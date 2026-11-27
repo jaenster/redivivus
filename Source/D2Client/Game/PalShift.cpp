@@ -58,6 +58,7 @@ void __stdcall AllocPalShift_GreenBlood() {
 }
 
 // @sourcefile .\GAME\PalShift.cpp
+// 1.14d mac: 00073d3b
 void __stdcall InitPal() {
     int i;
     D2MPQFileStrc* pGreenBloodFile;
@@ -92,6 +93,7 @@ void __stdcall InitPal() {
 }
 
 // @sourcefile .\GAME\PalShift.cpp
+// 1.14d mac: 00073ec2
 void __stdcall FreeGamePalShift() {
     while (gpPalShiftEntryListHead) {
       D2PalShiftEntryStrc* pNextEntry = gpPalShiftEntryListHead->pNext;
@@ -173,6 +175,7 @@ static void PALSHIFT_ApplyGreenBloodPalette(uint8_t * pPaletteData, int32_t nMon
 
 // Loads a monster's palshift.dat color-remapping table on demand. Looks up MonStats for nMonsterId, returns early if missing or if a palshift entry already exists. Builds the path Data\\Global\\Monsters\\<2-char monster code>\\Cof\\palshift.dat, opens it if present, allocates a 0x1008-byte client-memory entry, reads the file into it, applies the green-blood palette transform, links it into the global palshift list, and registers it in gpMonsterPalShiftList by monster index. Side effects: client-memory alloc, MPQ file read, mutates global palshift list/array.
 // @sourcefile .\GAME\PalShift.cpp
+// 1.14d mac: 00073f83
 void __fastcall PALSHIFT_LoadMonsterPalShift(int32_t nMonsterId) {
     char* pPathEnd2;
     uint32_t iMonIdx;
@@ -271,6 +274,7 @@ void __stdcall PALSHIFT_InitPalShiftTable() {
 }
 
 // Returns a pointer into the monster's palette-shift transform table for the given unit's current pal-shift index. Returns null for non-monster units or those without a palette-shift entry. For random transforms (index 8-37) uses PalShift_RandTransform; for blood-palette indices (2-7) returns the green-blood sub-table offset if blood is enabled and the monster uses local blood; otherwise returns the base palette-shift offset. Halts if the random index is out of the 30-entry range.
+// 1.14d mac: 0007428f
 D2GamePalShiftRandTransformStrc * * __fastcall PALSHIFT_GetMonsterTransform(D2UnitStrc * pUnit) {
     BOOL nBloodFlag;
     D2MonStats2Txt* pMonStats2;
@@ -333,6 +337,7 @@ static inline int GetClassIdInline(D2UnitStrc * pUnit) {
     return (int)(-1);
 }
 
+// 1.14d mac: 000743c6
 int32_t __fastcall PALSHIFT_GenerateShiftDuration(D2UnitStrc * pUnitSeedBase, uint16_t nSeedInput) {
     if (!pUnitSeedBase) {
       return 9;
@@ -344,6 +349,7 @@ int32_t __fastcall PALSHIFT_GenerateShiftDuration(D2UnitStrc * pUnitSeedBase, ui
     return qwRandState % 0x1e + 9;
 }
 
+// 1.14d mac: 00074425
 D2GamePalShiftGreenBloodStrc * __stdcall PALSHIFT_GetGreenBloodTable() {
     return PalShift_GreenBlood;
 }

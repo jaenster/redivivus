@@ -83,11 +83,13 @@ void __stdcall AppModeClientShutdown() {
     D2Common::Logging::ProfCore::CloseProfCore();
 }
 
+// 1.14d mac: 0005d107
 int32_t __fastcall fAPPMODE_client_ReturnAppMode_Caller(D2IniConfigStrc * pD2IniConfig) {
     int32_t eAppMode = fAPPMODE_client_ReturnAppMode(*(HMODULE*)((char*)&gMCPGameListBuffer + 28672), pD2IniConfig);
     return eAppMode;
 }
 
+// 1.14d mac: 0005df4c
 void __fastcall CLIENT_SetScreenResolution(DWORD RequestedScreenModeMaybe) {
     // Static local variables (originally global data)
     static int gbScreenResolutionChangeInitInProgress = 0x280; D2_STATIC_GUARD(gbScreenResolutionChangeInitInProgress, "D2Client::ClientModeInGame::CLIENT_SetScreenResolution::gbScreenResolutionChangeInitInProgress");
@@ -125,6 +127,7 @@ void __fastcall CLIENT_SetScreenResolution(DWORD RequestedScreenModeMaybe) {
     UI::ui::DRAW_RefreshNpcDialog(RequestedScreenModeMaybe);
 }
 
+// 1.14d mac: 00073968
 uint32_t __stdcall CLIENTMODE_WaitForQServerConnection(uint32_t dwUnused) {
     int32_t nState;
     uint8_t packetBuffer[512];
@@ -160,6 +163,7 @@ void Unreferenced_0044bb70() {
     D2Game::GAME::Server::QSERVER_InitializeServerState();
 }
 
+// 1.14d mac: 00073a2b
 int __stdcall FreeQServer() {
     if (!gbQServerRunning) {
       return 0;
@@ -170,10 +174,12 @@ int __stdcall FreeQServer() {
     return uResult;
 }
 
+// 1.14d mac: 00073a4e
 int __stdcall CLIENTMODE_InitializeCallback() {
     return gnClientModeInitValue;
 }
 
+// 1.14d mac: 00073a60
 BOOL __stdcall GameLoopFuncInitGame(uint32_t dwUnused) {
     if ((eD2GSGameType_007a0610 != GAMETYPE_SINGLEPLAYER && eD2GSGameType_007a0610 != GAMETYPE_SINGLEPLAYER_UNCAPPED) || !D2gfx::D2GFX::D2GFX_EndCutSceneReturnSceneState()) {
       int nInitResult = D2Net::Game::Server::CreateThreadClientSocketOrSingleplayer();
@@ -246,6 +252,7 @@ eD2ClientAppMode __stdcall NET_QServer_StartServer() {
     return eAppMode;
 }
 
+// 1.14d mac: 00073c58
 uint32_t __stdcall CLIENTMODE_WaitForServerShutdown(uint32_t dwUnused) {
     uint8_t packetBuffer[512];
     D2gfx::D2GFX::D2GFX_EndCutSceneReturnSceneState();

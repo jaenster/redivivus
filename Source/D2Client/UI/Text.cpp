@@ -2271,6 +2271,7 @@ void __fastcall DRAW_SetMouseWorldOffsets(int nXOffset, int nYOffset) {
 }
 
 // JMP thunk
+// 1.14d mac: 000a0e0d
 void __stdcall thunk_TEXT_ClearChatMessages() {
     ::D2Client::UI::Text::TEXT_ClearChatMessages();
 }
@@ -2319,6 +2320,7 @@ static void TEXT_RecalcTextBoxDimensions(D2TextBoxStrc * pTextBox) {
     pTextBox->nHeight = (short int)pTextBox->nLineCount * 0xf + 6;
 }
 
+// 1.14d mac: 000eef59
 void __stdcall TEXT_FreeTextBox(D2TextBoxStrc * pTextBox) {
     if (!pTextBox) {
       return;
@@ -2328,6 +2330,7 @@ void __stdcall TEXT_FreeTextBox(D2TextBoxStrc * pTextBox) {
     D2_FREE_AT(pTextBox, ".\\UI\\text.cpp", 0x68e);
 }
 
+// 1.14d mac: 000eeff4
 void __stdcall TEXT_InitTextDisplaySettings() {
     int32_t nDisplayMode;
     memset(&Dialog::DialogHandle, 0, sizeof(Dialog::DialogHandle));
@@ -2370,6 +2373,7 @@ void __stdcall TEXT_InitTextDisplaySettings() {
     gnTextDisplayMode = nDisplayMode;
 }
 
+// 1.14d mac: 000f1265
 static void TEXT_FreeScreenMessage(ScreenMessage_t * pMessage) {
     int i = 0;
     do {
@@ -2587,6 +2591,7 @@ static BOOL TEXT_DrawScrollingTextBox(D2TextBoxStrc * ppwszText) {
     return 0;
 }
 
+// 1.14d mac: 000ef278
 void __fastcall TEXT_DrawTextBoxAtPosition(D2TextBoxStrc * pTextBox, int32_t nScreenX, int32_t nScreenY) {
     int32_t nLineCount = pTextBox->nLineCount;
     if ((uint32_t)nLineCount > 10) {
@@ -2609,6 +2614,7 @@ void __fastcall TEXT_DrawTextBoxAtPosition(D2TextBoxStrc * pTextBox, int32_t nSc
     D2Win::Src::D2WinFont::SetAndReturnLastFont(nSavedFont);
 }
 
+// 1.14d mac: 000f0e22
 static int TEXT_DrawTextBoxWithBorderCheck(D2TextBoxStrc * pTextBox, int * pnPosition) {
     if (!pTextBox->nState) {
       pTextBox->nState = 1;
@@ -2644,12 +2650,14 @@ static int TEXT_DrawTextBoxWithBorderCheck(D2TextBoxStrc * pTextBox, int * pnPos
     return 1;
 }
 
+// 1.14d mac: 000ef38e
 void __stdcall TEXT_OnClickCloseNpcDialog(D2UIMouseMsgStrc * pMsg) {
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000ef7e0
 void __fastcall TEXT_SetNpcMenuSelection(D2UnitStrc * pUnit) {
     if (pUnit) {
       gnTextNpcMenuIndex = pUnit->nUnitGUID;
@@ -2660,6 +2668,7 @@ void __fastcall TEXT_SetNpcMenuSelection(D2UnitStrc * pUnit) {
     gbTextNpcMenuSelection = 0;
 }
 
+// 1.14d mac: 000ef691
 void __stdcall TEXT_ClearNpcMenuSelection() {
     gbTextNpcMenuSelection = 0;
 }
@@ -2701,6 +2710,7 @@ int __fastcall Unreferenced_0049dae0(D2TextBoxStrc * pTextBox, D2CoordStrc * pCo
     return iVar2;
 }
 
+// 1.14d mac: 000ef819
 ScreenMessage_t * __fastcall TEXT_AllocScreenMessage(ScreenMessage_t * ppwszText) {
     ScreenMessage_t* ppwszSrcLine;
     ScreenMessage_t* pMessage = D2_NEW_AT(ScreenMessage_t, ".\\UI\\text.cpp", 0x9d0);
@@ -2723,6 +2733,7 @@ ScreenMessage_t * __fastcall TEXT_AllocScreenMessage(ScreenMessage_t * ppwszText
     return pMessage;
 }
 
+// 1.14d mac: 000f11da
 void __fastcall TEXT_InsertScreenMessage(ScreenMessage_t * ppwszText) {
     ScreenMessage_t* pPrev;
     ScreenMessage_t* pNewMessage = TEXT_AllocScreenMessage(ppwszText);
@@ -3051,6 +3062,7 @@ static uint8_t __stdcall TEXT_FindNonOverlappingRect(int32_t nExistingRectCount,
     return 1;
 }
 
+// 1.14d mac: 000efda3
 static uint8_t TEXT_ConvertCharToWideWithLanguage(uint32_t dwUnused, char * szText, uint32_t nLanguage, uint16_t * pwszDest) {
     uint32_t nCurLanguage;
     if (nLanguage == 7 || nLanguage == 0xc || nLanguage == 6 || nLanguage == 9) {
@@ -3103,6 +3115,7 @@ void __stdcall TEXT_FreeStaticTextBox() {
     gpStaticTextPopup = 0;
 }
 
+// 1.14d mac: 000f12cb
 void __stdcall TEXT_DrawAllMessageLog() {
     ScreenMessage_t* pMessage;
     for (pMessage = AllMessagesMaybe.pHead; pMessage; pMessage = pMessage->pNext) {
@@ -3115,6 +3128,7 @@ int Unreferenced_0049e390() {
     return DVar1 + 10000;
 }
 
+// 1.14d mac: 000f0eb2
 void __fastcall TEXT_PrintGameString(uint16_t * wMessage, uint8_t nColor) {
     ScreenMessage_t* pNewMsg = D2_NEW_AT(ScreenMessage_t, ".\\UI\\text.cpp", 0xd46);
     memset(pNewMsg, 0, 0x24);
@@ -3193,6 +3207,7 @@ void __fastcall TEXT_PrintGameString(uint16_t * wMessage, uint8_t nColor) {
     D2Win::Src::D2WinFont::SetAndReturnLastFont(nPrevFont);
 }
 
+// 1.14d mac: 000f1365
 void __fastcall TEXT_PrintPartyMessage(uint16_t * wszText, uint8_t byColor) {
     BOOL bIsLineBreak;
     uint32_t nMsgCount;
@@ -3281,6 +3296,7 @@ void __fastcall TEXT_PrintPartyMessage(uint16_t * wszText, uint8_t byColor) {
     Sound::SOUND_PlaySound(SOUND_CURSOR_SWITCH, nullptr, 0, 0, 0);
 }
 
+// 1.14d mac: 000f1629
 void __fastcall TEXT_SetScrollCompleteCallback(pfnTextScrollComplete pfnCallback, void * pUserParam) {
     gpTextScrollCompleteCallback = pfnCallback;
     gpTextScrollCompleteParam = pUserParam;
@@ -3326,6 +3342,7 @@ uint32_t __stdcall TEXT_GetTextDisplayMode() {
     return gnTextDisplayMode;
 }
 
+// 1.14d mac: 000f1bbf
 D2UnitStrc * __stdcall TEXT_GetOverheadSpeakerUnit() {
     D2UnitStrc* pUnit;
     if (gnTextNpcInteractGuid) {
@@ -3428,6 +3445,7 @@ static BOOL TEXT_FormatEventMessage(D2Packet0x5aEventStructure * pEventData, uin
 }
 
 // Handles the 0x5a event message packet: switches on pMessageCtx->nMessageType, formats the localized message from the packet's names and argument, and prints it in pMessageCtx->nColor. pEventData is the format argument for message type 0x12, which also shakes the view and plays sound 0x1220.
+// 1.14d mac: 000f1c15
 void __fastcall TEXT_HandleEventMessagePacket(D2Packet0x5aEventStructure * pMessageCtx) {
     D2UnitStrc* pPlayerUnit_lcl;
     uint8_t* pszMyName;
@@ -3734,6 +3752,7 @@ void __fastcall TEXT_FreeHoverText(D2HoverTextStrc * pHover) {
     D2Common::Chat::Free(nullptr, pHover);
 }
 
+// 1.14d mac: 000f2d40
 static void __stdcall TEXT_SetUnitHoverText(uint32_t dwUnused, char * szText, uint8_t nLanguageCode, D2UnitStrc * pUnit) {
     char chCur;
     if (!pUnit) {
@@ -3760,6 +3779,7 @@ static void __stdcall TEXT_SetUnitHoverText(uint32_t dwUnused, char * szText, ui
 }
 
 // Converts and displays game message - handles player names, ignore lists, colored text formatting
+// 1.14d mac: 000f289f
 void __fastcall TEXT_ProcessChatMessage(MessageStrc * pMessage) {
     uint32_t nCheckResult;
     char* pszName;
@@ -3924,6 +3944,7 @@ void __fastcall TEXT_ProcessChatMessage(MessageStrc * pMessage) {
     }
 }
 
+// 1.14d mac: 000f2dd6
 void __fastcall TEXT_ClearUnitHoverText(D2GSPacketSrv0x76 * pPacket) {
     D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(pPacket->nUnitGUID, (eD2UnitType)pPacket->nUnitType);
     if (!pUnit) {
@@ -3936,6 +3957,7 @@ void __fastcall TEXT_ClearUnitHoverText(D2GSPacketSrv0x76 * pPacket) {
     pUnit->pHoverText = 0;
 }
 
+// 1.14d mac: 000f2e23
 D2GSPacketSrv0x27_TextStrc * __stdcall TEXT_GetOverheadGlobalPointer() {
     return gpOverHeadStrc;
 }
@@ -6114,6 +6136,7 @@ void __stdcall TEXT_CloseScrollingText() {
     gpTextScrollBoxImage = 0;
 }
 
+// 1.14d mac: 000f332c
 void __stdcall TEXT_DrawScrollBackground() {
     D2GfxDataStrc sGfxData;
     D2gfx::D2GFX::D2GFX_DrawSolidRectEx(Inv::gnPanelOffsetX, Inv::gnPanelOffsetY - 0xe0 + Inv::ScreenSizeY, ui::ScreenSizeX / 2, Inv::ScreenSizeY - 0x30, 0, DRAW_SOLID);
@@ -6140,6 +6163,7 @@ void __stdcall TEXT_DrawScrollBackground() {
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, Inv::gnPanelOffsetX + 0x115, Inv::gnPanelOffsetY - 0x3d + Inv::ScreenSizeY, -1, DRAW_SOLID, nullptr);
 }
 
+// 1.14d mac: 000f2fad
 void __stdcall TEXT_DrawQuestScrollAnimation(int32_t bDraw) {
     // Static local variables (originally global data)
     static int gaTextDrawAnimPos[10] = {
@@ -6253,6 +6277,7 @@ void __stdcall TEXT_DrawQuestScrollAnimation(int32_t bDraw) {
     D2Win::Src::D2WinFont::SetAndReturnLastFont(nPrevFont);
 }
 
+// 1.14d mac: 000ef16e
 void __stdcall TEXT_FreeScrollDC6Images() {
     if (gpQuestScrollImageBottom) {
       Core::Archive::DC6_FreeAndDelete(gpQuestScrollImageBottom);
@@ -6278,6 +6303,7 @@ void __stdcall TEXT_OnEscCloseQuestScroll(D2UIMouseMsgStrc * pMsg) {
     TEXT_FreeScrollDC6Images();
 }
 
+// 1.14d mac: 000f2ec9
 void __stdcall TEXT_OnClickCloseQuestScroll(D2UIMouseMsgStrc * pMsg) {
     if (!((int)((uint32_t)pMsg->uLParam.nLParam >> 16) < Inv::ScreenSizeY - 0x30 && (int)(uint16_t)pMsg->uLParam.nLParam < ui::ScreenSizeX / 2)) {
       return;
@@ -6295,6 +6321,7 @@ void __stdcall TEXT_OnPanelUnregister_NoOp() {
 
 }
 
+// 1.14d mac: 000f2f57
 void __stdcall TEXT_DrawQuestScrollUI() {
     if (!gpQuestScrollTextBlock) {
       return;
@@ -6318,6 +6345,7 @@ void __stdcall TEXT_DrawQuestScrollUI() {
     return;
 }
 
+// 1.14d mac: 000f35c5
 void __fastcall TEXT_HandleScrollLinePacket(D2GSPacketSrv0x50 * pPacket) {
     if (pPacket->nMessageType != 4) {
       return;
@@ -6329,6 +6357,7 @@ void __fastcall TEXT_HandleScrollLinePacket(D2GSPacketSrv0x50 * pPacket) {
     gpQuestScrollUI = 0;
 }
 
+// 1.14d mac: 000f35f7
 void __fastcall TEXT_OpenQuestScroll(D2UnitStrc * pUnit, D2ItemsTxt * pTextBlock) {
     gpQuestScrollTextBlock = pTextBlock;
     ui::SetUIFlag(UI_QUESTSCROLL, UI_TOGGLE, 0);
@@ -6351,6 +6380,7 @@ void __fastcall TEXT_OpenQuestScroll(D2UnitStrc * pUnit, D2ItemsTxt * pTextBlock
     gaQuestScrollRect = 1;
 }
 
+// 1.14d mac: 000f3682
 uint32_t __stdcall TEXT_IsScrollingTextActive() {
     return (uint32_t)(gpTextScrollingBox != 0);
 }
@@ -6360,11 +6390,13 @@ void __stdcall TEXT_FreeChatAndLogMessages() {
     TEXT_FreeAllScreenMessages(&AllMessagesMaybe);
 }
 
+// 1.14d mac: 000f38d1
 int __stdcall TEXT_CloseMessageLogDialog() {
     ui::SetUIFlag(UI_MSGLOG, UI_RESET, 0);
     return 1;
 }
 
+// 1.14d mac: 000f36c3
 void __stdcall TEXT_OpenMessageLogDialog() {
     fpDialogFunc pfnCloseCallback;
     int32_t nEntryIdx;
@@ -6412,6 +6444,7 @@ void __stdcall TEXT_DestroyMessageLogDialog() {
     gpTextMessageLogHead = 0;
 }
 
+// 1.14d mac: 000f38fd
 void __stdcall TEXT_ClearChatMessages() {
     ScreenMessage_t* pSVar1;
     for (pSVar1 = ScreenMessagesMaybe.pHead; pSVar1; pSVar1 = pSVar1->pNext) {
@@ -6420,6 +6453,7 @@ void __stdcall TEXT_ClearChatMessages() {
 }
 
 static inline int GetClassIdInline(D2UnitStrc * pUnit);
+// 1.14d mac: 000f391e
 void __fastcall TEXT_SetUnitOverheadFromSoundTable(D2UnitStrc * pUnitAnim, uint32_t nSoundId) {
     // Static local variables (originally global data)
     static D2SoundStringKeyStrc * gnTextAnimState[7] = { (D2SoundStringKeyStrc*)&gaClassSoundStringKeys, (D2SoundStringKeyStrc*)&gaClassSoundStringKeys[1][0].nSoundId, (D2SoundStringKeyStrc*)&gaClassSoundStringKeys[2][0].nSoundId, (D2SoundStringKeyStrc*)&gaClassSoundStringKeys[3][0].nSoundId, (D2SoundStringKeyStrc*)&gaClassSoundStringKeys[4][0].nSoundId, (D2SoundStringKeyStrc*)&gaClassSoundStringKeys[5][0].nSoundId, (D2SoundStringKeyStrc*)&gaClassSoundStringKeys[6][0].nSoundId }; D2_STATIC_GUARD(gnTextAnimState, "D2Client::UI::Text::TEXT_SetUnitOverheadFromSoundTable::gnTextAnimState");
@@ -6477,6 +6511,7 @@ void __fastcall TEXT_SetUnitOverheadFromSoundTable(D2UnitStrc * pUnitAnim, uint3
     }
 }
 
+// 1.14d mac: 000f3a31
 void __stdcall TEXT_CloseMessageUI() {
     if (!Dialog::DialogHandle) {
       return;
@@ -6660,6 +6695,7 @@ D2TextLineStrc * __stdcall TEXT_ParseMultilineString(uint16_t * pwszInput, int *
     } while (true);
 }
 
+// 1.14d mac: 000eebfc
 D2TextBoxStrc * __fastcall TEXT_AllocTextBox(uint16_t * wszText, int32_t nWrapMode) {
     D2TextLineStrc* pParsedLines;
     D2TextBoxStrc* pTextBox = D2_NEW_AT(D2TextBoxStrc, ".\\UI\\text.cpp", 0x65d);
@@ -6684,6 +6720,7 @@ D2TextBoxStrc * __fastcall TEXT_AllocTextBox(uint16_t * wszText, int32_t nWrapMo
     return pTextBox;
 }
 
+// 1.14d mac: 000ef055
 void __stdcall TEXT_FreeEverything() {
     if (gpOverHeadStrc) {
       D2Common::Text::STRUCT_FreeTxtMessageForPacket0x27(gpOverHeadStrc);
@@ -6785,6 +6822,7 @@ void __stdcall TEXT_CloseNpcInteraction() {
     gnTextNpcInteractGuid = 0;
 }
 
+// 1.14d mac: 000ef483
 int __stdcall TEXT_HandleEscapeKey() {
     int nResult = 0;
     gbTextScrollBoxAnimating = 1;
@@ -6839,6 +6877,7 @@ int __stdcall TEXT_HandleEscapeKey() {
     return nResult;
 }
 
+// 1.14d mac: 000efb06
 static void __stdcall TEXT_DrawUnitOverheadText(D2HoverTextStrc * pHoverText, int * pScreenPos, D2UnitStrc * pUnit, uint16_t * wszText) {
     RECT rcBox;
     uint32_t nExpireFrame = D2Common::Chat::GetExpireFrame(pHoverText);
@@ -6879,6 +6918,7 @@ static void __stdcall TEXT_DrawUnitOverheadText(D2HoverTextStrc * pHoverText, in
     D2Win::Src::D2WinFont::SetAndReturnLastFont(nSavedFont);
 }
 
+// 1.14d mac: 000ef8ce
 void __fastcall TEXT_DrawMonsterHoverText(D2UnitStrc * pUnit) {
     uint32_t nBorderType;
     int nXOffset;
@@ -6957,6 +6997,7 @@ void __fastcall TEXT_DrawMonsterHoverText(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 000efe06
 void __fastcall TEXT_DrawObjectHoverText(D2UnitStrc * pUnit) {
     uint32_t nBorderType;
     int nXOffset;
@@ -7023,6 +7064,7 @@ void __fastcall TEXT_DrawObjectHoverText(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 000effb9
 void __fastcall TEXT_DrawMessageLogAndOverhead(D2GameViewStrc * pGameView) {
     DWORD dwTickCount;
     D2UnitStrc* pNpcUnit;
@@ -7116,6 +7158,7 @@ void __fastcall TEXT_DrawMessageLogAndOverhead(D2GameViewStrc * pGameView) {
     Dialog::DIALOG_DrawBackground(Dialog::DialogHandle);
 }
 
+// 1.14d mac: 000f1648
 void __fastcall TEXT_ShowNpcDialog(D2UnitStrc * pUnit, uint16_t wDialogStringId, uint32_t dwUnused) {
     D2UnitStrc* pNpcUnit;
     RECT nExclusionXOff;
@@ -7360,6 +7403,7 @@ void __fastcall TEXT_HandleOverheadTextPacket(D2GSPacketSrv0x27 * pPacket) {
     return;
 }
 
+// 1.14d mac: 000f2e8d
 void __stdcall TEXT_CloseNpcDialog() {
     TEXT_CloseScrollingText();
     gbTextScrollBoxVisible = 0;
@@ -7372,10 +7416,12 @@ void __stdcall TEXT_CloseNpcDialog() {
 }
 
 // JMP thunk
+// 1.14d mac: 000f3a28
 int __stdcall TEXT_HandleEscapeKey_Thunk() {
     return ::D2Client::UI::Text::TEXT_HandleEscapeKey();
 }
 
+// 1.14d mac: 000ef40d
 void __stdcall INPUT_TextDismiss(D2UIMouseMsgStrc * pMsg) {
     gbTextScrollBoxVisible = 0;
     DWORD dwTickCount = GetTickCount();
@@ -7397,6 +7443,7 @@ void __stdcall INPUT_TextDismiss(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000ef719
 void __stdcall INPUT_TextClickHandler(D2UIMouseMsgStrc * pMsg) {
     D2UnitStrc* pNpcUnit;
     gpTextDismissCallback = 1;
@@ -7432,6 +7479,7 @@ void __stdcall INPUT_TextClickHandler(D2UIMouseMsgStrc * pMsg) {
     INPUT_TextDismiss(pMsg);
 }
 
+// 1.14d mac: 000ef3bc
 void __stdcall INPUT_TextKeyHandler(D2UIMouseMsgStrc * pMsg) {
     uint32_t bIsBound = CmdTbl::CMD_IsCommandBound(7, 1);
     if (bIsBound) {
@@ -7445,6 +7493,7 @@ void __stdcall INPUT_TextKeyHandler(D2UIMouseMsgStrc * pMsg) {
     INPUT_TextDismiss(pMsg);
 }
 
+// 1.14d mac: 000ef3a8
 void __stdcall INPUT_TextKeyFilter(D2UIMouseMsgStrc * pMsg) {
     if (pMsg->nWParam == 0x73) {
       return;

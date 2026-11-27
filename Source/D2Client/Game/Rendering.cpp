@@ -19,31 +19,38 @@ static uint32_t gbHideExtendedFPSStats = 0; D2_STATIC_GUARD(gbHideExtendedFPSSta
 
 namespace D2Client::GAME::Rendering {
 
+// 1.14d mac: 0005e6a3
 void __fastcall SetupGamma(DWORD dwGamma) {
     D2gfx::D2GFX::D2GFX_SetGamma(dwGamma);
 }
 
+// 1.14d mac: 0005e6c9
 void __stdcall SetCurrentEngineToOne() {
     CurrentRendingEngine = 1;
     gnCurrentEngineIndex = 1;
 }
 
+// 1.14d mac: 0005e6e8
 void __stdcall RENDERER_Set3DFX() {
     CurrentRendingEngine = 4;
 }
 
+// 1.14d mac: 0005e6fd
 void __stdcall RENDERER_SetOpenGL() {
     CurrentRendingEngine = 5;
 }
 
+// 1.14d mac: 0005e712
 void __stdcall RENDERER_SetMode6() {
     CurrentRendingEngine = 6;
 }
 
+// 1.14d mac: 0005e727
 void __stdcall RENDERER_SetMode7() {
     CurrentRendingEngine = 7;
 }
 
+// 1.14d mac: 0005e73c
 int __stdcall GetCurrentEngine() {
     return CurrentRendingEngine;
 }
@@ -111,6 +118,7 @@ void __stdcall DrawRenderStats() {
 }
 
 // Renders the in-game FPS and diagnostic stats overlay (toggled by gbFPSStatsEnabled). Maintains a per-second frame counter (fps global) and a cumulative frame accumulator. When enabled, draws: FPS + skip count, ping, physical/page memory usage (via GlobalMemoryStatus), renderer name (Software/DirectDraw/Glide/OpenGL/Direct3D/RAVE), and optionally COF memory, sprite cache, async file count, and CelData cache stats. Called each render frame from the game rendering path.
+// 1.14d mac: 0005e76a
 void __stdcall DRAW_UI_FPSStats() {
     // Static local variables (originally global data)
     static unsigned int gdwFPSLastSecondTick; D2_STATIC_GUARD_BSS(gdwFPSLastSecondTick, "D2Client::GAME::Rendering::DRAW_UI_FPSStats::gdwFPSLastSecondTick");

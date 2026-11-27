@@ -46,6 +46,7 @@ static D2RosterPartyListStrc * pRosterPartyList = 0; D2_STATIC_GUARD(pRosterPart
 
 namespace D2Client::GAME::Roster {
 
+// 1.14d mac: 0007517f
 static D2RosterStrc * __stdcall GetRosterPlayerByGUID(int32_t nRosterGUID) {
     D2RosterLinkListStrc* pRosterLink;
     D2RosterStrc* pRosterIter = gpRosterPlayers;
@@ -113,6 +114,7 @@ static D2RosterStrc * GetRosterByGuidOrName(char * szPlayerName, int32_t nRoster
 }
 
 // Writes identity/party/guild fields into a D2RosterStrc. 004793c4..004793c6 read EAX, EDI and EBX without ever loading them: the roster, the player name and the clan tag all arrive in registers. Modelled as locals, the reconstruction wrote the roster through an uninitialised pointer.
+// 1.14d mac: 00074cfe
 static void __stdcall ROSTER_InitializeFields(D2RosterStrc * pRoster, char * szPlayerName, char * szClanTag, int32_t nRosterGUID, int32_t nCharType, int16_t nUnitLevel, int16_t nPartyId, int32_t bInParty, int16_t nGuildFlags, char * szGuildTag) {
     strcpy(pRoster->szRosterName, szPlayerName);
     pRoster->nRosterGUID = nRosterGUID;
@@ -132,6 +134,7 @@ static void __stdcall ROSTER_InitializeFields(D2RosterStrc * pRoster, char * szP
 }
 
 // @sourcefile .\GAME\Roster.cpp
+// 1.14d mac: 00075273
 static void FreeRosterLinkList(D2RosterStrc * pRoster) {
     D2RosterLinkListStrc* pRosterLinkList = pRoster->pRosterLinkList;
     while (pRosterLinkList) {
@@ -146,6 +149,7 @@ static void FreeRosterLinkList(D2RosterStrc * pRoster) {
 
 // Frees and NULLs every node in both gpRosterPlayers and gpRosterOther linked lists, releasing each roster's pPlayerList (via FreePlayerList) and pRosterLinkList chain (via FreeClientMemory) before freeing the D2RosterStrc itself. Leaves both globals as NULL.
 // @sourcefile .\GAME\Roster.cpp
+// 1.14d mac: 000752c5
 void __stdcall ClearBothRosterLists() {
     D2RosterStrc* pNextOther;
     D2RosterLinkListStrc* pNextOtherLink;
@@ -188,6 +192,7 @@ void __stdcall ClearBothRosterLists() {
     gpRosterOther = 0;
 }
 
+// 1.14d mac: 000753a1
 D2RosterStrc * __fastcall GetNextRosterPlayer(D2RosterStrc * pRoster) {
     if (pRoster) {
       return pRoster->pNext;
@@ -196,6 +201,7 @@ D2RosterStrc * __fastcall GetNextRosterPlayer(D2RosterStrc * pRoster) {
     return gpRosterPlayers;
 }
 
+// 1.14d mac: 000753c0
 char * __fastcall GetRosterName(D2RosterStrc * pRoster) {
     if (!pRoster) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x174);
@@ -496,6 +502,7 @@ static void ROSTER_MoveRosterPlayerToFront(int32_t nRosterGUID) {
     gpRosterPlayers = pHead;
 }
 
+// 1.14d mac: 00074da9
 void __stdcall ROSTER_RebuildPlayerParty() {
     int nRosterGUID;
     uint16_t nPartyId;
@@ -526,6 +533,7 @@ void __stdcall ROSTER_RebuildPlayerParty() {
 }
 
 // Sets arena score on roster entry by GUID. Score is uint16 from packet 0x65, sign-extended if bit 15 set (negative scores). Triggers party UI rebuild.
+// 1.14d mac: 0007550a
 void __fastcall ROSTER_SetArenaScore(int32_t nRosterGUID, uint16_t nArenaScore) {
     D2RosterStrc* pRoster = GetRosterPlayerByGUID(nRosterGUID);
     if (!pRoster) {
@@ -574,6 +582,7 @@ int32_t __fastcall ROSTER_GetArenaScore(D2RosterStrc * pRoster) {
     return pRoster->nArenaScore;
 }
 
+// 1.14d mac: 00075558
 uint32_t __fastcall GetRosterLevel(D2RosterStrc * pRoster) {
     if (pRoster) {
       return (uint32_t)pRoster->nUnitLevel;
@@ -582,6 +591,7 @@ uint32_t __fastcall GetRosterLevel(D2RosterStrc * pRoster) {
     return 0;
 }
 
+// 1.14d mac: 0007556c
 int32_t __fastcall GetRosterCharType(D2RosterStrc * pRoster) {
     if (pRoster) {
       return pRoster->nCharType;
@@ -590,11 +600,13 @@ int32_t __fastcall GetRosterCharType(D2RosterStrc * pRoster) {
     return 0;
 }
 
+// 1.14d mac: 0007557f
 D2RosterStrc * __fastcall GetRosterByGUID(int32_t nRosterGUID) {
     D2RosterStrc* pRoster = GetRosterPlayerByGUID(nRosterGUID);
     return pRoster;
 }
 
+// 1.14d mac: 0007558b
 uint16_t __fastcall GetRosterPartyId(D2RosterStrc * pRoster) {
     int nMemberCount = 0;
     D2RosterStrc* t2_c0 = gpRosterPlayers;
@@ -618,6 +630,7 @@ uint16_t __fastcall GetRosterPartyId(D2RosterStrc * pRoster) {
     return pRoster->nPartyId;
 }
 
+// 1.14d mac: 000755d9
 int16_t __fastcall GetUnitPartyId(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return -1;
@@ -640,6 +653,7 @@ uint32_t __fastcall ROSTER_GetLootFlag(D2RosterStrc * pRoster) {
     return 0;
 }
 
+// 1.14d mac: 00075642
 uint32_t __fastcall ROSTER_GetListenFlag(D2RosterStrc * pRoster) {
     if (pRoster) {
       D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
@@ -649,6 +663,7 @@ uint32_t __fastcall ROSTER_GetListenFlag(D2RosterStrc * pRoster) {
     return 0;
 }
 
+// 1.14d mac: 00075682
 uint32_t __fastcall ROSTER_GetMuteFlag(D2RosterStrc * pRoster) {
     if (pRoster) {
       D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
@@ -679,6 +694,7 @@ int __fastcall ROSTER_GetHostileFlag(D2RosterStrc * pRoster) {
     return 0;
 }
 
+// 1.14d mac: 0007570b
 BOOL __fastcall GetRosterInPartyBool(D2RosterStrc * pRoster) {
     if (pRoster) {
       return pRoster->nPartyState;
@@ -706,6 +722,7 @@ static void ROSTER_TogglePlayerFlag(D2RosterStrc * pRoster, int16_t nFlags) {
     UNIT::PlayerList::SetUnsetFlags(nPlayerGUID, pRoster->nRosterGUID, (uint32_t)(uint16_t)nFlags, bNotCurrentFlag);
 }
 
+// 1.14d mac: 0007571f
 void __fastcall ROSTER_ToggleLootAndSend(D2RosterStrc * pRoster) {
     int nUnitGUID;
     if (!pRoster) {
@@ -742,6 +759,7 @@ void __fastcall ROSTER_ToggleListenAndSend(D2RosterStrc * pRoster) {
     Msg::NET_D2GS_CLIENT_Send_0x5D(2, pRoster->nRosterGUID, bToggle);
 }
 
+// 1.14d mac: 00075875
 void __fastcall ROSTER_ToggleMuteAndSend(D2RosterStrc * pRoster) {
     int nPlayerGUID;
     ::IgnoreList* pIgnoreList;
@@ -778,6 +796,7 @@ void __fastcall ROSTER_ToggleMuteAndSend(D2RosterStrc * pRoster) {
 }
 
 // Handles a UI party-button click for a roster entry. Transitions bInParty state: 0→4 sends invite (NET 0x5E action 6), 4→0 cancels invite (action 7), 2/3 send accept/decline actions (8/9). State 1 (pending) is an internal error that halts. Always calls ROSTER_RebuildPlayerParty and ResetPartyUi after any state change.
+// 1.14d mac: 00075929
 void __fastcall ClickParty_i(D2RosterStrc * pRoster) {
     int nActionType;
     nActionType = 0;
@@ -818,6 +837,7 @@ void __fastcall ClickParty_i(D2RosterStrc * pRoster) {
     UI::Party::ResetPartyUi();
 }
 
+// 1.14d mac: 00075a0b
 D2RosterStrc * __stdcall ROSTER_LeaveParty() {
     int nGUID;
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
@@ -840,11 +860,13 @@ D2RosterStrc * __stdcall ROSTER_LeaveParty() {
     return pRoster;
 }
 
+// 1.14d mac: 000759e8
 void __stdcall LeaveParty() {
     D2RosterStrc* pRoster = ROSTER_LeaveParty();
     Msg::NET_D2GS_CLIENT_Send_0x5E(9, pRoster->nRosterGUID);
 }
 
+// 1.14d mac: 00075a74
 void __fastcall ROSTER_ToggleHostileAndSend(D2RosterStrc * pRoster) {
     int nUnitGUID;
     D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
@@ -878,6 +900,7 @@ void __fastcall ROSTER_ToggleHostileAndSend(D2RosterStrc * pRoster) {
     ROSTER_LeaveParty();
 }
 
+// 1.14d mac: 00075b7d
 uint32_t __fastcall CheckRostersArePartied(int32_t nRoster1GUID, int32_t nRoster2GUID) {
     D2RosterStrc* pRoster1 = GetRosterPlayerByGUID(nRoster1GUID);
     D2RosterStrc* pRoster2 = GetRosterPlayerByGUID(nRoster2GUID);
@@ -892,6 +915,7 @@ uint32_t __fastcall CheckRostersArePartied(int32_t nRoster1GUID, int32_t nRoster
     return (uint32_t)(bIsHostile != 0);
 }
 
+// 1.14d mac: 00075bdf
 int32_t __fastcall GetRosterGUID(D2RosterStrc * pRoster) {
     if (pRoster) {
       return pRoster->nRosterGUID;
@@ -900,6 +924,7 @@ int32_t __fastcall GetRosterGUID(D2RosterStrc * pRoster) {
     return -1;
 }
 
+// 1.14d mac: 00075bf3
 void __fastcall SetRosterHpAndArea(int32_t nRosterGUID, int32_t nHpPercent, uint16_t eLevel) {
     D2RosterStrc* pRoster = GetRosterPlayerByGUID(nRosterGUID);
     if (!pRoster) {
@@ -912,6 +937,7 @@ void __fastcall SetRosterHpAndArea(int32_t nRosterGUID, int32_t nHpPercent, uint
     UI::Party::ResetPartyUi();
 }
 
+// 1.14d mac: 00075c28
 void __fastcall SetRosterPosition(int32_t nRosterGUID, int32_t nX, int32_t nY) {
     D2RosterStrc* pRoster = GetRosterPlayerByGUID(nRosterGUID);
     if (!pRoster) {
@@ -934,6 +960,7 @@ BOOL __fastcall ROSTER_CheckPlayerInSameParty(D2RosterStrc * pRoster) {
     return 0;
 }
 
+// 1.14d mac: 00075c4b
 int32_t __fastcall GetRosterHP(int32_t nRosterGUID) {
     D2RosterStrc* pRoster = GetRosterPlayerByGUID(nRosterGUID);
     if (pRoster) {
@@ -943,6 +970,7 @@ int32_t __fastcall GetRosterHP(int32_t nRosterGUID) {
     return 0;
 }
 
+// 1.14d mac: 00075c69
 uint32_t __fastcall ROSTER_CheckPlayerNotHostile(int32_t nRosterGUID) {
     uint32_t bIsHostile;
     int nUnitGUID;
@@ -973,6 +1001,7 @@ void __fastcall GetRosterPosition(D2RosterStrc * pRoster, int * pX, int * pY) {
     *pY = 0;
 }
 
+// 1.14d mac: 00075cbf
 eD2LevelId __fastcall GetRosterArea(D2RosterStrc * pRoster) {
     if (pRoster) {
       return pRoster->eLevelId;
@@ -984,6 +1013,7 @@ eD2LevelId __fastcall GetRosterArea(D2RosterStrc * pRoster) {
 // @wasnamed GetRosterName - one name on two different functions.
 // @evidence Calls GetRosterPlayerByGUID(nRosterGUID) then ->pRosterName, NULL-safe.
 // 004795c0 takes a D2RosterStrc* directly and halts on NULL. Different argument, different contract.
+// 1.14d mac: 00075cd2
 char * __fastcall GetRosterNameByGUID(int32_t nRosterGUID) {
     D2RosterStrc* pRoster = GetRosterPlayerByGUID(nRosterGUID);
     if (pRoster) {
@@ -993,6 +1023,7 @@ char * __fastcall GetRosterNameByGUID(int32_t nRosterGUID) {
     return nullptr;
 }
 
+// 1.14d mac: 00075cef
 char * __fastcall GetPlayerRosterName(D2UnitStrc * pUnit) {
     D2UnitDataPlayerStrc* pPlayerData;
     if (!pUnit) {
@@ -1020,6 +1051,7 @@ char * __fastcall GetPlayerRosterName(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 00075d9d
 void __fastcall SetRosterPortalGuidAndDestArea(int32_t nRosterGUID, int32_t nPortalGUID1, int32_t nPortalGUID2) {
     D2RosterStrc* pRoster = GetRosterPlayerByGUID(nRosterGUID);
     if (!pRoster) {
@@ -1030,6 +1062,7 @@ void __fastcall SetRosterPortalGuidAndDestArea(int32_t nRosterGUID, int32_t nPor
     pRoster->nPortalGUID2 = nPortalGUID2;
 }
 
+// 1.14d mac: 00075dc0
 char * __fastcall GetPortalOwnerName(int32_t nPortalGUID) {
     D2RosterStrc* pRoster = gpRosterPlayers;
     while (true) {
@@ -1046,6 +1079,7 @@ char * __fastcall GetPortalOwnerName(int32_t nPortalGUID) {
     return pRoster->pRosterName;
 }
 
+// 1.14d mac: 00075df0
 BOOL __fastcall CheckIfUnitHasPartiedRosters(D2UnitStrc * pUnit) {
     int nGUID;
     D2RosterStrc* pCurRoster = gpRosterPlayers;
@@ -1069,6 +1103,7 @@ BOOL __fastcall CheckIfUnitHasPartiedRosters(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 00075e4c
 D2PlayerListStrc * __fastcall GetPlayerList(int32_t nRosterGUID) {
     D2RosterStrc* pRoster = GetRosterPlayerByGUID(nRosterGUID);
     if (pRoster) {
@@ -1078,6 +1113,7 @@ D2PlayerListStrc * __fastcall GetPlayerList(int32_t nRosterGUID) {
     return nullptr;
 }
 
+// 1.14d mac: 00075e6a
 void __fastcall SetRosterPartyId(int32_t nRosterGUID, uint16_t nPartyId) {
     D2RosterStrc* pRoster = GetRosterPlayerByGUID(nRosterGUID);
     if (!pRoster) {
@@ -1089,6 +1125,7 @@ void __fastcall SetRosterPartyId(int32_t nRosterGUID, uint16_t nPartyId) {
     UI::Party::ResetPartyUi();
 }
 
+// 1.14d mac: 00075e97
 void __fastcall SetRosterInParty(int32_t nRosterGUID, uint8_t bInParty) {
     D2RosterStrc* pRoster = GetRosterPlayerByGUID(nRosterGUID);
     if (!pRoster) {
@@ -1123,6 +1160,7 @@ void __fastcall ROSTER_SetPlayerHostileFlag(int32_t nUnitGUID, int32_t nRosterGU
 }
 
 // @sourcefile .\GAME\Roster.cpp
+// 1.14d mac: 00075f2b
 void __fastcall AllocRosterOther(int32_t nOwnerGUID, int32_t nRosterGUID) {
     D2RosterLinkListStrc* pRosterLinkList;
     D2RosterStrc* pRoster = GetRosterPlayerByGUID(nOwnerGUID);
@@ -1159,6 +1197,7 @@ void __fastcall AllocRosterOther(int32_t nOwnerGUID, int32_t nRosterGUID) {
 }
 
 // @sourcefile .\GAME\Roster.cpp
+// 1.14d mac: 00076073
 void __fastcall FreeAllRosterPlayer(int32_t nOwnerGUID, int32_t nRosterGUID) {
     D2RosterLinkListStrc* pPrevLink = 0;
     D2RosterStrc* pRoster = GetRosterPlayerByGUID(nOwnerGUID);
@@ -1182,6 +1221,7 @@ void __fastcall FreeAllRosterPlayer(int32_t nOwnerGUID, int32_t nRosterGUID) {
     }
 }
 
+// 1.14d mac: 000760de
 BOOL __fastcall ROSTER_CheckPlayerCanLoot(int32_t nLooterGUID, int32_t nOwnerGUID) {
     D2RosterStrc* pRoster = GetRosterPlayerByGUID(nOwnerGUID);
     if (pRoster) {
@@ -1198,6 +1238,7 @@ BOOL __fastcall ROSTER_CheckPlayerCanLoot(int32_t nLooterGUID, int32_t nOwnerGUI
     return 0;
 }
 
+// 1.14d mac: 00076122
 BOOL __fastcall ROSTER_CheckPlayersInSameParty(int32_t nRoster1GUID, int32_t nRoster2GUID) {
     D2RosterStrc* pRoster1 = GetRosterPlayerByGUID(nRoster1GUID);
     D2RosterStrc* pRoster2 = GetRosterPlayerByGUID(nRoster2GUID);
@@ -1292,6 +1333,7 @@ BOOL __fastcall ROSTER_HasOutgoingLoot(D2RosterStrc * pRoster) {
     return 0;
 }
 
+// 1.14d mac: 000762c8
 BOOL __fastcall RosterIsFemale(D2RosterStrc * pRoster) {
     if (pRoster) {
       int nCharType;
@@ -1304,6 +1346,7 @@ BOOL __fastcall RosterIsFemale(D2RosterStrc * pRoster) {
     return 1;
 }
 
+// 1.14d mac: 000762ed
 void __fastcall SetRosterPlayerHpPercent(int32_t nRosterGUID, uint8_t nHpPercent) {
     D2RosterStrc* pRoster = GetRosterPlayerByGUID(nRosterGUID);
     if (!pRoster) {
@@ -1313,6 +1356,7 @@ void __fastcall SetRosterPlayerHpPercent(int32_t nRosterGUID, uint8_t nHpPercent
     pRoster->nHpPercent = (uint32_t)nHpPercent;
 }
 
+// 1.14d mac: 0007630d
 int32_t __fastcall GetRosterPlayerHpPercent(int32_t nRosterGUID) {
     int nMyGUID;
     D2RosterStrc* pRosterEntry = GetRosterPlayerByGUID(nRosterGUID);
@@ -1331,6 +1375,7 @@ int32_t __fastcall GetRosterPlayerHpPercent(int32_t nRosterGUID) {
 
 // Adds or refreshes a player entry in gpRosterPlayers. Looks up the player by name/GUID; if absent, allocates a new D2RosterStrc (recycling from gpRosterOther if available), attaches a fresh player list, populates fields via ROSTER_InitializeFields, and prepends to gpRosterPlayers. If the player already exists, only refreshes fields. Always rebuilds the party list and resets the party UI afterward.
 // @sourcefile .\GAME\Roster.cpp
+// 1.14d mac: 00074b3c
 void __fastcall ROSTER_AllocOrUpdatePlayer(int nPlayerGUID, int nCharType, char * szPlayerName, short nUnitLevel, short nPartyId, short nUnk1, int bInParty, short nGuildFlags, char * szGuildTag, char * szGuildName) {
     D2PlayerListStrc* pPlayerList;
     D2RosterStrc* pDVar1 = gpRosterOther;
@@ -1396,6 +1441,7 @@ void __fastcall ROSTER_UpdatePlayerPartyInfo(int32_t nUnitGuid, int16_t nPartyId
 
 // Removes a departing player from gpRosterPlayers by nPlayerUid (GUID). Unlinks the matching D2RosterStrc, frees its pPlayerList and pRosterLinkList chain, then frees the node itself. Always calls ROSTER_RebuildPlayerParty and ResetPartyUi at the end, whether or not the player was found.
 // @sourcefile .\GAME\Roster.cpp
+// 1.14d mac: 000751bc
 void __fastcall PlayerLeft(int32_t nPlayerUid) {
     D2RosterLinkListStrc* pCurrentRoster;
     D2RosterLinkListStrc* pNextRoster;

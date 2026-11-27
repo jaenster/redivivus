@@ -184,6 +184,7 @@ namespace D2Client::UNIT {
 
 // Applies a socketed item's (pUnit2) stat mods to its host item (pUnit) and toggles whether those stats are active. If pUnit2 is a gem/rune, looks up its D2ItemsTxt + gem definition (TXT_Gems_GetLine via dwGemOffset) and applies the rune/gem stats via ApplyRuneAndGemStats (mode 2 gem, 5 rune); otherwise treats it as a set/equip item via ITEM_ProcessSetItemEquip. Then, unless the item is DISABLED, marks the stats active with STATLIST_SetItemStatActive: for players it accounts for dual-wield (a second equipped weapon stays inactive), and respects the BROKEN flag unless bForceActive is set. Halts via Fog::ErrorManager when a gem/rune host is not a UNIT_ITEM or txt lookups fail.
 // @sourcefile .\UNIT\Item.cpp
+// 1.14d mac: 00101a6e
 static void __stdcall ITEM_ApplySocketableAndEquipStats(int32_t bForceActive, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     D2ItemsTxt* pItemsTxt;
     D2GemsTxt* pGemsTxt;
@@ -285,6 +286,7 @@ static void __stdcall ITEM_ApplySocketableAndEquipStats(int32_t bForceActive, D2
 }
 
 // @sourcefile .\UNIT\Item.cpp
+// 1.14d mac: 001008a0
 void __fastcall ITEM_RemoveItemStatsFromOwner(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t bRecalc, int32_t bUpdateResources) {
     if (!pUnit2) {
       return;
@@ -306,6 +308,7 @@ void __fastcall ITEM_RemoveItemStatsFromOwner(D2UnitStrc * pUnit, D2UnitStrc * p
 
 // Creates a client-side item unit from a ground-drop network packet (pbParam). Extracts item details from the packet payload, creates the unit via UNIT_CreateWarp, loads save data via ITEM_LoadFromSaveData. On load failure, removes the item from the server object table and returns null. If the item has ITEMFLAG_BOUGHT and bSendIdentRequest is set, sends a 0x37 ident-request packet for unidentified items.
 // @sourcefile .\UNIT\Item.cpp
+// 1.14d mac: 00100f4c
 static D2UnitStrc * __stdcall ITEM_CreateItemFromGroundPacket(uint16_t nItemX, uint16_t nItemY, int32_t bSendIdentRequest, uint8_t * pPacketData, D2UnitDataItemDetailsStrc * pUnitDataItemDetails) {
     D2UnitDataItemDetailsStrc itemDetails;
     int32_t bLoadFailed;
@@ -338,6 +341,7 @@ static D2UnitStrc * __stdcall ITEM_CreateItemFromGroundPacket(uint16_t nItemX, u
 }
 
 // @sourcefile .\UNIT\Item.cpp
+// 1.14d mac: 00102058
 static D2UnitStrc * __stdcall ITEM_CreateItemFromBodyPacket(uint16_t nItemX, uint16_t nItemY, int32_t bSendIdentRequest, uint8_t * pPacketData, D2UnitDataItemDetailsStrc * pUnitDataItemDetails) {
     D2UnitDataItemDetailsStrc itemDetails;
     int32_t bLoadFailed;
@@ -384,6 +388,7 @@ BOOL __fastcall Unreferenced_004c10c0(D2UnitStrc * pUnit, D2SkillStrc * pSkill) 
     }
 }
 
+// 1.14d mac: 00100918
 int32_t __fastcall ITEM_CheckItemEquipRequirements(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     D2UnitStrc* pWeaponSlot;
     eD2ItemTypes eQuiverType;
@@ -498,6 +503,7 @@ static void ITEM_RestoreSkillSelections(D2UnitStrc * pUnit, int * pSkillSaveStat
 }
 
 // @sourcefile .\UNIT\Item.cpp
+// 1.14d mac: 00105ca7
 static void __stdcall ITEM_RemoveItemFromBodyAndRecalc(int32_t nGfxComponent, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     if (!(pUnit2 && pUnit && pUnit2->pInventory)) {
       return;
@@ -513,6 +519,7 @@ static void __stdcall ITEM_RemoveItemFromBodyAndRecalc(int32_t nGfxComponent, D2
     Engine::Gfx::GFX_ClearAllModeFlags(pUnit2, nGfxComponent);
 }
 
+// 1.14d mac: 00105d02
 static void __stdcall ITEM_ReequipItemOnBody(D2UnitStrc * pUnit, int32_t bApplyEquipStats, int32_t nGfxComponent, D2UnitStrc * pUnit2) {
     if (!(pUnit && pUnit2)) {
       return;
@@ -551,6 +558,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_9(D2UnitStrc * p) {
 
 // Re-evaluates and reapplies every equipped/carried item on a player (or merc-flagged unit) after a stat-affecting change. Saves the unit's skill selections, first (re)enables qualifying active charms applying their stats, then in three passes over the 11 body-location slots: disables items whose equip requirements are no longer met (removing their stats and flagging a gfx reload), iteratively re-enables items that now qualify (up to 100 passes, reapplying socketable/equip stats and updating the primary weapon/swap state), and recalculates set-quality items (quality 5). Restores skill selections, and if anything changed triggers a gfx/COF reload for players or a MonsterMessage(7) for mercs. Pure side effects on pUnit's inventory/stats; no return.
 // @sourcefile .\UNIT\Item.cpp
+// 1.14d mac: 00106007
 static void ITEM_RecalcAllEquippedItems_EBX(D2UnitStrc * pUnit) {
     D2InventoryStrc* pInventory_00;
     eD2PlayerAnimMode eVar1;
@@ -707,6 +715,7 @@ static void thunk_ITEM_RecalcAllEquippedItems_Unref_004c16c0(D2UnitStrc * pUnit)
 }
 
 // Returns the sound ID to play when an item is dropped on the ground. Looks up the base drop sound from D2ItemsTxt; overrides with quality-specific sounds for unique items (quality==7, from D2UniqueItemsTxt) and set items (quality==5, from D2SetItemsTxt) when those tables have a non-zero dropsound. Also writes the SFX frame offset to *pnParam (default 0xC) if the relevant txt row specifies one. Returns 0 if pUnit is null or no sound is found.
+// 1.14d mac: 0010436e
 static int32_t ITEM_GetItemDropSound(uint32_t * pnDropSfxFrame, D2UnitStrc * pUnit) {
     uint32_t nItemClassId;
     D2SetItemsTxt* pSetItemsTxt;
@@ -763,6 +772,7 @@ static int32_t ITEM_GetItemDropSound(uint32_t * pnDropSfxFrame, D2UnitStrc * pUn
 }
 
 // Returns the sound ID to play when a player uses/consumes an item. Starts with the base item's wUseSound from ItemsTxt (if wDropSound > 0). For unique quality items (eQuality==7) checks UniqueItemsTxt.usesound; for set quality (eQuality==5) checks SetItemsTxt.usesound, overriding the base value if available. Returns 0 if no sound is defined.
+// 1.14d mac: 0010449e
 static int32_t ITEM_GetItemUseSound(D2UnitStrc * pUnit) {
     uint32_t nItemClassId;
     D2SetItemsTxt* pSetItemsTxt;
@@ -800,6 +810,7 @@ static int32_t ITEM_GetItemUseSound(D2UnitStrc * pUnit) {
     return nSoundId;
 }
 
+// 1.14d mac: 00100c10
 static void ITEM_PlayItemDropSound(D2UnitStrc * pUnit) {
     uint32_t nSoundVolume = 0xc;
     eD2Sounds nSoundId = ITEM_GetItemDropSound(&nSoundVolume, pUnit);
@@ -817,6 +828,7 @@ static void ITEM_PlayItemDropSound(D2UnitStrc * pUnit) {
 }
 
 // Sets an item unit's animation mode and places it in the world. For mode Run (on-ground targetable), initialises a static path, blocks collision, and adds the unit to pRoom. For mode TownNeutral (dropped item), does the same and also plays the drop sound. Modes Death/Neutral/Walk/TownWalk/GetHit clear the targetable flag. When nParam is non-zero, marks the item identified, allocates a fresh stat list, and creates an inventory struct if the item type supports one.
+// 1.14d mac: 001009c1
 void __fastcall ITEM_SetAnimModeAndPlace(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nAnimMode, int32_t bInitItemData) {
     if (nAnimMode >= 7) {
       return;
@@ -876,6 +888,7 @@ void __fastcall ITEM_SetAnimModeAndPlace(D2UnitStrc * pUnit, D2RoomStrc * pRoom,
     D2Common::INVENTORY::Inventory::STRUCT_CreatePlayerInventory(nullptr, pUnit);
 }
 
+// 1.14d mac: 00100c95
 void __fastcall ITEM_FreeItemUnit(D2UnitStrc * pUnit) {
     Engine::Gfx::FreeGfxInfo(pUnit);
     int32_t iVar1 = D2Common::ITEMS::Items::ITEM_GetItemsTxt_bHasInv(pUnit);
@@ -899,6 +912,7 @@ void __fastcall ITEM_FreeItemUnit(D2UnitStrc * pUnit) {
 }
 
 // Updates a ground-item unit's animation state and targetability flag each frame. Death/Neutral/Walk/GetHit/TownWalk modes clear UNITFLAG_TARGETABLE. Run mode sets UNITFLAG_TARGETABLE and adds OVERLAY_itemgleam if not already present. TownNeutral advances the frame and transitions to Run when the cycle ends. Halts on unexpected anim mode or null unit.
+// 1.14d mac: 00100d19
 void __fastcall ITEM_UpdateItemAnimation(D2UnitStrc * pUnit) {
     BOOL bHasOverlay;
     if (!pUnit) {
@@ -947,6 +961,7 @@ void __fastcall ITEM_UpdateItemAnimation(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 00100e28
 void __fastcall ItemMessage(int32_t eMessageType, D2UnitStrc * pUnit, int32_t pMessage, int32_t nUpdateFlag) {
     switch (eMessageType) {
       case 2:
@@ -968,6 +983,7 @@ void __fastcall ItemMessage(int32_t eMessageType, D2UnitStrc * pUnit, int32_t pM
 
 // Client-side handler for S2C packet 0x47. Recalculates all equipped item states for the unit identified in the packet. Walks inventory charms (enables qualifying ones), iterates body slots 0-10 (disables items failing requirements, re-enables items passing requirements in a convergence loop up to 100 iterations), recalculates set bonuses for quality-5 items, and reloads character GFX if equipment changed. Source: .\\UNIT\\Item.cpp
 // EDX bFromNetwork: 1 from the network handler, 0 from the two local callers; overwritten here before any read.
+// 1.14d mac: 0010219c
 void __fastcall ITEM_CltRecalcAllEquippedItems(D2GSPacketSrv0x47 * pBytes, int32_t bFromNetwork) {
     D2UnitStrc* pUnit = CUnit::UNITS_FindClientSideUnit(pBytes->nUnitGUID, (eD2UnitType)pBytes->eUnitType);
     if (!pUnit) {
@@ -991,6 +1007,7 @@ void __fastcall ITEM_CltRecalcAllEquippedItems2(D2GSPacketSrv0x48 * pBytes) {
     ITEM_RecalcAllEquippedItems_EBX(pUnit);
 }
 
+// 1.14d mac: 001021fc
 void __fastcall ITEM_RecalcAllEquippedItems_ECX(D2UnitStrc * pUnit) {
     ITEM_RecalcAllEquippedItems_EBX(pUnit);
 }
@@ -1008,6 +1025,7 @@ static void ITEM_SaveWeaponHandClassId(D2UnitStrc * pUnit, char eBodyLoc) {
     gnWeaponHandClassId_Left = nWeaponAnimClass;
 }
 
+// 1.14d mac: 00102208
 uint32_t __fastcall ITEM_SetItemInBodyLocation(D2InventoryStrc * pInventory, D2UnitStrc * pItem, uint32_t eBodyLoc) {
     if (!pItem) {
       return 0;
@@ -1023,6 +1041,7 @@ uint32_t __fastcall ITEM_SetItemInBodyLocation(D2InventoryStrc * pInventory, D2U
 }
 
 // @sourcefile .\UNIT\Item.cpp
+// 1.14d mac: 001024a0
 static void __stdcall ITEM_RemoveEquippedItemForSwap(D2UnitStrc * pItem, D2UnitStrc * pOwner) {
     BOOL bIsBroken;
     D2InventoryStrc* pInventory = pOwner->pInventory;
@@ -1108,12 +1127,14 @@ int32_t __fastcall ITEM_PlayItemUseSound(D2UnitStrc * pUnit) {
     return nSoundId;
 }
 
+// 1.14d mac: 00104587
 void __stdcall ITEM_ResetWeaponHandClassIds() {
     gnWeaponHandClassId_Right = 0;
     gnWeaponHandClassId_Left = 0;
 }
 
 // Finds the UNITSTAT_item_charged_skill stat matching nParam/nStatLevel on pUnit or any item in its inventory (recursive), then resets the charge count to min(level, nMaxCharge). Used when charged skill charges are restored (e.g. town portal refresh). Returns 1 if the stat was found and updated, 0 otherwise.
+// 1.14d mac: 0010458c
 BOOL __fastcall ITEM_UpdateChargedSkillStat(D2UnitStrc * pUnit, int32_t nSkillId, uint32_t nStatLevel, uint32_t nMaxCharge) {
     D2StatListExStrc* pStatList;
     D2UnitStrc* pInvItem;
@@ -1158,6 +1179,7 @@ BOOL __fastcall ITEM_UpdateChargedSkillStat(D2UnitStrc * pUnit, int32_t nSkillId
 
 // Client-side handler for an item stat-update network message: applies a stat change to a client-side item (located by GUID) and re-evaluates which equipped/charm items remain valid. For UNITSTAT_item_charged_skill it forwards to ITEM_UpdateChargedSkillStat. Otherwise, if bSetStat it writes the stat (STATLIST_SetUnitStat), then (unless the stat is quantity) re-runs equip validation over the player: re-enables active charms whose requirements are now met, disables/removes equipped body-loc items that no longer meet requirements (iterating body locs 0-0xA, looping up to 100 passes until stable), handles weapon-swap and gfx mode flags, reapplies socketable/equip stats, and for set items recalculates owner stats. Saves/restores skill selections around the pass and, if anything changed (bNeedsGfxReload), reloads the unit's mode COF (player) or sends MonsterMessage 7. For quantity>0 it just clears the item's cursor/disabled flags. No return.
 // @sourcefile .\UNIT\Item.cpp
+// 1.14d mac: 001046b6
 void __fastcall ITEM_HandleStatUpdatePacket(DWORD nUnitGUID, char bSetStat, eD2UnitStat eUnitStat, uint32_t nValue, uint16_t nStatParam) {
     D2UnitStrc* pPlayerUnit_lcl;
     bool bAnyEquipped;
@@ -1200,6 +1222,7 @@ void __fastcall ITEM_HandleStatUpdatePacket(DWORD nUnitGUID, char bSetStat, eD2U
     }
 }
 
+// 1.14d mac: 0010497b
 void __fastcall ITEM_HandleItemFlagEditPacket(D2GSPacketSrv0x40 * pbPacket) {
     D2UnitStrc* pUnit = CUnit::UNITS_FindClientSideUnit(pbPacket->dwItemGUID, UNIT_ITEM);
     if (!pUnit) {
@@ -1234,6 +1257,7 @@ void __fastcall ITEM_HandleCursorItemRemoval(D2GSPacketSrv0x42 * pbPacket) {
     UI::npcmenu::NPCMENU_OnCursorItemRemoved(nUnitGUID);
 }
 
+// 1.14d mac: 00104d8f
 void __fastcall HandleItemToCursor(uint8_t * pBytes) {
     D2UnitDataItemDetailsStrc itemDetails;
     D2InventoryStrc* pInventory;
@@ -1279,6 +1303,7 @@ int __fastcall Unreferenced_004c2150(int nInvType) {
 }
 
 // @sourcefile .\UNIT\Item.cpp
+// 1.14d mac: 001010a4
 void __fastcall ITEM_RemoveUninterruptableState(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xcc2);
@@ -1296,10 +1321,12 @@ void __fastcall ITEM_RemoveUninterruptableState(D2UnitStrc * pUnit) {
     D2Common::Units::UpdateAnimSpeed(pUnit, ".\\UNIT\\Item.cpp", 0xcca);
 }
 
+// 1.14d mac: 00105b19
 void __fastcall ITEM_ClearUnitState(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * dwParam) {
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
 }
 
+// 1.14d mac: 00105a7e
 void __fastcall ITEM_RemoveClientSide(D2UnitStrc * pUnit) {
     eD2UnitType eUnitType;
     D2StatListExStrc* pUninterruptStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_uninterruptable);
@@ -1323,6 +1350,7 @@ void __fastcall ITEM_RemoveClientSide(D2UnitStrc * pUnit) {
 }
 
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).
+// 1.14d mac: 00105b3e
 BOOL __fastcall PlayerIsUnInterruptable(D2UnitStrc * pUnit) {
     if (D2Common::Stats::StatsEx::GetStatsByFlags(pUnit, 2)) {
       return TRUE;
@@ -1337,6 +1365,7 @@ BOOL __fastcall PlayerIsUnInterruptable(D2UnitStrc * pUnit) {
 }
 
 // Handles an item break/repair state-change packet (pPacket carries item GUID at +6, owner unit type/id at +1/+2, action code at +10, broken flag at +0xe). Action 0x100 = item broke: sets ITEMFLAG_BROKEN, removes the item from the body and recalculates equipped stats, then iterates the owner's body slots disabling items whose equip requirements no longer hold and re-enabling charms; loops (up to 100 passes) to settle dependent gear, restores skill selections, and reloads the unit's GFX/COF. Action 0x200 = item repaired: clears ITEMFLAG_BROKEN, re-equips it on the body, and recalculates all equipped items. No-op if item or owner unit can't be found.
+// 1.14d mac: 00105b88
 void __fastcall ITEM_HandleItemRepairBreak(D2GSPacketSrv0x7D * pPacket) {
     int iBodyLocSaved;
     int nEquipReqResult;
@@ -1374,6 +1403,7 @@ void __fastcall ITEM_HandleItemRepairBreak(D2GSPacketSrv0x7D * pPacket) {
     ITEM_RecalcAllEquippedItems_EBX(pUnit);
 }
 
+// 1.14d mac: 00105d85
 void __fastcall ITEM_HandleItemCopyToCursor(uint8_t * pBytes) {
     D2UnitDataItemDetailsStrc stItemDetails;
     D2Common::ITEMS::Items::ExtractItemDetails(pBytes + 0xd, pBytes[2] - 0xd, 0, &stItemDetails);
@@ -1398,6 +1428,7 @@ void __fastcall ITEM_HandleItemCopyToCursor(uint8_t * pBytes) {
 
 // Re-validates and re-applies all socketed/equipped item effects for a unit's inventory. For each item carrying a socket-filler, re-enables charms whose owner is empty and whose equip requirements are met, then iterates the 11 body-location slots: disables items failing equip requirements (removing them from body), repeatedly re-equips items now meeting requirements (up to 100 passes), and re-applies set-item (quality==5) bonus stats. Saves/restores skill selections around the recalc and triggers a GFX mode-COF reload (player) or MonsterMessage(7) if anything changed. Finally frees the recursive child inventories. Halts via Fog ErrorManager on inventory-consistency failures.
 // @sourcefile .\UNIT\Item.cpp
+// 1.14d mac: 00105e69
 void __fastcall ITEM_HandleUnsocketItems(D2UnitStrc * pUnit) {
     D2UnitStrc* pCarriedItem;
     int32_t iVar1;
@@ -1470,6 +1501,7 @@ void __fastcall ITEM_HandleUnsocketItems(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 0010136e
 static void __stdcall ITEM_DropItemToGroundWithMode(int32_t nAnimMode, int32_t bFindRoom, eInventoryPage eInvPage, uint16_t nX, D2UnitStrc * pUnit, uint16_t nY) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xac);
@@ -1486,6 +1518,7 @@ static void __stdcall ITEM_DropItemToGroundWithMode(int32_t nAnimMode, int32_t b
 }
 
 // @sourcefile .\UNIT\Item.cpp
+// 1.14d mac: 00100e6c
 void __fastcall HandleItemAddToGround(uint8_t * pBytes) {
     D2UnitDataItemDetailsStrc stItemDetails;
     D2Common::ITEMS::Items::ExtractItemDetails(pBytes + 8, pBytes[2] - 8, 0, &stItemDetails);
@@ -1509,6 +1542,7 @@ void __fastcall HandleItemAddToGround(uint8_t * pBytes) {
     ITEM_PlayItemDropSound(pItem);
 }
 
+// 1.14d mac: 0010113d
 void __fastcall HandleItemPickedFromGround(uint8_t * pBytes) {
     D2UnitDataItemDetailsStrc stItemDetails;
     D2Common::ITEMS::Items::ExtractItemDetails(pBytes + 8, pBytes[2] - 8, 0, &stItemDetails);
@@ -1533,6 +1567,7 @@ void __fastcall HandleItemPickedFromGround(uint8_t * pBytes) {
 }
 
 // Client-side handler for a server packet indicating an item was dropped to the ground. Extracts item details from the packet; if the item already exists client-side and is the cursor item, clears the cursor. For ITEMFLAG_RELOAD items, removes the old unit and recreates it via ITEM_CreateItemFromGroundPacket. Places the resulting item unit in the world at the packet-specified tile coordinates via ITEM_SetAnimModeAndPlace.
+// 1.14d mac: 0010122e
 void __fastcall HandleItemDroppedToGround(uint8_t * pBytes) {
     uint32_t _byInvPage;
     D2RoomStrc* pRoom;
@@ -1583,6 +1618,7 @@ void __fastcall HandleItemDroppedToGround(uint8_t * pBytes) {
 
 // Client-side handler that drops an item to the ground from a packet. Extracts item details from the packet body via ExtractItemDetails, then locates the existing item unit. If the item was equipped on the local player it is unequipped: swaps the primary weapon, clears GFX mode flags for its body location, and runs the full equip-requirement recalc loop over the 11 body slots (disable items failing requirements, re-equip qualifying ones up to 100 passes, re-apply set-item bonuses), reloading the unit mode COF. Removes the old item from the server object table, then creates the ground item from the packet (ITEM_CreateItemFromGroundPacket) and clears its uninterruptable state. Halts via Fog ErrorManager on inconsistent state.
 // @sourcefile .\UNIT\Item.cpp
+// 1.14d mac: 0010140f
 void __fastcall HandleItemOnGround(uint8_t * pBuffer) {
     int iBodyLocSaved;
     D2UnitStrc* pUnit;
@@ -1655,6 +1691,7 @@ void __fastcall HandleItemOnGround(uint8_t * pBuffer) {
 }
 
 // Places pUnit (an item) into pUnit2's inventory at the given grid coords (nItemX, nYPos), then calls INVENTORY_PlaceItemAtCoords for the resolved inventory page. If the item belongs to the local player: plays a pickup sound (nParam==1) or refreshes cursor item (otherwise). Handles Horadric Cube quest trigger for scroll/tome items (nParam==3). Client-side only (calls D2Client functions).
+// 1.14d mac: 001018a1
 static void __stdcall ITEM_PlaceItemInContainer(D2UnitStrc * pUnit, uint32_t nYPos, int32_t nInvPage, D2UnitStrc * pUnit2, uint32_t nItemX) {
     BOOL _bIsExpansion;
     bool bIsExpansion;
@@ -1732,6 +1769,7 @@ static void __stdcall ITEM_PlaceItemInContainer(D2UnitStrc * pUnit, uint32_t nYP
 
 // Client-side handler for a server "item placed in container" packet. Extracts item details from pbParam, locates or creates the client-side item unit, updates its position/flags, places it in the appropriate inventory grid slot via ITEM_PlaceItemInContainer, applies charm stats if active, and notifies the NPC-menu UI. On RELOAD flag, also removes the old entry and recalculates owner stats.
 // @sourcefile .\UNIT\Item.cpp
+// 1.14d mac: 001015ee
 void __fastcall HandleItemPutInContainer(uint8_t * pBytes) {
     uint32_t nFlagResult;
     eInventoryPage eInvPage;
@@ -1800,6 +1838,7 @@ void __fastcall HandleItemPutInContainer(uint8_t * pBytes) {
 
 // Client-side handler that processes a server packet removing an item from a container/inventory. Parses item details (ExtractItemDetails), resolves the owner unit and the item by GUID; verifies the item belongs to the owner's inventory (halts with ERROR_UnrecoverableInternalError on mismatch). Removes the item's stat list (unless broken), then either drops it to the ground, or on RELOAD recreates it from the body packet and places it on the cursor (ITEM_SetItemOnHand); on REMOVED it deletes the server-object-table entry and clears the cursor/plays a sound for corpse/merc pages. Notifies the NPC menu when the owner is the local player.
 // @sourcefile .\UNIT\Item.cpp
+// 1.14d mac: 00101d6b
 void __fastcall HandleItemRemoveFromContainer(uint8_t * pBytes) {
     eInventoryPage eContainingPage;
     bool bIsBroken;
@@ -1909,6 +1948,7 @@ void __fastcall HandleItemRemoveFromContainer(uint8_t * pBytes) {
 }
 
 // Client-side handler for the server item-on-body packet (pBytes): extracts item details, finds/creates the item and its owner unit, places it into the body/inventory grid at the given bodyloc, sets it in the body location, and reloads the unit's gfx COF. If the owner is a player it then re-evaluates all equipped items: disables items whose equip requirements fail, re-enables ones now satisfied (iterated up to 100 passes over the 11 body slots), reapplies socketable/set/charm equip stats, updates the primary weapon, restores skill selections, and refreshes the NpcMenu. Pure client-side gfx/inventory sync; no server authority.
+// 1.14d mac: 0010225c
 void __fastcall HandleItemEquip(uint8_t * pBytes) {
     // The values VC8 kept in pInventoryTmp's one frame slot, one member each: a frame object reaches the slot.
     union pInventoryTmp_u {
@@ -2022,6 +2062,7 @@ void __fastcall HandleItemEquip(uint8_t * pBytes) {
 
 // Client-side handler for a server item-swap-on-body packet (pBytes wire buffer). Parses item details (ExtractItemDetails), resolves the target unit, and for weapon-swap body locations (R/L arm and their swapped variants 4/5/0xb/0xc) removes the currently equipped item in the paired slot, clears its gfx component, recalcs stats, then either reuses or creates the incoming item (ITEM_CreateItemFromBodyPacket / drops the old one), places it in the inventory slot and body location, updates primary weapon and reloads the unit COF. Afterward, for a player/merc owner, re-validates the entire equipped set against equip requirements: re-enables active charms, disables items whose requirements are no longer met, iteratively re-equips items that now qualify (up to 100 passes), removes set-quality items, restores skill selections, and reloads gfx (or sends MonsterMessage 7 for non-players). Fatal Fog error on missing items/slots. No return value; drives client visual/inventory state, not authoritative server state.
 // @sourcefile .\UNIT\Item.cpp
+// 1.14d mac: 00102582
 void __fastcall HandleItemIndirectSwapBodyItem(uint8_t * pBytes) {
     // The values VC8 kept in pLocalPlayer's one frame slot, one member each: a frame object reaches the slot.
     union pLocalPlayer_u {
@@ -2430,6 +2471,7 @@ static void __stdcall ITEM_HandleSwapBodyUnequipItem(uint8_t * pPacketData, D2Un
     ITEM_RemoveUninterruptableState(pBodyItem);
 }
 
+// 1.14d mac: 00102c89
 void __fastcall HandleItemSwapBodyItem(uint8_t * pBytes) {
     D2UnitDataItemDetailsStrc stItemDetails;
     D2Common::ITEMS::Items::ExtractItemDetails(pBytes + 0xd, pBytes[2] - 0xd, 0, &stItemDetails);
@@ -2530,6 +2572,7 @@ void __fastcall HandleItemWeaponSwitch(uint8_t * pPacket) {
 }
 
 // Client handler for a server packet that updates an existing item's quantity/stats (e.g. after stacking gold/potions). Locates the item by GUID, reloads its save data from the packet; on failure removes the item. If the item is not ITEMFLAG_IGNORE, clears the player's cursor inventory and refreshes the on-hand item display via ITEM_SetItemOnHand. Halts if the player or inventory is null.
+// 1.14d mac: 00103368
 void __fastcall NET_D2GS_CLIENT_HandleItemAddQuantity(uint8_t * pPacket) {
     eD2ItemFlag eD2ItemFlag2;
     D2InventoryStrc* pInventory;
@@ -2574,6 +2617,7 @@ void __fastcall NET_D2GS_CLIENT_HandleItemAddQuantity(uint8_t * pPacket) {
 
 // Client-side handler for a shop/NPC item packet (pbParam = packet bytes; pbParam[1]=sub-action, pbParam[4..]=item GUID). Parses item details, resolves the interacted NPC unit and its inventory. Sub-action 0xc removes an item from the shop view (resets shop UI, removes the item from the client object table). Otherwise it creates/locates the client-side item, sets its inventory page, and if INVENTORY_CheckGridCollisions says it fits, places it into the NPC's shop container at the parsed (x,y) and flags the inventory for refresh. No-op if NPC, inventory, or item is missing/invalid page (0xff).
 // @sourcefile .\UNIT\Item.cpp
+// 1.14d mac: 00103494
 void __fastcall HandleItemInShop(uint8_t * pPacket) {
     // Frame slots -20..-4 are ONE object: &nCollisionResult is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -2828,6 +2872,7 @@ static void __stdcall ITEM_HandleSwapContainerOldItem(uint8_t * pPacketData, D2U
     ITEM_RemoveUninterruptableState(pItem);
 }
 
+// 1.14d mac: 00103796
 void __fastcall HandleItemSwapInContainer(uint8_t * pPacket) {
     D2UnitDataItemDetailsStrc stItemDetails;
     D2Common::ITEMS::Items::ExtractItemDetails(pPacket + 8, pPacket[2] - 8, 0, &stItemDetails);
@@ -2847,6 +2892,7 @@ void __fastcall HandleItemSwapInContainer(uint8_t * pPacket) {
 }
 
 // Client packet handler that places an item into the player's belt inventory. Extracts item details from the raw packet buffer, locates or creates the item unit, sets its anim/page, positions it in the inventory grid via PutItemInInventory, validates belt slot placement, applies charm stats if active, marks the item as sorted, refreshes the cursor item, sets the belt-slot hover flag, and notifies the NPC-menu system.
+// 1.14d mac: 00103c81
 void __fastcall HandleItemPutInBelt(uint8_t * pPacket) {
     uint32_t _nInvPageByte;
     BOOL bPlacedInInv;
@@ -2917,6 +2963,7 @@ void __fastcall HandleItemPutInBelt(uint8_t * pPacket) {
 
 // Client-side packet handler that removes an item from the player's belt. Extracts item details from the raw packet bytes, looks up the player and item units, validates belt membership, clears the belt slot hover UI, removes the item's stat contributions from the player, and either drops the item to ground (if not flagged REMOVED) or removes it from the server object table. Calls ERROR_Halt on missing player/inventory.
 // @sourcefile .\UNIT\Item.cpp
+// 1.14d mac: 00103ea7
 void __fastcall HandleItemRemoveFromBelt(uint8_t * pPacket) {
     D2UnitStrc* pBelongsResult;
     BOOL bIsBroken;
@@ -3070,6 +3117,7 @@ void __stdcall ITEM_HandleSwapBeltOldItem(uint8_t * pBytes, D2UnitDataItemDetail
     }
 }
 
+// 1.14d mac: 00104054
 void __fastcall HandleItemSwapInBelt(uint8_t * pBytes) {
     D2UnitDataItemDetailsStrc stItemDetails;
     D2Common::ITEMS::Items::ExtractItemDetails(pBytes + 8, pBytes[2] - 8, 0, &stItemDetails);
@@ -3145,6 +3193,7 @@ void __fastcall ITEM_HandleItemCursorAssign(D2GSPacketSrv0x3F * pPacket) {
 
 // Process auto-unequip packet from client when item no longer meets requirements
 // @sourcefile .\UNIT\Item.cpp
+// 1.14d mac: 001049b8
 void __fastcall HandleItemAutoUnequip(uint8_t * pPacketData) {
     eD2InventoryGridType eVar1_invGridType;
     uint32_t nItemComponent;
@@ -3248,6 +3297,7 @@ void __fastcall HandleItemAutoUnequip(uint8_t * pPacketData) {
 }
 
 // Client handler for a packet placing a socketable item into an owner unit's socket. Extracts item details, finds the owner unit (any type) and socket item by GUID; creates the socket item if it doesn't exist. Sets the item's position/page, inserts it into the owner's inventory, applies socketable+equip stats via ITEM_ApplySocketableAndEquipStats. If not ITEMFLAG_IGNORE, refreshes the local player's cursor. Halts on missing inventory.
+// 1.14d mac: 00104e87
 void __fastcall HandleItemInSocket(uint8_t * pPacket) {
     uint32_t _nInvPageByte;
     D2UnitStrc* pLocalPlayer;
@@ -3299,6 +3349,7 @@ void __fastcall HandleItemInSocket(uint8_t * pPacket) {
 
 // Client-side handler for the server packet that equips/moves an item to a body location. Extracts item details from the packet (ExtractItemDetails), resolves the target unit and (for the local player) the moved item, then either reuses the existing item, recreates it on RELOAD, or builds a fresh item from the body packet. Places the item into the equipped inventory slot (PutItemInInventory + ITEM_SetItemInBodyLocation), updates the primary weapon, reloads the unit's COF gfx, and applies equip/socketable stats. Then runs the full equipped-item recalculation pass: enabling active charms, disabling items whose requirements are no longer met, re-enabling now-valid items (iterating up to 100 passes until stable), and re-applying set-item (quality 5) bonuses, saving/restoring skill selections around it. Halts on inventory/item invariants. No return value.
 // @sourcefile .\UNIT\Item.cpp
+// 1.14d mac: 00104fff
 void __fastcall ITEM_HandleItemMoveToBodyLoc(uint8_t * pPacket) {
     // The values VC8 kept in pPlayerUnit_lcl's one frame slot, one member each: a frame object reaches the slot.
     union pPlayerUnit_lcl_u {
@@ -3396,6 +3447,7 @@ void __fastcall ITEM_HandleItemMoveToBodyLoc(uint8_t * pPacket) {
 
 // Client-side handler for a server item-update packet. Parses item details (ExtractItemDetails) then dispatches on the action code: place item into inventory grid (creates the item, applies socketable/equip stats, charm activation), equip-on-body / remove-from-body (mode 1: swaps primary weapon, clears CelCmp mode flags, runs the full re-equip pass that disables/enables items by ITEM_CheckItemEquipRequirements, recalcs equipped items and reloads the unit COF), put-in-belt (mode 2), or set-on-cursor (mode 4). Resolves the owning unit via UNITS_FindClientSideUnit, updates the local player's hand/weapon class ids and UI. Returns the affected item unit (or NULL); calls the unrecoverable-error halt on consistency failures. __fastcall(pbPacket).
 // @sourcefile .\UNIT\Item.cpp
+// 1.14d mac: 001052b7
 D2UnitStrc * __fastcall HandleItemUpdateStats(uint8_t * pbPacket) {
     eD2InventoryGridType eInvGridType;
     D2UnitStrc* pCursorItem_lcl;
@@ -3632,6 +3684,7 @@ D2UnitStrc * __fastcall HandleItemUpdateStats(uint8_t * pbPacket) {
     return pCursorItem_lcl;
 }
 
+// 1.14d mac: 00105a51
 void __fastcall ITEM_HandleServerItemAction(D2GSPacketSrv0x7C * pPacket) {
     D2UnitStrc* pUnit = CUnit::UNITS_FindClientSideUnit(pPacket->dwUnitGUID, (eD2UnitType)pPacket->nUnitType);
     if (!pUnit) {

@@ -38,10 +38,12 @@ void __thiscall Destructor(::ListBoxImplementation * pThis) {
     pThis->pVtable = (ListBoxImplementationVtable*)(void*)UI::vftable;
 }
 
+// 1.14d mac: 000c0548 D2Client::UI::ListBox::ListBoxImplementation::GetItemCount
 int __thiscall GetItemCount(::ListBoxImplementation * pThis) {
     return (uint32_t)pThis->nItemCount;
 }
 
+// 1.14d mac: 000c0558 D2Client::UI::ListBox::ListBoxImplementation::Clear
 void __thiscall Clear(::ListBoxImplementation * pThis) {
     int nItemIdx = 0;
     if ((uint16_t)pThis->nItemCount > 0) {
@@ -62,6 +64,7 @@ void __thiscall Clear(::ListBoxImplementation * pThis) {
     pThis->nItemCount = 0;
 }
 
+// 1.14d mac: 000c05c2
 void __thiscall DrawScrollbar(::ListBoxImplementation * pThis) {
     D2GfxDataStrc sGfxData;
     int nThumbSegCount;
@@ -158,6 +161,7 @@ void __thiscall DrawScrollbar(::ListBoxImplementation * pThis) {
     pThis->nThumbEndSegment = nScrollStart;
 }
 
+// 1.14d mac: 000c084a
 int __thiscall GetVisibleItemCount(::ListBoxImplementation * pThis) {
     int nItemCount = pThis->nItemCount;
     int nTotalHeight = 0;
@@ -192,6 +196,7 @@ int __thiscall GetVisibleItemCount(::ListBoxImplementation * pThis) {
     return nItemCount;
 }
 
+// 1.14d mac: 000c090e
 void __thiscall DrawTruncatedText(::ListBoxImplementation * pThis, uint16_t * wszText, int nX, int nY, int nColor) {
     int i;
     uint16_t* pWcharClear;
@@ -220,6 +225,7 @@ void __thiscall DrawTruncatedText(::ListBoxImplementation * pThis, uint16_t * ws
     D2Win::Src::D2WinFont::DRAW_text(wszWorkBuffer, nX, nY, nColor, 0);
 }
 
+// 1.14d mac: 000c109c D2Client::UI::ListBox::ListBoxImplementation::AddItem
 void __thiscall AddItem(::ListBoxImplementation * pThis, uint16_t * wszLine0, uint16_t * wszLine1, uint16_t * wszLine2, uint16_t * wszLine3, uint16_t * wszLine4, uint16_t * wszLine5, uint32_t dwItemData, int nColor, BOOL bUseDefaultColor, int nFont) {
     if (pThis->nItemCount >= 0x80) {
       return;
@@ -279,6 +285,7 @@ BOOL __thiscall IsMouseOnScrollUp(::ListBoxImplementation * pThis, D2UIMouseMsgS
     return 0;
 }
 
+// 1.14d mac: 000c1052
 BOOL __thiscall IsMouseOnScrollDown(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
     int32_t nMouseX = (int32_t)pMsg->uLParam.sMousePos.nMouseX;
     int32_t nMouseY = (int32_t)pMsg->uLParam.sMousePos.nMouseY;
@@ -293,6 +300,7 @@ BOOL __thiscall IsMouseOnScrollDown(::ListBoxImplementation * pThis, D2UIMouseMs
     return 0;
 }
 
+// 1.14d mac: 000c12ec
 BOOL __thiscall IsMouseOnScrollTrack(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
     int32_t nMouseX = (int32_t)pMsg->uLParam.sMousePos.nMouseX;
     int32_t nMouseY = (int32_t)pMsg->uLParam.sMousePos.nMouseY;
@@ -343,6 +351,7 @@ void __thiscall EnsureSelectionVisible(::ListBoxImplementation * pThis) {
     pThis->nFirstVisibleIndex++;
 }
 
+// 1.14d mac: 000c188e D2Client::UI::ListBox::ListBoxImplementation::OnUpArrow
 int __thiscall OnUpArrow(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
     if (!pThis->pfnOnItemActivated) {
       pThis->nSelectedIndex = pThis->nFirstVisibleIndex;
@@ -365,6 +374,7 @@ int __thiscall OnUpArrow(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMs
     }
 }
 
+// 1.14d mac: 000c1922 D2Client::UI::ListBox::ListBoxImplementation::OnDownArrow
 int __thiscall OnDownArrow(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
     if (!pThis->pfnOnItemActivated) {
       int nLastVisibleIdx;
@@ -389,14 +399,17 @@ int __thiscall OnDownArrow(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * p
     return 1;
 }
 
+// 1.14d mac: 000c19e2 D2Client::UI::ListBox::ListBoxImplementation::OnLeftArrow
 int __thiscall OnLeftArrow(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
     return 0;
 }
 
+// 1.14d mac: 000c19ea D2Client::UI::ListBox::ListBoxImplementation::OnRightArrow
 int __thiscall OnRightArrow(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
     return 0;
 }
 
+// 1.14d mac: 000c1626
 int __thiscall HitTestItem(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
     if (pMsg->uLParam.sMousePos.nMouseX > pThis->nScrollBarX - 0xf || !pThis->pfnOnItemActivated) {
       return -1;
@@ -436,6 +449,7 @@ int __thiscall HitTestItem(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * p
     return -1;
 }
 
+// 1.14d mac: 000c19f2 D2Client::UI::ListBox::ListBoxImplementation::OnMouseMove
 int __thiscall OnMouseMove(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
     int32_t nMouseX = (int32_t)pMsg->uLParam.sMousePos.nMouseX;
     int32_t nMouseY = (int32_t)pMsg->uLParam.sMousePos.nMouseY;
@@ -446,6 +460,7 @@ int __thiscall OnMouseMove(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * p
     return 0;
 }
 
+// 1.14d mac: 000c1a26 D2Client::UI::ListBox::ListBoxImplementation::OnChar
 int __thiscall OnChar(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
     if (pThis->pfnOnItemActivated) {
       pMsg->bHandled = 1;
@@ -464,6 +479,7 @@ int __thiscall OnChar(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) 
     return 0;
 }
 
+// 1.14d mac: 000c1a84 D2Client::UI::ListBox::ListBoxImplementation::GetValue
 int __thiscall GetValue(::ListBoxImplementation * pThis) {
     return pThis->nSelectedIndex;
 }
@@ -629,6 +645,7 @@ void __thiscall Draw(::ListBoxImplementation * pThis) {
     D2Win::Src::D2WinFont::SetAndReturnLastFont(nPrevFontId);
 }
 
+// 1.14d mac: 000c1334
 int __thiscall HandleScrollTrackClick(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
     int nPageSize;
     int32_t uMouseY = (int32_t)pMsg->uLParam.sMousePos.nMouseY;
@@ -677,6 +694,7 @@ int __thiscall HandleScrollTrackClick(::ListBoxImplementation * pThis, D2UIMouse
     return 0;
 }
 
+// 1.14d mac: 000c1540 D2Client::UI::ListBox::ListBoxImplementation::OnMouseDown
 int __thiscall OnMouseDown(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
     uint16_t uMouseY;
     int32_t nMouseX = (int32_t)pMsg->uLParam.sMousePos.nMouseX;
@@ -717,6 +735,7 @@ int __thiscall OnMouseDown(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * p
     return 1;
 }
 
+// 1.14d mac: 000c174c D2Client::UI::ListBox::ListBoxImplementation::OnMouseUp
 int __thiscall OnMouseUp(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
     BOOL nIsOnTarget;
     int nHitItemIdx;
@@ -772,6 +791,7 @@ int __thiscall OnMouseUp(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMs
     return 0;
 }
 
+// 1.14d mac: 000c0352 D2Client::UI::ListBox::ListBoxImplementation::Constructor
 ::ListBoxImplementation * __thiscall Constructor(::ListBoxImplementation * pThis, int nPosX, int nPosY, int nWidth, int nHeight, int nItemSpacing, int nDefaultColor, int nDefaultFont, fpListBoxItemActivated pfnOnItemActivated, bool bTallRows) {
     pfnEHHandlerRoutine pfnExceptHandler = SehHandler_6ca238;
     void* pPrevExceptionList = ExceptionList;

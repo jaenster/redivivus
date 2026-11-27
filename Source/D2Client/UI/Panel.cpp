@@ -97,21 +97,25 @@ static uint32_t gpPanelBorderImage = 0; D2_STATIC_GUARD(gpPanelBorderImage, "gpP
 namespace D2Client::UI::Panel {
 
 // JMP thunk
+// 1.14d mac: 000a0b48
 void __stdcall thunk_CMD_UseBeltSlot1() {
     ::D2Client::UI::Panel::CMD_UseBeltSlot1();
 }
 
 // JMP thunk
+// 1.14d mac: 000a0b51
 void __stdcall thunk_CMD_UseBeltSlot2() {
     ::D2Client::UI::Panel::CMD_UseBeltSlot2();
 }
 
 // JMP thunk
+// 1.14d mac: 000a0b5a
 void __stdcall thunk_CMD_UseBeltSlot3() {
     ::D2Client::UI::Panel::CMD_UseBeltSlot3();
 }
 
 // JMP thunk
+// 1.14d mac: 000a0b63
 void __stdcall thunk_CMD_UseBeltSlot4() {
     ::D2Client::UI::Panel::CMD_UseBeltSlot4();
 }
@@ -124,6 +128,7 @@ uint32_t __stdcall INV_HasItemToDescribe() {
     return (uint32_t)(Inv::pItemToDescribe != 0);
 }
 
+// 1.14d mac: 000ce9a1
 void __stdcall LoadPanelImages() {
     char* ppszPath;
     btn = ui::ARCHIVE_LoadOverlayImageUsedInGame("Panel\\btn");
@@ -325,6 +330,7 @@ void __fastcall SPELLSEL_DrawSkillIcon(D2UnitStrc * pUnit, D2SkillStrc * pSkill,
     SpellSel::SPELLSEL_DrawSkillTooltip(&pSkillTxt->skill, ePalette, nSkillLevel, nReqLevel, nScreenX, nScreenY);
 }
 
+// 1.14d mac: 000cf130
 void __stdcall PANEL_DrawSkillIcons() {
     int nSkillLevel;
     int32_t nLine;
@@ -362,6 +368,7 @@ void __stdcall PANEL_DrawSkillIcons() {
     Panel::SPELLSEL_DrawSkillIcon(pUnit, pSkill, ui::ScreenSizeX - 0xa5, Inv::ScreenSizeY, 0);
 }
 
+// 1.14d mac: 000cfddf
 static int32_t PANEL_GetSmoothedStatValue(eD2UnitStat eUnitStat) {
     int nMaxValue = 0;
     int32_t nNow;
@@ -556,18 +563,22 @@ void __stdcall PANEL_DrawManaOrb() {
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX - 0x6e, Inv::ScreenSizeY - 9, -1, DRAW_SOLID, nullptr);
 }
 
+// 1.14d mac: 000cf2bd
 void __stdcall PANEL_InitStaminaColorLow() {
     gbyPanelStaminaColorLow = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0xff, 0, 0);
 }
 
+// 1.14d mac: 000cf2f2
 void __stdcall PANEL_InitStaminaColorNormal() {
     gbyPanelStaminaColorNormal = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0xf4, 0xc0, 0x4c);
 }
 
+// 1.14d mac: 000cf327
 void __stdcall PANEL_InitStaminaColorBlue() {
     gbyPanelStaminaColorBlue = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0, 0, 0xff);
 }
 
+// 1.14d mac: 000cf35c
 void __stdcall PANEL_InitBeltColors() {
     gaPanelBeltColors[0] = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0x80, 0, 0);
     gaPanelBeltColors[1] = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0, 0x80, 0);
@@ -753,6 +764,7 @@ void __stdcall PANEL_DrawMenuButton() {
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX / 2 - 8, Inv::ScreenSizeY - 0x10, -1, DRAW_SOLID, nullptr);
 }
 
+// 1.14d mac: 000d2f5d
 static void __stdcall PANEL_HighlightBeltSlot(int32_t nBeltSlot, int32_t nHighlightColor) {
     int nRect[4];
     PANEL_InitBeltColors();
@@ -796,10 +808,12 @@ static void CLIENT_HandleBeltSlotClick(D2InventoryStrc * pInventory) {
     PANEL_HighlightBeltSlot(gnBeltSlotUnderCursor, 0);
 }
 
+// 1.14d mac: 000cf3f7
 uint32_t __stdcall PANEL_GetBeltSlotHoverFlag() {
     return (uint32_t)(gbPanelBeltSlotHovered != 0);
 }
 
+// 1.14d mac: 000cf409
 int __stdcall PANEL_CheckBeltUseBlocked() {
     switch (gnBeltPanelState) {
       case 2:
@@ -1100,6 +1114,7 @@ void __stdcall DRAW_EquipmentNeedArrows() {
     } while (nSlotIndex < gnInventoryWarningSlotCount);
 }
 
+// 1.14d mac: 000cf71e
 void __stdcall Draw_EquipmentNeedToRepairBody() {
     // Static local variables (originally global data)
     static int gaBodySlotLocTable[7] = { 0x1, 0x3, 0x8, 0x9, 0xa, 0x4, 0x5 }; D2_STATIC_GUARD(gaBodySlotLocTable, "D2Client::UI::Panel::Draw_EquipmentNeedToRepairBody::gaBodySlotLocTable");
@@ -1181,6 +1196,7 @@ void __stdcall Draw_EquipmentNeedToRepairBody() {
     }
 }
 
+// 1.14d mac: 000cf9f0
 void __stdcall PANEL_DrawPanelLayout() {
     int32_t nTextWidth;
     int nClearCount;
@@ -1372,6 +1388,7 @@ void __stdcall DRAW_UI_BorderRight() {
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, 400, 0x229, -1, DRAW_SOLID, nullptr);
 }
 
+// 1.14d mac: 000d2aed
 static int32_t __stdcall PANEL_GetBeltBoxAtPoint(int32_t nMouseY, int32_t nMouseX) {
     D2BeltsTxt sBeltsTxt;
     int nResult = -1;
@@ -1388,6 +1405,7 @@ static int32_t __stdcall PANEL_GetBeltBoxAtPoint(int32_t nMouseY, int32_t nMouse
     return nResult;
 }
 
+// 1.14d mac: 000d2683
 static void __stdcall ClickBelt(D2InventoryStrc * pInventory, int32_t nMouseX, int32_t nMouseY) {
     BOOL BVar1;
     uint8_t nPacketId;
@@ -1450,6 +1468,7 @@ static void __stdcall ClickBelt(D2InventoryStrc * pInventory, int32_t nMouseX, i
     Sound::SOUND_PlaySound(UNIT::SOUND_GetIdFromUnit(pCursorItem_lcl), nullptr, 0, 0, nSoundArg3);
 }
 
+// 1.14d mac: 000d28f7
 static void CLIENT_HandleBeltMouseDown(D2InventoryStrc * pInventory, int32_t nMouseX, int32_t nMouseY) {
     int aInvRect[4];
     uint32_t nBeltSlot = PANEL_GetBeltBoxAtPoint(nMouseY, nMouseX);
@@ -1514,6 +1533,7 @@ static BOOL __fastcall PANEL_CheckEquipmentClickable(D2ItemsTxt * pItemTxt, D2Un
     return bClickable;
 }
 
+// 1.14d mac: 000d2bb1
 static void __stdcall ClickBeltRight(uint32_t nBeltSlot, D2UnitStrc * pUnit, D2InventoryStrc * pInventory, int32_t bToMercenary) {
     D2GridScreenCoordinates sGridCoords;
     BOOL bClickable = GAME::Game::CLIENT_CheckExpansion();
@@ -1579,6 +1599,7 @@ static void __stdcall ClickBeltRight(uint32_t nBeltSlot, D2UnitStrc * pUnit, D2I
 // gbPanelStatStrengthColor is set, calls ClickBeltRight(0, pUnit, pUnit->pInventory, SHIFT-held).
 // It reads no colour and returns nothing.
 // The gbPanelStat*Color globals it tests are likewise misnamed belt-slot flags.
+// 1.14d mac: 000d2df9
 void __stdcall CMD_UseBeltSlot1() {
     BOOL bIsExiting = GAME::Game::GAMEDATA_GetExitFlag3();
     if (bIsExiting) {
@@ -1598,6 +1619,7 @@ void __stdcall CMD_UseBeltSlot1() {
 // gbPanelStatDexterityColor is set, calls ClickBeltRight(1, pUnit, pUnit->pInventory, SHIFT-held).
 // It reads no colour and returns nothing.
 // The gbPanelStat*Color globals it tests are likewise misnamed belt-slot flags.
+// 1.14d mac: 000d2e60
 void __stdcall CMD_UseBeltSlot2() {
     BOOL bIsExiting = GAME::Game::GAMEDATA_GetExitFlag3();
     if (bIsExiting) {
@@ -1617,6 +1639,7 @@ void __stdcall CMD_UseBeltSlot2() {
 // gbPanelStatVitalityColor is set, calls ClickBeltRight(2, pUnit, pUnit->pInventory, SHIFT-held).
 // It reads no colour and returns nothing.
 // The gbPanelStat*Color globals it tests are likewise misnamed belt-slot flags.
+// 1.14d mac: 000d2e6e
 void __stdcall CMD_UseBeltSlot3() {
     BOOL bIsExiting = GAME::Game::GAMEDATA_GetExitFlag3();
     if (bIsExiting) {
@@ -1636,6 +1659,7 @@ void __stdcall CMD_UseBeltSlot3() {
 // gbPanelStatEnergyColor is set, calls ClickBeltRight(3, pUnit, pUnit->pInventory, SHIFT-held).
 // It reads no colour and returns nothing.
 // The gbPanelStat*Color globals it tests are likewise misnamed belt-slot flags.
+// 1.14d mac: 000d2e7c
 void __stdcall CMD_UseBeltSlot4() {
     BOOL bIsExiting = GAME::Game::GAMEDATA_GetExitFlag3();
     if (bIsExiting) {
@@ -1651,6 +1675,7 @@ void __stdcall CMD_UseBeltSlot4() {
     ClickBeltRight(3, pUnit, pUnit->pInventory, GetKeyState(0x10) & 0x8000);
 }
 
+// 1.14d mac: 000d2e8a
 void __fastcall PANEL_SetBeltSlotHasItem(uint32_t nIndex, int bHasItem) {
     if (nIndex >= 4) {
       return;
@@ -1659,6 +1684,7 @@ void __fastcall PANEL_SetBeltSlotHasItem(uint32_t nIndex, int bHasItem) {
     gabBeltSlotHasItem[nIndex] = (uint8_t)bHasItem;
 }
 
+// 1.14d mac: 000d2ea7
 void __stdcall PANEL_ClearBeltSlotHover() {
     gnBeltSlotUnderCursor = -1;
     gnBeltTooltipX = -1;
@@ -1680,6 +1706,7 @@ void __fastcall PANEL_SetBeltPanelState(int nState) {
     exit(-1);
 }
 
+// 1.14d mac: 000d1fc5
 BOOL __fastcall PANEL_CalculateBeltSlotIndex(D2UIMouseMsgStrc * pMsg) {
     D2BeltsTxt sBeltsTxt;
     int32_t nMouseX = (int32_t)pMsg->uLParam.sMousePos.nMouseX;
@@ -1937,6 +1964,7 @@ void __stdcall PANEL_DrawBottomPanel() {
     CLIENT_HandleBeltSlotClick(pInventory);
 }
 
+// 1.14d mac: 000cffc7
 void __stdcall DRAW_UI_BordersAndOrbsAndFillers() {
     eD2LevelId eRoomLevelId;
     BOOL bDirectDraw = FALSE;
@@ -1980,6 +2008,7 @@ void __stdcall DRAW_UI_BordersAndOrbsAndFillers() {
     PANEL_DrawLife();
 }
 
+// 1.14d mac: 000d1dac
 void __stdcall INPUT_PanelLeftClickDown(D2UIMouseMsgStrc * pMsg) {
     BOOL bExitFlag;
     bExitFlag = GAME::Game::GAMEDATA_GetExitFlag3();
@@ -2050,6 +2079,7 @@ void __stdcall INPUT_PanelLeftClickDown(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000d209c
 void __stdcall INPUT_PanelLeftClickUp(D2UIMouseMsgStrc * pMsg) {
     // Static local variables (originally global data)
     static uint32_t gpPanelMenuButtonState; D2_STATIC_GUARD_BSS(gpPanelMenuButtonState, "D2Client::UI::Panel::INPUT_PanelLeftClickUp::gpPanelMenuButtonState");
@@ -2287,6 +2317,7 @@ void __stdcall PANEL_UpdatePanelFromMode(D2UIMouseMsgStrc * pMsg) {
     pMsg->bHandled = 0;
 }
 
+// 1.14d mac: 000d2a12
 void __stdcall INPUT_PanelRightClick(D2UIMouseMsgStrc * pMsg) {
     D2UnitStrc* pPlayer;
     int nCursorItemType;

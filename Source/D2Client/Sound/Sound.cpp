@@ -39,11 +39,13 @@ int32_t int32_t_007c8c98 = 0; D2_GLOBAL_GUARD(int32_t_007c8c98, "int32_t_007c8c9
 namespace D2Client::Sound {
 
 // JMP thunk
+// 1.14d mac: 000dca2a
 BOOL __stdcall SOUND_IsDirectSoundAvailable_For3DSoundItem() {
     return ::D2Client::Sound::SOUND_IsDirectSoundAvailable();
 }
 
 // JMP thunk
+// 1.14d mac: 000dca55
 BOOL __stdcall SOUND_IsEaxAvailable_ForEaxItem() {
     return ::D2Client::Sound::SOUND_IsEaxAvailable();
 }
@@ -61,6 +63,7 @@ float __stdcall SOUND_CalculatePanning(float fParam1, float fParam2, float fPara
     return min(fLow, fParam3); // steer-ok: windef.h min/max macros
 }
 
+// 1.14d mac: 00095f61
 void __fastcall SOUND_StopById(int32_t nChannelHandle) {
     D2SoundChannelStrc* nChanDataPtr;
     if (!nChannelHandle) {
@@ -112,6 +115,7 @@ void __fastcall SOUND_FadeOutMusic(int32_t nSoundId) {
     }
 }
 
+// 1.14d mac: 0009663c D2Client::Sound::SOUND_StopMusic
 void __stdcall SOUND_StopMusic() {
     int32_t nSoundId;
     D2SoundChannelNodeStrc* pDVar1;
@@ -293,6 +297,7 @@ void __stdcall SoundChaosDebug() {
     SOUND_DebugPrintChannels();
 }
 
+// 1.14d mac: 00094630
 void __fastcall SOUND_ToggleSoundMixerBinary(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     if (!(GAME::Sound::pAudioMixerInterface && !lpAddend_007c8a74)) {
       return;
@@ -310,6 +315,7 @@ void __fastcall SOUND_ToggleSoundMixerBinary(D2EscMenuItemStrc * pItem, D2UIMous
     /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement(&lpAddend_007c8a74);
 }
 
+// 1.14d mac: 000946b8
 void __fastcall SOUND_CycleSoundMixerMode(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     if (!(GAME::Sound::pAudioMixerInterface && !lpAddend_007c8a74)) {
       return;
@@ -327,6 +333,7 @@ void __fastcall SOUND_CycleSoundMixerMode(D2EscMenuItemStrc * pItem, D2UIMouseMs
     /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement(&lpAddend_007c8a74);
 }
 
+// 1.14d mac: 00097898
 int32_t __fastcall SOUND_PlayFootstepSound(uint32_t nFrame, uint32_t nFootstepFrame, int nModulus) {
     int nMinDist;
     uint32_t nMod1;
@@ -393,6 +400,7 @@ void __stdcall Unreferenced_004e4220() {
     } while ((int)eSound < 0xb3d);
 }
 
+// 1.14d mac: 00094c78
 static void SOUND_SetVolumeForChannel(int32_t nChannelIndex) {
     int nSoundHdrOffset = nChannelIndex * 4 + 0xa9c;
     int nCount = 3;

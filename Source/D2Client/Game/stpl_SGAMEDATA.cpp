@@ -441,6 +441,7 @@ template<> TSExportTableSimple<::SGAMEDATA, HSGAMEDATA__*, 0>* TSExportTableSimp
 }
 
 // @blizzard TSExportTableSimple<SGAMEDATA,HSGAMEDATA__*,0> scalar deleting destructor (STORM.H)
+// 1.14d mac: 00072b0c TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::ScalarDeletingDestructor
 template<> TSExportTableSimple<::SGAMEDATA, HSGAMEDATA__*, 0>* __thiscall TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>::ScalarDeletingDestructor(TSExportTableSimple<::SGAMEDATA, HSGAMEDATA__*, 0>* pThis, uint32_t dwFlags) {
     pThis->Destructor();
     if (dwFlags & 1 && pThis) {

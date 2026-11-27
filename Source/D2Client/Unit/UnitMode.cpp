@@ -181,6 +181,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_2(D2UnitStrc * p) {
 
 // Client-side: handles the local player attempting to interact with a unit identified by type+GUID. Finds the client-side target unit; dispatches by unit type: PLAYER/MONSTER face the target and send interact request 0x13 (monster throttled to 200ms); ITEM sends pickup 0x16 (with inventory-open flag). For OBJECT, clears the server path target and, if the object is interactable, faces it and either starts a melee/kick skill cast or sends interact 0x13. Special handling for object class 0x194 (uses Kick/Attack depending on equipped-weapon code and death anim) and 0x178 (sends type-2 interact when dead, attack-skill when walking). No return; communicates via NET_D2GS_CLIENT_Send_* packets.
 // @sourcefile .\UNIT\UnitMode.cpp
+// 1.14d mac: 00127c78
 void __fastcall INTERACT_AnyObject(uint16_t eUnitType, DWORD nUnitGUID) {
     int32_t nPosY;
     uint32_t dwItemCode;
@@ -275,6 +276,7 @@ void __fastcall INTERACT_AnyObject(uint16_t eUnitType, DWORD nUnitGUID) {
 }
 
 // Registers: eModeAction in ECX; pUnit in EDX is passed by the caller but not read.
+// 1.14d mac: 00127fb4
 void __fastcall ClickWithSkillOnUnitOrCoord(eD2UnitModeAction eModeAction, D2UnitStrc * pUnit, int32_t nTargetOrX, int32_t nUnitGUIDOrY, uint32_t dwUnused) {
     if (eModeAction == UNITMODEACTION_ITEM_INTERACT) {
       return;
@@ -328,6 +330,7 @@ uint32_t UNITMODE_CanInterruptSkill_Extern(D2UnitStrc * pUnit) {
     return ::D2Client::UNIT::UnitMode::UNITMODE_CanInterruptSkill(pUnit);
 }
 
+// 1.14d mac: 001279ca
 BOOL __fastcall HandleMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2ServerMessageHandleStrc * pMessage, int32_t eNeutralMode) {
     BOOL nResult;
     switch (pUnit->eUnitType) {
@@ -390,6 +393,7 @@ static BOOL UNITMODE_IsTargetInActionRange(D2UnitStrc * pUnit, D2UnitStrc * pUni
 }
 
 // Client-side: when a player/monster unit enters a hit/death anim mode (player modes 0/4/0x13, monster modes 0/3/0xd), spawns the appropriate elemental-hit overlay graphic on the unit based on the high nibble of dwLastHitClass (provided the low nibble is also set). Maps element class 0x20->fire_hit, 0x30->ice_explode, 0x40->lightning, 0x10->doubledamage1, 0x70->bash, 0x80->hit_thorns, 0x90->sanctuaryknockback via GFX_AddOverlayToUnit. Visual only; no-op for other unit types or non-hit modes.
+// 1.14d mac: 00128606
 void __fastcall UNITMODE_ShowElementalHitOverlay(D2UnitStrc * pUnit, int32_t nAnimMode) {
     uint32_t nElementMask;
     bool bIsHitMode;
@@ -458,6 +462,7 @@ void __fastcall UNITMODE_ShowElementalHitOverlay(D2UnitStrc * pUnit, int32_t nAn
     Engine::Gfx::GFX_AddOverlayToUnit(pUnit, OVERLAY_sanctuaryknockback, 2, 0, 0, 0, 0, 0);
 }
 
+// 1.14d mac: 0012870c
 static BOOL __stdcall UNITMODE_SetModeAndLoadCof(int32_t nAnimMode, D2UnitStrc * pUnit) {
     _Utils::UTILS_OnUnitModeChange_NoOp(pUnit);
     if (pUnit) {
@@ -594,6 +599,7 @@ void __fastcall UNITMODE_SendWalkToPosition(D2UnitStrc * pUnit, int32_t nTargetX
 
 // Dispatches a queued player/unit action (nActionType 1..0x13) into the server-side UnitMode message pipeline. Resolves left/right skill id+owner GUID for skill actions, builds a D2ServerMessageHandleStrc on the stack and routes it through HandleMessage; on success increments the pierce stat (for skill cases) and calls ClickWithSkillOnUnitOrCoord. Validates targetable item for the 0x13 (item-interact) action. Clears the player's pending-interact/queued-skill/target fields on exit. No return; side-effects on pUnit's player data and stats.
 // @sourcefile .\UNIT\UnitMode.cpp
+// 1.14d mac: 00128016
 void __fastcall UNITMODE_ExecuteSkillAction(eD2UnitModeAction nActionType, D2UnitStrc * pUnit, int32_t nTargetOrX, int32_t nTargetGUIDOrY, uint32_t dwUnused) {
     D2UnitStrc* pItemUnit;
     D2SkillStrc* pSkill;
@@ -912,6 +918,7 @@ static BOOL __stdcall UNITMODE_TryInteractWithObject(D2UnitStrc * pUnit, eD2Unit
     return 0;
 }
 
+// 1.14d mac: 00128364
 void __fastcall UNITMODE_ExecuteDeferredAction(D2UnitStrc * pUnit) {
     uint32_t bTargetable;
     int fInteractResult;

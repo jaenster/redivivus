@@ -122,6 +122,7 @@ int __fastcall Unreferenced_004b9560(int nChannelHandle) {
     return FindChannelInline(nChannelHandle) != nullptr;
 }
 
+// 1.14d mac: 00095d9a
 uint32_t __fastcall SOUND_GetSoundId(int32_t nChannelHandle) {
     if (!nChannelHandle) {
       return 0;
@@ -155,6 +156,7 @@ int __fastcall SOUND_GetSoundByIndex(int32_t nChannelHandle) {
     return 0;
 }
 
+// 1.14d mac: 00095f98
 int __fastcall SOUND_StopSound(int32_t nSoundId) {
     for (D2SoundChannelNodeStrc* pNode = gpActiveSoundChannelsHead; pNode; pNode = pNode->pNext) {
       D2SoundChannelStrc* pChannel = pNode->pChannel;
@@ -201,6 +203,7 @@ D2SoundChannelStrc * __stdcall SOUND_SetChannelProperties(int32_t nSoundGroup, i
 
 // Returns the first active sound channel other than pExcludeChannel that is in streaming play mode (nPlayMode 1), has nSoundId in 0xb76..0x1230 and, when nListKey is non-zero, holds nListKey in its list; NULL if there is none.
 // @provenance 1.14d asm 004b9700 (RET 4, key in EBX); formerly misnamed SOUND_SetChannelVolume.
+// 1.14d mac: 0009711c
 static D2SoundChannelStrc * __stdcall SOUND_FindActiveStreamChannel(D2SoundChannelStrc * pExcludeChannel, intptr_t nListKey) {
     D2SoundChannelStrc* nChannelData;
     D2SoundChannelNodeStrc* pDVar1 = gpActiveSoundChannelsHead;
@@ -311,6 +314,7 @@ static void SOUND_Calculate3DPosition(float * pfPosition, D2SoundChannelStrc * p
     exit(-1);
 }
 
+// 1.14d mac: 00095fc5
 void __fastcall SOUND_PlayEnvironmentSound(int32_t nSoundId, int32_t nPosX, int32_t nPosY, int32_t nPosZ) {
     if (!nSoundId) {
       return;
@@ -388,6 +392,7 @@ int __fastcall SOUND_PlaySound(eD2Sounds nSoundId, D2UnitStrc * pUnit, int32_t n
     return pChannel->nChannelHandle;
 }
 
+// 1.14d mac: 0009640b
 int __fastcall SOUND_SetMasterVolume(int32_t nSoundId) {
     if (!nSoundId) {
       return 0;
@@ -403,6 +408,7 @@ int __fastcall SOUND_SetMasterVolume(int32_t nSoundId) {
     return 0;
 }
 
+// 1.14d mac: 00096442
 void __fastcall SOUND_SetChannelPriority(int32_t nSoundId, int32_t nPriority) {
     if (!nSoundId) {
       return;
@@ -463,6 +469,7 @@ int __stdcall SOUND_IsMusicPlaying() {
     return 1;
 }
 
+// 1.14d mac: 000967e3
 BOOL __stdcall SOUND_GetAmbientMusicState() {
     D2SoundChannelNodeStrc* pDVar1 = gpActiveSoundChannelsHead;
     while (true) {
@@ -481,6 +488,7 @@ BOOL __stdcall SOUND_GetAmbientMusicState() {
     return 1;
 }
 
+// 1.14d mac: 00096821
 int __fastcall SOUND_GetSoundIdByChannelHandle(int32_t nChannelHandle) {
     if (!nChannelHandle) {
       return 0;
@@ -530,6 +538,7 @@ void __stdcall SOUND_ResumeAll() {
     gnSoundChannelCount = 1;
 }
 
+// 1.14d mac: 00097234
 uint32_t __fastcall SOUND_GetCurrentMusic(int32_t nSoundId) {
     if (!nSoundId) {
       return 0;
@@ -605,6 +614,7 @@ BOOL __fastcall IsUnitDistanceLowerThan700(D2UnitStrc * pUnit) {
 
 namespace D2Client::Sound {
 
+// 1.14d mac: 000972f3
 uint32_t __fastcall SOUND_FindChannelForSound(D2UnitStrc * pUnit) {
     D2SoundChannelStrc* pChannel = SOUND_FindActiveStreamChannel(nullptr, (intptr_t)pUnit);
     return (uint32_t)(pChannel != 0);
@@ -617,6 +627,7 @@ void Unreferenced_004b9eb0() {
     }
 }
 
+// 1.14d mac: 0009647a
 void __fastcall SOUND_StopChannelGracefully(int32_t nSoundId, int32_t nFadeTarget, int32_t nFadeDelay, uint32_t nFadeDuration) {
     D2SoundChannelNodeStrc* pChannelNode;
     int pSmpData;
@@ -714,6 +725,7 @@ void __fastcall SOUND_StopChannelGracefully(int32_t nSoundId, int32_t nFadeTarge
     SOUND_SetChannelPriority(nSoundId, nFadeTarget);
 }
 
+// 1.14d mac: 00096858
 void __fastcall SOUND_UpdateAllChannels(uint32_t nFrameTime) {
     // Static local variables (originally global data)
     static uint32_t gnSoundVolumeUpdateFrame; D2_STATIC_GUARD_BSS(gnSoundVolumeUpdateFrame, "D2Client::Sound::SOUND_UpdateAllChannels::gnSoundVolumeUpdateFrame");
@@ -1114,6 +1126,7 @@ void __fastcall SOUND_UpdateAllChannels(uint32_t nFrameTime) {
     exit(-1);
 }
 
+// 1.14d mac: 00095f13
 static void SOUND_StopUnitSound(D2SoundChannelStrc * pChannel) {
     D2SoundsTxt* pSoundsTxt = SoundHdr::TXT_sounds_GetLineBySoundId(pChannel->nSoundId);
     pChannel->bStopFlag = 1;
@@ -1124,6 +1137,7 @@ static void SOUND_StopUnitSound(D2SoundChannelStrc * pChannel) {
     SOUND_StopChannelGracefully(pChannel->nChannelHandle, 0, 0, (uint32_t)pSoundsTxt->Fade_Out);
 }
 
+// 1.14d mac: 00095e4f
 void __fastcall SOUND_StopUnitSoundByIndex(int32_t nChannelHandle, D2UnitStrc * pUnit, int32_t bForceStop) {
     BOOL bForceStopNeeded;
     D2SoundChannelStrc* nChanDataPtr;

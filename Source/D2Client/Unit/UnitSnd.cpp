@@ -2494,6 +2494,7 @@ int gaAmbientMusicLevelSetTable[168] = {
 
 namespace D2Client::UNIT::UnitSnd {
 
+// 1.14d mac: 00128cfe
 static DWORD GetSndUnitClassId(D2UnitStrc * pUnit) {
     eD2UnitType eUnitType;
     int nClassId;
@@ -2512,6 +2513,7 @@ static DWORD GetSndUnitClassId(D2UnitStrc * pUnit) {
     return nClassId;
 }
 
+// 1.14d mac: 00128c80
 static eD2UnitType GetSndUnitType(D2UnitStrc * pUnit) {
     eD2UnitType eUnitType;
     int nClassId;
@@ -2530,6 +2532,7 @@ static eD2UnitType GetSndUnitType(D2UnitStrc * pUnit) {
     return eUnitType;
 }
 
+// 1.14d mac: 0012962f
 static int32_t GetSndUnitMode(D2UnitStrc * pUnit) {
     eD2UnitType eUnitType = pUnit ? pUnit->eUnitType : UNIT_COUNT;
     int nClassId = !pUnit ? -1 : pUnit->nClassId;
@@ -2542,6 +2545,7 @@ static int32_t GetSndUnitMode(D2UnitStrc * pUnit) {
     return nAnimMode;
 }
 
+// 1.14d mac: 00129248
 static int * UNITSND_GetBaseSoundId(uint32_t nUnitClassId) {
     if (nUnitClassId >= 7) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb22);
@@ -2552,6 +2556,7 @@ static int * UNITSND_GetBaseSoundId(uint32_t nUnitClassId) {
 }
 
 // Returns the D2MonSoundsTxt record for a unit's sound set. For monsters, resolves in priority order: super-unique boss sound override (MonSound), unique/minion UMonSound field, then base MonStats sound. Returns line 0 (silent) if pUnit is null or class ID is out of range.
+// 1.14d mac: 0012928a
 static D2MonSoundsTxt * TxtGetSoundIdLineFromUnit(D2UnitStrc * pUnit) {
     D2MonSoundsTxt* pMonSoundsResult;
     BOOL BVar1;
@@ -2606,6 +2611,7 @@ static D2MonSoundsTxt * TxtGetSoundIdLineFromUnit(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 0012890d
 int __fastcall UNITSND_GetSkillCastSound(D2UnitStrc * pUnit, uint32_t nAnimMode) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb5c);
@@ -2621,6 +2627,7 @@ int __fastcall UNITSND_GetSkillCastSound(D2UnitStrc * pUnit, uint32_t nAnimMode)
     }
 }
 
+// 1.14d mac: 00128978
 uint32_t __fastcall UNITSND_GetSkillStartSound(D2UnitStrc * pUnit, uint32_t nAnimMode) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb6b);
@@ -2643,6 +2650,7 @@ uint32_t __fastcall UNITSND_GetSkillStartSound(D2UnitStrc * pUnit, uint32_t nAni
 }
 
 // Maps a unit's animation/event flag word to a pair of sound ids. Resolves the unit's sound type; for monsters that are critters, returns no sound. The low nibble (nAnimFlags & 0xf) selects a base sound id into *pnSoundIdOut (0 if none); the high nibble (&0xf0) selects a secondary/param sound into *pnParam, with several cases branching on whether a base sound exists and whether the unit is a player/monster (gated by bExcludePlayerMonster). Both outputs default to 0. Halts via ErrorManager if pUnit is null.
+// 1.14d mac: 00128a00
 void __fastcall UNITSND_ResolveSoundFromFlags(D2UnitStrc * pUnit, uint32_t nAnimFlags, int32_t bExcludePlayerMonster, int * pnSoundIdOut, int * pnSecondarySoundIdOut) {
     DWORD nMonStatsId;
     BOOL bIsCritter;
@@ -2789,10 +2797,12 @@ static inline void * * __stdcall UNITSND_GetSfxDataListHead(D2UnitStrc * pUnit) 
     return (void**)&pUnit->uSideData.pClientSide.pUnitSfxData;
 }
 
+// 1.14d mac: 00128de2
 void __fastcall AllocUnitSfxData(D2UnitStrc * pUnit, int32_t nChannelHandle) {
     D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Alloc((void*)UNITSND_GetSfxDataListHead(pUnit), nChannelHandle);
 }
 
+// 1.14d mac: 00128e43
 void __fastcall FreeSfxData(D2UnitStrc * pUnit, int32_t nSearchValue) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc2c);
@@ -2802,6 +2812,7 @@ void __fastcall FreeSfxData(D2UnitStrc * pUnit, int32_t nSearchValue) {
     D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Free(&pUnit->uSideData.pClientSide.pUnitSfxData, nSearchValue);
 }
 
+// 1.14d mac: 00128e65
 int32_t __fastcall UNITSND_GetMissileSound(D2UnitStrc * pUnit, int32_t nSound) {
     int nChannelId;
     int32_t nSfxSoundId;
@@ -2863,6 +2874,7 @@ void __fastcall IterateUnitSfxData(D2UnitStrc * pUnit, int32_t bForceStop) {
     }
 }
 
+// 1.14d mac: 00128f7c
 void __fastcall UNITSND_UpdatePositionalAudio(D2UnitStrc * pUnit) {
     int nSoundId_00;
     uint32_t nLoopFlag;
@@ -2927,6 +2939,7 @@ static void __stdcall UNITSND_Unused_Placeholder_4(uint32_t dwParam, D2UnitStrc 
     pUnit->uSideData.pClientSide.nSfxMode = dwParam;
 }
 
+// 1.14d mac: 00129c7a
 static uint32_t GetSfxTicks(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xcbb);
@@ -2936,6 +2949,7 @@ static uint32_t GetSfxTicks(D2UnitStrc * pUnit) {
     return pUnit->uSideData.pClientSide.dwSfxTicks;
 }
 
+// 1.14d mac: 00129f34
 static void __stdcall SetSfxTicks(uint32_t dwSfxTicks, D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xcc6);
@@ -3005,6 +3019,7 @@ static void __stdcall SetHasActiveSound(D2UnitStrc * pUnit, BOOL bHasActiveSound
     pUnit->uSideData.pClientSide.bHasActiveSound = bHasActiveSound;
 }
 
+// 1.14d mac: 001290cb
 static D2DrlgTileDataStrc * UNITSND_GetTileDataAtPosition(D2RoomStrc * pRoom, int32_t nPosX, int32_t nPosY) {
     D2DrlgRoomCoordsStrc sRoomCoords;
     uint32_t nTileCount;
@@ -3031,6 +3046,7 @@ static D2DrlgTileDataStrc * UNITSND_GetTileDataAtPosition(D2RoomStrc * pRoom, in
     return nullptr;
 }
 
+// 1.14d mac: 0012914d
 static uint32_t UNITSND_GetGroundMaterialType(D2DrlgTileDataStrc * pUnit) {
     if (pUnit->pTileLibraryEntry) {
       uint16_t wTileFlags;
@@ -3327,6 +3343,7 @@ static int Unreferenced_004cb180(D2UnitStrc * pUnit) {
     return pDVar1->Taunt;
 }
 
+// 1.14d mac: 001296b3
 void __fastcall UNITSND_StopAllSkillSounds(D2UnitStrc * pUnit) {
     int nSoundField60;
     int32_t nSfxChannelId;
@@ -3398,6 +3415,7 @@ void __stdcall UNITSND_UpdateNeutralSound(D2UnitStrc * pUnit, int32_t bForceStop
     }
 }
 
+// 1.14d mac: 0012a528
 void __stdcall UNITSND_StopAllCombatSounds(D2UnitStrc * pUnit) {
     int nSoundField60;
     int32_t nSfxChannelId;
@@ -3637,6 +3655,7 @@ void __fastcall UpdateUnitSfxOnModeChange(D2UnitStrc * pUnit) {
 }
 
 // Plays the attack sound(s) for a unit's attack. For players: looks up the hit-class sound in gaUnitSoundTable and plays it (delay only when bPlayDelayed), recording the sfx tick into the unit's client-side data. For monsters: reads MonSounds.txt (Attack1/Attack2 + delay/probability for nAttackMode==4 vs other), rolls Att*Prb to decide whether to play the attack vocal (respecting a sound-channel cooldown), then always plays the corresponding Weapon1/Weapon2 sound scaled by the unit's anim speed and sets its channel priority by Wea*Vol. No-op for other unit types.
+// 1.14d mac: 00129cb7
 void __fastcall UNITSND_PlayAttackSound(D2UnitStrc * pUnit, int32_t nAttackMode, uint32_t bPlayDelayed) {
     uint32_t nHitClass;
     int nWeaponDelay;
@@ -3752,6 +3771,7 @@ static void UNITSND_PlayGetHitSound(D2UnitStrc * pUnit) {
 }
 
 // Plays the appropriate skill sound for a monster unit based on its animation mode (Skill1–Skill4). Looks up the sound ID from MonSounds.txt via TxtGetSoundIdLineFromUnit. For sound ID 0 (SOUND_ALKOR_ACT3_GOSSIP_4 used as sentinel for throttled sounds), enforces a 25-frame cooldown via pUnit->dwSfxTicks. Calls SOUND_PlaySound and updates gdwSoundChannelIndex on success.
+// 1.14d mac: 0012a443
 static void UNITSND_PlayMonsterSkillSound(D2UnitStrc * pUnit, eD2MonsterAnimMode nAnimMode) {
     eD2Sounds nSoundId;
     eD2UnitType eUnitType = GetSndUnitType(pUnit);
@@ -3823,6 +3843,7 @@ static void UNITSND_PlayFleeSound(D2UnitStrc * pUnit) {
 }
 
 // Plays the appropriate player/character sound effect for a given animation-mode/event code (nAnimModeParam, low 16 bits). Looks up the per-class sound table (gaUnitSoundTableByClassId indexed by nClassId 0-6); aborts loudly for invalid units. Maps the code into one of three ranges: anim modes 0x19-0x20 (footstep/run sounds gated by channel availability), special scheduled sequences 0x21-0x53 (WALL2_ScheduleSoundSequence for timed multi-part sounds), and small codes 1-0x18 (cursor/UI/item sounds and the class voice/attack sounds from the table, with duplicate-suppression within ~75ms via gnSoundLastPlayerAnimModeTime). Plays via SOUND_PlaySound and routes the result to overhead-text display. Skips if the local player is dead.
+// 1.14d mac: 0012a5cd
 void __fastcall UNITSND_PlayPlayerSound(D2UnitStrc * pUnit, uint16_t nAnimModeParam) {
     uint32_t nResult;
     int nChannelId;
@@ -4030,6 +4051,7 @@ void __fastcall UNITSND_PlayPlayerSound(D2UnitStrc * pUnit, uint16_t nAnimModePa
 }
 
 // Client-side dispatcher that plays a contextual voice/ambience sound for a unit (mercenary/NPC/player) identified by GUID+type. Switches on a sound command (low 16 bits): quest-instruction lines, skill cast sound (from the unit's modifier-skill state via STATE_evade statlist), find-item/guardian/jade barks, taunt (from MonSounds.txt), flee sound, NPC greeting (cmd 0x12, SOUND_SelectNpcGreetingSound), durability-break cursor sound, and class-specific (Necromancer/other 0x10f) action grunts whose sound id is then surfaced as overhead text. Falls through to UNITSND_PlayPlayerSound for player units. No-op if the unit can't be resolved.
+// 1.14d mac: 0012ab44
 void __fastcall UNITSND_PlaySoundForMercenary(int32_t nUnitGUID, uint8_t eUnitType, int32_t nSoundCmd) {
     D2UnitStrc* pMercUnit = CUnit::UNITS_FindClientSideUnit(nUnitGUID, (eD2UnitType)eUnitType);
     if (!pMercUnit) {
@@ -4140,6 +4162,7 @@ void __fastcall UNITSND_PlaySoundForMercenary(int32_t nUnitGUID, uint8_t eUnitTy
 }
 
 // Toggles the mute state of all audible sounds associated with a unit. nMuteDelta>0 mutes, <0 unmutes; no-ops if already in the requested state. For monsters adjusts reference counts on all MonSounds entries (Attack1/2, Hit, Death, Flee, Footstep); for objects iterates the unit sound table (up to 8 entries). Halts fatally if pUnit is null.
+// 1.14d mac: 0012b0fc
 void __fastcall MuteOrUnmuteUnitSounds(D2UnitStrc * pUnit, int32_t nMuteDelta) {
     DWORD DVar1;
     int nSoundTableIdx;
@@ -4289,6 +4312,7 @@ mark_set_played:
     UNITSND_PlayPlayerSound(pUnit, *(uint16_t*)(nMusicTableEntryPtr + 0xb));
 }
 
+// 1.14d mac: 0012b36d
 void __fastcall PlayUnitInitSound(D2UnitStrc * pUnit) {
     uint32_t dwSfxAsyncTicks;
     eD2UnitType eUnitType = GetSndUnitType(pUnit);
@@ -4433,6 +4457,7 @@ static void __stdcall UNITSND_PlayModeChangeSound(int32_t nMode, D2UnitStrc * pU
 }
 
 // Dispatches the appropriate sound event when a unit changes animation mode. For players: plays mode-change, attack, or get-hit sounds keyed on mode and class (e.g. Druid kick at mode 0xF, Assassin at 0x10). For monsters: applies MonSounds CvtMo/CvtTgt remapping, then plays mode-change, attack, skill, or stop-combat sound. nMode==0 uses the unit's current mode.
+// 1.14d mac: 00129f75
 void __fastcall UNITSND_DispatchModeChangeSound(D2UnitStrc * pUnit, int32_t nAnimMode, int32_t nMode) {
     int32_t nAttackMode;
     const eD2UnitType eUnitType = GetSndUnitType(pUnit);

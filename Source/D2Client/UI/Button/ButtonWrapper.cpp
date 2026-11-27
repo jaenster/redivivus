@@ -162,6 +162,7 @@ void __thiscall Destructor(::ButtonWrapper * pThis) {
     }
 }
 
+// 1.14d mac: 0009c750 D2Client::UI::Button::ButtonWrapper::ScalarDeletingDestructor
 ::ButtonWrapper * __thiscall ScalarDeletingDestructor(::ButtonWrapper * pThis, uint32_t nFlags) {
     ButtonWrapper::Destructor(pThis);
     if (nFlags & 1 && pThis) {
@@ -171,64 +172,77 @@ void __thiscall Destructor(::ButtonWrapper * pThis) {
     return pThis;
 }
 
+// 1.14d mac: 0009c824 D2Client::UI::Button::ButtonWrapper::OnMouseWheel
 int __thiscall OnMouseWheel(::ButtonWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
     int nResult = pThis->pImplementation->pVtable->OnMouseWheel(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 0009c844 D2Client::UI::Button::ButtonWrapper::OnMouseDown
 int __thiscall OnMouseDown(::ButtonWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
     int nResult = pThis->pImplementation->pVtable->OnMouseDown(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 0009c864 D2Client::UI::Button::ButtonWrapper::OnMouseUp
 int __thiscall OnMouseUp(::ButtonWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
     int nResult = pThis->pImplementation->pVtable->OnMouseUp(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 0009c884 D2Client::UI::Button::ButtonWrapper::OnMouseMove
 int __thiscall OnMouseMove(::ButtonWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
     int nResult = pThis->pImplementation->pVtable->OnMouseMove(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 0009c8a4 D2Client::UI::Button::ButtonWrapper::Draw
 void __thiscall Draw(::ButtonWrapper * pThis) {
     pThis->pImplementation->pVtable->Draw(pThis->pImplementation);
 }
 
+// 1.14d mac: 0009c8be D2Client::UI::Button::ButtonWrapper::OnChar
 int __thiscall OnChar(::ButtonWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
     int nResult = pThis->pImplementation->pVtable->OnChar(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 0009c8de D2Client::UI::Button::ButtonWrapper::OnDownArrow
 int __thiscall OnDownArrow(::ButtonWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
     int nResult = pThis->pImplementation->pVtable->OnDownArrow(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 0009c8fe D2Client::UI::Button::ButtonWrapper::OnUpArrow
 int __thiscall OnUpArrow(::ButtonWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
     int nResult = pThis->pImplementation->pVtable->OnUpArrow(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 0009c91e D2Client::UI::Button::ButtonWrapper::OnRightArrow
 int __thiscall OnRightArrow(::ButtonWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
     int nResult = pThis->pImplementation->pVtable->OnRightArrow(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 0009c93e D2Client::UI::Button::ButtonWrapper::OnLeftArrow
 int __thiscall OnLeftArrow(::ButtonWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
     int nResult = pThis->pImplementation->pVtable->OnLeftArrow(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 0009c95e D2Client::UI::Button::ButtonWrapper::GetValue
 int __thiscall GetValue(::ButtonWrapper * pThis) {
     int nResult = pThis->pImplementation->pVtable->GetValue(pThis->pImplementation);
     return nResult;
 }
 
+// 1.14d mac: 0009c978 D2Client::UI::Button::ButtonWrapper::SetAccelerator
 void __thiscall SetAccelerator(::ButtonWrapper * pThis, BOOL bEnable) {
     pThis->pImplementation->pVtable->SetAccelerator(pThis->pImplementation, bEnable);
 }
 
+// 1.14d mac: 0009c7ae D2Client::UI::Button::ButtonWrapper::Constructor
 ::ButtonWrapper * __thiscall Constructor(::ButtonWrapper * pThis, int nPosX, int nPosY, int nButtonKind, fpButtonOnActivate pfnOnActivate) {
     pfnEHHandlerRoutine pExcHandler = __GSHandlerCheck_EH_6ca103; // steer-ok: generated form, kept as emitted
     void* pPrevExceptionList = ExceptionList;

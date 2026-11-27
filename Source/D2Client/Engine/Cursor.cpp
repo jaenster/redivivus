@@ -185,6 +185,7 @@ void __stdcall UI_HandleCursorMouseDown(D2UIMouseMsgStrc * pMsg)
     pMsg->dwResult = 0;
 }
 
+// 1.14d mac: 000631bb
 void __stdcall UI_HandleCursorMouseMove(D2UIMouseMsgStrc * pMsgEvent) {
     POINT sPair;
     sPair.x = (int)pMsgEvent->uLParam.sMousePos.nMouseX;
@@ -208,6 +209,7 @@ void __stdcall UI_HandleCursorMouseMove(D2UIMouseMsgStrc * pMsgEvent) {
     }
 }
 
+// 1.14d mac: 0006322a
 void __stdcall UI_HandleCursorMouseUp(D2UIMouseMsgStrc * pMsg) {
     POINT sPair;
     sPair.x = (int)pMsg->uLParam.sMousePos.nMouseX;
@@ -237,6 +239,7 @@ int32_t __stdcall CURSOR_GetAnimationFrame() {
     return gCursorAnimationFrame;
 }
 
+// 1.14d mac: 00063305
 void __fastcall UI_SetCursorToSpecialIcon(int32_t nAnimFrame, int32_t bAltIcon) {
     pCursorItem = 0;
     nCursorDataIndex = 6;
@@ -244,6 +247,7 @@ void __fastcall UI_SetCursorToSpecialIcon(int32_t nAnimFrame, int32_t bAltIcon) 
     ItemTypeOnHand = bAltIcon != 0 ? 8 : 7;
 }
 
+// 1.14d mac: 0006333f
 void __fastcall ITEM_SetItemOnHand(D2UnitStrc * pUnit) {
     pCursorItem = pUnit;
     nCursorDataIndex = 5;
@@ -256,10 +260,12 @@ void __fastcall ITEM_SetItemOnHand(D2UnitStrc * pUnit) {
     ItemTypeOnHand = 4;
 }
 
+// 1.14d mac: 00063395
 D2UnitStrc * __stdcall GetCursorItem() {
     return pCursorItem;
 }
 
+// 1.14d mac: 000633a6
 int __fastcall UI_InitializeCursor(int32_t nCursorType) {
     // Static local variables (originally global data)
     static unsigned short gwCursorAnimUnknownField; D2_STATIC_GUARD_BSS(gwCursorAnimUnknownField, "D2Client::Cursor::UI_InitializeCursor::gwCursorAnimUnknownField");
@@ -290,6 +296,7 @@ int __fastcall UI_InitializeCursor(int32_t nCursorType) {
     return 1;
 }
 
+// 1.14d mac: 000634d1
 void __stdcall UI_FreeCursor() {
     _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gUIFlagGeneralInit, 3);
     gnCursorInitialized = 0;
@@ -410,6 +417,7 @@ void __stdcall MOUSE_DrawCursorSprite() {
     UI_UpdateCursorAnimation();
 }
 
+// 1.14d mac: 00063d0c
 void __stdcall UI_DrawCursorIcon() {
     D2GfxDataStrc sGfxData;
     memset(&sGfxData, 0, sizeof(sGfxData));
@@ -420,6 +428,7 @@ void __stdcall UI_DrawCursorIcon() {
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, gnCursorType + t2_c0, MouseY + 0x21, -1, DRAW_SOLID, nullptr);
 }
 
+// 1.14d mac: 00063534
 void __stdcall DrawCursor() {
     int nSpriteLoaded;
     D2GfxDataStrc sGfxData;
@@ -499,10 +508,12 @@ void __stdcall UI_DrawCursorWithItem() {
     UI_UpdateCursorAnimation();
 }
 
+// 1.14d mac: 000639d6
 int __stdcall GetMouseX() {
     return MouseX;
 }
 
+// 1.14d mac: 000639f5
 int __stdcall GetMouseY() {
     return MouseY;
 }
@@ -515,6 +526,7 @@ void __fastcall UI_SetMousePosition(int32_t nX, int32_t nY) {
     MouseY = nY;
 }
 
+// 1.14d mac: 00063a1d
 void __fastcall SetMouseXY(int32_t x, int32_t y) {
     if (x < 0) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x30f);
@@ -538,6 +550,7 @@ void __fastcall SetMouseXY(int32_t x, int32_t y) {
     MouseX = x;
 }
 
+// 1.14d mac: 00063acd
 int __stdcall GetItemType() {
     return ItemTypeOnHand;
 }

@@ -204,6 +204,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_21(D2UnitStrc * p) 
     return p->eUnitFlags >> 21 & 1;
 }
 
+// 1.14d mac: 00060851
 D2LightMapStrc * __fastcall AllocLightMap(D2UnitStrc * pUnit, int32_t nLightType, int32_t nDiameter, uint8_t nGamma, uint8_t nRed, uint8_t nGreen, uint8_t nBlue) {
     // Static local variables (originally global data)
     static int nLightMapSize; D2_STATIC_GUARD_BSS(nLightMapSize, "D2Client::Draw::LightMap::AllocLightMap::nLightMapSize");
@@ -267,6 +268,7 @@ D2LightMapStrc * __fastcall AllocLightMap(D2UnitStrc * pUnit, int32_t nLightType
     return nullptr;
 }
 
+// 1.14d mac: 00060992
 void __fastcall SetRadiusY(D2LightMapStrc * pLightMap, int32_t nValue) {
     if (nValue <= 0) {
       return;
@@ -282,6 +284,7 @@ void __fastcall SetRadiusY(D2LightMapStrc * pLightMap, int32_t nValue) {
     pLightMap->nRadiusY = nValue * 8;
 }
 
+// 1.14d mac: 000609eb
 void __fastcall LIGHTMAP_SetRadius(D2LightMapStrc * pLightMap, int32_t nDiameter) {
     if (nDiameter <= 0) {
       return;
@@ -311,6 +314,7 @@ void __fastcall LIGHTMAP_SetRadius(D2LightMapStrc * pLightMap, int32_t nDiameter
     pLightMap->pPixelMap = 0;
 }
 
+// 1.14d mac: 00060a84
 int32_t __fastcall GetRadiusX(D2LightMapStrc * pLightMap) {
     if (!pLightMap) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x155);
@@ -324,6 +328,7 @@ int Unreferenced_00474380() {
     return 0x20;
 }
 
+// 1.14d mac: 00060ac7
 void __fastcall SetRGB(D2LightMapStrc * pLightMap, uint8_t nRed, uint8_t nGreen, uint8_t nBlue) {
     if (!pLightMap) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x167);
@@ -335,6 +340,7 @@ void __fastcall SetRGB(D2LightMapStrc * pLightMap, uint8_t nRed, uint8_t nGreen,
     pLightMap->nBlue = nBlue;
 }
 
+// 1.14d mac: 00060b16 D2Client::Draw::LightMap::FreeLightMap
 void __fastcall FreeLightMap(D2LightMapStrc * pLightMap) {
     // Static local variables (originally global data)
     static int nFreedLightMapsCounter; D2_STATIC_GUARD_BSS(nFreedLightMapsCounter, "D2Client::Draw::LightMap::FreeLightMap::nFreedLightMapsCounter");
@@ -375,6 +381,7 @@ void __fastcall FreeLightMap(D2LightMapStrc * pLightMap) {
     } while (true);
 }
 
+// 1.14d mac: 00060be0
 void __fastcall LIGHTMAP_ValidateAndReset(D2LightMapStrc * pLightMap) {
     if (!pLightMap) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x18d);
@@ -425,6 +432,7 @@ static void __stdcall LIGHTMAP_FillGridRect(int nYStart, uint32_t nColorARGB, in
     } while (nRowCount);
 }
 
+// 1.14d mac: 00060c4e
 void __fastcall ROOM_GetAmbientLightColor(D2RoomStrc * pRoom, uint32_t * pIntensity, char * pRed, char * pGreen, char * pBlue, uint32_t bUseLevel) {
     uint32_t nIntensity;
     uint8_t nLevelIntensity;
@@ -452,6 +460,7 @@ void __fastcall ROOM_GetAmbientLightColor(D2RoomStrc * pRoom, uint32_t * pIntens
     *pBlue = nBlue;
 }
 
+// 1.14d mac: 00060d43
 void __stdcall LIGHTMAP_InitFromPlayerAndRooms(uint32_t bForceBlack) {
     D2RoomStrc* pRoom;
     int nYStart;
@@ -1272,6 +1281,7 @@ void __stdcall LIGHTMAP_BuildCollisionFlags() {
     }
 }
 
+// 1.14d mac: 0006140f D2Client::Draw::LightMap::LIGHTMAP_GetQualityLevel
 int __stdcall LIGHTMAP_GetQualityLevel() {
     // Static local variables (originally global data)
     static unsigned int gdwLightmapQualityLastCheck; D2_STATIC_GUARD_BSS(gdwLightmapQualityLastCheck, "D2Client::Draw::LightMap::LIGHTMAP_GetQualityLevel::gdwLightmapQualityLastCheck");
@@ -1323,6 +1333,7 @@ int __stdcall LIGHTMAP_GetQualityLevel() {
 // frame-counter-gated call before dInitWallDraw.
 // @wasnamed LIGHTMAP_UpdatePlayerArea
 // Rebuilds the lightmap for the box +/-0x18 around the UI player, then updates every live light.
+// 1.14d mac: 000614a5
 void __stdcall dLightMapUpdate() {
     // Static local variables (originally global data)
     static int gnActiveLightMapCount; D2_STATIC_GUARD_BSS(gnActiveLightMapCount, "D2Client::Draw::LightMap::dLightMapUpdate::gnActiveLightMapCount");
@@ -1366,6 +1377,7 @@ void __stdcall dLightMapUpdate() {
     }
 }
 
+// 1.14d mac: 0006242f
 void __stdcall LIGHTMAP_FreeAll() {
     D2LightMapStrc* pMemoryToFree = gpLightMap;
     while (pMemoryToFree) {
@@ -1383,6 +1395,7 @@ void __stdcall LIGHTMAP_FreeAll() {
 }
 
 // Client-side light-map activation callback. Iterates the gpLightMap linked list looking for dynamic (nLightType==2) entries. For each, resolves the owning unit (client- or server-side lookup via bUnknown flag) and checks whether the light radius edge (±nRadiusX>>3 cells in X and Y) touches pRoom via DRLGROOM_FindBetterNearbyRoom. If the light bleeds into pRoom, marks bPixelMapReady=0 so the renderer will rebuild the pixel map for that room on the next frame.
+// 1.14d mac: 00061073
 void __fastcall ACTCALLBACKFN(D2RoomStrc * pRoom) {
     D2UnitStrc* pUnit;
     D2RoomStrc* pUnitRoom;

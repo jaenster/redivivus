@@ -78,6 +78,7 @@ float Abs2(float fValue) {
     return std::fabs(fValue);
 }
 
+// 1.14d mac: 0006c2d8
 void __stdcall WEATHER_Init() {
     pEnvironmentParticles = Fog::Src::DataArrays::FOG_CreateDataArray("Environment Particles", 0x100, 0x28);
     Fog::Src::DataArrays::FOG_CloseDataArray(pEnvironmentParticles);
@@ -95,6 +96,7 @@ void __stdcall WEATHER_Init() {
     gnWeatherRngRangeMax = 0xaa;
 }
 
+// 1.14d mac: 0006c3ab D2Client::Draw::Weather::Free
 void __stdcall Free() {
     Fog::Src::DataArrays::FreeWeatherPointer(pEnvironmentParticles);
     Fog::Src::DataArrays::FreeWeatherPointer(pEnvironmentSplashes);
@@ -204,6 +206,7 @@ void __stdcall WEATHER_InitializeRngParams() {
     gnWeatherRngParam = 0x7f;
 }
 
+// 1.14d mac: 0006c673
 int __stdcall WEATHER_UpdateStateAct5(int bForceDisable) {
     uint32_t sSeedUpdated;
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
@@ -274,6 +277,7 @@ int __stdcall WEATHER_UpdateStateAct5(int bForceDisable) {
     exit(-1);
 }
 
+// 1.14d mac: 0006c774
 void __fastcall MISC_PrepareWeatherOverlay(eD2LevelId eLevel) {
     // Static local variables (originally global data)
     static int gnWeatherSplashSpawnIntervalMs; D2_STATIC_GUARD_BSS(gnWeatherSplashSpawnIntervalMs, "D2Client::Draw::Weather::MISC_PrepareWeatherOverlay::gnWeatherSplashSpawnIntervalMs");
@@ -388,6 +392,7 @@ void __fastcall MISC_PrepareWeatherOverlay(eD2LevelId eLevel) {
     gnWeatherTransitionInitialized = 0.0;
 }
 
+// 1.14d mac: 0006cd21
 void __stdcall WEATHER_FreeDC6Graphics() {
     DC6** ppBubbleDC6Cur = DC6_UncompOverlays_Rain;
     do {
@@ -432,6 +437,7 @@ void __fastcall WEATHER_InitBlizzardState(int nSpellId) {
 }
 
 // Registers: pSeed (ECX) is passed by WeatherEffects but not read.
+// 1.14d mac: 0006cdfb
 void __fastcall WEATHER_UpdateSplashes(D2SeedStrc * pSeed) {
     uint32_t bPerspective = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
     D2DataArrayStrc* pSplashArray = pEnvironmentSplashes;
@@ -465,6 +471,7 @@ void __fastcall WEATHER_UpdateSplashes(D2SeedStrc * pSeed) {
 }
 
 // Registers: pSeed (ECX) is passed by WeatherEffects but not read.
+// 1.14d mac: 0006ceb6
 void __fastcall WEATHER_UpdateBubbles(D2SeedStrc * pSeed) {
     uint32_t bPerspective = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
     D2DataArrayStrc* pArray = pEnvironmentBubbles;
@@ -497,6 +504,7 @@ void __fastcall WEATHER_UpdateBubbles(D2SeedStrc * pSeed) {
     } while (nIndex <= pArray->nHighestUsedIndex);
 }
 
+// 1.14d mac: 0006cf71
 void __fastcall WEATHER_SpawnSplash(int nScreenX, int nScreenY, int nWorldX, int nWorldY) {
     int32_t nRoll;
     int32_t nRange;
@@ -546,6 +554,7 @@ void __fastcall WEATHER_SpawnSplash(int nScreenX, int nScreenY, int nWorldX, int
     pSplash->_pad1 = 2;
 }
 
+// 1.14d mac: 0006d152
 void __fastcall WEATHER_SpawnBubble(int nScreenX, int nScreenY, int nWorldX, int nWorldY) {
     int nRange;
     int nPosY;
@@ -643,6 +652,7 @@ static void __stdcall WEATHER_GetLightingTint(int nIntensity, uint8_t * pOutTint
     exit(-1);
 }
 
+// 1.14d mac: 0006e0ce
 static void WEATHER_SpawnParticle(D2SeedStrc * pSeed) {
     bool bIsBlizzard;
     D2WeatherParticleStrc* pParticleSlot;
@@ -936,6 +946,7 @@ static void Unreferenced_00473720(BOOL * pbCanRain, BOOL * pbCanMud) {
     *pbCanMud = (uint32_t)(uVar1 != '\0');
 }
 
+// 1.14d mac: 0006d327
 uint32_t __stdcall WEATHER_GetCurrentLevelWeatherFlags() {
     D2RoomStrc* pRoom;
     eD2LevelId eLevel;
@@ -1083,6 +1094,7 @@ void __stdcall DRAW_Overlay_Weather() {
     WEATHER_DrawParticles();
 }
 
+// 1.14d mac: 0006de11
 void __fastcall WEATHER_DrawBubbles(D2DataArrayStrc * pBubbleArray, DC6 * * pDC6Table) {
     BOOL nDrawResult;
     int nPositionX;
@@ -1151,6 +1163,7 @@ void __fastcall WEATHER_DrawBubbles(D2DataArrayStrc * pBubbleArray, DC6 * * pDC6
     }
 }
 
+// 1.14d mac: 0006e022
 void __stdcall DRAW_WORLD_RainEffectOnFloor() {
     if (pEnvironmentSplashes->nUsedCount) {
       WEATHER_DrawBubbles(pEnvironmentSplashes, DC6_UncompOverlays_Rain);
@@ -1162,6 +1175,7 @@ void __stdcall DRAW_WORLD_RainEffectOnFloor() {
     WEATHER_DrawBubbles(pEnvironmentBubbles, DC6_UncompOverlays_bubble);
 }
 
+// 1.14d mac: 0006e077
 uint32_t __stdcall WEATHER_CanHaveRain() {
     D2RoomStrc* pRoom;
     eD2LevelId eLevel;
@@ -1183,6 +1197,7 @@ uint32_t __stdcall WEATHER_CanHaveRain() {
     return bCanRain;
 }
 
+// 1.14d mac: 0006e0a6
 float __stdcall WEATHER_FloatPassthrough() {
     return gnWeatherTransitionInitialized;
 }
@@ -1194,6 +1209,7 @@ void __fastcall WEATHER_SetGlobalFlag(int nValue) {
     gnWeatherGlobalFlag = nValue;
 }
 
+// 1.14d mac: 0006e0bc
 void __fastcall ENV_Rcv0x54_NoOp(char * pBytes) {
 
 }
@@ -1210,14 +1226,17 @@ void __stdcall ENV_InitClientSide_NoOp_Unref_00473cd0() {
 
 }
 
+// 1.14d mac: 0006e0c4
 void __stdcall ENV_InitClientSide_NoOp() {
 
 }
 
+// 1.14d mac: 0006e0c9
 void __stdcall ENV_FreeClientSide_NoOp() {
 
 }
 
+// 1.14d mac: 0006c3e6
 void __fastcall WEATHER_TransitionState(uint32_t nState) {
     if (3 >= nState) {
       {
@@ -1397,6 +1416,7 @@ void __stdcall WeatherEffects() {
     WEATHER_UpdateBubbles(pSeed);
 }
 
+// 1.14d mac: 00060814
 uint32_t __fastcall WEATHER_ApproximateDistance(uint32_t nDeltaX, uint32_t nDeltaY) {
     int nAbsX = (uint32_t)abs((int)nDeltaX);
     int nAbsY = (uint32_t)abs((int)nDeltaY);

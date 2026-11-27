@@ -291,6 +291,7 @@ uint16_t __fastcall GAMEDATA_SetByteInUshort(uint16_t * pWord, uint16_t byteValu
 }
 
 // Setter for gRunKeyDown (run modifier).
+// 1.14d mac: 0006e520
 void __fastcall SetRunKeyDown(BOOL bRunKeyDown) {
     gRunKeyDown = bRunKeyDown;
 }
@@ -299,14 +300,17 @@ BOOL __stdcall GAME_GetRunKeyDown() {
     return gRunKeyDown;
 }
 
+// 1.14d mac: 0006e534 D2Client::GAME::Game::SetGlobalAlwaysRun
 void __fastcall SetGlobalAlwaysRun(int32_t nValue) {
     gnAlwaysRun = nValue;
 }
 
+// 1.14d mac: 0006e548
 BOOL __stdcall GetGlobalAlwaysRun() {
     return gnAlwaysRun;
 }
 
+// 1.14d mac: 0006e559
 void __fastcall GAMEDATA_SetClickModifier(int32_t bModifierDown) {
     gClickModifierDown = bModifierDown;
 }
@@ -316,6 +320,7 @@ BOOL __stdcall GAME_GetClickModifierDown() {
 }
 
 // Compute mouse click modifier flags (run/always-run, modifier key).
+// 1.14d mac: 0006e56d
 uint16_t __stdcall GetMouseClickFlags() {
     uint32_t flags = 0;
     if (gRunKeyDown) {
@@ -335,10 +340,12 @@ void __stdcall GAME_SetMouseButtonEventPending() {
     gbMouseButtonEventPending = 1;
 }
 
+// 1.14d mac: 0006e5c5
 uint32_t __stdcall GAME_GetPrimaryClickState() {
     return gnPrimaryClickState;
 }
 
+// 1.14d mac: 0006e5d6
 int __stdcall GAME_GetMouseButtonEventState() {
     return gnMouseButtonEventState;
 }
@@ -347,11 +354,13 @@ int __stdcall GAME_GetQueuedSecondaryClick() {
     return gQueuedSecondaryClick;
 }
 
+// 1.14d mac: 0006e5e7
 int __stdcall GAMEDATA_GetQueuedPrimaryClick() {
     return gQueuedPrimaryClick;
 }
 
 // Handle under-mouse primary click: set queued click, build flags, call ClickMap(0,...).
+// 1.14d mac: 00071f91
 void __stdcall UnderMouse_PrimaryClick(D2UIMouseMsgStrc * pMsg) {
     gnPrimaryClickState = 4;
     gbMouseButtonEventPending = 0;
@@ -439,6 +448,7 @@ void __stdcall ProcessPrimaryClickImmediate() {
 }
 
 // WM_LBUTTONUP handler: forwards to ProcessPrimaryClickImmediate.
+// 1.14d mac: 00072064
 void __stdcall INPUT_HandlePrimaryClickUp(D2UIMouseMsgStrc * pMsg) {
     ProcessPrimaryClickImmediate();
 }
@@ -517,6 +527,7 @@ void Unreferenced_0044c340() {
     Select::SetCanBeSelectedToFalse();
 }
 
+// 1.14d mac: 0007229f
 void __stdcall INPUT_HandleSecondaryClick(D2UIMouseMsgStrc * pMsg) {
     gnMouseButtonEventState = 0x10;
     gQueuedSecondaryClick = 0;
@@ -537,6 +548,7 @@ void __stdcall INPUT_HandleSecondaryClick(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 00071822
 void __stdcall INPUT_HandleMouseWheel(D2UIMouseMsgStrc * pMsg) {
     // Static local variables (originally global data)
     static int gnMouseWheelScrollAccumulator; D2_STATIC_GUARD_BSS(gnMouseWheelScrollAccumulator, "D2Client::GAME::Game::INPUT_HandleMouseWheel::gnMouseWheelScrollAccumulator");
@@ -557,6 +569,7 @@ void __stdcall INPUT_HandleMouseWheel(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000717a8
 void __stdcall INPUT_HandleScrollDown(D2UIMouseMsgStrc * pMsg) {
     if (!ServerLoadingComplete) {
       return;
@@ -568,6 +581,7 @@ void __stdcall INPUT_HandleScrollDown(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000717e5
 void __stdcall INPUT_HandleScrollUp(D2UIMouseMsgStrc * pMsg) {
     if (!ServerLoadingComplete) {
       return;
@@ -579,6 +593,7 @@ void __stdcall INPUT_HandleScrollUp(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 00071700
 void __stdcall INPUT_HandlePageUpDown(D2UIMouseMsgStrc * pMsg) {
     if (!ServerLoadingComplete) {
       return;
@@ -596,6 +611,7 @@ void __stdcall INPUT_HandlePageUpDown(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 00071754
 void __stdcall INPUT_HandleScrollToEnd(D2UIMouseMsgStrc * pMsg) {
     if (!ServerLoadingComplete) {
       return;
@@ -613,6 +629,7 @@ void __stdcall INPUT_HandleScrollToEnd(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 0007233e
 void __stdcall INPUT_HandleSysCommand(D2UIMouseMsgStrc * pMsg) {
     uint16_t wSysCommand = (uint16_t)pMsg->nWParam & 0xfff0;
     if (wSysCommand != 0xf130 && wSysCommand != 0xf100) {
@@ -632,6 +649,7 @@ void __stdcall INPUT_HandleSysCommand(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 00071ee5
 void __stdcall INPUT_HandlePassthrough(D2UIMouseMsgStrc * pMsg) {
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
@@ -639,6 +657,7 @@ void __stdcall INPUT_HandlePassthrough(D2UIMouseMsgStrc * pMsg) {
 }
 
 // Handle mouse button event: clear selection/UI, update run key, and normalize queued click state.
+// 1.14d mac: 00071e7e
 void __stdcall HandleMouseButtonEvent(D2UIMouseMsgStrc * pMouseEvent) {
     SHORT keyState;
     _Message::gnLastMouseButtonEventType = (uint32_t)pMouseEvent->nWParam;
@@ -674,6 +693,7 @@ void __fastcall ClientInit_Noop04_Unref_0044c6a0(D2IniConfigStrc * pIni) {
 
 }
 
+// 1.14d mac: 0006e60a
 void __stdcall GAMEDATA_CheckAutomapCenterOnLoad() {
     if (!ServerLoadingComplete) {
       return;
@@ -720,6 +740,7 @@ void __stdcall GameLoop() {
 // Client-side world update. Runs at 25 FPS (same cadence as server loop).
 // Per-frame: GameLoop -> UpdateGfxState -> AnimateTiles -> UpdateLights -> Gfx_UpdateNearbyUnitGfx.
 // Also: day/night cycle, room activation, automap, periodic FreeDungeons (13th frame).
+// 1.14d mac: 0006fc2a
 void __stdcall ClientSideGameLoop() {
     gClientGameData.uGlobalTickCountA = GetTickCount();
     GameLoop();
@@ -745,6 +766,7 @@ void __stdcall ClientSideGameLoop() {
     D2Common::DUNGEON::Dungeon::FreeDungeons(sgpDrlgAct);
 }
 
+// 1.14d mac: 0006e65f
 void __stdcall GAMEDATA_InitializeEclipseEnvironment() {
     if (sgpDrlgAct) {
       D2Common::Environment::DRLGENV_InitializeEnvironment(sgpDrlgAct, UNIT::CUnit::GetCurrentRoom(), 5, 0, 1);
@@ -754,26 +776,31 @@ void __stdcall GAMEDATA_InitializeEclipseEnvironment() {
     gbActInitExpansionFlag = 1;
 }
 
+// 1.14d mac: 0006e8de
 void __stdcall ExitFunction(uint32_t dwArg1, uint32_t dwArg2, uint32_t dwArg3) {
     D2gfx::D2GFX::D2GFX_DestroyWindow();
     D2gfx::D2GFX::D2GFX_Release();
 }
 
+// 1.14d mac: 0006e8f2
 void __fastcall D2CLIENT_SetExitVar2(BOOL bResult) {
     D2CLIENT_ExitVar2 = bResult;
 }
 
+// 1.14d mac: 0006e906
 BOOL __stdcall GAMEDATA_GetExitFlag2() {
     return D2CLIENT_ExitVar2;
 }
 
 // JMP thunk
+// 1.14d mac: 0006ef28
 void __stdcall thunk_WEATHER_FreeDC6Graphics() {
     ::D2Client::Draw::Weather::WEATHER_FreeDC6Graphics();
 }
 
 // GAME_FreeClientSideStructures - Client-side cleanup: frees game structures, UI elements, memory pools.
 // @sourcefile .\GAME\Game.cpp
+// 1.14d mac: 0006ef31
 void __stdcall GAME_FreeClientSideStructures() {
     D2Client::Draw::Weather::WEATHER_FreeDC6Graphics();
     PalShift::FreeGamePalShift();
@@ -1047,6 +1074,7 @@ int Unreferenced_0044cd40() {
     return 0;
 }
 
+// 1.14d mac: 0006f3e9
 void __stdcall GAMEDATA_SendPeriodicPing() {
     DWORD dwCurrentTick = GetTickCount();
     if (gClientGameData.TickToSendPingToServer >= dwCurrentTick) {
@@ -1062,6 +1090,7 @@ void __stdcall GAMEDATA_SendPeriodicPing() {
     }
 }
 
+// 1.14d mac: 0006f41e
 void __fastcall NET_D2GS_CLIENT_Incoming0x8F_HEARTBEAT_PING(char * pBytes) {
     gClientGameData.gdwWardenResponseTickPart4 = *(uint32_t*)(pBytes + 1);
     gClientGameData.gdwWardenResponseTickPart3 = *(uint32_t*)(pBytes + 5);
@@ -1082,10 +1111,12 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x8F_HEARTBEAT_PING(char * pBytes) {
     gClientGameData.gnAveragePing = (gClientGameData.ping + nPingSum) / gClientGameData.gnPingSampleCount;
 }
 
+// 1.14d mac: 0006ef14
 void __fastcall GAME_SetSkillDelayEndFrame(int32_t nValue) {
     gClientGameData.gnGameDataValue04fc = nValue;
 }
 
+// 1.14d mac: 0006f48c
 uint32_t __stdcall GAME_GetSkillDelayEndFrame() {
     return gClientGameData.gnGameDataValue04fc;
 }
@@ -1094,6 +1125,7 @@ uint32_t __stdcall GetPing() {
     return gClientGameData.ping;
 }
 
+// 1.14d mac: 0006f4ae
 uint32_t __stdcall GAME_GetAveragePing() {
     return gClientGameData.gnAveragePing;
 }
@@ -1380,10 +1412,12 @@ void __stdcall GAMEDATA_DrawLoadingScreenText() {
 }
 
 // Set gExitCutscenePlayed flag.
+// 1.14d mac: 00070e55
 void __stdcall SetExitCutscenePlayed() {
     gExitCutsceneState.cutscenePlayed = 1;
 }
 
+// 1.14d mac: 00070e01
 void __stdcall D2CLIENT_SetExitVar3ToTrue() {
     D2CLIENT_ExitVar3 = 1;
 }
@@ -1393,6 +1427,7 @@ void __fastcall SetPendingExitCutsceneId(int32_t nCutsceneId) {
     gExitCutsceneState.pendingCutsceneId = nCutsceneId;
 }
 
+// 1.14d mac: 00070e7e
 D2BNetClientCallbacksStrc * __stdcall GAME_GetBNetClientCallbacks() {
     return gpBNetClientCallbacks;
 }
@@ -1409,6 +1444,7 @@ eD2ClientAppMode __stdcall pfModes_ExitGame() {
 }
 
 // Apply no-save option (disables saving).
+// 1.14d mac: 00071c7b
 void __fastcall ClientInit_NoSaveFlag(D2IniConfigStrc * pIniConfig) {
     if (!pIniConfig->bNOSAVE) {
       return;
@@ -1418,6 +1454,7 @@ void __fastcall ClientInit_NoSaveFlag(D2IniConfigStrc * pIniConfig) {
 }
 
 // Set starting act from config; validates and halts on invalid values.
+// 1.14d mac: 00071bd5
 void __fastcall ClientInit_StartingAct(D2IniConfigStrc * pIniConfig) {
     int nAct = pIniConfig->nACT;
     if (!nAct) {
@@ -1437,6 +1474,7 @@ void __fastcall ClientInit_StartingAct(D2IniConfigStrc * pIniConfig) {
 }
 
 // Apply TCP/IP game server address from config.
+// 1.14d mac: 00071957
 void __fastcall ClientInit_JoinTcpIpServer(D2IniConfigStrc * pIniConfig) {
     bool bCharsEqual = !strcmp(pIniConfig->szSERVERIP, "0");
     if (!bCharsEqual) {
@@ -1450,6 +1488,7 @@ void __fastcall ClientInit_JoinTcpIpServer(D2IniConfigStrc * pIniConfig) {
 }
 
 // Apply Battle.net server address from config.
+// 1.14d mac: 000719e1
 void __fastcall ClientInit_JoinBNetServer(D2IniConfigStrc * pIniConfig) {
     bool bBnetIpIsZero = !strcmp(pIniConfig->szBATTLENETIP, "0");
     if (bBnetIpIsZero) {
@@ -1460,6 +1499,7 @@ void __fastcall ClientInit_JoinBNetServer(D2IniConfigStrc * pIniConfig) {
 }
 
 // Apply MCP server address from config.
+// 1.14d mac: 00071a2f
 void __fastcall ClientInit_JoinMcpServer(D2IniConfigStrc * pIniConfig) {
     bool bMcpIpIsZero = !strcmp(pIniConfig->szMCPIP, "0");
     if (bMcpIpIsZero) {
@@ -1470,6 +1510,7 @@ void __fastcall ClientInit_JoinMcpServer(D2IniConfigStrc * pIniConfig) {
 }
 
 // Apply player class selection from config (string).
+// 1.14d mac: 00071a7a
 void __fastcall ClientInit_PlayerClass(D2IniConfigStrc * pIniConfig) {
     if (pIniConfig->bAMAZON) {
       nD2PlayerClassID = CLASS_AMAZON;
@@ -1496,14 +1537,17 @@ void __fastcall ClientInit_PlayerClass(D2IniConfigStrc * pIniConfig) {
     nD2PlayerClassID = CLASS_ASSASSIN;
 }
 
+// 1.14d mac: 00071bbc
 void __fastcall ClientInit_Noop04(D2IniConfigStrc * pIni) {
 
 }
 
+// 1.14d mac: 00071bc1
 void __fastcall ClientInit_Noop05(D2IniConfigStrc * pIni) {
 
 }
 
+// 1.14d mac: 00071af8
 void __fastcall ClientInit_Noop03(D2IniConfigStrc * pIni) {
 
 }
@@ -1511,6 +1555,7 @@ void __fastcall ClientInit_Noop03(D2IniConfigStrc * pIni) {
 // Set fullscreen rendering mode.
 // Body continues at 0044d76b, the JZ target of 0044d764 - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named 'GAMEDATA_Noop1'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
 // Retired notes from 'GAMEDATA_Noop1':
+// 1.14d mac: 000718a4
 void __fastcall ClientInit_Fullscreen(D2IniConfigStrc * pIni) {
     if (!pIni->bWINDOW) {
       return;
@@ -1520,6 +1565,7 @@ void __fastcall ClientInit_Fullscreen(D2IniConfigStrc * pIni) {
 }
 
 // Adjust fixed aspect ratio setting based on config.
+// 1.14d mac: 000718b8
 void __fastcall ClientInit_AspectRatio(D2IniConfigStrc * pIniConfig) {
     if (!pIniConfig->bASPECT) {
       return;
@@ -1529,6 +1575,7 @@ void __fastcall ClientInit_AspectRatio(D2IniConfigStrc * pIniConfig) {
 }
 
 // Select 3DFX renderer.
+// 1.14d mac: 000718cc
 void __fastcall ClientInit_Renderer_3DFX(D2IniConfigStrc * pIniConfig) {
     if (!pIniConfig->b3DFX) {
       return;
@@ -1538,6 +1585,7 @@ void __fastcall ClientInit_Renderer_3DFX(D2IniConfigStrc * pIniConfig) {
 }
 
 // Select OpenGL renderer.
+// 1.14d mac: 000718e0
 void __fastcall ClientInit_Renderer_OpenGL(D2IniConfigStrc * pIniConfig) {
     if (!pIniConfig->bOPENGL) {
       return;
@@ -1547,6 +1595,7 @@ void __fastcall ClientInit_Renderer_OpenGL(D2IniConfigStrc * pIniConfig) {
 }
 
 // Select Direct3D renderer.
+// 1.14d mac: 000718f4
 void __fastcall ClientInit_Renderer_D3D(D2IniConfigStrc * pIniConfig) {
     if (!pIniConfig->bD3D) {
       return;
@@ -1556,6 +1605,7 @@ void __fastcall ClientInit_Renderer_D3D(D2IniConfigStrc * pIniConfig) {
 }
 
 // Select Rave renderer.
+// 1.14d mac: 00071908
 void __fastcall ClientInit_Renderer_Rave(D2IniConfigStrc * pIniConfig) {
     if (!pIniConfig->bRAVE) {
       return;
@@ -1564,11 +1614,13 @@ void __fastcall ClientInit_Renderer_Rave(D2IniConfigStrc * pIniConfig) {
     Rendering::RENDERER_SetMode7();
 }
 
+// 1.14d mac: 0007191c
 void __fastcall ClientInit_Noop01(D2IniConfigStrc * pIni) {
 
 }
 
 // Apply gamma setting from config.
+// 1.14d mac: 00071921
 void __fastcall ClientInit_Gamma(D2IniConfigStrc * pIniConfig) {
     if (!pIniConfig->nGAMMA) {
       return;
@@ -1580,6 +1632,7 @@ void __fastcall ClientInit_Gamma(D2IniConfigStrc * pIniConfig) {
 // Apply vsync setting from config.
 // Body continues at 0044d7eb, the JZ target of 0044d7e4 - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named 'GAMEDATA_Noop2'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
 // Retired notes from 'GAMEDATA_Noop2':
+// 1.14d mac: 0007193e
 void __fastcall ClientInit_Vsync(D2IniConfigStrc * pIniConfig) {
     if (!pIniConfig->bVSYNC) {
       return;
@@ -1588,27 +1641,33 @@ void __fastcall ClientInit_Vsync(D2IniConfigStrc * pIniConfig) {
     D2gfx::D2GFX::D2GFX_EnableVSync();
 }
 
+// 1.14d mac: 00071bc6
 void __fastcall ClientInit_Noop06(D2IniConfigStrc * pIni) {
 
 }
 
+// 1.14d mac: 00071cdf
 void __fastcall ClientInit_Noop12(D2IniConfigStrc * pIni) {
 
 }
 
+// 1.14d mac: 00071952
 void __fastcall ClientInit_Noop02(D2IniConfigStrc * pIni) {
 
 }
 
+// 1.14d mac: 00071bcb
 void __fastcall ClientInit_Noop07(D2IniConfigStrc * pIni) {
 
 }
 
+// 1.14d mac: 00071bd0
 void __fastcall ClientInit_Noop08(D2IniConfigStrc * pIni) {
 
 }
 
 // Enable/init logging from config.
+// 1.14d mac: 00071c53
 void __fastcall ClientInit_Log(D2IniConfigStrc * pIniConfig) {
     if (!pIniConfig->bLOG) {
       return;
@@ -1618,6 +1677,7 @@ void __fastcall ClientInit_Log(D2IniConfigStrc * pIniConfig) {
 }
 
 // Apply forced game seed from config.
+// 1.14d mac: 00071c9e
 void __fastcall ClientInit_CustomSeed(D2IniConfigStrc * pIniConfig) {
     if (!pIniConfig->nSEED) {
       return;
@@ -1626,11 +1686,13 @@ void __fastcall ClientInit_CustomSeed(D2IniConfigStrc * pIniConfig) {
     D2Game::GAME::Server::GAME_SetForcedGameSeed(pIniConfig->nSEED);
 }
 
+// 1.14d mac: 00071c76
 void __fastcall ClientInit_Noop09(D2IniConfigStrc * pIni) {
 
 }
 
 // Apply character name from config.
+// 1.14d mac: 00071afd
 void __fastcall ClientInit_CharName(D2IniConfigStrc * pIniConfig) {
     char* szName = pIniConfig->szNAME;
     if (!strcmp(szName, "0")) {
@@ -1648,32 +1710,39 @@ void __fastcall ClientInit_CharName(D2IniConfigStrc * pIniConfig) {
 }
 
 // Apply realm selection from config.
+// 1.14d mac: 00071b6c
 void __fastcall ClientInit_Realm(D2IniConfigStrc * pIniConfig) {
     Storm::Source::SSTR::SStrCopy(RealmName, pIniConfig->szREALM, 0x20);
 }
 
 // Set arena flags from config.
+// 1.14d mac: 00071cbe
 void __fastcall ClientInit_ArenaFlags(D2IniConfigStrc * pIni) {
     CLIENT_ToggleDefaultActiveFlag(0);
 }
 
+// 1.14d mac: 00071cd5
 void __fastcall ClientInit_Noop10(D2IniConfigStrc * pIni) {
 
 }
 
+// 1.14d mac: 00071cda
 void __fastcall ClientInit_Noop11(D2IniConfigStrc * pIni) {
 
 }
 
+// 1.14d mac: 00071cee
 void __fastcall ClientInit_Noop15(D2IniConfigStrc * pIni) {
 
 }
 
 // Apply player class selection by id.
+// 1.14d mac: 00071b9f
 void __fastcall ClientInit_PlayerClassId(D2IniConfigStrc * pIniConfig) {
     CLIENT_SetDefaultCharClass((eD2PlayerClassIDDWORD)(uint8_t)pIniConfig->nCTEMP_MaybePlayerClass);
 }
 
+// 1.14d mac: 00071cf3
 void __fastcall GLOBAL_SetGameVersionInfo(D2IniConfigStrc * pIniConfig) {
     if (!pIniConfig->pBNetClientCallbacks) {
       return;
@@ -1682,15 +1751,18 @@ void __fastcall GLOBAL_SetGameVersionInfo(D2IniConfigStrc * pIniConfig) {
     gpBNetClientCallbacks = pIniConfig->pBNetClientCallbacks;
 }
 
+// 1.14d mac: 00071ce4
 void __fastcall ClientInit_Noop13(D2IniConfigStrc * pIni) {
 
 }
 
+// 1.14d mac: 00071ce9
 void __fastcall ClientInit_Noop14(D2IniConfigStrc * pIni) {
 
 }
 
 // Disable data compression and persist setting to registry.
+// 1.14d mac: 00071d11
 void __fastcall ClientInit_NoCompression(D2IniConfigStrc * pIniConfig) {
     if (!pIniConfig->bNOCOMPRESS) {
       return;
@@ -1700,10 +1772,12 @@ void __fastcall ClientInit_NoCompression(D2IniConfigStrc * pIniConfig) {
 }
 
 // Enable use of TXT data tables (modding/dev override).
+// 1.14d mac: 00071d32
 void __fastcall ClientInit_UseTxt(D2IniConfigStrc * pIniConfig) {
     D2Common::DATATBLS::DataTbls::sgtDataTableSetupIfUseTxt((uint32_t)!pIniConfig->bTXT);
 }
 
+// 1.14d mac: 00071d55
 void __fastcall ClientInit_Noop16(D2IniConfigStrc * pIni) {
 
 }
@@ -1781,10 +1855,12 @@ BOOL __fastcall LoadDataForGame(D2IniConfigStrc * pIni) {
     return gClientInitOk;
 }
 
+// 1.14d mac: 00071529
 BOOL __stdcall GAMEDATA_GetExitFlag3() {
     return D2CLIENT_ExitVar3;
 }
 
+// 1.14d mac: 0007153a
 void __stdcall UI_ResetInputState() {
     gnMouseButtonEventState = 0x10;
     gnPrimaryClickState = 0x10;
@@ -1795,6 +1871,7 @@ void __stdcall UI_ResetInputState() {
     Select::ClearSelectedUnit();
 }
 
+// 1.14d mac: 0007157f
 void __stdcall GAMEDATA_ClearQueuedClicks() {
     gQueuedPrimaryClick = 0;
     gQueuedSecondaryClick = 0;
@@ -1802,10 +1879,12 @@ void __stdcall GAMEDATA_ClearQueuedClicks() {
     gnQueuedSecondaryClickX = 0;
 }
 
+// 1.14d mac: 000715ac
 int32_t __stdcall GetEntryIndex() {
     return gClientGameData.gnRecordEntryIndex;
 }
 
+// 1.14d mac: 000715bd
 uint32_t __stdcall GAMEDATA_GetGlobalTickCount() {
     return gClientGameData.uGlobalTickCountA;
 }
@@ -1814,14 +1893,17 @@ uint32_t __stdcall GAMEDATA_GetGlobalTickCount_Unref_0044dab0() {
     return gClientGameData.gnFramesDrawnCounter;
 }
 
+// 1.14d mac: 000715ce
 uint32_t __stdcall GAME_GetSyncTickCount() {
     return gClientGameData.gdwSyncTickCount;
 }
 
+// 1.14d mac: 000715df
 void __fastcall GAME_SetSyncTickCount(uint32_t dwTickCount) {
     gClientGameData.gdwSyncTickCount = dwTickCount;
 }
 
+// 1.14d mac: 000715f3
 uint32_t __stdcall GAMEDATA_GetFpsDrawn() {
     return gClientGameData.fps_drawn;
 }
@@ -1830,10 +1912,12 @@ uint32_t __stdcall GetFPSSkip() {
     return gClientGameData.fps_skip;
 }
 
+// 1.14d mac: 00071615
 int32_t __stdcall gnRecordingIndex() {
     return gClientGameData.gnRecordEntryIndex;
 }
 
+// 1.14d mac: 00071626
 uint32_t __stdcall GetStepsOfMissileMovement() {
     return gClientGameData.gdwSyncTickCountPrev;
 }
@@ -1842,10 +1926,12 @@ D2PoolManagerStrc * __stdcall GAME_GetClientPoolManager() {
     return gClientGameData.gpClientPoolManager;
 }
 
+// 1.14d mac: 00071637
 eD2GSGameType __stdcall CLIENT_GetD2GSGameType() {
     return eD2GSGameType_007a0610;
 }
 
+// 1.14d mac: 0006e8b7
 void __fastcall GAMEDATA_ExtendTimeout(int32_t nDelayMs) {
     DWORD dwCurrentTick = GetTickCount();
     if (!(dwCurrentTick + nDelayMs > (uint32_t)gClientGameData.gdwCatchupTimeoutTick)) {
@@ -1875,6 +1961,7 @@ void __stdcall GAMEDATA_LoadActTiles(uint8_t nAct) {
 }
 
 // ESI is not an argument: the body never reads it.
+// 1.14d mac: 0006ec3b
 void GAMEDATA_CheckColorTxtOverride() {
     D2MPQFileStrc* pFileHandle;
     char byColorByte;
@@ -1900,22 +1987,27 @@ void __stdcall GAME_ToggleBloodFlag() {
     gbBloodFlag = (uint32_t)!gbBloodFlag;
 }
 
+// 1.14d mac: 00071648
 BOOL __stdcall GAMEDATA_GetBloodFlag() {
     return gbBloodFlag;
 }
 
+// 1.14d mac: 00071659
 void __fastcall CLIENT_SetDifficulty(char nDifficulty) {
     CLIENT_nDifficulty = nDifficulty;
 }
 
+// 1.14d mac: 0007166d
 void __fastcall CLIENT_SetExpansion(uint8_t bExpansion) {
     gClientGameData.CLIENT_bExpansion = (uint32_t)bExpansion;
 }
 
+// 1.14d mac: 00071682
 void __fastcall CLIENT_SetLadder(BOOL bLadder) {
     gClientGameData.CLIENT_bLadder = bLadder;
 }
 
+// 1.14d mac: 00071696
 uint32_t __stdcall GAMEDATA_GetLadderOrGameType() {
     uint32_t bResult = gClientGameData.CLIENT_bLadder;
     if (!((uint32_t)(eD2GSGameType_007a0610 - GAMETYPE_BNET_BETA) > 1)) {
@@ -1926,27 +2018,32 @@ uint32_t __stdcall GAMEDATA_GetLadderOrGameType() {
     return bResult;
 }
 
+// 1.14d mac: 000716b9
 BOOL __stdcall CLIENT_CheckExpansion() {
     return gClientGameData.CLIENT_bExpansion;
 }
 
+// 1.14d mac: 0006e8a5
 uint8_t __stdcall GetDificulity() {
     return CLIENT_nDifficulty;
 }
 
 // Clear in-game UI flags for several UI elements (data_0070f2c4/348/360).
+// 1.14d mac: 0007144c
 void __stdcall ClearInGameUIFlags() {
     _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &g_UIFlagInitGameDataPanel1, 1);
     _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), g_UIFlagInitGameDataPanel2, 2);
     _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), g_UIFlagInitGameDataPanel3, 2);
 }
 
+// 1.14d mac: 000713dc
 void __stdcall GAMEDATA_RegisterEventHandlers() {
     _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &g_UIFlagInitGameDataPanel1, 1);
     _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), g_UIFlagInitGameDataPanel2, 2);
     _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), g_UIFlagInitGameDataPanel3, 2);
 }
 
+// 1.14d mac: 000716ca
 void __fastcall D2CLIENT_ExitGame(int32_t nParam) {
     int nMsgArg;
     ClientModeInGame::D2CLIENT_SetExitVar1(0);
@@ -1990,6 +2087,7 @@ uint32_t __fastcall GAMEDATA_CheckTimerExpired(D2ClientTimerStrc * pTimer) {
 }
 
 // Timer helper: checks [start,duration] pair, clears when expired, returns active status.
+// 1.14d mac: 00072db4
 uint32_t __fastcall Timer_IsActiveAndUpdate(D2ClientTimerStrc * pTimer) {
     return !TIMER_IsExpired(pTimer);
 }
@@ -2010,6 +2108,7 @@ void __stdcall SendExitGameRequest(D2UIMouseMsgStrc * pMsg) {
     pMsg->dwResult = 0;
 }
 
+// 1.14d mac: 0006e6ae
 void __fastcall CLIENT_AllocAct(uint8_t nActNo, int32_t nMapSeed, int32_t nAutomap, eD2LevelId eLevel) {
     GAMEDATA_LoadActTiles(nActNo);
     if (sgpDrlgAct) {
@@ -2044,6 +2143,7 @@ void __fastcall CLIENT_AllocAct(uint8_t nActNo, int32_t nMapSeed, int32_t nAutom
 
 // GAME_InitClientSide: reset globals, init client pool, view/UI, loading screen, send join packet for network games, init palette/weather/lighting/chat; set CurrentDrawFunction and flags.
 // @sourcefile .\GAME\Game.cpp
+// 1.14d mac: 0006e917
 void __stdcall GAME_InitClientSide() {
     gLoadTimerDurationMs.dwStartTick = 0;
     gLoadTimerDurationMs.dwDurationMs = 0;
@@ -2093,6 +2193,7 @@ void __stdcall GAME_InitClientSide() {
     ServerLoadingComplete = 0;
 }
 
+// 1.14d mac: 0006f148
 void __fastcall CLIENT_ConnectionRefused(int32_t nReason) {
     uint32_t bLoadTimerActive = Timer_IsActiveAndUpdate(&gLoadTimerDurationMs);
     if (!(!bLoadTimerActive && !gEndGameUiState.showCutscene && !gExitCutsceneState.cutscenePlayed)) {
@@ -2114,6 +2215,7 @@ void __fastcall CLIENT_ConnectionRefused(int32_t nReason) {
 }
 
 // While load timer active, draw loading message; otherwise cleanup after loading act.
+// 1.14d mac: 0006f1fa
 uint32_t __stdcall LoadingScreen_TickOrCleanup(uint32_t dwArg1) {
     uint32_t bExpired = 0;
     if (TIMER_IsExpired(&gLoadTimerDurationMs)) {
@@ -2361,6 +2463,7 @@ uint32_t __stdcall DRAW_Congratz(uint32_t dwUnused) {
     return 0;
 }
 
+// 1.14d mac: 00070e16
 void __stdcall GAMEDATA_ShowEndGameCutscene() {
     ClientModeInGame::D2IniData_client->eCTEMP_eD2PlayerStatus = CLIENT_nDifficulty + 1 << 0xa | ClientModeInGame::D2IniData_client->eCTEMP_eD2PlayerStatus & 0xe0ff;
     gEndGameUiState.showCutscene = 1;
@@ -2408,6 +2511,7 @@ void __stdcall Client_CheckConnectionTimeouts() {
 // SP: Server tick (QSERVER_TickAllGames) + ClientSideGameLoop + render
 // MP: Receive packets + ClientSideGameLoop + render
 // Frame skip logic prevents runaway when overloaded. Exits when D2CLIENT_ExitVar3 set.
+// 1.14d mac: 0006f4bf
 uint32_t __stdcall CLIENT_GameLoopFrame(uint32_t dwUnused) {
     // Static local variables (originally global data)
     static uint32_t uGlobalTickCountB = 0x28; D2_STATIC_GUARD(uGlobalTickCountB, "D2Client::GAME::Game::CLIENT_GameLoopFrame::uGlobalTickCountB");
@@ -2590,6 +2694,7 @@ uint32_t __stdcall CLIENT_GameLoopFrame(uint32_t dwUnused) {
 }
 
 // EnterGame mode. Setup UI flags, start host thread if hosting, init client-side game + sound, then run _Message::MessageGameLoop with DRAW_LowLevelDrawing (main in-game loop). Handles end-of-game cutscenes/cleanup.
+// 1.14d mac: 00070e8f
 eD2ClientAppMode __stdcall pfModes_EnterGame() {
     // Static local variables (originally global data)
     static D2UIFlagInitStrc gsGameDataFlagInit[10] = {
@@ -2940,6 +3045,7 @@ void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_0045bb10(StormLinkedLis
 }
 
 // JMP thunk
+// 1.14d mac: 000a0db2
 void __stdcall thunk_GAMEDATA_CheckAutomapCenterOnLoad() {
     ::D2Client::GAME::Game::GAMEDATA_CheckAutomapCenterOnLoad();
 }

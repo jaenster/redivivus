@@ -23,30 +23,36 @@ static D2ClientSoundChannelStrc gaSoundChannels[16] = {}; D2_STATIC_GUARD(gaSoun
 namespace D2Client::GAME::Sound {
 
 // JMP thunk
+// 1.14d mac: 000dcc06
 BOOL __stdcall SOUND_IsInitialized_ForSoundOptionsItem() {
     return ::D2Client::GAME::Sound::SOUND_IsInitializedDup();
 }
 
 // JMP thunk
+// 1.14d mac: 000dc84c
 BOOL __stdcall SOUND_IsInitialized_ForSoundVolumeItem() {
     return ::D2Client::GAME::Sound::SOUND_IsInitializedDup();
 }
 
 // JMP thunk
+// 1.14d mac: 000dc93b
 BOOL __stdcall SOUND_IsInitialized_ForMusicVolumeItem() {
     return ::D2Client::GAME::Sound::SOUND_IsInitializedDup();
 }
 
 // JMP thunk
+// 1.14d mac: 000dca80
 BOOL __stdcall SOUND_Is3DMixerActive_For3DBiasItem() {
     return ::D2Client::GAME::Sound::SOUND_Is3DMixerActive();
 }
 
 // JMP thunk
+// 1.14d mac: 000dcb6f
 BOOL __stdcall SOUND_IsInitialized_ForNpcSpeechItem() {
     return ::D2Client::GAME::Sound::SOUND_IsInitializedDup();
 }
 
+// 1.14d mac: 000939b3
 BOOL __fastcall SOUND_ParseStreamWavHeader(D2SoundsTxt * pSoundStream) {
     WAVEFORMATEX sWaveFormat;
     if (pSoundStream->nLoadState != 2) {
@@ -120,6 +126,7 @@ void __fastcall SOUND_DetachUnit(D2ClientSoundChannelStrc * pSoundEntry) {
     pSoundEntry->pActiveSound = 0;
 }
 
+// 1.14d mac: 00094286
 void __fastcall SOUND_StopAndDetach(D2ClientSoundChannelStrc * ppnParam) {
     if (ppnParam->pSoundSmp) {
       uint32_t nStreamProgress;
@@ -169,6 +176,7 @@ void __stdcall CleanUpGame() {
     D2Sound::Src::D2SoundSmp::SOUNDSMP_SetGlobalVolume(0xff);
 }
 
+// 1.14d mac: 00094351
 BOOL __stdcall SOUND_IsInitialized() {
     return pAudioMixerInterface;
 }
@@ -177,6 +185,7 @@ BOOL __stdcall SOUND_IsInitializedDup() {
     return pAudioMixerInterface;
 }
 
+// 1.14d mac: 00094375
 void __stdcall SOUND_UpdateNonLoopingStreams() {
     D2SoundsTxt* pSoundsTxtLine;
     int32_t bIsPlaying;
@@ -205,6 +214,7 @@ void __stdcall SOUND_UpdateNonLoopingStreams() {
     } while (nChannel < 16);
 }
 
+// 1.14d mac: 000943f3
 uint32_t __fastcall SOUND_GetStreamProgress(D2ClientSoundChannelStrc * pChannel) {
     uint32_t nProgress = D2Sound::Src::D2SoundSmp::SOUNDSMP_GetStreamProgress(pChannel->pSoundSmp);
     return nProgress;
@@ -214,6 +224,7 @@ void __stdcall SOUND_GetSoundMixer_Thunk() {
     D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer();
 }
 
+// 1.14d mac: 00094326
 BOOL __stdcall SOUND_Is3DMixerActive() {
     if (!pAudioMixerInterface) {
       return 0;
@@ -238,6 +249,7 @@ uint32_t __stdcall SOUND_IsEaxMixerActive() {
 
 // Body continues at 004df9e6, the JNZ target of 004df9de - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named 'SOUND_FindPlayingById'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
 // Retired notes from 'SOUND_FindPlayingById':
+// 1.14d mac: 00093e39
 D2ClientSoundChannelStrc * __fastcall SOUND_FindPlayingByIdSafe(int32_t nId) {
     D2SoundChannelStrc* pDVar1;
     if (!pAudioMixerInterface) {
@@ -273,6 +285,7 @@ uint32_t __fastcall SOUND_GetPlaybackStatus(int * * ppnParam) {
     return 0;
 }
 
+// 1.14d mac: 0009453e
 void __stdcall SOUND_ShutdownAudio() {
     if (!pAudioMixerInterface) {
       return;
@@ -510,6 +523,7 @@ void __fastcall SOUND_UpdateChannelParams(D2ClientSoundChannelStrc * pSoundChann
     pSoundChannel->dwLastEaxObstruction = nSoundDescSaved->fUnitDistance;
 }
 
+// 1.14d mac: 0009440b D2Client::GAME::Sound::SOUND_SetSoundMixer
 BOOL __fastcall SOUND_SetSoundMixer(int32_t nMixer) {
     DWORD dwInitFlag;
     if (nMixer == 1) {
@@ -578,6 +592,7 @@ void __stdcall SOUND_ShutdownAudio_Thunk() {
 }
 
 // Plays a positioned (panned) sound effect using the game's channel system. Resolves the sound ID (randomizing from a group if flagged), checks for a duplicate already-playing instance, loads the sound file if needed, selects a mono/stereo/EAX channel, sets reverb and frequency, loads WAV data or opens a streaming file, and calls SOUNDSMP_Play/SOUNDSMP_OpenAndStreamFile. Returns the allocated channel slot on success, null on failure or if a duplicate throttle fires.
+// 1.14d mac: 00093b48
 D2ClientSoundChannelStrc * __fastcall SOUND_PlaySoundWithPanning(D2SoundChannelStrc * pMemory) {
     int32_t pRandomizedSoundId;
     BOOL BVar2;
@@ -984,6 +999,7 @@ static D2NpcGreetingSoundsStrc gaNpcGreetingSounds[29] = {
 
 // Returns a greeting sound id from pUnit's class-id greeting set, or 0 when the class has none. nMode 2 returns nReturnSoundId directly; otherwise picks nGreetingSoundId, or nInactiveSoundId 1 in 2 when nMode is 0, or the time-of-day id (+0/+1/+2 by DRLGENV_GetCycleIndexFromAct), retrying up to 20 times to avoid repeating nLastSoundId, and records the pick.
 // Provenance: 1.14d asm 004e0590; callers pass nMode 1 (004b510e greeting, 004cc04d mercenary) or the greeting mode (004b691b).
+// 1.14d mac: 0011e988
 int32_t __fastcall SOUND_SelectNpcGreetingSound(D2UnitStrc * pUnit, int32_t nMode) {
     int32_t nCycleIdx;
     D2NpcGreetingSoundsStrc* pGreetingSounds = SOUND_GetNpcGreetingSounds(pUnit);

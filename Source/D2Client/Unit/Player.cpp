@@ -749,6 +749,7 @@ static void __stdcall CLIENT_PlayIndexedUnitSound(D2UnitStrc * pUnit, int32_t nS
     UnitSnd::UNITSND_PlayPlayerSound(pUnit, *(uint16_t*)(gwPlayerAnimationState + nSoundIndex));
 }
 
+// 1.14d mac: 001244e2
 static uint32_t __stdcall PLAYER_CheckSkillUsability(int * pnUsabilityCode, D2UnitStrc * pUnit, D2SkillStrc * * ppSkill) {
     D2SkillsTxt* pSkillsTxt;
     D2SkillStrc* pSkill;
@@ -789,6 +790,7 @@ uint32_t __stdcall PLAYER_CheckSkillUsability_Extern(int * pnUsabilityCode, D2Un
 }
 
 // @sourcefile .\UNIT\Player.cpp
+// 1.14d mac: 001220e4
 static uint32_t __stdcall PLAYER_ValidateSkillMessage(int * pnUsabilityCode, D2UnitStrc * pUnit, D2ServerMessageHandleStrc * pServerMessageHandle) {
     D2SkillStrc* pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, pServerMessageHandle->nSkillId, pServerMessageHandle->nItemId);
     if (!pSkill) {
@@ -843,6 +845,7 @@ static void __stdcall PLAYER_ApplyCurrentSkillFlags(int32_t bIsLocalPlayer, D2Un
 }
 
 // Client-side player message/command dispatcher: applies a queued action (nMessageType) to a player unit from a D2ServerMessageHandleStrc. Frees any active light map and clears the current skill (except for type 0x13), restores path velocity, and resolves town vs non-town neutral mode. Switches on the message type to: set move/attack/interact targets (0/1/2/0x17/0x18), play a get-hit (6) / block (0x12) / cold-hit overlay+sound (0x13) / knockback (0x14) reaction, run skill cast/validate paths (0x15/0x16) , handle death (8/9) including closing panels and clearing trade/selection, and set run/skill anim modes (0x19). Returns 1 on success; on a failed skill/target it falls through to CLIENT_SetAnimModeAndMoveToCurrentPos and returns 0. Halts via Fog ErrorManager on an invalid message type.
+// 1.14d mac: 00121afd
 BOOL __fastcall PlayerMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2ServerMessageHandleStrc * pMessage, int32_t eNeutralMode) {
     int bIsActive;
     uint32_t pMessageHandle;
@@ -1179,6 +1182,7 @@ static void __stdcall PLAYER_InteractWithObject(int32_t nObjectGUID, D2UnderMous
     D2Common::Skills::StoreLastSkillHit(0x13, pUnderMouse->pPlayer, UNIT_OBJECT, nObjectGUID);
 }
 
+// 1.14d mac: 001222c3
 static void PLAYER_InteractWithUnit(int32_t nTargetGUID, D2UnderMouseStrc * pUnderMouse) {
     uint32_t nDistance = D2Common::Collision::GetDistanceBetweenUnits(pUnderMouse->pTarget, pUnderMouse->pPlayer);
     if (nDistance <= 2) {
@@ -1210,6 +1214,7 @@ void __fastcall PLAYER_InteractAtTarget(D2UnitStrc * pTargetUnit) {
     PLAYER_InteractWithUnit(!pTargetUnit ? -1 : pTargetUnit->nUnitGUID, &sInteractInfo);
 }
 
+// 1.14d mac: 00122391
 uint32_t __fastcall SKILL_CheckAuraRange(D2SkillStrc * pSkill, D2UnitStrc * pUnit, int * pnMinX, int * pnMinY) {
     int32_t nCalcResult;
     D2UnitStrc* pPlayerUnit_lcl = GetPlayerUnit_UI();
@@ -1287,6 +1292,7 @@ static int PLAYER_ExecuteSkillWithAura(D2UnderMouseStrc * pUnderMouse, eD2UnitTy
 }
 
 // Client-side skill execution targeting a specific unit GUID. Verifies skill usability, resolves the target unit, checks melee range, and dispatches via aura path (srvdofunc==0x13), ranged/bow path (StoreLastSkillHit), or the general PLAYER_ExecuteModeBasedAction depending on weapon class and range.
+// 1.14d mac: 00123acd
 static void __stdcall PLAYER_ExecuteSkillAtUnit(eD2UnitType eTargetUnitType, int32_t nTargetGUID, D2UnderMouseStrc * pUnderMouse) {
     D2SkillStrc** ppSkill = &pUnderMouse->pSkill;
     uint32_t bUsable = PLAYER_CheckSkillUsability(nullptr, pUnderMouse->pPlayer, ppSkill);
@@ -1343,6 +1349,7 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
     return (eD2UnitType)6;
 }
 
+// 1.14d mac: 00124498
 BOOL __stdcall PLAYER_CheckPendingInteraction(int32_t nTargetType, int32_t nTargetGUID) {
     D2UnitStrc* pPlayer = GetPlayerUnit_UI();
     if (GetTypeInline(pPlayer) != UNIT_PLAYER) {
@@ -1662,6 +1669,7 @@ static void INPUT_ContinuePlayerMovement(D2UnderMouseStrc * pMouse) {
 }
 
 // Computes the effective movement target for a player unit given the current mouse context. Reads the player's current tile position (static or dynamic path), computes the X/Y delta to the mouse cursor, clamps the minimum step distance based on mouse context flags (e.g. run/walk/attack modifiers), and writes the adjusted target back into pMouseCtx. Returns 1 if the movement should be committed (delta large enough and run-frame throttle not exceeded), 0 otherwise.
+// 1.14d mac: 0012368e
 static BOOL __stdcall PLAYER_CalculateMovementTarget(D2UnitStrc * pPlayerUnit, D2UnderMouseStrc * pMouseCtx) {
     // Static local variables (originally global data)
     static int gnLastMovementTargetEntryIndex; D2_STATIC_GUARD_BSS(gnLastMovementTargetEntryIndex, "D2Client::UNIT::Player::PLAYER_CalculateMovementTarget::gnLastMovementTargetEntryIndex");
@@ -1958,6 +1966,7 @@ static void INPUT_ExecuteSkillCommand(D2UnderMouseStrc * pUnderMouse) {
     }
 }
 
+// 1.14d mac: 00122428
 void __stdcall PLAYER_ClearRecursionClick() {
     bRecursionClick = 0;
 }
@@ -2207,6 +2216,7 @@ static BOOL INPUT_HandleRightClickWithPet(D2UnderMouseStrc * pUnderMouse) {
 }
 
 // Client input dispatcher for map clicks. Converts raw screen coordinates to perspective-view world coords, builds a D2UnderMouseStrc with the player and currently selected unit, sets run/walk and force-move flags from mouseEventFlags, then dispatches to the appropriate handler based on clickType (0=left-down, 1=left-hold, 2=left-up, 3=right-down, 4=right-hold, 5=right-up). Guards against re-entrant calls and ESC-menu-open state.
+// 1.14d mac: 0012243a
 int __fastcall ClickMap(int32_t clickType, int32_t nX, int32_t nY, uint16_t mouseEventFlags) {
     uint32_t nResult;
     int nXConverted = nX;
@@ -2329,6 +2339,7 @@ uint8_t __stdcall PLAYER_GetWeaponTypeForAnimation(D2UnitStrc * pPlayerUnit, D2U
 }
 
 // Client-side handler for a player-death message (msg ptr arg: type byte at +1, dead-unit GUID at +2, killer GUID at +6). Locates the dead player unit; if inactive sets its anim mode to Death. If the dead unit is the local player, finds the killer unit, makes the corpse non-colliding (width 5), and copies the dead unit's position/facing onto the corpse. Then walks the dead unit's inventory unequipping each equipped (grid type 3) item: swaps primary weapon, clears weapon anim mode flags, removes item stats, reloads the unit COF, and drops the item from the client object table.
+// 1.14d mac: 001229d4
 void __fastcall PLAYER_HandlePlayerDeath(D2GSPacketSrv0x74 * pDeathMsg) {
     uint8_t bVar1;
     eD2BodyLoc eBodyLoc;
@@ -2444,6 +2455,7 @@ BOOL __fastcall PLAYER_GetMercAppearanceBytes(uint32_t * pAppearanceOut, uint32_
 }
 
 // Teleports a player unit to a new room/position (via PATH_CheckCollisionFlags) and, if the unit was in a movement mode, re-issues the appropriate walk/run PlayerMessage to resume movement toward the previous target unit or coordinates.
+// 1.14d mac: 00122cf2
 void __fastcall CLIENT_WarpPlayerAndContinueMove(D2UnitStrc * pUnit, D2RoomStrc * pRoom, uint16_t nNewX, uint16_t nNewY) {
     eD2PlayerAnimMode eAnimMode = pUnit->eAnimMode.ePlayerMode;
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
@@ -2556,6 +2568,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_14(D2UnitStrc * p) 
 
 // Per-frame client-side state machine driving a player unit's current animation mode. Uses gaPlayerInitStats[playerMode] flag columns to decide behavior: steps the path and plays footstep sounds for moving modes, advances/handles the skill cast step (setting skill flags and re-issuing the current skill) for action modes, and advances or clamps the animation frame per the mode's loop/freeze attribute. On animation completion it transitions the mode: KnockBack restores position/velocity and reverts to GetHit; players with a queued skill set a pending-interact flag; otherwise it clears the current skill, frees the light map, and reverts to Neutral/TownNeutral. Also reloads the COF when needed, handles room-change updates, interpolates facing direction, cancels run/walk, applies active damage-state skill effects, and resolves player collision.
 // @blizzard UnitProcessPlayerModeSimulation
+// 1.14d mac: 001214e5
 void __fastcall PLAYER_ProcessPlayerModeSimulation(D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
     static D2PlayerModeAttribsStrc gaPlayerModeAttribs[20] = {
@@ -2862,6 +2875,7 @@ static void __stdcall PLAYER_PlaceUnitInRoom(int32_t nX, D2RoomStrc * pRoom, D2U
     D2Common::Unit::DRLGROOM_AddUnitToRoom(pUnit, pRoom);
 }
 
+// 1.14d mac: 000fdb30
 void __fastcall CLIENT_UpdateMonsterAllegiance(D2UnitStrc * pUnit, uint8_t byOldAllegiance, uint8_t byNewAllegiance) {
     int nOldAllegiance = byOldAllegiance;
     int nNewAllegiance = byNewAllegiance;
@@ -2884,6 +2898,7 @@ void __fastcall CLIENT_UpdateMonsterAllegiance(D2UnitStrc * pUnit, uint8_t byOld
     D2Common::PATH::DynamicPath::PATH_UpdateCollisionWidth(pUnit);
 }
 
+// 1.14d mac: 000fdbf0
 void __stdcall CLIENT_ClearServerAndClientUnitLists() {
     int nSize = 0x300;
     D2UnitStrc** ppUnit = CUnit::ServerSideUnitHashTables[0];
@@ -2901,6 +2916,7 @@ void __stdcall CLIENT_ClearServerAndClientUnitLists() {
 }
 
 // Iterates all 128 buckets of the server-side unit hash table. For each unit calls CLIENT_UpdateUnitFrame, then looks up the matching entry in the client-side hash table and dispatches CLIENT_DispatchMonsterAiBehavior (monsters) or OBJECT_ExecuteClientFunction (objects). Halts fatally on unit-type mismatch.
+// 1.14d mac: 000fe0e7
 void __stdcall CUNIT_UpdateClientFramesAndAI(D2UnitStrc * * pUnitHashTable) {
     for (int nBucketIdx = 0; nBucketIdx < 0x80; nBucketIdx++) {
       D2UnitStrc* pCurUnit = pUnitHashTable[nBucketIdx];
@@ -2954,14 +2970,17 @@ void __fastcall HANDSHAKE_SetClientPlayerUnit(D2UnitStrc * pUnit) {
     CUnit::pPlayerUnit = pUnit;
 }
 
+// 1.14d mac: 000fc9b5
 D2UnitStrc * __stdcall GetPlayerUnit_UI() {
     return CUnit::pPlayerUnit;
 }
 
+// 1.14d mac: 000fe6b2
 D2UnitStrc * __stdcall GetPlayerUnit_Net() {
     return CUnit::pPlayerUnit;
 }
 
+// 1.14d mac: 000fe6c3
 uint32_t __stdcall IsPlayerDead() {
     if (!CUnit::pPlayerUnit) {
       return 1;

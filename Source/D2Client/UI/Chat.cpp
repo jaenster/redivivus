@@ -433,6 +433,7 @@ void __stdcall CHAT_ShutdownIME() {
 }
 #endif
 
+// 1.14d mac: 000a01d3
 static int32_t __stdcall CHAT_CompareCaseInsensitive(char * szText1, char * szText2) {
     int nUpper1;
     int nUpper2;
@@ -492,6 +493,7 @@ static void CHAT_DrawCursor(int32_t nPosY, int32_t nPosX, int32_t nColor) {
     gnIMECursorVisible = 1;
 }
 
+// 1.14d mac: 0009ebfe
 void __stdcall CHAT_InitEmpty() {
 
 }
@@ -599,6 +601,7 @@ void __stdcall CHAT_DrawIMECandidates() {
 }
 #endif
 
+// 1.14d mac: 0009ec08
 void __stdcall DRAW_UI_ChatInput() {
     int i;
     uint16_t wszInputCopy[258];
@@ -747,6 +750,7 @@ static void __fastcall CHAT_AddToHistory(uint16_t * pwSrc) {
     memcpy(gaChatHistoryBuffer[gnChatHistoryReadIndex], pwSrc, sizeof(gaChatHistoryBuffer[0]));
 }
 
+// 1.14d mac: 0009f0f1
 void __stdcall CHAT_ScrollHistory(int32_t nDirection) {
     const int nOldIndex = gnChatHistoryScrollIndex;
     gnChatHistoryScrollIndex += nDirection;
@@ -840,6 +844,7 @@ BOOL __stdcall CHAT_ParseCommand(char * * ppszText, uint8_t * pbCommandType, cha
     } while (true);
 }
 
+// 1.14d mac: 0009efb8
 void __stdcall CHAT_CheckChatboxBounds(D2UIMouseMsgStrc * pMsg) {
     if (!((int)(uint32_t)pMsg->uLParam.sMousePos.nMouseY > Inv::ScreenSizeY - 0x31)) {
       return;
@@ -885,6 +890,7 @@ int32_t __fastcall CHAT_IsWideStringASCII(uint16_t * wszText) {
     return (uint32_t)((uint32_t)((uint32_t)uHighBits & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
 }
 
+// 1.14d mac: 0009fd27
 void __stdcall CHAT_InitHistoryIndices() {
     gnChatHistoryReadIndex = 7;
     gnChatHistoryWriteIndex = 7;
@@ -922,6 +928,7 @@ static void CHAT_ExtractWhisperPrefix(char * szInput, char * szOutPrefix) {
     Storm::Source::SSTR::SStrCopy(szOutPrefix, szInput, 0x7fffffff);
 }
 
+// 1.14d mac: 0009fd63
 void __stdcall CHAT_ClearInput() {
     memset(gwszChatInputText, 0, 0x202);
     gnChatInputTextCursorPosition = 0;
@@ -929,6 +936,7 @@ void __stdcall CHAT_ClearInput() {
 }
 
 // Routes incoming BNet chat packet by type - handles whispers, emotes, broadcasts, system messages
+// 1.14d mac: 0009fdb6
 BOOL __stdcall CHAT_ProcessBattleNetMessage() {
     uint8_t* pbyWhisperTarget;
     uint8_t* pbyPrefixScan;
@@ -1062,6 +1070,7 @@ BOOL __stdcall CHAT_ProcessBattleNetMessage() {
     return 1;
 }
 
+// 1.14d mac: 000a04f0
 static BOOL CHAT_HandleResignCommand(char * szCommandName, char * szInput) {
     char szUsageMessage[256];
     MessageStrc MStack_124;
@@ -1099,6 +1108,7 @@ static BOOL CHAT_HandleResignCommand(char * szCommandName, char * szInput) {
     return 1;
 }
 
+// 1.14d mac: 000a0289
 static BOOL __stdcall CHAT_HandleWhisperCommand(int32_t bInGame, char * szCommandName, char * szInput) {
     // Static local variables (originally global data)
     static char gszChatWhisperTargetName[2] = " "; D2_STATIC_GUARD(gszChatWhisperTargetName, "D2Client::UI::Chat::CHAT_HandleWhisperCommand::gszChatWhisperTargetName");
@@ -1416,6 +1426,7 @@ static void __thiscall ChatCommandProcessor(uint16_t * pwInputMessage, char * ps
     ui::SetUIFlag(UI_CHATBOX, UI_RESET, 0);
 }
 
+// 1.14d mac: 0009f13d
 void __stdcall INPUT_HandleChatCharInput(D2UIMouseMsgStrc * pMsg) {
     uint16_t** ppWVar2;
     BOOL bIsValidChar;

@@ -31,6 +31,7 @@ static uint8_t gnNpcMenuMercListCount = 0; D2_STATIC_GUARD(gnNpcMenuMercListCoun
 
 namespace D2Client::UI::npcmenu::Merc {
 
+// 1.14d mac: 000c8cb9
 void __fastcall AddMercForHireToGlobalList(D2GSPacketSrv0x4E * pPacket) {
     if (!pPacket) {
       return;
@@ -47,6 +48,7 @@ void __fastcall AddMercForHireToGlobalList(D2GSPacketSrv0x4E * pPacket) {
     }
 }
 
+// 1.14d mac: 000c5ea3
 void __fastcall NET_D2GS_CLIENT_Incoming0x4F_INITMERCENARYLIST(char * pBytes) {
     D2Client::Merc::D2MercForHire[0].bActive = 0;
     D2Client::Merc::D2MercForHire[1].bActive = 0;
@@ -60,10 +62,12 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x4F_INITMERCENARYLIST(char * pBytes) {
     D2Client::Merc::D2MercForHire[9].bActive = 0;
 }
 
+// 1.14d mac: 000c8d0e
 D2BitBufferStrc * __stdcall NPCMENU_GetGameQuestRecord() {
     return gpGameQuestRecord;
 }
 
+// 1.14d mac: 000c8d62
 void __fastcall NPCMENU_SetSelectedMercIndex(int16_t wMercNameId) {
     D2MercForHire* pMercEntry = D2Client::Merc::D2MercForHire;
     do {
@@ -77,6 +81,7 @@ void __fastcall NPCMENU_SetSelectedMercIndex(int16_t wMercNameId) {
     Hireables::UI_InitializeHirelingIconsUI();
 }
 
+// 1.14d mac: 000c8d6b
 void __fastcall NPCMENU_MercItemFoundCb(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->nClassId == 0x13e && pUnit->eAnimMode.ePlayerMode == Walk)) {
       return;
@@ -155,6 +160,7 @@ void __stdcall NPCMENU_ResurrectMerc() {
     NPCMENU_ShowTransactionConfirmDialog();
 }
 
+// 1.14d mac: 000ca934
 int __stdcall NPCMENU_ShowMercResurrectDialog() {
     Sound::SOUND_PlaySound(SOUND_CURSOR_SELECT, nullptr, 0, 0, 0);
     gnNpcMenuMercHireCost1 = gpNpcMenuMercListBox->pVtable->GetValue(gpNpcMenuMercListBox);

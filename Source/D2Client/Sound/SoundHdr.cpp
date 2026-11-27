@@ -127,6 +127,7 @@ static uint8_t geCutsceneCurrentSoundId = 0; D2_STATIC_GUARD(geCutsceneCurrentSo
 
 namespace D2Client::Sound::SoundHdr {
 
+// 1.14d mac: 0009597c
 static void SOUNDHDR_CompleteAsyncLoad(D2SoundsTxt * pSoundHdr) {
     void* nAddress;
     if (pSoundHdr->nLoadState != 1) {
@@ -158,6 +159,7 @@ eD2LevelId __stdcall SOUND_GetCurrentLevelId() {
     return eLevelId;
 }
 
+// 1.14d mac: 00094d9a
 uint32_t __stdcall GetSoundEnv() {
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
     D2RoomStrc* pRoom = pUnit ? D2Common::Units::UNITS_GetRoom(pUnit) : nullptr;
@@ -178,22 +180,27 @@ int __stdcall SOUNDHDR_GetTxtSoundEnvironSize() {
     return nTxtSoundEnvironSize;
 }
 
+// 1.14d mac: 00094df0
 int __stdcall SOUNDHDR_GetGlobal0() {
     return gpSoundHdrGlobal;
 }
 
+// 1.14d mac: 00094e01
 int __stdcall SOUNDHDR_GetGlobal1() {
     return gnSoundIdRangeMax;
 }
 
+// 1.14d mac: 00094e12
 int * __stdcall SOUNDHDR_GetGlobal2() {
     return (int*)pSoundChannelDataArray;
 }
 
+// 1.14d mac: 000959f5
 uint32_t __stdcall SOUNDHDR_GetGlobal3() {
     return gnCurrentGameAudioVolume;
 }
 
+// 1.14d mac: 0009534c
 void __stdcall Cleanup() {
     GAME::Sound::CleanUpGame();
     SOUND_ShutdownSystem();
@@ -207,6 +214,7 @@ void __stdcall SOUNDHDR_Nop() {
 
 }
 
+// 1.14d mac: 00094cc6
 D2SoundsTxt * __fastcall TXT_sounds_GetLineBySoundId(int32_t nSoundId) {
     if (pTxtSounds && nSoundId >= 0 && nSoundId < nTxtSoundsSize) {
       return pTxtSounds + nSoundId;
@@ -215,6 +223,7 @@ D2SoundsTxt * __fastcall TXT_sounds_GetLineBySoundId(int32_t nSoundId) {
     return nullptr;
 }
 
+// 1.14d mac: 00094cf8
 int __fastcall SOUNDHDR_GetSoundField0x60(int32_t nSoundId) {
     D2SoundsTxt* pSound = pTxtSounds;
     if (!pSound) {
@@ -231,6 +240,7 @@ int __fastcall SOUNDHDR_GetSoundField0x60(int32_t nSoundId) {
     return pRow->nGroupStartIndex;
 }
 
+// 1.14d mac: 00094d1e
 uint8_t __fastcall SOUNDHDR_GetSoundGroupSize(int32_t nSoundId) {
     D2SoundsTxt* pSound = pTxtSounds;
     if (!pSound) {
@@ -432,6 +442,7 @@ void __stdcall TXT_AllocTxt_sounds_soundenviron() {
     }
 }
 
+// 1.14d mac: 00094e23
 void __fastcall SOUNDHDR_Init(BOOL bBackgroundActive) {
     IDirectSound* nSpeakerCfg = D2Sound::SOUND_GetDirectSoundDevice();
     if (!nSpeakerCfg) {
@@ -480,6 +491,7 @@ void __fastcall SOUNDHDR_AdjustReferenceCount(int32_t nSoundId, int32_t nDelta) 
     }
 }
 
+// 1.14d mac: 00095475
 void __fastcall SOUNDHDR_ClearReferenceCounts(eD2Sounds eSound) {
     int nSoundsCount = nTxtSoundsSize;
     D2SoundsTxt* pSound = eSound != SOUND_NONE && pTxtSounds && (int)eSound >= 0 && (int)eSound < nTxtSoundsSize ? pTxtSounds + eSound : nullptr;
@@ -501,6 +513,7 @@ void __fastcall SOUNDHDR_ClearReferenceCounts(eD2Sounds eSound) {
 }
 
 // @sourcefile .\Sound\SoundHdr.cpp
+// 1.14d mac: 00095a6f
 void __fastcall SOUNDHDR_FreeSoundBuffer(int32_t nSoundId) {
     D2SoundsTxt* pSound;
     if (!pTxtSounds || nSoundId < 0 || nSoundId >= nTxtSoundsSize) {
@@ -607,6 +620,7 @@ float __fastcall SOUNDHDR_GetFalloffMax(int32_t nSoundId) {
     return 700.0;
 }
 
+// 1.14d mac: 00095cf8
 int32_t __fastcall SOUNDHDR_RandomizeSoundFromGroup(int32_t nSoundId) {
     int32_t nRoll;
     int nHistIdx;
@@ -652,6 +666,7 @@ int32_t __fastcall SOUNDHDR_RandomizeSoundFromGroup(int32_t nSoundId) {
     return nPickedId;
 }
 
+// 1.14d mac: 00095b59
 void __fastcall SOUNDHDR_BuildSoundPath(int32_t nSoundId, char * pszOutPath) {
     D2SoundsTxt* pSound;
     if (!pTxtSounds || nSoundId < 0 || nSoundId >= nTxtSoundsSize) {
@@ -677,6 +692,7 @@ void __fastcall SOUNDHDR_BuildSoundPath(int32_t nSoundId, char * pszOutPath) {
     strcat(pszOutPath, pSound->Filename);
 }
 
+// 1.14d mac: 00095c4c
 void __fastcall SOUNDHDR_UpdateLRUTimestamp(int32_t nSoundId) {
     D2SoundsTxt* pSound = !pTxtSounds || nSoundId < 0 || nSoundId >= nTxtSoundsSize ? 0 : pTxtSounds + nSoundId;
     pSound->nLRUTimestamp = gnCurrentGameAudioVolume;
@@ -706,6 +722,7 @@ void __stdcall SOUNDHDR_Shutdown() {
     gpSoundHdrGlobal = 0;
 }
 
+// 1.14d mac: 0009525a
 void __stdcall SOUNDHDR_ShutdownCleanup() {
     IDirectSound* nSpeakerCfg = D2Sound::SOUND_GetDirectSoundDevice();
     if (!nSpeakerCfg) {
@@ -720,6 +737,7 @@ void __stdcall SOUNDHDR_ShutdownCleanup() {
 }
 
 // @sourcefile .\Sound\SoundHdr.cpp
+// 1.14d mac: 000955f7
 void __fastcall SOUNDHDR_LoadSoundFile(int32_t nSoundId, int32_t bForceSync, int32_t bRespectRecency) {
     void* pSoundData;
     D2SoundsTxt* pSound;
@@ -809,6 +827,7 @@ void __fastcall SOUNDHDR_LoadSoundFile(int32_t nSoundId, int32_t bForceSync, int
     pSound->nLoadState = 1;
 }
 
+// 1.14d mac: 000954f1
 void __fastcall SOUNDHDR_ProcessAsyncLoads(int32_t dwTick) {
     if (pTxtSounds) {
       BOOL bForce = !dwTick;
@@ -846,6 +865,7 @@ void __stdcall DRAW_AfterDraw() {
     /* DWORD dwMilliseconds for Sleep */ Sleep(0);
 }
 
+// 1.14d mac: 0005d300
 void __fastcall SOUNDHDR_UpdateRegistryVersion(int32_t nSoundHeaderIndex) {
     uint8_t byRequiredVersionFlag;
     uint8_t byCurrentVersionFlag;
@@ -1175,6 +1195,7 @@ void __fastcall ExitGamePlayCutScene(int32_t nCutsceneId) {
     gbItemDescDirtyFlag = 0;
 }
 
+// 1.14d mac: 0005da07
 void __stdcall INV_SetItemDescFlag() {
     gbCutsceneActive = '\x01';
 }
@@ -1187,10 +1208,12 @@ void __stdcall INV_ResetItemDescFlags() {
     gbItemDescDirtyFlag = 0;
 }
 
+// 1.14d mac: 0005da4d
 void __stdcall INV_SetItemDescHighlight() {
     geCutsceneCurrentSoundId = '\x01';
 }
 
+// 1.14d mac: 0005da5f
 uint8_t __stdcall INV_GetItemDescDirtyFlag() {
     return gbItemDescDirtyFlag;
 }

@@ -11,6 +11,7 @@
 
 namespace D2Client::_Utils {
 
+// 1.14d mac: 00100894
 void __fastcall UTILS_OnUnitModeChange_NoOp(D2UnitStrc * pUnit) {
 
 }
@@ -19,6 +20,7 @@ void __stdcall UTILS_OnUnitModeChange_NoOp_Unref_004e4030() {
 
 }
 
+// 1.14d mac: 00100899
 void __fastcall ANIM_OnSkillCastStub(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
 
 }
@@ -33,10 +35,12 @@ float thunk___CIsqrt(float fValue) {
     return (float)fVar1;
 }
 
+// 1.14d mac: 000977c5
 int32_t __fastcall RollRandomNumerUpToArgument(int32_t nNumber) {
     return D2_SeedRollLimited(&UNIT::Player::GetPlayerUnit_UI()->sSeed, nNumber);
 }
 
+// 1.14d mac: 00097805
 int32_t __fastcall RollRandomNumber(int32_t nMin, int32_t nMax) {
     int32_t nRoll = RollRandomNumerUpToArgument(nMax - nMin + 1);
     return nRoll + nMin;
@@ -47,6 +51,7 @@ int32_t __fastcall RollRandomNumberTimesTwo(int32_t nRange) {
     return nRoll - nRange;
 }
 
+// 1.14d mac: 00097843
 float __stdcall CalculateHypotenuse(float a, float b) {
     a = b * b + a * a;
     long double fVar1 = sqrt((double)a);

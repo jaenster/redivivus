@@ -58,6 +58,7 @@ uint32_t __stdcall HIREABLE_IsNotInMercPurchaseMode() {
     return (uint32_t)(gnHireDisplayMode != 2);
 }
 
+// 1.14d mac: 000a8c6f
 void __stdcall LoadClassIcons() {
     char aBaseIconPaths[5][32] = {"Hireables\\AmazonIcon", "Hireables\\SorceressIcon", "Hireables\\BarbarianIcon", "Hireables\\PaladinIcon", "Hireables\\NecromancerIcon"};
     char aExpansionIconPaths[7][32] = {"Hireables\\AssassinIcon", "Hireables\\DruidIcon"};
@@ -82,6 +83,7 @@ void __stdcall LoadClassIcons() {
     memset(gpHireablesList, 0, nAllocSize);
 }
 
+// 1.14d mac: 000a8dbc
 void __stdcall FreeHireablesList() {
     int nIconIdx;
     DC6** ppClassIcon = ClassIcons;
@@ -111,6 +113,7 @@ void __stdcall FreeHireablesList() {
     gpHireablesList = 0;
 }
 
+// 1.14d mac: 000a8e67
 void __fastcall InitializeHealthBarColors(int32_t nForce) {
     if (!nForce) {
       if (HealthBarColorsInitialized) {
@@ -149,6 +152,7 @@ static void __stdcall DrawHirelingName(int32_t nX, int32_t nY, int32_t nColor, u
     D2Win::Src::D2WinFont::SetAndReturnLastFont(nPrevFont);
 }
 
+// 1.14d mac: 000aa4e2
 static void __stdcall GetAndDrawHirelingName(int32_t nX, int32_t nY, int32_t nPetType) {
     uint16_t wszName[32];
     D2PetTypeTxt* pPetTypeTxt = nPetType >= 0 && nPetType < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtPetType + nPetType : nullptr;
@@ -203,6 +207,7 @@ void __stdcall UI_DrawSummonCount(int32_t nSummonCount, int32_t nDrawPositionX) 
     D2Win::Src::D2WinFont::SetAndReturnLastFont(nStrLen);
 }
 
+// 1.14d mac: 000a8f09
 DC6 * __fastcall GetRosterIcon(D2UnitStrc * pUnit, int32_t nSkillId, int32_t * pRosterGUID, uint32_t * pFlagOut) {
     int nIconIndex;
     DC6* pIcon;
@@ -289,6 +294,7 @@ void __stdcall DRAW_Overlay_PetsAndPartyMembers() {
     }
 }
 
+// 1.14d mac: 000a9cd6
 void __stdcall INPUT_HireableInteract(D2UIMouseMsgStrc * pMsg) {
     if (gnHireDisplayMode == 2) {
       pMsg->bHandled = 1;
@@ -327,6 +333,7 @@ D2UnitStrc * Unreferenced_004934b0() {
     return pDVar1;
 }
 
+// 1.14d mac: 000a9e45
 int32_t __stdcall UI_CheckItemCanEquipToHireling(int32_t bPlaySound) {
     if (!GAME::Game::CLIENT_CheckExpansion()) {
       return 0;
@@ -416,6 +423,7 @@ int32_t __stdcall UI_CheckItemCanEquipToHireling(int32_t bPlaySound) {
     return bCanEquip;
 }
 
+// 1.14d mac: 000a9d80
 void __stdcall INPUT_HireableHireClick(D2UIMouseMsgStrc * pMsg) {
     BOOL bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
     if (!bIsExpansion) {
@@ -442,6 +450,7 @@ void __stdcall INPUT_HireableHireClick(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000aa133
 void __stdcall UI_HandleHirelingTooltipHoverTimer(D2UIMouseMsgStrc * pMsg) {
     int32_t nMercGUID;
     BOOL bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
@@ -484,6 +493,7 @@ void __stdcall UI_HandleHirelingTooltipHoverTimer(D2UIMouseMsgStrc * pMsg) {
     gnHireIconHoverX = 1;
 }
 
+// 1.14d mac: 000aa217
 void __stdcall UI_ToggleHirelingIconsVisibility() {
     eD2GSGameType eGameType;
     switch (gnHireDisplayMode) {
@@ -524,6 +534,7 @@ void __stdcall UI_ToggleHirelingIconsVisibility() {
     }
 }
 
+// 1.14d mac: 000aa2a5
 void __stdcall INPUT_HireableLongPress(D2UIMouseMsgStrc * pMsg) {
     int32_t nMercGUID;
     BOOL bResult = GAME::Game::CLIENT_CheckExpansion();
@@ -568,6 +579,7 @@ void __stdcall INPUT_HireableLongPress(D2UIMouseMsgStrc * pMsg) {
     gnHireIconHoverIndex = 0;
 }
 
+// 1.14d mac: 000aa387
 void __stdcall UI_InitializeHirelingIconsUI() {
     gnHireDisplayMode = 0;
     ui::SetUIFlag(UI_HIREICONS, UI_SET, 0);
@@ -834,6 +846,7 @@ static BOOL __stdcall HIRELING_DrawGenericPetIcon(D2UnitStrc * pUnit, int * pnX,
     return 1;
 }
 
+// 1.14d mac: 000a9070
 void __stdcall UI_DrawHireableIcons() {
     BOOL bResult;
     char* pPetTypeRow;

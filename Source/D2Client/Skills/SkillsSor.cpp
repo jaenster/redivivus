@@ -22,6 +22,7 @@
 namespace D2Client::SKILLS::SkillsSor {
 
 // Client DoFunc for Sorceress skills that fire a counted number of linear missiles (e.g. Charged Bolt variants). Reads missile count from skill calc[0], sets UNITFLAG_SKSRVDOFUNC, resolves target coords, then loops MakeMissile nMissileCount times using SKILLSMON_SetMissilePathLinear as the path function. Missile type selected via SKILLSASS_GetCltMissileByAuraLevel.
+// 1.14d mac: 0009208b
 BOOL __fastcall Skills_CltDoFunc_Sor_LinearMissileCount(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillArgStrc sSkillArg;
     D2SkillsTxt* pSkillsTxtBase = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -62,6 +63,7 @@ BOOL __fastcall Skills_CltDoFunc_Sor_LinearMissileCount(D2UnitStrc * pUnit, eD2S
 }
 
 // Client StFunc for Sorceress Inferno. Checks if STATE_inferno is already active on pUnit; if not, adds the skill overlay and plays the prgsound. Retrieves or allocates a stat list for STATE_inferno, sets the expire callback to SKILLSSOR_StatExpireCallback_ClearState, attaches it to the unit, and sets the unit sequence frame to 8 with a frame count of 0x500. Maintains the continuous beam visual and state.
+// 1.14d mac: 00092209
 BOOL __fastcall Skills_CltStFunc_ApplyInfernoState(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
@@ -100,6 +102,7 @@ BOOL __fastcall Skills_CltStFunc_ApplyInfernoState(D2UnitStrc * pUnit, eD2Skills
     return 1;
 }
 
+// 1.14d mac: 00092409
 void __fastcall SKILLSSOR_SetInfernoFrames(D2UnitStrc * pUnit, int32_t nTotalFrames) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE && nTotalFrames)) {
       return;
@@ -115,6 +118,7 @@ void __fastcall SKILLSSOR_SetInfernoFrames(D2UnitStrc * pUnit, int32_t nTotalFra
 }
 
 // Client-side: spawns an Inferno (or Hydra-fire variant) missile for the Sorceress. Looks up cltmissilea/cltmissileb from SkillsTxt; randomly picks between them using the unit seed (50/50). Reads target coords via GetCooordinates, evaluates calc[0] for frame count (min 1), fires MakeMissile with nFlags=0x8020. If the missile is created and the unit has STATE_inferno active: advances the animation sequence to frame 8 (or decrements nGfxCurrentFrame by 0x200 if no anim sequence).
+// 1.14d mac: 00092475
 D2UnitStrc * __fastcall SKILLSSOR_CltCreateInfernoMissile(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nTotalFrames;
     D2UnitStrc* pMissile;
@@ -180,12 +184,14 @@ D2UnitStrc * __fastcall SKILLSSOR_CltCreateInfernoMissile(D2UnitStrc * pUnit, eD
     return nullptr;
 }
 
+// 1.14d mac: 0009262d
 BOOL __fastcall Skills_CltDoFunc_Sor_Inferno(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pMissileUnit = SKILLSSOR_CltCreateInfernoMissile(pUnit, eSkill, nSkillLvl);
     return (uint32_t)(pMissileUnit != 0);
 }
 
 // Client-side StFunc that checks whether the caster's confirmed target unit falls within the aura's range. Computes squared distance between caster and target (handling static/dynamic paths), compares against (aurarangecalc)^2, and additionally verifies neither unit is in town and that CanInteractWith returns true for non-monster targets. Returns TRUE if in range.
+// 1.14d mac: 00092659
 BOOL __fastcall Skills_CltStFunc_CheckTargetInAuraRange(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nTargetY) {
     int nCasterY;
     int32_t nDistSq;
@@ -248,6 +254,7 @@ BOOL __fastcall Skills_CltStFunc_CheckTargetInAuraRange(D2UnitStrc * pUnit, eD2S
     return 0;
 }
 
+// 1.14d mac: 00092808
 BOOL __fastcall Skills_CltDoFunc_Nova(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nBonusVelocity;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -273,6 +280,7 @@ BOOL __fastcall Skills_CltDoFunc_Nova(D2UnitStrc * pUnit, eD2Skills eSkill, int3
 
 // Client do-func 26: Fire Wall and its monster copies. Resolves the primary and sub-missile from skills.txt, validates the caster's collision and room, then spawns two missiles running perpendicular to the caster-to-target vector plus a centred sub-missile.
 // Slot from skills.txt cltdofunc 26.
+// 1.14d mac: 000928fd
 BOOL __fastcall Skills_CltDoFunc_Sor_FireWall(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillArgStrc sSkillArg;
     int32_t nTargetPosX;
@@ -340,6 +348,7 @@ BOOL __fastcall Skills_CltDoFunc_Sor_FireWall(D2UnitStrc * pUnit, eD2Skills eSki
     return 1;
 }
 
+// 1.14d mac: 00092bb3
 BOOL __fastcall Skills_CltDoFunc_Sor_MissileWithChargeCount(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
@@ -365,6 +374,7 @@ BOOL __fastcall Skills_CltDoFunc_Sor_MissileWithChargeCount(D2UnitStrc * pUnit, 
 }
 
 // Client DoFunc for Sorceress aura-level missile skills. Resolves the missile id via SKILLSASS_GetCltMissileByAuraLevel, then computes a positional offset from the caster to the confirmed target unit. Builds a D2SkillArgStrc (flags=0x21, owner, offset-adjusted X/Y, skill level in nToHit) and spawns a client missile via MakeMissile. On success sets the missile's target-X (used as the missile count or distance parameter) from calc[0]. Returns 1 on success, 0 if skill/missile record invalid or missile creation fails.
+// 1.14d mac: 00092c91
 BOOL __fastcall Skills_CltDoFunc_Sor_OffsetMissileCount(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillArgStrc sSkillArg;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -411,6 +421,7 @@ BOOL __fastcall Skills_CltDoFunc_Sor_OffsetMissileCount(D2UnitStrc * pUnit, eD2S
     return 0;
 }
 
+// 1.14d mac: 00092edf
 BOOL __fastcall Skills_CltDoFunc_Sor_CollisionCheckedMissile(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -435,6 +446,7 @@ BOOL __fastcall Skills_CltDoFunc_Sor_CollisionCheckedMissile(D2UnitStrc * pUnit,
     return 0;
 }
 
+// 1.14d mac: 00092f84
 BOOL __fastcall Skills_CltStFunc_CheckCasterHasRoomNotInTown(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nPosX;
     int32_t nPosY;
@@ -462,6 +474,7 @@ BOOL __fastcall Skills_CltStFunc_CheckCasterHasRoomNotInTown(D2UnitStrc * pUnit,
     return 1;
 }
 
+// 1.14d mac: 000930b2
 BOOL __fastcall Skills_CltDoFunc_Sor_SimpleMakeMissile(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -483,6 +496,7 @@ BOOL __fastcall Skills_CltDoFunc_Sor_SimpleMakeMissile(D2UnitStrc * pUnit, eD2Sk
 }
 
 // Client-side per-frame tick for the Sorceress Blaze skill. Called when the unit is moving (dynamic path flags non-zero) and has the STATE_blaze stat list active. Reads the skill ID and level from the blaze stat list, looks up the skill's client missile entries (cltmissilea/b/c), and spawns a Blaze trail missile at the unit's current tile position via MakeMissile, randomly selecting among missile variants when multiple are configured. Skips spawn in town rooms.
+// 1.14d mac: 00093142
 void __fastcall SKILLSSOR_CltCreateBlazeMissile(D2UnitStrc * pUnit) {
     D2SkillArgStrc sSkillArg;
     if (!pUnit->pPath.pDynamicPath) {
@@ -560,6 +574,7 @@ void __fastcall SKILLSSOR_CltCreateBlazeMissile(D2UnitStrc * pUnit) {
 
 // Client do-func 84: the Thunder Storm bolt, reached only as Thunder Storm's cltprgfunc1. Spawns the cltmissilea at the confirmed target's position with nSkillLvl as ToHit, sets its Z position to 0x118 and Z offset to -0x28 (strike from above), calls WEATHER_InitBlizzardState(0) and adds the skill overlay to the target.
 // Slot from skills.txt cltdofunc 84.
+// 1.14d mac: 00093359
 BOOL __fastcall Skills_CltDoFunc_Sor_ThunderStormBolt(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillArgStrc sSkillArg;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -604,6 +619,7 @@ BOOL __fastcall Skills_CltDoFunc_Sor_ThunderStormBolt(D2UnitStrc * pUnit, eD2Ski
 }
 
 // Client missile collision event callback for Sorceress Blizzard/Frozen Orb ice shard spawning. Fires only on nParam1==0 (hit event). Validates pUnit can interact with the missile owner, checks missile flags2 bit 1 (piercing/spawning flag), then spawns a cltmissilea sub-missile at the owner's position and adds the cltoverlaya overlay to the struck unit.
+// 1.14d mac: 00093534
 int32_t __fastcall SKILLSSOR_StateCltEventFn01_ChillingArmor(int32_t nParam1, D2UnitStrc * pUnit, D2UnitStrc * pMissile, int32_t nUnused, eD2Skills eSkill, int32_t nSkillLevel) {
     uint32_t bCanInteract;
     D2MissilesTxt* pMissileTxt;
@@ -663,6 +679,7 @@ int32_t __fastcall SKILLSSOR_StateCltEventFn01_ChillingArmor(int32_t nParam1, D2
 }
 
 // Client DoFunc for Sorceress skills that fire missiles at random positions within a radius on a timer (e.g. Frozen Orb bolt scatter). Reads fire interval from cltcalc[0], radius from cltcalc[1], duration from cltcalc[2]. Increments skill param1 each tick; fires one missile at a random offset within radius only when param1 % fireInterval == 0, using a random duration offset from cltcalc[2].
+// 1.14d mac: 0009371a
 BOOL __fastcall Skills_CltDoFunc_Sor_RandomRadiusMissile(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {

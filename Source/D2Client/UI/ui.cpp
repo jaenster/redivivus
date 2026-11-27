@@ -3043,6 +3043,7 @@ int UI_GoldInputCallback_ReturnZero_Unref_00437d10() {
     return 0;
 }
 
+// 1.14d mac: 000f4b3c
 void __stdcall INPUT_ClearChatMessages(D2UIMouseMsgStrc * pMsg) {
     Text::TEXT_ClearChatMessages();
     pMsg->bHandled = 1;
@@ -3050,6 +3051,7 @@ void __stdcall INPUT_ClearChatMessages(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000f4b61
 DC6 * __fastcall ARCHIVE_LoadOverlayImageUsedInGame(char * pFilename) {
     char szFullPath[260];
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szFullPath, "%s\\UI\\", "DATA\\GLOBAL");
@@ -3068,6 +3070,7 @@ DC6 * __fastcall ARCHIVE_LoadOverlayImageUsedInGame(char * pFilename) {
     return pImage;
 }
 
+// 1.14d mac: 000f5547
 void __stdcall InitializeGlobalsWithColors() {
     Inv::InitializeColors();
     Party::SetPartyColors();
@@ -3079,10 +3082,12 @@ void __stdcall InitializeGlobalsWithColors() {
     Panel::PANEL_InitStaminaColorBlue();
 }
 
+// 1.14d mac: 000f557a
 void * __fastcall MoveArgumentToEAX(void * pParam) {
     return pParam;
 }
 
+// 1.14d mac: 000f5582
 void __fastcall UI_TranslateWideCharacterLookup(uint16_t * wszText) {
     int i;
     if (!wszText) {
@@ -3097,6 +3102,7 @@ void __fastcall UI_TranslateWideCharacterLookup(uint16_t * wszText) {
     }
 }
 
+// 1.14d mac: 000f55c8
 uint16_t * __fastcall AppendAsWideChar(uint16_t * wszText, int nColor) {
     char szDigit[4];
     uint16_t wszDigit[4];
@@ -3140,6 +3146,7 @@ uint16_t * __fastcall UI_AppendColorCodeToString(uint16_t * wszText, int nColor)
     return wszText;
 }
 
+// 1.14d mac: 000f56b2
 uint16_t * __fastcall UI_RemoveColorCodesFromString(uint16_t * wszText) {
     uint16_t* wszMatch;
     int32_t nRemainingLength;
@@ -3237,6 +3244,7 @@ void __fastcall UI_StoreGlobalUIText_Unref_00452550(uint16_t * wszText, DWORD dw
     gnImmunityText2Color = dwTextColor;
 }
 
+// 1.14d mac: 000f58b6
 BOOL __fastcall UI_GetUniqueMonsterName(D2UnitStrc * pUnit, uint16_t nNameMode) {
     D2UnitStrc* pInteractUnit;
     uint32_t eBorderType = Path::DRAW_GetTypeOfBorder();
@@ -3271,6 +3279,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_2(D2UnitStrc * p) {
     return p->eUnitFlags >> 2 & 1;
 }
 
+// 1.14d mac: 000f5938
 int32_t __fastcall UI_GetMonsterHpBarValue(D2UnitStrc * pUnit) {
     uint32_t bCanInteract;
     int32_t nMaxHp;
@@ -3399,6 +3408,7 @@ static void UI_BuildUberBossImmunityString(D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\UI\ui.cpp
+// 1.14d mac: 000f5a08
 void __fastcall UI_FormatItemNameWithQuality(D2UnitStrc * pUnit, uint16_t * wszText, int32_t nMaxLength) {
     // Frame slots -560..-32 are ONE object: &wszItemName is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -3535,6 +3545,7 @@ void __fastcall UI_FormatItemNameWithQuality(D2UnitStrc * pUnit, uint16_t * wszT
     }
 }
 
+// 1.14d mac: 000f6e84
 static void __stdcall UI_FormatPlayerNameAndStatus(D2UnitStrc * pUnit, uint16_t * wszText, int32_t nFormatMode, BOOL * pbIsPartied, int * pnHpBarValue) {
     uint32_t nLangCode;
     int nUnitGUID;
@@ -3580,6 +3591,7 @@ static void __stdcall UI_FormatPlayerNameAndStatus(D2UnitStrc * pUnit, uint16_t 
     D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszText, pszRosterNameCopy, 0x80);
 }
 
+// 1.14d mac: 000f7025
 static void __stdcall UI_ShowMonsterNameBar(int32_t bStoreMode, D2UnitStrc * pUnit) {
     int nInteractUnitGuid;
     BOOL bHasInteract = npcmenu::GetInteractedUnitGuid(&nInteractUnitGuid);
@@ -3765,6 +3777,7 @@ void __fastcall DRAW_Direct_RectFrame(RECT * pRect) {
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nRightX - 0xc, nRightEdge + 1, -1, DRAW_SOLID, nullptr);
 }
 
+// 1.14d mac: 000f7403
 void __stdcall UI_DrawStoredTooltip() {
     const int32_t nTextLength = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(UNICODE_007a2c80);
     if (!nTextLength) {
@@ -3887,6 +3900,7 @@ void __stdcall DRAW_UI_DeathMessage() {
     D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x13e7), nCenterY - nTextWidth / 2, nDrawY, nTextColor, bDrawMultiline);
 }
 
+// 1.14d mac: 000f9f83
 void __fastcall UI_DrawPlayerNameOverhead(D2UnitStrc * pUnit) {
     const uint32_t eBorderType = Path::DRAW_GetTypeOfBorder();
     if (eBorderType == 3) {
@@ -3932,6 +3946,7 @@ void __fastcall UI_DrawPlayerNameOverhead(D2UnitStrc * pUnit) {
     UI_FormatPlayerNameAndStatus(pUnit, wszName, 0x80, &bIsPartied, &nHpBarValue);
 }
 
+// 1.14d mac: 000f753e
 void __stdcall UI_DrawPlayerStateOverlays() {
     // Static local variables (originally global data)
     static int gaAutoMapRenderingLayerVisibilityArray3 = 0x40; D2_STATIC_GUARD(gaAutoMapRenderingLayerVisibilityArray3, "D2Client::UI::ui::UI_DrawPlayerStateOverlays::gaAutoMapRenderingLayerVisibilityArray3");
@@ -4001,6 +4016,7 @@ void __stdcall Unreferenced_004535d0() {
     UNIT::CUnit::CUNIT_IterateServerUnitsWithCallback((fnUnitIterCallback)UI_DrawPlayerNameOverhead);
 }
 
+// 1.14d mac: 000f9f25
 static void __stdcall UI_SetButtonKeyBinding(D2UIKeyBindingSetStrc * pButtonContainer, uint16_t nDefaultKey, int32_t nCmdCategory, int32_t nButtonIndex, int32_t nCommandId) {
     uint16_t wKey;
     uint32_t nKey;
@@ -4152,6 +4168,7 @@ static void UI_SetMultipleButtonKeyBindings(D2UIKeyBindingSetStrc * pnButtonIndi
     pnButtonIndices->pHandlers[nHandlerIdx].nMessageOrKeyCode = 0x57;
 }
 
+// 1.14d mac: 000f8f5e
 BOOL __fastcall GetUIFlag(eD2UIvars eUI) {
     if (eUI >= UI_RECIPESCROLL + 1) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc34);
@@ -4263,27 +4280,33 @@ static uint32_t UI_HandleKeyInputAndDismiss(int32_t nKeyAction, int32_t nUIFlagT
     return 1;
 }
 
+// 1.14d mac: 000f8fa1
 BOOL __fastcall UI_GetFlag(eD2UIvars eUI) {
     return (&Draw::GFX_bShowUIFlag.Game)[eUI];
 }
 
+// 1.14d mac: 000f8fb6
 DC6 * __stdcall UI_GetCursorIconIndex() {
     return gpUiCursorFocus16DC6;
 }
 
+// 1.14d mac: 000f8fc7
 DC6 * __stdcall UI_GetCursorIconDC6() {
     return gpDC6CursorIcon;
 }
 
+// 1.14d mac: 000f8fd8
 void __stdcall UI_ClearCursorAnimationState() {
     gbCursorAnimationPending = 0;
     gdwQuestResurrectDismissThrottle = 0;
 }
 
+// 1.14d mac: 000f8ff4
 void __stdcall UI_SetCursorAnimationFlag() {
     gbCursorAnimationPending = 1;
 }
 
+// 1.14d mac: 000f8e34
 void __stdcall UI_UpdateCursorAnimationTimer() {
     if (!gbCursorAnimationPending) {
       return;
@@ -4293,6 +4316,7 @@ void __stdcall UI_UpdateCursorAnimationTimer() {
     gdwQuestResurrectDismissThrottle = dwTickCount + 100;
 }
 
+// 1.14d mac: 000f9006
 void __stdcall UI_SendMouseMoveMessage() {
     SendMessageA(D2gfx::D2GFX::GetHwnd(), WM_MOUSEMOVE, 0, MAKELPARAM(Cursor::GetMouseX(), Cursor::GetMouseY())); // steer-ok: windows.h WM_MOUSEMOVE and MAKELPARAM
 }
@@ -4430,6 +4454,7 @@ void __stdcall UI_FreeAllPanelAssets() {
     Cursor::ITEM_SetItemOnHand(nullptr);
 }
 
+// 1.14d mac: 000f70d8
 uint16_t * __fastcall CLIENT_GetLevelNameByLevelId(eD2LevelId eLevel) {
     uint16_t* pwszName;
     D2LevelsTxt* pLevelLine = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetLine(eLevel);
@@ -4453,6 +4478,7 @@ uint16_t * __fastcall CLIENT_GetLevelNameByLevelId(eD2LevelId eLevel) {
     return pwszName;
 }
 
+// 1.14d mac: 000f913c
 void __stdcall UI_DropCursorItemOnGround() {
     D2UnitStrc* pCursorItem_lcl = Cursor::GetCursorItem();
     if (!pCursorItem_lcl) {
@@ -4503,6 +4529,7 @@ void __stdcall UI_CloseCurrentDialog() {
     UI_ClearGoldStashMode();
 }
 
+// 1.14d mac: 000f96a0
 int __stdcall UI_DialogCloseCallback() {
     UI_CloseCurrentDialog();
     return 0;
@@ -4512,6 +4539,7 @@ int UI_GoldInputCallback_ReturnZero() {
     return 0;
 }
 
+// 1.14d mac: 000f96b2
 int __stdcall UI_GoldDialogScrollCallback() {
     uint32_t uMaxGoldAvailable;
     int nScrollDirection = gpCurrentDialog->pVtable->GetValue(gpCurrentDialog);
@@ -4549,6 +4577,7 @@ int __stdcall UI_GoldDialogScrollCallback() {
 }
 
 // Activate callback of the gold dialog's confirm button: closes the dialog and sends the gold transaction for the entered amount. No arguments and a plain RET, so it fits the cdecl fpButtonOnActivate slot.
+// 1.14d mac: 000f97a2
 int UI_GoldDialogConfirmCallback() {
     D2UnitStrc* pPlayer;
     int nPlayerGUID;
@@ -4592,12 +4621,14 @@ int UI_GoldDialogConfirmCallback() {
     return 1;
 }
 
+// 1.14d mac: 000f98b4
 int UI_ButtonCallback_CloseDialog() {
     UI_CloseCurrentDialog();
     return 1;
 }
 
 // @sourcefile .\UI\ui.cpp
+// 1.14d mac: 000f9167
 void __fastcall UI_ShowGoldTransactionDialog(int32_t nTransactionType) {
     int nGoldInventory;
     uint16_t* pwszPrompt;
@@ -4779,6 +4810,7 @@ void __stdcall UI_DrawDialogBackground() {
     Dialog::DIALOG_DrawBackground(Dialog::gpDialog);
 }
 
+// 1.14d mac: 000f86a4
 void __fastcall UI_RegisterAutoMapEventHandlers(int32_t bRegister) {
     if (bRegister) {
       if (Draw::GFX_bShowUIFlag.Automap) {
@@ -4792,6 +4824,7 @@ void __fastcall UI_RegisterAutoMapEventHandlers(int32_t bRegister) {
     }
 }
 
+// 1.14d mac: 000f98c9
 DC6 * __stdcall GetBuySellBtnDC6() {
     if (!pUi_Panel_buysellbtn) {
       char szPath[260];
@@ -4822,6 +4855,7 @@ void * __fastcall UI_LoadFileToMemory(LPCSTR szFilename, DWORD * pSize) {
     return pBuffer;
 }
 
+// 1.14d mac: 000f9941
 void __stdcall PALETTE_LoadLoadingScreenPalette() {
     char acStack_20c[260];
     char szPalPl2Path[260];
@@ -4830,6 +4864,7 @@ void __stdcall PALETTE_LoadLoadingScreenPalette() {
     D2Win::Src::D2WinPalette::LoadPalette(acStack_20c, szPalPl2Path);
 }
 
+// 1.14d mac: 000f9dd5
 void __fastcall SetActNo(int32_t nActNo) {
     nLoadedActNo = nActNo;
 }
@@ -4838,6 +4873,7 @@ int32_t __stdcall DRAW_GetLoadedActNo() {
     return nLoadedActNo;
 }
 
+// 1.14d mac: 000f9a93
 void __stdcall CleanupAfterLoadingAct() {
     // Static local variables (originally global data)
     static BOOL gbCleanupAfterLoadingActFlag; D2_STATIC_GUARD_BSS(gbCleanupAfterLoadingActFlag, "D2Client::UI::ui::CleanupAfterLoadingAct::gbCleanupAfterLoadingActFlag");
@@ -4865,10 +4901,12 @@ void __stdcall CleanupAfterLoadingAct() {
     gnLastOpenPanelId = 0;
 }
 
+// 1.14d mac: 000f9dea
 int32_t __stdcall DRAW_GetLastPanelId() {
     return gnLastOpenPanelId;
 }
 
+// 1.14d mac: 000f9dfc
 BOOL __stdcall DRAW_CheckTickRateLimiter() {
     // Static local variables (originally global data)
     static unsigned int gdwLastDrawTickTimestamp; D2_STATIC_GUARD_BSS(gdwLastDrawTickTimestamp, "D2Client::UI::ui::DRAW_CheckTickRateLimiter::gdwLastDrawTickTimestamp");
@@ -4883,6 +4921,7 @@ BOOL __stdcall DRAW_CheckTickRateLimiter() {
 }
 
 // Fills a four-int array with the visible viewport bounds as left, top, right, bottom. Callers must model the destination as one 16-byte object (int[4]): splitting it into separate stack locals leaves the right and bottom elements looking unwritten.
+// 1.14d mac: 000f9e2e
 uint32_t __fastcall DRAW_GetVisibleViewportBounds(int * pnBounds) {
     *pnBounds = 0;
     pnBounds[2] = ScreenSizeX;
@@ -4906,11 +4945,13 @@ int32_t __stdcall DRAW_GetBottomPanelY() {
     return Inv::ScreenSizeY - 0x31;
 }
 
+// 1.14d mac: 000f870b
 void __stdcall DRAW_RegisterDrawHandlers() {
     _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gaUIFlagInitTable + 5, 0xd);
     _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gUIFlagDrawPanelInit, 1);
 }
 
+// 1.14d mac: 000f9ef6
 void __fastcall DRAW_RefreshNpcDialog(int32_t nScreenMode) {
     Text::TEXT_CloseMessageUI();
     npcmenu::NPCMENU_RefreshMenuDialog();
@@ -4925,6 +4966,7 @@ uint32_t * __fastcall Unreferenced_004549d0(uint32_t * pData) {
     return pData;
 }
 
+// 1.14d mac: 000f57e1
 static void __stdcall DRAW_CenteredText(int32_t nFontId, int32_t nY, DWORD dwColor, uint16_t * wszText) {
     int i;
     uint16_t* pwszClear;
@@ -4946,6 +4988,7 @@ static void __stdcall DRAW_CenteredText(int32_t nFontId, int32_t nY, DWORD dwCol
     D2Win::Src::D2WinFont::SetAndReturnLastFont(nPrevFont);
 }
 
+// 1.14d mac: 000f5771
 void __stdcall DRAW_MonsterUnderCursorImmunites() {
     D2UnitStrc* pSelected = GAME::Select::GetSelectedUnit();
     if (!(pSelected && pSelected->eUnitType == UNIT_MONSTER)) {
@@ -5153,6 +5196,7 @@ void __fastcall DRAW_MonsterHealthBar(D2UnitStrc * pUnit) {
 }
 
 // Draw UI label showing unit name/life under mouse cursor during gameplay
+// 1.14d mac: 000f5e90
 void __fastcall DRAW_UnitUnderMouse(D2UnitStrc * pUnit) {
     // The values VC8 kept in pLevelTxtResult's one frame slot, one member each: a frame object reaches the slot.
     union pLevelTxtResult_u {
@@ -5390,6 +5434,7 @@ void __fastcall DRAW_UnitUnderMouse(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 000f74ce
 void __stdcall DRAW_UnitUModsUnderCursor() {
     int32_t nNameLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength((uint16_t*)gnMonsterHealthBarValue);
     if (!nNameLen) {
@@ -5520,6 +5565,7 @@ void __stdcall DRAW_Overlay_EnteringAreaX() {
     }
 }
 
+// 1.14d mac: 000f82a0
 void __fastcall SetUiFlagInit(eD2UIvars eUIVar) {
     // Static local variables (originally global data)
     static D2UIKeyBindingSetStrc gnUIFlagShopKeyBindings = {
@@ -5894,6 +5940,7 @@ void __fastcall UI_UnregisterHandlersForPanel(eD2UIvars ePanel) {
     }
 }
 
+// 1.14d mac: 000f4df0
 DWORD __fastcall SetUIFlag(eD2UIvars eUI, eD2UIvarsSetType neD2UIvarsSetType, DWORD bAdjustMouse) {
     int iVar1;
     if (eUI >= 0x26) {
@@ -6083,6 +6130,7 @@ DWORD __fastcall SetUIFlag(eD2UIvars eUI, eD2UIvarsSetType neD2UIvarsSetType, DW
     return 1;
 }
 
+// 1.14d mac: 000f8150
 BOOL __fastcall UI_CloseActivePanels(int32_t bForceAutomap, int32_t bAdjustMouse) {
     // Static local variables (originally global data)
     static uint32_t gnUICloseActivePanelsFlag[38] = {
@@ -6260,10 +6308,12 @@ void __stdcall nullSub_CharonGameDraw_Unref_00463d70() {
 
 }
 
+// 1.14d mac: 00063ac8
 void __fastcall nullSub_CharonGameDraw(int32_t nArg1, int32_t nArg2) {
 
 }
 
+// 1.14d mac: 000a0921
 void __stdcall UI_ToggleHelpScreen() {
     int32_t nHelpMenuValue;
     BOOL bExitFlag = GAME::Game::GAMEDATA_GetExitFlag3();
@@ -6286,6 +6336,7 @@ void __stdcall UI_ToggleHelpScreen() {
     Storm::Source::SReg::SRegSaveValue("Diablo II", "Help Menu", 1, 1);
 }
 
+// 1.14d mac: 000a07c8
 void __stdcall UI_ToggleBeltRows() {
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
     if (!pUnit) {
@@ -6665,6 +6716,7 @@ int __stdcall UI_GetControlConfigRowCount() {
     return (uint64_t)((uint64_t)(uint32_t)nScrollExtra << 32 | (uint64_t)(uint32_t)nRows);
 }
 
+// 1.14d mac: 000cdbd0
 void __fastcall UI_ScrollConfigListVertical(int32_t nSteps) {
     int nNewOffset;
     if (nSteps < -1) {
@@ -6721,6 +6773,7 @@ void __fastcall UI_ScrollConfigListVertical(int32_t nSteps) {
     gnUICtrlConfigScrollPosition = (gnUICtrlConfigScrollMaxLines * -0xc + 0xf6) * gnUICtrlConfigScrollOffset / iVar1 + 0x2f + (WindowSizeY - 0x1a4) / 2;
 }
 
+// 1.14d mac: 000cdd36
 void __fastcall UI_ScrollConfigListHorizontal(int32_t nSteps) {
     int nNewSelectedRow;
     int64_t lRowCount;
@@ -6805,6 +6858,7 @@ void __fastcall UI_ScrollConfigListHorizontal(int32_t nSteps) {
     return;
 }
 
+// 1.14d mac: 000ce8ba
 static int32_t UI_GetControlConfigRowAtY(int32_t nMouseY) {
     int nCurRow;
     int i = 0;
@@ -6862,6 +6916,7 @@ static int32_t UI_GetControlConfigTabIndex(int32_t nMouseX, int32_t nMouseY) {
     return nMatchedTabIndex;
 }
 
+// 1.14d mac: 000ce830
 static int UI_IsMouseInControlConfigArea(int32_t nMouseX, int32_t nMouseY) {
     int nScreenLeftMargin = (ScreenSizeX - 0x26c) / 2;
     if (nMouseX >= nScreenLeftMargin + 0x12 && nMouseX <= nScreenLeftMargin + ((ScreenSizeX + nScreenLeftMargin * -2 - 0x31) / 3 + 6) * 3) {
@@ -6887,6 +6942,7 @@ static inline int UI_GetConfigListTop() {
     return (WindowSizeY - 0x1a4) / 2;
 }
 
+// 1.14d mac: 000cd820
 static int UI_IsMouseOnUpArrow(int32_t nMouseX, int32_t nMouseY) {
     if (nMouseX >= UI_GetConfigPanelRight() - 0x1f && nMouseX <= UI_GetConfigPanelRight() - 0x12) {
       const int nTop = UI_GetConfigListTop();
@@ -6898,6 +6954,7 @@ static int UI_IsMouseOnUpArrow(int32_t nMouseX, int32_t nMouseY) {
     return 0;
 }
 
+// 1.14d mac: 000cd89c
 static int UI_IsMouseOnDownArrow(int32_t nMouseX, int32_t nMouseY) {
     if (nMouseX >= UI_GetConfigPanelRight() - 0x1f && nMouseX <= UI_GetConfigPanelRight() - 0x12) {
       const int nTop = UI_GetConfigListTop();
@@ -6990,6 +7047,7 @@ uint32_t __fastcall Unreferenced_004a4aa0(int32_t nIgnoredRegion) {
 }
 
 // Control config mouse handler. Tracks g_nControlConfigMouseButtonState array for each UI region (scroll up/down, list drag, buttons). Dispatches scroll/selection based on mouse state. Main mouse logic for config UI.
+// 1.14d mac: 000cd19f
 void __stdcall UI_UpdateConfigControlsState(int32_t nMouseXStack, int32_t nMouseYStack) {
     // Static local variables (originally global data)
     static int32_t gnUICtrlConfigHoveredControl; D2_STATIC_GUARD_BSS(gnUICtrlConfigHoveredControl, "D2Client::UI::ui::UI_UpdateConfigControlsState::gnUICtrlConfigHoveredControl");
@@ -7232,22 +7290,26 @@ static int32_t UI_GetConfigControlTextColor(int32_t nRow, int32_t nColumn) {
     return bIsBound != 0 ? 0x4U : 0x5U;
 }
 
+// 1.14d mac: 000ce919
 void __fastcall UIAction_ResetKeyBindingsToDefaults() {
     CmdTbl::CMD_ResetKeyBindingsToDefaults(0);
 }
 
+// 1.14d mac: 000ce930
 void CONTROLCONFIG_SaveAndCancel() {
     CmdTbl::CMD_SaveKeyBindings();
     SetUIFlag(UI_CONFIG, UI_RESET, 0);
     EscMenu::ESCMENU_RestoreUIState(1);
 }
 
+// 1.14d mac: 000ce245
 void CONTROLCONFIG_RevertAndClose() {
     CmdTbl::CMD_RevertKeyBindings();
     SetUIFlag(UI_CONFIG, UI_RESET, 0);
     EscMenu::ESCMENU_ShowMenu(0, 1);
 }
 
+// 1.14d mac: 000cc609
 void __stdcall CONTROLCONFIG_CalculateColumnBounds() {
     int32_t nTextWidth;
     uint32_t nColumnWidth;
@@ -7289,6 +7351,7 @@ void __stdcall CONTROLCONFIG_CalculateColumnBounds() {
     gnUICtrlConfigScrollPosition = (gnUICtrlConfigScrollMaxLines * -0xc + 0xf6) * gnUICtrlConfigScrollOffset / nColumnIndex + 0x2f + (WindowSizeY - 0x1a4) / 2;
 }
 
+// 1.14d mac: 000cc533
 void __stdcall CONTROLCONFIG_Initialize() {
     char szDc6Path[260];
     UI_InitializeStatDescriptionPointers();
@@ -7299,6 +7362,7 @@ void __stdcall CONTROLCONFIG_Initialize() {
     g_ControlConfigUIState = 0;
 }
 
+// 1.14d mac: 000cc6fc
 void __stdcall CONTROLCONFIG_Cleanup() {
     if (!gpUICtrlConfigScrollbarDC6) {
       return;
@@ -7308,6 +7372,7 @@ void __stdcall CONTROLCONFIG_Cleanup() {
     gpUICtrlConfigScrollbarDC6 = 0;
 }
 
+// 1.14d mac: 000cc729
 void __fastcall CONTROLCONFIG_OnToggleUI(int32_t bClose) {
     UI_InitializeStatDescriptionPointers();
     if (bClose) {
@@ -7331,6 +7396,7 @@ void __fastcall CONTROLCONFIG_OnToggleUI(int32_t bClose) {
     CONTROLCONFIG_CalculateColumnBounds();
 }
 
+// 1.14d mac: 000cc803
 void __stdcall DRAW_ConfigControlsMenu() {
     // Static local variables (originally global data)
     static int gnUICtrlConfigAnimationFrame; D2_STATIC_GUARD_BSS(gnUICtrlConfigAnimationFrame, "D2Client::UI::ui::DRAW_ConfigControlsMenu::gnUICtrlConfigAnimationFrame");
@@ -7520,6 +7586,7 @@ void __stdcall DRAW_ConfigControlsMenu() {
     gnUICtrlConfigAnimationFrame++;
 }
 
+// 1.14d mac: 000cd91e
 void __stdcall InitConfigUiFlags(D2UIMouseMsgStrc * pMsg) {
     BOOL bExitFlag = GAME::Game::GAMEDATA_GetExitFlag3();
     if (bExitFlag) {
@@ -7534,6 +7601,7 @@ void __stdcall InitConfigUiFlags(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000cdb3d
 void __stdcall INPUT_SkillTreeScroll(D2UIMouseMsgStrc * pMsg) {
     BOOL bExitFlag = GAME::Game::GAMEDATA_GetExitFlag3();
     if (bExitFlag) {
@@ -7552,6 +7620,7 @@ void __stdcall INPUT_SkillTreeScroll(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000cdc9d
 void __stdcall INPUT_SkillTreeNavigateUp(D2UIMouseMsgStrc * pMsg) {
     BOOL bExitFlag = GAME::Game::GAMEDATA_GetExitFlag3();
     D2ConfigControlDescStrc* pStatTable = gpStatDescriptorTable;
@@ -7575,6 +7644,7 @@ void __stdcall INPUT_SkillTreeNavigateUp(D2UIMouseMsgStrc * pMsg) {
     return;
 }
 
+// 1.14d mac: 000cde14
 void __stdcall INPUT_SkillTreeNavigateDown(D2UIMouseMsgStrc * pMsg) {
     BOOL bExitFlag = GAME::Game::GAMEDATA_GetExitFlag3();
     D2ConfigControlDescStrc* pStatTable = gpStatDescriptorTable;
@@ -7598,6 +7668,7 @@ void __stdcall INPUT_SkillTreeNavigateDown(D2UIMouseMsgStrc * pMsg) {
     return;
 }
 
+// 1.14d mac: 000cdead
 void __stdcall INPUT_ConfigToggleLeft(D2UIMouseMsgStrc * pMsg) {
     BOOL bExitFlag = GAME::Game::GAMEDATA_GetExitFlag3();
     if (bExitFlag) {
@@ -7614,6 +7685,7 @@ void __stdcall INPUT_ConfigToggleLeft(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000cdf30
 void __stdcall INPUT_ConfigToggleRight(D2UIMouseMsgStrc * pMsg) {
     BOOL bExitFlag = GAME::Game::GAMEDATA_GetExitFlag3();
     if (bExitFlag) {
@@ -7672,6 +7744,7 @@ void __stdcall INPUT_ConfigCancel(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000ce063
 void __stdcall UI_ConfigKeyBindModeEnable() {
     gbUICtrlConfigKeyBindMode = 1;
     UI_UnregisterHandlersForPanel(UI_CONFIG);
@@ -7681,6 +7754,7 @@ void __stdcall UI_ConfigKeyBindModeEnable() {
     _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gsUIFlagInit3, 1);
 }
 
+// 1.14d mac: 000ce2d2
 void __stdcall UI_ConfigKeyBindModeDisable(int32_t bRestoreDrawHandlers) {
     _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIFlagInit0, 6);
     _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &gsUIFlagInit3, 1);
@@ -7694,6 +7768,7 @@ void __stdcall UI_ConfigKeyBindModeDisable(int32_t bRestoreDrawHandlers) {
     gbUICtrlConfigKeyBindMode = 0;
 }
 
+// 1.14d mac: 000ce285
 void __stdcall UI_ConfigKeyBindModeCancelAndRevert() {
     if (!gbUICtrlConfigKeyBindMode) {
       return;
@@ -7742,6 +7817,7 @@ static void UI_ConfigHandleMouseClick(int32_t nMouseX, int32_t nMouseY) {
     gaControlConfigRegionMouseState[6] = 0;
 }
 
+// 1.14d mac: 000cd96d
 void __stdcall INPUT_ConfigMouseDown(D2UIMouseMsgStrc * pMsg) {
     BOOL bExitFlag = GAME::Game::GAMEDATA_GetExitFlag3();
     if (bExitFlag) {
@@ -7759,6 +7835,7 @@ void __stdcall INPUT_ConfigMouseDown(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000cdfb3
 void __stdcall INPUT_ConfigConfirmEntry(D2UIMouseMsgStrc * pMsg) {
     BOOL bExitFlag = GAME::Game::GAMEDATA_GetExitFlag3();
     if (bExitFlag) {
@@ -7802,6 +7879,7 @@ void __stdcall INPUT_ConfigScreenOpen(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000ce5af
 void __stdcall INPUT_ConfigKeyBind(D2UIMouseMsgStrc * pMsg) {
     BOOL bExitFlag;
     bExitFlag = GAME::Game::GAMEDATA_GetExitFlag3();
@@ -7845,6 +7923,7 @@ void __stdcall INPUT_ConfigKeyBind(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000ce713
 void __stdcall INPUT_ConfigKeyBindAlternate(D2UIMouseMsgStrc * pMsg) {
     if (GAME::Game::GAMEDATA_GetExitFlag3()) {
       pMsg->bHandled = 0;
@@ -7890,6 +7969,7 @@ void __fastcall UI_ConfigSetKeyBinding(uint32_t nKeyCode) {
     gdwUICtrlConfigKeyBindTimestamp = GetTickCount();
 }
 
+// 1.14d mac: 000ce375
 void __stdcall INPUT_ConfigMouseClick(D2UIMouseMsgStrc * pMsg) {
     BOOL bExitFlag = GAME::Game::GAMEDATA_GetExitFlag3();
     if (bExitFlag) {
@@ -7903,6 +7983,7 @@ void __stdcall INPUT_ConfigMouseClick(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000ce42b
 void __stdcall INPUT_ConfigMouseButtonHandler(D2UIMouseMsgStrc * pMsg) {
     uint32_t nKeyCode;
     BOOL bExitFlag;
@@ -7938,6 +8019,7 @@ void __stdcall INPUT_ConfigMouseButtonHandler(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000ce482
 void __stdcall INPUT_ConfigMouseWheelScroll(D2UIMouseMsgStrc * pMsg) {
     BOOL bExitFlag = GAME::Game::GAMEDATA_GetExitFlag3();
     D2UIMouseMsgStrc* pUnderMouseOrig = pMsg;
@@ -7967,6 +8049,7 @@ void __stdcall INPUT_ConfigMouseWheelScroll(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pUnderMouseOrig);
 }
 
+// 1.14d mac: 000bf3a7
 void __stdcall UI_LoadLevelUpPanelImages() {
     gpUIStatLevelUpPanelImages = ARCHIVE_LoadOverlayImageUsedInGame("Panel\\Level");
     gpUIStatLevelUpButtonImages = ARCHIVE_LoadOverlayImageUsedInGame("Panel\\Levelsocket");
@@ -7985,6 +8068,7 @@ void __stdcall UI_FreeLevelUpPanelImages() {
     gpUIStatLevelUpButtonImages = 0;
 }
 
+// 1.14d mac: 000bf429
 void __stdcall UI_UpdateNewStatSkillIcons() {
     int32_t nPointsAvailable;
     eD2UIvarsSetType neD2UIvarsSetType;
@@ -8033,6 +8117,7 @@ void __stdcall UI_UpdateNewStatSkillIcons() {
     }
 }
 
+// 1.14d mac: 000bf533
 BOOL __fastcall UI_IsMouseOnStatButton(int32_t nPanelMode, int32_t nMouseX, int32_t nMouseY) {
     if (nPanelMode == 2) {
       if (nMouseX <= ScreenSizeX / 2 + 0x28) {
@@ -8051,6 +8136,7 @@ BOOL __fastcall UI_IsMouseOnStatButton(int32_t nPanelMode, int32_t nMouseX, int3
     return 1;
 }
 
+// 1.14d mac: 000bf59a
 int __stdcall UI_GetNewStatPointsCount() {
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
@@ -8061,6 +8147,7 @@ int __stdcall UI_GetNewStatPointsCount() {
     return 0;
 }
 
+// 1.14d mac: 000bf5f9
 BOOL __fastcall UI_IsMouseOnSkillButton(int32_t nPanelMode, int32_t nMouseX, int32_t nMouseY) {
     int nButtonBaseX = ScreenSizeX;
     switch (nPanelMode) {
@@ -8078,6 +8165,7 @@ BOOL __fastcall UI_IsMouseOnSkillButton(int32_t nPanelMode, int32_t nMouseX, int
     return 0;
 }
 
+// 1.14d mac: 000bf662
 int __stdcall UI_GetNewSkillPointsCount() {
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
@@ -8088,6 +8176,7 @@ int __stdcall UI_GetNewSkillPointsCount() {
     return 0;
 }
 
+// 1.14d mac: 000bf6c1
 void __stdcall INPUT_StatScreenButtonDown(D2UIMouseMsgStrc * pMsg) {
     BOOL bEscMenuOpen;
     int bOnButton;
@@ -8120,6 +8209,7 @@ void __stdcall INPUT_StatScreenButtonDown(D2UIMouseMsgStrc * pMsg) {
     }
 }
 
+// 1.14d mac: 000bf7a0
 void __stdcall INPUT_SkillTreeButtonDown(D2UIMouseMsgStrc * pMsg) {
     BOOL bEscMenuOpen;
     int bOnButton;
@@ -8152,6 +8242,7 @@ void __stdcall INPUT_SkillTreeButtonDown(D2UIMouseMsgStrc * pMsg) {
     }
 }
 
+// 1.14d mac: 000bf87f
 void __stdcall INPUT_StatScreenButtonUp(D2UIMouseMsgStrc * pMsg) {
     BOOL bEscMenuOpen;
     uint32_t eBorderType;
@@ -8200,6 +8291,7 @@ void __stdcall INPUT_StatScreenButtonUp(D2UIMouseMsgStrc * pMsg) {
     pMsg->bHandled = 0;
 }
 
+// 1.14d mac: 000bf98c
 void __stdcall INPUT_SkillTreeButtonUp(D2UIMouseMsgStrc * pMsg) {
     BOOL bEscMenuOpen;
     uint32_t eBorderType;
@@ -8278,6 +8370,7 @@ bool __stdcall UI_CanAllocateStatPoint(int32_t nBorderType) {
     return bUIFlag;
 }
 
+// 1.14d mac: 000bfa99
 void __stdcall UI_DrawLevelUpButtonLeft() {
     D2GfxDataStrc sGfxData;
     DWORD eResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
@@ -8301,6 +8394,7 @@ void __stdcall UI_DrawLevelUpButtonLeft() {
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX / 2 - 0xc2, Inv::ScreenSizeY - 8, -1, DRAW_SOLID, nullptr);
 }
 
+// 1.14d mac: 000bfb96
 void __stdcall DRAW_UI_NewStatPoints_II() {
     int bMouseOnButton;
     int nBaseX;
@@ -8412,6 +8506,7 @@ bool __stdcall UI_GetNewSkillPointsForClass(int32_t nCharClass) {
     return false;
 }
 
+// 1.14d mac: 000bfeb5
 void __stdcall UI_DrawLevelUpButtonRight() {
     D2GfxDataStrc sGfxData;
     DWORD eResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
@@ -8435,6 +8530,7 @@ void __stdcall UI_DrawLevelUpButtonRight() {
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ScreenSizeX / 2 + 0xa3, Inv::ScreenSizeY - 8, -1, DRAW_SOLID, nullptr);
 }
 
+// 1.14d mac: 000bffb2
 void __stdcall Draw_UI_NewStatPoints() {
     int bMouseOnButton;
     D2GfxDataStrc sGfxData;
@@ -8525,6 +8621,7 @@ void __stdcall Draw_UI_NewStatPoints() {
     return;
 }
 
+// 1.14d mac: 0009c998
 void __fastcall UI_DrawTextCentered(int32_t nPositionXStart, int32_t nPositionY, int32_t nPositionXEnd, uint16_t * wszMessage, int32_t dwColor) {
     int nRegionWidth = nPositionXEnd - nPositionXStart + 1;
     int32_t nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(wszMessage);
@@ -8539,6 +8636,7 @@ void __stdcall CHAR_FreePanelAssets_NoOp_Unref_004b3330() {
 
 }
 
+// 1.14d mac: 000f3afc
 void __stdcall UI_ResetTradeGlobals() {
     Trade::g_nTradeWindowState = 0;
     Trade::gbTradeResetFlag = false;
@@ -8610,12 +8708,14 @@ void __stdcall DRAW_UI_TradePrompt() {
     }
 }
 
+// 1.14d mac: 000f3ef7
 void __stdcall UI_InitTradeState() {
     gnTradeAcceptedFlags = 0;
     gnTradePlayerGoldAmount = 0;
     gbTradeWindowOpen = 1;
 }
 
+// 1.14d mac: 000f3b28
 void __fastcall UI_CloseTradeWindow(int32_t bToggleInventory) {
     gbTradeWindowOpen = 0;
     if (Dialog::gpTradeCancelDialog) {
@@ -8658,6 +8758,7 @@ int Unreferenced_004b8a00() {
     return (uint32_t)(gbTradeWindowOpen == '\0');
 }
 
+// 1.14d mac: 000f3f1e
 int __stdcall TRADE_GetTradeStatus() {
     if (Trade::g_nTradeWindowState != 1 && Trade::g_nTradeWindowState != 2) {
       return 0;
@@ -8674,6 +8775,7 @@ void __stdcall CHAR_FreePanelAssets_NoOp_Unref_004c0080() {
 
 }
 
+// 1.14d mac: 000fa2a4
 void __stdcall UI_FreeHoradricCubeAssets() {
     if (gnPlayerCashDisplay) {
       UseItem::UI_CloseHoradricCubeWindow();
@@ -8690,6 +8792,7 @@ void __stdcall UI_FreeHoradricCubeAssets() {
     gpHoradricBackgroundDC6 = 0;
 }
 
+// 1.14d mac: 000faaa4
 void __stdcall PACKET_SendUnitInteraction0x44(D2UIMouseMsgStrc * pMsg) {
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
@@ -8717,6 +8820,7 @@ void __stdcall PACKET_SendUnitInteraction0x44(D2UIMouseMsgStrc * pMsg) {
     }
 }
 
+// 1.14d mac: 000fab5f
 void __stdcall DRAW_UI_CASH() {
     int32_t bDC6Loaded;
     int nSpriteHandleResult;
@@ -8770,6 +8874,7 @@ void __stdcall DRAW_UI_CASH() {
     exit(-1);
 }
 
+// 1.14d mac: 000fa3f3
 BOOL __stdcall NPCSHOP_IsRepairTabActive() {
     D2UnitStrc* pDVar1;
     if (gnPlayerCashDisplay == 3) {
@@ -8845,6 +8950,7 @@ void __stdcall UI_ShowHoradricCubeTransmuteDialog() {
 }
 
 // JMP thunk
+// 1.14d mac: 000fa3ea
 BOOL __stdcall thunk_NPCSHOP_IsRepairTabActive() {
     return ::D2Client::UI::ui::NPCSHOP_IsRepairTabActive();
 }
@@ -8938,6 +9044,7 @@ void __fastcall UI_HandleHoradricCubePacket(uint8_t * pPacket) {
     exit(-1);
 }
 
+// 1.14d mac: 000fb2f5
 void __fastcall UI_OpenHoradricCubeWithNpcInteraction(int nNpcShopTab) {
     UseItem::nHoradricCubeUIState = 1;
     gnNpcShopSecondActiveTab = nNpcShopTab;

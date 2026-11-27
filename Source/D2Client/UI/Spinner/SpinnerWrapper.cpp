@@ -155,6 +155,7 @@ void __thiscall Destructor(::SpinnerWrapper * pThis) {
     }
 }
 
+// 1.14d mac: 000ee9ba D2Client::UI::Spinner::SpinnerWrapper::ScalarDeletingDestructor
 ::SpinnerWrapper * __thiscall ScalarDeletingDestructor(::SpinnerWrapper * pThis, uint32_t nFlags) {
     SpinnerWrapper::Destructor(pThis);
     if (nFlags & 1 && pThis) {
@@ -164,65 +165,78 @@ void __thiscall Destructor(::SpinnerWrapper * pThis) {
     return pThis;
 }
 
+// 1.14d mac: 000eea8e D2Client::UI::Spinner::SpinnerWrapper::OnMouseWheel
 int __thiscall OnMouseWheel(::SpinnerWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
     int nResult = pThis->pImplementation->pVtable->OnMouseWheel(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 000eeaae D2Client::UI::Spinner::SpinnerWrapper::OnMouseDown
 int __thiscall OnMouseDown(::SpinnerWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
     int nResult = pThis->pImplementation->pVtable->OnMouseDown(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 000eeace D2Client::UI::Spinner::SpinnerWrapper::OnMouseUp
 int __thiscall OnMouseUp(::SpinnerWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
     int nResult = pThis->pImplementation->pVtable->OnMouseUp(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 000eeaee D2Client::UI::Spinner::SpinnerWrapper::OnMouseMove
 int __thiscall OnMouseMove(::SpinnerWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
     int nResult = pThis->pImplementation->pVtable->OnMouseMove(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 000eeb0e D2Client::UI::Spinner::SpinnerWrapper::Draw
 void __thiscall Draw(::SpinnerWrapper * pThis) {
     pThis->pImplementation->pVtable->Draw(pThis->pImplementation);
 }
 
+// 1.14d mac: 000eeb28 D2Client::UI::Spinner::SpinnerWrapper::OnChar
 int __thiscall OnChar(::SpinnerWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
     int nResult = pThis->pImplementation->pVtable->OnChar(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 000eeb48 D2Client::UI::Spinner::SpinnerWrapper::OnDownArrow
 int __thiscall OnDownArrow(::SpinnerWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
     int nResult = pThis->pImplementation->pVtable->OnDownArrow(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 000eeb68 D2Client::UI::Spinner::SpinnerWrapper::OnUpArrow
 int __thiscall OnUpArrow(::SpinnerWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
     int nResult = pThis->pImplementation->pVtable->OnUpArrow(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 000eeb88 D2Client::UI::Spinner::SpinnerWrapper::OnRightArrow
 int __thiscall OnRightArrow(::SpinnerWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
     int nResult = pThis->pImplementation->pVtable->OnRightArrow(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 000eeba8 D2Client::UI::Spinner::SpinnerWrapper::OnLeftArrow
 int __thiscall OnLeftArrow(::SpinnerWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
     int nResult = pThis->pImplementation->pVtable->OnLeftArrow(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 000eebc8 D2Client::UI::Spinner::SpinnerWrapper::GetValue
 int __thiscall GetValue(::SpinnerWrapper * pThis) {
     int nSpinnerValue = pThis->pImplementation->pVtable->GetValue(pThis->pImplementation);
     return nSpinnerValue;
 }
 
+// 1.14d mac: 000eebe2 D2Client::UI::Spinner::SpinnerWrapper::GetRepeatDelta
 int __thiscall GetRepeatDelta(::SpinnerWrapper * pThis, int nUnused) {
     int nRepeatDelta = pThis->pImplementation->pVtable->GetRepeatDelta(pThis->pImplementation);
     return nRepeatDelta;
 }
 
+// 1.14d mac: 000eea18 D2Client::UI::Spinner::SpinnerWrapper::Constructor
 ::SpinnerWrapper * __thiscall Constructor(::SpinnerWrapper * pThis, int nPosX, int nPosY, BOOL bHorizontal, fpSpinnerRepeatAction pfnRepeatAction) {
     pfnEHHandlerRoutine puExcHandler = SehHandler_6ca203; // steer-ok: generated form, kept as emitted
     void* pExcList = ExceptionList;

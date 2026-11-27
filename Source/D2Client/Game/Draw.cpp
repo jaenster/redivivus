@@ -285,6 +285,7 @@ namespace D2Client::GAME::Draw {
 // @wasnamed DRAW_WORLD_Floor
 // Floor draw pass entry point. Delegates to DrawFloorByViewAndFloor with the module-global
 // D2DrawFloorStrc scratch state.
+// 1.14d mac: 0005f4ae
 void __fastcall dFloorDraw(D2GameViewStrc * pGameView) {
     // Static local variables (originally global data)
     static D2DrawFloorStrc D2DrawFloorStrc_007c8a28 = {}; D2_STATIC_GUARD(D2DrawFloorStrc_007c8a28, "D2Client::GAME::Draw::dFloorDraw::D2DrawFloorStrc_007c8a28");
@@ -300,6 +301,7 @@ void __fastcall dFloorDraw(D2GameViewStrc * pGameView) {
 // dWall.cpp owns the wall-draw pass that consumes these globals.
 // @wasnamed DRAW_UpdateLightFromEnvironment
 // Per-frame refresh of the global wall/tile light colour and intensity from the current act, overridden by the player's room when the room carries its own colour.
+// 1.14d mac: 00062a1c
 void __stdcall dInitWallDraw() {
     // Static local variables (originally global data)
     static uint8_t gLightBlue; D2_STATIC_GUARD_BSS(gLightBlue, "D2Client::GAME::Draw::dInitWallDraw::gLightBlue");

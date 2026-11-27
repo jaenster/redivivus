@@ -15,6 +15,7 @@ namespace D2Client::UI {
     return pThis;
 }
 
+// 1.14d mac: 000c034c D2Client::UI::UIWidget::Destructor
 void __thiscall Destructor(::UIWidget * pThis) {
     pThis->pVtable = (UIWidgetVtable*)(void*)UI::vftable;
 }

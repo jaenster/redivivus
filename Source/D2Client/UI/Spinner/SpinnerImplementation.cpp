@@ -145,6 +145,7 @@ typedef _EXCEPTION_DISPOSITION (*pfnEHHandlerRoutine)(EHExceptionRecord * pExcep
 
 namespace D2Client::UI::Spinner::SpinnerImplementation {
 
+// 1.14d mac: 000ee644 D2Client::UI::Spinner::SpinnerImplementation::Destructor
 void __thiscall Destructor(::SpinnerImplementation * pThis) {
     struct EhState0 {
       ::SpinnerImplementation* pThis;
@@ -160,6 +161,7 @@ void __thiscall Destructor(::SpinnerImplementation * pThis) {
     Core::Archive::DC6_FreeAndDelete(pThis->pDC6);
 }
 
+// 1.14d mac: 000ee67c D2Client::UI::Spinner::SpinnerImplementation::Draw
 void __thiscall Draw(::SpinnerImplementation * pThis) {
     D2GfxDataStrc sGfxData;
     if (pThis->bDownPressed || pThis->bUpPressed) {
@@ -196,6 +198,7 @@ BOOL __thiscall IsMouseOnDownButton(::SpinnerImplementation * pThis, D2UIMouseMs
     return 0;
 }
 
+// 1.14d mac: 000ee7a6 D2Client::UI::Spinner::SpinnerImplementation::GetValue
 int __thiscall GetValue(::SpinnerImplementation * pThis) {
     if (pThis->bUpPressed) {
       return 1;
@@ -204,6 +207,7 @@ int __thiscall GetValue(::SpinnerImplementation * pThis) {
     return pThis->bDownPressed ? 2 : 0;
 }
 
+// 1.14d mac: 000ee7c6 D2Client::UI::Spinner::SpinnerImplementation::GetRepeatDelta
 int __thiscall GetRepeatDelta(::SpinnerImplementation * pThis) {
     uint32_t dwElapsed;
     if (!pThis->bUpPressed && !pThis->bDownPressed) {
@@ -244,6 +248,7 @@ int __thiscall GetRepeatDelta(::SpinnerImplementation * pThis) {
     return 1;
 }
 
+// 1.14d mac: 000ee874 D2Client::UI::Spinner::SpinnerImplementation::OnMouseWheel
 int __thiscall OnMouseWheel(::SpinnerImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
     short int nWheelDelta;
     nWheelDelta = *(short int*)((intptr_t)&pMsg->nWParam + 2);
@@ -267,6 +272,7 @@ int __thiscall OnMouseWheel(::SpinnerImplementation * pThis, D2UIMouseMsgStrc * 
     return 1;
 }
 
+// 1.14d mac: 000ee8d2 D2Client::UI::Spinner::SpinnerImplementation::OnMouseDown
 int __thiscall OnMouseDown(::SpinnerImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
     DWORD dwNow;
     pThis->bMouseCaptured = 1;
@@ -297,6 +303,7 @@ int __thiscall OnMouseDown(::SpinnerImplementation * pThis, D2UIMouseMsgStrc * p
     return 0;
 }
 
+// 1.14d mac: 000ee94a D2Client::UI::Spinner::SpinnerImplementation::OnMouseUp
 int __thiscall OnMouseUp(::SpinnerImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
     if (pThis->bMouseCaptured) {
       pThis->nRepeatStep = 0;
@@ -314,30 +321,37 @@ int __thiscall OnMouseUp(::SpinnerImplementation * pThis, D2UIMouseMsgStrc * pMs
     return 0;
 }
 
+// 1.14d mac: 000ee98a D2Client::UI::Spinner::SpinnerImplementation::OnChar
 int __thiscall OnChar(::SpinnerImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
     return 0;
 }
 
+// 1.14d mac: 000ee992 D2Client::UI::Spinner::SpinnerImplementation::OnMouseMove
 int __thiscall OnMouseMove(::SpinnerImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
     return 0;
 }
 
+// 1.14d mac: 000ee99a D2Client::UI::Spinner::SpinnerImplementation::OnUpArrow
 int __thiscall OnUpArrow(::SpinnerImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
     return 0;
 }
 
+// 1.14d mac: 000ee9a2 D2Client::UI::Spinner::SpinnerImplementation::OnDownArrow
 int __thiscall OnDownArrow(::SpinnerImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
     return 0;
 }
 
+// 1.14d mac: 000ee9aa D2Client::UI::Spinner::SpinnerImplementation::OnRightArrow
 int __thiscall OnRightArrow(::SpinnerImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
     return 0;
 }
 
+// 1.14d mac: 000ee9b2 D2Client::UI::Spinner::SpinnerImplementation::OnLeftArrow
 int __thiscall OnLeftArrow(::SpinnerImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
     return 0;
 }
 
+// 1.14d mac: 000ee4d6 D2Client::UI::Spinner::SpinnerImplementation::Constructor
 ::SpinnerImplementation * __thiscall Constructor(::SpinnerImplementation * pThis, int nPosX, int nPosY, BOOL bHorizontal, fpSpinnerRepeatAction pfnRepeatAction) {
     char szPath[260];
     D2GfxDataStrc celQueryBuf;
@@ -383,6 +397,7 @@ int __thiscall OnLeftArrow(::SpinnerImplementation * pThis, D2UIMouseMsgStrc * p
     return pThis;
 }
 
+// 1.14d mac: 000ee620 D2Client::UI::Spinner::SpinnerImplementation::ScalarDeletingDestructor
 ::SpinnerImplementation * __thiscall ScalarDeletingDestructor(::SpinnerImplementation * pThis, uint32_t nFlags) {
     SpinnerImplementation::Destructor(pThis);
     if (nFlags & 1 && pThis) {

@@ -190,6 +190,7 @@ void __stdcall FreeUiImages() {
     WaypointWaygateIcons = 0;
 }
 
+// 1.14d mac: 000fb320
 void __stdcall InitializeWaypoints() {
     D2Client::Waypoint::pWaypoint = D2Common::Waypoints::Alloc(nullptr);
     D2Client::Waypoint::bNeedAllocation = false;
@@ -237,6 +238,7 @@ void __stdcall WAYPOINT_Shutdown() {
     FreeUiImages();
 }
 
+// 1.14d mac: 000fc417
 static void Waypoint_SetWaypointArea(int32_t nAct) {
     BOOL bQuestComplete;
     eD2Quests eQuestId;
@@ -290,6 +292,7 @@ static void Waypoint_SetWaypointArea(int32_t nAct) {
     WaypointCurrentSelectedAct = nAct;
 }
 
+// 1.14d mac: 000fbe19
 void __stdcall WAYPOINT_PopulateList() {
     // Static local variables (originally global data)
     static uint8_t gaWaypointVisited[55] = {
@@ -695,6 +698,7 @@ void __stdcall WAYPOINT_SendOpenPacket() {
     D2Client::Waypoint::bNeedAllocation = true;
 }
 
+// 1.14d mac: 000fbd71
 void __fastcall WAYPOINT_Init(uint8_t * pPacket) {
     D2RoomStrc* pRoom;
     eD2LevelId eLevel;

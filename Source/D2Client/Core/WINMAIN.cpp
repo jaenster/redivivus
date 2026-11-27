@@ -117,6 +117,7 @@ static LPCSTR gpszCmdLineCaptionStr = 0; D2_STATIC_GUARD(gpszCmdLineCaptionStr, 
 
 namespace D2Client::ClientModeInGame {
 
+// 1.14d mac: 0005dab3
 void __fastcall ClientAppModeQueue(eD2ClientAppMode eAppMode) {
     if (gClientAppModeQueueCounter >= 5) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xaa);
@@ -127,6 +128,7 @@ void __fastcall ClientAppModeQueue(eD2ClientAppMode eAppMode) {
     gClientAppModeQueueCounter++;
 }
 
+// 1.14d mac: 0005db09
 eD2ClientAppMode __stdcall CLIENTMODE_GetCurrentAppMode() {
     if (!gClientAppModeQueueCounter) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb4);
@@ -142,6 +144,7 @@ eD2ClientAppMode __stdcall CLIENTMODE_GetCurrentAppMode() {
 }
 
 // If first time and user != "rseis", show MessageBox with available command-line options text.
+// 1.14d mac: 0005e069
 BOOL __stdcall CmdLine_ShowHelpIfNotDeveloper(CMDPARAMS * pParams, char * szCmdLine) {
     char szUserName[16];
     DWORD dwUserNameSize;
@@ -164,6 +167,7 @@ BOOL __stdcall CmdLine_ShowHelpIfNotDeveloper(CMDPARAMS * pParams, char * szCmdL
 namespace D2Client {
 
 // @sourcefile .\CORE\WINMAIN.CPP
+// 1.14d mac: 0005e1b6
 BOOL __stdcall WINMAIN_TestMemoryAccess(CMDPARAMS * pParams, char * szCmdLine) {
     uint8_t* pPage;
     uint8_t* pMemory = (uint8_t*)D2_ALLOC_AT(0x6000000, ".\\CORE\\WINMAIN.CPP", 0x121);
@@ -181,29 +185,34 @@ namespace D2Client::ClientModeInGame {
 
 // Callback for the "-r" ARGLIST entry (gaClientCmdLineArgs[6]): calls StopRecordingSetFlags and returns TRUE.
 // Provenance: 1.14d table entry 006d5c54 -> 0044b5a0: CALL 004519a0 / MOV EAX,1 / RET 8.
+// 1.14d mac: 0005e225
 BOOL __stdcall CmdLine_StopRecordingSetFlags(CMDPARAMS * pParams, char * szCmdLine) {
     GAME::Record::StopRecordingSetFlags();
     return 1;
 }
 
 // Cmdline option handler to enable game recording (calls Game::Record::SetupRecording).
+// 1.14d mac: 0005e23a
 BOOL __stdcall CmdLine_EnableRecording(CMDPARAMS * pParams, char * szCmdLine) {
     GAME::Record::SetupRecording();
     return 1;
 }
 
 // Callback wrapper to show command-line help message box.
+// 1.14d mac: 0005e029
 int __stdcall CmdLine_ShowHelpCallback(uint32_t dwArg1) {
     CmdLine_ShowHelpIfNotDeveloper(nullptr, nullptr);
     return 0;
 }
 
+// 1.14d mac: 0005e04a
 void __stdcall CLIENTMODEIN_CmdLineCallback_ShowHelp(uint32_t * pnErrorCode) {
     CmdLine_ShowHelpIfNotDeveloper(nullptr, nullptr);
 }
 
 // "-set" command-line callback: saves the option's string value with SRegSaveString("Diablo II", "Default Command Line") and returns its result.
 // @provenance 1.14d asm 0044b5e0; the help text in CmdLine_SetAppMode lists -set as "Set new default command line string".
+// 1.14d mac: 0005e109
 BOOL __stdcall CmdLine_SaveDefaultCommandLine(CMDPARAMS * pParams, char * szCmdLine) {
     int32_t bSaved = Storm::Source::SReg::SRegSaveString("Diablo II", "Default Command Line", 0, pParams->uValue.szStringValue);
     return bSaved;
@@ -211,6 +220,7 @@ BOOL __stdcall CmdLine_SaveDefaultCommandLine(CMDPARAMS * pParams, char * szCmdL
 
 // App-mode command-line callback: matches the option's string value case-insensitively against gaClientModeHandlerTable and sets gdwAppMode on a hit (returns TRUE). Otherwise, once, shows the command-line help box (skipped for user name "rseis") and returns FALSE.
 // @provenance 1.14d asm 0044b600.
+// 1.14d mac: 0005e144
 BOOL __stdcall CmdLine_SetAppMode(CMDPARAMS * pParams, char * szCmdLine) {
     // Static local variables (originally global data)
     static char * gaClientModeHandlerTable[7] = { nullptr, nullptr, (char*)"Game", nullptr, nullptr, nullptr, nullptr }; D2_STATIC_GUARD(gaClientModeHandlerTable, "D2Client::ClientModeInGame::CmdLine_SetAppMode::gaClientModeHandlerTable");
@@ -300,6 +310,7 @@ D2IniConfigStrc * __stdcall D2IniData_Getter() {
     return D2IniData_client;
 }
 
+// 1.14d mac: 0005db7c
 D2BNetClientCallbacksStrc * __stdcall CLIENT_GetBNetClientCallbacks() {
     return D2IniData_client->pBNetClientCallbacks;
 }
@@ -340,14 +351,17 @@ char * __stdcall CLIENTMODE_GetGamePasswordPart3() {
     return nullptr;
 }
 
+// 1.14d mac: 0005dc08
 uint32_t __stdcall CLIENTMODE_IsHardcoreCharacter() {
     return (uint8_t)(char)D2IniData_client->eCTEMP_eD2PlayerStatus & 4;
 }
 
+// 1.14d mac: 0005dc23
 void __stdcall CLIENTMODE_SetCharacterDied() {
     D2IniData_client->eCTEMP_eD2PlayerStatus |= PLAYERSTATUS_Died;
 }
 
+// 1.14d mac: 0005dc3c
 void __fastcall D2CLIENT_SetExitVar1(BOOL bResult) {
     gbQuitGame = bResult;
 }

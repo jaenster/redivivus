@@ -37,6 +37,7 @@ D2RosterPetStrc * pRosterPet = 0; D2_GLOBAL_GUARD(pRosterPet, "D2Client::GAME::R
 namespace D2Client::GAME::RosterPets {
 
 // @sourcefile .\GAME\RosterPets.cpp
+// 1.14d mac: 00076340
 void __stdcall FreeRosterPet() {
     D2RosterPetStrc* pMemoryToFree = pRosterPet;
     while (pMemoryToFree) {
@@ -66,6 +67,7 @@ D2RosterPetStrc * __fastcall Unreferenced_00478a90(int nRosterGUID) {
 }
 
 // @sourcefile .\GAME\RosterPets.cpp
+// 1.14d mac: 0007644d
 static void __fastcall ROSTERPETS_RemoveRosterPetsBySkillID(int32_t nRosterGUID) {
     D2RosterPetStrc* pPrev = 0;
     if (!pRosterPet) {
@@ -93,6 +95,7 @@ static void __fastcall ROSTERPETS_RemoveRosterPetsBySkillID(int32_t nRosterGUID)
 }
 
 // @sourcefile .\GAME\RosterPets.cpp
+// 1.14d mac: 00076396
 void __fastcall AddRosterPet(int32_t nRosterGUID, int32_t nOwnerGUID, int32_t nSkillId, int32_t nRosterType) {
     D2RosterPetStrc* pRosterPet;
     D2RosterPetStrc* pExisting = RosterPets::pRosterPet;
@@ -128,6 +131,7 @@ void __fastcall AddRosterPet(int32_t nRosterGUID, int32_t nOwnerGUID, int32_t nS
 }
 
 // Registers a pet or mercenary in the client-side roster pet list. For skillID 7 (merc), first removes any existing merc for the owner, then adds the pet entry and populates seed/owner fields from pMercArg. If the merc unit already exists in the world, initializes it via MERC_InitializeFromPacket, marks it attackable, sets up its light map, and flags it for update.
+// 1.14d mac: 000764ba
 void __fastcall AddRosterPetMerc(DWORD nRosterGUID, int32_t nOwnerGUID, int32_t nSkillID, int32_t nRosterType, D2RosterMercArg * pMercArg) {
     D2MercInitArgStrc sMercInit;
     D2RosterPetStrc* pRosterPet;
@@ -178,6 +182,7 @@ void __fastcall AddRosterPetMerc(DWORD nRosterGUID, int32_t nOwnerGUID, int32_t 
 
 // Removes a pet/merc entry from the global roster pet list by nRosterGUID. For skillID 7 (merc) owned by the local player, sets a deferred-removal flag (field8_0x20=1) instead of freeing immediately. Otherwise unlinks and frees the D2RosterPetStrc via FreeClientMemory.
 // @sourcefile .\GAME\RosterPets.cpp
+// 1.14d mac: 000765ab
 void __fastcall RemoveRosterPet(int32_t nRosterGUID) {
     int nPlayerGUID;
     D2RosterPetStrc* pPrev = 0;
@@ -254,6 +259,7 @@ int __fastcall ROSTER_GetPetOwnershipRelation(int32_t nRosterGUID) {
     return 0;
 }
 
+// 1.14d mac: 0007670b D2Client::GAME::RosterPets::GetSeed
 D2RosterPetSeedStrc * __fastcall GetSeed(int32_t nRosterGUID) {
     D2RosterPetStrc* pPet = pRosterPet;
     while (true) {
@@ -314,6 +320,7 @@ uint32_t __fastcall ROSTER_AreUnitsHostile(D2UnitStrc * pUnit, D2UnitStrc * pRos
     return 0;
 }
 
+// 1.14d mac: 000767ca
 int32_t __fastcall CountRostersForUnitFilterBySkill(D2UnitStrc * pUnit, int32_t nSkillId) {
     int nUnitGUID;
     D2RosterPetStrc* pRosterPet = RosterPets::pRosterPet;
@@ -333,6 +340,7 @@ int32_t __fastcall CountRostersForUnitFilterBySkill(D2UnitStrc * pUnit, int32_t 
     return nCount;
 }
 
+// 1.14d mac: 00076810
 int32_t __fastcall GetRosterPetGUID(D2UnitStrc * pUnit, int32_t nSkillId, int32_t bAllowActive) {
     D2RosterPetStrc* pRosterPet;
     if (!pUnit) {
@@ -355,6 +363,7 @@ int32_t __fastcall GetRosterPetGUID(D2UnitStrc * pUnit, int32_t nSkillId, int32_
     return pRosterPet->nRosterGUID;
 }
 
+// 1.14d mac: 0007685e
 BOOL __fastcall CheckIfUnitHasRosterPet(D2UnitStrc * pUnit) {
     int nUnitGUID;
     D2RosterPetStrc* pRosterIter = pRosterPet;
@@ -378,6 +387,7 @@ BOOL __fastcall CheckIfUnitHasRosterPet(D2UnitStrc * pUnit) {
     return 1;
 }
 
+// 1.14d mac: 00076895
 void __stdcall ROSTER_UpdateHostileColors() {
     D2UnitStrc* pRosterUnit;
     uint32_t bHostile;
@@ -397,6 +407,7 @@ void __stdcall ROSTER_UpdateHostileColors() {
     }
 }
 
+// 1.14d mac: 00076913
 void __fastcall UpdateLifeAndArea(DWORD nRosterGUID, int32_t nHpPercent, uint16_t eLevel) {
     D2RosterPetStrc* pRosterPet;
     pRosterPet = RosterPets::pRosterPet;
@@ -426,6 +437,7 @@ void __fastcall UpdateLifeAndArea(DWORD nRosterGUID, int32_t nHpPercent, uint16_
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pRosterUnit, UNITSTAT_hitpoints, D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pRosterUnit) * nHpPercent / 100, 0);
 }
 
+// 1.14d mac: 000769a3
 int32_t __fastcall GetRosterPerHPPercent(int32_t nRosterGUID) {
     D2RosterPetStrc* pRosterIter = pRosterPet;
     while (true) {
@@ -479,6 +491,7 @@ eD2LevelId __fastcall Unreferenced_004790f0(int32_t nRosterGUID) {
     return pDVar1->eLevelId;
 }
 
+// 1.14d mac: 000769ca
 int32_t __fastcall GetRosterClass(int32_t nRosterGUID) {
     D2RosterPetStrc* pRosterPet;
     pRosterPet = RosterPets::pRosterPet;
@@ -496,6 +509,7 @@ int32_t __fastcall GetRosterClass(int32_t nRosterGUID) {
     return pRosterPet->nRosterClass;
 }
 
+// 1.14d mac: 000769f0
 DWORD __fastcall GetRosterOwnerGUID(DWORD nRosterGUID) {
     D2RosterPetStrc* pRosterPet;
     pRosterPet = RosterPets::pRosterPet;
@@ -513,6 +527,7 @@ DWORD __fastcall GetRosterOwnerGUID(DWORD nRosterGUID) {
     return pRosterPet->nOwnerGUID;
 }
 
+// 1.14d mac: 00076a1a D2Client::GAME::RosterPets::GetSkillId
 int32_t __fastcall GetSkillId(int32_t nRosterGUID) {
     D2RosterPetStrc* pRosterPet;
     pRosterPet = RosterPets::pRosterPet;

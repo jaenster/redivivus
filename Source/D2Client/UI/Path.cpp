@@ -32,6 +32,7 @@ uint32_t __stdcall LOADER_GetScreenResolutionMode() {
     return Engine::gaScreenResolutionModeArray;
 }
 
+// 1.14d mac: 0007abae
 uint32_t __stdcall DRAW_GetTypeOfBorder() {
     return gnBorderType;
 }
@@ -74,18 +75,22 @@ int __stdcall GetMouseXOffset() {
     return MouseXOffset;
 }
 
+// 1.14d mac: 0007adb5
 int __stdcall GetMouseYOffset() {
     return MouseYOffset;
 }
 
+// 1.14d mac: 0007adc6
 int32_t __stdcall DRAW_GetWorldOffsetX() {
     return MouseXOffset - MouseYRelatedB;
 }
 
+// 1.14d mac: 0007addd
 int32_t __stdcall DRAW_GetWorldOffsetY() {
     return MouseYOffset - 8;
 }
 
+// 1.14d mac: 0007adf2
 void __fastcall ConvertCoordToPerspectiveView(int * pX, int * pY) {
     int nX = *pX;
     int nY = *pY;
@@ -246,6 +251,7 @@ void __stdcall DEBUG_DrawWarpUnitBounds() {
     }
 }
 
+// 1.14d mac: 0007aeb1
 void __stdcall DRAW_UpdateMouseWorldOffsets() {
     // Static local variables (originally global data)
     static int gnMouseWorldXBorder; D2_STATIC_GUARD_BSS(gnMouseWorldXBorder, "D2Client::UI::Path::DRAW_UpdateMouseWorldOffsets::gnMouseWorldXBorder");

@@ -229,6 +229,7 @@ char * gaLanguageNames_007251e0[15] = {
 namespace D2Client::UNIT::Monster {
 
 // Iterates the monster's MonUModList (up to 9 modifiers) and calls, for each slot, the function pointer at gapMonUniqueModDispatchTable[modIdx*5 + nIndex], passing bIsChampion. nIndex selects the lifecycle phase (e.g. apply, remove). Skips null entries. Guards: unit must be a monster with valid pMonData and a non-null mod list.
+// 1.14d mac: 0011d4a5
 void __stdcall MONUNIQUE_DispatchModifierByIndex(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nIndex) {
     // Static local variables (originally global data)
     static fnMonUniqueModCallback gapMonUniqueModDispatchTable[216] = {
@@ -494,22 +495,27 @@ void __stdcall MONUNIQUE_DispatchModifierByIndex(D2UnitStrc * pUnit, D2UnitStrc 
     } while (i < 9);
 }
 
+// 1.14d mac: 0011d489
 void __fastcall MONUNIQUE_DispatchModIdle(D2UnitStrc * pUnit) {
     MONUNIQUE_DispatchModifierByIndex(pUnit, nullptr, 0);
 }
 
+// 1.14d mac: 0011d572
 void __fastcall MONUNIQUE_DispatchModWalk(D2UnitStrc * pUnit) {
     MONUNIQUE_DispatchModifierByIndex(pUnit, nullptr, 1);
 }
 
+// 1.14d mac: 0011d58e
 void __fastcall MONUNIQUE_DispatchModGetHit(D2UnitStrc * pUnit) {
     MONUNIQUE_DispatchModifierByIndex(pUnit, nullptr, 2);
 }
 
+// 1.14d mac: 0011d5aa
 void __fastcall MONUNIQUE_DispatchModDeath(D2UnitStrc * pUnit) {
     MONUNIQUE_DispatchModifierByIndex(pUnit, nullptr, 3);
 }
 
+// 1.14d mac: 0011d5c6
 void __fastcall MONUNIQUE_DispatchModAttack(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     if (!(pUnit && pUnit2 && pUnit->eUnitType == UNIT_MONSTER)) {
       return;
@@ -519,6 +525,7 @@ void __fastcall MONUNIQUE_DispatchModAttack(D2UnitStrc * pUnit, D2UnitStrc * pUn
 }
 
 // Builds the localized display name string (into wszText) for a unique/champion monster by concatenating its rolled affix string-table entries (mods stored in the monster's UnitData pWaypoint array) plus an optional title/suffix string id. Minions get a simpler "<suffix> minion of <owner>" form (string ids 0xf9b/0xc95). For regular uniques it sets font 6, appends the suffix then each modifier's localized word (separated by gnMonsterUniqueNameBuffer), bounded by nPrefixId-1 max characters and a ~0x1e0-pixel width budget measured via DRAW_text0, then restores the prior font. No-op for non-monsters or monsters without unit data; class ids 0x2c0-0x2c5 skip the modifier loop.
+// 1.14d mac: 0011d5f0
 void __fastcall MONSTER_BuildUniqueName(D2UnitStrc * pUnit, uint16_t * wszText, int32_t nPrefixId, uint16_t nSuffixId) {
     // Static local variables (originally global data)
     static uint16_t gwMonsterSoundTableSize[44] = {
@@ -657,6 +664,7 @@ uint32_t __fastcall MONSTER_GetNameModifierStringId(D2UnitStrc * pUnit, uint16_t
     return 0;
 }
 
+// 1.14d mac: 00117e70
 void __fastcall MONSTER_SetMonStatsTxtAndType(D2UnitStrc * pUnit, uint16_t wParam) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
       return;
@@ -676,6 +684,7 @@ void __fastcall MONSTER_SetMonStatsTxtAndType(D2UnitStrc * pUnit, uint16_t wPara
 
 namespace D2Client {
 
+// 1.14d mac: 00117ebf
 void __fastcall MONSTER_FreeMonsterPath(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
       return;
@@ -712,6 +721,7 @@ int32_t __fastcall GetOwnerGUID(D2UnitStrc * pUnit) {
     return pUnit->pUnitData.pUnitDataMonster->nOwnerGUID;
 }
 
+// 1.14d mac: 00117f54
 void __fastcall SetOwnerGUID(D2UnitStrc * pUnit, int32_t nOwnerGUID) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
       return;
@@ -752,6 +762,7 @@ static void MONSTER_ResetToNeutralFacingTarget(D2UnitStrc * pUnit) {
 }
 
 // Allocates and attaches a D2LightMapStrc to a monster unit. Computes the final light radius as the max of the monster's equipment light and its MonStats2 byLight value; special-cases Den of Evil quest monsters (clamped to radius 3). Replaces any existing light map and updates the unit's stored light radius.
+// 1.14d mac: 00117f93
 void __fastcall MONSTER_InitLightMap(D2UnitStrc * pUnit) {
     uint32_t bResult;
     uint8_t cAlign;
@@ -793,6 +804,7 @@ void __fastcall MONSTER_InitLightMap(D2UnitStrc * pUnit) {
 }
 
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).
+// 1.14d mac: 00118117
 BOOL __fastcall IsMonsterChampion(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
       BOOL bIsChampion;
@@ -803,6 +815,7 @@ BOOL __fastcall IsMonsterChampion(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 00118142
 int32_t __fastcall IsMonsterGhostly(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
       BOOL bIsGhostly;
@@ -814,6 +827,7 @@ int32_t __fastcall IsMonsterGhostly(D2UnitStrc * pUnit) {
 }
 
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).
+// 1.14d mac: 0011816d
 BOOL __fastcall IsMonsterUnique(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
       BOOL bIsUnique;
@@ -824,6 +838,7 @@ BOOL __fastcall IsMonsterUnique(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 00118198
 int32_t __fastcall IsMonsterMinion(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
       BOOL bIsMinion;
@@ -834,6 +849,7 @@ int32_t __fastcall IsMonsterMinion(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 001181c3
 BOOL __fastcall IsMonsterSuperUnique(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
       BOOL bIsSuperUnique;
@@ -858,6 +874,7 @@ void __fastcall MONSTER_ExplodeOwnerMissile(D2UnitStrc * pUnit) {
 }
 
 // Advances the monster's RNG seed, picks one of 5 missile IDs from a hard-coded table at gTxtCompilationMemPool+0x157c, casts it at the monster's own position via CastAttack, stores mutual owner links between unit and missile, and marks the missile NODRAW so it renders only via its attached particle.
+// 1.14d mac: 0011c789
 static void MONSTER_SpawnRandomAttachedMissile(D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
     static int INT_ARRAY_006da5dc[5] = { 0x196, 0x19a, 0x19f, 0x1a2, 0x1a5 }; D2_STATIC_GUARD(INT_ARRAY_006da5dc, "D2Client::UNIT::Monster::MONSTER_SpawnRandomAttachedMissile::INT_ARRAY_006da5dc");
@@ -903,6 +920,7 @@ static void MONSTER_SpawnRandomAttachedMissile(D2UnitStrc * pUnit) {
 }
 
 // Performs class-ID-specific post-spawn setup for special/unique monsters. Handles: gnMonsterSpecialType pointer (0x96), collision-pattern reset for large monsters (0x9d/0x9e/0x13f), player targeting/facing (0x14b), BladeCreeper missile cast with owner assignment (0x19d), random attached missile (0x1f1/0x1f2/499/500), Baal teleport missile (0x23a), and random direction seeded from player RNG (0x158).
+// 1.14d mac: 001188c5
 static void MONSTER_InitSpecialMonster(D2UnitStrc * pUnit, int32_t nClassId) {
     D2UnitStrc* pTargetUnit;
     eD2Skills eSkill;
@@ -972,6 +990,7 @@ static void MONSTER_InitSpecialMonster(D2UnitStrc * pUnit, int32_t nClassId) {
 }
 
 // Returns the catapult's facing direction if pUnit2 is a Catapult (BaseId 0x12a), is within collision distance 2 of pUnit, and pUnit is positioned exactly 3*composite-sprite-dims ahead in the catapult's facing direction. Returns 0 if any condition fails, indicating pUnit is not at the valid firing position.
+// 1.14d mac: 00118b32
 uint32_t __fastcall MONSTER_CheckCatapultFiringPosition(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, uint32_t dwParam1, uint32_t dwParam2) {
     uint32_t _byDirIndex;
     uint8_t byDirTable[8];
@@ -1036,6 +1055,7 @@ uint32_t __fastcall MONSTER_CheckCatapultFiringPosition(D2UnitStrc * pUnit, D2Un
 }
 
 // Core initialization of a freshly allocated monster unit from its MonStats/MonStats2 record. Validates nClassId against the MonStats table, allocates the unit stat list and sets base stats: level (per-difficulty from TreasureClass area), attackrate, velocity%, animrate, and the six per-difficulty resistances (dmg/magic/fire/light/cold/poison), then applies difficulty scaling and base maxhp/hitpoints. Allocates the dynamic path (room nParam1, mode/coords from params) and sets velocity. Creates a player inventory for NPCs/interactables (or special class ids). Sets the update flag (nParam2). For dead/no-deadCol monsters removes collision, shrinks width and switches to corpse collision. Randomizes start gfx frame; sets targetable/shadow/valid-target/can-be-attacked unit flags from MonStats2 isSel/shadow/isAtt. Sets monstats type, special-monster init, light map, creates skill list, applies unique modifiers, then adds the monster's up to 8 skills (level += difficulty MonsterSkillBonus) with their modes. Finally computes an initial facing direction (random or special-case per base/class id, e.g. catapult firing position) and sets the path direction. nParam1=room ptr, pSkillIdPtr/nOverrideMode feed path alloc.
+// 1.14d mac: 001181ee
 void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t nOverrideMode, int32_t nY, int32_t nClassId, uint32_t nAnimMode) {
     short* pSkillId;
     D2InventoryStrc* pInventory;
@@ -1195,6 +1215,7 @@ void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, 
     D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pDynamicPath, (uint8_t)nY);
 }
 
+// 1.14d mac: 00118ce3
 void __fastcall FreeMonster(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return;
@@ -1230,6 +1251,7 @@ void __fastcall FreeMonster(D2UnitStrc * pUnit) {
 }
 
 // Morphs an existing unit into a different monster type (nClassId), used by polymorph/transform effects. Validates nClassId against MonStats/MonStats2 tables, then tears down the old unit's gfx, inventory, lightmap and AI param block, assigns the new classId, and rebuilds it: sets velocities/collision, recreates inventory if the new monster is interactive, allocates a fresh stat list and applies base stats (attackrate/velocity/animrate=100, per-difficulty resistances from MonStats, maxhp/hitpoints=0x8000), reseeds the gfx start frame, updates targetable/shadow/attackable unit flags from MonStats2, recreates the skill list adding the 8 MonStats skills, randomizes facing for non-NPCs, reinits gfx (WALL2_InitUnitGfx) and computes a palette-shift index from TransLvl with special-case overrides for certain classIds/difficulties. Returns early without effect if the unit has no dynamic path.
+// 1.14d mac: 00118d91
 void __fastcall MONSTER_TransformToClassId(D2UnitStrc * pUnit, int32_t nClassId) {
     D2InventoryStrc* pInventory;
     eD2UnitFlags eUpdatedFlags;
@@ -1937,6 +1959,7 @@ static void MONSTER_HandleSkillAnimEnd(D2UnitStrc * pUnit) {
 }
 
 // Spawns blood-trail particle missiles behind a bleeding running monster. Uses the unit seed to probabilistically skip frames (1/25, and 1/3 while running). Only proceeds for UNIT_MONSTER whose MonStats2 byBleed flag is set; spawn count comes from the item_extrablood stat or the passed default. For each drop it picks a direction-biased offset slot, scans the 8 collision-offset slots (gTxtCompilationMemPool tables) for a non-blocking tile near the unit's path X/Y, rolls a blood-missile variant (MISSILE_Blood1 + byBleed range), and creates it via MakeMissile. Advances the seed throughout; return value is a leftover register, not meaningful.
+// 1.14d mac: 0011bd68
 void __fastcall MONSTER_SpawnBloodParticles(D2UnitStrc * pUnit, int nDefaultCount, int nBloodDirSlot) {
     // Static local variables (originally global data)
     static int INT_ARRAY_006da5f0[8] = { 0x2, 0x1, 0x0, -0x1, -0x2, -0x1, 0x0, 0x1 }; D2_STATIC_GUARD(INT_ARRAY_006da5f0, "D2Client::UNIT::Monster::MONSTER_SpawnBloodParticles::INT_ARRAY_006da5f0");
@@ -2072,6 +2095,7 @@ void __fastcall MONSTER_SpawnBloodParticles(D2UnitStrc * pUnit, int nDefaultCoun
     } while (nBloodMissilesSpawned < nBloodSpawnCount);
 }
 
+// 1.14d mac: 0011c449
 static void MONSTER_PreloadSequenceAnimations(D2UnitStrc * pUnit) {
     uint32_t nFrameSpeed;
     uint32_t nFrameEnd;
@@ -2149,6 +2173,7 @@ static void MONSTER_SpawnDeathEffectMissiles(D2UnitStrc * pUnit) {
 }
 
 // Animation-mode callback driving a monster's burrow (submerge/emerge) transition. On mode 0xc (burrow down): clears the unit's targetable/attackable/valid-target flags, removes both its unit-related and monster collision footprints at its current cell, shrinks collision width to 5, clears the collision pattern, and starts a downward fading particle effect. On modes 0xe/0xa (emerge): re-sets those flags, re-adds collision, restores width 1 and pattern 0x3c01, and starts an upward fade. Reads position from static or dynamic path depending on unit type.
+// 1.14d mac: 0011c077
 static void MONSTER_HandleBurrowTransition(D2UnitStrc * pUnit, int32_t nMsgType) {
     int32_t nPosY;
     int32_t nPosX;
@@ -2266,6 +2291,7 @@ static void MONSTER_HandleBurrowTransition(D2UnitStrc * pUnit, int32_t nMsgType)
 }
 
 // Central per-monster state/mode message dispatcher. Given a message type nParam (0..0x1d), a monster D2UnitStrc, and a server message handle, transitions the monster's path/anim mode: walk/run/move-to (0,1,4,5,etc.), got-hit (6,0x13), death (8) and dying/corpse (9), sequence/skill start (0x14,0x15,0x16), town-walk (0x12), etc. Restores collision and resets the 0x2000 path flag, sets target unit by type/GUID, calculates paths, applies per-classId special cases (unique death overlays/missiles/sounds, burrow transitions, special facing) keyed on the monster's base MonStats id, and updates UNITFLAG targetable/shadow/nodraw flags. Halts via Fog ErrorManager when a required pMessage is null. Tail applies velocity-percent stat changes and dispatches unique-mod walk callbacks. __fastcall (nParam in ECX, pUnit in EDX).
+// 1.14d mac: 0011948c
 void __fastcall MonsterMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2ServerMessageHandleStrc * pMessage) {
     uint8_t nDirection;
     D2UnitStrc* pPlayerUnit_lcl;
@@ -3017,6 +3043,7 @@ uint32_t __fastcall NPCMENU_ParseSpeechData(D2UnitStrc * pUnit, uint8_t * pParam
 }
 
 // Client-side initialization of a mercenary unit from a network packet. Sets ISMERC|TARGETABLE flags, reads the name/seed from the packet, rolls stats via RollMercStats using the current player's level and difficulty, then assigns skills (id, level, mode) from the HirelingTxt table, sets the localized name, and recalculates equipped item stats.
+// 1.14d mac: 0011c4c8
 void __fastcall MERC_InitializeFromPacket(D2UnitStrc * pUnit, D2MercInitArgStrc * pMercInit) {
     D2HirelingHireData sHireData;
     if (!(pUnit && pMercInit)) {
@@ -3067,6 +3094,7 @@ void __fastcall MERC_InitializeFromPacket(D2UnitStrc * pUnit, D2MercInitArgStrc 
 }
 
 static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit);
+// 1.14d mac: 0011c67c
 int __fastcall MONSTER_CanBeConverted(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return 0;
@@ -3114,6 +3142,7 @@ void __fastcall CMONSTERS_SetSpawnerMonsterClass(D2GSPacketSrv0x98 * pPacket) {
 }
 
 // Client-side monster animation tick / end-of-cycle event dispatcher. Fires MonsterMessage(9) when SplEndDeath is set and both target coords are zero at the end of the frame cycle. Then switches on mode (nParam+4): advances the frame, clears collision/size, sets a path-point flag, or resets size to 0x100 depending on mode 0-3.
+// 1.14d mac: 00119363
 uint32_t __fastcall CLIENT_UpdateMonsterAnimByMode(D2UnitStrc * pUnit, D2ClientMonAnimModeEntryStrc * pAnimModeEntry) {
     uint32_t nResult;
     int nClassId;
@@ -3191,6 +3220,7 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
 }
 
 // Client-side per-frame update tick for a monster/NPC unit (param is the unit; aliased as D2DynamicPathStrc). Skips if frozen-and-inactive; reads the unit's animation-mode entry, advances path/trail-effect stepping for walk modes, resolves the client-side target unit from the server path, periodically recalculates pathing, and faces the player when nearby. Computes name-color and the per-anim-mode completion flag, casts queued skill missiles, dispatches unique-mod get-hit handlers, interpolates path direction, fires the skill-anim-end handler, may spawn missile 0x1de on a DOUPDATE object, runs damage-state skill effects, and updates SFX/footstep sounds.
+// 1.14d mac: 0011b0cc
 void __fastcall CLIENT_UpdateUnitNameplate(D2UnitStrc * pDynamicPath) {
     bool bHasDmgState;
     uint32_t nCheckResult;

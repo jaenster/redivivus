@@ -65,6 +65,7 @@ static int32_t gnLoadScreenAnimFrame = 0; D2_STATIC_GUARD(gnLoadScreenAnimFrame,
 
 namespace D2Client::UI::Draw {
 
+// 1.14d mac: 000f99cb
 void __stdcall LoadingsScreen() {
     char szPath[260];
     ui::CleanupAfterLoadingAct();
@@ -234,6 +235,7 @@ skip_toggle:
     return;
 }
 
+// 1.14d mac: 000f4beb
 void __stdcall InitializeUI() {
     D2UnitStrc* pPlayer;
     int bIsActive;
@@ -422,6 +424,7 @@ void __stdcall InitializeUI() {
     exit(-1);
 }
 
+// 1.14d mac: 000f5410
 void __stdcall FreeDraw() {
     BOOL bWasGameUiOpen = GFX_bShowUIFlag.Game;
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
@@ -756,12 +759,14 @@ void __fastcall CLIENT_AdjustMemoryBudget(D2PoolManagerStrc * pMemory, int32_t b
     Engine::Gfx::GFX_InitCofSystem(0x200000);
 }
 
+// 1.14d mac: 0005d2d3
 void __fastcall GFX_ShutdownSpriteCacheAndCofSystem(int32_t nMemoryPoolHandle) {
     D2CMP::SRC::SpriteCache::SPRITECACHE_Init(nMemoryPoolHandle);
     D2CMP::SRC::SpriteCache::SPRITECACHE_Shutdown(nMemoryPoolHandle);
     Engine::Gfx::GFX_ShutdownCofSystem();
 }
 
+// 1.14d mac: 0005d2fa
 void __fastcall DRAW_NoOp(int32_t nScreenMode) {
 
 }

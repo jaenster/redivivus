@@ -103,6 +103,7 @@ static BOOL __stdcall UI_IsMouseInRect(int32_t nRectLeftX, int32_t nRectBottomY,
     return 0;
 }
 
+// 1.14d mac: 000aa908
 void __stdcall DrawPopupOk(int32_t bDiscPrompt) {
     D2GfxDataStrc sGfxData;
     memset(&sGfxData, 0, sizeof(sGfxData));
@@ -148,6 +149,7 @@ void __stdcall LOADER_DrawInsertDiscMessage() {
     D2Win::Src::D2WinFont::SetAndReturnLastFont(nPrevFont);
 }
 
+// 1.14d mac: 000aa6e6
 void __fastcall LOADER_DrawInsertDiscScreen(int32_t nUnused) {
     int32_t nSceneState = D2gfx::D2GFX::D2GFX_EndCutSceneReturnSceneState();
     if (nSceneState) {
@@ -169,6 +171,7 @@ void __fastcall LOADER_DrawInsertDiscScreen(int32_t nUnused) {
     D2gfx::D2GFX::D2GFX_EndScene();
 }
 
+// 1.14d mac: 000aab72
 void __stdcall INPUT_CharScreenOkDown(D2UIMouseMsgStrc * pMsg) {
     int nLeftX = UI::Inv::gnPanelOffsetX + 0x110;
     int nBottomY = 0x136 - UI::Inv::gnPanelOffsetY;
@@ -190,6 +193,7 @@ void __stdcall INPUT_CharScreenOkDown(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000aac40
 void __stdcall INPUT_CharScreenOkUp(D2UIMouseMsgStrc * pMsg) {
     int nMouseY;
     int nLeftEdge;
@@ -218,6 +222,7 @@ void __stdcall INPUT_CharScreenOkUp(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000aacac
 void __stdcall INPUT_CharScreenOkForce(D2UIMouseMsgStrc * pMsg) {
     gbCharScreenOkPressed = 1;
     gnCharScreenInputState = 0;
@@ -228,6 +233,7 @@ void __stdcall INPUT_CharScreenOkForce(D2UIMouseMsgStrc * pMsg) {
 }
 
 // Escape handler for the char-screen OK dialog: clears gbCharScreenOkPressed.
+// 1.14d mac: 000aace5
 void __stdcall INPUT_CharScreenOkCancel(D2UIMouseMsgStrc * pMsg) {
     gbCharScreenOkPressed = 0;
 }
@@ -270,6 +276,7 @@ int Unreferenced_00460170() {
     return 1;
 }
 
+// 1.14d mac: 000aad48
 void __fastcall LOADER_DrawConnectionLostScreen(int32_t nUnused) {
     int32_t nSceneState = D2gfx::D2GFX::D2GFX_EndCutSceneReturnSceneState();
     if (nSceneState) {
@@ -291,6 +298,7 @@ void __fastcall LOADER_DrawConnectionLostScreen(int32_t nUnused) {
     D2gfx::D2GFX::D2GFX_EndScene();
 }
 
+// 1.14d mac: 000ab09f
 void __stdcall INPUT_CharScreenDualButtonDown(D2UIMouseMsgStrc * pMsg) {
     int nButtonX = UI::Inv::gnPanelOffsetX + 0xce;
     int nButtonY = 0x136 - UI::Inv::gnPanelOffsetY;
@@ -326,6 +334,7 @@ void __stdcall INPUT_CharScreenDualButtonDown(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000ab157
 void __stdcall INPUT_CharScreenDualButtonUp(D2UIMouseMsgStrc * pMsg) {
     gnCharScreenOkButtonPressed = 0;
     gnConnectionLostScreenState = 0;
@@ -360,6 +369,7 @@ void __stdcall INPUT_CharScreenDualButtonUp(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000ab210
 void __stdcall INPUT_CharScreenDualButtonForce(D2UIMouseMsgStrc * pMsg) {
     gbCharScreenOkButtonConfirmed = 1;
     gnCharScreenInputState = 0;
@@ -370,10 +380,12 @@ void __stdcall INPUT_CharScreenDualButtonForce(D2UIMouseMsgStrc * pMsg) {
 }
 
 // Escape handler for the char-screen dual-button dialog: sets gbCharScreenCancelPressed.
+// 1.14d mac: 000ab249
 void __stdcall INPUT_CharScreenDualButtonCancel(D2UIMouseMsgStrc * pMsg) {
     gbCharScreenCancelPressed = 1;
 }
 
+// 1.14d mac: 000aaa74
 void __stdcall LOADER_FreePopupImages() {
     if (IMG_popupok_DiscPrompt) {
       Core::Archive::DC6_FreeAndDelete((DC6*)IMG_popupok_DiscPrompt);
@@ -391,6 +403,7 @@ void __stdcall LOADER_FreePopupImages() {
     UI::ui::PALETTE_LoadLoadingScreenPalette();
 }
 
+// 1.14d mac: 000ab25b
 void __fastcall LOADER_SetConnectionLostFlag(BOOL bConnectionLost) {
     gbConnectionLost = bConnectionLost;
 }
@@ -520,6 +533,7 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
     return (eD2UnitType)6;
 }
 
+// 1.14d mac: 00121391
 void __stdcall CLIENT_PreloadMonsterCofsInAdjacentRooms() {
     BOOL eState;
     uint32_t nCount;
@@ -548,6 +562,7 @@ void __stdcall CLIENT_PreloadMonsterCofsInAdjacentRooms() {
     }
 }
 
+// 1.14d mac: 00120ddc
 void __fastcall CLIENT_UpdateUnitLightRadius(D2UnitStrc * pUnit, int32_t nRadiusBonus) {
     D2MonStats2Txt* pMonStats2;
     uint32_t nLightRadius;

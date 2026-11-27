@@ -25,12 +25,14 @@
 
 namespace D2Client::SKILLS::SkillsMon {
 
+// 1.14d mac: 0008c990
 BOOL __fastcall Skills_CltDoFunc_Mon_ResetAnimSpeed(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     pUnit->nSeqAnimSpeed = 0;
     return 1;
 }
 
 // Client-side skill start function for monsters: initialises the monster's animation mode, marks it targetable, spawns its client-side missile (cltmissilea from Skills.txt, swapping to cltmissileb in Act II), then finds a free collision-clear tile near the unit and registers SMALL_UNIT_PRESENCE collision there. Returns TRUE if the unit is successfully placed with collision, FALSE otherwise. Used as a SkillsCltStFunc table entry for monster skills that visually fire a missile on the client while the server handles damage.
+// 1.14d mac: 0008c9a4
 BOOL __fastcall Skills_CltStFunc_MonInitAndSpawnCltMissile(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2RoomStrc* pRoom;
     eD2LevelId eLevelId;
@@ -104,6 +106,7 @@ BOOL __fastcall Skills_CltStFunc_MonInitAndSpawnCltMissile(D2UnitStrc * pUnit, e
     return 1;
 }
 
+// 1.14d mac: 0008cc3f
 BOOL __fastcall Skills_CltStFunc_ClearTargetableAndCollision(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nY;
     int32_t nX;
@@ -135,6 +138,7 @@ BOOL __fastcall Skills_CltStFunc_ClearTargetableAndCollision(D2UnitStrc * pUnit,
     return 1;
 }
 
+// 1.14d mac: 0008cce3
 BOOL __fastcall Skills_CltDoFunc_Mon_AdvanceFrameMetrics(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nFrameCount;
     int nCurrentFrame;
@@ -148,6 +152,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_AdvanceFrameMetrics(D2UnitStrc * pUnit, eD2
 }
 
 // Client start-func for monster skills. Reads the confirmed target unit's world position (static path for objects/tiles, dynamic path for moving units) and writes X into skill Param1 and Y into skill Param2. Returns FALSE if no target or no current skill.
+// 1.14d mac: 0008cd1f
 BOOL __fastcall Skills_CltStFunc_SetParamsFromTargetPosition(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nTargetX;
     D2UnitStrc* pTarget = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
@@ -185,6 +190,7 @@ BOOL __fastcall Skills_CltStFunc_SetParamsFromTargetPosition(D2UnitStrc * pUnit,
 }
 
 // Client do-function for monster composite-directional missile skills (e.g. multi-direction breath/projectile attacks). Resolves target coordinates from skill params or cursor, computes direction and 8-dir GFX index, looks up the composite frame offset table (gaSkillCompositeDirectionalMissileConst) to get a per-frame spawn position, then fires the skill's cltmissilea missile at the adjusted world coordinate.
+// 1.14d mac: 0008cdc4
 BOOL __fastcall Skills_CltDoFunc_Mon_CompositeDirMissile(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     // Static local variables (originally global data)
     static uint8_t gaSkillCompositeDirectionalMissileConst[8][9] = {
@@ -333,6 +339,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_CompositeDirMissile(D2UnitStrc * pUnit, eD2
     return 1;
 }
 
+// 1.14d mac: 0008cfde
 BOOL __fastcall Skills_CltStFunc_CalcPathToTargetSetFlag(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pTarget = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
     if (!pTarget) {
@@ -366,6 +373,7 @@ BOOL __fastcall Skills_CltStFunc_CalcPathToTargetSetFlag(D2UnitStrc * pUnit, eD2
     return 1;
 }
 
+// 1.14d mac: 0008d0b0
 BOOL __fastcall Skills_CltDoFunc_Mon_SetSequenceFromCalc(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
@@ -387,6 +395,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_SetSequenceFromCalc(D2UnitStrc * pUnit, eD2
     return 1;
 }
 
+// 1.14d mac: 0008d16e
 BOOL __fastcall Skills_CltStFunc_MonSummonSpawnSetCollision(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nSpawnMode;
     int32_t nSpawnY;
@@ -414,6 +423,7 @@ BOOL __fastcall Skills_CltStFunc_MonSummonSpawnSetCollision(D2UnitStrc * pUnit, 
     return 1;
 }
 
+// 1.14d mac: 0008d2f0
 BOOL __fastcall Skills_CltDoFunc_Mon_RemoveCollisionAtParam(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
     if (!pSkill) {
@@ -438,6 +448,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_RemoveCollisionAtParam(D2UnitStrc * pUnit, 
 }
 
 // Client-side monster skill do-function that fires a jump/leap missile toward the confirmed target. Validates the skill and its client missile (cltmissilea) indices, sets the caster's SKSRVDOFUNC flag, then steps up to 4 tiles from the caster toward the target (along the dominant axis) to pick a landing position. Builds a D2SkillArgStrc (positions, skill/missile ids, level), faces the caster in the jump direction via a lookup table, and spawns the missile with MakeMissile. Returns TRUE on success, FALSE if invalid skill/missile or no target.
+// 1.14d mac: 0008d427
 BOOL __fastcall Skills_CltDoFunc_Mon_JumpMissileTowardTarget(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     // Static local variables (originally global data)
     static uint8_t gaSkillJumpMissileData2[4] = { 0x31, 0x1f, 0x11, 0x0 }; D2_STATIC_GUARD(gaSkillJumpMissileData2, "D2Client::SKILLS::SkillsMon::Skills_CltDoFunc_Mon_JumpMissileTowardTarget::gaSkillJumpMissileData2");
@@ -584,6 +595,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_JumpMissileTowardTarget(D2UnitStrc * pUnit,
     return 1;
 }
 
+// 1.14d mac: 0008d68d
 BOOL __fastcall Skills_CltStFunc_ClearTargetableFlags(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     if (pUnit) {
       pUnit->eUnitFlags &= ~(UNITFLAG_ISVALIDTARGET | UNITFLAG_CANBEATTACKED | UNITFLAG_TARGETABLE);
@@ -592,6 +604,7 @@ BOOL __fastcall Skills_CltStFunc_ClearTargetableFlags(D2UnitStrc * pUnit, eD2Ski
     return 1;
 }
 
+// 1.14d mac: 0008d6a5
 BOOL __fastcall Skills_CltDoFunc_Mon_AdvanceFrameMetrics2(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nTotalFrames;
     int nCurrentFrame;
@@ -605,6 +618,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_AdvanceFrameMetrics2(D2UnitStrc * pUnit, eD
 }
 
 // Client do-func that spawns a burst of missiles in an area around the target position. Uses skill cltmissilea as the missile type, aurarangecalc (minus 6, min 1) as the scatter radius, and cltcalc[0] as the missile count. Delegates to MISSILE_SpawnMissilesInArea. Sets UNITFLAG_SKSRVDOFUNC on pUnit.
+// 1.14d mac: 0008d6e1
 BOOL __fastcall Skills_CltDoFunc_Mon_SpawnMissilesInArea(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nMissileCount;
     int32_t nTargetX;
@@ -669,6 +683,7 @@ static BOOL __stdcall SKILLSMON_SetMissileFrameAndSpeed(eD2Skills eSkill, D2Unit
 }
 
 // Creates a single missile from a pre-built D2SkillArgStrc using pUnit's RNG seed to pick a velocity offset from a table (pVelocityOffsets points to an int array, seed mod 5 selects entry). Advances pUnit->sSeed twice. After MakeMissile succeeds, calls SKILLSMON_SetMissileFrameAndSpeed to apply frame/speed from skill calc. Returns the new missile unit or NULL on failure.
+// 1.14d mac: 0008d955
 static D2UnitStrc * __stdcall SKILLSMON_CreateMissileWithSeed(int32_t * pVelocityOffsets, int32_t nUnitX, int32_t nUnitY, eD2Skills eSkill, int32_t nSkillLevel, D2UnitStrc * pUnit, int32_t nMissileId) {
     D2SkillArgStrc sSkillArg;
     memset(&sSkillArg, 0, sizeof(sSkillArg));
@@ -727,6 +742,7 @@ static D2UnitStrc * __stdcall SKILLSMON_CreateMissileWithSeed(int32_t * pVelocit
 }
 
 // Client do-func that fires exactly 2 missiles toward the target, randomly choosing between cltmissilea and cltmissileb each shot using pUnit's RNG seed (bit 0). Orients the dynamic path toward the target first. Calls SKILLSMON_CreateMissileWithSeed for each shot using the 0x6dbaa0 velocity table.
+// 1.14d mac: 0008d822
 BOOL __fastcall Skills_CltDoFunc_Mon_RandomDualMissile(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     // Static local variables (originally global data)
     static uint8_t gnMercenaryDamageMultiplier[24] = {
@@ -795,6 +811,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_RandomDualMissile(D2UnitStrc * pUnit, eD2Sk
     return 0;
 }
 
+// 1.14d mac: 0008dba3
 BOOL __fastcall Skills_CltStFunc_SetTargetableFlags(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_ISVALIDTARGET | UNITFLAG_CANBEATTACKED | UNITFLAG_TARGETABLE;
@@ -803,6 +820,7 @@ BOOL __fastcall Skills_CltStFunc_SetTargetableFlags(D2UnitStrc * pUnit, eD2Skill
     return 1;
 }
 
+// 1.14d mac: 0008dbbb
 BOOL __fastcall Skills_CltStFunc_CheckTargetClearNodrawFlag(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pTarget = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
     if (!pTarget) {
@@ -816,6 +834,7 @@ BOOL __fastcall Skills_CltStFunc_CheckTargetClearNodrawFlag(D2UnitStrc * pUnit, 
 }
 
 // Client-side skill DoFunc for monster ring-missile-spray attacks (e.g. Nihlathak corpse explosion spread). Fires 8 evenly-spaced missiles from gaSkillRingMissileSpreadConst* tables at velocity Param1<<6. If nNumRings > 1, fires a second ring at velocity Param2<<6 using gaSkillRingMissileSpreadTable*. Sets UNITFLAG_SKSRVDOFUNC on the caster. Returns TRUE on success.
+// 1.14d mac: 0008dbe9
 BOOL __fastcall Skills_CltDoFunc_Mon_RingMissileSpray(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     // Static local variables (originally global data)
     static int gaSkillRingMissileSpreadConstZ[16] = {
@@ -914,6 +933,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_RingMissileSpray(D2UnitStrc * pUnit, eD2Ski
     return 0;
 }
 
+// 1.14d mac: 0008de28
 BOOL __fastcall Skills_CltStFunc_SetParam1FromCltCalc(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
@@ -930,6 +950,7 @@ BOOL __fastcall Skills_CltStFunc_SetParam1FromCltCalc(D2UnitStrc * pUnit, eD2Ski
     return 1;
 }
 
+// 1.14d mac: 0008deba
 void __fastcall SKILLSMON_SetMonsterDeathFrame(D2SkillsTxt * pSkillsTxt, D2UnitStrc * pUnit) {
     D2MonStats2Txt* pMonStats2Txt;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
@@ -959,6 +980,7 @@ void __fastcall SKILLSMON_SetMonsterDeathFrame(D2SkillsTxt * pSkillsTxt, D2UnitS
 }
 
 // Client do-func that fires one missile every N animation ticks (N = cltcalc[0]). Increments skill Param1 each call; when it reaches the period it resets to 0, resolves target coords, spawns a missile via SKILLSMON_CreateMissileWithSeed (0x6dbb38 table), and calls SKILLSMON_SetMonsterDeathFrame. Returns TRUE only on the firing tick.
+// 1.14d mac: 0008df82
 BOOL __fastcall Skills_CltDoFunc_Mon_PeriodicMissile(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     // Static local variables (originally global data)
     static uint8_t gnMercenaryMaxHireCount[20] = {
@@ -1021,6 +1043,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_PeriodicMissile(D2UnitStrc * pUnit, eD2Skil
 }
 
 // Client-side skill-do function for monster directional-beam attacks. Validates the skill and its cltmissilea missile entry, sets UNITFLAG_SKSRVDOFUNC on the caster, builds a D2SkillArgStrc with origin coords and calc[0] as sub-loop multiplier, then aims at the confirmed target unit (or SP1 vector if no target) and spawns the missile via MakeMissile. Sets target X on the resulting missile. Returns 1 on success, 0 if skill/missile is invalid.
+// 1.14d mac: 0008e0f0
 BOOL __fastcall Skills_CltDoFunc_Mon_DirectionalBeam(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nSrcY;
     int32_t nTargetX;
@@ -1076,6 +1099,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_DirectionalBeam(D2UnitStrc * pUnit, eD2Skil
     return 0;
 }
 
+// 1.14d mac: 0008e55c
 void __fastcall SKILLSMON_SetMissilePathRandom(D2UnitStrc * pUnit, intptr_t nSeedOffset) {
     if (!pUnit) {
       return;
@@ -1102,6 +1126,7 @@ void __fastcall SKILLSMON_SetMissilePathRandom(D2UnitStrc * pUnit, intptr_t nSee
 }
 
 // Client do-func that spawns N randomly-directed missiles (N = calc[0]) from the caster's position toward the target area. Fills a shared D2SkillArgStrc with flag 0x21, owner, position, skill level, and SKILLSMON_SetMissilePathRandom callback, then calls MakeMissile once per missile index. Sets UNITFLAG_SKSRVDOFUNC.
+// 1.14d mac: 0008e3f0
 BOOL __fastcall Skills_CltDoFunc_Mon_RandomScatterMissiles(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillArgStrc sSkillArg;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -1140,6 +1165,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_RandomScatterMissiles(D2UnitStrc * pUnit, e
     return 0;
 }
 
+// 1.14d mac: 0008e628
 BOOL __fastcall Skills_CltStFunc_ClearSkillFlags(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
     if (!pSkill) {
@@ -1152,6 +1178,7 @@ BOOL __fastcall Skills_CltStFunc_ClearSkillFlags(D2UnitStrc * pUnit, eD2Skills e
 
 // Client-side per-frame do-function for monster charge skills. Checks frame progress against skill Param thresholds: if target is adjacent at Param[3] it snaps the charge to the contact animation; if at Param[2] it calculates and applies velocity (scaled by UNITSTAT_velocitypercent) and sets PATH_TYPE 1; at Param[3] end it transitions to the next sequence frame. Returns TRUE while the charge is still in progress.
 // @sourcefile .\SKILLS\SkillsMon.cpp
+// 1.14d mac: 0008e65b
 BOOL __fastcall Skills_CltDoFunc_Mon_ChargeAnim(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nDist;
     int nPercent;
@@ -1227,6 +1254,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ChargeAnim(D2UnitStrc * pUnit, eD2Skills eS
 }
 
 // Monster client-side skill DoFunc (eSkill, nSkillLvl) firing a line/spread of missiles. Validates the skill index and its cltmissilea against the data-table bounds, sets UNITFLAG_SKSRVDOFUNC on pUnit, and gets the target coords. Computes the cast direction (relative to the unit's tile) into 8-way step deltas (nStepX/nStepY), uses skill calc[0] as the missile count N, then walks an N-step line perpendicular to the aim direction, calling MakeMissile for each via a D2SkillArgStrc (flags=3, owner=pUnit, per-step x/y). Returns TRUE if missiles were spawned, FALSE on bad skill/missile id or no direction.
+// 1.14d mac: 0008e91b
 BOOL __fastcall Skills_CltDoFunc_Mon_LineMissileSpread(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nOriginY;
     int nStepX;
@@ -1348,6 +1376,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_LineMissileSpread(D2UnitStrc * pUnit, eD2Sk
 }
 
 // Client-side monster skill DoFunc: emits a radial burst of 64 client missiles outward from the caster as a visual explosion. Validates eSkill against skills.txt, resolves the skill's cltmissilea missile id, marks the caster with UNITFLAG_SKSRVDOFUNC, and requires a confirmed target. Computes per-missile velocity (MISSILETBLS_CalculateVelocity), then loops the 64 entries of the global skill-DoFunc cos/sin spread tables building a D2SkillArgStrc (origin at caster path pos, nToHit=skill level) and calls MakeMissile for each; each spawned particle gets stopped-with-fade, reverse-direction, offset/bounds/pos vectors set via the client Particle engine. Returns 1 on success, 0 if skill/missile/target invalid. __fastcall: pUnit(ECX), eSkill(EDX), nSkillLvl(stack).
+// 1.14d mac: 0008ebe3
 BOOL __fastcall Skills_CltDoFunc_Mon_RadialMissileExplosion(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     // Static local variables (originally global data)
     static int gnSkillDoFuncSpreadTableX[64] = {
@@ -1535,6 +1564,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_RadialMissileExplosion(D2UnitStrc * pUnit, 
 }
 
 // Client start-func that seeds a deterministic RNG from (pUnit->GUID + target->GUID), picks a random value in [calc[0], calc[1]), and writes it into skill Param1 (clamped to min 1). Also stores target GUID in Param2 and target unit type in Param3. Used to synchronize a pseudo-random parameter between client and server via the unit-pair seed.
+// 1.14d mac: 0008eddf
 BOOL __fastcall Skills_CltStFunc_SetRandomParamFromCalcRange(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nUnitGUID;
     D2SeedStrc sSeed;
@@ -1578,6 +1608,7 @@ BOOL __fastcall Skills_CltStFunc_SetRandomParamFromCalcRange(D2UnitStrc * pUnit,
     return 1;
 }
 
+// 1.14d mac: 0008ef65
 BOOL __fastcall Skills_CltDoFunc_Mon_MeleeRepeat(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxtBase = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxtBase) {
@@ -1612,6 +1643,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_MeleeRepeat(D2UnitStrc * pUnit, eD2Skills e
     return 0;
 }
 
+// 1.14d mac: 0008f06d
 BOOL __fastcall Skills_CltStFunc_SpawnCltMissileA(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (pSkillsTxt) {
@@ -1627,6 +1659,7 @@ BOOL __fastcall Skills_CltStFunc_SpawnCltMissileA(D2UnitStrc * pUnit, eD2Skills 
 }
 
 // Client do-func that fires two overlapping scatter-missile waves: 2 missiles of type cltmissilea (SKILLS_CreateMissileScatter count=2, spread=1) and then 4 missiles of type cltmissileb (count=4, spread=5), if cltmissileb is valid. Uses flag 0x2021 with pUnit as both owner and missile reference. Sets UNITFLAG_SKSRVDOFUNC.
+// 1.14d mac: 0008f0e2
 BOOL __fastcall Skills_CltDoFunc_Mon_ScatterDoubleMissile(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
@@ -1662,6 +1695,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ScatterDoubleMissile(D2UnitStrc * pUnit, eD
     return 0;
 }
 
+// 1.14d mac: 0008f24f
 BOOL __fastcall Skills_CltDoFunc_Mon_QueenDeath(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillStrc* pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, eSkill);
     int32_t nRepeatCount = D2Common::Skills::SKILL_GetParam1(pSkill);
@@ -1696,6 +1730,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_QueenDeath(D2UnitStrc * pUnit, eD2Skills eS
 }
 
 // Client do-func that creates a MISSILE_Cursecenter missile at the target position, then configures it with cltmissileb as the stream missile ID and aurarangecalc as the stream range. Used for monster curse auras that project a centered streaming effect over a skill-level-scaled radius. Sets UNITFLAG_SKSRVDOFUNC on success.
+// 1.14d mac: 0008f2f2
 BOOL __fastcall Skills_CltDoFunc_Mon_CurseCenter_StreamRange(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillArgStrc sSkillArg;
     int nTargetY;
@@ -1738,6 +1773,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_CurseCenter_StreamRange(D2UnitStrc * pUnit,
 }
 
 // Client-side skill state function for the Hell Meteor effect: spawns the full set of cosmetic/impact missiles (Hellmeteordown, Hellmeteorball x2, Hellmeteorup, launch1/launch2) at the caster's current X/Y (read from static path for objects/NPCs, dynamic path otherwise). Adjusts each spawned missile's particle offset/position vectors and sets launch-missile animation speed. Always returns TRUE.
+// 1.14d mac: 0008f426
 BOOL __fastcall Skills_CltStFunc_CastHellMeteorMissiles(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nPosY;
     int32_t nPosX;
@@ -1842,6 +1878,7 @@ BOOL __fastcall Skills_CltStFunc_CastHellMeteorMissiles(D2UnitStrc * pUnit, eD2S
 }
 
 // Client do-func that selects a missile ID as (cltmissilea + monster Components[10]) to vary the projectile by the monster's visual component variant (index A). Validates the offset stays within missile table bounds. If skill flag bit 1 is set uses MISSILE_CreateFromUnitWithOffset, otherwise MakeMissile. Sets UNITFLAG_SKSRVDOFUNC.
+// 1.14d mac: 0008f79c
 BOOL __fastcall Skills_CltDoFunc_Mon_ComponentOffset_Missile_A(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint8_t byComponentIdx;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -1882,6 +1919,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ComponentOffset_Missile_A(D2UnitStrc * pUni
 }
 
 // Identical in structure to Skills_CltDoFunc_Mon_ComponentOffset_Missile_A but uses monster Components[11] (index B) as the offset into the missile table. Allows a second independent component-driven missile variant for the same skill. Sets UNITFLAG_SKSRVDOFUNC.
+// 1.14d mac: 0008f8eb
 BOOL __fastcall Skills_CltDoFunc_Mon_ComponentOffset_Missile_B(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint8_t byComponentIdx;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -1921,6 +1959,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ComponentOffset_Missile_B(D2UnitStrc * pUni
     return 0;
 }
 
+// 1.14d mac: 0008fa3a
 BOOL __fastcall Skills_CltDoFunc_Mon_ArrowModifier_MakeMissile(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
@@ -1956,6 +1995,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ArrowModifier_MakeMissile(D2UnitStrc * pUni
 }
 
 // Client-side handler that spawns a Spider Lay (web) missile for a spider monster. Requires a valid dynamic path with non-zero 8-flags (direction). Reads the unit's SpiderLay skill level, determines the unit's facing direction via UpdateDirection+MONSTERS_GetGfxOffsetTable2, looks up a fixed per-direction offset table to offset the spawn point, rejects town rooms, then fires MISSILE_Spidergoolay via MakeMissile with nFlags=0x25, playing SOUND_SORCERESS_ENERGYSHIELD_HIT_3 on success.
+// 1.14d mac: 0008fb8d
 D2UnitStrc * __fastcall SKILLSMON_CltCreateSpiderLay(D2UnitStrc * pUnit) {
     int nUnitX;
     int nUnitY;
@@ -2034,6 +2074,7 @@ D2UnitStrc * __fastcall SKILLSMON_CltCreateSpiderLay(D2UnitStrc * pUnit) {
     return nullptr;
 }
 
+// 1.14d mac: 00091feb
 void __fastcall SKILLSMON_SetMissilePathLinear(D2UnitStrc * pUnit, intptr_t nSeedOffset) {
     if (!pUnit) {
       return;

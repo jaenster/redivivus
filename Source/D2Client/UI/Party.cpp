@@ -62,10 +62,12 @@ static int32_t gpWaypointButtonHover = 0; D2_STATIC_GUARD(gpWaypointButtonHover,
 
 namespace D2Client::UI::Party {
 
+// 1.14d mac: 000d2fde
 void __stdcall SetPartyColors() {
     cRed = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0xff, 0, 0);
 }
 
+// 1.14d mac: 000d3013
 void __stdcall SetRedToBlack() {
     cRed = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0, 0, 0);
 }
@@ -105,6 +107,7 @@ static void __stdcall UI_DrawPartyButtonFrame(DC6 * pDC6, int32_t nX, int32_t nF
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, Inv::gnPanelOffsetX + nX, nY - Inv::gnPanelOffsetY, -1, DRAW_SOLID, nullptr);
 }
 
+// 1.14d mac: 000d3048
 void __stdcall FreeAllUiParty() {
     D2UiPartyStrc* pMemoryToFree = pUiParty;
     while (pMemoryToFree) {
@@ -213,6 +216,7 @@ int Unreferenced_0049a2a0() {
     return (uint32_t)((int)uVar1 >= 9);
 }
 
+// 1.14d mac: 000d5818
 static void __fastcall UI_DrawPartyMemberName(char * szPlayerName, int32_t nScreenY, int32_t nColor, int32_t bNarrowMode) {
     int i;
     uint16_t wszName[100];
@@ -296,6 +300,7 @@ static void __stdcall UI_DrawPartyMemberClass(int32_t nScreenY, int32_t nCharTyp
     D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(nLocaleId), Inv::gnPanelOffsetX + 0x24, nScreenY - Inv::gnPanelOffsetY, nColor, bMultiLineCenter);
 }
 
+// 1.14d mac: 000d59d0
 void __thiscall UI_DrawPartyButtonLabelText(int32_t eButtonType, int32_t nBaseY, int32_t bHostileMode, uint16_t nPartyId) {
     uint16_t nLocaleId;
     int32_t nTextFlags = 0;
@@ -381,6 +386,7 @@ void __stdcall UI_DrawPlayerNameInParty() {
     D2_FREE_AT(wszMessage, ".\\UI\\Party.cpp", 0x21a);
 }
 
+// 1.14d mac: 000d30a1
 void __stdcall ResetPartyUi() {
     int nCounter;
     FreeAllUiParty();
@@ -1176,6 +1182,7 @@ static void UI_HandlePartyButtonClick(D2UiPartyStrc * pUiParty, D2RosterStrc * p
     pUiPartyIter->pPartyButtons[nButtonIdx].bIsActive = bIsInParty;
 }
 
+// 1.14d mac: 000d4d9b
 void __stdcall INPUT_PartyScreenLeftClick(D2UIMouseMsgStrc * pMsg) {
     D2RosterStrc* pRoster;
     uint32_t nLevel;
@@ -1388,6 +1395,7 @@ void __stdcall INPUT_PartyScreenMouseUp(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000d53cc
 void __stdcall LoadPartyDC6() {
     pMenu_party = ui::ARCHIVE_LoadOverlayImageUsedInGame("Menu\\party");
     pMenu_partybuttons = ui::ARCHIVE_LoadOverlayImageUsedInGame("Menu\\partybuttons");

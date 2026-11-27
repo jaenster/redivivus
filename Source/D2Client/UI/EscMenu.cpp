@@ -58563,28 +58563,33 @@ static uint32_t __fastcall UI_SLIDER_GetPositionFromValue(D2EscMenuItemStrc * pS
     return (uint32_t)((float)(nMaxPos - nMinPos) / (float)(uint32_t)(pSliderItem->nSubImageCount - 1) * (float)(uint32_t)pSliderItem->nImageIndex + (float)nMinPos);
 }
 
+// 1.14d mac: 000dc855
 void __fastcall UI_SLIDER_ApplyMasterVolumeFromSlider(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     uint32_t nVolume = UI_SLIDER_GetPositionFromValue(pItem, 0, 100);
     D2Sound::Src::D2SoundFast::SOUND_SetMasterVolume(nVolume);
 }
 
+// 1.14d mac: 000dc8cc
 void __fastcall UI_SLIDER_ApplyMasterVolume(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     int nCurrentVolume = D2Sound::Src::D2SoundFast::SOUND_GetMasterVolume();
     int32_t nSliderValue = UI_SLIDER_GetValueFromPosition(0, 100, pItem, nCurrentVolume);
     pItem->nImageIndex = nSliderValue;
 }
 
+// 1.14d mac: 000dc944
 void __fastcall UI_SLIDER_ApplyMusicVolumeFromSlider(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     uint32_t nVolume = UI_SLIDER_GetPositionFromValue(pItem, 0, 100);
     D2Sound::Src::D2SoundFast::SOUND_SetMusicVolume(nVolume);
 }
 
+// 1.14d mac: 000dc9bb
 void __fastcall UI_SLIDER_ApplyMusicVolume(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     int nCurrentVolume = D2Sound::Src::D2SoundFast::SOUND_GetMusicVolume();
     int32_t nSliderValue = UI_SLIDER_GetValueFromPosition(0, 100, pItem, nCurrentVolume);
     pItem->nImageIndex = nSliderValue;
 }
 
+// 1.14d mac: 000dca3c
 void __fastcall ESCMENU_Init3DSoundItem(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     BOOL _bIs3DActive;
     bool bIs3DActive;
@@ -58592,22 +58597,26 @@ void __fastcall ESCMENU_Init3DSoundItem(D2EscMenuItemStrc * pItem, D2UIMouseMsgS
     pItem->nImageIndex = _bIs3DActive;
 }
 
+// 1.14d mac: 000dca89
 void __fastcall UI_SLIDER_ApplyPositionalBiasFromSlider(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     uint32_t nBias = UI_SLIDER_GetPositionFromValue(pItem, 0, 100);
     D2Sound::Src::D2SoundFast::SOUND_SetPositionalBias(nBias);
 }
 
+// 1.14d mac: 000dcb00
 void __fastcall UI_SLIDER_ApplyPositionalBias(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     int nCurrentBias = D2Sound::Src::D2SoundFast::SOUND_GetPositionalBias();
     int32_t nSliderValue = UI_SLIDER_GetValueFromPosition(0, 100, pItem, nCurrentBias);
     pItem->nImageIndex = nSliderValue;
 }
 
+// 1.14d mac: 000dca67
 void __fastcall ESCMENU_InitEaxSoundItem(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     uint32_t bIsEaxActive = GAME::Sound::SOUND_IsEaxMixerActive();
     pItem->nImageIndex = bIsEaxActive;
 }
 
+// 1.14d mac: 000dcb78
 void __fastcall UI_SLIDER_ApplyNpcSpeech(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     D2Sound::Src::D2SoundFast::SOUND_SetNpcSpeech(pItem->nImageIndex);
     int nSpeechVal = pItem->nImageIndex;
@@ -58648,6 +58657,7 @@ void __fastcall UI_SLIDER_LoadAndApplyNpcSpeech(D2EscMenuItemStrc * pItem, D2UIM
     UI_SLIDER_ApplyNpcSpeech(pItem, pMsg);
 }
 
+// 1.14d mac: 000dc170
 void __fastcall UI_SLIDER_ApplyLightQuality(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     Storm::Source::SReg::SRegSaveValue("Diablo II", "Light Quality", 0, pItem->nImageIndex);
     int nLightQuality = pItem->nImageIndex;
@@ -58677,6 +58687,7 @@ void __fastcall UI_SLIDER_ApplyLightQuality(D2EscMenuItemStrc * pItem, D2UIMouse
     }
 }
 
+// 1.14d mac: 000dc1fa
 void __fastcall UI_SLIDER_InitLightQuality(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     Storm::Source::SReg::SRegLoadValue("Diablo II", "Light Quality", 0, &pItem->nImageIndex);
     int nLightQuality = pItem->nImageIndex;
@@ -58706,16 +58717,19 @@ void __fastcall UI_SLIDER_InitLightQuality(D2EscMenuItemStrc * pItem, D2UIMouseM
     }
 }
 
+// 1.14d mac: 000dc284
 void __fastcall UI_SLIDER_ApplyBlendedShadows(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     Storm::Source::SReg::SRegSaveValue("Diablo II", "Blended Shadows", 0, pItem->nImageIndex);
     D2gfx::D2GFX::D2GFX_SetBlendedShadows(pItem->nImageIndex);
 }
 
+// 1.14d mac: 000dc2d2
 void __fastcall UI_SLIDER_InitBlendedShadows(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     Storm::Source::SReg::SRegLoadValue("Diablo II", "Blended Shadows", 0, &pItem->nImageIndex);
     D2gfx::D2GFX::D2GFX_SetBlendedShadows(pItem->nImageIndex);
 }
 
+// 1.14d mac: 000dc792
 void __fastcall UI_SLIDER_ApplyResolution(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     Storm::Source::SReg::SRegSaveValue("Diablo II", "Resolution", 0, pItem->nImageIndex);
     DWORD RequestedScreenModeMaybe = 2;
@@ -58726,6 +58740,7 @@ void __fastcall UI_SLIDER_ApplyResolution(D2EscMenuItemStrc * pItem, D2UIMouseMs
     ClientModeInGame::CLIENT_SetScreenResolution(RequestedScreenModeMaybe);
 }
 
+// 1.14d mac: 000dc7e9
 void __fastcall UI_SLIDER_LoadAndApplyResolution(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     int* pnOut = &pItem->nImageIndex;
     int bLoaded = Storm::Source::SReg::SRegLoadValue("Diablo II", "Resolution", 0, pnOut);
@@ -58741,6 +58756,7 @@ void __fastcall UI_SLIDER_LoadAndApplyResolution(D2EscMenuItemStrc * pItem, D2UI
     ClientModeInGame::CLIENT_SetScreenResolution(RequestedScreenModeMaybe);
 }
 
+// 1.14d mac: 000dc329
 void __fastcall UI_SLIDER_ApplyPerspective(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     Storm::Source::SReg::SRegSaveValue("Diablo II", "Perspective", 0, pItem->nImageIndex);
     D2gfx::D2GFX::D2GFX_SetPerspective(pItem->nImageIndex);
@@ -58762,12 +58778,14 @@ void __fastcall UI_SLIDER_LoadAndApplyPerspective(D2EscMenuItemStrc * pItem, D2U
     *pnOut = 0;
 }
 
+// 1.14d mac: 000dc413
 void __fastcall StoreGamma(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     uint32_t dwGamma = UI_SLIDER_GetPositionFromValue(pItem, 0x37, 0xff);
     Storm::Source::SReg::SRegSaveValue("Diablo II", "Gamma", 0, dwGamma);
     GAME::Rendering::SetupGamma(dwGamma);
 }
 
+// 1.14d mac: 000dc4ae
 void __fastcall UI_SLIDER_InitGamma(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     int32_t nStoredGamma = 0x9b;
     Storm::Source::SReg::SRegLoadValue("Diablo II", "Gamma", 0, &nStoredGamma);
@@ -58783,6 +58801,7 @@ void __fastcall UI_SLIDER_InitGamma(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc 
     GAME::Rendering::SetupGamma(nGammaPos);
 }
 
+// 1.14d mac: 000dc564
 void __fastcall UI_SLIDER_ApplyContrast(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     uint32_t nContrastPos = UI_SLIDER_GetPositionFromValue(pItem, 0, 100);
     Storm::Source::SReg::SRegSaveValue("Diablo II", "Contrast", 0, nContrastPos);
@@ -58790,6 +58809,7 @@ void __fastcall UI_SLIDER_ApplyContrast(D2EscMenuItemStrc * pItem, D2UIMouseMsgS
     D2gfx::D2GFX::D2GFX_SetGamma(0);
 }
 
+// 1.14d mac: 000dc619
 void __fastcall UI_SLIDER_InitContrast(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     eD2RendererMode eRendererMode_lcl = D2gfx::D2GFX::D2GFX_GetRendererMode();
     int32_t nContrastVal = eRendererMode_lcl != RENDERER_Glide ? 100 : 0;
@@ -58802,6 +58822,7 @@ void __fastcall UI_SLIDER_InitContrast(D2EscMenuItemStrc * pItem, D2UIMouseMsgSt
     D2gfx::D2GFX::D2GFX_SetGamma(0);
 }
 
+// 1.14d mac: 000dc6d0
 void __fastcall UI_SLIDER_ApplyAutomapMode(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     if ((uint32_t)pItem->nImageIndex > 2) {
       pItem->nImageIndex = 0;
@@ -58811,6 +58832,7 @@ void __fastcall UI_SLIDER_ApplyAutomapMode(D2EscMenuItemStrc * pItem, D2UIMouseM
     Storm::Source::SReg::SRegSaveValue("Diablo II", "AutoMapMode", 0, pItem->nImageIndex);
 }
 
+// 1.14d mac: 000dc731
 void __fastcall UI_SLIDER_InitAutomapMode(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     uint32_t nAutomapMode;
     D2_UNINIT(nAutomapMode, (uint32_t)(uintptr_t)pItem);
@@ -58824,6 +58846,7 @@ void __fastcall UI_SLIDER_InitAutomapMode(D2EscMenuItemStrc * pItem, D2UIMouseMs
     pItem->nImageIndex = nMiniMapType;
 }
 
+// 1.14d mac: 000dbf9f
 void __fastcall UI_SLIDER_ApplyAutomapFade(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     if ((uint32_t)pItem->nImageIndex > 4) {
       pItem->nImageIndex = 0;
@@ -58833,6 +58856,7 @@ void __fastcall UI_SLIDER_ApplyAutomapFade(D2EscMenuItemStrc * pItem, D2UIMouseM
     Storm::Source::SReg::SRegSaveValue("Diablo II", "AutoMapFade", 0, pItem->nImageIndex);
 }
 
+// 1.14d mac: 000dc000
 void __fastcall UI_SLIDER_InitAutomapFade(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     uint32_t nAutomapFade;
     D2_UNINIT(nAutomapFade, (uint32_t)(uintptr_t)pItem);
@@ -58846,30 +58870,36 @@ void __fastcall UI_SLIDER_InitAutomapFade(D2EscMenuItemStrc * pItem, D2UIMouseMs
     pItem->nImageIndex = nCurrentFade;
 }
 
+// 1.14d mac: 000dc061
 void __fastcall UI_SLIDER_ApplyAutomapCenters(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     Automap::AUTOMAP_SetCenters(pItem->nImageIndex);
 }
 
+// 1.14d mac: 000dc07d
 void __fastcall ESCMENU_InitAutomapCenterItem(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     int32_t nCenters = Automap::AUTOMAP_GetCenters();
     pItem->nImageIndex = nCenters;
 }
 
+// 1.14d mac: 000dc096
 void __fastcall UI_SLIDER_ApplyAutomapParty(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     Automap::AUTOMAP_SetParty(pItem->nImageIndex);
 }
 
+// 1.14d mac: 000dc0b2
 void __fastcall ESCMENU_InitAutomapPartyItem(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     BOOL nPartyData = Automap::AUTOMAP_GetParty();
     pItem->nImageIndex = nPartyData;
 }
 
+// 1.14d mac: 000dc0f0
 void __fastcall UI_SLIDER_InitAutomapParty(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     BOOL bHasParty = Automap::AUTOMAP_GetParty();
     pItem->nImageIndex = bHasParty && Automap::AUTOMAP_GetPartyNames() ? 1 : 0;
 }
 
 // Converts mouse Y coordinate to menu item index. Iterates visible items to find which contains the Y position, checking enable callbacks. Returns -1 if no valid item hit or if item is disabled.
+// 1.14d mac: 000d955e
 static int32_t ESCMENU_GetItemIndexFromMouseY(int32_t nParam) {
     int nItemCount = gpEscMenuItemCount->nItemCount;
     int nHalfHeight = gpEscMenuItemCount->nVerticalSpacing * nItemCount / 2;
@@ -58939,6 +58969,7 @@ static void __stdcall ESCMENU_ClickMenuItem(D2UIMouseMsgStrc * pMsg) {
     }
 }
 
+// 1.14d mac: 000d9335
 static void ESCMENU_HandleSliderDrag(int32_t nMouseX, int32_t nMouseY) {
     int32_t nHoveredIndex;
     BOOL nSliderLeftX;
@@ -59006,6 +59037,7 @@ static void ESCMENU_HandleSliderDrag(int32_t nMouseX, int32_t nMouseY) {
     Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);
 }
 
+// 1.14d mac: 000d92db
 void __stdcall INPUT_EscMenuMouseDown(D2UIMouseMsgStrc * pMsg) {
     uint32_t nMouseX;
     uint32_t nMouseY = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
@@ -59022,6 +59054,7 @@ void __stdcall INPUT_EscMenuMouseDown(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000d9506
 void __stdcall INPUT_EscMenuMouseUp(D2UIMouseMsgStrc * pMsg) {
     int nMouseY = pMsg->uLParam.sMousePos.nMouseY;
     if (gbEscMenuSliderDragging) {
@@ -59039,6 +59072,7 @@ void __stdcall INPUT_EscMenuMouseUp(D2UIMouseMsgStrc * pMsg) {
 }
 
 // Navigates to next menu item (down arrow key). Increments selected index in gpEscMenuItemCount, wrapping to 0 at end. Skips disabled items by checking enable callback. Plays navigation sound.
+// 1.14d mac: 000d971c
 void __stdcall INPUT_EscMenuNavigateNext(D2UIMouseMsgStrc * pMsg) {
     BOOL nNextIndex;
     pfnEscMenuItemVisible pfnEnableCallback;
@@ -59056,6 +59090,7 @@ void __stdcall INPUT_EscMenuNavigateNext(D2UIMouseMsgStrc * pMsg) {
 }
 
 // Navigates to previous menu item (up arrow key). Decrements selected index in gpEscMenuItemCount, wrapping to last at beginning. Skips disabled items by checking enable callback. Plays navigation sound.
+// 1.14d mac: 000d97bb
 void __stdcall INPUT_EscMenuNavigatePrev(D2UIMouseMsgStrc * pMsg) {
     BOOL nPrevIndex;
     pfnEscMenuItemVisible pfnEnableCallback;
@@ -59072,6 +59107,7 @@ void __stdcall INPUT_EscMenuNavigatePrev(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000d9852
 void __stdcall INPUT_EscMenuOptionDecrease(D2UIMouseMsgStrc * pMsg) {
     int nItemIndex;
     uint32_t nLastImageIndex;
@@ -59126,6 +59162,7 @@ void __stdcall INPUT_EscMenuOptionDecrease(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000d996a
 void __stdcall INPUT_EscMenuOptionIncrease(D2UIMouseMsgStrc * pMsg) {
     int nItemIndex;
     uint32_t nLastImageIndex;
@@ -59260,12 +59297,14 @@ void __fastcall ESCMENU_LoadLocalizedImages(int * pMenuHeader, D2EscMenuItemStrc
 
 // Shared fatal tail of ESCMENU_LoadLocalizedImages: every failing check pushes its source line and enters here; reports ERROR_UnrecoverableInternalError_Halt("", ip, nLine) and exits.
 // Provenance: 1.14d asm 0047dbce (entered by fall-through from the first check and by JMP from 0047dbf1,0047dd56,0047dd60).
+// 1.14d mac: 000d9aa9
 void __stdcall ESCMENU_LoadLocalizedImages_HaltTail(int nLine) {
     Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nLine);
     exit(-1);
 }
 
 // Initializes escape menu system. Loads all DC6 images for 5 menu tables (main, options, help, and two save/exit variants for classic vs expansion). Loads widget decorations (OptBar progress bar, OptBarC colored bar, OptSkull slider marker). Measures rotating star cursor icon to determine maximum frame width for centering calculations. Sets gpEscMenuItemCount and gpEscMenuCurrentTable to main menu.
+// 1.14d mac: 000d9d91
 void __stdcall ESCMENU_Initialize() {
     int32_t nFrameWidth;
     D2EscMenuHeaderStrc* pSaveExitHeader;
@@ -59360,6 +59399,7 @@ void __stdcall ESCMENU_FreeLoadedImages_HaltTail(int nLine) {
 }
 
 // Shuts down escape menu system. Clears gpEscMenuItemCount and gpEscMenuCurrentTable pointers, frees all loaded DC6 images from all menu tables (main, options, save/exit variants), releases skull and bar decoration images.
+// 1.14d mac: 000da135
 void __stdcall ESCMENU_Shutdown() {
     D2EscMenuHeaderStrc* pMenuTable;
     D2EscMenuItemStrc* pSaveExitTable;
@@ -59397,6 +59437,7 @@ void __stdcall ESCMENU_Shutdown() {
 }
 
 // Shows escape menu by table index (0=main, 1=options, 2=help, 3=save/exit). Hides UI panels based on menu config flags, sets UI_ESCMENU mode, switches gpEscMenuCurrentTable and gpEscMenuItemCount to selected table. Sets selected item to last or item 1 for exit confirm.
+// 1.14d mac: 000d90a1
 void __fastcall ESCMENU_ShowMenu(int32_t bHideUI, int32_t nMenuIndex) {
     BOOL bShouldHideUI;
     eD2UIvars ePrevUIMode;
@@ -59467,6 +59508,7 @@ void __fastcall ESCMENU_ShowMenu(int32_t bHideUI, int32_t nMenuIndex) {
     gnEscMenuSelectedIndex = 1;
 }
 
+// 1.14d mac: 000da2bb
 void __fastcall ESCMENU_RestoreUIState(int32_t bRestoreFlags) {
     BOOL bEscMenuActive = ui::GetUIFlag(UI_ESCMENU);
     if (bEscMenuActive) {
@@ -59542,6 +59584,7 @@ void __stdcall ESCMENU_DrawProgressBar(D2EscMenuItemStrc * pMenuItem, int32_t nB
 }
 
 // Renders escape menu UI. Tracks mouse position, updates selection via GetItemIndexFromMouseY or handles slider drag. Iterates visible items (skipping expansion-only in classic mode), drawing based on type: 0=centered image, 1=dual-sided images (left -230px, right +230px), 2=progress bar. Draws rotating star cursor on both sides of selected item, animating at tick rate. Uses gpEscMenuItemCount header for spacing and gpEscMenuCurrentTable for item data.
+// 1.14d mac: 000da331
 void __stdcall DRAW_EscMenu() {
     // Static local variables (originally global data)
     static uint32_t DRAW_RotatingStarPosition; D2_STATIC_GUARD_BSS(DRAW_RotatingStarPosition, "D2Client::UI::EscMenu::DRAW_EscMenu::DRAW_RotatingStarPosition");
@@ -59733,6 +59776,7 @@ void __fastcall ESCMENU_SwitchToMainMenu_alt(D2EscMenuItemStrc * pItem, D2UIMous
     gnEscMenuSelectedIndex = gEscMenuHeaderInitData.nItemCount - 1;
 }
 
+// 1.14d mac: 000dc11c
 void __fastcall ESCMENU_SwitchToOptionsMenu(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     ui::SetUIFlag(UI_ESCMENU, UI_SET, 0);
     gpEscMenuItemCount = &gaEscMenuHeaderOptions;
