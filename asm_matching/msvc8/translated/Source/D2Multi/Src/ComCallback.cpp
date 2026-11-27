@@ -739,76 +739,43 @@ static void COMCALLBACK_FormatChannelUserData(D2ChannelUserStrc * pChannelUser) 
 
 // Adds or updates a channel user in gpChannelUserLinkedListHead sorted list. Allocates 0x48-byte node, copies username and raw BNet data. Updates existing entry if username matches.
 void __fastcall COMCALLBACK_AddOrUpdateChannelUser(char * szUsername, uint8_t * pbRawData) {
-    int nCmpResult;
-    intptr_t nCopyDelta;
-    uint8_t* pszCmpB;
-    uint8_t* pNextNode;
-    uint8_t byChar;
-    char cCopied;
-    D2ChannelUserNameNodeStrc* pbCharNameKey = gpChannelUserLinkedListHead;
-    D2ChannelUserNameNodeStrc* pPrevNode = 0;
+    D2ChannelUserNameNodeStrc* pNode = gpChannelUserLinkedListHead;
+    D2ChannelUserNameNodeStrc* pPrevNode = nullptr;
     char* pszStarPos = Storm::Source::SSTR::SStrChr(szUsername, '*');
-    if (!pszStarPos || (pNextNode = (uint8_t*)(pszStarPos + 1) , !pszStarPos[1])) {
-      pNextNode = (uint8_t*)szUsername;
+    char* szName = pszStarPos && pszStarPos[1] ? pszStarPos + 1 : szUsername;
+    while (pNode) {
+      pszStarPos = Storm::Source::SSTR::SStrChr(pNode->szUsername, '*');
+      if (!strcmp(pszStarPos && pszStarPos[1] ? pszStarPos + 1 : pNode->szUsername, szName)) {
+        break;
+      }
+
+      pPrevNode = pNode;
+      pNode = pNode->pNext;
     }
 
-    do {
-      D2ChannelUserNameNodeStrc* pszCmpA;
-      if (!pbCharNameKey) {
-        break;
-      }
+    if (pNode) {
+      strcpy(pNode->szFormattedName, (char*)pbRawData);
+      return;
+    }
 
-      pszStarPos = Storm::Source::SSTR::SStrChr(pbCharNameKey->szUsername, '*');
-      pszCmpB = pNextNode;
-      if (!pszStarPos || (pszCmpA = (D2ChannelUserNameNodeStrc*)(pszStarPos + 1) , ((D2ChannelUserNameNodeStrc*)(pszStarPos + 1))->szUsername[0] == '\0')) {
-        pszCmpA = pbCharNameKey;
-      }
-
-      nCmpResult = strcmp(pszCmpA->szUsername, (char*)pszCmpB);
-      if (!nCmpResult) {
-        if (pbCharNameKey) {
-          nCopyDelta = 0x32 - (intptr_t)pbRawData;
-          do {
-            byChar = *pbRawData;
-            pbRawData[(intptr_t)((intptr_t)pbCharNameKey + nCopyDelta)] = byChar;
-            pbRawData++;
-          } while (byChar);
-
-          return;
-        }
-
-        break;
-      }
-
-      pPrevNode = pbCharNameKey;
-      pbCharNameKey = pbCharNameKey->pNext;
-    } while (true);
-
-    pbCharNameKey = gpChannelUserLinkedListHead;
     if (gnChannelUserTotalCount >= 0x400) {
-      gpChannelUserLinkedListHead = gpChannelUserLinkedListHead->pNext;
-      D2_FREE_AT(pbCharNameKey, ".\\Src\\ComCallback.cpp", 0x936);
+      D2ChannelUserNameNodeStrc* pOldestNode = gpChannelUserLinkedListHead;
+      gpChannelUserLinkedListHead = pOldestNode->pNext;
+      D2_FREE_AT(pOldestNode, ".\\Src\\ComCallback.cpp", 0x936);
       gnChannelUserTotalCount--;
     }
 
     D2ChannelUserNameNodeStrc* pNewNode = D2_NEW_AT(D2ChannelUserNameNodeStrc, ".\\Src\\ComCallback.cpp", 0x93a);
-    strcpy((char*)pNewNode, szUsername);
-    nCopyDelta = 0x32 - (intptr_t)pbRawData;
-    do {
-      byChar = *pbRawData;
-      pbRawData[(intptr_t)pNewNode + nCopyDelta] = byChar;
-      pbRawData++;
-    } while (byChar);
-
-    pNewNode->pNext = 0;
+    strcpy(pNewNode->szUsername, szUsername);
+    strcpy(pNewNode->szFormattedName, (char*)pbRawData);
+    pNewNode->pNext = nullptr;
     if (pPrevNode) {
-      gnChannelUserTotalCount++;
       pPrevNode->pNext = pNewNode;
-      return;
+    } else {
+      gpChannelUserLinkedListHead = pNewNode;
     }
 
     gnChannelUserTotalCount++;
-    gpChannelUserLinkedListHead = pNewNode;
 }
 
 void __fastcall COMCALLBACK_FormatChatMessage(char * szText1, char * szText2, char * szFormattedOutput) {
