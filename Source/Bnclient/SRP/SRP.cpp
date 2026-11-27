@@ -361,55 +361,9 @@ BOOL __thiscall SRP_ClientKeyExchange(D2Srp * * pThis, D2SrpCredentialsStrc * pC
 
 // 1.14d mac: 002f9748
 BOOL __thiscall SRP_ClientVerifyServerProof(D2Srp * * pThis, D2SrpCredentialsStrc * pSrpContext, uint8_t * pServerProof) {
-    int nCmpSign;
-    int nCmpDiff;
     uint8_t computedProofBuf[20];
     SRP_ComputeServerProof(*pThis, pSrpContext->aClientPublicKey_A, pSrpContext->aClientProof_M1, pSrpContext->aSessionKey_K, computedProofBuf);
-    uint32_t nRemaining;
-    nRemaining = 0x14;
-    uint8_t* pComputedProof;
-    pComputedProof = computedProofBuf;
-    do {
-      if (*(int*)pComputedProof != *(int*)pServerProof) {
-        goto compare_bytewise;
-      }
-
-      nRemaining -= 4;
-      pServerProof += 4;
-      pComputedProof += 4;
-    } while (nRemaining >= 4);
-
-    if (!nRemaining) {
-      proofs_equal:
-      nCmpSign = 0;
-    } else {
-      compare_bytewise:
-      nCmpDiff = (uint32_t)*pComputedProof - (uint32_t)*pServerProof;
-      if (!nCmpDiff) {
-        if (nRemaining == 1) {
-          goto proofs_equal;
-        }
-
-        nCmpDiff = (uint32_t)pComputedProof[1] - (uint32_t)pServerProof[1];
-        if (!nCmpDiff) {
-          if (nRemaining == 2) {
-            goto proofs_equal;
-          }
-
-          nCmpDiff = (uint32_t)pComputedProof[2] - (uint32_t)pServerProof[2];
-          if (!nCmpDiff && (nRemaining == 3 || (nCmpDiff = (uint32_t)pComputedProof[3] - (uint32_t)pServerProof[3] , !nCmpDiff))) {
-            goto proofs_equal;
-          }
-        }
-      }
-
-      nCmpSign = 1;
-      if (nCmpDiff <= 0) {
-        nCmpSign = -1;
-      }
-    }
-
-    return (uint32_t)!nCmpSign;
+    return !memcmp(computedProofBuf, pServerProof, sizeof(computedProofBuf));
 }
 
 uint32_t __stdcall SRP_ParseChallenge(uint32_t * pContext, char * szText, uint32_t * pModulusN, uint32_t * pGenerator, uint32_t * pServerPublicBBytes) {
