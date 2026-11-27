@@ -16,16 +16,16 @@
 int _stricmp(const char* szA, const char* szB);
 
 static void* RESOURCE_FindEntry(unsigned int nTypeOrName, const char* szType, HANDLE hModule, unsigned int nName,
-                                short nLanguage);
+                                unsigned short nLanguage);
 
 // 1.14d mac: 0002b500
 // The language falls back to US English, then to any.
-void* FindResourceEx(HANDLE hModule, const char* szType, const char* szName, short wLanguage) {
+void* FindResourceEx(HANDLE hModule, const char* szType, const char* szName, unsigned short wLanguage) {
     void* pEntry = RESOURCE_FindEntry((unsigned int)szName, szType, hModule, (unsigned int)szName, wLanguage);
     if (pEntry == NULL && wLanguage == 0) {
         pEntry = RESOURCE_FindEntry(0, szType, hModule, (unsigned int)szName, 0x409);
         if (pEntry == NULL) {
-            pEntry = RESOURCE_FindEntry(0, szType, hModule, (unsigned int)szName, -1);
+            pEntry = RESOURCE_FindEntry(0, szType, hModule, (unsigned int)szName, 0xFFFF);
         }
     }
     return pEntry;
@@ -34,9 +34,9 @@ void* FindResourceEx(HANDLE hModule, const char* szType, const char* szName, sho
 // 1.14d mac: 0002b566
 // Type and name are small integers (MAKEINTRESOURCE), "#nnn" strings or names.
 static void* RESOURCE_FindEntry(unsigned int nTypeOrName, const char* szTypeArg, HANDLE hModule, unsigned int nNameArg,
-                                short nLanguage) {
-    char szEntryName[0x100];
+                                unsigned short nLanguage) {
     char szEntryType[0x100];
+    char szEntryName[0x100];
 
     if (nLanguage == 0) {
         nLanguage = LOCALE_GetDefaultLangId();
@@ -51,10 +51,10 @@ static void* RESOURCE_FindEntry(unsigned int nTypeOrName, const char* szTypeArg,
             szType = NULL;
         }
     }
-    short nNameId = (short)nNameArg;
+    int nNameId = nNameArg;
     if (nNameArg > 0xFFFF) {
         if (*szTypeArg == '#') {
-            nNameId = (short)atoi((const char*)(nNameArg + 1));
+            nNameId = atoi((const char*)(nNameArg + 1));
         } else {
             szName = (const char*)nNameArg;
         }
@@ -68,7 +68,7 @@ static void* RESOURCE_FindEntry(unsigned int nTypeOrName, const char* szTypeArg,
         int* pEntry = (int*)*hMap;
         int* pEnd = (int*)((char*)pEntry + nSize);
         do {
-            short nEntryTypeId;
+            unsigned short nEntryTypeId;
             int nOffset;
             if ((short)pEntry[2] == -1) {
                 szEntryType[0] = '\0';
@@ -88,7 +88,7 @@ static void* RESOURCE_FindEntry(unsigned int nTypeOrName, const char* szTypeArg,
                 nOffset = nOffset - 6;
                 nEntryTypeId = 0;
             }
-            short nEntryNameId;
+            unsigned short nEntryNameId;
             int nNameOffset;
             short nFirst = *(short*)(nOffset + 8 + (char*)pEntry);
             if (nFirst == -1) {
@@ -110,7 +110,7 @@ static void* RESOURCE_FindEntry(unsigned int nTypeOrName, const char* szTypeArg,
                 nEntryNameId = 0;
             }
             bool bLangMismatch = false;
-            if (nLanguage != (short)0xFFFF) {
+            if (nLanguage != 0xFFFF) {
                 bLangMismatch = *(uint16_t*)((((nOffset + 0xB + nNameOffset) & 0xFFFFFFFCU)) + 6 + (char*)pEntry) !=
                                 (uint16_t)nLanguage;
             }
@@ -118,7 +118,7 @@ static void* RESOURCE_FindEntry(unsigned int nTypeOrName, const char* szTypeArg,
             if (szType == NULL) {
                 bTypeMatch = false;
                 if (szEntryType[0] == '\0') {
-                    bTypeMatch = nEntryTypeId == (short)(intptr_t)pcType;
+                    bTypeMatch = nEntryTypeId == (unsigned short)(intptr_t)pcType;
                 }
             } else {
                 bTypeMatch = false;
@@ -155,22 +155,26 @@ UINT LoadString(HANDLE hInstance, UINT uID, char* szBuffer, int nBufferMax) {
     if (nBufferMax > 0) {
         char* pResource = (char*)FindResourceEx(hInstance, (const char*)6, (const char*)((uID >> 4) + 1), 0);
         if (pResource != NULL) {
-            int nSkip = (*(int*)(pResource + 4) + 3) & ~3;
+            int nSkip = (*(int*)(pResource + 4) + 3) / 4 * 4;
             char* pString = pResource + nSkip;
             short nLength = *(short*)pString;
-            for (UINT nEntry = uID & 0xF; nEntry != 0; nEntry--) {
-                pString += nLength * 2 + 2;
-                nLength = *(short*)pString;
+            UINT nEntry = uID & 0xF;
+            if (nEntry != 0) {
+                do {
+                    pString += nLength * 2 + 2;
+                    nLength = *(short*)pString;
+                } while (--nEntry != 0);
             }
             nCopied = nBufferMax - 1;
             if (nLength <= (int)nCopied) {
                 nCopied = nLength;
             }
             if ((int)nCopied > 0) {
-                for (UINT n = nCopied; n != 0; n--) {
+                UINT n = nCopied;
+                do {
                     pString += sizeof(short);
                     *szBuffer++ = *pString;
-                }
+                } while (--n != 0);
             }
             *szBuffer = 0;
         }

@@ -77,7 +77,7 @@ extern const unsigned char g_aAnsiToMacRoman[256];
 extern const unsigned char g_aMacRomanToAnsi[256];
 
 // 1.14d mac: 0002b500
-void* FindResourceEx(HANDLE hModule, const char* szType, const char* szName, short wLanguage);
+void* FindResourceEx(HANDLE hModule, const char* szType, const char* szName, unsigned short wLanguage);
 // 1.14d mac: 0002b180
 WORD LOCALE_GetDefaultLangId(void);
 // 1.14d mac: 0002a0c0
