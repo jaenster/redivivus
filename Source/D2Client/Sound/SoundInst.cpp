@@ -299,16 +299,11 @@ float __thiscall SOUND_CalculateUnitDistance(int32_t pThis, D2UnitStrc * pUnit) 
 }
 
 static void SOUND_Calculate3DPosition(float * pfPosition, D2SoundChannelStrc * pChannel) {
-    float fY;
     if (pChannel && pfPosition) {
-      float fVar1;
-      pChannel->fPosX = *pfPosition;
-      pChannel->fPosY = pfPosition[1];
-      pChannel->fPosZ = pfPosition[2];
-      fVar1 = SOUND_CalculatePanning(*pfPosition, -2000.0, 2000.0);
-      fY = SOUND_CalculatePanning(pfPosition[1], -2000.0, 2000.0);
-      fVar1 = _Utils::CalculateHypotenusePowered(fVar1, fY);
-      pChannel->fPanResult = fVar1;
+      memcpy(&pChannel->fPosX, pfPosition, sizeof(float) * 3);
+      float fPanX = SOUND_CalculatePanning(pfPosition[0], -2000.0, 2000.0);
+      float fPanY = SOUND_CalculatePanning(pfPosition[1], -2000.0, 2000.0);
+      pChannel->fPanResult = _Utils::CalculateHypotenusePowered(fPanX, fPanY);
       return;
     }
 
