@@ -1521,10 +1521,8 @@ static BOOL __stdcall SKILLBAR_UpdateLeap(::SGAMEDATA * pGame, D2SkillStrc * pSk
 
 // Server do-func for Barbarian Leap Attack (skill 77). On the outbound leap (flag 0x80 set, 0x100 clear) delegates to SKILL_InitTransportPath. On arrival (flag 0x100 set), calls SKILLBAR_ArriveAtChargeTarget; if arrived and unit is a player, triggers ENDANIM event then applies AoE melee damage (calc[0] radius, hit class 9) via SKILLS_ApplyAreaDamage. Monster casters only reset skill flags.
 BOOL __fastcall Skills_SrvDoFunc_077_Leap(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    BOOL bArrived;
-    D2DamageStrc sDamage;
-    D2SkillsTxt* pDVar1 = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
-    if (!pDVar1) {
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
       return 0;
     }
 
@@ -1539,23 +1537,22 @@ BOOL __fastcall Skills_SrvDoFunc_077_Leap(::SGAMEDATA * pGame, D2UnitStrc * pUni
       eUnitType = pUnit->eUnitType;
     }
 
+    BOOL bIsMonster = eUnitType == UNIT_MONSTER;
     uint32_t nFlags = D2Common::Skills::SKILL_GetFlags(pSkill);
     if (nFlags & 0x100) {
-      int32_t nAoeRange;
-      bArrived = SKILLBAR_UpdateLeap(pGame, pSkill, pUnit);
-      if (bArrived && eUnitType != UNIT_MONSTER) {
+      if (SKILLBAR_UpdateLeap(pGame, pSkill, pUnit) && !bIsMonster) {
+        D2DamageStrc sDamage;
         memset(&sDamage, 0, sizeof(sDamage));
         sDamage.wResultFlags = 9;
-        nAoeRange = D2Common::Skills::D2GetSkillCalc(pUnit, pDVar1->calc[0], eSkill, nSkillLvl);
+        int32_t nAoeRange = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl); // steer-ok: the original computes the area range before pushing the damage arguments
         SkillsServer::SKILLS_ApplyAreaDamage(pGame, pUnit, 0, 0, nAoeRange, &sDamage, 0);
         return 1;
       }
     } else {
       if (nFlags & 0x80) {
-        bArrived = SKILL_InitTransportPath(pGame, pUnit, pSkill);
-        return bArrived;
+        return SKILL_InitTransportPath(pGame, pUnit, pSkill);
       }
-      if (eUnitType != UNIT_MONSTER) {
+      if (!bIsMonster) {
         D2Common::Skills::SKILL_SetFlags(pSkill, 0);
       }
     }
