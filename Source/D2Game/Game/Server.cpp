@@ -2574,6 +2574,8 @@ void __stdcall QSERVER_BroadcastChatByServerId(uint16_t nServerId, char * pMessa
     return gpQServerLockedGame;
 }
 
+#if !D2_OS_MAC
+// Not in the 1.14d Mac binary (no PlayerMessageThread, no caller of CreateThread for it).
 // lpStartAddress parameter of CreateThread
 DWORD __stdcall QSERVER_PlayerMessageThread(D2PlayerMessageThreadArgsStrc * lpThreadParam) {
     QSERVER_BroadcastPlayerMessage(lpThreadParam->nGameToken, lpThreadParam->nClientId, lpThreadParam->szMessage);
@@ -2595,6 +2597,7 @@ void __fastcall GAME_CreatePlayerMessageThread(int32_t nGameToken, int32_t nClie
     /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ lpParameter->szMessage[0xff] = '\0';
     CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)QSERVER_PlayerMessageThread, lpParameter, 0, &dwThreadId);
 }
+#endif
 
 // Scans the global 1024-slot game-token table to find a game whose szGameName matches szGameName (case-insensitive). Locks each candidate game, compares names via STRING_CompareTwoStringNoCaseSensitive, unlocks and returns the matching token on success. Returns 0 if no match found. Used to resolve a game name to its token for join or query operations.
 uint32_t __fastcall QSERVER_FindGameTokenByName(char * szGameName) {

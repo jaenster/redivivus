@@ -706,7 +706,11 @@ SOCKET __fastcall StartListening(D2QServerStrc * pQServer, uint32_t nPort) {
     pThreadArgs = (D2QServerWorkerThreadContextStrc*)D2_ALLOC_AT(sizeof(D2QServerWorkerThreadContextStrc), ".\\Src\\QServer\\QServerNT.cpp", 0xa2);
     /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ pThreadArgs->pQServer = pQServer;
     pThreadArgs->nWorkerIndex = nResult;
+#if !defined(_WIN32) && D2_OS_MAC
+    hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)AcceptThreadMain, pThreadArgs, 0, (LPDWORD)(pQServer->aAcceptThreadIds + nResult), "sAcceptThread");
+#else
     hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)AcceptThreadMain, pThreadArgs, 0, (LPDWORD)(pQServer->aAcceptThreadIds + nResult));
+#endif
     pQServer->aAcceptThreadHandles[nResult] = hThread;
     ErrorManager::StubHook1(pQServer->aAcceptThreadIds[nResult], hThread);
     if (pQServer->bUseDedicatedIoWorkers) {
@@ -714,7 +718,11 @@ SOCKET __fastcall StartListening(D2QServerStrc * pQServer, uint32_t nPort) {
       /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ pThreadArgs->pQServer = pQServer;
       pThreadArgs->nWorkerIndex = nResult;
       pIocp2 = (uint32_t*)(pQServer->aIoWorkerThreadIds + nResult);
+#if !defined(_WIN32) && D2_OS_MAC
+      hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)IoWorkerThreadMain, pThreadArgs, 0, (LPDWORD)pIocp2, "sReadThread");
+#else
       hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)IoWorkerThreadMain, pThreadArgs, 0, (LPDWORD)pIocp2);
+#endif
       pQServer->aIoWorkerThreadHandles[nResult] = hThread;
       ErrorManager::StubHook1(*pIocp2, hThread);
     }

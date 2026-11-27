@@ -2772,7 +2772,11 @@ static uint32_t gdwHostGameThreadId; D2_STATIC_GUARD_BSS(gdwHostGameThreadId, "D
         /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ ExitingGame = 0;
         EnteringGame = 0;
         InitializeCriticalSection(&gHostGameStateCs);
+#if !defined(_WIN32) && D2_OS_MAC
+        HostGameThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0x20000, (LPTHREAD_START_ROUTINE)Server::QSERVER_CooperativeThreadMain, (LPVOID)0x0, 0, (LPDWORD)&gdwHostGameThreadId, "OpenServerThread");
+#else
         /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ HostGameThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)Server::QSERVER_CooperativeThreadMain, (LPVOID)0x0, 0, (LPDWORD)&gdwHostGameThreadId);
+#endif
       }
     }
 

@@ -93,11 +93,14 @@ DWORD __stdcall CLIENT_ServerConnectionThread_lpStartAddress(void * lpThreadPara
     return 1;
 }
 
+#if !D2_OS_MAC
+// Not in the 1.14d Mac binary; NET_D2GS_ConnectToServer (002dd101) starts the thread itself.
 // Creates server connection thread. Spawns thread via CreateThread with CLIENT_ServerConnectionThread_lpStartAddress entry point, stores handle in SERVER_THREAD.
 static HANDLE __stdcall NET_CLIENT_CreateServerConnectionThread(void * pThreadParam) {
     /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ SERVER_THREAD = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)CLIENT_ServerConnectionThread_lpStartAddress, pThreadParam, 0, (LPDWORD)&::D2Net::SRC::Client::lpThreadId_00882b30);
     return SERVER_THREAD;
 }
+#endif
 
 // @sourcefile .\SRC\Client.cpp
 void __stdcall NET_D2GS_ConnectToServer(eD2GSConnectionType neD2GSConnectionType, char * szIpAddress) {
@@ -113,7 +116,11 @@ void __stdcall NET_D2GS_ConnectToServer(eD2GSConnectionType neD2GSConnectionType
       return;
     }
 
+#if !defined(_WIN32) && D2_OS_MAC
+    SERVER_THREAD = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)CLIENT_ServerConnectionThread_lpStartAddress, szIpAddress, 0, (LPDWORD)&::D2Net::SRC::Client::lpThreadId_00882b30, "ConnectThread");
+#else
     /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ SERVER_THREAD = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)CLIENT_ServerConnectionThread_lpStartAddress, szIpAddress, 0, (LPDWORD)&::D2Net::SRC::Client::lpThreadId_00882b30);
+#endif
 }
 
 // Shuts down client-server connection. Frees packet buffer, sets shutdown flag, waits for thread (6s timeout), frees both packet queues (0xAF/0xAE), deletes critical section, closes socket for non-singleplayer.
@@ -489,6 +496,8 @@ void __fastcall NET_D2GS_CLIENT_HandleIncomingBufferAndCreatePacket(char * pByte
     exit(-1);
 }
 
+#if !D2_OS_MAC
 static void * keep_0052a730 = (0 ? (NET_CLIENT_CreateServerConnectionThread(*(void * *)0), (void *)0) : (void *)0);
+#endif
 
 } // namespace D2Net::SRC::Client

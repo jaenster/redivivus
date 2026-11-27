@@ -291,7 +291,11 @@ void __stdcall NET_MCP_CLIENT_CreateConnectionThread(D2QSSocketStrc * NET_MCP_CL
     /* LPCSTR lpName for CreateEventA */ /* BOOL bInitialState for CreateEventA */ /* BOOL bManualReset for CreateEventA */ /* LPSECURITY_ATTRIBUTES lpEventAttributes for CreateEventA */ NET_MCP_CLIENT_D2QSSocket->bStopRequested = 0;
     HANDLE pvVar1 = CreateEventA((LPSECURITY_ATTRIBUTES)0x0, 0, 0, (LPCSTR)0x0);
     NET_MCP_CLIENT_D2QSSocket->pEvent = pvVar1;
+#if !defined(_WIN32) && D2_OS_MAC
+    pvVar1 = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)QSSOCKET_ThreadEntryPoint, NET_MCP_CLIENT_D2QSSocket, 0, &NET_MCP_CLIENT_D2QSSocket->dwThreadId, "(LPTHREAD_START_ROUTINE)sConnect");
+#else
     /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ pvVar1 = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)QSSOCKET_ThreadEntryPoint, NET_MCP_CLIENT_D2QSSocket, 0, &NET_MCP_CLIENT_D2QSSocket->dwThreadId);
+#endif
     /* DWORD dwMilliseconds for WaitForSingleObject */ /* HANDLE hHandle for WaitForSingleObject */ NET_MCP_CLIENT_D2QSSocket->hThread = pvVar1;
     DWORD DVar2 = WaitForSingleObject(pvVar1, 0);
     while (DVar2) {
@@ -300,6 +304,8 @@ void __stdcall NET_MCP_CLIENT_CreateConnectionThread(D2QSSocketStrc * NET_MCP_CL
     }
 }
 
+#if !D2_OS_MAC
+// The Mac binary has one thread-starting function, QSSOCKET_StartConnectThread (002ed57c).
 HANDLE __stdcall QSSOCKET_Initialize(D2QSSocketStrc * pQSSocket) {
     if (!pQSSocket) {
       return (HANDLE)0x0;
@@ -315,6 +321,7 @@ HANDLE __stdcall QSSOCKET_Initialize(D2QSSocketStrc * pQSSocket) {
     pQSSocket->hThread = hHandle;
     return hHandle;
 }
+#endif
 
 void __stdcall D2QSSOCKET_BlockSocketIfValid(D2QSSocketStrc * pQSSocket) {
     if (!pQSSocket) {

@@ -1738,7 +1738,11 @@ void __fastcall EnqueueFormattedLogMessage(char * szText, int32_t nPriority, int
 
 void __stdcall StartLogWriterThread() {
     /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ gLogWriterThreadStopFlag = 0;
+#if !defined(_WIN32) && D2_OS_MAC
+    gLogWriterThreadHandle = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)LOGMANAGER_LogWriterThreadProc, (LPVOID)0x0, 0, &gLogWriterThreadId, "LogThread");
+#else
     gLogWriterThreadHandle = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)LOGMANAGER_LogWriterThreadProc, (LPVOID)0x0, 0, &gLogWriterThreadId);
+#endif
     /* LPSYSTEMTIME lpSystemTime for GetLocalTime */ gLogManagerInitialized = 1;
     GetLocalTime(&gLogRealmStartupLocalTime);
     for (int i = 0; i < (int)(sizeof(gLogFileSlotMutex) / sizeof(gLogFileSlotMutex[0])); i++) {

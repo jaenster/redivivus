@@ -464,7 +464,9 @@ void InitializeCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
 void EnterCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
 void LeaveCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
 void DeleteCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
+#if !D2_OS_MAC
 HANDLE CreateThread(LPSECURITY_ATTRIBUTES lpThreadAttributes, SIZE_T dwStackSize, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID lpParameter, DWORD dwCreationFlags, LPDWORD lpThreadId);
+#endif
 #if !D2_OS_MAC
 DWORD WaitForSingleObject(HANDLE hHandle, DWORD dwMilliseconds);
 BOOL CloseHandle(HANDLE hObject);

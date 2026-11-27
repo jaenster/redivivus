@@ -458,7 +458,11 @@ void __stdcall MCPCONNECT_CreateThread(uint32_t * pSrcState) {
     }
 
     memcpy(gMCPConnectionState, pSrcState, sizeof(gMCPConnectionState));
+#if !defined(_WIN32) && D2_OS_MAC
+    MCPThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)ThreadHandler, (LPVOID)0x0, 0, (LPDWORD)&pSrcState, "(LPTHREAD_START_ROUTINE)sMCPConnect");
+#else
     MCPThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)ThreadHandler, (LPVOID)0x0, 0, (LPDWORD)&pSrcState);
+#endif
 }
 
 static char * __stdcall STRING_GetStringLength(char * szDest, char * szText, uint32_t * pnLength, uint32_t nMaxLength) {

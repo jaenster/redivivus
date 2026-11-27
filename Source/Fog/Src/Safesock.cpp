@@ -160,7 +160,11 @@ D2NetDataStrc * __fastcall Create(char * szHostName, u_short nPort, LPTHREAD_STA
       }
     }
     if (pThreadProcLocal) {
+#if !defined(_WIN32) && D2_OS_MAC
+      hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, pThreadProcLocal, pThreadParamLocal, 0, (LPDWORD)&pSafesockStrc->lpThreadId, "lpClientThread");
+#else
       /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, pThreadProcLocal, pThreadParamLocal, 0, (LPDWORD)&pSafesockStrc->lpThreadId);
+#endif
       pSafesockStrc->hSocketThread = hThread;
     }
 

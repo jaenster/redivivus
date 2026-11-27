@@ -220,7 +220,11 @@ int __stdcall CreateThreadClientSocketOrSingleplayer() {
           LeaveCriticalSection(&lpCriticalSection_00882ce8);
         }
 
+#if !defined(_WIN32) && D2_OS_MAC
+        hClientConnectionThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)SRC::Client::ThreadClientToServer, (LPVOID)0x0, 0, (LPDWORD)&SRC::Client::lpThreadId_00882b30, "ClientThread");
+#else
         /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ hClientConnectionThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)SRC::Client::ThreadClientToServer, (LPVOID)0x0, 0, (LPDWORD)&SRC::Client::lpThreadId_00882b30);
+#endif
         /* int nPriority for SetThreadPriority */ /* HANDLE hThread for SetThreadPriority */ SetThreadPriority(hClientConnectionThread, 1);
         return 2;
       }

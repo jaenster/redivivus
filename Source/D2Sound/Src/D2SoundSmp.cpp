@@ -953,7 +953,11 @@ void __stdcall SOUNDSMP_CreateSoundThread() {
     }
 
     /* LPCSTR lpName for CreateEventA */ /* BOOL bInitialState for CreateEventA */ /* BOOL bManualReset for CreateEventA */ /* LPSECURITY_ATTRIBUTES lpEventAttributes for CreateEventA */ ghSoundThreadStopEvent = CreateEventA((LPSECURITY_ATTRIBUTES)0x0, 1, 0, (LPCSTR)0x0);
+#if !defined(_WIN32) && D2_OS_MAC
+    ghSoundThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)D2SOUNDSMP_SoundUpdateThreadProc, (LPVOID)0x0, 0, &dwThreadId, "sSampleThreadProc");
+#else
     /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ ghSoundThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)D2SOUNDSMP_SoundUpdateThreadProc, (LPVOID)0x0, 0, &dwThreadId);
+#endif
 }
 
 float __stdcall SOUNDSMP_LogVolumeToLinear(float fVolume) {
