@@ -420,9 +420,10 @@ void __fastcall MONMODE_EndTrappedSoulAttack(::SGAMEDATA * pGame, D2UnitStrc * p
 void __fastcall MONMODE_EndTrappedSoulSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     BOOL bIsModeZeroDeath;
     D2Common::Units::SetCurrentSkill(pUnit, nullptr);
-    D2ModeChangeStrc killStrc = {};
-    killStrc.nUnitMode = eD2MonsterAnimMode_ns::Skill1;
-    killStrc.pUnit = pUnit;
+    D2ModeChangeStrc sMonsterKill;
+    memset(&sMonsterKill, 0, sizeof(sMonsterKill));
+    sMonsterKill.nUnitMode = eD2MonsterAnimMode_ns::Skill1;
+    sMonsterKill.pUnit = pUnit;
     int32_t byAnimMode2 = 'd';
     if (pUnit) {
       D2MonStats2Txt* pMonStats2;
@@ -432,9 +433,9 @@ void __fastcall MONMODE_EndTrappedSoulSkill(::SGAMEDATA * pGame, D2UnitStrc * pU
       }
     }
 
-    killStrc.nAnimatedMode2 = byAnimMode2;
-    killStrc.pTargetUnit = UNIT::SUnit::GetTargetEx(pGame, pUnit);
-    D2Game::Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &killStrc, 1);
+    sMonsterKill.nAnimatedMode2 = byAnimMode2;
+    sMonsterKill.pTargetUnit = UNIT::SUnit::GetTargetEx(pGame, pUnit);
+    D2Game::Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sMonsterKill, 1);
     BOOL eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_freeze);
     if (eState) {
       eState = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
