@@ -7363,50 +7363,39 @@ void __fastcall SKILLDESC_BuildSkillTooltip_NoMaxLevelCheck(D2UnitStrc * pUnit, 
 }
 
 void __fastcall SKILLDESC_BuildSkillShortTooltip(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel, int32_t nCalcIndex, int32_t nParam1, int32_t nScreenX, int32_t nScreenY) {
-    uint16_t wStrId;
-    int nLineResult;
     uint16_t wszTooltipBuf[1024];
     char szLevelBuf[32];
     int nTooltipWidth;
     uint16_t wszLevelBuf[32];
     int nTooltipHeight;
-    int nDescLineIdx = 0;
-    D2SkillsTxt* pSkillDescRec;
-    if (!(pUnit && (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
+    if (!pUnit) {
       return;
     }
 
-    int nSkillTxtOffset = eSkill * 0x23c;
-    D2SkillsTxt* pSkillsTxtBase = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills;
-    if (!(pSkillsTxtBase + eSkill)) {
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
       return;
     }
 
-    D2UnitStrc* pUnitLocal = pUnit;
-    eD2Skills eSkillLocal = eSkill;
-    for (nLineResult = 0; nLineResult < 0x400; nLineResult++) {
-      wszTooltipBuf[nLineResult] = L'\0';
+    for (int i = 0; i < 0x400; i++) {
+      wszTooltipBuf[i] = L'\0';
     }
 
-    for (int iFill = 0; iFill < 32; iFill++) {
-      wszLevelBuf[iFill] = L'\0';
+    for (int i = 0; i < 32; i++) {
+      wszLevelBuf[i] = L'\0';
     }
 
     uint16_t* pWszLocale = D2Lang::StrTable::strtable::GetLocaleString(0x109c);
     D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszTooltipBuf, pWszLocale);
-    int bAnyDescLine = 0;
-    do {
-      BOOL BVar1;
-      BVar1 = SKILLDESC_ProcessDescLine(pUnitLocal, wszTooltipBuf, pSkillsTxtBase + eSkill, eSkillLocal, nSkillLevel, nCalcIndex, nDescLineIdx, nParam1);
-      if (BVar1) {
-        bAnyDescLine = 1;
+    BOOL bAnyDescLine = FALSE;
+    for (int i = 0; i < 10; i++) {
+      if (SKILLDESC_ProcessDescLine(pUnit, wszTooltipBuf, pSkillsTxt, eSkill, nSkillLevel, nCalcIndex, i, nParam1)) {
+        bAnyDescLine = TRUE;
       }
-
-      nDescLineIdx++;
-    } while (nDescLineIdx < 10);
+    }
 
     if (bAnyDescLine) {
-      /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szLevelBuf, "%d", nSkillLevel);
+      wsprintfA(szLevelBuf, "%d", nSkillLevel);
       D2Lang::UTF8_ConvertToWideChar(wszLevelBuf, szLevelBuf, 0x20);
       pWszLocale = D2Lang::StrTable::strtable::GetLocaleString(0x109e);
       D2Lang::Unicode::UNISYS::AppendToBuffer(wszTooltipBuf, pWszLocale);
@@ -7417,26 +7406,44 @@ void __fastcall SKILLDESC_BuildSkillShortTooltip(D2UnitStrc * pUnit, eD2Skills e
       D2Lang::Unicode::UNISYS::AppendToBuffer(wszTooltipBuf, pWszLocale);
     }
 
-    eD2Skills eSkillForDesc = eSkillLocal;
-    if (eSkillLocal == SKILL_Attack && pUnitLocal->eUnitType == UNIT_PLAYER && pUnitLocal->nClassId == 6) {
+    if (eSkill == SKILL_Attack && pUnit->eUnitType == UNIT_PLAYER && pUnit->nClassId == 6) {
       pWszLocale = D2Lang::StrTable::strtable::GetLocaleString(0x5722);
       D2Lang::Unicode::UNISYS::AppendToBuffer(wszTooltipBuf, pWszLocale);
     }
-    if ((int)eSkillForDesc < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && (pSkillDescRec = (D2SkillsTxt*)((char*)D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + nSkillTxtOffset) , pSkillDescRec != nullptr) && (nDescLineIdx = (int)pSkillDescRec->skilldesc , nDescLineIdx >= 0 && nDescLineIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillDescSize && D2Common::ITEMS::Items::sgptDataTable->pTxtSkillDesc + nDescLineIdx)) {
-      wStrId = D2Common::ITEMS::Items::sgptDataTable->pTxtSkillDesc[nDescLineIdx].strShort;
-    } else {
+
+    D2SkillsTxt* pSkillTxt = (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillDescTxt* pSkillDescTxt = nullptr;
+    if (pSkillTxt) {
+      int nSkillDesc = pSkillTxt->skilldesc;
+      if (nSkillDesc >= 0 && nSkillDesc < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillDescSize) {
+        pSkillDescTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkillDesc + nSkillDesc;
+      }
+    }
+
+    uint16_t wStrId;
+    if (!pSkillDescTxt) {
       wStrId = 0x1506;
+    } else {
+      wStrId = pSkillDescTxt->strShort;
     }
 
     pWszLocale = D2Lang::StrTable::strtable::GetLocaleString(wStrId);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszTooltipBuf, pWszLocale);
     pWszLocale = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszTooltipBuf, pWszLocale);
-    D2SkillDescTxt* pSkillDescTxt;
-    if ((int)eSkillForDesc < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && (pSkillDescRec = (D2SkillsTxt*)((char*)D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + nSkillTxtOffset) , pSkillDescRec != nullptr) && (nDescLineIdx = (int)pSkillDescRec->skilldesc , pSkillDescTxt = nDescLineIdx >= 0 && nDescLineIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillDescSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkillDesc + nDescLineIdx : nullptr)) {
-      wStrId = pSkillDescTxt->strName;
-    } else {
+    pSkillTxt = (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    pSkillDescTxt = nullptr;
+    if (pSkillTxt) {
+      int nSkillDesc = pSkillTxt->skilldesc;
+      if (nSkillDesc >= 0 && nSkillDesc < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillDescSize) {
+        pSkillDescTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkillDesc + nSkillDesc;
+      }
+    }
+
+    if (!pSkillDescTxt) {
       wStrId = 0x1506;
+    } else {
+      wStrId = pSkillDescTxt->strName;
     }
 
     pWszLocale = D2Lang::StrTable::strtable::GetLocaleString(wStrId);

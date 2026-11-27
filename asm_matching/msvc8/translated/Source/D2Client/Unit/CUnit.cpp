@@ -2205,14 +2205,8 @@ static D2UnitStrc * FinalizeCreation(D2UnitStrc * pUnit) {
 // Client-side unit initialisation, counterpart to the server's CreateUnit. Populates a pre-allocated D2UnitStrc with GUID, class, type, expansion flag, seeds, and act/room from map coordinates. Dispatches to type-specific init routines (JoinRoomSetup for players, AllocObjectData for objects, MISSILE_InitMissileUnit for missiles, ITEM_SetAnimModeAndPlace for items, static-path + collision for warps). Monsters are not supported client-side and halt with an error. Finalises via FinalizeCreation and adds visual overlays for objects.
 // @sourcefile .\UNIT\CUnit.cpp
 static D2UnitStrc * __stdcall InitCommonData(D2UnitStrc * pUnit, int32_t nUnitGUID, int32_t nClassId, int32_t nX, int32_t nY, eD2UnitType eUnitType, int32_t nItemAnimMode, uint32_t nObjectAnimMode) {
-    eD2LevelId eLevel;
-    uint32_t nNewSeed;
-    D2UnitStrc* pFinalUnit;
-    uint32_t sNextSeed;
-    BOOL bIsExpansion;
-    bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
-    D2RoomStrc* pRoom;
-    pRoom = 0;
+    BOOL bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
+    D2RoomStrc* pRoom = nullptr;
     if (pUnit) {
       if (bIsExpansion) {
         pUnit->eUnitFlagsEx |= UNITFLAGEX_ISEXPANSION;
@@ -2227,11 +2221,8 @@ static D2UnitStrc * __stdcall InitCommonData(D2UnitStrc * pUnit, int32_t nUnitGU
     pUnit->dwTickCount = 0;
     pUnit->pMemory = 0;
     if (nX || nY) {
-      eAct eActNo;
       pRoom = FindRoom(nX, nY);
-      eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-      eActNo = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
-      pUnit->nAct = eActNo;
+      pUnit->nAct = D2Common::Drlg::GetActNoFromLevelNumber(D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom));
       pUnit->pDrlgAct = GAME::Game::sgpDrlgAct;
     }
 
@@ -2240,9 +2231,9 @@ static D2UnitStrc * __stdcall InitCommonData(D2UnitStrc * pUnit, int32_t nUnitGU
       D2Common::ITEMS::Items::STRUCT_CreateDataItem(nullptr, pUnit);
       D2Common::ITEMS::Items::ResetItemSeed(pUnit);
     }
+
     if (pRoom) {
-      sNextSeed = D2_SeedRoll(&pRoom->sSeed);
-      nNewSeed = sNextSeed;
+      uint32_t nNewSeed = D2_SeedRoll(&pRoom->sSeed);
       pUnit->nInitSeed = nNewSeed;
       D2Common::Seed::InitSeed_Param_666(&pUnit->sSeed, nNewSeed);
     }
@@ -2250,37 +2241,38 @@ static D2UnitStrc * __stdcall InitCommonData(D2UnitStrc * pUnit, int32_t nUnitGU
     switch (eUnitType) {
       case UNIT_PLAYER:
         Player::JoinRoomSetup(pUnit, pRoom, nX, nY);
-      break;
+        break;
       case UNIT_MONSTER:
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x202);
-      exit(-1);
+        exit(-1);
       case UNIT_OBJECT:
         D2Common::Units::AllocStaticPath(pUnit);
-      Object::AllocObjectData(pUnit, pRoom, nX, nY, nClassId, (uint8_t)nObjectAnimMode);
-      break;
+        Object::AllocObjectData(pUnit, pRoom, nX, nY, nClassId, (uint8_t)nObjectAnimMode);
+        break;
       case UNIT_ITEM:
         D2Common::Units::AllocStaticPath(pUnit);
-      ITEM_SetAnimModeAndPlace(pUnit, pRoom, nX, nY, nItemAnimMode, 1);
-      break;
+        ITEM_SetAnimModeAndPlace(pUnit, pRoom, nX, nY, nItemAnimMode, 1);
+        break;
       case UNIT_MISSILE:
         Missile::MISSILE_InitMissileUnit(pUnit, pRoom, nX, nY, nClassId);
-      break;
+        break;
       case UNIT_WARP:
         D2Common::Units::AllocStaticPath(pUnit);
-      pUnit->eUnitFlags |= UNITFLAG_DRAWSHADOW | UNITFLAG_TARGETABLE;
-      D2Common::Units::InitializeStaticPath(pUnit, pRoom, nX, nY);
-      D2Common::Units::BlockCollisionPath(pUnit, pRoom, nX, nY);
-      D2Common::Unit::DRLGROOM_AddUnitToRoom(pUnit, pRoom);
-      goto finalize_unit;
+        pUnit->eUnitFlags |= UNITFLAG_DRAWSHADOW | UNITFLAG_TARGETABLE;
+        D2Common::Units::InitializeStaticPath(pUnit, pRoom, nX, nY);
+        D2Common::Units::BlockCollisionPath(pUnit, pRoom, nX, nY);
+        D2Common::Unit::DRLGROOM_AddUnitToRoom(pUnit, pRoom);
+        break;
     }
 
-    GAME::Wall2::WALL2_InitUnitGfx(pUnit);
-    if (eUnitType == UNIT_PLAYER || eUnitType == UNIT_MONSTER) {
-      D2Common::Units::UpdateAnimSpeed(pUnit, ".\\UNIT\\CUnit.cpp", 0x21d);
+    if (eUnitType != UNIT_WARP) {
+      GAME::Wall2::WALL2_InitUnitGfx(pUnit);
+      if (eUnitType == UNIT_PLAYER || eUnitType == UNIT_MONSTER) {
+        D2Common::Units::UpdateAnimSpeed(pUnit, ".\\UNIT\\CUnit.cpp", 0x21d);
+      }
     }
 
-    finalize_unit:
-    pFinalUnit = FinalizeCreation(pUnit);
+    D2UnitStrc* pFinalUnit = FinalizeCreation(pUnit);
     if (pFinalUnit && eUnitType == UNIT_OBJECT) {
       Object::OBJECT_AddVisualOverlay(pFinalUnit);
     }
