@@ -20,6 +20,7 @@
 #include <stdlib.h>
 
 #include <QuickTime/QuickTime.h>
+#include <CoreServices/CoreServices.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -87,6 +88,10 @@ struct MacAppProcs {
 };
 // 1.14d mac: 00397abc
 extern MacAppProcs* g_pMacAppProcs;
+// 1.14d mac: 00028d7f
+void SMemZero(void* pMem, uint32_t nBytes);
+// 1.14d mac: 002b98b1
+uint32_t MISC_GetLanguageCode(void);
 // 1.14d mac: 00029946
 void MSG_ExchangeCmdPeriodFlag(int* pnFlag);
 // 1.14d mac: 00013bad
@@ -104,6 +109,10 @@ extern void (*g_pfnMacAbortHook)(void);
 void MAC_DeactivateTSMDocument(void);
 void MAC_ActivateTSMDocument(void);
 void MAC_ShutdownTSM(void);
+static void MAC_ShowFatalErrorAndExit(const unsigned char* szMessage);
+void FUN_0019db13(void);
+__attribute__((noinline)) void FUN_0019be53(int nExitCode);
+extern uint8_t g_bMacMenuToggle;
 void FUN_0019e432(void);
 void MAC_SetWorkingDirectoryToAppFolder(void);
 // 1.14d mac: 00036d19
@@ -136,7 +145,8 @@ __attribute__((noinline)) bool MAC_OnApplicationActivate(EventRecord* pEvent);
 static __attribute__((noinline)) void MAC_HandleKeyDownEvent(EventRecord* pEvent);
 static __attribute__((noinline)) uint8_t MAC_HandleSuspendResumeEvent(EventRecord* pEvent);
 void FUN_0019db65(void);
-void MAC_SynthesizeKeyEvent(uint32_t nPressed, uint32_t nKeyCode, EventRecord* pEvent, char cPressed);
+static void MAC_SynthesizeKeyEvent(EventRecord* pEvent, int nKeyCode, char bPressed);
+static uint8_t MAC_HandleMenuSelection(uint32_t nMenuResult);
 // 1.14d mac: 0002a6a3
 uint32_t GetTempPathFreeSpace(void);
 // 1.14d mac: 00030cb2
@@ -1582,7 +1592,7 @@ void MAC_ProcessEvents(void) {
                             goto mouseInGame;
                         case 1:
                             FUN_0019db65();
-                            MAC_HandleMenuCommand(MenuSelect(tEvent.where));
+                            MAC_HandleMenuSelection(MenuSelect(tEvent.where));
                             break;
                         case 4: {
                             Rect rcBounds;
@@ -1651,7 +1661,7 @@ void MAC_ProcessEvents(void) {
 
 // 1.14d mac: 003b8d80
 // The mouse position of the last event.
-static Point s_ptLastMouse;
+static Point s_ptLastMouse = {0x7FFF, 0x7FFF};
 // 1.14d mac: 00536ca4
 // The modifier keys of the last event.
 static uint16_t s_wLastModifiers;
@@ -1677,23 +1687,23 @@ static uint8_t MAC_TrackMouseAndModifierChanges(EventRecord* pEvent) {
             s_wLastModifiers ^= wModifiers;
             if (s_wLastModifiers & 0x100) {
                 uint32_t nPressed = pEvent->modifiers & 1;
-                MAC_SynthesizeKeyEvent(nPressed, 0x37, &tSynth, (char)nPressed);
+                MAC_SynthesizeKeyEvent(&tSynth, 0x37, (char)nPressed);
             }
             if (s_wLastModifiers & 0x200) {
                 uint32_t nPressed = (pEvent->modifiers >> 9) & 1;
-                MAC_SynthesizeKeyEvent(nPressed, 0x38, &tSynth, (char)nPressed);
+                MAC_SynthesizeKeyEvent(&tSynth, 0x38, (char)nPressed);
             }
             if (s_wLastModifiers & 0x400) {
                 uint32_t nPressed = (pEvent->modifiers >> 10) & 1;
-                MAC_SynthesizeKeyEvent(nPressed, 0x39, &tSynth, (char)nPressed);
+                MAC_SynthesizeKeyEvent(&tSynth, 0x39, (char)nPressed);
             }
             if (s_wLastModifiers & 0x800) {
                 uint32_t nPressed = (pEvent->modifiers >> 11) & 1;
-                MAC_SynthesizeKeyEvent(nPressed, 0x3A, &tSynth, (char)nPressed);
+                MAC_SynthesizeKeyEvent(&tSynth, 0x3A, (char)nPressed);
             }
             if (s_wLastModifiers & 0x1000) {
                 uint32_t nPressed = (pEvent->modifiers >> 12) & 1;
-                MAC_SynthesizeKeyEvent(nPressed, 0x3B, &tSynth, (char)nPressed);
+                MAC_SynthesizeKeyEvent(&tSynth, 0x3B, (char)nPressed);
             }
             s_wLastModifiers = pEvent->modifiers;
         }
@@ -1750,7 +1760,7 @@ static void MAC_HandleKeyDownEvent(EventRecord* pEvent) {
         if ((nModifiers & 0x100) != 0) {
             FUN_0019db65();
             nMessage = MenuKey((char)nMessage);
-            if ((char)nMessage != 0 && MAC_HandleMenuCommand(nMessage)) {
+            if ((char)nMessage != 0 && MAC_HandleMenuSelection(nMessage)) {
                 return;
             }
         }
@@ -1805,6 +1815,434 @@ OSErr MAC_HandleQuitAppleEvent(const AppleEvent* pAppleEvent, AppleEvent* pReply
         FUN_0019bbcd(7);
     }
     return nError;
+}
+
+// 1.14d mac: 0019db13
+void FUN_0019db13(void) {
+    FUN_0019be53(1);
+}
+
+// 1.14d mac: 0019db2a
+// A start-up failure: the alert, then out.
+static void MAC_ShowFatalErrorAndExit(const unsigned char* szMessage) {
+    StandardAlert(kAlertStopAlert, szMessage, "\p", NULL, NULL);
+    ExitToShell();
+}
+
+// 1.14d mac: 0019db65
+// Checks item 4 of menu 0x84 from the toggle the menu command keeps.
+void FUN_0019db65(void) {
+    MenuRef hMenu = GetMenuHandle(0x84);
+    if (hMenu != NULL) {
+        CheckMenuItem(hMenu, 4, g_bMacMenuToggle);
+    }
+}
+
+// 1.14d mac: 005c8a3c
+// The state of the toggle item of menu 0x84.
+uint8_t g_bMacMenuToggle;
+// 1.14d mac: 00536c5c
+// The reference number of the temporary resource file.
+static short s_nResFile;
+// 1.14d mac: 00536c5e
+// The temporary resource file the game's dialogs and menus come from.
+static FSSpec s_tResFileSpec;
+
+// 1.14d mac: 0019d582
+// main: process set-up, the game archives, the resource file made from the MPQ's
+// D2Resources.rsrc, the menu bar and AppleEvent handlers, then the game itself and the tear-down.
+int MAC_Main(void) {
+    ProcessSerialNumber tProcess;
+    Str255 szFatal = "\pDiablo II has encountered a serious error. Please reinstall Diablo II. (2)";
+    char szPath[256];
+    char szLang[256];
+    char szVersion[260];
+    void* hGameData = NULL;
+    void* hExpansion = NULL;
+    void* hPatch = NULL;
+    void* pResourceData;
+    uint32_t dwResourceSize;
+    short nVRefNum;
+    long nDirID;
+    FUN_0003e2ab();
+    GetCurrentProcess(&tProcess);
+    TransformProcessType(&tProcess, kProcessTransformToForegroundApplication);
+    MAC_SetWorkingDirectoryToAppFolder();
+    SFILE_InitializeFileSystem(0, 0);
+    if (SFileOpenArchive("Diablo II Game Data", 100, 0, &hGameData)) {
+        BOOL bExpansion = D2CheckExpansionGame();
+        if (bExpansion && !SFileOpenArchive("Diablo II Expansion Data", 0x96, 0, &hExpansion)) {
+            goto fatal;
+        }
+        if (hGameData != NULL && (!bExpansion || hExpansion != NULL)) {
+            SFileOpenArchive("Diablo II Patch", 200, 0, &hPatch);
+            TABLES_GetLangAbbreviation(szLang, 0);
+            SStrPrintf(szPath, 0x100, "Data\\Local\\MacUI\\%s\\D2Resources.rsrc", szLang);
+            if (SFileLoadFile(szPath, &pResourceData, &dwResourceSize, 0, 0)) {
+                SFileCloseArchive(hGameData);
+                if (hExpansion != NULL) {
+                    SFileCloseArchive(hExpansion);
+                }
+                if (hPatch != NULL) {
+                    SFileCloseArchive(hPatch);
+                }
+                if (dwResourceSize != 0) {
+                    if (FindFolder(kOnSystemDisk, kTemporaryFolderType, true, &nVRefNum, &nDirID) == noErr) {
+                        FSMakeFSSpec(nVRefNum, nDirID, "\pDiablo 2 Temporary Data", &s_tResFileSpec);
+                        FSpDelete(&s_tResFileSpec);
+                        FSpCreateResFile(&s_tResFileSpec, 'Doug', 'RSRC', smSystemScript);
+                        short nError = ResError();
+                        switch (nError) {
+                        case -49:
+                        case -48:
+                            MAC_ShowFatalErrorAndExit("\pDiablo II cannot be opened multiple times on one computer. (3)");
+                            goto done;
+                        case -46:
+                        case -44:
+                            MAC_ShowFatalErrorAndExit("\pDiablo II cannot run from a locked volume. (5)");
+                            goto done;
+                        case -34:
+                        case -33:
+                            MAC_ShowFatalErrorAndExit("\pDiablo II requires at least 40MB of free disk space. (4)");
+                            FUN_0019be53(1);
+                            return 0;
+                        }
+                        if (nError == 0) {
+                            nError = FSpOpenRF(&s_tResFileSpec, fsRdWrPerm, &s_nResFile);
+                            if (nError == 0) {
+                                long nWritten = dwResourceSize;
+                                FSWrite(s_nResFile, &nWritten, pResourceData);
+                                bool bFailed = nWritten != (long)dwResourceSize;
+                                nError = bFailed;
+                                if (!bFailed) {
+                                    FSClose(s_nResFile);
+                                    s_nResFile = FSpOpenResFile(&s_tResFileSpec, fsRdPerm);
+                                    nError = bFailed;
+                                    if (s_nResFile == -1) {
+                                        nError = 2;
+                                    }
+                                    SMemFree(pResourceData, NULL, 0, 0);
+                                    if (nError == 0) {
+                                        Handle hMenuBar = GetNewMBar(0x81);
+                                        if (hMenuBar != NULL) {
+                                            SetMenuBar(hMenuBar);
+                                            DisposeHandle(hMenuBar);
+                                            MenuRef hMenu = GetMenuHandle(0x82);
+                                            if (hMenu != NULL) {
+                                                DeleteMenuItem(hMenu, 3);
+                                                DeleteMenuItem(hMenu, 2);
+                                            }
+                                            DrawMenuBar();
+                                        }
+                                        AEInstallEventHandler(kCoreEventClass, kAEOpenApplication, MAC_HandleOpenAppAppleEvent, 0, false);
+                                        AEInstallEventHandler(kCoreEventClass, kAEOpenDocuments, MAC_HandleOpenDocumentsAppleEvent, 0, false);
+                                        AEInstallEventHandler(kCoreEventClass, kAEQuitApplication, MAC_HandleQuitAppleEvent, 0, false);
+                                        FUN_0019e432();
+                                        SStrPrintf(szVersion, 0x104, "v%d.%02d", 1, 14);
+                                        FUN_002ee3a4("D2");
+                                        FOG_InitErrorManager("Diablo II", szVersion, 1);
+                                        g_pfnMacAbortHook = FUN_0019db13;
+                                        SetEventMask(0xFFFF);
+                                        if (FUN_0019b636()) {
+                                            FUN_0019be79();
+                                            FUN_0019b744();
+                                        }
+                                        CloseResFile(s_nResFile);
+                                        FSpDelete(&s_tResFileSpec);
+                                        MAC_ShutdownTSM();
+                                        MACCURSOR_InitCursor();
+                                        return 0;
+                                    }
+                                }
+                            }
+                        }
+                        szFatal[0] = sprintf((char*)szFatal + 1, "Diablo II has encountered a critical error and cannot start. (6, %d)", (int)nError);
+                    }
+                }
+            }
+        }
+    }
+fatal:
+    MAC_ShowFatalErrorAndExit(szFatal);
+done:
+    return 0;
+}
+
+// 1.14d mac: 00331f04
+// The edit-menu items (3..8) as the shell's menu commands; item 7 is not a command.
+static const int s_aEditMenuCommands[9] = {0, 0, 0, 9, 10, 11, 12, -1, 13};
+
+// 1.14d mac: 0019dba3
+// A MenuSelect result (menu in the high word, item in the low): About, Quit, the edit
+// commands, and the display menu's items.
+static uint8_t MAC_HandleMenuSelection(uint32_t nMenuResult) {
+    uint8_t bBuffer[973];
+    uint32_t nCommand;
+    HiliteMenu(0);
+    int nMenu = (int)nMenuResult >> 16;
+    if (3 < (uint32_t)(nMenu - 0x81)) {
+        return 0;
+    }
+    uint32_t nItem = nMenuResult & 0xFF;
+    switch (nMenu) {
+    case 0x81:
+        if ((short)nItem == 1) {
+            MAC_ShowAboutDialog();
+        }
+        return 0;
+    case 0x82:
+        nCommand = 4;
+        if ((short)nItem != 1) {
+            if (nItem != 3) {
+                return 0;
+            }
+            nCommand = 7;
+        }
+        break;
+    case 0x83:
+        if (5 < nItem - 3 || nItem - 3 == 4) {
+            return 0;
+        }
+        nCommand = s_aEditMenuCommands[nItem];
+        break;
+    case 0x84:
+        nCommand = 0x81;
+        switch (nItem) {
+        case 1:
+            break;
+        case 3:
+            SMemZero(bBuffer, 0x3CD);
+            return 0;
+        case 4:
+            g_bMacMenuToggle = g_bMacMenuToggle == 0;
+            return 0;
+        case 5:
+            nCommand = 0x82;
+            break;
+        default:
+            return 0;
+        }
+        break;
+    }
+    return FUN_0019bbcd(nCommand);
+}
+
+// 1.14d mac: 0019dcd4
+// A key event made from a modifier change, sent to the key handlers.
+static void MAC_SynthesizeKeyEvent(EventRecord* pEvent, int nKeyCode, char bPressed) {
+    pEvent->message = nKeyCode << 8;
+    if (bPressed == 0) {
+        pEvent->what = keyUp;
+        MAC_PostKeyUp(pEvent);
+    } else {
+        pEvent->what = keyDown;
+        MAC_PostKeyDown(pEvent);
+    }
+}
+
+// 1.14d mac: 0019dd07
+void FUN_0019dd07(void) {
+}
+
+// 1.14d mac: 0019dd0c
+// How many characters a run of bytes is, a double-byte character counting as one.
+int MAC_CountMultiByteChars(const char* pText, int nBytes) {
+    uint32_t nLanguage = MISC_GetLanguageCode();
+    short nScript = 3;
+    if (nLanguage != 12 && nLanguage != 7) {
+        if (nLanguage == 6) {
+            nScript = 1;
+        } else {
+            nScript = 0;
+        }
+    }
+    int nCount = 0;
+    while (0 < nBytes) {
+        nCount++;
+        if (CharacterByteType((Ptr)pText, 0, nScript) == -1) {
+            nBytes -= 2;
+            pText += 2;
+        } else {
+            nBytes -= 1;
+            pText += 1;
+        }
+    }
+    return nCount;
+}
+
+// 1.14d mac: 0019dd7d
+// The text services 'shiw' handler: nothing to do.
+OSErr MAC_HandleTSMShowHideInputWindow(const AppleEvent* pAppleEvent, AppleEvent* pReply, SRefCon nRefCon) {
+    return 0;
+}
+
+// 1.14d mac: 0019dd84
+// The text services 'st2p' handler: a fixed position for the input window.
+OSErr MAC_HandleTSMOffsetToPos(const AppleEvent* pAppleEvent, AppleEvent* pReply) {
+    short nError = 0;
+    Point ptPos;
+    Fixed nPointSize;
+    DescType nActualType;
+    long nOffset;
+    long nRefCon;
+    Size nActualSize;
+    *(uint32_t*)&ptPos = 0x75307530;
+    nPointSize = 0x5A0000;
+    OSErr nResult = AEGetParamPtr(pAppleEvent, 'ofst', typeLongInteger, &nActualType, &nOffset, 4, &nActualSize);
+    if (nResult == 0) {
+        nResult = AEGetParamPtr(pAppleEvent, 'refc', typeLongInteger, &nActualType, &nRefCon, 4, &nActualSize);
+        if (nResult == 0) {
+            nResult = AEPutParamPtr(pReply, 'gpos', typeQDPoint, &ptPos, 4);
+            if (nResult == 0) {
+                nResult = AEPutParamPtr(pReply, 'ptps', typeFixed, &nPointSize, 4);
+                if (nResult == 0) {
+                    nResult = AEPutParamPtr(pReply, 'errn', typeShortInteger, &nError, 2);
+                }
+            }
+        }
+    }
+    return nResult;
+}
+
+// 1.14d mac: 0019dea7
+// The text services 'p2st' handler: offset 0 in the active region.
+OSErr MAC_HandleTSMPosToOffset(const AppleEvent* pAppleEvent, AppleEvent* pReply) {
+    DescType nActualType;
+    long nRefCon;
+    Point ptPos;
+    Size nActualSize;
+    OSErr nResult = AEGetParamPtr(pAppleEvent, 'refc', typeLongInteger, &nActualType, &nRefCon, 4, &nActualSize);
+    if (nResult == 0) {
+        nResult = AEGetParamPtr(pAppleEvent, 'cpos', typeQDPoint, &nActualType, &ptPos, 4, &nActualSize);
+        if (nResult == 0) {
+            long nOffset = 0;
+            nResult = AEPutParamPtr(pReply, 'ofst', typeLongInteger, &nOffset, 4);
+            if (nResult == 0) {
+                short nRegionClass = 2;
+                nResult = AEPutParamPtr(pReply, 'rgnc', typeShortInteger, &nRegionClass, 2);
+            }
+        }
+    }
+    return nResult;
+}
+
+void MAC_ConvertTextToUnicode(const char* pSrc, char* wszDest, int nSrcLength, int nDestSize, int nScript);
+
+// 1.14d mac: 003b8d84
+// Where the text services' input goes: the text, whether it is committed, and the highlight range.
+static void (*s_pfnTSMInput)(const char*, bool, int*) = (void (*)(const char*, bool, int*))FUN_0019dd07;
+
+// 1.14d mac: 0019df93
+// The text services 'updt' handler: the active input area's text converted to Unicode and
+// handed to the input callback with its highlight range.
+OSErr MAC_HandleTSMUpdateActiveInputArea(const AppleEvent* pAppleEvent) {
+    char wszText[512];
+    int aHiliteRange[2];
+    DescType nActualType;
+    long nRefCon;
+    long nFixedLength;
+    Size nActualSize;
+    TextRange tPinRange;
+    AEDesc tTextDesc = {typeNull, NULL};
+    AEDesc tHiliteDesc = {typeNull, NULL};
+    AEDesc tUpdateDesc = {typeNull, NULL};
+    Ptr pText = NULL;
+    Ptr pHiliteRanges = NULL;
+    aHiliteRange[1] = 0;
+    aHiliteRange[0] = 0;
+    bzero(wszText, 0x200);
+    OSErr nResult = AEGetParamPtr(pAppleEvent, 'refc', typeLongInteger, &nActualType, &nRefCon, 4, &nActualSize);
+    if (nResult == 0) {
+        nResult = AEGetParamDesc(pAppleEvent, 'kdat', typeText, &tTextDesc);
+        if (nResult == 0) {
+            AEGetParamPtr(pAppleEvent, 'fixl', typeLongInteger, &nActualType, &nFixedLength, 4, &nActualSize);
+            AEGetParamDesc(pAppleEvent, 'hrng', typeTextRangeArray, &tHiliteDesc);
+            AEGetParamDesc(pAppleEvent, 'udng', typeTextRangeArray, &tUpdateDesc);
+            AEGetParamPtr(pAppleEvent, 'pnrg', typeTextRange, &nActualType, &tPinRange, 4, &nActualSize);
+            Size nTextSize = AEGetDescDataSize(&tTextDesc);
+            pText = NewPtr(nTextSize);
+            nResult = MemError();
+            if (nResult == 0 && (nResult = AEGetDescData(&tTextDesc, pText, nTextSize)) == 0) {
+                if (nFixedLength == -1) {
+                    nFixedLength = nTextSize;
+                }
+                if (tHiliteDesc.dataHandle != NULL) {
+                    Size nRangesSize = AEGetDescDataSize(&tHiliteDesc);
+                    pHiliteRanges = NewPtr(nRangesSize);
+                    nResult = MemError();
+                    if (nResult != 0 || (nResult = AEGetDescData(&tHiliteDesc, pHiliteRanges, nRangesSize)) != 0) {
+                        goto cleanup;
+                    }
+                    TextRangeArray* pArray = (TextRangeArray*)pHiliteRanges;
+                    TextRange* pRange = pArray->fRange;
+                    for (int i = pArray->fNumOfRanges; 0 < i; i--) {
+                        if (pRange->fHiliteStyle == 5) {
+                            aHiliteRange[0] = MAC_CountMultiByteChars(pText, pRange->fStart);
+                            aHiliteRange[1] = MAC_CountMultiByteChars(pText, pRange->fEnd);
+                            break;
+                        }
+                        pRange++;
+                    }
+                }
+                int nConvert = 0xFF;
+                if (nTextSize < 0x100) {
+                    nConvert = nTextSize;
+                }
+                MAC_ConvertTextToUnicode(pText, wszText, nConvert, 0x200, -0x80);
+                s_pfnTSMInput(wszText, nFixedLength == nTextSize, aHiliteRange);
+                nResult = 0;
+                goto cleanup;
+            }
+        }
+    }
+    pText = NULL;
+    pHiliteRanges = NULL;
+cleanup:
+    AEDisposeDesc(&tTextDesc);
+    AEDisposeDesc(&tHiliteDesc);
+    AEDisposeDesc(&tUpdateDesc);
+    DisposePtr(pHiliteRanges);
+    DisposePtr(pText);
+    return nResult;
+}
+
+// 1.14d mac: 003b8d8c
+// The script the TEC converter below was made for; none until the first conversion.
+static int s_nTECScript = -0x80;
+// 1.14d mac: 00536cf0
+static TECObjectRef s_hTECConverter;
+
+// 1.14d mac: 0019e2fb
+// Converts text in a script (the language's by default, -0x80) to Unicode, with a terminator.
+void MAC_ConvertTextToUnicode(const char* pSrc, char* wszDest, int nSrcLength, int nDestSize, int nScript) {
+    ByteCount nOutLength;
+    ByteCount nSrcRead;
+    TextEncoding nEncoding;
+    if (nScript == -0x80) {
+        uint32_t nLanguage = MISC_GetLanguageCode();
+        nScript = 3;
+        if (nLanguage != 12 && nLanguage != 7) {
+            if (nLanguage == 6) {
+                nScript = 1;
+            } else {
+                nScript = 0;
+            }
+        }
+    }
+    if (nScript != s_nTECScript) {
+        if (s_hTECConverter != NULL) {
+            TECDisposeConverter(s_hTECConverter);
+            s_hTECConverter = NULL;
+        }
+        s_nTECScript = nScript;
+        UpgradeScriptInfoToTextEncoding((short)nScript, kTextLanguageDontCare, kTextRegionDontCare, NULL, &nEncoding);
+        TextEncoding nUnicodeEncoding = CreateTextEncoding(kTextEncodingUnicodeDefault, 0, 0);
+        TECCreateConverter(&s_hTECConverter, nEncoding, nUnicodeEncoding);
+    }
+    TECConvertText(s_hTECConverter, (ConstTextPtr)pSrc, nSrcLength, &nSrcRead, (TextPtr)wszDest, nDestSize - 2, &nOutLength);
+    ByteCount nConverted = nOutLength;
+    TECFlushText(s_hTECConverter, (TextPtr)wszDest + nOutLength, (nDestSize - 2) - nOutLength, &nOutLength);
+    *(uint16_t*)(wszDest + nConverted + nOutLength) = 0;
 }
 
 #endif  // D2_OS_MAC
