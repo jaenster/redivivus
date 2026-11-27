@@ -23,6 +23,7 @@ addr	name	reason_class	detail
 0000eab0	Storm::SCODE_InitStaticLists	pic-ref	orig stores into s_tStreamList-4 and struct-4 with unnamed global ? where ours stores into s_tBlockList+8 and s_tStreamList+8 with ___dso_handle
 0000ebb6	Storm::HUFFMAN_InsertNewSymbol	regalloc	the call sequence and tree updates match; two stack slots are swapped and one insn fewer
 0000ed92	Storm::HUFFMAN_BuildTree	regalloc	weight-row pointer is hoisted into a register in the original; ours folds the table base into the load
+0000f0e9	Storm::SCOMP_DecompressImplode	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
 0000f191	Storm::Source::SSComp::SCOMP_AcquireTempBuffer	inline	absent from object; orig SCompDecompress calls it out of line while ours inlines its mutex and SMemAlloc body
 0000f2c1	Storm::Source::SSComp::SCOMP_ReleaseTempBuffer	inline	absent from object; orig SCompDecompress calls it out of line while ours inlines its mutex and SMemFree body
 0000f32f	Storm::Source::SSComp::SCompDecompress	inline	the original calls the temp-buffer helpers (0000f191, 0000f2c1) out of line; ours inlines them

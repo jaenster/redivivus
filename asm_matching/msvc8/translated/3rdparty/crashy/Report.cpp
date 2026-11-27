@@ -42,7 +42,7 @@ void __fastcall Destructor(::Report * pThis, int) {
     pThis->pFile = 0;
 }
 
-int8_t __fastcall Open(::Report * pThis, int, char * szFileName) {
+int8_t Open(::Report * pThis, char * szFileName) {
     bool bSuccess;
     bool bGotPath;
     tm localTime;
@@ -81,7 +81,7 @@ int8_t __fastcall Open(::Report * pThis, int, char * szFileName) {
     return pFile != 0;
 }
 
-int8_t __fastcall Close(::Report * pThis, int) {
+int8_t Close(::Report * pThis) {
     if (pThis->pFile) {
       fclose(pThis->pFile);
       pThis->pFile = 0;
@@ -90,11 +90,11 @@ int8_t __fastcall Close(::Report * pThis, int) {
     return '\x01';
 }
 
-bool __fastcall IsOpen(::Report * pThis, int) {
+bool IsOpen(::Report * pThis) {
     return pThis->pFile != 0;
 }
 
-int8_t __fastcall AddAttachment(::Report * pThis, int, char * szPath, int8_t bCopyToReportDir) {
+int8_t AddAttachment(::Report * pThis, char * szPath, int8_t bCopyToReportDir) {
     bool bVar1;
     char* pBaseDirPtr;
     char* pDst;

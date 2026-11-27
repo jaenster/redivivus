@@ -42,10 +42,10 @@ namespace Fog { namespace _3rdparty { namespace crashy {
 ::Report * __fastcall Constructor(::Report * pThis, int);
 ::Report * __fastcall ScalarDeletingDestructor(::Report * pThis, int, uint32_t nFlags);
 void __fastcall Destructor(::Report * pThis, int);
-int8_t __fastcall Open(::Report * pThis, int, char * szFileName);
-int8_t __fastcall Close(::Report * pThis, int);
-bool __fastcall IsOpen(::Report * pThis, int);
-int8_t __fastcall AddAttachment(::Report * pThis, int, char * szPath, int8_t bCopyToReportDir);
+int8_t Open(::Report * pThis, char * szFileName);
+int8_t Close(::Report * pThis);
+bool IsOpen(::Report * pThis);
+int8_t AddAttachment(::Report * pThis, char * szPath, int8_t bCopyToReportDir);
 int32_t Printf(::Report * pThis, char * szFormat, ...);
 uint32_t __stdcall isDebuggerPresent();
 // @wasnamed TerminateProcess - named after the Win32 API it calls; the body read as infinite recursion.

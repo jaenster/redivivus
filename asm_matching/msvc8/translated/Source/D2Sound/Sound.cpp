@@ -86,10 +86,11 @@ void __fastcall SOUND_ApplyEAXEnvironment(D2SoundEaxEnvironStrc * pEnviron) {
     }
 #endif
 #if !defined(_WIN32) && D2_OS_MAC
-    if (gnSoundQualityMode) {
+#define SOUND_EAX_SET_IS_EAX2 (gnSoundQualityMode)
 #else
-    if (gnSoundQualityMode == 2) {
+#define SOUND_EAX_SET_IS_EAX2 (gnSoundQualityMode == 2)
 #endif
+    if (SOUND_EAX_SET_IS_EAX2) {
       fAttenuation.nValue = 0x20;
       gpDirectSoundEAXInterface->lpVtbl->Set(gpDirectSoundEAXInterface, gEAXPropertyGuid_Reserved2, 0xb, nullptr, 0, pEnviron, 4);
       gpDirectSoundEAXInterface->lpVtbl->Set(gpDirectSoundEAXInterface, gEAXPropertyGuid_Reserved2, 0xf, nullptr, 0, &fAttenuation, 4);
@@ -271,9 +272,9 @@ void __stdcall SOUND_InitDirectSound() {
     }
 
     IDirectSoundVtbl* pIVar1 = gpDirectSound->lpVtbl;
-    uint32_t dwCoopLevel = 2;
-    HWND hWnd = D2gfx::D2GFX::GetHwnd();
-    HRESULT hResultDSCall = pIVar1->SetCooperativeLevel(gpDirectSound, hWnd, dwCoopLevel);
+    
+    
+    HRESULT hResultDSCall = pIVar1->SetCooperativeLevel(gpDirectSound, (HWND)(D2gfx::D2GFX::GetHwnd()), (uint32_t)(2));
     if (hResultDSCall < 0) {
       szErrorMsg = SOUND_GetDirectSoundErrorString(hResultDSCall);
       Fog::Src::LogManager::LOGFILE_WriteStringToFile("DirectSound error: %s returned on SetCooperativeLevel", szErrorMsg);
@@ -499,4 +500,4 @@ void __stdcall SOUND_StopSoundThread() {
     ghSoundThread = (HANDLE)0x0;
 }
 
-} // namespace D2Sound::Sound
+}} // namespace D2Sound::Sound

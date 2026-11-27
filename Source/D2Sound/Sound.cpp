@@ -86,10 +86,11 @@ void __fastcall SOUND_ApplyEAXEnvironment(D2SoundEaxEnvironStrc * pEnviron) {
     }
 #endif
 #if !defined(_WIN32) && D2_OS_MAC
-    if (gnSoundQualityMode) {
+#define SOUND_EAX_SET_IS_EAX2 (gnSoundQualityMode)
 #else
-    if (gnSoundQualityMode == 2) {
+#define SOUND_EAX_SET_IS_EAX2 (gnSoundQualityMode == 2)
 #endif
+    if (SOUND_EAX_SET_IS_EAX2) {
       fAttenuation.nValue = 0x20;
       gpDirectSoundEAXInterface->lpVtbl->Set(gpDirectSoundEAXInterface, gEAXPropertyGuid_Reserved2, 0xb, nullptr, 0, pEnviron, 4);
       gpDirectSoundEAXInterface->lpVtbl->Set(gpDirectSoundEAXInterface, gEAXPropertyGuid_Reserved2, 0xf, nullptr, 0, &fAttenuation, 4);

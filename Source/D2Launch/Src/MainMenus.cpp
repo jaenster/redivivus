@@ -9136,7 +9136,7 @@ BOOL __stdcall MAINMENU_OnPressCreateCharacterOk(D2ControlStrc * pControl) {
     uint64_t nTotalBytes = 0;
     uint64_t nTotalFreeBytes = 0;
     GetDiskFreeSpaceEx(szSavePath, &nFreeBytesAvailable, &nTotalBytes, &nTotalFreeBytes);
-    if (nFreeBytesAvailable < 5000) {
+#define MAINMENU_SAVE_PATH_LOW_ON_SPACE (nFreeBytesAvailable < 5000)
 #else
     uint32_t nIndex = 0;
     do {
@@ -9153,8 +9153,9 @@ BOOL __stdcall MAINMENU_OnPressCreateCharacterOk(D2ControlStrc * pControl) {
     DWORD dwBytesPerSector = 0;
     DWORD dwTotalClusters = 0;
     /* LPDWORD lpBytesPerSector for GetDiskFreeSpaceA */ /* LPDWORD lpSectorsPerCluster for GetDiskFreeSpaceA */ /* LPCSTR lpRootPathName for GetDiskFreeSpaceA */ GetDiskFreeSpaceA(szSavePath, &dwSectorsPerCluster, &dwFreeClusters, &dwBytesPerSector, &dwTotalClusters);
-    if (dwBytesPerSector * dwFreeClusters * dwSectorsPerCluster < 5000) {
+#define MAINMENU_SAVE_PATH_LOW_ON_SPACE (dwBytesPerSector * dwFreeClusters * dwSectorsPerCluster < 5000)
 #endif
+    if (MAINMENU_SAVE_PATH_LOW_ON_SPACE) {
       uint16_t* wszPopupText;
       wszPopupText = D2Lang::StrTable::strtable::GetLocaleString(0x141d);
       UIMENU_CreateSmallPopup(wszPopupText, MAINMENU_CloseAndLaunchCharSelect);

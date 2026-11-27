@@ -1483,10 +1483,11 @@ void __stdcall INPUT_HandleChatCharInput(D2UIMouseMsgStrc * pMsg) {
               CHAT_AddToHistory(gwszChatInputText + nScanIdx);
               /* LPBOOL lpUsedDefaultChar for WideCharToMultiByte */ /* LPCSTR lpDefaultChar for WideCharToMultiByte */ /* int cbMultiByte for WideCharToMultiByte */ /* LPSTR lpMultiByteStr for WideCharToMultiByte */ /* int cchWideChar for WideCharToMultiByte */ /* LPCWSTR lpWideCharStr for WideCharToMultiByte */ /* DWORD dwFlags for WideCharToMultiByte */ /* UINT CodePage for WideCharToMultiByte */ 
 #if !defined(_WIN32) && D2_OS_MAC
-              MAC_ConvertUnicodeToText((const char*)gwszChatInputText, szMultiByteText, D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(gwszChatInputText), 0x101, -0x80);
+#define CHAT_INPUT_TO_MULTIBYTE() MAC_ConvertUnicodeToText((const char*)gwszChatInputText, szMultiByteText, D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(gwszChatInputText), 0x101, -0x80)
 #else
-              WideCharToMultiByte(0, 0x250, (LPCWSTR)gwszChatInputText, -1, szMultiByteText, 0x100, (LPCSTR)0x0, (LPBOOL)0x0);
+#define CHAT_INPUT_TO_MULTIBYTE() WideCharToMultiByte(0, 0x250, (LPCWSTR)gwszChatInputText, -1, szMultiByteText, 0x100, (LPCSTR)0x0, (LPBOOL)0x0)
 #endif
+              CHAT_INPUT_TO_MULTIBYTE();
               ChatCommandProcessor(gwszChatInputText, szMultiByteText, nScanIdx);
               goto consume_message;
             }

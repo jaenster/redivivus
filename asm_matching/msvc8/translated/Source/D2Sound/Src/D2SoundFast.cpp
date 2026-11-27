@@ -407,10 +407,11 @@ void __stdcall SOUND_LoadRegistrySettings() {
     g_nSoundOptionsMusic = 1;
     int bReadMasterVol = Storm::Source::SReg::SRegLoadValue("Diablo II", "Sound Mixer", 0, (int32_t*)&dwRegValue);
 #if !defined(_WIN32) && D2_OS_MAC
-    if (bReadMasterVol && dwRegValue < 4) {
+#define SOUND_MIXER_TYPE_COUNT 4
 #else
-    if (bReadMasterVol && dwRegValue < 3) {
+#define SOUND_MIXER_TYPE_COUNT 3
 #endif
+    if (bReadMasterVol && dwRegValue < SOUND_MIXER_TYPE_COUNT) {
       g_nSoundMixerType = dwRegValue;
     }
 
@@ -706,4 +707,4 @@ void Unreferenced_00515110() {
 
 }
 
-} // namespace D2Sound::Src::D2SoundFast
+}}} // namespace D2Sound::Src::D2SoundFast
