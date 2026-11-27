@@ -158,163 +158,144 @@ LRESULT DefWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     return 0;
 }
 
+// Paints an owner-drawn button by sending its parent WM_DRAWITEM; the only style
+// implemented. Inlined into Proc_ButtonWndProc; the name is the one its fatal message gives.
+static void Proc_PaintButton(HWND hWnd, DWORD dwStyle) {
+    PAINTSTRUCT tPaint;
+    HDC hDC = BeginPaint(hWnd, &tPaint);
+    if (hDC != 0 && hWnd != 0) {
+        DWORD dwType = dwStyle & 0xF;
+        if (dwType > 1) {
+            if (dwType == 0xB) {
+                DRAWITEMSTRUCT tItem;
+                tItem.CtlType = 4;
+                tItem.CtlID = hWnd->nID;
+                tItem.itemID = 0;
+                tItem.itemAction = 1;
+                tItem.itemState = 0;
+                tItem.hwndItem = hWnd;
+                tItem.itemData = 0;
+                tItem.hDC = hDC;
+                GetClientRect(hWnd, &tItem.rcItem);
+                if (GetFocus() == hWnd) {
+                    tItem.itemState |= 0x10;
+                }
+                if ((dwStyle & 0x8000000) != 0) {
+                    tItem.itemState |= 4;
+                }
+                SendMessage(GetParent(hWnd), WM_DRAWITEM, hWnd->nID, (LPARAM)&tItem);
+            } else {
+                fp_fatal(dwType == 9 ? "Only painting of owner-drawn buttons has been implemented"
+                                     : "Proc_PaintButton: Unknown button style");
+            }
+        }
+    }
+    EndPaint(hWnd, &tPaint);
+}
+
 // 1.14d mac: 0002ef4a
 LRESULT Proc_ButtonWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     DWORD dwStyle = hWnd->dwStyle;
     LRESULT lResult = 0;
-    WPARAM wNotify;
-    HWND hParent;
-
-    if (uMsg < 0x200) {
-        if (uMsg >= 0xF0) {
-            switch (uMsg) {
-                case 0xF0:
-                case 0xF1:
-                    return 0;
-                case BM_GETSTATE:
-                    return GetProp(hWnd, "__ButtonIsPressed") != 0;
-                case BM_SETSTATE: {
-                    int bPressed = GetProp(hWnd, "__ButtonIsPressed");
-                    if (bPressed == 0 && wParam != 0) {
-                        SetProp(hWnd, "__ButtonIsPressed", 1);
-                    } else {
-                        if (wParam != 0 || bPressed == 0) {
-                            return 0;
-                        }
-                        RemoveProp(hWnd, "__ButtonIsPressed");
-                    }
-                    InvalidateRect(hWnd, 0, 1);
-                    return 0;
-                }
-                case BM_SETSTYLE:
-                    hWnd->dwStyle = dwStyle | 0xF;
-                    return 0;
-                case BM_CLICK:
-                    SendMessage(hWnd, WM_LBUTTONDOWN, 0, 0);
-                    SendMessage(hWnd, WM_LBUTTONUP, 0, 0);
-                    return 0;
-                default:
-                    return DefWindowProc(hWnd, uMsg, wParam, lParam);
-            }
-        }
-        if (uMsg > WM_NCHITTEST + 2) {
-            if (uMsg == WM_GETDLGCODE) {
-                return (dwStyle & 0xF) < 10 ? s_anButtonDlgCode[dwStyle & 0xF] : 0x2000;
-            }
-            return DefWindowProc(hWnd, uMsg, wParam, lParam);
-        }
-        if (uMsg < WM_SETFOCUS) {
-            if (uMsg != WM_DESTROY) {
-                return DefWindowProc(hWnd, uMsg, wParam, lParam);
-            }
-            RemoveProp(hWnd, "__ButtonIsPressed");
-            return DefWindowProc(hWnd, WM_DESTROY, wParam, lParam);
-        }
-        switch (uMsg) {
-            case WM_SETFOCUS:
-                if ((dwStyle & 0x4000) != 0) {
-                    wNotify = hWnd->nID;
-                    hParent = GetParent(hWnd);
-                    SendMessage(hParent, WM_COMMAND, (wNotify & 0xFFFF) | 0x60000, (LPARAM)hWnd);
-                }
-                return 0;
-            case WM_KILLFOCUS:
-                if ((dwStyle & 0x4000) != 0) {
-                    wNotify = hWnd->nID;
-                    hParent = GetParent(hWnd);
-                    SendMessage(hParent, WM_COMMAND, (wNotify & 0xFFFF) | 0x70000, (LPARAM)hWnd);
-                }
-                return 0;
-            case WM_SETTEXT: {
-                LRESULT lText = DefWindowProc(hWnd, WM_SETTEXT, wParam, lParam);
-                if (lText != 0) {
-                    InvalidateRect(hWnd, 0, 1);
-                    lResult = lText;
-                }
-                return lResult;
-            }
-            case WM_PAINT: {
-                PAINTSTRUCT tPaint;
-                HDC hDC = BeginPaint(hWnd, &tPaint);
-                if (hDC != 0 && hWnd != 0) {
-                    DWORD dwType = dwStyle & 0xF;
-                    if (dwType > 1) {
-                        if (dwType == 0xB) {
-                            DRAWITEMSTRUCT tItem;
-                            tItem.CtlType = 4;
-                            tItem.CtlID = hWnd->nID;
-                            tItem.itemID = 0;
-                            tItem.itemAction = 1;
-                            tItem.itemState = 0;
-                            tItem.hwndItem = hWnd;
-                            tItem.itemData = 0;
-                            tItem.hDC = hDC;
-                            GetClientRect(hWnd, &tItem.rcItem);
-                            if (GetFocus() == hWnd) {
-                                tItem.itemState |= 0x10;
-                            }
-                            if ((dwStyle & 0x8000000) != 0) {
-                                tItem.itemState |= 4;
-                            }
-                            hParent = GetParent(hWnd);
-                            SendMessage(hParent, WM_DRAWITEM, hWnd->nID, (LPARAM)&tItem);
-                        } else if (dwType == 9) {
-                            fp_fatal("Only painting of owner-drawn buttons has been implemented");
-                        } else {
-                            fp_fatal("Proc_PaintButton: Unknown button style");
-                        }
-                    }
-                }
-                EndPaint(hWnd, &tPaint);
-                return 0;
-            }
-            default:
-                return DefWindowProc(hWnd, uMsg, wParam, lParam);
-        }
-    }
-    if (uMsg - WM_MOUSEMOVE > 3) {
-        return DefWindowProc(hWnd, uMsg, wParam, lParam);
-    }
-    int nMouseX = (short)lParam;
-    int nMouseY = (int)lParam >> 16;
     switch (uMsg) {
+        case WM_DESTROY:
+            RemoveProp(hWnd, "__ButtonIsPressed");
+            lResult = DefWindowProc(hWnd, uMsg, wParam, lParam);
+            break;
+        case WM_SETFOCUS:
+            if ((dwStyle & 0x4000) != 0) {
+                {
+                int nID = hWnd->nID;
+                SendMessage(GetParent(hWnd), WM_COMMAND, (nID & 0xFFFF) | 0x60000, (LPARAM)hWnd);
+            }
+            }
+            break;
+        case WM_KILLFOCUS:
+            if ((dwStyle & 0x4000) != 0) {
+                {
+                int nID = hWnd->nID;
+                SendMessage(GetParent(hWnd), WM_COMMAND, (nID & 0xFFFF) | 0x70000, (LPARAM)hWnd);
+            }
+            }
+            break;
+        case WM_SETTEXT:
+            lResult = DefWindowProc(hWnd, uMsg, wParam, lParam);
+            if (lResult != 0) {
+                InvalidateRect(hWnd, 0, 1);
+            }
+            break;
+        case WM_PAINT:
+            Proc_PaintButton(hWnd, dwStyle);
+            break;
+        case WM_GETDLGCODE:
+            lResult = (dwStyle & 0xF) < 10 ? s_anButtonDlgCode[dwStyle & 0xF] : 0x2000;
+            break;
+        case 0xF0:
+        case BM_SETCHECK:
+            break;
+        case BM_GETSTATE:
+            lResult = GetProp(hWnd, "__ButtonIsPressed") != 0;
+            break;
+        case BM_SETSTATE: {
+            int bPressed = GetProp(hWnd, "__ButtonIsPressed");
+            if (bPressed == 0 && wParam != 0) {
+                SetProp(hWnd, "__ButtonIsPressed", 1);
+                InvalidateRect(hWnd, 0, 1);
+            } else if (bPressed != 0 && wParam == 0) {
+                RemoveProp(hWnd, "__ButtonIsPressed");
+                InvalidateRect(hWnd, 0, 1);
+            }
+            break;
+        }
+        case BM_SETSTYLE:
+            hWnd->dwStyle = dwStyle | 0xF;
+            break;
+        case BM_CLICK:
+            SendMessage(hWnd, WM_LBUTTONDOWN, 0, 0);
+            SendMessage(hWnd, WM_LBUTTONUP, 0, 0);
+            break;
         case WM_MOUSEMOVE:
             if (GetCapture() == hWnd) {
                 RECT rcClient;
                 GetClientRect(hWnd, &rcClient);
-                BOOL bInside = PtInRect(&rcClient, nMouseX, nMouseY);
-                SendMessage(hWnd, BM_SETSTATE, bInside != 0, 0);
+                POINT tPoint = {(short)lParam, (int)lParam >> 16};
+                if (PtInRect(&rcClient, tPoint) != 0) {
+                    SendMessage(hWnd, BM_SETSTATE, 1, 0);
+                } else {
+                    SendMessage(hWnd, BM_SETSTATE, 0, 0);
+                }
             }
-            return 0;
+            break;
         case WM_LBUTTONDOWN:
             SendMessage(hWnd, BM_SETSTATE, 1, 0);
             SetFocus(hWnd);
             SetCapture(hWnd);
-            return 0;
-        case WM_LBUTTONUP: {
-            if (GetCapture() != hWnd) {
-                return 0;
+            break;
+        case WM_LBUTTONUP:
+            if (GetCapture() == hWnd) {
+                ReleaseCapture();
+                SendMessage(hWnd, BM_SETSTATE, 0, 0);
+                RECT rcButton;
+                GetClientRect(hWnd, &rcButton);
+                POINT tPoint = {(short)lParam, (int)lParam >> 16};
+                if (PtInRect(&rcButton, tPoint) != 0) {
+                    if ((dwStyle & 0xF) == 9) {
+                        SendMessage(hWnd, BM_SETCHECK, 1, 0);
+                    }
+                    int nID = hWnd->nID;
+                    SendMessage(GetParent(hWnd), WM_COMMAND, nID & 0xFFFF, (LPARAM)hWnd);
+                }
             }
-            ReleaseCapture();
-            SendMessage(hWnd, BM_SETSTATE, 0, 0);
-            RECT rcButton;
-            GetClientRect(hWnd, &rcButton);
-            if (PtInRect(&rcButton, nMouseX, nMouseY) == 0) {
-                return 0;
-            }
-            if ((dwStyle & 0xF) == 9) {
-                SendMessage(hWnd, BM_SETCHECK, 1, 0);
-            }
-            wNotify = hWnd->nID;
-            hParent = GetParent(hWnd);
-            SendMessage(hParent, WM_COMMAND, wNotify & 0xFFFF, (LPARAM)hWnd);
-            return 0;
-        }
+            break;
         case WM_LBUTTONDBLCLK:
-            wNotify = hWnd->nID;
-            hParent = GetParent(hWnd);
-            SendMessage(hParent, WM_COMMAND, (wNotify & 0xFFFF) | 0x50000, (LPARAM)hWnd);
-            return 0;
+            {
+                int nID = hWnd->nID;
+                SendMessage(GetParent(hWnd), WM_COMMAND, (nID & 0xFFFF) | 0x50000, (LPARAM)hWnd);
+            }
+            break;
+        default:
+            lResult = DefWindowProc(hWnd, uMsg, wParam, lParam);
+            break;
     }
     return lResult;
 }

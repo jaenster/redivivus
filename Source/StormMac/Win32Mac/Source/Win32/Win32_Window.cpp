@@ -918,20 +918,22 @@ void Wnd_CalculateVisibleRgn(HWND hWnd, HRGN hRgn, int bClipChildren) {
 
 // 1.14d mac: 0002ff24
 // The child of hWndParent that contains the point (in the parent's client space),
-// the deepest one with bRecurse; bVisibleOnly skips hidden and disabled windows.
-HWND Wnd_ChildFromPoint(HWND hWndParent, int nX, int nY, int bRecurse, int bVisibleOnly) {
+// the deepest one with bRecurse; bVisibleOnly skips hidden windows and disabled children.
+HWND Wnd_ChildFromPoint(HWND hWndParent, POINT pt, int bRecurse, int bVisibleOnly) {
     if (hWndParent == 0) {
         return 0;
     }
     for (HWND hChild = hWndParent->pFirstChild; hChild != 0; hChild = hChild->pNextSibling) {
         if (bVisibleOnly == 0 ||
-            ((hChild->dwStyle & WS_VISIBLE) != 0 && (hChild->dwStyle & (WS_VISIBLE | WS_DISABLED)) != (WS_VISIBLE | WS_DISABLED))) {
-            if (PtInRect(&hChild->rcWindow, nX, nY) != 0) {
+            ((hChild->dwStyle & WS_VISIBLE) != 0 && (hChild->dwStyle & (WS_CHILD | WS_DISABLED)) != (WS_CHILD | WS_DISABLED))) {
+            if (PtInRect(&hChild->rcWindow, pt) != 0) {
                 if (bRecurse == 0) {
                     return hChild;
                 }
-                HWND hDeeper = Wnd_ChildFromPoint(hChild, nX - hChild->rcWindow.left, nY - hChild->rcWindow.top, bRecurse,
-                                                  bVisibleOnly);
+                POINT ptChild;
+                ptChild.x = pt.x - hChild->rcWindow.left;
+                ptChild.y = pt.y - hChild->rcWindow.top;
+                HWND hDeeper = Wnd_ChildFromPoint(hChild, ptChild, bRecurse, bVisibleOnly);
                 return hDeeper != 0 ? hDeeper : hChild;
             }
         }
@@ -943,10 +945,10 @@ HWND Wnd_ChildFromPoint(HWND hWndParent, int nX, int nY, int bRecurse, int bVisi
 HWND WindowFromPoint(POINT pt) {
     HWND hResult = 0;
     if (g_hDesktopWnd != 0) {
-        hResult = Wnd_ChildFromPoint(g_hDesktopWnd, pt.x, pt.y, 1, 1);
+        hResult = Wnd_ChildFromPoint(g_hDesktopWnd, pt, 1, 1);
         if (hResult == 0) {
             hResult = 0;
-            if (PtInRect(&g_hDesktopWnd->rcWindow, pt.x, pt.y) != 0) {
+            if (PtInRect(&g_hDesktopWnd->rcWindow, pt) != 0) {
                 hResult = g_hDesktopWnd;
             }
             if (hResult == 0) {
