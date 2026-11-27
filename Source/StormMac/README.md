@@ -55,6 +55,8 @@ Two sources of evidence:
 |`Win32_Region.cpp`|00031b0d..00032b50|21|name unrecorded: the strip-region run between the window manager's key-code helpers and the DirectX shims; one heap-block region type, so one unit|
 |`Win32_DirectSound.cpp`|00032b50..00033a24|31|name unrecorded: DirectDrawCreate, DirectSoundCreate and the IDirectSound/IDirectSoundBuffer/IKsPropertySet bodies share the sound-buffer globals 003f481c..003f4828|
 |`Win32_String.cpp`|00033a24..00033cef|11|name unrecorded: the CRT string and number helpers (_stricmp .. srand) before StormMac's own SOURCE run begins at 00033cef; several have Windows twins|
+|`SOURCE/SRegMac.mm`|0003a696..0003e21d|88 (18 functions, 70 stpl.h instantiations and the static initialiser)|1.14d `__FILE__` (0030f7d6) in SRegSaveData, SRegSaveString, SREG_ReadEscapedData, SREG_FreeValueData, SREG_DestroyEntry; Objective-C++ (NSFileManager through objc_msgSend); ends with its static initialiser 0003e0a0; the three hash tables it instantiates (RegistryEntry, RegistryFileEntry, WriteRegistryEntry) keep their weak members here only, the linker kept the first copy of the ones shared with Win32_utils.cpp (HASHKEY_STRI::operator=)|
+|`SOURCE/unknown_macfile.cpp`|0003e21d..0003e30a|4|the unit after SRegMac.mm's static initialiser: MACFILE_FSSpecToPath, a counter and the static object calling StormMacInit / MyRuntimeTerminate; no binary records its name|
 
 The `unknown_*` names are descriptive: no binary records those files' names. The folder
 of the `Win32_*` files other than Win32_utils.cpp is inferred from it, and the header
