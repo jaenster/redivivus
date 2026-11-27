@@ -247,12 +247,13 @@ void __fastcall UI_SetCursorToSpecialIcon(int32_t nAnimFrame, int32_t bAltIcon) 
 void __fastcall ITEM_SetItemOnHand(D2UnitStrc * pUnit) {
     pCursorItem = pUnit;
     nCursorDataIndex = 5;
-    gCursorAnimationFrame = 0;
-    ItemTypeOnHand = 1;
     if (!pUnit) {
+      gCursorAnimationFrame = 0;
+      ItemTypeOnHand = 1;
       return;
     }
 
+    gCursorAnimationFrame = 0;
     ItemTypeOnHand = 4;
 }
 
