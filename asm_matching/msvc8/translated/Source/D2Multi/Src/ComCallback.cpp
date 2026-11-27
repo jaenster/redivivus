@@ -2187,82 +2187,63 @@ BOOL __fastcall COMCALLBACK_OnChannelUserJoinedCallback(uint32_t dwStatusFlags, 
     return 1;
 }
 
+// The account part of a Battle.net user name "Character*Account": the text after the '*', or the whole name when it has none.
+static inline char* COMCALLBACK_GetAccountName(char* szUserName) {
+    char* szAccountName = strchr(szUserName, '*');
+    if (!szAccountName) {
+      szAccountName = szUserName;
+    } else {
+      szAccountName++;
+    }
+
+    return szAccountName;
+}
+
 // Removes user from Battle.net channel list. Searches linked list for username match (strips clan tag *prefix for comparison), unlinks from list, displays "username has left the channel" message if gnNotifyEnabled flag set, clears channel view if was selected user, destroys character composite sprite, frees D2ChannelUserStrc memory, decrements global channel user count, formats updated channel title "Channel Name (N)" as Unicode, and refreshes UI. Returns after first match found.
 void __stdcall COMCALLBACK_RemoveChannelUser(char * szUsername) {
-    char* pStar;
-    char* pszNameScan;
-    int nResult;
-    uint8_t* pbScanName;
-    uint16_t* pwszClear;
     uint16_t wszChannelTitleBuffer[576];
     char szChannelUserCount[256];
-    char ch2;
-    D2ChannelUserStrc* pPreviousUser;
-    pPreviousUser = 0;
-    D2ChannelUserStrc* pMemoryToFree;
-    pMemoryToFree = gpChannelUserListHead;
-    do {
-      char szLeaveMessage[500];
-      if (!pMemoryToFree) {
+    D2ChannelUserStrc* pPreviousUser = nullptr;
+    D2ChannelUserStrc* pUser = gpChannelUserListHead;
+    while (pUser) {
+      char* szUserAccount = COMCALLBACK_GetAccountName(pUser->szUsername); // steer-ok: the original strips the list user's name before the name it is looking for
+      if (!strcmp(szUserAccount, COMCALLBACK_GetAccountName(szUsername))) {
         break;
       }
 
-      pszNameScan = pMemoryToFree->szUsername;
-      pStar = strchr(pszNameScan, 0x2a);
-      if (pStar) {
-        pszNameScan = pStar + 1;
-      }
+      pPreviousUser = pUser;
+      pUser = pUser->pNext;
+    }
 
-      pStar = strchr(szUsername, 0x2a);
-      pbScanName = (uint8_t*)szUsername;
-      if (pStar) {
-        pbScanName = (uint8_t*)(pStar + 1);
-      }
-
-      nResult = strcmp(pszNameScan, (char*)pbScanName);
-      if (!nResult) {
-        if (pMemoryToFree) {
-          if (gnNotifyEnabled) {
-            pszNameScan = pMemoryToFree->szFormattedName;
-            if (!pszNameScan) {
-              goto use_username;
-            }
-
-            pStar = pszNameScan;
-            pStar = pStar + strlen(pStar) + 1;
-            if (pStar == pMemoryToFree->szFormattedName + 1) {
-              use_username:
-              pszNameScan = pMemoryToFree->szUsername;
-            }
-
-            sprintf(szLeaveMessage, "%s has left the channel.", pszNameScan);
-            PrintChannelText(szLeaveMessage, 5);
-          }
-          if (pPreviousUser) {
-            pPreviousUser->pNext = pMemoryToFree->pNext;
-          } else {
-            gpChannelUserListHead = pMemoryToFree->pNext;
-          }
-          if (gpCurrentChatRoomContext == pMemoryToFree) {
-            COMCALLBACK_ClearChannelListView();
-          }
-
-          D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit(pMemoryToFree->pComposite, 1);
-          pMemoryToFree->pComposite = 0;
-          D2_FREE_AT(pMemoryToFree, ".\\Src\\ComCallback.cpp", 0x7fe);
+    if (pUser) {
+      if (gnNotifyEnabled) {
+        char szLeaveMessage[500];
+        if (pUser->szFormattedName && strlen(pUser->szFormattedName) != 0) {
+          sprintf(szLeaveMessage, "%s has left the channel.", pUser->szFormattedName);
+        } else {
+          sprintf(szLeaveMessage, "%s has left the channel.", pUser->szUsername);
         }
 
-        break;
+        PrintChannelText(szLeaveMessage, 5);
+      }
+      if (pPreviousUser) {
+        pPreviousUser->pNext = pUser->pNext;
+      } else {
+        gpChannelUserListHead = pUser->pNext;
+      }
+      if (gpCurrentChatRoomContext == pUser) {
+        COMCALLBACK_ClearChannelListView();
       }
 
-      pPreviousUser = pMemoryToFree;
-      pMemoryToFree = pMemoryToFree->pNext;
-    } while (true);
+      D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit(pUser->pComposite, 1);
+      pUser->pComposite = 0;
+      D2_FREE_AT(pUser, ".\\Src\\ComCallback.cpp", 0x7fe);
+    }
 
     gnChannelUserCount--;
     sprintf(szChannelUserCount, "%s (%d)", gszCurrentChannelName, gnChannelUserCount);
-    for (nResult = 0; nResult < (int)_countof(wszChannelTitleBuffer); nResult++) {
-      wszChannelTitleBuffer[nResult] = L'\0';
+    for (int i = 0; i < (int)_countof(wszChannelTitleBuffer); i++) {
+      wszChannelTitleBuffer[i] = L'\0';
     }
 
     D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszChannelTitleBuffer, szChannelUserCount, 0x240);
