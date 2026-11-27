@@ -1608,25 +1608,21 @@ D2HirelingTxt * __stdcall GetHirelingText(int32_t bIsExpansion, int32_t nHirelin
 }
 
 D2HirelingTxt * __stdcall GetHirelingEntryByNameId(BOOL bIsExpansion, uint16_t nMercNameId, D2HirelingTxt * pPrevEntry) {
-    intptr_t nIndex = 0;
+    D2HirelingTxt* pHireling = nullptr;
+    uint16_t wVersion = bIsExpansion ? 100 : 0;
+    int nStart = 0;
     if (pPrevEntry) {
-      nIndex = ((intptr_t)pPrevEntry - (intptr_t)sgtDataTable.pTxtHireling) / 0x118 + 1;
+      nStart = pPrevEntry - sgtDataTable.pTxtHireling + 1;
     }
-    if (nIndex < sgtDataTable.nTxtHirelingSize) {
-      uint16_t* pNameRange;
-      pNameRange = &sgtDataTable.pTxtHireling[nIndex].nNameLast;
-      while (pNameRange[-1] > nMercNameId || *pNameRange < nMercNameId || ((D2HirelingTxt*)(pNameRange - 0x8b))->version != (bIsExpansion ? 100 : 0)) {
-        nIndex++;
-        pNameRange += 0x8c;
-        if (nIndex >= sgtDataTable.nTxtHirelingSize) {
-          return nullptr;
-        }
+
+    for (int i = nStart; i < sgtDataTable.nTxtHirelingSize; i++) {
+      if (sgtDataTable.pTxtHireling[i].nNameFirst <= nMercNameId && sgtDataTable.pTxtHireling[i].nNameLast >= nMercNameId && sgtDataTable.pTxtHireling[i].version == wVersion) {
+        pHireling = &sgtDataTable.pTxtHireling[i];
+        break;
       }
-
-      return sgtDataTable.pTxtHireling + nIndex;
     }
 
-    return nullptr;
+    return pHireling;
 }
 
 D2HirelingTxt * __stdcall GetHirelingEntryByClassId(BOOL bIsExpansion, int32_t nClassId, D2HirelingTxt * pPrevEntry) {
