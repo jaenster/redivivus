@@ -1,47 +1,24 @@
 addr	name	reason_class	detail
 00009632	operator delete	unverified-ref	all 18 instructions are identical; 1 call target(s) cmp cannot name on our side (a destructor variant or a weak template copy in the object)
 00009671	delete	unpaired	cmp pairs operator delete[] and operator delete under the one name "delete", so this body is compared against the other one (line 40 vs 46); the source carries line 46
-000096e6	StormDestroy	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
 00009830	STORM_Crc32	sched	same calls; the CRC loop is laid out differently
 000098dc	CryptRSA_Process	eh	orig has __Unwind_Resume and four __ZSt9terminatev cleanup landing pads absent in ours, ours has ___stack_chk_fail instead
 000099ee	LogComputerInfoHeader	pic-ref	orig indexes an unnamed table via lea [R+4R+0x38d651], ours names g_aszMonthAbbreviation and loads with mov, bounds check equivalent
-00009d2e	Sha1_Pump	crt-idiom	orig is fully unrolled (424 insns, no loop), ours is a 144-insn loop with round constants 0x5a827999 etc.
-0000a4b8	Sha1_Append	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 74 insns, ours 78; opcode-skeleton similarity 0.67
-0000a56e	Sha1_Finalize	pic-ref	orig uses lea of PIC g_abySha1Padding, ours loads the pointer via mov from the PIC GOT slot &g_abySha1Padding
-0000a645	BigBuffer_Add	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 79 insns, ours 78; opcode-skeleton similarity 0.70
-0000a72c	BigBuffer_Compare	regalloc	pA is copied to eax and spilled before the loads; loop index registers swap (ebx/edi)
-0000a7b6	SBigDel	eh	landing-pad tail differs (orig 3 insns, ours 0); body pic-ref: same instructions; a PIC data reference or call target resolves to a different symbol/offset
-0000a87e	BigBuffer_Div	inline	callees differ: orig-only [] ours-only []
-0000ae0a	BigBuffer_Mul	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 148 insns, ours 146; opcode-skeleton similarity 0.97
-0000b032	SBigNew	regalloc	identical stores; orig hoists lea ecx,[eax+0x154] before the loop and uses edx as index
-0000b127	BigBuffer_PowMod	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 190 insns, ours 196; opcode-skeleton similarity 0.88
-0000b38f	BigBuffer_Shl	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 90 insns, ours 92; opcode-skeleton similarity 0.84
-0000b74d	BigBuffer_Sub	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 73 insns, ours 72; opcode-skeleton similarity 0.68
-0000b878	SBIG_ToBinaryAppend	regalloc	identical but one commutative lea operand order (lea ecx,[edx+esi] orig)
-0000b92f	BigBuffer_Div_Ux	regalloc	same operations, orig spills edx and ecx to [ebp-0x24]/[ebp-0x1c] that ours keeps in registers, ours reloads [ebp+0x10]
-0000ba3f	BigBuffer_Mul_Ux	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 72 insns, ours 68; opcode-skeleton similarity 0.78
-0000bb08	TSGrowableArray_Uc_Reserve	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 46 insns, ours 47; opcode-skeleton similarity 0.94
-0000bb7c	TSBaseArray_Uc_ReallocData	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 66 insns, ours 64; opcode-skeleton similarity 0.95
-0000bc80	TSGrowableArray_Ui_Reserve	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 46 insns, ours 47; opcode-skeleton similarity 0.94
-0000bcf2	TSBaseArray_Ui_ReallocData	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 69 insns, ours 65; opcode-skeleton similarity 0.94
-0000bdc8	TSBaseArray_Ui_Copy	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 43 insns, ours 39; opcode-skeleton similarity 0.84
-0000bf02	TSFixedArray_Ui_Set	regalloc	same instructions modulo register choice
+00009d2e	Sha1_Pump	crt-idiom	orig is the 80 rounds fully unrolled (424 insns, no loop, frame 0x18c), ours a 145-insn loop; not reworked
+0000a87e	BigBuffer_Div	sched	344 insns both, rewritten in the BigBuffer idiom (64-bit carries, windowed start word, per-buffer scratch allocation); only the divisor's top-bit scan differs: lea operand order of start+word-1 and the mask copy/shift scheduled before the bit counter decrement (4 insns)
 0000c000	SBltDestroy	regalloc	loop counter: orig counts 2 down with dec/jne, clang425 here counts -2 up with inc
-0000c0ae	SBmpDecodeImage	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 274 insns, ours 270; opcode-skeleton similarity 0.59
-0000c421	SBmpLoadImage	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 487 insns, ours 481; opcode-skeleton similarity 0.76
-0000ccb4	SBMP_CopyBottomUpRows	sched	same instructions in a different order
-0000cd40	SBMP_IsValidTgaHeader	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 48 insns, ours 46; opcode-skeleton similarity 0.81
-0000cdbe	SBMP_LoadTgaPalette	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 70 insns, ours 70; opcode-skeleton similarity 0.89
-0000ce80	SBMP_DecodeTgaPixels	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 296 insns, ours 266; opcode-skeleton similarity 0.69
-0000d1f8	UncompressPcxImage	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 218 insns, ours 151; opcode-skeleton similarity 0.45
-0000d43e	SCmdDestroy	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 79 insns, ours 66; opcode-skeleton similarity 0.77
-0000d532	SCmdProcess	pic-ref	orig reads global s_tBareList-4 where ours reads s_bRequiredRegistered-4, plus orig uses setcc/or where ours uses branches
-0000d674	SCMD_ProcessTokens	inline	callees differ: orig-only [] ours-only []
-0000db26	SCMD_ReportError	pic-ref	same 78-insn body; orig indexes a table at absolute 0x3c1bb1 directly while ours loads named global _gaSCMD_FallbackMessages first
-0000dce8	SCmdRegisterArgument	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 98 insns, ours 93; opcode-skeleton similarity 0.62
-0000dec7	PerformConversion	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 268 insns, ours 247; opcode-skeleton similarity 0.84
-0000e40a	TSList_LinkNode	inline	static TS list/link helper: clang inlines it, no out-of-line copy in the object, so there is nothing to compare
-0000e540	SCMD_InitStaticLists	pic-ref	orig stores sentinel into s_tBareList-4 and loads unnamed global ? where ours stores into s_bRequiredRegistered-4 and loads ___dso_handle; same otherwise
+0000c0ae	SBmpDecodeImage	regalloc	rebuilt in Storm's shape (validate block, signature switch defaulting to TGA, BMP/PCX/TGA decoders inlined); same instruction sequence, registers differ (pnHeight in edx vs ecx) and the PCX header bytes load planes before bits-per-pixel
+0000c421	SBmpLoadImage	stack-layout	rebuilt in Storm's shape (validate block, signature switch, the three file decoders in one body); control-flow skeleton identical, frame 0xc1c vs 0xc0c and register assignment differ; SFileCloseFile's block is placed after the TGA free paths in ours
+0000cdbe	SBMP_LoadTgaPalette	regalloc	same loop and bzero calls; orig keeps the entry size in edi and tests the colour-map start as a 16-bit value (test di,di), ours computes the size in eax and tests the zero-extended 32-bit value
+0000ce80	SBMP_DecodeTgaPixels	regalloc	descriptor origin bits now a bitfield (byte ops match the orig); clang reassociates width*bpp so the image size and the bottom-row offset share it, where the orig computes (h*w)*bpp and ((h-1)*w)*bpp separately; frame 0x3c vs 0x4c
+0000d1f8	UncompressPcxImage	sched	same algorithm (dest, source order; single-pixel path apart from runs); clang lowers the single pixel's plane test as a switch (planes==1 first) where the orig tests 3 first; the rest is register choice
+0000d43e	SCmdDestroy	regalloc	loop shape now identical (raw next link, bitwise-or end test); in the latch ours reuses the end test's p==0 byte (test bl,1) for the link null check where the orig re-tests the pointer, and the list counter is spilled
+0000d532	SCmdProcess	pic-ref	instruction-identical except the arg list's first-element read, named s_bAddedOptional-4 in ours and s_tFlagList-4 in the orig: our object lays the zerofill statics out FlagList, ArgList, flag
+0000d674	SCMD_ProcessTokens	stack-layout	same calls and flow; the orig spills the delimiter, "-/" "=:" and __FILE__ addresses to frame slots before the loop, ours recomputes them; frame 0x27c vs 0x26c
+0000db26	SCMD_ReportError	pic-ref	instruction-identical except the fallback-message table load [esi+4*eax+disp], an indexed PIC reference cmp.ts does not resolve on either side
+0000dce8	SCmdRegisterArgument	pic-ref	instruction-identical except the s_bAddedOptional store, addressed off ebx (a copy of the PIC base) which cmp.ts resolves on neither side
+0000dec7	PerformConversion	stack-layout	same structure (type switch over the three conversions, callback, propagation loop); frame 0x5c vs 0x4c and the value string is kept in ebx where the orig moves it to edi
+0000e540	SCMD_InitStaticLists	pic-ref	instruction-identical except the zerofill layout (pFirst stores named off the neighbouring static) and __dso_handle, unnamed in the orig
 0000eab0	SCODE_InitStaticLists	pic-ref	orig stores into s_tStreamList-4 and struct-4 with unnamed global ? where ours stores into s_tBlockList+8 and s_tStreamList+8 with ___dso_handle
 0000ebb6	HUFFMAN_InsertNewSymbol	regalloc	the call sequence and tree updates match; two stack slots are swapped and one insn fewer
 0000ed92	HUFFMAN_BuildTree	regalloc	weight-row pointer is hoisted into a register in the original; ours folds the table base into the load
@@ -56,8 +33,8 @@ addr	name	reason_class	detail
 0001071c	SErrGetErrorStr	pic-ref	identical except the 0x57 store to gdwStormLastErrorCode on ours where orig stores to s_bLeakOptionRead-4; cmove vs cmovne
 0001083c	SERR_GetString	pic-ref	orig indexes the message table at in-image offset 0x3beed2 while ours loads named gaSErrMessageStrings
 0001088b	WriteErrorLog	stack-layout	same calls and the run-time-sized 0x1450 array; locals sit 4 bytes lower and the original has one more spill slot
-00010b81	SErrSuppressErrors	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
-00010b98	SErrSetLastError	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
+00010b81	SErrSuppressErrors	data-guess	same instructions except a data address: original 003f031c (s_bLeakOptionRead-c), ours gbSuppressErrors+0 tagged 003f02fc
+00010b98	SErrSetLastError	data-guess	same instructions except a data address: original 003f0324 (s_bLeakOptionRead-4), ours gdwStormLastErrorCode+0 tagged 003f0300
 00010e19	SERR_WriteLogTextCRLF	stack-layout	only difference is the alloca size expression 2n+0x12 on ours vs 2n+0x11 on orig; otherwise identical
 00011040	SERR_InitStatics	pic-ref	same store sequence but orig writes flag to s_tLogMutex-4 and atexit args use lea and unnamed data, ours uses s_bFacilitiesRegistered-4 and &___dso_handle
 00011118	SEvtDestroy	regalloc	same instructions modulo register choice and PIC references
@@ -75,7 +52,6 @@ addr	name	reason_class	detail
 000128ed	SFileDdaEnd	sched	the original loads pStream->pMpqFile before computing the next list node; the optimiser sinks that load below it in ours; the destructor call is unresolved (D1/D2 variant)
 000129bc	SFileSetFilePointer	sched	the original tests the move method 0, 1, 2 in sequence; ours folds 1/2 into a range check and loads the size through a merged pointer
 00012ac1	SFileReadFileEx2	inline	397 vs 382 insns, 60% of the register-normalised stream aligns; calls 26 vs 25; helpers are inlined or called differently from the original
-00013080	__attribute__	unpaired	cmp.ts reads the tag name as __attribute__ (static noinline function), so no object function is compared
 000131d7	SFileDdaDestroy	regalloc	78 vs 81 insns, 96% of the register-normalised stream aligns; same call sequence; register choice, spills and branch layout differ
 000132d6	SFileDdaGetPos	regalloc	75 vs 75 insns, 97% of the register-normalised stream aligns; same call sequence; register choice, spills and branch layout differ
 000133a1	SFILE_GetStreamPosition	unverified-ref	all 45 instructions are identical; 1 call target(s) cmp cannot name on our side (a destructor variant or a weak template copy in the object)
@@ -96,7 +72,6 @@ addr	name	reason_class	detail
 00015c64	SFILE_GetHashTableIndex	sched	143 vs 131 insns, 42% of the register-normalised stream aligns; same call sequence; block order and fused forms differ
 00015e0c	SFILE_CdThreadProc	inline	858 vs 814 insns, 57% of the register-normalised stream aligns; calls 39 vs 39; helpers are inlined or called differently from the original
 00016a72	CRITSECT_Destroy	unverified-ref	all 10 instructions are identical; 1 call target(s) cmp cannot name on our side (a destructor variant or a weak template copy in the object)
-00017210	SFILE_ReleaseFileHandle	unverified-ref	all 37 instructions are identical; 1 call target(s) cmp cannot name on our side (a destructor variant or a weak template copy in the object)
 00017278	D2ArchiveStrc	unpaired	destructor tag: cmp.ts cannot match D2ArchiveStrc::~D2ArchiveStrc to an object symbol by name
 0001737c	D2MPQFileStrc	unpaired	destructor tag: cmp.ts cannot match the member by name
 00017484	D2StormAudioStreamRec	unpaired	destructor tag: cmp.ts cannot match the member by name
@@ -119,83 +94,58 @@ addr	name	reason_class	detail
 000188c7	SLogSetIndent	regalloc	orig reloads [ebp-0xc] into eax then runs imul eax,0x2c, ours folds the reload into imul with a memory operand
 0001891e	SLogSetTimestamp	sched	the original reloads nSlot into a register and then imul eax,eax,0x2c; ours folds the load into imul reg,[mem],0x2c
 00018965	SLogPend	regalloc	67 vs 69 insns, 91% of the register-normalised stream aligns; same call sequence; register choice, spills and branch layout differ
-00018b0b	SMemAlloc	semantic-guess	out-of-memory name/line selection is a branch in orig and a cmov/sbb mask in ours; same two-way result
-00018b75	SMEM_DisplayOutOfMemoryError	sched	same instructions in a different order
-00018d1b	SMSG_DeleteWindow	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
+00018d1b	SMSG_DeleteWindow	pic-ref	same instructions; the one store is to 003f096c on both sides (g_nActiveWindowState[3]): cmp names it off a different neighbour (g_tSNetCritSect-4 vs g_nActiveWindowState+c)
 00018ddd	SMsgDispatchMessage	sched	same instructions in a different order
 00019040	SMSG_InternalRegister	regalloc	42 vs 41 insns, 99% of the register-normalised stream aligns; same call sequence; register choice, spills and branch layout differ
 00019235	SMSG_FindWindow	regalloc	ours spills the PIC base to [ebp-0x10] where the original keeps it in esi; the list walk is otherwise the same
 00019464	TSLinkList<SMsgWindowRecord>::DeleteNode	regalloc	same instructions modulo register choice
 000194e0	_GLOBAL__I_a	pic-ref	orig lea's the ~TSLinkList destructor and loads a PIC slot for __dso_handle; ours mov's the &symbol forms, same atexit call
-00019532	SNetLeaveGame	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 217 insns, ours 188; opcode-skeleton similarity 0.69
+00019532	SNetLeaveGame	inline	SNET_CreateConnection and SNET_ConnSendMessage keep their constant arguments in orig (ecx=&g_tLocalConnList; edx=0, 0xb, payload, 8); ours has them folded by IPSCCP because the file lacks the other (dead-stripped) callers; orig also keeps Link()'s NULL test in both connection loops. The resend loop now walks each connection's own queues (was the local one) and the three 0x80-byte strings are cleared by their first byte, as the asm does
 00019897	SNetDestroy	inline	orig SpiDestroy takes bClearList in ecx (fastcc, constant 1 not propagated); ours propagates the constant
 00019a47	SpiDestroy	inline	orig SpiDestroy takes its argument in ecx; ours propagates the constant
-00019b0b	SNET_ConnSendMessage	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 203 insns, ours 163; opcode-skeleton similarity 0.65
-00019eb2	SNET_ConnSendPacket	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 107 insns, ours 100; opcode-skeleton similarity 0.88
+00019b0b	SNET_ConnSendMessage	inline	body checked against the asm line by line; orig takes nType/nSubType/pPayload/nPayloadSize as live arguments, ours sees one caller (SNetLeaveGame) and IPSCCP folds them to 0/0xb/8, so the frame (0x4c vs 0x3c) and every use differ; the original file had further callers dead-stripped at link
+00019eb2	SNET_ConnSendPacket	inline	identical apart from dump_packet's arguments: orig passes ecx="ConnSendPacket", edx=0 and the packet on the stack, ours has the two constants folded into dump_packet (its only caller here); the send buffer is now a struct, which gives the original reload of g_pSendBuffer
 0001a05f	dump_packet	data-guess	orig dispatches the packet subtype through a 16-entry switch jumptable; ours indexes guessed tables at 0xe3c and 0xe4c
-0001a27c	SNET_ComputePacketChecksum	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 34 insns, ours 35; opcode-skeleton similarity 0.86
-0001a319	SNET_DestroyConnection	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 44 insns, ours 42; opcode-skeleton similarity 0.89
 0001a43f	SNET_CreateConnection	inline	orig keeps the list argument in ecx (two callers, same list); ours propagates the constant
 0001a4a2	SNetLogInfo::~SNetLogInfo[D1]	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
 0001a508	TSGrowableArray<unsignedint>::~TSGrowableArray[D1]	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
-0001a9f8	SLOG_EnsureLogCreated	inline	orig takes pLogInfo on the stack and calls SLOG_CreateFromRegistry out of line; ours propagates g_tSNetLog
-0001aa62	SLOG_CreateFromRegistry	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 45 insns, ours 45; opcode-skeleton similarity 0.89
 0001ae80	_GLOBAL__I_a	pic-ref	orig lea's destructor and string-literal addresses; ours mov's PIC &symbol slots and immediate-stores the literal text; __dso_handle resolves differently
 0001b106	RgnExportTable::~RgnExportTable[D1]	inline	callees differ: orig-only [_pthread_mutex_destroy __ZSt9terminatev] ours-only []
-0001b13a	RgnExportTable_Lock	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 34 insns, ours 34; opcode-skeleton similarity 0.88
 0001b26e	RgnList_LinkNode	regalloc	same ops; orig differs only by two reg-to-reg moves at the argument setup
-0001b2f0	RgnList_UnlinkAll	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 33 insns, ours 32; opcode-skeleton similarity 0.94
-0001b33c	RgnHashTable_Ptr	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 48 insns, ours 44; opcode-skeleton similarity 0.71
+0001b2f0	RgnList_UnlinkAll	regalloc	one instruction: orig loads m_linkoffset into ecx and adds the node (mov ecx,[esi]; add ecx,eax), ours folds the load into add eax,[esi]; tried integer, pointer and Link()-ternary forms
+0001b33c	RgnHashTable_Ptr	sched	same lookup; orig enters the rotated loop through the terminator test (jmp) and keeps Link()'s NULL test inside the loop (48 insns), ours tests once and drops it (44); now takes and compares the HASHKEY_NONE key object as orig's callers pass it
 0001b3aa	RgnExportTable::RgnExportTable[C1]	inline	callees differ: orig-only [RgnHashTableReuse::RgnHashTableReuse[C1] CRITSECT_Init RgnHashTableReuse::~RgnHashTableReuse[D2] __Unwind_Resume] ours-only []
-0001b452	RgnHashTableReuse::InternalNew	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 66 insns, ours 66; opcode-skeleton similarity 0.97
 0001b514	RgnExportTable::~RgnExportTable[D0]	inline	callees differ: orig-only [_pthread_mutex_destroy RgnHashTableReuse::~RgnHashTableReuse[D2] __ZSt9terminatev] ours-only []
 0001b61a	RgnFreeList_Clear	unverified-ref	3 reference(s) (__ZSt9terminatev) only one side can resolve; every other instruction identical
 0001b732	RgnArrRGN_Destroy	eh	orig has four __ZSt9terminatev calls on the landing pads, ours has three unresolved calls
-0001b8c4	RgnHashTable_Clear	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 68 insns, ours 67; opcode-skeleton similarity 0.97
-0001ba12	RgnArrRGN_Reserve	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 46 insns, ours 47; opcode-skeleton similarity 0.94
+0001b8c4	RgnHashTable_Clear	regalloc	one instruction: orig mov eax,[eax+edi]; add ecx,eax where ours folds the load into add ecx,[eax+edi] (the UnlinkAll pattern)
 0001ba84	RgnArrRGN_ReallocData	eh	orig has 6 call __ZSt9terminatev where ours has 6 unresolved calls, and orig uses cmova where ours uses cmovb
 0001bce0	SRGN_CopyRegionRecord	eh	orig adds __Unwind_Resume, terminate and SMemFree/RgnLink_Unlink cleanup calls that ours lacks entirely
-0001be5a	RgnArr8_Set	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 33 insns, ours 29; opcode-skeleton similarity 0.73
-0001befa	RgnArr16_Set	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 35 insns, ours 31; opcode-skeleton similarity 0.69
-0001bfa6	RgnArr1C_Set	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 39 insns, ours 37; opcode-skeleton similarity 0.67
 0001c066	RgnBlockList_LinkNode	regalloc	only two extra reg-to-reg mov instructions in orig, same calls and same ops otherwise
-0001c0e8	RgnArrRGN_New	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 43 insns, ours 40; opcode-skeleton similarity 0.91
 0001c1b6	RgnHashTableReuse::~RgnHashTableReuse[D2]	pic-ref	orig loads the vtable as mov from PIC symbol then add 8, ours uses lea of the PIC symbol; orig also has a terminate call
 0001c258	RgnHashTable::~RgnHashTable[D2]	pic-ref	orig loads the vtable as mov from PIC symbol then add 8, ours uses lea of the PIC symbol; orig also has a terminate call
 0001c2f4	InternalDelete	inline	callees differ: orig-only [SMemFree SMemFree SMemFree SMemFree __ZSt9terminatev __ZSt9terminatev __ZSt9terminatev] ours-only [RgnList_LinkNode]
 0001c3ce	InternalNew	inline	orig is a 14-insn wrapper calling RgnList_NewNode out of line, ours has RgnList_NewNode body inlined with RgnArrRGN_New and ReallocData calls
 0001c41e	Destroy	inline	callees differ: orig-only [RgnBucketArr_Destroy] ours-only [RgnBlockList_Clear RgnFreeList_Clear]
 0001c46c	RgnBucketArr_Destroy	eh	only callee difference is orig's extra __ZSt9terminatev; loop stride and index codegen also differ (add 0xc vs lea +4)
-0001c5c6	RgnBlockList_UnlinkAll	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 33 insns, ours 32; opcode-skeleton similarity 0.94
+0001c5c6	RgnBlockList_UnlinkAll	regalloc	same as RgnList_UnlinkAll: orig mov ecx,[esi]; add ecx,eax where ours folds the load into add eax,[esi]
 0001c612	RgnHashTableReuse::RgnHashTableReuse[C1]	inline	callees differ: orig-only [RgnList_UnlinkAll RgnList_UnlinkAll] ours-only []
 0001c6f0	_GLOBAL__I_a	unverified-ref	2 reference(s) only one side can resolve; every other instruction identical
 0001c806	SStrCopy	crt-idiom	orig scans 4 bytes at a time with 0x81010100 masks, ours uses a byte-at-a-time loop
-0001c9bd	SStrDup	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
 0001ca30	SStrLen	crt-idiom	orig scans 4 bytes at a time with 0x7efefeff and 0x81010100 masks, ours uses a byte-at-a-time loop
 0001caaf	SStrPack	crt-idiom	orig uses word-at-a-time 0x81010100 scan with unrolled tests, ours uses a byte loop
 0001cd8c	SStrTokenize	sched	the original evaluates (szBuffer==0) and (nBufferChars!=0) into flags before the pointer checks; ours branches
 0001ceaa	SStrHash	data-guess	hash multiply as shl 5 plus sub in orig, imul 0x21 in ours; table displacement 0x304b6c in orig vs 0x3d1 in ours
 0001cfaf	SStrHashHT	regalloc	same Jenkins mix and byte-assembled words (lookup2 form); register assignment and spills differ (271 vs 277 insns)
-0001d302	SSignatureVerifyStream_Begin	semantic-guess	same new/Sha1_Initialize/SMemAlloc calls, only the assert line constant differs (0x5b vs 0x57) and the store order
-0001d458	SSignatureVerifyStream_Finish	eh	orig has extra __Unwind_Resume and terminate calls plus stack adjust cleanups, ours has none; all other callees match
-0001d69e	STRANS_DeleteTransRecord	sched	same instructions in a different order
-0001d720	STransDestroy	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
-0001d826	TSList_DeleteNode_STrans	inline	callees differ: orig-only [] ours-only []
+0001d458	SSignatureVerifyStream_Finish	sched	175 insns both now (the key's two numbers are scoped holders, so the landing pads match); the result's sete is scheduled after the pDataBuffer load in ours; the terminate calls print as 'call ?' only because cmp cannot name ours
 0001d960	_GLOBAL__I_a	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
-0001d9b5	UTF16_ToUTF8	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 100 insns, ours 107; opcode-skeleton similarity 0.79
-0001dad0	UTF8_IsValidString	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 102 insns, ours 78; opcode-skeleton similarity 0.36
-0001dbca	UTF8_ToUTF16	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 168 insns, ours 186; opcode-skeleton similarity 0.74
-0001ddd4	TRANSTBL_Latin1ToUnicode	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 15 insns, ours 11; opcode-skeleton similarity 0.73
-0001de00	TRANSTBL_SingleByteToUnicode	data-guess	ours reaches the table through call-pop PIC and displacement +0x1cb, orig indexes a register base with no displacement
-0001de67	SVidDestroy	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
-0001df6a	SVidPlayEnd	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
-0001e067	SVID_IsVideoInList	pic-ref	orig takes lea of g_tVideoList+4, ours does mov of g_tVideoList+0 then indexes at +4
-0001e0f0	SVID_DeleteVideoNode	wrong	ours calls TSLink<SVid>::Unlink three times, orig twice, and orig has an extra terminate call
+0001d9b5	UTF16_ToUTF8	regalloc	rewritten as the Windows SSTR.cpp algorithm over a sign-extended (movsx) 16-bit unit; the remaining diff is register choice in the prologue (orig keeps -1 in edi and pszUTF16Out in edx, ours edx/ecx) plus the PIC displacement of gdwUTF8FirstByteMark[nBytes] that cmp does not normalise in a scaled-index operand
+0001dbca	UTF8_ToUTF16	regalloc	rewritten as the Windows SSTR.cpp algorithm (validate, switch fall-through accumulate, full checks); same instruction stream except ours loads pszUTF16Out into eax then copies to edi (one extra mov), orig loads it into edi; plus the unnormalised scaled-index PIC displacement of gdwUTF8ConversionTab
+0001ddd4	TRANSTBL_Latin1ToUnicode	inline	orig passes the table pointer (ecx = gszUnicodeLatin1_1, edx = dest, stack src/count) to the fastcc static helper; ours has one caller so IPSCCP constant-folds the table out of the helper's signature. The Windows twin has Latin1/Latin2/Korean callers; the Mac TU had them too and the linker dead-stripped two
+0001de00	TRANSTBL_SingleByteToUnicode	inline	same cause as 0001ddd4: orig receives the table in ecx (two callers in the TU), ours has it constant-propagated and addresses gszUnicodeLatin1_1 through the PIC base, so the frame and every table load differ
+0001e067	SVID_IsVideoInList	regalloc	loop now raw-advances through Link(p)->m_next with IsTerminator as in the asm; one cmov differs: ours reuses the IsTerminator NULL flag (test bl,1; cmovne) where orig re-tests edx (test edx,edx; cmove)
+0001e0f0	SVID_DeleteVideoNode	unverified-ref	instruction-identical (SVid owns two region handles destroyed last to first, then the base link's double Unlink, as the asm); 1 reference cmp cannot name on one side (the __ZSt9terminatev landing pad)
 0001e240	_GLOBAL__I_a	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
-0001e2d0	STORM_LaunchURLCallback	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
-0001e2fd	Mem_SetDefaultAllocators	unverified-ref	2 reference(s) only one side can resolve; every other instruction identical
-0001e3c0	MemAlloc	unverified-ref	2 reference(s) only one side can resolve; every other instruction identical
-0001e550	FPSetMessageBoxCallback	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
 0001e564	FPMessageBox	data-guess	ours string/global refs resolve to unknown [PIC ?] while orig uses s_szLogoMaskFiles offsets; switch lowered differently
 0001e94c	MAC_ConvertNewlinesToReturns	data-guess	only difference is two string refs: orig s_szLogoMaskFiles+1ccc/1cdc, ours unresolved [PIC ?]
 0001e9fb	MAC_OutputDebugStringF	data-guess	orig has lea s_szLogoMaskFiles+1cec and a byte store of 0 to ebp-0x11, ours has an unresolved [PIC ?] lea and omits that store
@@ -396,18 +346,16 @@ addr	name	reason_class	detail
 00036580	FreeMemFile2	sched	9/44(orig) 41(ours): ours 'je #33' orig 'je #36'
 0003661b	LockMemFile2	sched	10/97(orig) 92(ours): ours 'je #85' orig 'je #90'
 0003685e	MACDISPLAY_Init	wrong	orig writes [g_pHostHooks+0x1c..0x2c] from the args; ours reads g_pDisplayDriver+0x30 and writes a flag byte at +1 of a different struct
-00036ba1	MACDISPLAY_GetBounds	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
 00036bf4	MACDISPLAY_SetPaletteEntries	pic-ref	same memmove; orig lea uses global base 0x3bdd68 plus offset, ours uses bare offset 0x7bd with no base symbol
 00036c36	MACDISPLAY_GetPaletteEntries	pic-ref	same memmove; orig lea uses global base 0x3bdd26 plus offset, ours uses bare offset 0x77b with no base symbol
-00036d19	MACDISPLAY_SelectDriver	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
 00036d5e	MACCURSOR_CallGuardProc	regalloc	same ops; orig loads the arg into cl then movzx ecx,cl, ours folds into one movzx ecx,byte; return block laid out differently
 00036ffe	MACDISPLAY_FindBestDisplayMode	pic-ref	orig leas string literal s_szLogoMaskFiles+1d8c, ours leas unresolved [PIC ?]; locals sit 8 bytes higher in ours and 0.0 stored as two dword writes
 0003a9a0	SRegLoadValue	regalloc	null/empty checks now in orig order; orig loads the first character into al and tests it, ours fuses cmp byte
 0003abad	SRegSaveString	regalloc	null/empty checks now in orig order; orig loads the first character into al and tests it, ours fuses cmp byte
 0003ade0	SREG_LoadPrefsFile	regalloc	orig stores constants 0 and 1 straight to a stack slot; ours keeps the flag in a register with spill/reload and movzx/xor return
 0003afe5	SREG_FlushPrefsFiles	pic-ref	orig reads unresolved [PIC ?] globals where ours names g_szBattleNetPrefsFolder+8/18/28/38 and s_tRegistry; vtable ref differs; GetShared/GetUser calls reordered
-0003b53a	SREG_GetUserPrefsFolder	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
-0003b5ed	SREG_GetSharedPrefsFolder	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
+0003b53a	SREG_GetUserPrefsFolder	pic-ref	same instructions; unverifiable s_tStormMacRuntime-8 / SREG_GetUserPrefsFolder+0
+0003b5ed	SREG_GetSharedPrefsFolder	pic-ref	same instructions; unverifiable ? / g_szBattleNetPrefsFolder+4; ? / g_szBattleNetPrefsFolder+10; ? / g_szBattleNetPrefsFolder+14
 0003b786	SREG_WriteEscapedData	regalloc	9/101(orig) 93(ours): ours 'mov edi, edx' orig 'mov ebx, ecx'
 0003b8c9	SREG_Destroy	regalloc	loop structure now matches; register assignment and one spilled flag differ
 0003b98f	SREG_ReadEscapedData	eh	both have __Unwind_Resume landing pads; orig calls __ZSt9terminatev twice, ours calls unresolved '?' twice
@@ -424,7 +372,6 @@ addr	name	reason_class	detail
 0003c57c	TSGrowableArray<TSExplicitList<WriteRegistryEntry,-572662307>>::SetCount	sched	body is a template of the shared Source/StormMac/H/stpl.h (outside this set); 10/64(orig) 60(ours): ours 'jae #36' orig 'jae #38'
 0003c69a	TSGrowableArray<TSExplicitList<WriteRegistryEntry,-572662307>>::ReallocData	regalloc	Same calls and arithmetic in different order; orig uses mov from [S] where ours folds it into add; one cmova/cmovb flip with swapped operands.
 0003c7e2	TSHashTable<WriteRegistryEntry,HASHKEY_STRI>::~TSHashTable[D2]	unverified-ref	2 reference(s) only one side can resolve; every other instruction identical
-0003c85a	TSHashTable<WriteRegistryEntry,HASHKEY_STRI>::InternalDelete	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
 0003c930	TSGrowableArray<TSExplicitList<WriteRegistryEntry,-572662307>>::~TSGrowableArray[D2]	eh	Orig has a call to __ZSt9terminatev (noexcept dtor landing pad) that ours does not; ours calls an unnamed target instead.
 0003cade	RegistryEntry::~RegistryEntry[D2]	unverified-ref	3 reference(s) only one side can resolve; every other instruction identical
 0003cbb8	TSHashTable<RegistryFileEntry,HASHKEY_STRI>::~TSHashTable[D2]	unverified-ref	2 reference(s) only one side can resolve; every other instruction identical
@@ -432,7 +379,6 @@ addr	name	reason_class	detail
 0003cd42	TSGrowableArray<TSExplicitList<RegistryFileEntry,-572662307>>::~TSGrowableArray[D2]	eh	Orig has a call to __ZSt9terminatev (noexcept dtor landing pad) that ours does not; ours calls an unnamed target instead.
 0003ced0	TSHashTable<RegistryEntry,HASHKEY_STRI>::~TSHashTable[D2]	unverified-ref	2 reference(s) only one side can resolve; every other instruction identical
 0003cf48	TSHashTable<RegistryEntry,HASHKEY_STRI>::InternalClear	regalloc	body is a template of the shared Source/StormMac/H/stpl.h (outside this set); 11/68(orig) 65(ours): ours 'mov ecx, dword ptr [esi + 0x18]' orig 'mov edx, dword ptr [esi + 0x18]'
-0003d004	TSHashTable<RegistryEntry,HASHKEY_STRI>::InternalDelete	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
 0003d0da	TSGrowableArray<TSExplicitList<RegistryEntry,-572662307>>::~TSGrowableArray[D2]	eh	Orig has a call to __ZSt9terminatev (noexcept dtor landing pad) that ours does not; ours calls an unnamed target instead.
 0003d27e	TSExplicitList<RegistryEntry,-572662307>::UnlinkAll	regalloc	Same ops; orig loads [esi] into ecx then adds, ours folds the load into add eax,[esi].
 0003d2ca	TSHashTable<RegistryFileEntry,HASHKEY_STRI>::Ptr	regalloc	body is a template of the shared Source/StormMac/H/stpl.h (outside this set); 13/73(orig) 71(ours): ours 'mov ecx, dword ptr [esi + 0x1c]' orig 'mov edi, eax'
@@ -451,38 +397,31 @@ addr	name	reason_class	detail
 0003e294	StormMacRuntime::~StormMacRuntime[D1]	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
 0003e2d0	_GLOBAL__I_a	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
 0019a59a	MAC_ShowAboutDialog	regalloc	same call sequence; orig keeps the dialog item pointer in ebx and the new text buffer in a register where ours spills esi to [ebp-0x234] and reloads it
-0019a89c	FUN_0019a89c	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
-0019aad0	MAC_PromptForGameDisc	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
 0019ae9c	MAC_ParseCommandLineAndRun	pic-ref	Orig reads strings and tables through unresolved lea [R+K] offsets where ours uses named PIC strings CmdLine UseCmdLine Diablo II; local buffer is ebp-0xb14 in orig vs ebp-0x114 in ours.
 0019b2d9	MAC_IsMousePointInGameScreen	pic-ref	same tests in the same order; orig reads s_bEventsEnabled with cmp byte,1 (a global stored from other units) where ours, seeing every store in this unit, shrinks it to a bool and tests al
 0019b33e	MAC_HandleMouseCarbonEvent	stack-layout	Same calls and sequence; local offsets shift (ebp-0x1c vs ebp-0x10, spill -0x24 vs -0x14), and one je/jne sense flips with the two calls swapped in layout.
 0019b51a	FUN_0019b51a	sched	same message dispatch; orig reads the right button's state before storing the command-click flag and merges both emulation paths into one test, ours keeps the flag test as cmp/je and a different block order
 0019b636	FUN_0019b636	pic-ref	instruction-identical; the compare names the function-local static and its guard from the orig's overlapping bss tags (g_bMacExiting+N), ours by the local symbols, and cannot pair them
-0019b795	FUN_0019b795	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
 0019b813	MAC_PostMouseMessage	stack-layout	Ours adds a stack-protector canary (___stack_chk_guard, ___stack_chk_fail) with frame 0x4c vs orig 0x5c without canary; some data refs are also attributed to FUN_0019bbe8 offsets.
-0019bacc	MAC_OnApplicationDeactivate	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
-0019bb55	MAC_OnApplicationActivate	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
-0019bbe8	FUN_0019bbe8	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
+0019bbe8	FUN_0019bbe8	pic-ref	same instructions; unverifiable s_bSkipRendererIdleWait-8 / FUN_0019bbe8+0; g_bMacCommandClick+3 / FUN_0019bbe8+0
 0019bc4b	MAC_HandleMenuCommand	sched	same per-case PostMessage calls; orig reaches g_bMacDisplayMismatch directly (defined in its unit) while FUN_0019cb40/0019cf50 reach it through a PIC pointer, so one declaration cannot match all three; ours also re-zeroes bl once more on the >0x80 path
 0019bed3	FUN_0019bed3	eh	orig is compiled with exception tables: 63 extra insns of landing pads (__ZSt9terminatev, __Unwind_Resume) around the display-mode and C++ object calls, which ours does not emit
 0019cc81	FUN_0019cc81	stack-layout	same 90 insns and call sequence; orig stores the display request fields (byFlags=2 first) into a different frame order, [ebp-0x54] vs ours [ebp-0x10]
-0019cf88	MAC_ProcessEvents	inline	orig keeps MAC_HandleMouseDownEvent/UpEvent/UpdateEvent and the key handlers as calls; 6 insns fewer in ours: ours still inlines a small handler and orders the event switch cases differently
+0019cf88	MAC_ProcessEvents	stack-layout	switch re-derived (osEvt also handled inside the switch, as the asm has two MAC_HandleSuspendResumeEvent calls; FUN_0019bac5 gets the event; g_bMacModalActive defined here, it is addressed directly). Left: orig places tEvent lowest in the frame (ebp-0x48) and the block-scoped locals above it, ours puts tEvent first; MAC_HandleUpdateEvent is still called without its unused event (callee visible to ours, not to orig)
 0019d248	MAC_TrackMouseAndModifierChanges	stack-layout	orig zeroes the synthesised EventRecord as two dwords and a word ([ebp-0x1c]/[ebp-0x18]/[ebp-0x14]) and reads where as two word loads; ours memsets only 6 bytes and loads where as one dword
 0019d42b	MAC_HandleKeyDownEvent	sched	same calls; orig repeats test ah,1 on the modifiers word at each use where ours hoists and ecx = eax & 0x100 once
-0019d582	MAC_Main	wrong	MAC_Main not rewritten from the asm: orig calls FUN_0019b744 and MAC_ShutdownTSM where ours calls MAC_DSpShutdown and the display teardown directly; 289 vs 294 insns, diverges at insn 9 (global pointer load)
+0019d582	MAC_Main	inline	re-derived from the asm (fixed: FindFolder kChewableItemsFolderType not kTemporaryFolderType, FSpOpenRF fsWrPerm not fsRdWrPerm, no exit call after the 40MB alert, szFatal built after the working directory is set, frame layout now equal). Left: orig calls FUN_0019b744 and MAC_ShutdownTSM out of line and tests FUN_0019b636 with test al,al (callees in another unit), ours inlines both wrappers and so spills the stack guard pointer
 0019dba3	MAC_HandleMenuSelection	regalloc	same switch and callees; orig keeps the menu in eax and the item in ecx with cx compares, ours swaps them (72 vs 75 insns)
 0019dd0c	MAC_CountMultiByteChars	sched	same instructions in a different order
 0019dd84	MAC_HandleTSMOffsetToPos	stack-layout	same instructions; frame size or local offsets differ
 0019dea7	MAC_HandleTSMPosToOffset	stack-layout	same instructions; frame size or local offsets differ
-0019df93	MAC_HandleTSMUpdateActiveInputArea	wrong	MAC_HandleTSMUpdateActiveInputArea not rewritten from the asm: orig reads a global through a PIC pointer where ours reads s_nTECScript directly, and its frame is 0x26c vs 0x27c; same 209 insns
+0019df93	MAC_HandleTSMUpdateActiveInputArea	stack-layout	re-derived (descriptors zeroed, not typeNull, and handle re-cleared before each AEGetParamDesc; UniChar buffer; declaration order). Left: orig frame has one more 4-byte slot at ebp-0x40 above the highlight range, spill slots shift by 8; orig shares the two early failure blocks where ours duplicates xor edi/xor ebx; orig compares the text size with 0x100/cmovl where clang canonicalises to 0xff/cmovle
 0019e2fb	MAC_ConvertTextToUnicode	stack-layout	same instructions; frame size or local offsets differ
 0019e432	FUN_0019e432	pic-ref	instruction-identical; the compare resolves the four function-local statics and their guards from the orig bss tags, ours by local symbols
-0019e64a	MAC_SetTSMInputCallback	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
 0019e764	MAC_ConvertUnicodeToText	stack-layout	same instructions; frame size or local offsets differ
 0019e8a1	MAC_ParseCommandLine	sched	same callees and 216 vs 217 insns; the g_aMacSwitches lookup bound (0x100) and the cmp 4 separator test are scheduled differently and the epilogue pops eax
 0019f18a	FUN_0019f18a	sched	same instructions in a different order
-0019f1c4	MAC_SetWorkingDirectoryToAppFolder	stack-layout	same instructions; frame size or local offsets differ
-0019f2b6	FLAMINGLOGO_Init	wrong	same callees but orig writes globals s_dwNextTick, s_hCTable, s_hMaskCTable while ours writes fields at +0x946, +0x94a, +0x94e and or's 0x2 into a flag
+0019f2b6	FLAMINGLOGO_Init	regalloc	re-derived (switch on the kind, mask table not static so its read stays before SMemAlloc); only left: orig keeps the 0/1 kind in esi and checks the Carbon range as lea esi+2/add -2, ours materialises or esi,2 and indexes the mask table with it. cmp.ts also leaves [pic + 4*idx + disp] table loads unnormalised (treats them as a jump table without a bound cmp), so this cannot read SAME until cmp.ts handles scaled PIC indices
 0019f61c	FLAMINGLOGO_DrawFrame	unverified-ref	4 reference(s) only one side can resolve; every other instruction identical
 002b0e04	CD2TEXTURES_Construct	pic-ref	orig stores lea of s_szLogoMaskFiles+0x17e0 as the vtable pointer and uses g_tSurface-4/-8 globals; ours stores &_CD2TexturesVtable_003e26d8 and uses _BOOL_005c8a64/_BOOL_005c8a68
 002b0f36	CD2TEXTURES_Init	pic-ref	same code shape but the flag test reads g_tSurface-8 in orig and &_BOOL_005c8a64 in ours
@@ -495,32 +434,31 @@ addr	name	reason_class	detail
 002b1600	CD2TEXTURES_ListRemove	unverified-ref	3 reference(s) only one side can resolve; every other instruction identical
 002b1700	GetFreeMemory	wrong	orig skips the subtract when flag equals 0 (je); ours skips when flag is not 1 (jne), a different constant on the same flag
 002b1718	CD2TEXTURES_GrowEntries	wrong	ours stores to [reg+0x54] which orig never writes; orig writes through [reg] with a different register chain
-002b18a8	fpFillYBufferTable	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
-002b1913	PALETTE_InitColorLookupTables	sched	same instructions in a different order
+002b1913	PALETTE_InitColorLookupTables	regalloc	same instructions; the 49-table copy loop keeps the byte offset in edi and the source cursor in ebx, ours the other way round (index loop and pointer loop give the same)
 002b1a44	FUN_002b1a44	crt-idiom	orig is an unrolled per-row copy with cascading cmp/ja and dec-counter chains (Duff-style); ours is a compact loop over g_anTileRowDest/Src/Width
 002b1ca9	FUN_002b1ca9	crt-idiom	orig is a fully unrolled copy (about 357 extra add-based offset steps); ours is a loop over g_anTileRow tables with shade lookup
 002b224c	FUN_002b224c	sched	same operation set and clip checks; orig combines pixel bytes with movzx loads where ours uses plain byte moves and or (frame 0x1c vs 0x18)
 002b24c4	FUN_002b24c4	pic-ref	orig indexes g_abShiftTables while ours indexes g_abMacShadeTable with a different lea/displacement; the table symbol resolves differently
 002b2a08	FUN_002b2a08	sched	same callees and clip checks; orig uses cmovg and ja/jge polarity where ours uses cmovle and jbe/jle
 002b2da8	FUN_002b2da8	pic-ref	orig reads g_abShiftTables and shifts with sar cl; ours reads g_abMacShadeTable and masks the count with and 0x1f, so the table global differs
-002b35e9	FUN_002b35e9	data-guess	orig writes g_anClip+0xc as a byte and reads an unresolved [PIC ?] global; ours writes it as a dword, adds a g_anClip+0x20 store and reads _g_nMacScreenSide
+002b35e9	FUN_002b35e9	sched	rewritten from the asm (all clip fields in the binary's store order); identical except the screen-side test: orig tests 2 before 1, clang-425 forms a value-sorted switch (1 first) from every if/else-if form tried; g_nMacScreenSide's pointer cell is unresolved in the binary (1 unverified ref)
 002b36b6	FUN_002b36b6	sched	instruction-identical except the loop counter: orig counts esi down from 0x2dc with dec/jne, ours strength-reduces to a count-up from -0x2dc with inc/jne
-002b36e8	fpDrawVisTile	data-guess	first divergence is g_anRowOffsets-1c read as a byte (mov dl, byte ptr) in orig and as a dword in ours; ours also uses branch form where orig uses setcc
-002b38f3	FUN_002b38f3	data-guess	orig reads g_anRowOffsets-1c as a byte with setcc results; ours reads it as a dword with a branch chain, the same size guess as fpDrawVisTile
-002b3a14	fpDrawWallTile	pic-ref	same callees; orig and ours index the same row table at different displacements (0x29453a vs 0x1176) and call the helpers in a different order
-002b3be5	fpDrawBlendedVisTile	wrong	fpDrawBlendedVisTile not rewritten from the asm: orig reads g_ppPaletteTables and tests al against -0x40 (jb) where ours reads _g_ppBlendTables; 219 vs 223 insns
-002b3e8b	fpDrawRoofTile	wrong	fpDrawRoofTile not rewritten from the asm: orig reads g_ppPaletteTables and g_anRowOffsets where ours reads _g_ppBlendTables and g_abLightGrid at other offsets; frame 0x4c vs 0x5c
+002b36e8	fpDrawVisTile	regalloc	bTall now read as a byte and the clip tests as setcc/and like the binary; remaining difference is register choice and spill slots through the run loops
+002b38f3	FUN_002b38f3	sched	rewritten in the asm's order (row offset, surface, shift table, bounds tests); same instructions, the shift-table address is computed after the surface load where orig computes it before, and pBits/pShift swap registers
+002b3a14	fpDrawWallTile	regalloc	same callees, globals and constants; the wall bounds test now uses the shared setcc/and form; register choice and the placement of the per-pixel block differ (corner differences computed in another order)
+002b3be5	fpDrawBlendedVisTile	sched	rewritten from the asm: blend table from g_ppPaletteTables[0..2] by alpha, wall clip with a bool bTall, surface through &g_tSurface; same globals, constants and control flow, the run-copy loops are strength-reduced differently (orig walks src to an end pointer and derives dst from it, ours counts) so spills and register choice differ
+002b3e8b	fpDrawRoofTile	sched	rewritten from the asm: g_ppPaletteTables blend tables, g_abShiftTables[light][pixel], light grid row (x>>8)*0x400 + (y>>8)*0x20, clipped run light starting at the run (not the visible pixel) as the binary does; same globals and control flow, loop strength reduction and spills differ (frame 0x5c vs 0x4c)
 002b42cf	FUN_002b42cf	sched	same instructions in a different order
-002b4354	FUN_002b4354	wrong	FUN_002b4354 not rewritten from the asm: orig computes nLight>>3 first, keeps the surface as a pointer (g_pSurface->nPitch via a PIC pointer load) and caches clip rows in locals; 121 vs 133 insns
-002b44c2	FUN_002b44c2	wrong	FUN_002b44c2 not rewritten from the asm: same shift-table fix as 002b4354 applied, the row loop still differs (orig frame 0x5c vs ours 0x6c, 155 vs 160 insns)
-002b4696	fpDrawGroundTile	wrong	fpDrawGroundTile not rewritten from the asm: orig calls FUN_002b42cf before FUN_002b44c2 and reads g_anClip differently; 220 vs 212 insns
-002b4b72	D2GFX_SwitchModule	wrong	D2GFX_SwitchModule not rewritten from the asm: orig compares the renderer mode with 2 and calls through RENDERER_CurrentRender +0xc, ours compares with 1; 99 vs 100 insns
-002b603a	MACGFX_EnumerateDisplayModes	wrong	MACGFX_EnumerateDisplayModes not rewritten from the asm: orig extracts flags with and 0xffff0001 and imul 0xc, ours uses movsd of s_anTargetWidth; 352 vs 316 insns
+002b4354	FUN_002b4354	pic-ref	rewritten from the asm; identical except the row tables and g_abShiftTables cell, which cmp cannot normalise once the PIC base is copied to another register, and the row-count clamp (orig cmp 0x10/cmovge, every source form tried gives cmp 0xf/cmovg)
+002b44c2	FUN_002b44c2	regalloc	rewritten from the asm (same structure as 002b4354 plus the per-row light grid pointer starting at the row's first pixel); same instructions modulo register choice and spill slots, plus the same clamp compare form as 002b4354
+002b4696	fpDrawGroundTile	regalloc	rewritten from the asm: light cells 12 bytes, 8 per row, corner averages, the ground clip with bool bTall and the bounds test as setcc/and; same calls and globals, register choice, operand order of two clip compares and frame size (0x6c vs 0x7c) differ
+002b4b72	D2GFX_SwitchModule	pic-ref	rewritten from the asm (returns the renderer's CreateWindow/InitPerspective result, cmov for g_bMacHardware); the binary has it in D2GFX.cpp's unit (between 002b4975 and 002b4d0c) reading the selector 003c817c and helper table 003c815c directly, ours reaches them through pointer cells; also orig tests step 2 before step 1 where clang-425 turns every if/else-if or switch form into a value-sorted compare chain (1 first)
+002b603a	MACGFX_EnumerateDisplayModes	pic-ref	rewritten from the asm on a bitfield mode record (flag:1 width:15 height:16); every instruction identical except the constant-pool loads (65536.0 and the two default-mode images) and the indexed s_anTargetWidth/Height displacements, which sit at other offsets from the PIC base in our object
 002b652b	MACGFX_CompareDisplayModes	regalloc	same instructions modulo register choice
 002b692a	FUN_002b692a	noobj	Source/D2Hell/D2HellRoot.cpp is not built by d2_mac_objs
 002b7162	FUN_002b7162	sched	same loop; orig loads *pList into ecx and adds pNode, ours folds it into add eax,[esi] (33 vs 32 insns)
-002b71b0	TSLIST_InitFaultHandlerList	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
-002b721d	MACSEC_GetSigningOrganizationName	wrong	MACSEC_GetSigningOrganizationName not rewritten from the asm: orig stores 0xa to a stack slot and compares against 0xa/0x.. constants where ours stores 0x15; 352 vs 343 insns
+002b71b0	TSLIST_InitFaultHandlerList	pic-ref	same instructions; unverifiable gFaultHandlerList+8 / s_bOSChecked-4; ? / &___dso_handle
+002b721d	MACSEC_GetSigningOrganizationName	stack-layout	rewritten from the asm: dlopen flags RTLD_NOW|RTLD_GLOBAL (0xa, ours had 0x15), trust verdict computed before the chain test, OS check as >10 / ==10&&>6, certificate and organisation lookups as two inlined static helpers (their allocas lead the frame as in the orig); remaining: spill slots of pUrl/pCertificate swapped (-0x44/-0x48), the bool result spilled at entry instead of al=0, and the CSSM RDN loop's register choice
 002b7733	MACSEC_CheckCodeSignature	regalloc	status switch now matches the asm (0, 0x8001212a/0x80012436, 0xfffefa1b/0b, 0xfffefa0a); orig keeps the result in esi and the URL in edi, ours swaps them and sinks the initial 4
 002de2da	COGLTEXTURES_Construct	eh	orig has a landing pad calling _CD2Textures_D2 and __Unwind_Resume after CD2TEXTURES_Construct; ours has none
 002de374	_COGLTextures_D0	inline	orig _COGLTextures_D0 calls out-of-line _COGLTextures_D2; ours inlines CD2TEXTURES_Flush and _CD2Textures_D2 with a vtable store
@@ -647,3 +585,6 @@ addr	name	reason_class	detail
 002e70fc	OGL_MacGetDisplayDevice	semantic-guess	same CGDisplayBounds/DM calls, but float sums are stored and reassembled in different order with cvttss2si from memory vs registers
 002ef7cd	FOG_MacGetBlizzardSupportPath	noobj	Source/Fog/Src/ErrorManager.cpp is not built by d2_mac_objs
 0030a84a	MAC_SpawnProcess	unverified-ref	3 reference(s) only one side can resolve; every other instruction identical
+002b69ff	ARCHIVE_LoadMPQ	stack-layout	shared D2HellRoot.cpp D2_OS_MAC body, measured from d2_mac_shared_objs (cmp only reads d2_mac_objs, so coverage cannot see it). Fixed from the asm: GetModuleFileName (Win32Mac) instead of GetModuleFileNameA, szArchivePath[MAX_PATH-1] (orig +0x107, ours wrote [0xff]), the Mac __FILE__ of SRC/Archive.cpp on the alloc/free. Remaining: orig has an unreferenced 4-byte slot above tParam and pArchive below it (ours pArchive above tParam), and orig keeps the szArchivePath pointer and the callback in ebx/edi where ours reloads them
+0000a7b6	Storm::Source::SBig::SBigDel	unverified-ref	all 57 instructions identical; 3 calls to std::terminate in the noexcept landing pads that cmp cannot name on our side (an undefined external in the object)
+002b18a8	D2gfx::D2GFX::fpFillYBufferTable	unverified-ref	all 33 instructions identical; the load of g_nMacScreenSide resolves on our side only, the original address is not tagged as that global in the binary data cmp reads
