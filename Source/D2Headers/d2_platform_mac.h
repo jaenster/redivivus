@@ -38,25 +38,10 @@
 
 typedef BOOL* LPBOOL;
 
-// The message pump: the layer's PeekMessage, GetMessage, DispatchMessage, TranslateMessage
-// and DefWindowProc. The Mac pump has no accelerator tables.
-struct tagMSG;
-BOOL PeekMessage(tagMSG* pMsg, HWND hWnd, UINT nMsgFilterMin, UINT nMsgFilterMax, UINT wRemoveMsg);
-BOOL GetMessage(tagMSG* pMsg, HWND hWnd, UINT nMsgFilterMin, UINT nMsgFilterMax);
-LONG DispatchMessage(const tagMSG* pMsg);
-BOOL TranslateMessage(const tagMSG* pMsg);
-LONG DefWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-#define PeekMessageA PeekMessage
-#define GetMessageA GetMessage
-#define DispatchMessageA DispatchMessage
-#define DefWindowProcA DefWindowProc
-
-// Rectangles, the cursor and the keyboard (Win32_Rect.cpp, Win32_Window.cpp, Win32_GDI.cpp, Win32_Keys.cpp).
+// Rectangles and the keyboard (Win32_Rect.cpp, Win32_Keys.cpp); the message pump, PtInRect, GetWindowRect and
+// SetCursorPos are declared in d2_platform.h.
 BOOL CopyRect(RECT* pDest, RECT* pSrc);
 BOOL IntersectRect(RECT* pDest, RECT* pRect1, RECT* pRect2);
-BOOL PtInRect(RECT* pRect, POINT tPoint);
-BOOL GetWindowRect(HWND hWnd, RECT* pRect);
-BOOL SetCursorPos(int nX, int nY);
 short GetAsyncKeyState(BYTE byVirtKey);
 
 // The user name, the string and time helpers, and the interlocked pair the layer implements
