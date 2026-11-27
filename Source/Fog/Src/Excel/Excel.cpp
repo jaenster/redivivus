@@ -1340,4 +1340,89 @@ void __stdcall TXT_ParseDataAndPutIntoStructure(D2BinFieldExcelStrc * pBinFieldE
     }
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+// A 20-byte record whose first field is a key; the table walkers below stop at the first zero key.
+struct D2ExcelRecord20Strc {
+    /* 0x00 */ int nKey;
+    /* 0x04 */ int anValues[4];
+};
+static_assert(sizeof(D2ExcelRecord20Strc) == 0x14, "the table records are 0x14 bytes");
+
+// The head of a table of D2ExcelRecord20Strc: the record count at +4 and the records from +0x18.
+struct D2ExcelTable20Strc {
+    /* 0x00 */ int nReserved;
+    /* 0x04 */ int nCount;
+    /* 0x08 */ int anReserved[4];
+    /* 0x18 */ D2ExcelRecord20Strc aRecords[1];
+};
+static_assert(offsetof(D2ExcelTable20Strc, aRecords) == 0x18, "the records start at +0x18");
+
+// 1.14d mac: 002f2675
+void EXCEL_WalkTable20(D2ExcelTable20Strc* pTable) {
+    if (pTable->nCount) {
+      const D2ExcelRecord20Strc* pRecord = pTable->aRecords;
+      int nKey;
+      do {
+        nKey = pRecord->nKey;
+        pRecord++;
+      } while (nKey);
+    }
+}
+
+// A link table entry: a 4-character code (blank padded) and the index it stands for.
+struct D2ExcelLinkEntryStrc {
+    /* 0x00 */ char szCode[4];
+    /* 0x04 */ int nIndex;
+};
+static_assert(sizeof(D2ExcelLinkEntryStrc) == 8, "the link entries are 8 bytes");
+
+// 1.14d mac: 002f268e
+void EXCEL_WalkLinkTable(int* pEntry) {
+    if (*pEntry) {
+      do {
+        pEntry += 2;
+      } while (*pEntry);
+    }
+}
+
+// The linker: the entry count, and the table of D2ExcelLinkEntryStrc at +8.
+struct D2ExcelLinkerStrc {
+    /* 0x00 */ int nCount;
+    /* 0x04 */ int nReserved;
+    /* 0x08 */ D2ExcelLinkEntryStrc* pTable;
+};
+static_assert(offsetof(D2ExcelLinkerStrc, pTable) == 8, "the link table pointer is at +8");
+
+// 1.14d mac: 002f27cd
+int FOG_GetStringFromLinkIndex(D2ExcelLinkerStrc* pLinker, int nIndex, char* szCode) {
+    D2ExcelLinkEntryStrc* pTable = pLinker->pTable;
+    int bResult = 0;
+    if (pTable && nIndex >= 0 && nIndex < pLinker->nCount) {
+      int nNext = 0;
+      int i;
+      do {
+        i = nNext;
+        if (pLinker->nCount <= i) {
+          return 0;
+        }
+
+        nNext = i + 1;
+      } while (pTable[i].nIndex != nIndex);
+
+      char cCode = pTable[i].szCode[0];
+      szCode[0] = cCode != ' ' ? cCode : '\0';
+      cCode = pTable[i].szCode[1];
+      szCode[1] = cCode != ' ' ? cCode : '\0';
+      cCode = pTable[i].szCode[2];
+      szCode[2] = cCode != ' ' ? cCode : '\0';
+      cCode = pTable[i].szCode[3];
+      szCode[3] = cCode != ' ' ? cCode : '\0';
+      szCode[4] = '\0';
+      bResult = 1;
+    }
+
+    return bResult;
+}
+#endif
+
 } // namespace Fog::Src::Excel

@@ -40,7 +40,7 @@ addr	class	win_addr	evidence
 0005ad60	compiler		Static initialiser: CRITSECT_Init plus __cxa_atexit registration
 0005b525	shared-unpaired	005242f0	Extended Euclid mod 0x10001 inverse; win NET_SID_CLIENT_IDEAMultInverse (005242f0) same algorithm
 0005b5ec	shared-unpaired	005243e0	Builds IDEA decrypt schedule via MulInverse and negation; win NET_SID_CLIENT_IDEAInvertKey same
-0005c2ca	mac-only		Loads news cache and sends SID 0x46; win BNNEWS_LoadCachedNews (0051da30) loads only; no RequestNews twin verified
+0005c2ca	shared-unpaired	0051dbf0	win NET_SID_CLIENT_Send_0x46_NewsInfo stores the callbacks, frees the table, loads the cached news, notifies and sends SID 0x46 with the timestamp
 0005c580	shared-unpaired	0051d510	Done callback then per-entry callbacks for unread news; win BNNEWS_InvokeCallbacks (0051d510) same
 0005c676	shared-unpaired	0051d860	SID 0x46 news parser: MOTD id 0 callback, sorted insert, cache save, callbacks; win NET_SID_CLIENT_Incoming0x46 same
 0005ca08	mac-only		atexit destructor freeing array block via SMemFree; no verified win twin
@@ -609,7 +609,7 @@ addr	class	win_addr	evidence
 001fb32c	mac-only		Moves stat points into dexterity via STATLIST_AddUnitStat; no win function of this name found
 00205604	mac-only		Clears a state via ItemStats SetState; no win function of this name found
 002056d0	shared-unpaired	0054b930	win SCMD_0x2F_NpcInteract/0x30 do the same lookup, AI, act and 10 tile checks through IsOtherAct and CheckIfCoordsAreInRange
-002151c9	mac-only		Dispatches quest ids 201 and 331 to Act 2 quest 4 handlers; no win function of this name found
+002151c9	shared-unpaired	005447a0	win QUEST_DispatchMonsterCreateToA2Q4 bounds the class id by nTxtMonStatsSize and forwards 0xc9 and 0x14b
 002163d0	shared-unpaired	00544fa0	win QUEST_SetActNpcIntroFlags switches on the act with the same NPCINTRO lists
 00219349	shared-unpaired	005912e0	Win 005912e0 Q03_NpcGossipHandler confirmed: 96 bytes, same A1Q3 namespace and gating logic
 0021abc1	shared-unpaired	005920d0	Win 005920d0 Q04_NotifyQuestStateToPlayer confirmed: same A1Q4 gating logic
@@ -645,7 +645,7 @@ addr	class	win_addr	evidence
 00248873	mac-only		Clears a state via ItemStats SetState; no win function of this name found
 0024eba7	shared-unpaired	005d40f0	Win SKILLASS_SetupMissilePath at 005d40f0 has the same name and args (unit, seed); body not compared line by line
 002584aa	mac-only		Removes the blood_mana stat list and frees it; no win function of this name found
-00267b1c	mac-only		Copies a 9-byte table row into monster AI fields with a 0-3 random roll; no win function of this name found
+00267b1c	shared-unpaired	005c4180	win SKILLNEC_SetSkeletonComponentsByMasteryLvl copies the same 9-byte mastery rows (level capped at 10) into the monster components
 0026ed6e	mac-only		Picks inventory grid offset 4 or 5 by body slot; no win function of this name found
 00276341	shared-unpaired	005d0d70	Win SKILLPAL_AuraCallback_Redemption at 005d0d70 is the same redemption unit callback (corpse check, counter in callback args)
 002779c2	shared-unpaired	0055b720	Win PLAYERLIST_SetHostileDelay at 0055b720 has the same name and args (unit, unit2, delay) and stamps a tick count
@@ -734,7 +734,7 @@ addr	class	win_addr	evidence
 002ee03b	mac-only		handle lookup with index and serial check; no verified win twin
 002eed78	mac-only		Calls Gestalt (Mac OS query) and sets up Mac product/OS info at init; Gestalt is a Mac-only API
 002ef085	shared-unpaired		returns EBP for fp_fatal messages; VC inlines it at each fatal site, clang keeps it out of line
-002ef339	mac-only		returns DAT_00552f54 global flag; accessor, no verified win twin
+002ef339	shared-unpaired	00407ff0	win GetErrorState returns g_dwErrorState, the flag the Mac body reads at 00552f54 (CheckErrorDuringError)
 002ef34b	mac-only		body only returns 1; no caller, no code reference
 002ef3cd	mac-only		body returns 0; no caller, no code reference
 002ef740	mac-only		exe directory plus trailing backslash via SFILE_GetExecutableDirectory; win twin not verified
@@ -759,7 +759,7 @@ addr	class	win_addr	evidence
 002f3d5a	shared-unpaired	006bfad0	win BroadcastToAllClients inlines the closing check and the local or socket send
 002f3daa	shared-unpaired	006bfb70	win AddClient allocates the same connection (line 0x23b) and inserts it into the same hashes
 002f4400	shared-unpaired	006be700	win SweepExpiredHackEntries is the hacklist timer sweep
-002f471c	mac-only		address and mask-length list match; no verified win twin
+002f471c	shared-unpaired	006bf660	win MatchesGameTokenFilter walks the same (addr, mask index) list against the mask table; Mac layout shifts the offsets by the pthread mutex size
 002f47d4	shared-unpaired	006be9f0	win IsPerIpLimitReached is the per-address connection count test
 002f5529	mac-only		stores second arg at object +0xc20; accessor, no verified win twin
 002f553b	mac-only		game token filter match of masked address; no verified win twin

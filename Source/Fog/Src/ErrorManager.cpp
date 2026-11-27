@@ -20,6 +20,7 @@
 #include "Source/D2Headers/D2Arch.h"
 #if !defined(_WIN32) && D2_OS_MAC
 #include <CoreServices/CoreServices.h>
+#include "Source/MacSpecific/Source/MacShell/MacShell.h"
 #endif
 static_assert(sizeof(void*) != 4 || sizeof(D2BlizzardErrorArgument) == 0x54, "D2BlizzardErrorArgument is 0x54 bytes on 32-bit");
 
@@ -5303,6 +5304,88 @@ int ERRORMANAGER_ReturnTrue() {
 // 1.14d mac: 002ef3cd
 int ERRORMANAGER_ReturnFalse() {
     return 0;
+}
+#endif
+
+#if !defined(_WIN32) && D2_OS_MAC
+// The Mac binary's crash and error-report entry points live in its own unit and in the crash library.
+// 1.14d mac: 00002e4d
+void CRASH_InitCrashReporter();
+// 1.14d mac: 00002e52
+void ErrorReportingSetSupportPath(const char* szPath);
+// 1.14d mac: 00005cd5
+void CRASHY_SetCrashCallback(void* pfnCallback, void* pContext);
+
+// The crash report's custom message (the second argument of the init call), 0x400 bytes.
+// 1.14d mac: 00553356
+static char gszFogCrashReportCustomMessage[0x400] = {};
+// "D2 1.14d", the milestone string handed to the crash report.
+// 1.14d mac: 00552f56
+static char gszFogVersionString[16] = {};
+
+// 1.14d mac: 002eed78
+void FOG_InitErrorManager(void* pUnused, char* szText, int bStoreStartupInfo) {
+    char szSharedSupportPath[0x400];
+    if (gbFogErrorManagerInitialized) {
+      if (bStoreStartupInfo) {
+        Source::SFile::LOGFILE_StoreGameStartupInfo();
+      }
+      return;
+    }
+
+    CRASH_InitCrashReporter();
+    CRASHY_SetCrashCallback((void*)DumpLog, nullptr);
+    if (MAC_GetSharedSupportPath(szSharedSupportPath, sizeof(szSharedSupportPath))) {
+      ErrorReportingSetSupportPath(szSharedSupportPath);
+    }
+
+    g_nProjectId = 1;
+    szProduct = (char*)"Diablo II";
+    g_szApplicationName = (char*)"Diablo II";
+    g_szModuleName = (char*)"Diablo II";
+    sprintf(gszFogVersionString, "D2 %i.%i%c", 1, 14, 'd');
+    g_szMilestone = gszFogVersionString;
+    g_szBuildNumber = (char*)"77";
+    g_szPlatform = (char*)"OSX";
+    g_szPrimaryAssignment = (char*)".ClassicErrorReporter";
+    g_szAssignments = (char*)".ClassicErrorReporter";
+    if (szText) {
+      Storm::Source::SSTR::SStrCopy(gszFogCrashReportCustomMessage, szText, sizeof(gszFogCrashReportCustomMessage));
+    }
+
+    InitializeCriticalSection(&lpCriticalSection_0074c830);
+    InitializeCriticalSection(&lpCriticalSection_0074d848);
+    gbFogErrorManagerInitialized = 1;
+    LogManager::InitHighResTimer();
+    Memory::InitializePoolSystem(nullptr, "Global Pool System", 0x40000, 0x8000);
+    SMem::SMemInitPerfCounters();
+    for (int nBit = 0; nBit < 0x20; nBit++) {
+      uint32_t nMask = 1u << nBit;
+      if (BitBuffer::gadwBitMasks[nBit] != nMask || BitBuffer::gadwInvBitMasks[nBit] != ~nMask) {
+        return;
+      }
+    }
+
+    uint32_t nGestaltResult;
+    gSystemInfo.eOSType = 9;
+    Gestalt('sysv', (SInt32*)&nGestaltResult);
+    gSystemInfo.fOSVersion = (float)(nGestaltResult & 0xf) / 100.0f + (float)(nGestaltResult >> 8 & 0xf) +
+                             (float)(nGestaltResult >> 0xc & 0xf) * 10.0f + (float)(nGestaltResult >> 4 & 0xf) / 10.0f;
+    Gestalt('ram ', (SInt32*)&nGestaltResult);
+    gSystemInfo.dwTotalPhysicalMemory = nGestaltResult;
+    Gestalt('lram', (SInt32*)&nGestaltResult);
+    gSystemInfo.dwUnknown10 = nGestaltResult;
+    memset(&gSystemInfo.sWinSystemInfo, 0, sizeof(gSystemInfo.sWinSystemInfo));
+    gSystemInfo.sWinSystemInfo.dwNumberOfProcessors = 1;
+    gSystemInfo.bInitialized = 1;
+    LogManager::StartLogWriterThread();
+    if (bStoreStartupInfo) {
+      Source::SFile::LOGFILE_StoreGameStartupInfo();
+    }
+
+    atexit(EXIT_AtExit);
+    ERRORMANAGER_ReturnTrue();
+    Storm::Source::SErr::SErrSetBlizzardErrorFunction(CRASH_FillupCrashTxt);
 }
 #endif
 
