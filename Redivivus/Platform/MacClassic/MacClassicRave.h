@@ -9,9 +9,11 @@
 //   build 1.00-1.13d);
 // - TQADrawContext, whose methods D2Rave calls through the context's function pointers; the
 //   member order follows the public documentation, and the offsets D2Rave uses are noted;
-// - the tag, gestalt, pixel-type and error numbers D2Rave passes. Tags 16, 31, 32 and 46 are
-//   NOT verified against the public header and are deliberately left unnamed here: D2Rave spells
-//   them as numbers.
+// - the tag, gestalt, pixel-type and error numbers D2Rave passes.
+//
+// Every name, value and method offset here was checked against Apple's RAVE 1.6 header (QuickDraw 3D
+// 1.6, as shipped in the QuickTime 7.3 for Windows SDK); the RAVE 1.5 header covers only up to
+// getNoticeMethod and gestalt selector 8.
 //
 // Classic Mac PowerPC only. See README.md beside this file.
 #pragma once
@@ -106,6 +108,7 @@ enum {
     kQAGestalt_BitmapPixelTypesAllowed = 13,
     kQAGestalt_BitmapPixelTypesPreferred = 14,
     kQAGestalt_OptionalFeatures2 = 15,
+    kQAGestalt_MultiTextureMax = 16,
 };
 
 // Draw-context tags whose numbers D2Rave's behaviour confirms.
@@ -120,9 +123,21 @@ enum {
     kQATag_TextureFilter = 11,
     kQATag_TextureOp = 12,
     kQATag_Texture = 13,
+    kQATag_BufferComposite = 16,
+    kQATag_AlphaTestFunc = 31,
+    kQATag_DontSwap = 32,
     kQATagGL_BlendSrc = 109,
     kQATagGL_BlendDst = 110,
 };
+
+// Float tags.
+enum {
+    kQATag_AlphaTestRef = 46,
+};
+
+enum { kQABufferComposite_None = 0 };
+enum { kQAAlphaTest_None = 0 };
+enum { kQAAlphaTest_NE = 5 };
 
 // The draw context: a table of methods the engine fills in. Offsets are the ones D2Rave loads.
 struct TQADrawContext {
@@ -161,8 +176,8 @@ struct TQADrawContext {
     /* 0x78 */ void * accessZBufferEnd;
     /* 0x7c */ TQAError (*clearDrawBuffer)(const TQADrawContext * ctx, const TQARect * rect, const TQADrawContext * initialContext);
     /* 0x80 */ void * clearZBuffer;
-    /* 0x84 */ void * textureNewFromDrawContext;
-    /* 0x88 */ void * bitmapNewFromDrawContext;
+    /* 0x84 */ void * textureFromContext;
+    /* 0x88 */ void * bitmapFromContext;
     /* 0x8c */ void * busy;
     /* 0x90 */ TQAError (*swapBuffers)(const TQADrawContext * ctx, const TQARect * dirtyRect);
 };

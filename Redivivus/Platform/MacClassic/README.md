@@ -37,5 +37,5 @@ clang++ -target powerpc-unknown-none -ffreestanding -fsyntax-only -std=gnu++17 \
 need a hosted C++ library, so they fall back to `-target i386-apple-macos10.13` with the host SDK
 and the same two axes.
 
-RAVE tags 16, 31, 32 and 46 are not named here on purpose: D2Rave's behaviour does not pin them,
-and they have not been checked against the public header.
+The RAVE names, values and draw-context offsets were checked against Apple's RAVE 1.6 header
+(QuickDraw 3D 1.6, in the QuickTime 7.3 for Windows SDK), including tags 16, 31, 32 and 46.

@@ -288,10 +288,10 @@ void sRaveSetAlphaState(int nState) {
     if (snRaveAlphaState == 0 || nState != snRaveAlphaState) {
         TQADrawContext * pContext = gpRaveDrawContext;
         if (nState == 2) {
-            pContext->setInt(pContext, 31, 0);
+            pContext->setInt(pContext, kQATag_AlphaTestFunc, kQAAlphaTest_None);
         } else if (nState == 1) {
-            pContext->setInt(pContext, 31, 5);
-            pContext->setFloat(pContext, 46, sgfRaveZero);
+            pContext->setInt(pContext, kQATag_AlphaTestFunc, kQAAlphaTest_NE);
+            pContext->setFloat(pContext, kQATag_AlphaTestRef, sgfRaveZero);
         }
         snRaveAlphaState = nState;
     }
@@ -783,16 +783,16 @@ int sInitRaveContext(int nMode) {
     TQADrawContext * pContext = gpRaveDrawContext;
     pContext->setInt(pContext, kQATag_ZFunction, 0);
     pContext->setInt(pContext, kQATag_PerspectiveZ, 0);
-    pContext->setInt(pContext, 16, 0);
+    pContext->setInt(pContext, kQATag_BufferComposite, kQABufferComposite_None);
     pContext->setFloat(pContext, kQATag_ColorBG_a, sgfRaveColorOne);
     pContext->setFloat(pContext, kQATag_ColorBG_r, sgfRaveZero);
     pContext->setFloat(pContext, kQATag_ColorBG_g, sgfRaveZero);
     pContext->setFloat(pContext, kQATag_ColorBG_b, sgfRaveZero);
-    pContext->setInt(pContext, 31, 5);
-    pContext->setFloat(pContext, 46, sgfRaveZero);
+    pContext->setInt(pContext, kQATag_AlphaTestFunc, kQAAlphaTest_NE);
+    pContext->setFloat(pContext, kQATag_AlphaTestRef, sgfRaveZero);
     pContext->setInt(pContext, kQATag_TextureOp, 1);
     if (gbRaveSwapBuffers) {
-        pContext->setInt(pContext, 32, 1);
+        pContext->setInt(pContext, kQATag_DontSwap, 1);
     }
     sRaveSpriteInit();
 
