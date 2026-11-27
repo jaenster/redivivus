@@ -218,46 +218,40 @@ void __fastcall RemoveRosterPet(int32_t nRosterGUID) {
 // Returns the ownership relation of a roster pet to the local player: 0=not found or different party, 1=owned by local player, 2=owned by same-party member, 3=pet type lacks the party-share flag (nFlags&0x10==0) or skill out of range. Looks up the pet by nRosterGUID, checks PetType txt flags, then compares party IDs.
 int __fastcall ROSTER_GetPetOwnershipRelation(int32_t nRosterGUID) {
     D2RosterPetStrc* pPet = pRosterPet;
-    while (true) {
-      if (!pPet) {
-        return 0;
-      }
-      if (pPet->nRosterGUID == nRosterGUID) {
-        break;
-      }
-
+    while (pPet && pPet->nRosterGUID != nRosterGUID) {
       pPet = pPet->pNext;
     }
 
-    int nPlayerGUID = pPet->nSkillID;
-    D2PetTypeTxt* pPetTypeTxt;
-    if (!(pPetTypeTxt = nPlayerGUID >= 0 && nPlayerGUID < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtPetType + nPlayerGUID : nullptr) || !(pPetTypeTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[4])) {
-      return 3;
+    if (pPet) {
+      int nPetType = pPet->nSkillID;
+      D2PetTypeTxt* pPetTypeTxt = nPetType >= 0 && nPetType < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtPetType + nPetType : nullptr;
+      if (!pPetTypeTxt) {
+        return 3;
+      }
+
+      if (!(pPetTypeTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[4])) {
+        return 3;
+      }
+
+      D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
+      int nPlayerGUID;
+      if (!pPlayer) {
+        nPlayerGUID = -1;
+      } else {
+        nPlayerGUID = pPlayer->nUnitGUID;
+      }
+
+      if (pPet->nOwnerGUID == nPlayerGUID) {
+        return 1;
+      }
+
+      uint16_t nMyPartyId = Roster::GetRosterPartyId(Roster::GetRosterByGUID(nPlayerGUID));
+      if (nMyPartyId != 0xffff && nMyPartyId == Roster::GetRosterPartyId(Roster::GetRosterByGUID(pPet->nOwnerGUID))) {
+        return 2;
+      }
     }
 
-    D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
-    if (!pPlayer) {
-      nPlayerGUID = -1;
-    } else {
-      nPlayerGUID = pPlayer->nUnitGUID;
-    }
-    if (pPet->nOwnerGUID == nPlayerGUID) {
-      return 1;
-    }
-
-    D2RosterStrc* pRoster = Roster::GetRosterByGUID(nPlayerGUID);
-    uint16_t nMyPartyId = Roster::GetRosterPartyId(pRoster);
-    if (nMyPartyId == 0xffff) {
-      return 0;
-    }
-
-    pRoster = Roster::GetRosterByGUID(pPet->nOwnerGUID);
-    uint16_t nOwnerPartyId = Roster::GetRosterPartyId(pRoster);
-    if (nMyPartyId != nOwnerPartyId) {
-      return 0;
-    }
-
-    return 2;
+    return 0;
 }
 
 D2RosterPetSeedStrc * __fastcall GetSeed(int32_t nRosterGUID) {

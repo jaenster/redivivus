@@ -3187,10 +3187,7 @@ static void __stdcall INV_UpdateItemUnderCursor(D2UnitStrc * pUnit, D2InventoryS
 }
 
 static void __stdcall INV_UpdateBodySlotUnderCursor(int32_t nBodyLoc, D2UnitStrc * pUnit, D2InventoryStrc * pInventory) {
-    uint32_t bIsType;
-    D2UnitStrc* pItem;
-    pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
-    if (pItem) {
+    if (D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory)) {
       gpInventoryContextUi = -1;
       gaInventorySelectState = -1;
       gnInvBodySlotUnderCursor = nBodyLoc;
@@ -3200,63 +3197,38 @@ static void __stdcall INV_UpdateBodySlotUnderCursor(int32_t nBodyLoc, D2UnitStrc
       return;
     }
 
-    int nHandedness;
-    nHandedness = D2Common::INVENTORY::Inventory::INVENTORY_GetWeaponHandedness(pUnit, pInventory);
-    pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pUnit->pInventory, nBodyLoc);
-    if ((nBodyLoc == 4 || nBodyLoc == 5) && nHandedness == 2) {
-      D2UnitStrc* pOtherHandItem;
-      pOtherHandItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 4);
-      if (pOtherHandItem || (pOtherHandItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pUnit->pInventory, 5) , pOtherHandItem != 0)) {
-        if (pItem) {
-          bIsType = D2Common::ITEMS::Items::ITEMS_IsA(pOtherHandItem, ITEMTYPE_Crossbow);
-          if (!bIsType) {
-            bIsType = D2Common::ITEMS::Items::ITEMS_IsA(pItem, ITEMTYPE_Crossbow);
-            if (!bIsType) {
-              bIsType = D2Common::ITEMS::Items::ITEMS_IsA(pOtherHandItem, ITEMTYPE_Bow);
-              if (!bIsType) {
-                bIsType = D2Common::ITEMS::Items::ITEMS_IsA(pItem, ITEMTYPE_Bow);
-                if (!bIsType) {
-                  pItem = pOtherHandItem;
-                }
-              }
-            }
-          }
-        }
-        if (pOtherHandItem) {
-          if (pItem) {
-            goto describe_item;
-          }
+    BOOL bTwoHanded = D2Common::INVENTORY::Inventory::INVENTORY_GetWeaponHandedness(pUnit, pInventory) == 2;
+    D2UnitStrc* pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pUnit->pInventory, nBodyLoc);
+    if ((nBodyLoc == 4 || nBodyLoc == 5) && bTwoHanded) {
+      D2UnitStrc* pOtherHandItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 4);
+      if (!pOtherHandItem) {
+        pOtherHandItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pUnit->pInventory, 5);
+      }
 
-          pItem = pOtherHandItem;
-          if (g_nCurrentInventoryPage != 4) {
-            gbInvBodySlotUnderCursorExists = 0;
-            pItemToDescribe = 0;
-            gpInvHoveredItem = 0;
-            return;
-          }
-        }
+      if (pOtherHandItem && pItem && !D2Common::ITEMS::Items::ITEMS_IsA(pOtherHandItem, ITEMTYPE_Crossbow) && !D2Common::ITEMS::Items::ITEMS_IsA(pItem, ITEMTYPE_Crossbow) && !D2Common::ITEMS::Items::ITEMS_IsA(pOtherHandItem, ITEMTYPE_Bow) && !D2Common::ITEMS::Items::ITEMS_IsA(pItem, ITEMTYPE_Bow)) {
+        pItem = pOtherHandItem;
+      }
+
+      if (pOtherHandItem && !pItem && g_nCurrentInventoryPage == 4) {
+        pItem = pOtherHandItem;
       }
     }
-    if (!pItem) {
+
+    if (pItem) {
+      gbInvBodySlotUnderCursorExists = 1;
+      if (pItem != gpInvHoveredItem) {
+        gaInventoryItemSlots = (gaPlayerBodySlotScreenCoords[nBodyLoc].nRight + gaPlayerBodySlotScreenCoords[nBodyLoc].nLeft) / 2;
+        nInventoryContextMode = gaInventoryItemSlots;
+        pItemToDescribe = pItem;
+        gpInvHoveredItem = pItem;
+        gaInventoryState = gaPlayerBodySlotScreenCoords[nBodyLoc].nTop;
+        pInventoryContextUi = gaPlayerBodySlotScreenCoords[nBodyLoc].nBottom;
+      }
+    } else {
       gbInvBodySlotUnderCursorExists = 0;
       pItemToDescribe = 0;
       gpInvHoveredItem = 0;
-      return;
     }
-
-    describe_item:
-    gbInvBodySlotUnderCursorExists = 1;
-    if (pItem != gpInvHoveredItem) {
-      gaInventoryItemSlots = (gaPlayerBodySlotScreenCoords[nBodyLoc].nRight + gaPlayerBodySlotScreenCoords[nBodyLoc].nLeft) / 2;
-      nInventoryContextMode = gaInventoryItemSlots;
-      pItemToDescribe = pItem;
-      gpInvHoveredItem = pItem;
-      gaInventoryState = gaPlayerBodySlotScreenCoords[nBodyLoc].nTop;
-      pInventoryContextUi = gaPlayerBodySlotScreenCoords[nBodyLoc].nBottom;
-      return;
-    }
-
-    gbInvBodySlotUnderCursorExists = 1;
 }
 
 void __stdcall INV_HandleMouseMove(D2UIMouseMsgStrc * pMsg) {

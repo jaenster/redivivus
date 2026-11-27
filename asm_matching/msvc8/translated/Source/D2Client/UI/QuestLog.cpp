@@ -2192,31 +2192,31 @@ bool QUESTLOG_FindZooDummyMonster() {
 }
 
 void __fastcall QUESTLOG_SpawnZooDummyMonsters(int32_t nSpawnX, int32_t nSpawnY) {
-    if (gQuestLog.bZooSpawnArmed == '\0') {
+    if (!gQuestLog.bZooSpawnArmed) {
       return;
     }
 
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
-    uint32_t sNewSeed = D2_SeedRoll(&pPlayer->sSeed);
-    int nZooMonsterCount = sNewSeed % 3 + 2;
-    uint32_t i = 0;
+    int nZooMonsterCount = D2_SeedRoll(&pPlayer->sSeed) % 3 + 2;
+    int i = 0;
     if (nZooMonsterCount <= 0) {
       return;
     }
 
     do {
-      uint32_t nSpawnOffset;
-      nSpawnOffset = (int)i % 2;
-      pPlayer = UNIT::CUnit::CreateMissileOrMonster(0x95, nSpawnX + nSpawnOffset, nSpawnOffset + nSpawnY, UNIT_MONSTER, 1);
-      if (!pPlayer) {
-        gQuestLog.nZooMonsterGUID = -1;
+      int nSpawnOffset = i % 2;
+      D2UnitStrc* pMonster = UNIT::CUnit::CreateMissileOrMonster(0x95, nSpawnX + nSpawnOffset, nSpawnOffset + nSpawnY, UNIT_MONSTER, 1);
+      int nMonsterGUID;
+      if (!pMonster) {
+        nMonsterGUID = -1;
       } else {
-        gQuestLog.nZooMonsterGUID = pPlayer->nUnitGUID;
+        nMonsterGUID = pMonster->nUnitGUID;
       }
 
+      gQuestLog.nZooMonsterGUID = nMonsterGUID;
       i++;
       gQuestLog.bZooMonsterSpawned = 1;
-    } while ((int)i < nZooMonsterCount);
+    } while (i < nZooMonsterCount);
 }
 
 uint8_t * __fastcall Unreferenced_004a3200(uint8_t * pData) {
