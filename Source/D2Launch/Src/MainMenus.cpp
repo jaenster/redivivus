@@ -5533,34 +5533,7 @@ BOOL __stdcall MAINMENU_FreeRealmList() {
 // qsort comparator for the realm list (g_pBNetRealmList elements): strcmp of the two entries' szName.
 // Provenance: asm 00430b00 (loads [[arg]]), qsort callback pushed at 004341cc.
 int MAINMENU_CompareRealmNames(LPCVOID pRealmA, LPCVOID pRealmB) {
-    bool bLess;
-    uint8_t* pName2 = (uint8_t*)(*(D2BNetRealmEntryStrc* const*)pRealmB)->szName;
-    uint8_t* pName1 = (uint8_t*)(*(D2BNetRealmEntryStrc* const*)pRealmA)->szName;
-    while (true) {
-      uint8_t byCh1;
-      byCh1 = *pName1;
-      bLess = byCh1 < *pName2;
-      if (byCh1 != *pName2) {
-        break;
-      }
-      if (!byCh1) {
-        return 0;
-      }
-
-      byCh1 = pName1[1];
-      bLess = byCh1 < pName2[1];
-      if (byCh1 != pName2[1]) {
-        break;
-      }
-
-      pName1 += 2;
-      pName2 += 2;
-      if (!byCh1) {
-        return 0;
-      }
-    }
-
-    return 1 - (uint32_t)bLess - (uint32_t)(bLess != 0);
+    return strcmp((*(D2BNetRealmEntryStrc* const*)pRealmA)->szName, (*(D2BNetRealmEntryStrc* const*)pRealmB)->szName);
 }
 
 int __stdcall MAINMENU_GetRealmCount() {
