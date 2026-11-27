@@ -23,7 +23,7 @@ public:
     pthread_mutex_t m_tMutex;
 
     SFileCritSect();
-    ~SFileCritSect();
+    __attribute__((noinline)) ~SFileCritSect();
 };
 
 template<class T>
@@ -1330,5 +1330,397 @@ SFileCritSect::SFileCritSect() {
     pthread_mutexattr_settype(&tAttr, PTHREAD_MUTEX_RECURSIVE);
     pthread_mutex_init(&m_tMutex, &tAttr);
     pthread_mutexattr_destroy(&tAttr);
+}
+
+// What a caller hands SFileReadFileEx2 for an asynchronous read: where in the file to read
+// (0x08) and the event to signal when it is done (0x10).
+struct SFileOverlapped {
+    uint8_t pad00[8];
+    uint32_t nOffset;  // 0x08
+    uint8_t pad0c[4];
+    HANDLE hEvent;     // 0x10
+};
+
+SFILE_STATIC D2StormAsyncOpStrc* IssueRequest(D2MPQFileStrc* pFile, uint32_t nFileOffset, void* pChunkWritePtr,
+                                              void* pReadBufferBase, IDirectSoundBuffer* pStream,
+                                              uint32_t nStreamPos, D2StormAudioStreamRec* pParentStream,
+                                              uint32_t nBytesToRead, int32_t nTimeoutMs, int32_t nPriority,
+                                              HANDLE hCompletionEvent, BOOL bAutoFree, BOOL bQueueImmediately,
+                                              void* pCompletion);
+SFILE_STATIC uint32_t SFILE_InternalReadFile(uint32_t nUnused, uint32_t nOffset, D2MPQFileStrc* pFile,
+                                             void* pDestination, uint32_t nBytes);
+
+// 1.14d mac: 00012ac1
+// Reads from an open file. A synchronous read of a disk file goes straight to the disk. An
+// archive file is read through its read-ahead buffer; what is left is read directly or, for a
+// CD or an asynchronous read, queued in chunks for the I/O thread, which is waited for unless
+// the read is asynchronous.
+int SFileReadFileEx2(D2MPQFileStrc* hFile, void* pBuffer, uint32_t nBytesToRead, size_t* pnBytesRead,
+                     void* pOverlappedArg, int nPriority, void* ppCompletion) {
+    SFileOverlapped* pOverlapped = (SFileOverlapped*)pOverlappedArg;
+    uint8_t* pDest = (uint8_t*)pBuffer;
+    if (pnBytesRead != NULL) {
+        *pnBytesRead = 0;
+    }
+    if (pBuffer == NULL) {
+        SErrSetLastError(0x57);
+        return 0;
+    }
+    SFILE_LOCK();
+    if (nBytesToRead == 0) {
+        if (pOverlapped != NULL && pOverlapped->hEvent != 0) {
+            SetEvent(pOverlapped->hEvent);
+        }
+        SFILE_UNLOCK();
+        return 1;
+    }
+    if (hFile->hFile != 0 && pOverlapped == NULL) {
+        BOOL bResult = SFILE_SyncReadFile(hFile, -1, pBuffer, nBytesToRead, (uint32_t*)pnBytesRead);
+        SFILE_UNLOCK();
+        return bResult;
+    }
+    if (hFile->pReadBuffer != NULL) {
+        uint32_t nConsumed = hFile->nBytesRead;
+        if (nConsumed < hFile->nBufferSize && pOverlapped == NULL) {
+            uint32_t nCached = hFile->nBufferSize - nConsumed;
+            if (nBytesToRead < nCached) {
+                nCached = nBytesToRead;
+            }
+            if (0 < (int)nCached) {
+                memmove(pBuffer, (uint8_t*)hFile->pReadBuffer + nConsumed, nCached);
+                nConsumed = hFile->nBytesRead;
+            }
+            hFile->nFilePos = hFile->nFilePos + nCached;
+            hFile->nBytesRead = nConsumed + nCached;
+            if (pnBytesRead != NULL) {
+                *pnBytesRead = nCached;
+            }
+            if (nCached == nBytesToRead) {
+                if (hFile->bChecksumEnabled != 0 && hFile->nChecksumState == 4 &&
+                    hFile->dwComputedCRC != hFile->pBlockEntry->dwCRC32) {
+                    SErrDisplayError(0x85100083, hFile->szFileName, -4, NULL, 0, 1);
+                }
+                SFILE_UNLOCK();
+                return 1;
+            }
+            nBytesToRead -= nCached;
+            pDest = (uint8_t*)pBuffer + nCached;
+        }
+    }
+    uint32_t nReadLen = nBytesToRead;
+    uint8_t* pReadBase = pDest;
+    if (pOverlapped == NULL) {
+        uint32_t nSector = hFile->pArchive->nSectorSize;
+        uint32_t nToBoundary = nSector - ((nSector - 1) & hFile->nFilePos);
+        uint32_t nLimit = 0x1000;
+        if (nToBoundary < 0x1001) {
+            nLimit = nToBoundary;
+        }
+        if (nBytesToRead < nLimit) {
+            pReadBase = (uint8_t*)hFile->pReadBuffer;
+            nReadLen = nLimit;
+        }
+    }
+    if (nReadLen == 0) {
+        if (pOverlapped != NULL && pOverlapped->hEvent != 0) {
+            SetEvent(pOverlapped->hEvent);
+        }
+        SFILE_UNLOCK();
+        return 1;
+    }
+    uint32_t* pPos = pOverlapped != NULL ? &pOverlapped->nOffset : &hFile->nFilePos;
+    uint32_t nOffset = *pPos;
+    D2ArchiveStrc* pArchive = hFile->pArchive;
+    if (hFile->hFile == 0 && pArchive->nArchiveType == 0) {
+        nReadLen = SFILE_InternalReadFile(nReadLen, nOffset, hFile, pReadBase, nReadLen);
+        if (hFile->bChecksumEnabled != 0 && hFile->nChecksumState == 2 &&
+            hFile->nExpectedFileSize == hFile->pBlockEntry->dwFileSize) {
+            STORM_Crc32(NULL, 0, &hFile->dwComputedCRC, 4);
+            hFile->nChecksumState = 4;
+        }
+        if (pOverlapped != NULL && pOverlapped->hEvent != 0) {
+            SetEvent(pOverlapped->hEvent);
+        }
+    } else {
+        uint32_t nChunkSize = 0x100000;
+        if (pArchive != NULL &&
+            ((uint32_t)(pArchive->nArchiveType - 2) < 2 || (pArchive->nArchiveType == 1 && pOverlapped != NULL))) {
+            nChunkSize = s_nDataChunkSize;
+        }
+        SFILE_CreateCdThread();
+        HANDLE hEvent = pOverlapped != NULL ? pOverlapped->hEvent : CreateEventA(0, 1, 0, NULL);
+        uint32_t nRequests = ((nReadLen - 1) + nChunkSize) / nChunkSize;
+        D2StormAsyncOpStrc* pRequest = NULL;
+        uint32_t nQueued = 0;
+        if (nRequests != 0) {
+            int32_t nReqPriority = pOverlapped != NULL ? nPriority : 1;
+            int32_t nTimeoutMs = pOverlapped == NULL ? 0 : 0x7fffffff;
+            uint32_t nPos = 0;
+            for (uint32_t nIndex = 0; nIndex < nRequests; nIndex++) {
+                uint32_t nThis = nChunkSize < nReadLen ? nChunkSize : nReadLen;
+                bool bLast = nIndex == nRequests - 1;
+                nQueued += bLast ? 0 : nThis;
+                pRequest = IssueRequest(hFile, nOffset + nPos, pReadBase + nPos, pReadBase, NULL, 0, NULL, nThis,
+                                        nTimeoutMs, nReqPriority, bLast ? hEvent : 0, pOverlapped != NULL || !bLast,
+                                        bLast, bLast ? ppCompletion : NULL);
+                nReadLen -= nChunkSize;
+                nPos += nChunkSize;
+            }
+        }
+        SFILE_UNLOCK();
+        if (pOverlapped != NULL) {
+            return 1;
+        }
+        WaitForSingleObject(hEvent, 0xffffffff);
+        SFILE_LOCK();
+        CloseHandle(hEvent);
+        nReadLen = nQueued + pRequest->nChunkBytesRead;
+        if (pRequest != NULL) {
+            delete pRequest;
+        }
+    }
+    uint32_t nGot = nReadLen;
+    if (nBytesToRead < nReadLen) {
+        nGot = nBytesToRead;
+    }
+    if (pReadBase != pDest) {
+        if (0 < (int)nGot) {
+            memmove(pDest, pReadBase, nGot);
+        }
+        hFile->nBytesRead = nGot;
+        hFile->nBufferSize = nReadLen;
+    }
+    if (pOverlapped == NULL) {
+        hFile->nFilePos += nGot;
+    }
+    if (pnBytesRead != NULL) {
+        *pnBytesRead = *pnBytesRead + nGot;
+    }
+    if (nGot != nBytesToRead) {
+        SErrSetLastError(0x26);
+        SFILE_UNLOCK();
+        return 0;
+    }
+    if (hFile->bChecksumEnabled != 0 && hFile->nChecksumState == 4 &&
+        hFile->dwComputedCRC != hFile->pBlockEntry->dwCRC32) {
+        SErrDisplayError(0x85100083, hFile->szFileName, -4, NULL, 0, 1);
+    }
+    SFILE_UNLOCK();
+    return 1;
+}
+
+// 1.14d mac: 00014e4e
+// Sets the priority of the queued requests that read into a buffer. A request that becomes
+// urgent absorbs the request just before it when the two are one contiguous read.
+void SFilePrioritizeRequest(void* pReadBufferBase, int nPriority) {
+    if (pReadBufferBase == NULL) {
+        SErrSetLastError(0x57);
+        return;
+    }
+    SFILE_LOCK();
+    D2StormAsyncOpStrc* pRequest = s_tRequestQueue.Head();
+    D2StormAsyncOpStrc* pPrevRequest = NULL;
+    while (pRequest != NULL) {
+        D2StormAsyncOpStrc* pMatched = pPrevRequest;
+        if (pRequest->pReadBufferBase == pReadBufferBase) {
+            int nOldPriority = pRequest->nPriority;
+            pRequest->nPriority = nPriority;
+            pMatched = pRequest;
+            if (0 < nPriority && pPrevRequest != NULL && nOldPriority < 1 &&
+                pPrevRequest->pReadBufferBase == pReadBufferBase) {
+                if (pPrevRequest->nBytesToRead + pPrevRequest->nFilePos == pRequest->nFilePos &&
+                    pPrevRequest->nBytesToRead + pRequest->nBytesToRead < 0x100001 && pPrevRequest->bAutoFree != 0 &&
+                    pRequest->nChunkBytesRead == 0 && pPrevRequest->nChunkBytesRead == 0 &&
+                    pPrevRequest->pStream == NULL && pRequest->pStream == NULL &&
+                    pPrevRequest->pParentStream == NULL && pRequest->pParentStream == NULL &&
+                    pPrevRequest->hCompletionEvent == 0 && pPrevRequest->pCompletion == NULL) {
+                    pRequest->nFilePos = pPrevRequest->nFilePos;
+                    pRequest->nSeekFilePos = pPrevRequest->nSeekFilePos;
+                    pRequest->dwDueTick = pPrevRequest->dwDueTick;
+                    pRequest->pChunkWritePtr = pPrevRequest->pChunkWritePtr;
+                    pRequest->nBytesToRead = pRequest->nBytesToRead + pPrevRequest->nBytesToRead;
+                    delete pPrevRequest;
+                }
+            }
+        }
+        pRequest = s_tRequestQueue.Next(pRequest);
+        pPrevRequest = pMatched;
+    }
+    SFILE_UNLOCK();
+    if (0 < nPriority) {
+        SetEvent(s_hCdEvent);
+    }
+}
+
+// 1.14d mac: 0001505d
+// Queues a read for the I/O thread.
+SFILE_STATIC D2StormAsyncOpStrc* IssueRequest(D2MPQFileStrc* pFile, uint32_t nFileOffset, void* pChunkWritePtr,
+                                              void* pReadBufferBase, IDirectSoundBuffer* pStream,
+                                              uint32_t nStreamPos, D2StormAudioStreamRec* pParentStream,
+                                              uint32_t nBytesToRead, int32_t nTimeoutMs, int32_t nPriority,
+                                              HANDLE hCompletionEvent, BOOL bAutoFree, BOOL bQueueImmediately,
+                                              void* pCompletion) {
+    D2StormAsyncOpStrc* pRequest;
+    if (pChunkWritePtr == NULL && pStream == NULL) {
+        SErrSetLastError(0x57);
+        pRequest = NULL;
+    } else {
+        SFILE_LOCK();
+        pRequest = s_tRequestQueue.NewNode(STORM_LIST_LINK_BEFORE, 0, 0);
+        uint32_t nTick = GetTickCount();
+        pRequest->hCompletionEvent = hCompletionEvent;
+        pRequest->pFile = pFile;
+        pRequest->nFilePos = nFileOffset;
+        if (pFile->hFile == 0) {
+            nFileOffset = (nFileOffset >> 1) + pFile->pBlockEntry->dwFilePos;
+        }
+        pRequest->nSeekFilePos = nFileOffset;
+        pRequest->dwDueTick = nTick + nTimeoutMs;
+        pRequest->nPriority = nPriority;
+        pRequest->pChunkWritePtr = pChunkWritePtr;
+        pRequest->pReadBufferBase = pReadBufferBase;
+        pRequest->pStream = pStream;
+        pRequest->nStreamPos = nStreamPos;
+        pRequest->pParentStream = pParentStream;
+        pRequest->nBytesToRead = nBytesToRead;
+        pRequest->bAutoFree = bAutoFree;
+        pRequest->pCompletion = pCompletion;
+        if (pFile != NULL) {
+            pFile->nRefCount++;
+        }
+        if (pParentStream != NULL) {
+            pParentStream->nRefCount++;
+        }
+        SFILE_UNLOCK();
+        if (bQueueImmediately != 0) {
+            SetEvent(s_hCdEvent);
+        }
+    }
+    return pRequest;
+}
+
+// 1.14d mac: 0001516c
+// Reads from an archive file the sector way: the unaligned head and tail through the
+// archive's one-sector cache, the aligned middle straight into the destination; the file's
+// CRC runs along while the reads are in order.
+SFILE_STATIC uint32_t SFILE_InternalReadFile(uint32_t nUnused, uint32_t nOffset, D2MPQFileStrc* pFile,
+                                             void* pDestination, uint32_t nBytes) {
+    uint8_t* pOutput = (uint8_t*)pDestination;
+    uint32_t nFileSize = pFile->pBlockEntry->dwFileSize;
+    uint32_t nResult = 0;
+    uint32_t nRemaining = nFileSize - nOffset;
+    if (nOffset <= nFileSize && nRemaining != 0) {
+        if (nBytes < nRemaining) {
+            nRemaining = nBytes;
+        }
+        if (pFile->bChecksumEnabled != 0 && nOffset == 0) {
+            STORM_Crc32(NULL, 0, &pFile->dwComputedCRC, 1);
+            pFile->nExpectedFileSize = 0;
+            pFile->nChecksumState = 2;
+        }
+        D2ArchiveStrc* pArchive = pFile->pArchive;
+        uint32_t nSector = pArchive->nSectorSize;
+        uint32_t nHead;
+        uint8_t* pDest;
+        if ((nOffset & (nSector - 1)) == 0) {
+            nHead = 0;
+            pDest = pOutput;
+        } else {
+            if (pFile->bChecksumEnabled != 0 && pFile->nChecksumState != 1 && pFile->nExpectedFileSize != nOffset) {
+                pFile->nChecksumState = 1;
+                nSector = pArchive->nSectorSize;
+            }
+            uint32_t nSectorBytes = SFILE_InternalReadAlignedSector(pFile, -nSector & nOffset);
+            uint32_t nSectorSize = pFile->pArchive->nSectorSize;
+            uint32_t nInSector = (nSectorSize - 1) & nOffset;
+            nHead = nSectorSize - nInSector;
+            if (nRemaining < nHead) {
+                nHead = nRemaining;
+            }
+            if (0 < (int)nHead) {
+                memmove(pOutput, (uint8_t*)pFile->pArchive->pSectorBuffer + nInSector, nHead);
+            }
+            if (pFile->bChecksumEnabled != 0 && pFile->nChecksumState == 2) {
+                STORM_Crc32(pOutput, nHead, &pFile->dwComputedCRC, 2);
+                pFile->nExpectedFileSize = pFile->nExpectedFileSize + nHead;
+            }
+            pArchive = pFile->pArchive;
+            if (nSectorBytes != pArchive->nSectorSize || (nRemaining -= nHead, nRemaining == 0)) {
+                uint32_t nSkip = (pArchive->nSectorSize - 1) & nOffset;
+                uint32_t nAvailable = nSectorBytes - nSkip;
+                if (nSectorBytes < nSkip) {
+                    return 0;
+                }
+                if (nAvailable <= nHead) {
+                    return nAvailable;
+                }
+                return nHead;
+            }
+            nOffset += nHead;
+            pDest = pOutput + nHead;
+        }
+        uint32_t nMiddle = 0;
+        uint32_t nTail = 0;
+        if (nRemaining != 0) {
+            if (pFile->bChecksumEnabled != 0 && pFile->nChecksumState != 1 && pFile->nExpectedFileSize != nOffset) {
+                pFile->nChecksumState = 1;
+                nSector = pArchive->nSectorSize;
+            }
+            nMiddle = -nSector & nRemaining;
+            uint32_t nRead = SFILE_InternalReadAligned(pFile, nOffset, pDest, nMiddle);
+            if (pFile->bChecksumEnabled != 0 && pFile->nChecksumState == 2) {
+                STORM_Crc32(pDest, nRead, &pFile->dwComputedCRC, 2);
+                pFile->nExpectedFileSize = pFile->nExpectedFileSize + nRead;
+            }
+            if (nMiddle != nRead || (nRemaining -= nMiddle, nRemaining == 0)) {
+                return nRead + nHead;
+            }
+            if (pFile->bChecksumEnabled != 0 && pFile->nChecksumState != 1 &&
+                pFile->nExpectedFileSize != nOffset + nMiddle) {
+                pFile->nChecksumState = 1;
+            }
+            nTail = SFILE_InternalReadAlignedSector(pFile, nOffset + nMiddle);
+            if (0 < (int)nRemaining) {
+                memmove(pDest + nMiddle, pFile->pArchive->pSectorBuffer, nRemaining);
+            }
+            if (nRemaining < nTail) {
+                nTail = nRemaining;
+            }
+            if (pFile->bChecksumEnabled != 0 && pFile->nChecksumState == 2) {
+                STORM_Crc32(pDest + nMiddle, nTail, &pFile->dwComputedCRC, 2);
+                pFile->nExpectedFileSize = pFile->nExpectedFileSize + nTail;
+            }
+        }
+        nResult = nMiddle + nHead + nTail;
+    }
+    return nResult;
+}
+
+// 1.14d mac: 00017484
+D2StormAudioStreamRec::~D2StormAudioStreamRec() {
+    if (pMpqFile != NULL) {
+        if (--pMpqFile->nRefCount == 0) {
+            delete pMpqFile;
+        }
+    }
+    if (pStream != NULL && bAllocatedStream != 0) {
+        pStream->Release();
+    }
+    m_link.Unlink();
+}
+
+// 1.14d mac: 000174ec
+D2StormAsyncOpStrc::~D2StormAsyncOpStrc() {
+    if (pFile != NULL) {
+        if (--pFile->nRefCount == 0) {
+            delete pFile;
+        }
+    }
+    if (pParentStream != NULL) {
+        if (--pParentStream->nRefCount == 0) {
+            delete pParentStream;
+        }
+    }
+    m_link.Unlink();
 }
 #endif  // D2_OS_MAC

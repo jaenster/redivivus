@@ -22,6 +22,7 @@ struct D2SsigContextStrc;
 // The Mac DirectSound shim's buffer (Storm::IDirectSoundBuffer); only the call this file makes.
 struct IDirectSoundBuffer {
     int GetCurrentPosition(DWORD* pdwPlayCursor, DWORD* pdwWriteCursor);
+    int Release();
 };
 
 struct D2MPQHashEntryStrc {
@@ -76,7 +77,7 @@ struct D2ArchiveStrc {
     D2MPQFileStrc* pArchiveFile;             // 0x148  the archive opened as a file (closed with it)
 
     D2ArchiveStrc() {}
-    ~D2ArchiveStrc();
+    __attribute__((noinline)) ~D2ArchiveStrc();
 };
 
 struct D2MPQFileStrc {
@@ -103,7 +104,7 @@ struct D2MPQFileStrc {
     uint32_t nExpectedFileSize;              // 0x154
 
     D2MPQFileStrc() {}
-    ~D2MPQFileStrc();
+    __attribute__((noinline)) ~D2MPQFileStrc();
 };
 
 struct D2StormAudioStreamRec {
@@ -129,7 +130,7 @@ struct D2StormAudioStreamRec {
     uint32_t nRefCount;                      // 0x4C
 
     D2StormAudioStreamRec() {}
-    ~D2StormAudioStreamRec();
+    __attribute__((noinline)) ~D2StormAudioStreamRec();
 };
 
 struct D2StormAsyncOpStrc {
@@ -139,7 +140,7 @@ struct D2StormAsyncOpStrc {
     int nFilePos;                            // 0x10
     uint32_t nSeekFilePos;                   // 0x14
     int dwDueTick;                           // 0x18
-    int bUrgent;                             // 0x1C
+    int nPriority;                           // 0x1C
     void* pChunkWritePtr;                    // 0x20
     void* pReadBufferBase;                   // 0x24
     IDirectSoundBuffer* pStream;             // 0x28  the DirectSound buffer the request fills
@@ -151,7 +152,7 @@ struct D2StormAsyncOpStrc {
     void* pCompletion;                       // 0x40
 
     D2StormAsyncOpStrc() {}
-    ~D2StormAsyncOpStrc();
+    __attribute__((noinline)) ~D2StormAsyncOpStrc();
 };
 typedef char D2MPQ_size_block[(sizeof(D2MPQBlockEntryStrc) == 0x1c) ? 1 : -1];
 typedef char D2MPQ_size_archive[(sizeof(D2ArchiveStrc) == 0x14c) ? 1 : -1];
@@ -174,6 +175,8 @@ int SSignatureVerifyStream_Finish(D2SsigContextStrc* pContext, const void* pModu
 void SErrDisplayError(DWORD dwErrCode, const char* szFileName, int nLine, char* szDescription, int nFlags,
                       int nRecoverable);
 uint32_t SStrLen(const char* szString);
+// mode 1 starts a CRC, 2 adds data, 4 finishes it
+void STORM_Crc32(const uint8_t* pData, uint32_t nSize, uint32_t* pCrc, int nMode);
 char* SStrDup(const char* szString);
 uint8_t STORM_IsCDVolume(int16_t nVRefNum);
 
