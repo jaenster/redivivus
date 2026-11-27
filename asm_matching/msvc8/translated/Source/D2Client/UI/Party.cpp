@@ -718,23 +718,18 @@ void __stdcall DRAW_UI_PartyWindow_II() {
 }
 
 static void __stdcall UI_DrawPartyButtonTextWithTooltip(uint16_t nLocaleId1, uint16_t nLocaleId2, uint32_t dwUnused, int32_t nLine2Y, int32_t nColor, int32_t nOffsetX, int32_t nLine1Y) {
-    int32_t nCenterX;
     if (!nLocaleId2) {
       ShowToolTipOnPartyButtons(nLocaleId1, 0, nOffsetX, 0);
-      nCenterX = UI_CalculateCenteredTextXPosition(nLocaleId1, nOffsetX);
-      D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(nLocaleId1), Inv::gnPanelOffsetX + nCenterX, nLine1Y - Inv::gnPanelOffsetY, nColor, 0);
+      dwUnused = UI_CalculateCenteredTextXPosition(nLocaleId1, nOffsetX);
+      D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(nLocaleId1), Inv::gnPanelOffsetX + dwUnused, nLine1Y - Inv::gnPanelOffsetY, nColor, 0);
       return;
     }
 
     ShowToolTipOnPartyButtons(nLocaleId1, nLocaleId2, nOffsetX, 1);
-    nCenterX = UI_CalculateCenteredTextXPosition(nLocaleId1, nOffsetX);
-    int nX2 = nLine1Y - Inv::gnPanelOffsetY;
-    BOOL bCenter = 0;
-    int nX = Inv::gnPanelOffsetX + nCenterX;
-    nCenterX = nColor;
-    D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(nLocaleId1), nX, nX2, nCenterX, bCenter);
-    nCenterX = UI_CalculateCenteredTextXPosition(nLocaleId2, nOffsetX);
-    D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(nLocaleId2), Inv::gnPanelOffsetX + nCenterX, nLine2Y - Inv::gnPanelOffsetY, nColor, 0);
+    dwUnused = UI_CalculateCenteredTextXPosition(nLocaleId1, nOffsetX);
+    D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(nLocaleId1), Inv::gnPanelOffsetX + dwUnused, nLine1Y - Inv::gnPanelOffsetY, nColor, 0);
+    dwUnused = UI_CalculateCenteredTextXPosition(nLocaleId2, nOffsetX);
+    D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(nLocaleId2), Inv::gnPanelOffsetX + dwUnused, nLine2Y - Inv::gnPanelOffsetY, nColor, 0);
 }
 
 static void ROSTER_DrawPlayerTooltip(D2RosterStrc * pRoster) {
