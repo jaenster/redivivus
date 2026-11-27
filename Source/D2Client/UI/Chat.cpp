@@ -28,6 +28,7 @@
 #include "Source/MacSpecific/Source/MacShell/MacShell.h"
 // The text the Text Services Manager delivers for the chat line (Mac only, no Windows twin).
 void CHAT_OnIMEInputText(const char* szText, bool bFixed, int* pnRange);
+void MAC_DisposeTSMDocument(void);
 #endif
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -398,7 +399,16 @@ void __stdcall CHAT_InitIME() {
 #endif
 
 #if !defined(_WIN32) && D2_OS_MAC
-// Windows-only: the Mac build has no Imm* input method manager (its IME is Text Services Manager, MAC_SetTSMInputCallback).
+// The Mac has no Imm* input method manager: it drops the chat handlers and, for the Asian
+// languages, the Text Services Manager document and its input hook.
+// 1.14d mac: 0009ebad (CHAT_ShutdownInput in the Mac database)
+void __stdcall CHAT_ShutdownIME() {
+    _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gUIFlagChatInit, 4);
+    if ((unsigned)(gnLanguageCode - 6) < 4) {
+      ::MAC_DisposeTSMDocument();
+      ::MAC_SetTSMInputCallback(nullptr);
+    }
+}
 #else
 // @sourcefile .\UI\chat.cpp
 void __stdcall CHAT_ShutdownIME() {

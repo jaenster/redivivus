@@ -27,6 +27,13 @@
 #include "Source/D2Client/D2ClientRoot.h"
 #include "Source/D2Client/Engine.data.h"
 #include "Source/D2Common/DataTbls/MonsterTbls.inline.h"
+#if !defined(_WIN32) && D2_OS_MAC
+#include <Carbon/Carbon.h>
+// 1.14d mac: 00035351
+bool STORM_IsCDVolume(short nVRefNum);
+// 1.14d mac: 002b692a
+int FUN_002b692a(void);
+#endif
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -408,6 +415,58 @@ void __fastcall LOADER_SetConnectionLostFlag(BOOL bConnectionLost) {
     gbConnectionLost = bConnectionLost;
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+// True when a mounted volume of that name is a CD volume (the disc check of the insert-disc loop).
+// 1.14d mac: 000ab26f
+BOOL __fastcall LOADER_IsNamedVolumeMounted(char * szVolumeName) {
+    HParamBlockRec tParam;
+    Str255 szVolumeEntry;
+    Str255 szWanted;
+    size_t nLength = strlen(szVolumeName);
+    memcpy(szWanted + 1, szVolumeName, nLength + 1);
+    szWanted[0] = (unsigned char)nLength;
+    tParam.volumeParam.ioVolIndex = 1;
+    tParam.volumeParam.ioVRefNum = 0;
+    tParam.volumeParam.ioNamePtr = szVolumeEntry;
+    short nStatus = PBHGetVInfoSync(&tParam);
+    if (nStatus == 0) {
+      short nVolIndex = 2;
+      do {
+        if (EqualString(szVolumeEntry, szWanted, false, false) && STORM_IsCDVolume(tParam.volumeParam.ioVRefNum)) {
+          return 1;
+        }
+
+        tParam.volumeParam.ioVRefNum = 0;
+        tParam.volumeParam.ioNamePtr = szVolumeEntry;
+        tParam.volumeParam.ioVolIndex = nVolIndex;
+        nStatus = PBHGetVInfoSync(&tParam);
+        nVolIndex++;
+      } while (nStatus == 0);
+    }
+
+    return 0;
+}
+#endif
+
+#if !defined(_WIN32) && D2_OS_MAC
+// The Mac keeps the insert-disc loop alive only while the game disc is not mounted: each pass
+// draws the screen, then looks for the Play Disc (Lord of Destruction for the expansion); once
+// found it sets the done flag, otherwise it asks the Mac shell to unmount the other volumes.
+// 1.14d mac: 000aa68a
+uint32_t __stdcall fpGameLoopFunction(uint32_t dwUnused) {
+    GAME::Msg::NET_D2GS_CLIENT_Send_0x6D_PING();
+    LOADER_DrawInsertDiscScreen(0);
+    Sound::SoundHdr::DRAW_AfterDraw();
+    const char* szVolumeName = Fog::D2CheckExpansionGame() ? "Lord of Destruction" : "Diablo II Play Disc";
+    if (LOADER_IsNamedVolumeMounted((char*)szVolumeName)) {
+      gbCharScreenOkPressed = 1;
+    } else {
+      ::FUN_002b692a();
+    }
+
+    return gbCharScreenOkPressed & 1;
+}
+#else
 // Simple UI draw loop used by MessageGameLoop (clear, palette, popup/ok/cancel, cursor).
 // Returns nonzero to exit.
 // @abi __stdcall uint32_t(uint32_t dwUnused). Ends RET 4 - exactly one stack parameter and no
@@ -437,6 +496,7 @@ uint32_t __stdcall fpGameLoopFunction(uint32_t dwUnused) {
     Sound::SoundHdr::DRAW_AfterDraw();
     return (uint32_t)(gbCharScreenOkPressed != 0);
 }
+#endif
 
 BOOL fpRequiredUserAction() {
     uint32_t dwActPalIdx;
