@@ -11,6 +11,8 @@
 
 #include <string.h>
 
+#define D2_NOINLINE __attribute__((noinline))
+
 // Carbon's Script Manager and KeyTranslate, declared here because Carbon.h's own
 // FillRect, PtInRect, ShowWindow ... clash with the Win32 entry points this file defines.
 extern "C" long GetScriptManagerVariable(short nSelector);
@@ -114,7 +116,7 @@ static const BYTE s_abyVirtualKeyToMacKey[0x100] = {
 };
 
 // 1.14d mac: 0002ef30
-LRESULT Proc_DesktopWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+D2_NOINLINE LRESULT Proc_DesktopWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     if (uMsg != WM_PAINT && uMsg != WM_ERASEBKGND) {
         return 0;
     }
@@ -123,7 +125,7 @@ LRESULT Proc_DesktopWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 
 // 1.14d mac: 0002eae0
 // What a window does with the messages nothing else claims.
-LRESULT DefWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+D2_NOINLINE LRESULT DefWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     switch (uMsg) {
         case WM_CREATE:
             return 1;
@@ -199,7 +201,7 @@ LRESULT DefWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
                 return 0;
             }
             if (wParam == 0) {
-                wParam = GetSystemMetrics(SYSTEM_FONT);
+                wParam = (int)GetStockObject(SYSTEM_FONT);
             }
             hWnd->hFont = wParam;
             return 0;
@@ -209,7 +211,7 @@ LRESULT DefWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             }
             {
                 int hFont = hWnd->hFont;
-                return hFont != GetSystemMetrics(SYSTEM_FONT) ? hFont : 0;
+                return hFont != (int)GetStockObject(SYSTEM_FONT) ? hFont : 0;
             }
         case WM_NCCREATE:
             return 1;
@@ -242,7 +244,7 @@ LRESULT DefWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 }
 
 // 1.14d mac: 0002ef4a
-LRESULT Proc_ButtonWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+D2_NOINLINE LRESULT Proc_ButtonWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     DWORD dwStyle = hWnd->dwStyle;
     LRESULT lResult = 0;
     WPARAM wNotify;
@@ -403,35 +405,33 @@ LRESULT Proc_ButtonWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 }
 
 // 1.14d mac: 0002f793
-LRESULT Proc_StaticWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+D2_NOINLINE LRESULT Proc_StaticWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+    LRESULT lResult = 0;
     if (uMsg < WM_MOUSEMOVE) {
         if (uMsg - WM_SETFOCUS < 2) {
             InvalidateRect(hWnd, 0, 1);
-            return 0;
-        }
-        if (uMsg == WM_SETTEXT) {
+        } else if (uMsg == WM_SETTEXT) {
             LRESULT lText = DefWindowProc(hWnd, WM_SETTEXT, wParam, lParam);
-            if (lText == 0) {
-                return 0;
+            if (lText != 0) {
+                InvalidateRect(hWnd, 0, 1);
+                lResult = lText;
             }
-            InvalidateRect(hWnd, 0, 1);
-            return lText;
-        }
-        if (uMsg == WM_PAINT) {
+        } else if (uMsg == WM_PAINT) {
             PAINTSTRUCT tPaint;
             BeginPaint(hWnd, &tPaint);
             EndPaint(hWnd, &tPaint);
-            return 0;
+        } else {
+            lResult = DefWindowProc(hWnd, uMsg, wParam, lParam);
         }
-    } else if (uMsg - WM_MOUSEMOVE < 3) {
-        return 0;
+    } else if (uMsg - WM_MOUSEMOVE >= 3) {
+        lResult = DefWindowProc(hWnd, uMsg, wParam, lParam);
     }
-    return DefWindowProc(hWnd, uMsg, wParam, lParam);
+    return lResult;
 }
 
 // 1.14d mac: 0002f500
 // Registers the classes every window needs: the desktop, Button, Static, Listbox, Edit.
-void Proc_RegisterBuiltInClasses(int hInstance) {
+D2_NOINLINE void Proc_RegisterBuiltInClasses(int hInstance) {
     WNDCLASSEX tClass;
 
     tClass.cbSize = sizeof(WNDCLASSEX);
@@ -475,7 +475,7 @@ void Proc_RegisterBuiltInClasses(int hInstance) {
 
 // 1.14d mac: 0002fa20
 // The registered class of that name, case-insensitively, or NULL.
-Win32MacWindowClass* Wnd_FindClassByName(LPCSTR szClassName) {
+D2_NOINLINE Win32MacWindowClass* Wnd_FindClassByName(LPCSTR szClassName) {
     for (UINT i = 0; i < WINDOW_CLASS_COUNT; i++) {
         Win32MacWindowClass* pClass = &s_aWindowClasses[i];
         if (pClass->nUsed != 0 && _strnicmp(pClass->szClassName, szClassName, 0x100) == 0) {
@@ -487,7 +487,7 @@ Win32MacWindowClass* Wnd_FindClassByName(LPCSTR szClassName) {
 
 // 1.14d mac: 0002faf8
 // A free slot of the class table with cbClsExtra bytes of class storage, or NULL.
-Win32MacWindowClass* Wnd_NewWndClass(int nClsExtra) {
+D2_NOINLINE Win32MacWindowClass* Wnd_NewWndClass(int nClsExtra) {
     for (UINT i = 0; i < WINDOW_CLASS_COUNT; i++) {
         Win32MacWindowClass* pClass = &s_aWindowClasses[i];
         if (pClass->nUsed == 0) {
@@ -504,7 +504,7 @@ Win32MacWindowClass* Wnd_NewWndClass(int nClsExtra) {
 }
 
 // 1.14d mac: 0002f888
-HWND Wnd_CreateDesktopWindow(int hInstance, Win32MacWindowClass* pClass) {
+D2_NOINLINE HWND Wnd_CreateDesktopWindow(int hInstance, Win32MacWindowClass* pClass) {
     HWND hWnd = (HWND)Priv_AllocClear(pClass->cbWndExtra + sizeof(Win32MacWindow));
     if (hWnd != 0) {
         int nWidth = GetSystemMetrics(SM_CXSCREEN);
@@ -540,20 +540,20 @@ HWND Wnd_CreateDesktopWindow(int hInstance, Win32MacWindowClass* pClass) {
         hWnd->nNeedsPaint = 1;
         g_pMsgState->bPaintPending++;
         hWnd->n78 = 1;
-        hWnd->hFont = GetSystemMetrics(SYSTEM_FONT);
+        hWnd->hFont = (int)GetStockObject(SYSTEM_FONT);
     }
     return hWnd;
 }
 
 // 1.14d mac: 0002f9e0
-void Wnd_InitWnd(int hInstance) {
+D2_NOINLINE void Wnd_InitWnd(int hInstance) {
     Proc_RegisterBuiltInClasses(hInstance);
     Win32MacWindowClass* pClass = Wnd_FindClassByName("Wnd_Desktop");
     g_hDesktopWnd = Wnd_CreateDesktopWindow(hInstance, pClass);
 }
 
 // 1.14d mac: 0002fad7
-void Wnd_FreeWnd(HWND hWnd) {
+D2_NOINLINE void Wnd_FreeWnd(HWND hWnd) {
     if (hWnd->szText != 0) {
         Priv_Free(hWnd->szText);
     }
@@ -562,7 +562,7 @@ void Wnd_FreeWnd(HWND hWnd) {
 
 // 1.14d mac: 0002fa76
 // Tears the window system down.
-void Wnd_Shutdown(void) {
+D2_NOINLINE void Wnd_Shutdown(void) {
     if (g_hDesktopWnd != 0) {
         if (g_hDesktopWnd->hUpdateRgn != 0) {
             DeleteObject(g_hDesktopWnd->hUpdateRgn);
@@ -577,7 +577,7 @@ void Wnd_Shutdown(void) {
 }
 
 // 1.14d mac: 0002fb57
-BOOL Wnd_IsSelfOrDescendant(HWND hWndFind, HWND hWndRoot, int nDepth) {
+D2_NOINLINE BOOL Wnd_IsSelfOrDescendant(HWND hWndFind, HWND hWndRoot, int nDepth) {
     if (hWndFind == hWndRoot) {
         return 1;
     }
@@ -591,24 +591,26 @@ BOOL Wnd_IsSelfOrDescendant(HWND hWndFind, HWND hWndRoot, int nDepth) {
 
 // 1.14d mac: 0002fb9f
 // Tells each ancestor a child window was created or destroyed, unless the window opted out.
-void Wnd_SendParentNotify(HWND hWnd, WPARAM wEvent, int nChildID, LPARAM lParam) {
+D2_NOINLINE BOOL Wnd_SendParentNotify(HWND hWnd, WPARAM wEvent, int nChildID, LPARAM lParam) {
     if (g_hDesktopWnd == hWnd) {
-        return;
+        return 0;
     }
     while (hWnd != 0) {
-        do {
-            if ((hWnd->dwStyle & WS_CHILD) == 0) {
-                return;
-            }
-        } while ((hWnd->dwExStyle & 4) != 0);
+        if ((hWnd->dwStyle & WS_CHILD) == 0) {
+            return 0;
+        }
+        if ((hWnd->dwExStyle & 4) != 0) {
+            continue;
+        }
         hWnd = hWnd->pParent;
         SendMessage(hWnd, WM_PARENTNOTIFY, 0, lParam);
     }
+    return 0;
 }
 
 // 1.14d mac: 0002fe9b
 // The ancestor whose parent is the desktop.
-HWND Wnd_GetTopParent(HWND hWnd) {
+D2_NOINLINE HWND Wnd_GetTopParent(HWND hWnd) {
     while (hWnd != 0) {
         HWND hParent = hWnd->pParent;
         if (hParent == g_hDesktopWnd) {
@@ -620,12 +622,12 @@ HWND Wnd_GetTopParent(HWND hWnd) {
 }
 
 // 1.14d mac: 0002ffdd
-HWND GetDesktopWindow(void) {
+D2_NOINLINE HWND GetDesktopWindow(void) {
     return g_hDesktopWnd;
 }
 
 // 1.14d mac: 0002ffee
-LRESULT CallWindowProc(WNDPROC pfnWndProc, HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+D2_NOINLINE LRESULT CallWindowProc(WNDPROC pfnWndProc, HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     if (pfnWndProc != 0 && Wnd_IsSelfOrDescendant(hWnd, g_hDesktopWnd, 0) != 0) {
         return pfnWndProc(hWnd, uMsg, wParam, lParam);
     }
@@ -633,12 +635,12 @@ LRESULT CallWindowProc(WNDPROC pfnWndProc, HWND hWnd, UINT uMsg, WPARAM wParam, 
 }
 
 // 1.14d mac: 00030049
-BOOL IsWindow(HWND hWnd) {
+D2_NOINLINE BOOL IsWindow(HWND hWnd) {
     return Wnd_IsSelfOrDescendant(hWnd, g_hDesktopWnd, 0);
 }
 
 // 1.14d mac: 00030077
-ATOM RegisterClassEx(const WNDCLASSEX* pClassEx) {
+D2_NOINLINE ATOM RegisterClassEx(const WNDCLASSEX* pClassEx) {
     if (Wnd_FindClassByName(pClassEx->lpszClassName) != 0) {
         return 0;
     }
@@ -674,7 +676,7 @@ ATOM RegisterClassEx(const WNDCLASSEX* pClassEx) {
 }
 
 // 1.14d mac: 00030162
-ATOM RegisterClass(const WNDCLASS* pClass) {
+D2_NOINLINE ATOM RegisterClass(const WNDCLASS* pClass) {
     WNDCLASSEX tClassEx;
     tClassEx.cbSize = sizeof(WNDCLASSEX);
     tClassEx.style = pClass->style;
@@ -692,7 +694,7 @@ ATOM RegisterClass(const WNDCLASS* pClass) {
 }
 
 // 1.14d mac: 000301c7
-BOOL UnregisterClass(LPCSTR szClassName) {
+D2_NOINLINE BOOL UnregisterClass(LPCSTR szClassName) {
     Win32MacWindowClass* pClass = Wnd_FindClassByName(szClassName);
     if (pClass == 0) {
         return 0;
@@ -727,7 +729,7 @@ static void Wnd_UnlinkFromParent(HWND hWnd) {
 }
 
 // 1.14d mac: 0003020c
-BOOL DestroyWindow(HWND hWnd) {
+D2_NOINLINE BOOL DestroyWindow(HWND hWnd) {
     HWND hDesktop = g_hDesktopWnd;
     if (Wnd_IsSelfOrDescendant(hWnd, hDesktop, 0) == 0) {
         return 0;
@@ -791,7 +793,7 @@ BOOL DestroyWindow(HWND hWnd) {
 }
 
 // 1.14d mac: 00030408
-BOOL ShowWindow(HWND hWnd, UINT nCmdShow) {
+D2_NOINLINE BOOL ShowWindow(HWND hWnd, UINT nCmdShow) {
     if (hWnd == 0) {
         return 0;
     }
@@ -814,7 +816,7 @@ BOOL ShowWindow(HWND hWnd, UINT nCmdShow) {
 }
 
 // 1.14d mac: 000304b5
-HWND SetFocus(HWND hWnd) {
+D2_NOINLINE HWND SetFocus(HWND hWnd) {
     Win32MacMsgState* pState = g_pMsgState;
     HWND hOldFocus = pState->hWndFocus;
     HWND hPrev = 0;
@@ -859,18 +861,19 @@ HWND SetFocus(HWND hWnd) {
 }
 
 // 1.14d mac: 000305a7
-HWND GetFocus(void) {
+D2_NOINLINE HWND GetFocus(void) {
+    HWND hResult = 0;
     if (g_pMsgState != 0) {
         HWND hFocus = g_pMsgState->hWndFocus;
         if (hFocus != 0 && Wnd_IsSelfOrDescendant(hFocus, g_hDesktopWnd, 0) != 0) {
-            return hFocus;
+            hResult = hFocus;
         }
     }
-    return 0;
+    return hResult;
 }
 
 // 1.14d mac: 000305f6
-HWND SetActiveWindow(HWND hWnd) {
+D2_NOINLINE HWND SetActiveWindow(HWND hWnd) {
     Win32MacMsgState* pState = g_pMsgState;
     HWND hOldActive = pState->hWndActive;
     HWND hPrev = 0;
@@ -1045,7 +1048,7 @@ HWND CreateWindowEx(DWORD dwExStyle, LPCSTR szClassName, LPCSTR szWindowName, DW
     hWnd->hUpdateRgn = CreateRectRgn(0, 0, 0, 0);
     hWnd->nNeedsPaint = 0;
     hWnd->n78 = 0;
-    hWnd->hFont = GetSystemMetrics(SYSTEM_FONT);
+    hWnd->hFont = (int)GetStockObject(SYSTEM_FONT);
     if (hLinkParent != 0) {
         Wnd_LinkToParent(hWnd, hLinkParent, 0);
     }
@@ -1071,7 +1074,7 @@ HWND CreateWindowEx(DWORD dwExStyle, LPCSTR szClassName, LPCSTR szWindowName, DW
 }
 
 // 1.14d mac: 00030b93
-HWND GetParent(HWND hWnd) {
+D2_NOINLINE HWND GetParent(HWND hWnd) {
     HWND hResult = 0;
     if (Wnd_IsSelfOrDescendant(hWnd, g_hDesktopWnd, 0) != 0) {
         hResult = (hWnd->dwStyle & WS_CHILD) != 0 ? hWnd->pParent : hWnd->pOwner;
@@ -1080,7 +1083,7 @@ HWND GetParent(HWND hWnd) {
 }
 
 // 1.14d mac: 00030bdf
-HWND GetCapture(void) {
+D2_NOINLINE HWND GetCapture(void) {
     if (g_pMsgState == 0) {
         return 0;
     }
@@ -1088,7 +1091,7 @@ HWND GetCapture(void) {
 }
 
 // 1.14d mac: 00030c00
-HWND SetCapture(HWND hWnd) {
+D2_NOINLINE HWND SetCapture(HWND hWnd) {
     Win32MacMsgState* pState = g_pMsgState;
     HWND hPrev = 0;
     if (pState != 0) {
@@ -1102,7 +1105,7 @@ HWND SetCapture(HWND hWnd) {
 }
 
 // 1.14d mac: 00030c56
-BOOL ReleaseCapture(void) {
+D2_NOINLINE BOOL ReleaseCapture(void) {
     Win32MacMsgState* pState = g_pMsgState;
     if (pState == 0) {
         return 0;
@@ -1116,16 +1119,17 @@ BOOL ReleaseCapture(void) {
 }
 
 // 1.14d mac: 00030cb2
-HWND GetActiveWindow(void) {
+D2_NOINLINE HWND GetActiveWindow(void) {
     HWND hActive = g_pMsgState->hWndActive;
+    HWND hResult = 0;
     if (hActive != 0 && Wnd_IsSelfOrDescendant(hActive, g_hDesktopWnd, 0) != 0) {
-        return hActive;
+        hResult = hActive;
     }
-    return 0;
+    return hResult;
 }
 
 // 1.14d mac: 0002fdc5
-BOOL GetClientRect(HWND hWnd, RECT* pRect) {
+D2_NOINLINE BOOL GetClientRect(HWND hWnd, RECT* pRect) {
     if (hWnd == 0 || pRect == 0) {
         return 0;
     }
@@ -1137,7 +1141,7 @@ BOOL GetClientRect(HWND hWnd, RECT* pRect) {
 }
 
 // 1.14d mac: 0002fec2
-BOOL ClientToScreen(HWND hWnd, POINT* pPoint) {
+D2_NOINLINE BOOL ClientToScreen(HWND hWnd, POINT* pPoint) {
     if (pPoint == 0) {
         return 0;
     }
@@ -1153,7 +1157,7 @@ BOOL ClientToScreen(HWND hWnd, POINT* pPoint) {
 }
 
 // 1.14d mac: 0002fef3
-BOOL ScreenToClient(HWND hWnd, POINT* pPoint) {
+D2_NOINLINE BOOL ScreenToClient(HWND hWnd, POINT* pPoint) {
     if (pPoint == 0) {
         return 0;
     }
@@ -1169,7 +1173,7 @@ BOOL ScreenToClient(HWND hWnd, POINT* pPoint) {
 }
 
 // 1.14d mac: 00031060
-BOOL GetWindowRect(HWND hWnd, RECT* pRect) {
+D2_NOINLINE BOOL GetWindowRect(HWND hWnd, RECT* pRect) {
     if (hWnd == 0 || pRect == 0) {
         return 0;
     }
@@ -1185,7 +1189,7 @@ BOOL GetWindowRect(HWND hWnd, RECT* pRect) {
 // 1.14d mac: 0002fdfe
 // Takes a visible, opaque window's screen rectangle out of the region being built.
 // 1 when nothing is left.
-BOOL Wnd_Iterate_RemoveWindowFromVisRgn(HWND hWnd, Win32MacVisRgnContext* pContext) {
+D2_NOINLINE BOOL Wnd_Iterate_RemoveWindowFromVisRgn(HWND hWnd, Win32MacVisRgnContext* pContext) {
     if ((hWnd->dwStyle & WS_VISIBLE) == 0 || (hWnd->dwExStyle & 0x20) != 0) {
         return 0;
     }
@@ -1198,7 +1202,7 @@ BOOL Wnd_Iterate_RemoveWindowFromVisRgn(HWND hWnd, Win32MacVisRgnContext* pConte
 
 // 1.14d mac: 0002fbf8
 // hRgn becomes the part of the window that shows: its client area less everything in front.
-void Wnd_CalculateVisibleRgn(HWND hWnd, HRGN hRgn, int bClipChildren) {
+D2_NOINLINE void Wnd_CalculateVisibleRgn(HWND hWnd, HRGN hRgn, int bClipChildren) {
     int nOriginY = 0;
     int nOriginX = 0;
     SetRectRgn(hRgn, 0, 0, 0, 0);
@@ -1273,7 +1277,7 @@ void Wnd_CalculateVisibleRgn(HWND hWnd, HRGN hRgn, int bClipChildren) {
 // 1.14d mac: 0002ff24
 // The child of hWndParent that contains the point (in the parent's client space),
 // the deepest one with bRecurse; bVisibleOnly skips hidden and disabled windows.
-HWND Wnd_ChildFromPoint(HWND hWndParent, int nX, int nY, int bRecurse, int bVisibleOnly) {
+D2_NOINLINE HWND Wnd_ChildFromPoint(HWND hWndParent, int nX, int nY, int bRecurse, int bVisibleOnly) {
     if (hWndParent == 0) {
         return 0;
     }
@@ -1294,7 +1298,7 @@ HWND Wnd_ChildFromPoint(HWND hWndParent, int nX, int nY, int bRecurse, int bVisi
 }
 
 // 1.14d mac: 00030fce
-HWND WindowFromPoint(POINT pt) {
+D2_NOINLINE HWND WindowFromPoint(POINT pt) {
     HWND hResult = 0;
     if (g_hDesktopWnd != 0) {
         hResult = Wnd_ChildFromPoint(g_hDesktopWnd, pt.x, pt.y, 1, 1);
@@ -1347,7 +1351,7 @@ static void Wnd_AddToUpdateRegion(HWND hWnd, HRGN hRgn, int bErase, int bPaintNo
 }
 
 // 1.14d mac: 000318bf
-BOOL Wnd_InvalidateRectRecursive(HWND hWnd, Win32MacInvalidateArgs* pArgs) {
+D2_NOINLINE BOOL Wnd_InvalidateRectRecursive(HWND hWnd, Win32MacInvalidateArgs* pArgs) {
     if ((hWnd->dwStyle & WS_VISIBLE) != 0) {
         RECT rc = pArgs->rcInvalid;
         OffsetRect(&rc, -hWnd->rcWindow.left, -hWnd->rcWindow.top);
@@ -1444,7 +1448,7 @@ static void Wnd_InvalidateInParent(HWND hWnd, const RECT* pRect) {
 
 // 1.14d mac: 00031874
 // Marks hWnd, if hOwner owns it, and everything it owns in turn. 1 when it did.
-BOOL Wnd_MarkOwnedWindows(HWND hWnd, HWND hOwner) {
+D2_NOINLINE BOOL Wnd_MarkOwnedWindows(HWND hWnd, HWND hOwner) {
     if (hWnd->pOwner != hOwner) {
         return 0;
     }
@@ -1457,7 +1461,7 @@ BOOL Wnd_MarkOwnedWindows(HWND hWnd, HWND hOwner) {
         }
         hSibling = hNext;
     }
-    return 1;
+    return 0;
 }
 
 // 1.14d mac: 000317ac
@@ -1497,7 +1501,7 @@ static BOOL Wnd_ReorderOwnedWindows(HWND hWnd, HWND hAfter) {
 }
 
 // 1.14d mac: 00030cfd
-BOOL SetWindowPos(HWND hWnd, HWND hWndInsertAfter, int nX, int nY, int cx, int cy, BYTE uFlags) {
+D2_NOINLINE BOOL SetWindowPos(HWND hWnd, HWND hWndInsertAfter, int nX, int nY, int cx, int cy, BYTE uFlags) {
     BOOL bResult = 0;
     if (hWnd == 0) {
         return 0;
@@ -1586,7 +1590,7 @@ BOOL SetWindowPos(HWND hWnd, HWND hWndInsertAfter, int nX, int nY, int cx, int c
         }
     } else if ((nFlags & 0x80) != 0 && (hWnd->dwStyle & WS_VISIBLE) != 0) {
         hWnd->dwStyle &= ~WS_VISIBLE;
-        Wnd_ClearUpdateRegionTree(hWnd);
+        Wnd_ClearUpdateRegionTree(hWnd, 0);
         Wnd_InvalidateInParent(hWnd, pRect);
         if (hWnd == g_pMsgState->hWndActive) {
             for (HWND hNext = g_hDesktopWnd->pFirstChild; hNext != 0; hNext = hNext->pNextSibling) {
@@ -1605,12 +1609,12 @@ BOOL SetWindowPos(HWND hWnd, HWND hWndInsertAfter, int nX, int nY, int cx, int c
 }
 
 // 1.14d mac: 000312b5
-BOOL AdjustWindowRectEx(void* pRect, DWORD dwStyle, BOOL bMenu, DWORD dwExStyle) {
+D2_NOINLINE BOOL AdjustWindowRectEx(void* pRect, DWORD dwStyle, BOOL bMenu, DWORD dwExStyle) {
     return 1;
 }
 
 // 1.14d mac: 000312bf
-BOOL InvalidateRect(HWND hWnd, const RECT* pRect, BOOL bErase) {
+D2_NOINLINE BOOL InvalidateRect(HWND hWnd, const RECT* pRect, BOOL bErase) {
     RECT rcInvalid;
     int bPaintNow = 0;
     if (hWnd == 0) {
@@ -1634,11 +1638,12 @@ BOOL InvalidateRect(HWND hWnd, const RECT* pRect, BOOL bErase) {
 }
 
 // 1.14d mac: 0003135a
-BOOL UpdateWindow(HWND hWnd) {
+D2_NOINLINE BOOL UpdateWindow(HWND hWnd) {
     if (hWnd != 0) {
         Wnd_SendPaintIfPending(hWnd);
+        return 1;
     }
-    return hWnd != 0;
+    return 0;
 }
 
 // 1.14d mac: 0003149c
@@ -1651,7 +1656,7 @@ static void Wnd_ClearUpdateRegion(HWND hWnd) {
 }
 
 // 1.14d mac: 000313af
-HDC BeginPaint(HWND hWnd, PAINTSTRUCT* pPaint) {
+D2_NOINLINE HDC BeginPaint(HWND hWnd, PAINTSTRUCT* pPaint) {
     HDC hDC = 0;
     if (hWnd != 0 && pPaint != 0) {
         hDC = GetDC(hWnd);
@@ -1673,13 +1678,13 @@ HDC BeginPaint(HWND hWnd, PAINTSTRUCT* pPaint) {
 }
 
 // 1.14d mac: 000314f9
-BOOL EndPaint(HWND hWnd, const PAINTSTRUCT* pPaint) {
+D2_NOINLINE BOOL EndPaint(HWND hWnd, const PAINTSTRUCT* pPaint) {
     ReleaseDC(hWnd, pPaint->hdc);
     return 1;
 }
 
 // 1.14d mac: 0003151d
-BOOL IsWindowVisible(HWND hWnd) {
+D2_NOINLINE BOOL IsWindowVisible(HWND hWnd) {
     if (hWnd == 0) {
         return 0;
     }
@@ -1687,23 +1692,24 @@ BOOL IsWindowVisible(HWND hWnd) {
 }
 
 // 1.14d mac: 00031539
-BYTE Wnd_IsVisibleAndEnabled(HWND hWnd) {
+D2_NOINLINE BYTE Wnd_IsVisibleAndEnabled(HWND hWnd) {
     BYTE bVisible = 0;
     bool bEnabled = false;
     if (hWnd != 0) {
-        bEnabled = (hWnd->dwStyle & WS_DISABLED) == 0;
-        bVisible = ((BYTE)(hWnd->dwStyle >> 24) & 0x10) >> 4;
+        DWORD dwStyle = hWnd->dwStyle;
+        bEnabled = (dwStyle & WS_DISABLED) == 0;
+        bVisible = (dwStyle & 0x10000000) >> 28;
     }
     return bEnabled & bVisible;
 }
 
 // 1.14d mac: 00031564
-int Wnd_ReturnZero(void) {
+D2_NOINLINE int Wnd_ReturnZero(void) {
     return 0;
 }
 
 // 1.14d mac: 0003156b
-int GetWindowLong(HWND hWnd, int nIndex) {
+D2_NOINLINE int GetWindowLong(HWND hWnd, int nIndex) {
     if (hWnd == 0) {
         return 0;
     }
@@ -1740,7 +1746,7 @@ int GetWindowLong(HWND hWnd, int nIndex) {
 }
 
 // 1.14d mac: 00031618
-int GetProp(HWND hWnd, LPCSTR szName) {
+D2_NOINLINE int GetProp(HWND hWnd, LPCSTR szName) {
     if (hWnd == 0 || szName == 0 || *szName == 0) {
         return 0;
     }
@@ -1755,7 +1761,7 @@ int GetProp(HWND hWnd, LPCSTR szName) {
 }
 
 // 1.14d mac: 00031666
-BOOL SetProp(HWND hWnd, LPCSTR szName, int nValue) {
+D2_NOINLINE BOOL SetProp(HWND hWnd, LPCSTR szName, int nValue) {
     if (hWnd == 0 || szName == 0 || *szName == 0) {
         return 0;
     }
@@ -1776,7 +1782,7 @@ BOOL SetProp(HWND hWnd, LPCSTR szName, int nValue) {
 }
 
 // 1.14d mac: 000316f2
-int RemoveProp(HWND hWnd, LPCSTR szName) {
+D2_NOINLINE int RemoveProp(HWND hWnd, LPCSTR szName) {
     if (hWnd == 0 || szName == 0 || *szName == 0) {
         return 0;
     }
@@ -1801,20 +1807,23 @@ int RemoveProp(HWND hWnd, LPCSTR szName) {
 
 // 1.14d mac: 00031766
 // Clears the update region of the window and of every window below it.
-void Wnd_ClearUpdateRegionTree(HWND hWnd) {
+D2_NOINLINE BOOL Wnd_ClearUpdateRegionTree(HWND hWnd, int nReserved) {
     Wnd_ClearUpdateRegion(hWnd);
     HWND hChild = hWnd->pFirstChild;
     while (hChild != 0) {
         HWND hNext = hChild->pNextSibling;
-        Wnd_ClearUpdateRegionTree(hChild);
+        if (Wnd_ClearUpdateRegionTree(hChild, 0) != 0) {
+            return 1;
+        }
         hChild = hNext;
     }
+    return 0;
 }
 
 // 1.14d mac: 00031a84
 // The Win32 virtual key of a Mac key code: the letter the keyboard layout gives it, else a
 // fixed table.
-UINT Win32VirtualKey_From_MacScanCode(BYTE nKeyCode) {
+D2_NOINLINE UINT Win32VirtualKey_From_MacScanCode(BYTE nKeyCode) {
     uint32_t nKeyState = 0;
     void* pKCHR = (void*)GetScriptManagerVariable(smKCHRCache);
     uint32_t nResult = KeyTranslate(pKCHR, nKeyCode, &nKeyState);
@@ -1830,7 +1839,7 @@ UINT Win32VirtualKey_From_MacScanCode(BYTE nKeyCode) {
 }
 
 // 1.14d mac: 00031af6
-BYTE Key_VirtualKeyToMacKeyCode(BYTE nIndex) {
+D2_NOINLINE BYTE Key_VirtualKeyToMacKeyCode(BYTE nIndex) {
     return s_abyVirtualKeyToMacKey[nIndex];
 }
 

@@ -249,6 +249,7 @@ LRESULT DefWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 LRESULT SendMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 BOOL PostMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 int GetSystemMetrics(int nIndex);
+void* GetStockObject(int nIndex);
 void* Priv_AllocClear(size_t nSize);
 BOOL PtInRect(const RECT* pRect, int x, int y);
 BOOL OffsetRect(RECT* pRect, int dx, int dy);
@@ -317,6 +318,6 @@ BOOL SetProp(HWND hWnd, LPCSTR szName, int nValue);
 int RemoveProp(HWND hWnd, LPCSTR szName);
 BOOL InvalidateRect(HWND hWnd, const RECT* pRect, BOOL bErase);
 BOOL EndPaint(HWND hWnd, const PAINTSTRUCT* pPaint);
-void Wnd_ClearUpdateRegionTree(HWND hWnd);
+BOOL Wnd_ClearUpdateRegionTree(HWND hWnd, int nReserved);
 
 #endif  // D2_OS_MAC
