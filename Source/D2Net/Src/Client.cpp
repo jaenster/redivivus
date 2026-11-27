@@ -425,7 +425,7 @@ void __fastcall NET_D2GS_CLIENT_HandleIncomingBufferAndCreatePacket(char * pByte
     DWORD nErrorLine;
     D2OnePacketClientStrc* pTailPacket;
     uint8_t byFirstByte;
-    char* nPacketSize = pBytes;
+    uint32_t nPacketSize;
     while (true) {
       D2OnePacketClientStrc* pNewPacket;
       if ((int)pBytesSize <= 0) {
@@ -433,24 +433,20 @@ void __fastcall NET_D2GS_CLIENT_HandleIncomingBufferAndCreatePacket(char * pByte
       }
 
       pNewPacket = D2_NEW_AT(D2OnePacketClientStrc, ".\\SRC\\Client.cpp", 0x1fd);
-#if D2_ARCH_X64
-      // The size is written as a uint32_t into this pointer-sized slot, which starts as pBytes.
-      nPacketSize = 0;
-#endif
-      nSizeResult = ::D2Net::Game::Server::NET_D2GS_CLIENT_GetIncomingPacketSizeFromTableAndVariableSize(pBytes, pBytesSize, (uint32_t*)&nPacketSize);
+      nSizeResult = ::D2Net::Game::Server::NET_D2GS_CLIENT_GetIncomingPacketSizeFromTableAndVariableSize(pBytes, pBytesSize, &nPacketSize);
       if (!nSizeResult) {
         return;
       }
-      if (nPacketSize > (char*)0x204) {
+      if (nPacketSize > 0x204) {
         break;
       }
-      if ((intptr_t)nPacketSize <= 0) {
+      if ((int)nPacketSize <= 0) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x204);
         exit(-1);
       }
 
-      memcpy(pNewPacket, pBytes, (size_t)nPacketSize);
-      pNewPacket->nSize = (uint32_t)(uintptr_t)nPacketSize; // the packet size was written into this slot as a uint32_t
+      memcpy(pNewPacket, pBytes, nPacketSize);
+      pNewPacket->nSize = nPacketSize;
       nErrorLine = GetTickCount();
       pNewPacket->nTickCount = nErrorLine;
       pNewPacket->pD2PacketClientNext = 0;
@@ -485,8 +481,8 @@ void __fastcall NET_D2GS_CLIENT_HandleIncomingBufferAndCreatePacket(char * pByte
 
       pD2PacketClient_to_0xAE = pNewPacket;
       pD2PacketClient_from_0xAF = pTailPacket;
-      pBytesSize -= (intptr_t)nPacketSize;
-      pBytes += (intptr_t)nPacketSize;
+      pBytesSize -= nPacketSize;
+      pBytes += nPacketSize;
     }
 
     Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x203);
