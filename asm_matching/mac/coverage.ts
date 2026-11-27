@@ -96,11 +96,11 @@ function walk(d: string): string[] {
     return readdirSync(d).flatMap((f) => { const p = join(d, f); return statSync(p).isDirectory() ? walk(p) : [p]; });
 }
 for (const root of SOURCE_ROOTS) {
-    for (const file of walk(join(REPO, root)).filter((f) => /\.(cpp|c|h|hpp|mm|m)$/.test(f)).sort()) {
+    for (const file of walk(join(REPO, root)).filter((f) => /\.(cpp|c|h|hpp|mm|m)$/i.test(f)).sort()) {
         const text = readFileSync(file, "utf8");
         if (!text.includes("1.14d mac:")) continue;
         const lines = text.split("\n");
-        const isSource = /\.(cpp|c|mm|m)$/.test(file);
+        const isSource = /\.(cpp|c|mm|m)$/i.test(file);
         for (let li = 0; li < lines.length; li++) {
             const m = /^\s*\/\/ 1\.14d mac: ([0-9a-f]{8})\b(?:\s+(\S+))?/.exec(lines[li]);
             if (!m) continue;
