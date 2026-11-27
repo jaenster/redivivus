@@ -3009,53 +3009,35 @@ void __stdcall UTF8_EncodeChar(uint32_t uCodepoint, uint8_t * pbOut) {
     if (!pbOut) {
       return;
     }
-    if (uCodepoint >= 0x80) {
-      uint8_t byLeadByte;
-      if (uCodepoint < 0x800) {
-        byLeadByte = (uint8_t)(uCodepoint >> 6) | 0xc0;
-      } else {
-        if (uCodepoint < 0x10000) {
-          byLeadByte = (uint8_t)(uCodepoint >> 0xc) | 0xe0;
-        } else {
-          if (uCodepoint < 0x200000) {
-            byLeadByte = (uint8_t)(uCodepoint >> 0x12) | 0xf0;
-          } else {
-            byLeadByte = (uint8_t)(uCodepoint >> 0x18);
-            if (uCodepoint < 0x400000) {
-              byLeadByte |= 0xf8;
-            } else {
-              if (uCodepoint >= 0x80000000) {
-                *pbOut = 0;
-                return;
-              }
-
-              *pbOut = byLeadByte >> 6 | 0xfc;
-              pbOut++;
-              byLeadByte = byLeadByte & 0x3f | 0x80;
-            }
-
-            *pbOut = byLeadByte;
-            pbOut++;
-            byLeadByte = (uint8_t)(uCodepoint >> 0x12) & 0x3f | 0x80;
-          }
-
-          *pbOut = byLeadByte;
-          pbOut++;
-          byLeadByte = (uint8_t)(uCodepoint >> 0xc) & 0x3f | 0x80;
-        }
-
-        *pbOut = byLeadByte;
-        pbOut++;
-        byLeadByte = (uint8_t)(uCodepoint >> 6) & 0x3f | 0x80;
-      }
-
-      *pbOut = byLeadByte;
-      pbOut++;
-      uCodepoint = (uint32_t)((uint8_t)uCodepoint & 0x3f | 0x80);
+    if (uCodepoint < 0x80) {
+      *pbOut++ = (uint8_t)uCodepoint;
+    } else if (uCodepoint < 0x800) {
+      *pbOut++ = (uint8_t)(uCodepoint >> 6) | 0xc0;
+      *pbOut++ = (uint8_t)uCodepoint & 0x3f | 0x80;
+    } else if (uCodepoint < 0x10000) {
+      *pbOut++ = (uint8_t)(uCodepoint >> 0xc) | 0xe0;
+      *pbOut++ = (uint8_t)(uCodepoint >> 6) & 0x3f | 0x80;
+      *pbOut++ = (uint8_t)uCodepoint & 0x3f | 0x80;
+    } else if (uCodepoint < 0x200000) {
+      *pbOut++ = (uint8_t)(uCodepoint >> 0x12) | 0xf0;
+      *pbOut++ = (uint8_t)(uCodepoint >> 0xc) & 0x3f | 0x80;
+      *pbOut++ = (uint8_t)(uCodepoint >> 6) & 0x3f | 0x80;
+      *pbOut++ = (uint8_t)uCodepoint & 0x3f | 0x80;
+    } else if (uCodepoint < 0x400000) {
+      *pbOut++ = (uint8_t)(uCodepoint >> 0x18) | 0xf8;
+      *pbOut++ = (uint8_t)(uCodepoint >> 0x12) & 0x3f | 0x80;
+      *pbOut++ = (uint8_t)(uCodepoint >> 0xc) & 0x3f | 0x80;
+      *pbOut++ = (uint8_t)(uCodepoint >> 6) & 0x3f | 0x80;
+      *pbOut++ = (uint8_t)uCodepoint & 0x3f | 0x80;
+    } else if (uCodepoint < 0x80000000) {
+      *pbOut++ = (uint8_t)(uCodepoint >> 0x1e) | 0xfc;
+      *pbOut++ = (uint8_t)(uCodepoint >> 0x18) & 0x3f | 0x80;
+      *pbOut++ = (uint8_t)(uCodepoint >> 0x12) & 0x3f | 0x80;
+      *pbOut++ = (uint8_t)(uCodepoint >> 0xc) & 0x3f | 0x80;
+      *pbOut++ = (uint8_t)(uCodepoint >> 6) & 0x3f | 0x80;
+      *pbOut++ = (uint8_t)uCodepoint & 0x3f | 0x80;
     }
 
-    *pbOut = (uint8_t)uCodepoint;
-    pbOut++;
     *pbOut = 0;
 }
 
