@@ -73,11 +73,31 @@ static D2SoundWavCacheEntryStrc * gpWavFileCacheListHead = 0; D2_STATIC_GUARD(gp
 
 namespace D2Sound::Src::D2SoundFast {
 
+#if !defined(_WIN32) && D2_OS_MAC
+// The 1.14d Mac counts the ambient tables at compile time: the two-count check folds away and
+// the index check compares against 8.
+#define SOUND_AMBIENT_ENTRY_COUNT ((int32_t)(sizeof(gaAmbientSoundEntryTable) / sizeof(gaAmbientSoundEntryTable[0])))
+#endif
+
+// 1.14d mac: 002e9c5b
 static D2AmbientSoundEntryStrc * SOUND_GetAmbientSoundEntry(int32_t nIndex) {
     if (!gbAmbientSoundLangInitialized) {
       gbAmbientSoundLangInitialized = 1;
       gnAmbientSoundLanguageCode = SOUND_GetLanguageCode();
     }
+#if !defined(_WIN32) && D2_OS_MAC
+    if (!(nIndex < SOUND_AMBIENT_ENTRY_COUNT)) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x53);
+      exit(-1);
+    }
+
+    D2AmbientSoundEntryStrc* pAmbientEntry = gaAmbientSoundEntryTable;
+    if (!gnAmbientSoundLanguageCode) {
+      pAmbientEntry = gAmbientSoundTable;
+    }
+
+    return pAmbientEntry + nIndex;
+#else
     if (gnAmbientSoundEntryCount != gnAmbientSoundCount) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x52);
       exit(-1);
@@ -98,6 +118,7 @@ static D2AmbientSoundEntryStrc * SOUND_GetAmbientSoundEntry(int32_t nIndex) {
       pAmbientEntry = gAmbientSoundTable + nIndex;
       return pAmbientEntry;
     }
+#endif
 }
 
 BOOL __stdcall SOUND_IsAmbientStreaming() {
@@ -112,6 +133,15 @@ BOOL __stdcall SOUND_IsAmbientStreaming() {
     return 0;
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+// Inlined on the 1.14d Mac (SOUND_SetMusicEnabled 002e9a28, SOUND_PlayNextAmbientSound 002e9af1):
+// eight SOUND_GetAmbientSoundEntry calls.
+void __stdcall SOUND_ResetAmbientSoundFlags() {
+    for (int i = 0; i < SOUND_AMBIENT_ENTRY_COUNT; i++) {
+      SOUND_GetAmbientSoundEntry(i)->bPlayed = 0;
+    }
+}
+#else
 void __stdcall SOUND_ResetAmbientSoundFlags() {
     int i = 0;
     if (gnAmbientSoundEntryCount <= 0) {
@@ -145,6 +175,7 @@ void __stdcall SOUND_ResetAmbientSoundFlags() {
       pEntry->bPlayed = 0;
     } while (i < gnAmbientSoundEntryCount);
 }
+#endif
 
 void __fastcall SOUND_SetMusicEnabled(int32_t nEnabled) {
     if (nEnabled && !gnMusicEnabled) {
@@ -187,6 +218,72 @@ void __stdcall SOUND_FadeOutMusic() {
     D2SoundSmp::SOUNDSMP_StartFade(gpMusicStreamBuffer, 0, 200);
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 002e9952
+// Not a function of its own on Windows, where SOUND_PlayNextAmbientSound inlines it.
+static BOOL SOUNDSTRM_PlayMusicFile(char * szFile, int32_t bIsLooping) {
+    if (gpMusicStreamBuffer && D2SoundSmp::SOUNDSMP_GetEffectiveVolume() && !D2SoundSmp::SOUNDSMP_IsStreaming(gpMusicStreamBuffer) && szFile) {
+      D2SoundSmp::SOUNDSMP_Reset(gpMusicStreamBuffer);
+      D2SoundSmp::SOUNDSMP_SetVolume(gpMusicStreamBuffer, 0x6e);
+      if (D2SoundSmp::SOUNDSMP_OpenAndStreamFile(gpMusicStreamBuffer, szFile, 0, bIsLooping)) {
+        return 1;
+      }
+    }
+
+    return 0;
+}
+
+// 1.14d mac: 002e9af1
+// The ambient count is the compile-time 8 and the play step is SOUNDSTRM_PlayMusicFile.
+int __stdcall SOUND_PlayNextAmbientSound() {
+    D2AmbientSoundEntryStrc* pAmbientEntry;
+    int32_t nAmbientIdx;
+    EnterCriticalSection(&gSoundSmpCs);
+    if (!gpMusicStreamBuffer || !D2SoundSmp::SOUNDSMP_GetEffectiveVolume() || gpMusicStreamBuffer && D2SoundSmp::SOUNDSMP_IsStreaming(gpMusicStreamBuffer)) {
+      LeaveCriticalSection(&gSoundSmpCs);
+      return 0;
+    }
+
+    bool bResetDone = false;
+    while (true) {
+      for (nAmbientIdx = 0; nAmbientIdx < SOUND_AMBIENT_ENTRY_COUNT; nAmbientIdx++) {
+        if (!SOUND_GetAmbientSoundEntry(nAmbientIdx)->bPlayed) {
+          goto play_unplayed_track;
+        }
+      }
+      if (bResetDone) {
+        gnMusicEnabled = 0;
+        LeaveCriticalSection(&gSoundSmpCs);
+        return 0;
+      }
+
+      SOUND_ResetAmbientSoundFlags();
+      bResetDone = true;
+      play_unplayed_track:
+      if (gbSoundFastPathActive) {
+        pAmbientEntry = SOUND_GetAmbientSoundEntry(0);
+        gbSoundFastPathActive = 0;
+      } else {
+        int nRandIdx = rand() % SOUND_AMBIENT_ENTRY_COUNT;
+        pAmbientEntry = SOUND_GetAmbientSoundEntry(nRandIdx);
+        while (pAmbientEntry->bPlayed) {
+          nRandIdx++;
+          if (nRandIdx >= SOUND_AMBIENT_ENTRY_COUNT) {
+            nRandIdx = 0;
+          }
+
+          pAmbientEntry = SOUND_GetAmbientSoundEntry(nRandIdx);
+        }
+      }
+
+      pAmbientEntry->bPlayed = 1;
+      if (SOUNDSTRM_PlayMusicFile(pAmbientEntry->szFilename, 0)) {
+        LeaveCriticalSection(&gSoundSmpCs);
+        return 1;
+      }
+    }
+}
+#else
 int __stdcall SOUND_PlayNextAmbientSound() {
     uint32_t dwVolume;
     D2AmbientSoundEntryStrc* pAmbientEntry;
@@ -291,7 +388,10 @@ int __stdcall SOUND_PlayNextAmbientSound() {
       }
     } while (true);
 }
+#endif
 
+// 1.14d mac: 002e8120
+// The Mac accepts a "Sound Mixer" value up to 3.
 void __stdcall SOUND_LoadRegistrySettings() {
     uint32_t dwRegValue;
     g_nSoundMusicVolume = 0x32;
@@ -301,7 +401,11 @@ void __stdcall SOUND_LoadRegistrySettings() {
     g_nSoundNpcSpeech = 2;
     g_nSoundOptionsMusic = 1;
     int bReadMasterVol = Storm::Source::SReg::SRegLoadValue("Diablo II", "Sound Mixer", 0, (int32_t*)&dwRegValue);
+#if !defined(_WIN32) && D2_OS_MAC
+    if (bReadMasterVol && dwRegValue < 4) {
+#else
     if (bReadMasterVol && dwRegValue < 3) {
+#endif
       g_nSoundMixerType = dwRegValue;
     }
 
