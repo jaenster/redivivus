@@ -536,6 +536,50 @@ void FUN_002b2da8(int nX, int nY, const uint8_t* pSrc, uint8_t* pDest, int nLigh
     }
 }
 
+// 1.14d mac: 002b35e9
+// Sets the clip rectangles of the tile blitters from the surface size.
+void FUN_002b35e9(int nWidth, int nHeight) {
+    g_anClip[4] = nHeight - 0x2f;
+    if (g_nMacScreenSide == 2) {
+        g_anClip[8] = nWidth / 2;
+    } else {
+        g_anClip[8] = 0;
+        if (g_nMacScreenSide == 1) {
+            nWidth = nWidth - nWidth / 2;
+        }
+    }
+    g_anClip[3] = 1;
+    g_anClip[5] = g_anClip[8] - 0x20;
+    g_anClip[6] = nWidth;
+    g_anClip[7] = nHeight - 0x3f;
+    g_anClip[9] = nWidth - 0x20;
+    g_anClip[10] = 1;
+    g_anClip[11] = g_anClip[4];
+    g_anClip[12] = g_anClip[8] - 0x20;
+    g_anClip[13] = nWidth;
+    g_anClip[14] = nHeight - 0x4f;
+    g_anClip[15] = g_anClip[8];
+    g_anClip[16] = nWidth - 0x20;
+    g_anClip[0] = g_anClip[4];
+    g_anClip[1] = g_anClip[8];
+    g_anClip[2] = nWidth;
+}
+
+// 1.14d mac: 002b36b6
+// Fills the row-offset table with multiples of the surface pitch, from 32 rows above zero.
+void FUN_002b36b6(void) {
+    int nPitch = g_tSurface.nPitch;
+    int nOffset = nPitch * -0x20;
+    int* pEntry = g_anRowOffsets;
+    int nCount = 0x2dc;
+    do {
+        *pEntry = nOffset;
+        nOffset += nPitch;
+        pEntry++;
+        nCount--;
+    } while (nCount != 0);
+}
+
 void fpDrawVisTile(const uint8_t* pSrc, int nX, int nY);
 void FUN_002b38f3(const uint8_t* pSrc, int nX, int nY, uint8_t nLight);
 
