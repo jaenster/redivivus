@@ -59,10 +59,10 @@ HWND SetActiveWindow(HWND hWnd);
 // 1.14d mac: 00030cb2
 HWND GetActiveWindow(void);
 // 1.14d mac: 00026f58
-short GetKeyState(int nVirtKey);
+int GetKeyState(int nVirtKey);
 // 1.14d mac: 00026d14
 // Turns a Mac key event into the Win32 key message, in place.
-void Keys_PrepareKeyMsg(MSG* pMsg, BOOL bUpdateState, bool bKeyDown, BYTE byMacKeyCode, BYTE byCharCode, BOOL bAltDown);
+void Keys_PrepareKeyMsg(MSG* pMsg, BOOL bUpdateState, BOOL bKeyDown, BYTE byMacKeyCode, BYTE byCharCode, BOOL bAltDown);
 
 BOOL KillTimer(HWND hWnd, UINT nIDEvent);
 

@@ -21,11 +21,11 @@ extern DWORD g_dwSysKeyFilter;
 
 // 1.14d mac: 00026d14
 // Turns a Mac key event into the Win32 key message, in place.
-void Keys_PrepareKeyMsg(MSG* pMsg, BOOL bUpdateState, bool bKeyDown, BYTE byMacKeyCode, BYTE byCharCode,
+void Keys_PrepareKeyMsg(MSG* pMsg, BOOL bUpdateState, BOOL bKeyDown, BYTE byMacKeyCode, BYTE byCharCode,
                         BOOL bAltDown) {
     BYTE byChar = byCharCode;
-    if ((byCharCode > 0x1F || byMacKeyCode > 0x2F) && s_awKeyState[VK_CONTROL] != 0) {
-        byChar = 0;
+    if (byCharCode > 0x1F || byMacKeyCode > 0x2F) {
+        byChar = s_awKeyState[VK_CONTROL] != 0 ? 0 : byCharCode;
     }
     switch (byMacKeyCode) {
     case 0x4C:
@@ -48,7 +48,7 @@ void Keys_PrepareKeyMsg(MSG* pMsg, BOOL bUpdateState, bool bKeyDown, BYTE byMacK
         }
     } else {
         uLParam = 0x10000;
-        if (wPrevState < 0xFF && bUpdateState) {
+        if (wPrevState < 0xFF && bUpdateState != 0) {
             s_awKeyState[uVirtKey] = wPrevState + 1;
         }
     }
@@ -84,7 +84,7 @@ void Keys_PrepareKeyMsg(MSG* pMsg, BOOL bUpdateState, bool bKeyDown, BYTE byMacK
 }
 
 // 1.14d mac: 00026f58
-short GetKeyState(int nVirtKey) {
+int GetKeyState(int nVirtKey) {
     if (s_awKeyState[nVirtKey] != 0) {
         return (nVirtKey == VK_CAPITAL) | -0x80;
     }
@@ -94,13 +94,13 @@ short GetKeyState(int nVirtKey) {
 // 1.14d mac: 00026f82
 short GetAsyncKeyState(BYTE byVirtKey) {
     BYTE byMacKey = Key_VirtualKeyToMacKeyCode(byVirtKey);
-    UINT uBit = byMacKey & 7;
-    UINT uByte = (byMacKey & 0xFF) >> 3;
+    BYTE byBit = byMacKey & 7;
+    UINT byByte = byMacKey >> 3;
     BYTE abKeyMap[16];
     GetKeys(*(KeyMap*)abKeyMap);
     WORD wResult = 0;
-    if ((abKeyMap[uByte] >> uBit) & 1) {
-        wResult = ((s_abKeyMap[uByte] & (1 << uBit)) != 0) | 0x8000;
+    if ((abKeyMap[byByte] >> byBit) & 1) {
+        wResult = ((s_abKeyMap[byByte] & (1 << byBit)) != 0) | 0x8000;
     }
     SMemCopy(s_abKeyMap, abKeyMap, sizeof(s_abKeyMap));
     return (short)wResult;
@@ -112,8 +112,9 @@ BOOL TranslateMessage(const MSG* pMsg) {
     BOOL bTranslated = 0;
     if ((pMsg->message | 4) == WM_SYSKEYDOWN && (s_awKeyState[VK_LWIN] == 0 || pMsg->wParam == 0x0D)) {
         LPARAM lParam = pMsg->lParam;
-        if ((char)(lParam >> 8) != 0) {
-            PostMessage(pMsg->hwnd, (pMsg->message != WM_KEYDOWN) * 4 + WM_CHAR, (lParam >> 8) & 0xFF, lParam);
+        UINT uChar = lParam >> 8;
+        if ((BYTE)uChar != 0) {
+            PostMessage(pMsg->hwnd, (pMsg->message != WM_KEYDOWN) * 4 + WM_CHAR, (BYTE)uChar, lParam);
             bTranslated = 1;
         }
     }
