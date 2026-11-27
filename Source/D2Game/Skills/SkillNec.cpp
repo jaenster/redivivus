@@ -1651,7 +1651,8 @@ BOOL __fastcall Skills_SrvDoFunc_060_SummonBoneWall(::SGAMEDATA * pGame, D2UnitS
       byPetType = 0;
     }
 
-    D2MonsterCastPetStrc sCastPetArgs = {};
+    D2MonsterCastPetStrc sCastPetArgs;
+    memset(&sCastPetArgs, 0, sizeof(sCastPetArgs));
     sCastPetArgs.classId = nClassId;
     sCastPetArgs.nFunctionId = 0;
     sCastPetArgs.nFlags = 9;
@@ -1673,7 +1674,7 @@ BOOL __fastcall Skills_SrvDoFunc_060_SummonBoneWall(::SGAMEDATA * pGame, D2UnitS
     nX = D2Common::Units::GetXPosFromDynamicPathUnit(pWall);
     nY = D2Common::Units::GetYPosFromDynamicPathUnit(pWall);
     if (!D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pTargetRoom)) {
-      nLength = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl) / 2;
+      nLength = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[1], eSkill, nSkillLvl) / 2;
       if (nLength > 1 && pSkillsTxt->srvmissile[1] >= 0 && (int)pSkillsTxt->srvmissile[1] < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
         memset(&sSkillArg, 0, sizeof(sSkillArg));
         sSkillArg.nFlags = 0x21;
