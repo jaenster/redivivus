@@ -4671,4 +4671,250 @@ void StaticInit_gbChatLobbyInitialize() {
 static void * keep_0043e2e0 = (0 ? (CHATDLG_FreeChatMsgNode(*(void * * *)0), (void *)0) : (void *)0);
 static void * keep_0043f8a0 = (0 ? (SafeDefaultChannel(*(char * *)0), (void *)0) : (void *)0);
 
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 002d4558
+static int __fastcall CHATDLG_CompareInputPrefix(char * szPrefix) {
+    char* pInput = OOGUtilities::gszOogChatInputBuffer;
+    size_t nInputLen = strlen(pInput);
+    size_t nPrefixLen = strlen(szPrefix);
+    int nResult = -1;
+    if (nPrefixLen <= nInputLen) {
+      nResult = 0;
+      if (nPrefixLen != 0) {
+        do {
+          int nUpperInput = toupper((int)*pInput);
+          int nUpperPrefix = toupper((int)*szPrefix);
+          if (nUpperInput != nUpperPrefix) {
+            if (nUpperInput == nUpperPrefix || nUpperInput - nUpperPrefix < 0) {
+              return -1;
+            }
+
+            return 1;
+          }
+
+          nPrefixLen--;
+          szPrefix++;
+          pInput++;
+        } while (nPrefixLen != 0);
+        nResult = 0;
+      }
+    }
+
+    return nResult;
+}
+
+// 1.14d mac: 002d45de
+static void __fastcall CHATDLG_GetInputArgument(char * szOut, int32_t nMaxLen) {
+    char* pszSpace = Storm::Source::SSTR::SStrChr(OOGUtilities::gszOogChatInputBuffer, ' ');
+    if (!pszSpace) {
+      *szOut = '\0';
+      return;
+    }
+
+    Storm::Source::SSTR::SStrCopy(szOut, pszSpace + 1, nMaxLen);
+}
+
+// 1.14d mac: 002d42cf
+static BOOL __fastcall CHATDLG_HandleReplyCommand(char * szCommand) {
+    uint16_t wszNobody[256];
+    uint16_t wszUsage[259];
+    char szDelimiter[4];
+    char szNobody[256];
+    char szWhisper[256];
+    char szUsage[256];
+    char szInputCopy[256];
+    char szCommandPrefix[256];
+    size_t nCommandLen = strlen(szCommand);
+    if (CHATDLG_CompareInputPrefix(szCommand) != 0) {
+      return 0;
+    }
+    if ((OOGUtilities::gszOogChatInputBuffer[nCommandLen] | 0x20) != 0x20) {
+      return 0;
+    }
+
+    uint16_t* pwszText;
+    if (!gszOogReplyCommandBuffer[0]) {
+      memset(wszNobody, 0, sizeof(wszNobody));
+      strcpy(szNobody, "Nobody to reply to!");
+      D2Lang::UTF8_ConvertToWideChar(wszNobody, szNobody, 0x100);
+      pwszText = wszNobody;
+    } else {
+      sprintf(szCommandPrefix, "%s ", szCommand);
+      strcpy(szInputCopy, OOGUtilities::gszOogChatInputBuffer);
+      szDelimiter[0] = ' ';
+      szDelimiter[1] = '\0';
+      char* pToken = strtok(szInputCopy, szDelimiter);
+      int nTokenCount = 0;
+      while (pToken) {
+        nTokenCount++;
+        if (nTokenCount == 2) {
+          if (!pNetworkUnknown->pfnIsSocketConnected()) {
+            uint16_t* pwszError = D2Lang::StrTable::strtable::GetLocaleString(0x14e7);
+            UIMENU_DrawTitleOnCenterSmaller(pwszError, OOG::OOGUTIL_DrawCallback_SetModeAndClearMsgLoop);
+          } else {
+            sprintf(szWhisper, "/w *%s %s", gszOogReplyCommandBuffer, OOGUtilities::gszOogChatInputBuffer + (pToken - szInputCopy));
+            pNetworkUnknown->pfnSendChatCommand((uint8_t*)szWhisper);
+          }
+
+          return 1;
+        }
+
+        pToken = strtok(nullptr, szDelimiter);
+      }
+
+      memset(wszUsage, 0, 0x200);
+      sprintf(szUsage, "Correct usage is: %s (message)", szCommand);
+      D2Lang::UTF8_ConvertToWideChar(wszUsage, szUsage, 0x100);
+      pwszText = wszUsage;
+    }
+
+    if (gpChatMessagesTextBox) {
+      D2Win::Src::D2WinTextBox::SetText(gpChatMessagesTextBox, pwszText, 1, false, 1);
+    }
+
+    return 1;
+}
+
+// 1.14d mac: 002d269b
+void CHATDLG_ProcessChatInput() {
+    uint16_t wszIgnoreResult[520];
+    uint16_t wszIgnoreFormat[520];
+    uint16_t wszNotify[259];
+    uint16_t wszName[34];
+    char szNotify[256];
+    char szName[17];
+    char szChannelName[32];
+    uint32_t aszAccountName[65];
+    uint16_t* pwszText;
+    char* szInput = OOGUtilities::gszOogChatInputBuffer;
+
+    if (szInput[0] != '/') {
+      if (!pNetworkUnknown->pfnIsSocketConnected()) {
+        uint16_t* pwszError = D2Lang::StrTable::strtable::GetLocaleString(0x14e7);
+        UIMENU_DrawTitleOnCenterSmaller(pwszError, OOG::OOGUTIL_DrawCallback_SetModeAndClearMsgLoop);
+        return;
+      }
+
+      pNetworkUnknown->pfnSendChatCommand((uint8_t*)szInput);
+      ComCallback::COMCALLBACK_BroadcastChatMessage(szInput);
+    } else {
+      memmove(gaChatDlgHistoryBuffer + 1, gaChatDlgHistoryBuffer, sizeof(gaChatDlgHistoryBuffer) - sizeof(gaChatDlgHistoryBuffer[0]));
+      strcpy((char*)gaChatDlgHistoryBuffer, szInput);
+      gnChatHistoryEntryCount++;
+      if (gnChatHistoryEntryCount > 10) {
+        gnChatHistoryEntryCount = 10;
+      }
+
+      if (!CHATDLG_HandleReplyCommand("/r") && !CHATDLG_HandleReplyCommand("/reply")) {
+        if (CHATDLG_CompareInputPrefix("/d2notify") == 0 && (szInput[9] | 0x20) == 0x20) {
+          if (CHATDLG_CompareInputPrefix("/d2notify") != 0) {
+            goto scroll_to_end;
+          }
+
+          uint32_t bWasEnabled = gnNotifyEnabled;
+          gnNotifyEnabled = gnNotifyEnabled == 0;
+          memset(wszNotify, 0, 0x200);
+          if (bWasEnabled == 0) {
+            strcpy(szNotify, "Player entering/leaving notifications are enabled.");
+          } else {
+            strcpy(szNotify, "Player entering/leaving notifications are disabled.");
+          }
+
+          D2Lang::UTF8_ConvertToWideChar(wszNotify, szNotify, 0x200);
+          pwszText = wszNotify;
+        } else if (CHATDLG_CompareInputPrefix("/ignorepersist") == 0) {
+          ::IgnoreList* pIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
+          IgnoreListVtable* pIgnoreVtbl = pIgnoreList->_vfptr;
+          ::IgnoreList* pIgnoreListThis = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
+          int32_t nPersistent = pIgnoreListThis->_vfptr->GetPersistentSetting(pIgnoreListThis);
+          pIgnoreVtbl->SavePersistentSetting(pIgnoreList, (uint32_t)(nPersistent == 0));
+          pIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
+          nPersistent = pIgnoreList->_vfptr->GetPersistentSetting(pIgnoreList);
+          pwszText = D2Lang::StrTable::strtable::GetLocaleString(nPersistent == 0 ? 0x2ba2 : 0x2ba1);
+        } else if (CHATDLG_CompareInputPrefix("/ignore ") == 0 || CHATDLG_CompareInputPrefix("/squelch ") == 0) {
+          memset(wszIgnoreFormat, 0, 0x410);
+          memset(wszIgnoreResult, 0, 0x410);
+          memset(wszName, 0, sizeof(wszName));
+          CHATDLG_GetInputArgument(szName, 0x11);
+          if (Storm::Source::SSTR::SStrCmpI(szName, OOGUtilities::D2IniData_multiplayer->szLastBnetAccount, 0x7fffffff) == 0) {
+            goto scroll_to_end;
+          }
+
+          D2Lang::UTF8_ConvertToWideChar(wszName, szName, 0x22);
+          ::IgnoreList* pIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
+          int32_t nAdded = pIgnoreList->_vfptr->AddByPattern(pIgnoreList, szName);
+          uint16_t* pwszFormat = D2Lang::StrTable::strtable::GetLocaleString(nAdded == 0 ? 0x2ba4 : 0x2ba3);
+          D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x208, wszIgnoreFormat, pwszFormat, wszName);
+          D2Lang::Unicode::UNISYS::AppendToBuffer(wszIgnoreResult, wszIgnoreFormat);
+          pwszText = wszIgnoreResult;
+        } else if (CHATDLG_CompareInputPrefix("/unignore ") == 0 || CHATDLG_CompareInputPrefix("/unsquelch ") == 0) {
+          memset(wszIgnoreFormat, 0, 0x410);
+          memset(wszIgnoreResult, 0, 0x410);
+          memset(wszName, 0, sizeof(wszName));
+          CHATDLG_GetInputArgument(szName, 0x11);
+          D2Lang::UTF8_ConvertToWideChar(wszName, szName, 0x22);
+          ::IgnoreList* pIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
+          int32_t nRemoved = pIgnoreList->_vfptr->RemoveByPattern(pIgnoreList, szName);
+          uint16_t* pwszFormat = D2Lang::StrTable::strtable::GetLocaleString(nRemoved == 0 ? 0x2ba6 : 0x2ba5);
+          D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x208, wszIgnoreFormat, pwszFormat, wszName);
+          D2Lang::Unicode::UNISYS::AppendToBuffer(wszIgnoreResult, wszIgnoreFormat);
+          pwszText = wszIgnoreResult;
+        } else if (CHATDLG_CompareInputPrefix("/filtermsg ") == 0) {
+          CHATDLG_GetInputArgument((char*)aszAccountName, 0x104);
+          ::IgnoreList* pIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
+          int32_t nAdded = pIgnoreList->_vfptr->AddByAccountName(pIgnoreList, (char*)aszAccountName);
+          pwszText = D2Lang::StrTable::strtable::GetLocaleString(nAdded == 0 ? 0x2ba8 : 0x2ba7);
+        } else if (CHATDLG_CompareInputPrefix("/unfiltermsg ") == 0) {
+          CHATDLG_GetInputArgument((char*)aszAccountName, 0x104);
+          ::IgnoreList* pIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
+          int32_t nRemoved = pIgnoreList->_vfptr->RemoveByAccountName(pIgnoreList, (char*)aszAccountName);
+          pwszText = D2Lang::StrTable::strtable::GetLocaleString(nRemoved == 0 ? 0x2baa : 0x2ba9);
+        } else {
+          if (CHATDLG_CompareInputPrefix("/homechannel ") == 0 || CHATDLG_CompareInputPrefix("/defaultchannel ") == 0 || CHATDLG_CompareInputPrefix("/home ") == 0) {
+            CHATDLG_GetInputArgument(szChannelName, 0x20);
+            Storm::Source::SReg::SRegSaveString("Diablo II", "Default Channel", 0, szChannelName);
+          } else if (CHATDLG_CompareInputPrefix("/home") == 0) {
+            if (Storm::Source::SReg::SRegLoadString("Diablo II", "Default Channel", 0, szChannelName, 0x20)) {
+              pNetworkUnknown->pfnSendJoinChannel(szChannelName, 0, 0);
+              OOGUtilities::OOGUTIL_JoinChannelAndDestroyForms(szChannelName);
+            }
+          } else if (!pNetworkUnknown->pfnIsSocketConnected()) {
+            uint16_t* pwszError = D2Lang::StrTable::strtable::GetLocaleString(0x14e7);
+            UIMENU_DrawTitleOnCenterSmaller(pwszError, OOG::OOGUTIL_DrawCallback_SetModeAndClearMsgLoop);
+          } else {
+            pNetworkUnknown->pfnSendChatCommand((uint8_t*)szInput);
+          }
+
+          goto scroll_to_end;
+        }
+
+        if (gpChatMessagesTextBox) {
+          D2Win::Src::D2WinTextBox::SetText(gpChatMessagesTextBox, pwszText, 3, false, 1);
+        }
+      }
+    }
+
+scroll_to_end:
+    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextWide(gpChatDlgInputEditBox, nullptr);
+    int32_t nVisibleLines = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetVisibleLineCount(gpChatMessagesTextBox);
+    int32_t nLineCount = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetLineCount(gpChatMessagesTextBox);
+    if (nVisibleLines < nLineCount) {
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ScrollToLine(gpChatMessagesTextBox, nLineCount - nVisibleLines);
+    }
+}
+
+// 1.14d mac: 002d098a
+int CHATDLG_PollMCPCharLogonPump() {
+    D2MCPClient::McpConnect::NET_MCP_CLIENT_ReadAndParsePacket();
+    BOOL bCharLogonSuccess = D2MCPClient::McpConnect::MCPSTATE_GetCharLogonSuccess();
+    if (!bCharLogonSuccess && D2MCPClient::McpConnect::HasPeerName() && !(gnMCPConnectionRestoreResult & 1)) {
+      return 1;
+    }
+
+    D2MCPClient::McpConnect::MCPSTATE_SetCharLogonSuccess(0);
+    D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
+    return 1;
+}
+#endif
+
 } // namespace D2Multi::ChatDlg
