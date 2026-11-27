@@ -331,6 +331,7 @@ addr	class	win_addr	evidence
 000eea0e	mac-only		forwarder to SpinnerWrapper::Constructor; no verified win twin
 000ef1d3	shared-unpaired	0049d4d0	TEXT_FreeAllScreenMessages: loop-free-count + halt line 0x6cd + zero head/count identical; Win inlines TEXT_FreeScreenMessage; source fn untagged
 000ef610	shared-unpaired	0049f960	TEXT_CloseScrollingText: free box, stop sound, unregister handlers, send 0x31; source fn untagged
+000ef691	mac-only		TEXT_SetEventHandlersRegistered: registers/unregisters the text UI event handler batch with a state flag; no Windows twin (the old pair with 0049da50 was wrong, whose twin is 000ef807)
 000ef807	shared-unpaired	0049da50	TEXT_ClearNpcMenuSelection: clears one byte flag; called from SetSelectedUnit_I like Win. The Windows twin carried the tag 000ef691 (TEXT_SetEventHandlersRegistered, now on Unreferenced_0049da60)
 000f185e	shared-unpaired		0049f960 TEXT_CloseScrollingText / 004a1320 TEXT_ShowScrollingText / 004a10e0 TEXT_ShowNpcDialog: Win inlines SOUND_StopSound+StopChannelGracefully(.,0,0,4) in all three (mac has the same 3 callers)
 000f1912	shared-unpaired	004a1320	TEXT_ShowScrollingText: halt line 0x1063, alloc box font 8, bAlignToPanel/bShowImage = param_2/param_3; source fn untagged
