@@ -2879,147 +2879,106 @@ static int DRLGOUTROOM_SnapVertexToGrid(D2DrlgLevelStrc * pLevel, int * pOutCoor
 
 // Builds the wilderness outdoor-level exit-point array. For levels with linked orth (sub-level) data, emits one exit per orth link (positioned by DrlgDirection NE/NW/SE/SW or special 0x1a), setting eType from the direction. For grid-based levels, scans the level's preset + outdoor grid cells, classifying each cell's GetGridFlags preset code (4/5/6/7/0x18/0x19/0x1c/0x33/0x34) into an exit eType (0..3, 4=none) and recording world X/Y. Increments pDrlgLevelData->nExitCount per emitted exit (into aExitPoints1), then snaps each vertex to the grid via DRLGOUTROOM_SnapVertexToGrid. Side effect: populates the level's exit-point table used for connecting adjacent wilderness levels.
 void __stdcall DRLGOUTROOM_BuildExitPointArray(D2DrlgLevelStrc * pLevel) {
-    int nGridY;
-    int nPresetType;
-    uint32_t nOutdoorGridFlags;
-    int nGridX;
-    D2DrlgExitPointStrc* pExitPoint;
-    bool bIsBorderEdge;
-    int nExitIdx;
-    D2DrlgLevelStrc* pLinkedLevel;
-    D2DrlgLevelDataWildernessLevel* pWildernessData;
-    pWildernessData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
-    D2DrlgOrthStrc* pOrth;
-    pOrth = pWildernessData->pOrthData;
+    D2DrlgLevelDataWildernessLevel* pWildernessData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
     pWildernessData->nExitCount = 0;
-    do {
-      if (!pOrth) {
-        for (nGridX = 0; nGridX < pWildernessData->nGridCoordsWidth; nGridX++) {
-          for (nGridY = 0; nGridY < pWildernessData->nGridCoordsHeight; nGridY++) {
-            nPresetType = DrlgGrid::GetGridFlags(&pWildernessData->sGridPreset, nGridX, nGridY);
-            nOutdoorGridFlags = DrlgGrid::GetGridFlags(&pWildernessData->sGridOutdoor, nGridX, nGridY);
-            pExitPoint = pWildernessData->aExitPoints1 + pWildernessData->nExitCount;
-            pExitPoint->nWorldX = pLevel->sCoordinatesAndSize.WorldPosition.x + 3 + nGridX * 8;
-            pExitPoint->nWorldY = pLevel->sCoordinatesAndSize.WorldPosition.y + 3 + nGridY * 8;
-            nOutdoorGridFlags = nOutdoorGridFlags >> 0x10 & 0xf;
-            pExitPoint->eType = 4;
-            switch (nPresetType) {
-              case 4:
-                if (nOutdoorGridFlags == 3) {
-                  pExitPoint->eType = 3;
-                }
+    for (D2DrlgOrthStrc* pOrth = pWildernessData->pOrthData; pOrth; pOrth = pOrth->pNext) {
+      D2DrlgLevelStrc* pLinkedLevel = pOrth->pLink.pLevel;
+      switch (pLinkedLevel->eD2LevelId) {
+        case 1: {
+          D2DrlgExitPointStrc* pExitPoint = &pWildernessData->aExitPoints1[pWildernessData->nExitCount];
+          pExitPoint->eType = (char)pOrth->neDrlgDirection;
+          switch (pOrth->neDrlgDirection) {
+            case DIRECTION_SOUTHEAST:
+              pExitPoint->nWorldX = pLinkedLevel->sCoordinatesAndSize.WorldPosition.x + 0x3b;
+              pExitPoint->nWorldY = pLinkedLevel->sCoordinatesAndSize.WorldPosition.y + 0x13;
               break;
-              case 5:
-                if (nOutdoorGridFlags == 3) {
-                  pExitPoint->eType = 0;
-                  break;
-                }
+            case DIRECTION_NORTHEAST:
+              pExitPoint->nWorldX = pLinkedLevel->sCoordinatesAndSize.WorldPosition.x + 0x1d;
+              pExitPoint->nWorldY = pLinkedLevel->sCoordinatesAndSize.WorldPosition.y + 0x23;
               break;
-              case 0x19:
-                pExitPoint->eType = 0;
+            case DIRECTION_SOUTHWEST:
+              pExitPoint->nWorldX = pLinkedLevel->sCoordinatesAndSize.WorldPosition.x + 4;
+              pExitPoint->nWorldY = pLinkedLevel->sCoordinatesAndSize.WorldPosition.y + 0x16;
               break;
-              case 6:
-                if (nOutdoorGridFlags == 3) {
-                  pExitPoint->eType = 1;
-                  break;
-                }
+            case DIRECTION_NORTHWEST:
+              pExitPoint->nWorldX = pLinkedLevel->sCoordinatesAndSize.WorldPosition.x + 0x1d;
+              pExitPoint->nWorldY = pLinkedLevel->sCoordinatesAndSize.WorldPosition.y + 3;
               break;
-              case 0x18:
-                pExitPoint->eType = 1;
-              break;
-              case 7:
-                bIsBorderEdge = false;
-              if (nOutdoorGridFlags == 3) {
-                bIsBorderEdge = true;
-              }
-              if (bIsBorderEdge) {
-                pExitPoint->eType = 2;
-              }
-
-              break;
-              case 0x33:
-                pExitPoint->eType = nOutdoorGridFlags != 0;
-              break;
-              case 0x34:
-                pExitPoint->eType = nOutdoorGridFlags != 0;
-              break;
-              case 0x1c:
-                if (nOutdoorGridFlags == 1) {
-                  bIsBorderEdge = false;
-                  if (nGridX == pWildernessData->nGridCoordsWidth - 2) {
-                    bIsBorderEdge = true;
-                  }
-                  if (bIsBorderEdge) {
-                    pExitPoint->eType = 2;
-                  }
-
-                  break;
-                }
-              break;
-            }
-
-            if (pExitPoint->eType != 4) {
-              pWildernessData->nExitCount++;
-            }
           }
+
+          pWildernessData->nExitCount++;
+          break;
         }
-
-        nExitIdx = 0;
-        if (pWildernessData->nExitCount <= 0) {
-          return;
-        }
-
-        pExitPoint = pWildernessData->aExitPoints1;
-        do {
-          DRLGOUTROOM_SnapVertexToGrid(pLevel, &pExitPoint[6].nWorldX, &pExitPoint->nWorldX);
-          nExitIdx++;
-          pExitPoint++;
-        } while (nExitIdx < pWildernessData->nExitCount);
-
-        return;
-      }
-
-      pLinkedLevel = pOrth->pLink.pLevel;
-      if (pLinkedLevel->eD2LevelId != 1) {
-        if (pLinkedLevel->eD2LevelId == 0x1a) {
-          pExitPoint = pWildernessData->aExitPoints1 + pWildernessData->nExitCount;
+        case 0x1a: {
+          D2DrlgExitPointStrc* pExitPoint = &pWildernessData->aExitPoints1[pWildernessData->nExitCount];
           pExitPoint->nWorldX = pLinkedLevel->sCoordinatesAndSize.WorldPosition.x + 0x1b;
-          nGridY = pLinkedLevel->sCoordinatesAndSize.WorldPosition.y + 0xd;
+          pExitPoint->nWorldY = pLinkedLevel->sCoordinatesAndSize.WorldPosition.y + 0xd;
           pExitPoint->eType = 1;
-          goto store_exit_y;
+          pWildernessData->nExitCount++;
+          break;
         }
-      } else {
-        pExitPoint = pWildernessData->aExitPoints1 + pWildernessData->nExitCount;
-        pExitPoint->eType = (char)pOrth->neDrlgDirection;
-        switch (pOrth->neDrlgDirection) {
-          case DIRECTION_SOUTHEAST:
-            pExitPoint->nWorldX = pLinkedLevel->sCoordinatesAndSize.WorldPosition.x + 0x3b;
-          nGridY = pLinkedLevel->sCoordinatesAndSize.WorldPosition.y + 0x13;
-          break;
-          case DIRECTION_NORTHEAST:
-            pExitPoint->nWorldX = pLinkedLevel->sCoordinatesAndSize.WorldPosition.x + 0x1d;
-          nGridY = pLinkedLevel->sCoordinatesAndSize.WorldPosition.y + 0x23;
-          break;
-          case DIRECTION_SOUTHWEST:
-            pExitPoint->nWorldX = pLinkedLevel->sCoordinatesAndSize.WorldPosition.x + 4;
-          nGridY = pLinkedLevel->sCoordinatesAndSize.WorldPosition.y + 0x16;
-          break;
-          case DIRECTION_NORTHWEST:
-            pExitPoint->nWorldX = pLinkedLevel->sCoordinatesAndSize.WorldPosition.x + 0x1d;
-          nGridY = pLinkedLevel->sCoordinatesAndSize.WorldPosition.y + 3;
-          break;
-          default:
-            goto count_exit;
-        }
-
-        store_exit_y:
-        pExitPoint->nWorldY = nGridY;
-        count_exit:
-        pWildernessData->nExitCount++;
       }
+    }
 
-      pOrth = pOrth->pNext;
-    } while (true);
+    for (int nGridX = 0; nGridX < pWildernessData->nGridCoordsWidth; nGridX++) {
+      for (int nGridY = 0; nGridY < pWildernessData->nGridCoordsHeight; nGridY++) {
+        int nPresetType = DrlgGrid::GetGridFlags(&pWildernessData->sGridPreset, nGridX, nGridY);
+        uint32_t nOutdoorGridFlags = DrlgGrid::GetGridFlags(&pWildernessData->sGridOutdoor, nGridX, nGridY);
+        D2DrlgExitPointStrc* pExitPoint = &pWildernessData->aExitPoints1[pWildernessData->nExitCount];
+        pExitPoint->nWorldX = pLevel->sCoordinatesAndSize.WorldPosition.x + 3 + nGridX * 8;
+        pExitPoint->nWorldY = pLevel->sCoordinatesAndSize.WorldPosition.y + 3 + nGridY * 8;
+        nOutdoorGridFlags = nOutdoorGridFlags >> 0x10 & 0xf;
+        pExitPoint->eType = 4;
+        switch (nPresetType) {
+          case 4:
+            if (nOutdoorGridFlags == 3) {
+              pExitPoint->eType = 3;
+            }
+            break;
+          case 5:
+            if (nOutdoorGridFlags == 3) {
+              pExitPoint->eType = 0;
+            }
+            break;
+          case 0x19:
+            pExitPoint->eType = 0;
+            break;
+          case 6:
+            if (nOutdoorGridFlags == 3) {
+              pExitPoint->eType = 1;
+            }
+            break;
+          case 0x18:
+            pExitPoint->eType = 1;
+            break;
+          case 7:
+            if (nOutdoorGridFlags == 3) {
+              pExitPoint->eType = 2;
+            }
+            break;
+          case 0x33:
+            pExitPoint->eType = nOutdoorGridFlags != 0;
+            break;
+          case 0x34:
+            pExitPoint->eType = nOutdoorGridFlags != 0;
+            break;
+          case 0x1c:
+            if (nOutdoorGridFlags == 1 && nGridX == pWildernessData->nGridCoordsWidth - 2) {
+              pExitPoint->eType = 2;
+            }
+            break;
+        }
+
+        if (pExitPoint->eType != 4) {
+          pWildernessData->nExitCount++;
+        }
+      }
+    }
+
+    for (int i = 0; i < pWildernessData->nExitCount; i++) {
+      D2DrlgExitPointStrc* pExitPoint = &pWildernessData->aExitPoints1[i];
+      DRLGOUTROOM_SnapVertexToGrid(pLevel, &pExitPoint[6].nWorldX, &pExitPoint->nWorldX);
+    }
 }
 
 // DRLG outdoor wilderness level generation: computes target positions for each of a level's exits, writing into the wilderness level data's aExitPoints4 array. If the level has the left-exit flag (0x10) and DRLGOUTROOM_FindLeftExitPosition yields a valid cell, all exits are placed along that left edge (eType 0 or 2 by X comparison). Otherwise it averages the existing exit grid positions (or uses the grid center for a single exit) and does an 8-ring spiral search (gaExitSpiralOffsetX/Y) for the first empty grid cell via DRLGOUTDOOR_IsGridCellEmpty, placing exit 0 there (eType 4) and copying it to the rest. Finally snaps every exit vertex to the grid via DRLGOUTROOM_SnapVertexToGrid.
