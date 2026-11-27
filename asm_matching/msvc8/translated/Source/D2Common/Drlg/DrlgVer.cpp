@@ -29,6 +29,7 @@ namespace D2Common { namespace Drlg { namespace DrlgVer {
 
 // Allocates 0x14-byte vertex node.
 // @sourcefile .\DRLG\DrlgVer.cpp
+// 1.14d mac: 001508c0
 D2DrlgVertexStrc * __fastcall DRLGVER_AllocVertex(D2PoolManagerStrc * pMemory, uint8_t nDirection) {
     D2DrlgVertexStrc* pVertex = D2_NEW_POOL_AT(pMemory, D2DrlgVertexStrc, ".\\DRLG\\DrlgVer.cpp", 0x13);
     memset(pVertex, 0, sizeof(*pVertex));
@@ -170,17 +171,13 @@ D2DrlgVertexStrc * __stdcall DRLGVER_CreateVerticesFromEdges(D2PoolManagerStrc *
 
 // Allocates and chains four D2DrlgVertexStrc corner nodes for the given room coordinate rect (temporarily shrinking width/height by 1, restoring after), then calls DRLGVER_CreateVerticesFromEdges to insert edge-interior vertices. Normalises all vertex positions relative to the room origin. Used during DRLG Vers layout to build the vertex ring describing a room's boundary polygon.
 // @sourcefile .\DRLG\DrlgVer.cpp
+// 1.14d mac: 0015091a
 void __fastcall DRLGVER_CreateRoomVertices(D2PoolManagerStrc * pMemory, D2DrlgVertexStrc * * ppVertices, D2DrlgCoordStrc * pDrlgCoord, uint8_t nDirection, D2DrlgOrthStrc * pDrlgRoomData) {
-    POINT* pPVar1;
-    LONG* pLVar2;
-    D2DrlgOrthStrc* pRoomData;
     pDrlgCoord->nWidth--;
     pDrlgCoord->nHeight--;
-    for (pRoomData = pDrlgRoomData; pRoomData; pRoomData = pRoomData->pNext) {
-      pPVar1 = &pRoomData->psCoordinatesAndSize->WorldSize;
-      pPVar1->x--;
-      pLVar2 = &pRoomData->psCoordinatesAndSize->WorldSize.y;
-      (*pLVar2)--;
+    for (D2DrlgOrthStrc* pRoomData = pDrlgRoomData; pRoomData; pRoomData = pRoomData->pNext) {
+      pRoomData->psCoordinatesAndSize->WorldSize.x--;
+      pRoomData->psCoordinatesAndSize->WorldSize.y--;
     }
 
     D2DrlgVertexStrc* pVertex = D2_NEW_POOL_AT(pMemory, D2DrlgVertexStrc, ".\\DRLG\\DrlgVer.cpp", 0x13);
@@ -209,25 +206,24 @@ void __fastcall DRLGVER_CreateRoomVertices(D2PoolManagerStrc * pMemory, D2DrlgVe
     pVertexNext->nPosY = pDrlgCoord->nPosY + pDrlgCoord->nHeight;
     pVertexNext->pNext = *ppVertices;
     DRLGVER_CreateVerticesFromEdges(pMemory, *ppVertices, pDrlgCoord, nDirection, pDrlgRoomData);
-    pVertex = *ppVertices;
-    pVertexNext = pVertex;
+    D2DrlgVertexStrc* pFirstVertex = *ppVertices;
+    pVertex = pFirstVertex;
     do {
-      pVertexNext->nPosX -= pDrlgCoord->nPosX;
-      pVertexNext->nPosY -= pDrlgCoord->nPosY;
-      pVertexNext = pVertexNext->pNext;
-    } while (pVertexNext != pVertex);
+      pVertex->nPosX -= pDrlgCoord->nPosX;
+      pVertex->nPosY -= pDrlgCoord->nPosY;
+      pVertex = pVertex->pNext;
+    } while (pVertex != pFirstVertex);
 
     pDrlgCoord->nWidth++;
     pDrlgCoord->nHeight++;
-    for (; pDrlgRoomData; pDrlgRoomData = pDrlgRoomData->pNext) {
-      pPVar1 = &pDrlgRoomData->psCoordinatesAndSize->WorldSize;
-      pPVar1->x++;
-      pLVar2 = &pDrlgRoomData->psCoordinatesAndSize->WorldSize.y;
-      (*pLVar2)++;
+    for (D2DrlgOrthStrc* pRoomData = pDrlgRoomData; pRoomData; pRoomData = pRoomData->pNext) {
+      pRoomData->psCoordinatesAndSize->WorldSize.x++;
+      pRoomData->psCoordinatesAndSize->WorldSize.y++;
     }
 }
 
 // @sourcefile .\DRLG\DrlgVer.cpp
+// 1.14d mac: 00150d54
 void __fastcall DRLGVER_FreeVertices(D2PoolManagerStrc * pMemory, D2DrlgVertexStrc * * ppVertices) {
     if (!*ppVertices) {
       return;
@@ -264,6 +260,7 @@ void __fastcall Unreferenced_0067d250(D2DrlgVertexStrc * * ppVertices) {
     *ppVertices = pDVar3;
 }
 
+// 1.14d mac: 00150e1c
 void __fastcall GetCoordDiff(D2DrlgVertexStrc * pDrlgVertex, int * pDiffX, int * pDiffY) {
     *pDiffX = pDrlgVertex->pNext->nPosX - pDrlgVertex->nPosX;
     *pDiffY = pDrlgVertex->pNext->nPosY - pDrlgVertex->nPosY;

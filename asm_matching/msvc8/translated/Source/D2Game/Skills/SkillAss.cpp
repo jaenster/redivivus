@@ -91,6 +91,7 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
     return (eD2UnitType)6;
 }
 
+// 1.14d mac: 00248596
 BOOL __fastcall SKILLASS_SrvStFn22_PsychicHammer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     if (pTarget && !D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(D2Common::Units::UNITS_GetRoom(pUnit)) && !D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(D2Common::Units::UNITS_GetRoom(pTarget))) {
@@ -101,6 +102,7 @@ BOOL __fastcall SKILLASS_SrvStFn22_PsychicHammer(::SGAMEDATA * pGame, D2UnitStrc
 }
 
 // Server-side hit handler for Assassin Tiger Strike. Validates skill and runs the setup function (SrvStFunc_22), then fetches the current target, applies skill bonus damage, and rolls a critical-hit chance using the unit seed (result flag 0x8). Sets result flag 0x2 if target HP is nearly zero. Selects the skill calc slot based on target class (normal/champion/boss/player) to determine crit percentage. Finalises via SERVER_GetHitCalculation.
+// 1.14d mac: 002485f3
 BOOL __fastcall Skills_SrvDoFunc_033_PsychicHammer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nAttackerLvl;
     int nEffLevel;
@@ -177,6 +179,7 @@ BOOL __fastcall Skills_SrvDoFunc_033_PsychicHammer(::SGAMEDATA * pGame, D2UnitSt
     return 1;
 }
 
+// 1.14d mac: 00248838
 BOOL __fastcall SKILLASS_SrvStFn23_MartialArtsCharge(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     if (!pTarget) {
@@ -233,6 +236,7 @@ static BOOL __stdcall SKILLASS_AddChargeUpStack(::SGAMEDATA * pGame, eD2Skills e
     return 1;
 }
 
+// 1.14d mac: 00248898
 BOOL __fastcall Skills_SrvDoFunc_034_ChargeUpStackMelee(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillRecord;
     D2DamageStrc sDamage;
@@ -266,6 +270,7 @@ BOOL __fastcall Skills_SrvDoFunc_034_ChargeUpStackMelee(::SGAMEDATA * pGame, D2U
 }
 
 // Dragon Claw skill SrvDoFunc. Checks that the unit has two distinct non-broken weapons in both arm slots; if so, clears UNITFLAG_SKSRVDOFUNC and delegates to the ChargeUp/StackMelee handler. On odd animation frames with no valid dual-wield it sets the flag to suppress further processing. Returns 1 always.
+// 1.14d mac: 00248cd7
 BOOL __fastcall Skills_SrvDoFunc_035_ElementalChargeRelease(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pRightHandItem;
     D2UnitStrc* pLeftHandItem;
@@ -479,6 +484,7 @@ static void __stdcall SKILLASS_ApplyChargeUpConvertDamage(D2UnitStrc * pUnit, D2
     SkillsServer::SERVER_AppendDamageToUnitEvent(pUnit, pDamage, (eSkillEType)pSkillTxt->EType, nPhysConvertPct, 0, nullptr, nullptr);
 }
 
+// 1.14d mac: 00248dab
 void __fastcall SKILLASS_ApplyProgressiveDamageToTarget(D2UnitStrc * pUnit, D2DamageStrc * pDamage) {
     D2StatListExStrc* pStatList;
     eD2Skills eSkill;
@@ -517,6 +523,7 @@ void __fastcall SKILLASS_ApplyProgressiveDamageToTarget(D2UnitStrc * pUnit, D2Da
 }
 
 // Iterates all active charge-up states on pUnit (sgptDataTable->pAllStatesDataTblFlag0x04) and, for each that is active and has a valid skill, dispatches to the appropriate handler based on pSkillTxt->prgdam: 2=AddChargeUpDamageRange, 3=ApplyChargeUpDamage, 4=ApplyChargeUpConvertDamage. Only runs if pDamage result-flag bit 0 is set.
+// 1.14d mac: 00249004
 void __fastcall SKILLASS_DispatchChargeUpDamage(D2UnitStrc * pUnit, D2DamageStrc * pDamage) {
     D2StatListExStrc* pStatList;
     eD2Skills eSkill;
@@ -568,6 +575,7 @@ void __fastcall SKILLASS_DispatchChargeUpDamage(D2UnitStrc * pUnit, D2DamageStrc
     } while (nChargeStateIdx < D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x04Size);
 }
 
+// 1.14d mac: 0024964f
 uint32_t __fastcall SKILLS_AreaCallback_ApplyCopiedDamage(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pUnit) {
     int nWordsLeft;
     D2DamageStrc sDamage;
@@ -578,6 +586,7 @@ uint32_t __fastcall SKILLS_AreaCallback_ApplyCopiedDamage(D2SkillCallbackContext
     return 1;
 }
 
+// 1.14d mac: 0024969f
 int32_t __fastcall SKILLASS_GetChargeUpMissile(D2UnitStrc * pUnit, int32_t nSkillId) {
     D2SkillsTxt* pSkillTxt = nSkillId >= 0 && nSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;
     if (!pSkillTxt) {
@@ -602,6 +611,7 @@ int32_t __fastcall SKILLASS_GetChargeUpMissile(D2UnitStrc * pUnit, int32_t nSkil
 }
 
 // Returns the charge-level-indexed prgcalc value for a charge-up skill. If the skill has the charge-up flag (bit 2) and a valid aurastate with an active stat list, selects prgcalc[0..2] by clamped charge level (1/2/3); otherwise falls back to prgcalc[0]. Returns 0 if skill id is out of range.
+// 1.14d mac: 00249777
 uint32_t __fastcall SKILLASS_GetChargeUpCalcValue(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
@@ -630,6 +640,7 @@ uint32_t __fastcall SKILLASS_GetChargeUpCalcValue(D2UnitStrc * pUnit, eD2Skills 
 // Server do-func 38: the second charge release of Fists of Fire and Blades of Ice. Applies direct melee damage to the target via DAMAGE_ProcessCombatQueueEntry, then fires an area explosion at the target/cursor position; the radius comes from SKILLASS_GetChargeUpCalcValue (falling back to aurarangecalc).
 // Slot from skills.txt srvdofunc 38.
 // @sourcefile .\SKILLS\SkillAss.cpp
+// 1.14d mac: 002498a1
 BOOL __fastcall Skills_SrvDoFunc_038_ChargeRelease_AreaExplosion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     uint32_t nTargetX;
@@ -667,6 +678,7 @@ BOOL __fastcall Skills_SrvDoFunc_038_ChargeRelease_AreaExplosion(::SGAMEDATA * p
 }
 
 // Server skill handler for Assassin charge-release skills (e.g. Dragon Tail / Tiger Strike release). Advances the unit RNG seed, resolves the accumulated charge-up missile id and radius (aurarangecalc fallback), then scatters radius^2 missiles randomly within a circle of that radius around the skill target using rejection sampling. Each candidate point is validated against the nearby room before spawning. Returns TRUE on success.
+// 1.14d mac: 00249a93
 BOOL __fastcall Skills_SrvDoFunc_039_ChargeRelease_CircleSpawn(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nOffsetY;
     int nOffsetX;
@@ -899,6 +911,7 @@ void __fastcall SKILLASS_SpawnMissileRing(uint32_t dwUnused, int32_t pUnit, ::SG
 }
 
 // Builds the spiral flight path for an Assassin missile unit (e.g. trap/blade projectiles). Clamps total frames to 0x4D, seeds the unit's PRNG from nParam (high word 0x29a), sets path type 10, and steps a turning angle around the unit's facing direction: each frame advances the direction by a seed-derived angle step (turn direction flips every gnSpiralMissileBaseOffset frames), looks up per-direction X/Y deltas via gnSkillAssTableIndexBySkill/OffsetBySkill, and writes the accumulated position into the dynamic path's PathPoints. Sets the final point count. Mutates pUnit->sSeed.
+// 1.14d mac: 0024e96a
 void __fastcall SKILLASS_BuildSpiralMissilePath(D2UnitStrc * pUnit, intptr_t nSeed) {
     // Static local variables (originally global data)
     static int gnSkillAssTableOffsetBySkill[8] = { 0x0, 0x2, 0x2, 0x2, 0x0, -0x2, -0x2, -0x2 }; D2_STATIC_GUARD(gnSkillAssTableOffsetBySkill, "D2Game::SKILLS::SkillAss::SKILLASS_BuildSpiralMissilePath::gnSkillAssTableOffsetBySkill");
@@ -1139,6 +1152,7 @@ void __fastcall SKILLASS_SpawnSpiralMissileRing(uint32_t dwParam, int32_t pUnit,
     } while (nByteOffset < 0x100);
 }
 
+// 1.14d mac: 00249dfe
 BOOL __fastcall Skills_SrvDoFunc_036_ChargeRelease_MissileRing(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     if (!pTarget) {
@@ -1164,6 +1178,7 @@ BOOL __fastcall Skills_SrvDoFunc_036_ChargeRelease_MissileRing(::SGAMEDATA * pGa
     return 1;
 }
 
+// 1.14d mac: 00249ef2
 BOOL __fastcall Skills_SrvDoFunc_037_ChargeRelease_MultiElementScatter(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t nTargetX;
     eD2Skills eSkillSlot;
@@ -1193,6 +1208,7 @@ BOOL __fastcall Skills_SrvDoFunc_037_ChargeRelease_MultiElementScatter(::SGAMEDA
     return 1;
 }
 
+// 1.14d mac: 0024a152
 BOOL __fastcall Skills_SrvDoFunc_143_ChargeRelease_GroundStrike(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t nTargetX;
     eD2Skills eSkillSlot;
@@ -1222,6 +1238,7 @@ BOOL __fastcall Skills_SrvDoFunc_143_ChargeRelease_GroundStrike(::SGAMEDATA * pG
     return 1;
 }
 
+// 1.14d mac: 0024a3b4
 BOOL __fastcall Skills_SrvDoFunc_040_ChargeRelease_SingleMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t nTargetX;
     uint32_t nTargetY;
@@ -1244,6 +1261,7 @@ BOOL __fastcall Skills_SrvDoFunc_040_ChargeRelease_SingleMissile(::SGAMEDATA * p
 
 // Server do-func 41: the third charge release of Royal Strike (Phoenix Strike). Gets the target/cursor position and the charge-up missile type and count, then spawns that many missiles at seeded +-20 offsets around the target, storing the seed and packed XY in each missile.
 // Slot from skills.txt srvdofunc 41.
+// 1.14d mac: 0024a437
 BOOL __fastcall Skills_SrvDoFunc_041_ChargeRelease_RandomMissileBurst(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t nSeedLow;
     D2SkillArgStrc sSkillArg;
@@ -1393,6 +1411,7 @@ void __fastcall SKILLASS_ReleaseChargeUpAttack(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // Server-side per-hit damage application for the Assassin's dual-wield Whirlwind-style melee attack (also used by other dual-weapon skills). Args (custom calling convention): nParam=SGAMEDATA*, pDamage (in/out D2DamageStrc), pUnit=target, eSkill, pUnit1=skill-context unit, pUnit2(EBX)=attacker. Applies progressive charge-up damage, sets hit flags 3, computes skill min/max damage scaled by the damage struct's enhanced-damage percent (with 64-bit overflow-safe paths), adds kick damage similarly, rolls a uniform value in [min,max] from the attacker seed, and accumulates into pDamage->dwPhysDamage. Then, for each equipped weapon (main + offhand in BODYLOC_R_ARM slot), validates it is an unbroken usable weapon with an owner, toggles its item stats active, calls DAMAGE_CalculateOffensiveDamage and SKILLASS_DispatchChargeUpDamage so both weapons contribute, then restores the main weapon's stat-active flag.
+// 1.14d mac: 0024ce08
 static void __stdcall SKILLASS_FillKickDamage(::SGAMEDATA * pGame, D2DamageStrc * pDamage, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t pUnit1, D2UnitStrc * pUnit2) {
     D2UnitStrc* pMainWeapon;
     uint32_t bIsWeaponType;
@@ -1460,6 +1479,7 @@ static void __stdcall SKILLASS_FillKickDamage(::SGAMEDATA * pGame, D2DamageStrc 
     D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pUnit2, pMainWeapon, 1);
 }
 
+// 1.14d mac: 0024ab33
 static void __stdcall D2CalcKickDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2SkillsTxt * pSkillTxt, int32_t nSkillLvl, BOOL bKickCheck, D2UnitStrc * pAttacker, eD2Skills eSkill) {
     D2DamageStrc sDamage;
     int nToHit = D2Common::Skills::SKILLS_CalcToHit(pAttacker, eSkill, nSkillLvl) + D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pAttacker, UNITSTAT_progressive_tohit, 0);
@@ -1493,6 +1513,7 @@ static void __stdcall D2CalcKickDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pAttacker, pUnit, &sDamage, nSrcDam);
 }
 
+// 1.14d mac: 0024aa12
 BOOL __fastcall SKILLASS_SrvStFn24_DragonTalon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkilsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkilsTxt) {
@@ -1520,6 +1541,7 @@ BOOL __fastcall SKILLASS_SrvStFn24_DragonTalon(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // Server DoFunc for the Assassin Dragon Talon skill (skill srvdofunc 42). Validates the Skills.txt row, resolves the attack target, releases any charge-up attack and processes the combat queue. Decrements the skill's Param1 (remaining kick count); while kicks remain it keeps the SKSRVDOFUNC flag and re-arms the anim timer. On the final kick it rolls a knockback chance from skill calc[1..3] (selected by target being player/merc, boss, or a specific monster type) against the unit seed, then applies kick damage via D2CalcKickDamage and reprocesses the combat queue. Returns TRUE on success.
+// 1.14d mac: 0024ac9e
 BOOL __fastcall Skills_SrvDoFunc_042_DragonTalon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nLvlDiffClamped;
     uint32_t nRandRoll;
@@ -1618,6 +1640,7 @@ BOOL __fastcall Skills_SrvDoFunc_042_DragonTalon(::SGAMEDATA * pGame, D2UnitStrc
 }
 
 // Server-side Assassin skill handler that fires a scatter pattern of missiles toward or around the target cursor position. With nParam1/nParam2 both ≥ 2, spawns nParam1 missiles each at a random offset within ±nParam2 tiles of the target (skipping positions within 3 units of the caster). Falls back to a single on-target missile if either spread parameter is less than 2. Seeds the unit's RNG with the target X position before each scatter run.
+// 1.14d mac: 0024af02
 BOOL __fastcall SKILLASS_CastScatterMissiles(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOwner, eMissilesId pMissileTxtId, int32_t nMissileCount, int32_t nSpread, eD2Skills eSkill, int32_t nSkillLevel) {
     D2SkillArgStrc sSkillArg;
     uint32_t nTargetY;
@@ -1652,6 +1675,7 @@ BOOL __fastcall SKILLASS_CastScatterMissiles(::SGAMEDATA * pGame, D2UnitStrc * p
     return 1;
 }
 
+// 1.14d mac: 0024b100
 BOOL __fastcall Skills_SrvDoFunc_043_ChargeRelease_ScatterMissiles(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxtBase = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxtBase) {
@@ -1674,6 +1698,7 @@ BOOL __fastcall Skills_SrvDoFunc_043_ChargeRelease_ScatterMissiles(::SGAMEDATA *
 }
 
 // Assassin summon-skill helper. Resolves the monster class id and pet type for the given skill/level, falls back to the caster's position if no explicit spawn coords are provided, walks up the owner chain if called from a monster context, then calls SKILL_CreateSummon and applies revive/buff logic (SKILLNEC_ReviveCorpseAsMinion + SKILLNEC_ApplySummonBuffs) and sets alignment before triggering lifecycle transition.
+// 1.14d mac: 0024b1d6
 D2UnitStrc * __fastcall SKILLASS_CreateSummon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nX, uint32_t nSpawnY, D2SkillsTxt * pSkillsTxt, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL _bHasPos;
     bool bHasPos;
@@ -1761,6 +1786,7 @@ D2UnitStrc * __fastcall SKILLASS_CreateSummon(::SGAMEDATA * pGame, D2UnitStrc * 
 }
 
 // Server Do handler for Shadow Warrior (Assassin skill 44). Resolves the summon monster class via SKILLS_GetSummonMonsterClassId, finds/creates the cursor target position, spawns the shadow clone via SKILLASS_CreateSummon, sets its level to match the caster, relocates it to the caster's room, and queues an AI think event on the next frame. Returns TRUE on success.
+// 1.14d mac: 0024b50e
 BOOL __fastcall Skills_SrvDoFunc_044_SummonBladeSentinel(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL _bHasTarget;
     bool bHasTarget;
@@ -1805,33 +1831,24 @@ BOOL __fastcall Skills_SrvDoFunc_044_SummonBladeSentinel(::SGAMEDATA * pGame, D2
     return 1;
 }
 
+// 1.14d mac: 0024b7b6
 BOOL __fastcall Skills_SrvDoFunc_045_SummonTrapSentry(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    BOOL _bHasPos;
-    bool bHasPos;
     uint32_t nTargetX;
     eD2Skills eSkillSlot;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if (!((int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
+
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    _bHasPos = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nTargetX, &eSkillSlot);
-    if (!_bHasPos) {
+    if (!SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nTargetX, &eSkillSlot)) {
       return 0;
     }
 
-    D2UnitStrc* pSummon = SKILLASS_CreateSummon(pGame, pUnit, nTargetX, eSkillSlot, pSkillTxt, eSkill, nSkillLvl);
-    return (uint32_t)(pSummon != 0);
+    return SKILLASS_CreateSummon(pGame, pUnit, nTargetX, eSkillSlot, pSkillTxt, eSkill, nSkillLvl) != nullptr;
 }
 
 // Generic Assassin skill melee attack resolver. Computes to-hit (SKILLS_CalcToHit + progressive_tohit stat), runs DAMAGE_CalculateHitCheck; on hit applies progressive damage, elemental enhancement, conversion percent, SetDamageOnEvent, offensive damage calculation, and DispatchChargeUpDamage. Always finalises with DAMAGE_CalculateAndApplyDamage.
@@ -1868,11 +1885,13 @@ static void __stdcall SKILLASS_SkillMeleeAttack(::SGAMEDATA * pGame, D2UnitStrc 
     UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit2, pUnit, &sDamage, 0x80);
 }
 
+// 1.14d mac: 0024b866
 BOOL __fastcall SKILLASS_SrvStFn25_DragonClaw(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     return (uint32_t)(pTarget != 0);
 }
 
+// 1.14d mac: 0024b88b
 BOOL __fastcall Skills_SrvDoFunc_046_DragonClaw(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t nSeqFrameFlags;
     D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
@@ -1960,6 +1979,7 @@ void __fastcall SKILLASS_ClearAllChargeUpStates(D2UnitStrc * pUnit) {
 }
 
 // Server-side skill event handler. Builds a D2StateExArgStrc from the event context and applies a timed state via SetStateWithExpiryTime, wiring SKILLNEC_OnCurseExpire as the expiry callback. Copies up to 5 stats into the new stat list, and for monster targets (re)attaches the correct AI. Returns 1 on success, 0 if the unit is dead or state allocation fails.
+// 1.14d mac: 0024bfc3
 uint32_t __fastcall SKILL_ApplyTimedStateWithCurseExpiry(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pUnit) {
     int nStatCount;
     eD2Skills* pStatId = (eD2Skills*)pContext->pCallbackArg;
@@ -2019,6 +2039,7 @@ uint32_t __fastcall SKILL_ApplyTimedStateWithCurseExpiry(D2SkillCallbackContextS
 
 // Server-side do-function for Assassin skill Cloak of Shadows (skill 47). Checks the caster does not already have the aura state active, then builds and applies a timed stat-list via SetStateWithExpiryTime using auralencalc duration and passivestat/passivecalc entries from skills.txt. Adds the skill/level modifierlist stats, toggles the visual gfx state, and if an auratargetstate is configured, broadcasts the aura effect to nearby units via SKILLS_ApplyAreaEffect. Returns 1 on success, 0 on invalid skill or state already present.
 // @sourcefile .\SKILLS\SkillAss.cpp
+// 1.14d mac: 0024bc9a
 BOOL __fastcall Skills_SrvDoFunc_047_CloakOfShadows(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nCalcVal;
     D2SkillCurseArgStrc sCurseArgs;
@@ -2113,6 +2134,7 @@ BOOL __fastcall Skills_SrvDoFunc_047_CloakOfShadows(::SGAMEDATA * pGame, D2UnitS
 }
 
 // Server Do handler for Blade Sentinel (Assassin skill 48). Each call fires a charge-up missile toward the cursor if the per-charge cooldown (SKILL param1 frame counter) has elapsed, then advances the cooldown by the charge calc value. If the unit has STATE_inferno active, triggers an anim-timer event afterward. Returns TRUE only when a missile was actually created.
+// 1.14d mac: 0024c0ed
 BOOL __fastcall Skills_SrvDoFunc_048_BladeFury(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t nCursorY;
     uint32_t nCursorX;
@@ -2166,6 +2188,7 @@ BOOL __fastcall Skills_SrvDoFunc_048_BladeFury(::SGAMEDATA * pGame, D2UnitStrc *
     return bMissileCreated;
 }
 
+// 1.14d mac: 0024c4ae
 void __fastcall SKILLSASS_StatExpireCallback_ClearStateSetFlag(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * pStatList) {
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
     if (!pUnit) {
@@ -2176,6 +2199,7 @@ void __fastcall SKILLSASS_StatExpireCallback_ClearStateSetFlag(D2UnitStrc * pUni
 }
 
 // Server sustain function for the Assassin Blade Sentinel charge-up (skill 26 / STATE_inferno). If the unit already has the inferno state, extends the state timeout and fires another BladeSentinel if the cooldown has elapsed; otherwise checks mana, allocates a new state statlist, attaches it, and marks the skill param. Returns TRUE if the skill fired or state was initiated.
+// 1.14d mac: 0024c23a
 BOOL __fastcall SKILLASS_SrvStFn26_BladeFury(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int pExpireFramePtr;
     BOOL bDidFire;
@@ -2252,21 +2276,14 @@ BOOL __fastcall SKILLASS_SrvStFn26_BladeFury(::SGAMEDATA * pGame, D2UnitStrc * p
 
 // Equips items onto a summoned monster unit (pUnit must be UNIT_MONSTER) from a monster-equipment table keyed by the monster class id (SKILLBAR_GetVelocityAndSpreadForMissile returns the table base). Walks the matching equip rows, and for each one with a valid body-loc range uses the summoner's RNG seed to pick a random equip slot. If that grid slot is empty it resolves an item code (a literal 4-char code, or for the "    " placeholder copies the corresponding item code from the owner unit's inventory at nParam1) and calls MONSTER_CreateAndEquipItem to spawn and equip it. __fastcall, no return. NOTE: many accesses go through raw offsets on the equip-table row (pUnit->unk0x19, +0x60 owner inventory) — the equip-table row type is unmodeled.
 void __fastcall SKILLASS_EquipSummonItems(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2UnitStrc * pUnit, uint32_t eSkill, int32_t nLevel, int32_t nItemLevel, int32_t bOnInit) {
-    D2UnitStrc* pExistingItem;
-    uint32_t pItemCodeOrPool;
     D2MonEquipEntryStrc sEquipEntry;
-    uint8_t byBodyLoc;
-    short int nRowMonClass;
-    D2MonEquipTxt* pNextRow;
-    int nUnit;
-    D2UnitStrc* pMonster = pUnit;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
     }
 
     int32_t nMonStatsId = pUnit->nClassId;
     D2MonEquipTxt* pEquipTableRow = SKILLBAR_GetVelocityAndSpreadForMissile(nMonStatsId);
-    if (!(pEquipTableRow && (!bOnInit || pEquipTableRow->oninit))) {
+    if (!pEquipTableRow || (bOnInit && !pEquipTableRow->oninit)) {
       return;
     }
 
@@ -2275,50 +2292,43 @@ void __fastcall SKILLASS_EquipSummonItems(::SGAMEDATA * pGame, D2UnitStrc * pOwn
       return;
     }
 
-    short int nEquipMonClass = pEquipTableRow->monster;
-    for (; nEquipMonClass == nMonStatsId && pEquipTableRow->level > nLevel; pEquipTableRow++) {
-      nEquipMonClass = pEquipTableRow[1].monster;
+    while (pEquipTableRow->monster == nMonStatsId && pEquipTableRow->level > nLevel) {
+      pEquipTableRow++;
     }
 
-    for (nRowMonClass = pEquipTableRow->monster; nRowMonClass == nMonStatsId; pNextRow = pEquipTableRow + 1 , pEquipTableRow++ , nRowMonClass = pNextRow->monster) {
-      uint32_t nRandEquipSlot;
-      nRandEquipSlot = 0;
-      do {
-        if ((char)pEquipTableRow->loc[nRandEquipSlot] <= 0 || (char)pEquipTableRow->loc[nRandEquipSlot] >= 11) {
-          break;
-        }
+    for (; pEquipTableRow->monster == nMonStatsId; pEquipTableRow++) {
+      int nSlots = 0;
+      while (nSlots < 3 && (char)pEquipTableRow->loc[nSlots] > 0 && (char)pEquipTableRow->loc[nSlots] < 11) {
+        nSlots++;
+      }
 
-        nRandEquipSlot++;
-      } while ((int)nRandEquipSlot < 3);
-
-      if ((int)nRandEquipSlot > 0) {
-        nRandEquipSlot = D2_SeedRollLimited(&pMonster->sSeed, nRandEquipSlot);
-        byBodyLoc = pEquipTableRow->loc[nRandEquipSlot];
-        pExistingItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, (int)(char)byBodyLoc);
-        if (!pExistingItem) {
-          nUnit = (int)(char)pEquipTableRow->mod[nRandEquipSlot];
-          if (nUnit < 0 || nUnit >= 8) {
-            nUnit = 0x0;
+      if (nSlots > 0) {
+        int nSlot = D2_SeedRollLimited(&pUnit->sSeed, nSlots);
+        int nBodyLoc = (char)pEquipTableRow->loc[nSlot];
+        if (!D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, nBodyLoc)) {
+          int nQuality = (char)pEquipTableRow->mod[nSlot];
+          if (nQuality < 0 || nQuality >= 8) {
+            nQuality = 0;
           }
 
-          pItemCodeOrPool = pEquipTableRow->item[nRandEquipSlot];
-          if (pItemCodeOrPool == 0x20202020 && pOwner) {
+          uint32_t dwItemCode = pEquipTableRow->item[nSlot];
+          if (dwItemCode == 0x20202020 && pOwner) {
             if (!pOwner->pInventory) {
               continue;
             }
 
-            pExistingItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pOwner->pInventory, (int)(char)byBodyLoc);
-            if (!pExistingItem) {
+            D2UnitStrc* pOwnerItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pOwner->pInventory, nBodyLoc);
+            if (!pOwnerItem) {
               continue;
             }
 
-            pItemCodeOrPool = D2Common::ITEMS::Items::ITEM_GetItemsTxt_szCode(pExistingItem);
+            dwItemCode = D2Common::ITEMS::Items::ITEM_GetItemsTxt_szCode(pOwnerItem);
           }
 
-          sEquipEntry.dwItemCode = pItemCodeOrPool;
-          sEquipEntry.nBodyLoc = byBodyLoc;
-          sEquipEntry.nFlag = '\x01';
-          Monster::MONSTER_CreateAndEquipItem(pGame, pMonster, &sEquipEntry, nItemLevel, (eD2ItemQuality)nUnit);
+          sEquipEntry.dwItemCode = dwItemCode;
+          sEquipEntry.nBodyLoc = nBodyLoc;
+          sEquipEntry.nFlag = 1;
+          Monster::MONSTER_CreateAndEquipItem(pGame, pUnit, &sEquipEntry, nItemLevel, (eD2ItemQuality)nQuality);
         }
       }
     }
@@ -2375,6 +2385,7 @@ static void __stdcall SKILLASS_ApplyLevelScaledBuffs(::SGAMEDATA * pGame, D2Skil
 }
 
 // Server skill DoFunc #49 (Assassin Sentry-type summons, e.g. shadow/sentry): summons a monster for pUnit. Validates eSkill, resolves the summon class id and pet type from the skill's pettype/petmax columns, builds a D2MonsterCastPetStrc and calls SKILL_CreateSummon. Sets the summon's level to the caster's, applies level-scaled buffs, equips summon items, kicks off its AI think + periodic events, applies the skill's aurastate to the summon, stores the caster as owner, and—if the skill has an auralencalc lifetime—schedules an expiry event and inits umods. Returns 1 on success, 0 if the skill is invalid or the summon could not be created. Sets UNITFLAG_SKSRVDOFUNC on the caster.
+// 1.14d mac: 0024c6ae
 BOOL __fastcall Skills_SrvDoFunc_049_SummonShadowClone(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
@@ -2431,6 +2442,7 @@ BOOL __fastcall Skills_SrvDoFunc_049_SummonShadowClone(::SGAMEDATA * pGame, D2Un
     return 1;
 }
 
+// 1.14d mac: 0024cc82
 BOOL __fastcall SKILLASS_SrvStFn27_DragonTail(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     D2SkillsTxt* pDVar1 = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -2463,6 +2475,7 @@ BOOL __fastcall SKILLASS_SrvStFn27_DragonTail(::SGAMEDATA * pGame, D2UnitStrc * 
 }
 
 // Server DoFunc for Dragon Tail (skill 50). Copies the pending combat-queue entry from the target onto a local D2DamageStrc, releases the Assassin charge-up attack via SKILLASS_ReleaseChargeUpAttack, processes the melee hit, then — if the caster survived — computes fire-explosion AOE damage (base physical damage scaled by the ELE:fire% calc plus passive fire mastery stat) and calls SKILLS_ApplyAreaDamage at the target's tile position. Returns 1 on success, 0 if skill record, target, or combat entry is absent.
+// 1.14d mac: 0024d363
 BOOL __fastcall Skills_SrvDoFunc_050_DragonTail_FireExplosion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nFireMastery;
     int32_t nRadius;
@@ -2527,6 +2540,7 @@ static uint32_t __stdcall SKILLASS_RollMindBlastConversion(D2UnitStrc * pCaster,
 }
 
 // State-expire callback for the Assassin conversion (Mind Blast convert) effect. Resets the unit's alignment to hostile, clears the conversion state, frees monster target nodes, then restores pre-conversion level/HP from the STATE_conversion_save stat list (scaling current HP proportionally). Removes all flag-8 stat lists (the conversion buff layers).
+// 1.14d mac: 0024d64a
 void __fastcall SKILLASS_OnConversionExpire(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * dwParam) {
     int nConvMaxHp;
     int32_t nHpShifted;
@@ -2657,6 +2671,7 @@ static BOOL __stdcall SKILLASS_ApplyConversionToUnit(D2UnitStrc * pUnit, ::SGAME
     return 1;
 }
 
+// 1.14d mac: 0024d821
 uint32_t __fastcall SKILLASSN_AuraCallback_MindBlast(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pUnit) {
     int nCopyDwords;
     D2DamageStrc* pDamageDst;
@@ -2678,6 +2693,7 @@ uint32_t __fastcall SKILLASSN_AuraCallback_MindBlast(D2SkillCallbackContextStrc 
 
 // Mind Blast / Psychic Hammer SrvDoFunc. Gets target/cursor position, computes AoE radius via SKILLASS_GetChargeUpCalcValue (fallback aurarangecalc), builds a damage struct with random skill damage + SetDamageOnEvent + skill ResultFlags/HitFlags, then applies area effect using SKILLASSN_AuraCallback_MindBlast as the per-unit callback. Returns 1 on success.
 // @sourcefile .\SKILLS\SkillAss.cpp
+// 1.14d mac: 0024ddc9
 BOOL __fastcall Skills_SrvDoFunc_051_MindBlast(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     D2MindBlastArgStrc sMindBlastArgs;
@@ -2732,6 +2748,7 @@ BOOL __fastcall Skills_SrvDoFunc_051_MindBlast(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // Server DoFunc for Assassin skill Dragon Flight (skill 52). On the first call (nSeqFrame bit 0x8000 clear) resolves the target position from cursor/target and teleports the unit there via SUNIT_RelocateUnit if the level permits teleportation (Teleport != 0 in LevelsTxt; LOS-wall check for Teleport==2). On subsequent calls (sequence frame flag set, meaning the unit has arrived) performs the melee damage phase: rolls to-hit including UNITSTAT_progressive_tohit, applies Whirlwind-style damage on hit, releases charge-up stacks via SKILLASS_ReleaseChargeUpAttack, and processes the combat queue. Returns 1 on success.
+// 1.14d mac: 0024e00e
 BOOL __fastcall Skills_SrvDoFunc_052_DragonFlight(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t nSeqFrameFlags;
     eD2LevelId eLevel;
@@ -2809,6 +2826,7 @@ BOOL __fastcall Skills_SrvDoFunc_052_DragonFlight(::SGAMEDATA * pGame, D2UnitStr
 }
 
 // SrvStFunc for charge-up state application (index 28). Validates the charge-up missile via SKILLASS_GetChargeUpMissile; if present, evaluates auralencalc for duration, refreshes the aura state via D2UpdateState, allocates a timed stat list via SetStateWithExpiryTime, populates it with aura stats + modifierlist_skill/level, and toggles the state GFX. Returns 1 on success.
+// 1.14d mac: 0024e2bb
 BOOL __fastcall SKILLASS_SrvStFn28_BladeShield(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -2858,6 +2876,7 @@ BOOL __fastcall SKILLASS_SrvStFn28_BladeShield(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // @sourcefile .\SKILLS\SkillAss.cpp
+// 1.14d mac: 0024e496
 BOOL __fastcall Skills_SrvDoFunc_053_Venom_BladeShield_AreaPulse(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     eD2Skills eSkillOrig = eSkill;
@@ -2908,6 +2927,7 @@ uint32_t __fastcall SKILLASSN_AuraCallback_AreaDamage(D2SkillCallbackContextStrc
 
 // Blade Shield spin-damage SrvDoFunc. Computes AoE radius via SKILLASS_GetChargeUpCalcValue (fallback aurarangecalc), builds a damage struct (dwHitFlags=2, random skill damage, SetDamageOnEvent, HitClass from txt), conditionally runs SKILLS_CalcToHit if ResultFlags bit 0 is clear, then calls SKILLS_ApplyAreaEffect centred on the caster (0,0) using SKILLASSN_AuraCallback_AreaDamage as per-unit callback.
 // @sourcefile .\SKILLS\SkillAss.cpp
+// 1.14d mac: 0024e6fb
 BOOL __fastcall Skills_SrvDoFunc_142_BladeShield_SpinDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     D2SkillAreaDamageArgStrc sAreaDamageArgs;
@@ -2943,6 +2963,7 @@ BOOL __fastcall Skills_SrvDoFunc_142_BladeShield_SpinDamage(::SGAMEDATA * pGame,
     return 1;
 }
 
+// 1.14d mac: 0024e8cc
 BOOL __fastcall Skills_SrvDoFunc_054_BladeShield_Activate(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL bIsInTown;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
