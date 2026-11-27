@@ -653,15 +653,15 @@ uint32_t __fastcall DRLGPATH_UpdatePathVelocityAndDirection(uint32_t * pPathData
     uint32_t nVelY;
     int nDistX;
     int nDistY;
-    uint32_t* pnDirOut;
+    uint32_t nDirection;
     if ((short int)*pPathData == (short int)pPathData[1] && *(short int*)((char*)pPathData + 2) == *(short int*)((char*)pPathData + 6)) {
       memset(pPathData + 2, 0, 5 * sizeof(pPathData[0]));
     } else {
       uint32_t nVelX;
-      PATH::Path::DRLGPATH_CalcPathDirection((POINT*)(pPathData + 2), (uint32_t*)&pnDirOut, *pPathData, pPathData[1]);
-      *(char*)(pPathData + 7) = (char)(uintptr_t)pnDirOut;
+      PATH::Path::DRLGPATH_CalcPathDirection((POINT*)(pPathData + 2), &nDirection, *pPathData, pPathData[1]);
+      *(char*)(pPathData + 7) = (char)nDirection;
       if (pPathData[8] & 0x200) {
-        *(uint8_t*)(pPathData + 7) = (char)(uintptr_t)pnDirOut - 0x20U & 0x3f;
+        *(uint8_t*)(pPathData + 7) = (char)nDirection - 0x20U & 0x3f;
       }
 
       nVelX = (int)(((POINT*)(pPathData + 2))->x * pPathData[6]) >> 8;
