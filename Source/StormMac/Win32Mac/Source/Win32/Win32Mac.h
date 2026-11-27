@@ -160,7 +160,7 @@ void* Priv_Alloc(size_t nSize);
 void Priv_Free(void* pMem);
 
 // Microseconds since start-up as two dwords, low first (0001eabd).
-void MAC_GetMicroseconds64(DWORD* pCounterOut);
+DWORD* MAC_GetMicroseconds64(DWORD* pCounterOut);
 DWORD FPMilliseconds(void);
 
 
@@ -237,7 +237,6 @@ struct Win32MacRect {
 // 1.14d mac: 00031b0d
 int NewEmptyStripRgn(void);
 // 1.14d mac: 00031b18
-int Rgn_NewStripRgn(int nCapacity);
 // 1.14d mac: 00031ce9
 void Rgn_SetStripRgnRect(int hRgn, const Win32MacRect* pRect);
 // 1.14d mac: 00031dca

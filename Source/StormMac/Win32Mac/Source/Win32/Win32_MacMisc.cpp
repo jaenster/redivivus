@@ -30,7 +30,7 @@ HANDLE AllocModuleHandle(void);
 
 // 1.14d mac: 003f0e74
 // 0 before the first clock read, 1 once Microseconds() is the source.
-static char s_nClockState;
+static unsigned char s_nClockState;
 // 1.14d mac: 003f0e78
 static HANDLE s_hModule;
 
@@ -79,8 +79,9 @@ void MAC_OutputDebugStringF(const char* szFormat, ...) {
 }
 
 // 1.14d mac: 0001eabd
-void MAC_GetMicroseconds64(DWORD* pCounterOut) {
+DWORD* MAC_GetMicroseconds64(DWORD* pCounterOut) {
     MAC_GetMicrosecondsThunk(pCounterOut + 1, pCounterOut);
+    return pCounterOut;
 }
 
 // 1.14d mac: 0001eade
@@ -107,12 +108,13 @@ char* p2cstr(unsigned char* pPascalString) {
 // The clock as two dwords, high first in the out list.
 void MAC_GetMicroseconds(DWORD* pdwHigh, DWORD* pdwLow) {
     UnsignedWide tTime;
-    if (s_nClockState == 0) {
-        if (true) {
+    unsigned int nState = s_nClockState;
+    if (nState == 0) {
+        if (s_nClockState == 0) {
             s_nClockState = 1;
         }
         MAC_GetMicroseconds(pdwHigh, pdwLow);
-    } else if (s_nClockState == 1) {
+    } else if (nState == 1) {
         Microseconds(&tTime);
         *pdwHigh = tTime.hi;
         *pdwLow = tTime.lo;
@@ -125,13 +127,14 @@ void MAC_GetMicroseconds(DWORD* pdwHigh, DWORD* pdwLow) {
 // 1.14d mac: 0001eba1
 void MAC_GetMilliseconds(DWORD* pdwHigh, DWORD* pdwLow) {
     UnsignedWide tTime;
-    if (s_nClockState == 0) {
-        if (true) {
+    unsigned int nState = s_nClockState;
+    if (nState == 0) {
+        if (s_nClockState == 0) {
             s_nClockState = 1;
         }
         MAC_GetMicroseconds(pdwHigh, pdwLow);
         tTime.lo = *pdwLow;
-    } else if (s_nClockState == 1) {
+    } else if (nState == 1) {
         Microseconds(&tTime);
         *pdwHigh = tTime.hi;
         *pdwLow = tTime.lo;

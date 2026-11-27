@@ -20,6 +20,8 @@ void MemFreeHandle(Handle hMem);
 
 typedef Win32MacRect StripRect;
 
+#define D2_FASTCALL __attribute__((fastcall))
+
 // The region block: bounds, rect count, a lock count the walkers bump, capacity (a multiple
 // of 8 rects) and the rects.
 struct StripRgn {
@@ -40,6 +42,7 @@ static Handle s_hRegions;
 // 1.14d mac: 003f4818
 static int s_hScratchRgn;
 
+int D2_FASTCALL Rgn_NewStripRgn(int nCapacity);
 static void Rgn_ResizeStripRgn(int hRgn, int nCapacity);
 static void Rgn_CompactStripRgn(int hRgn);
 static void Rgn_AddRectToStripRgn(int hRgn, const StripRect* pRect);
@@ -71,40 +74,35 @@ int NewEmptyStripRgn(void) {
 // 1.14d mac: 00031b18
 // Finds a free slot in the handle table (creating it, or growing it by 32 slots) and
 // allocates a region with room for nCapacity rects. 0 on failure.
-int Rgn_NewStripRgn(int nCapacity) {
-    int nSlots = s_nRegionSlots;
+int D2_FASTCALL Rgn_NewStripRgn(int nCapacity) {
     if (s_hRegions == 0) {
         s_nRegionSlots = 32;
         s_hRegions = MemAllocHandle(32 * sizeof(void*));
-        nSlots = s_nRegionSlots;
         if (s_hRegions != 0) {
             void** pSlots = (void**)*s_hRegions;
             for (int i = 0; i < 32; i++) {
                 pSlots[i] = 0;
             }
-            nSlots = s_nRegionSlots;
         }
     }
     int nSlot;
-    for (;;) {
+    int nSlots;
+    do {
+        nSlots = s_nRegionSlots;
         for (nSlot = 0; nSlot < nSlots && ((void**)*s_hRegions)[nSlot] != 0; nSlot++) {
         }
-        int nNewSlots = s_nRegionSlots;
-        if (nSlots != nSlot) {
-            break;
+        if (nSlots == nSlot) {
+            SetHandleSize(s_hRegions, nSlots * 4 + 128);
+            if (MemError() != 0) {
+                return 0;
+            }
+            nSlots = s_nRegionSlots + 32;
+            for (int i = s_nRegionSlots; i < nSlots; i++) {
+                ((void**)*s_hRegions)[i] = 0;
+            }
+            s_nRegionSlots = nSlots;
         }
-        SetHandleSize(s_hRegions, nSlots * 4 + 128);
-        if (MemError() != 0) {
-            return 0;
-        }
-        nSlots = s_nRegionSlots + 32;
-        do {
-            ((void**)*s_hRegions)[s_nRegionSlots] = 0;
-            s_nRegionSlots++;
-            nNewSlots = nSlots;
-        } while (s_nRegionSlots < nSlots);
-        s_nRegionSlots = nNewSlots;
-    }
+    } while (nSlots == nSlot);
     StripRgn* pRgn = (StripRgn*)MemAlloc(nCapacity * sizeof(StripRect) + 0x1c, 0x100);
     if (pRgn == 0) {
         return 0;
@@ -120,13 +118,7 @@ void Rgn_SetStripRgnRect(int hRgn, const StripRect* pRect) {
     if (hRgn == 0 || pRect == 0) {
         return;
     }
-    if (pRect->right == pRect->left || pRect->right - pRect->left < 0 || pRect->bottom == pRect->top ||
-        pRect->bottom - pRect->top < 0) {
-        StripRgn* pRgn = ((StripRgn**)*s_hRegions)[hRgn - 1];
-        pRgn->nLocks++;
-        memset(&pRgn->tBounds, 0, sizeof(StripRect));
-        pRgn->nRects = 0;
-    } else {
+    if (pRect->right - pRect->left > 0 && pRect->bottom - pRect->top > 0) {
         StripRgn* pRgn = ((StripRgn**)*s_hRegions)[hRgn - 1];
         if (pRgn->nRects == 0) {
             Rgn_ResizeStripRgn(hRgn, 1);
@@ -136,6 +128,11 @@ void Rgn_SetStripRgnRect(int hRgn, const StripRect* pRect) {
         pRgn->tBounds = *pRect;
         pRgn->nRects = 1;
         pRgn->aRects[0] = *pRect;
+    } else {
+        StripRgn* pRgn = ((StripRgn**)*s_hRegions)[hRgn - 1];
+        pRgn->nLocks++;
+        memset(&pRgn->tBounds, 0, sizeof(StripRect));
+        pRgn->nRects = 0;
     }
     ((StripRgn**)*s_hRegions)[hRgn - 1]->nLocks--;
     Rgn_CompactStripRgn(hRgn);
@@ -164,13 +161,13 @@ int CountStripRgnRects(int hRgn) {
 // Copies up to nMaxRects rects out; returns how many.
 int GetStripRgnRects(int hRgn, StripRect* pRects, int nMaxRects) {
     int nCopied = 0;
-    if (nMaxRects > 0 && hRgn != 0 && pRects != 0) {
+    bool bValid = (pRects != 0) & (hRgn != 0);
+    if (nMaxRects > 0 && bValid) {
         StripRgn* pRgn = Rgn_Lock(hRgn);
         int nCount = pRgn->nRects;
         if (nCount > 0) {
-            nCopied = nMaxRects < nCount ? nMaxRects : nCount;
-            for (int i = 0; i < nCopied; i++) {
-                pRects[i] = pRgn->aRects[i];
+            for (nCopied = 0; nCopied < nMaxRects && nCopied < nCount; nCopied++) {
+                pRects[nCopied] = pRgn->aRects[nCopied];
             }
         }
         Rgn_Unlock(hRgn);
@@ -203,27 +200,27 @@ static void Rgn_ResizeStripRgn(int hRgn, int nCapacity) {
     if (hRgn == 0) {
         return;
     }
-    int nRounded = (nCapacity + 7) & ~7;
+    int nBlocks = (nCapacity + 7) / 8;
+    int nRounded = nBlocks * 8;
     StripRgn* pOld = ((StripRgn**)*s_hRegions)[hRgn - 1];
     int nOldCapacity = pOld->nCapacity;
     if (nOldCapacity == nRounded) {
         return;
     }
-    int nBytes = (nRounded >> 3) * 128 | 0x1c;
+    int nBytes = nBlocks * 128 | 0x1c;
     StripRgn* pNew = (StripRgn*)MemAlloc(nBytes, 0x100);
-    if (pNew == 0) {
-        MemFree(pOld, 0);
-        ((void**)*s_hRegions)[hRgn - 1] = 0;
-    } else {
+    if (pNew != 0) {
         size_t nCopy = nOldCapacity * sizeof(StripRect) + 0x1c;
-        if (nBytes < (int)nCopy) {
+        if ((int)nCopy > nBytes) {
             nCopy = nBytes;
         }
         if ((int)nCopy > 0) {
             memmove(pNew, pOld, nCopy);
         }
-        MemFree(pOld, 0);
-        ((void**)*s_hRegions)[hRgn - 1] = pNew;
+    }
+    MemFree(pOld, 0);
+    ((void**)*s_hRegions)[hRgn - 1] = pNew;
+    if (pNew != 0) {
         pNew->nCapacity = nRounded;
     }
 }
@@ -238,8 +235,10 @@ static void Rgn_CompactStripRgn(int hRgn) {
         pnCount = &pRgn->nRects;
         pnCapacity = &pRgn->nCapacity;
     }
-    if (*pnCount < *pnCapacity) {
-        Rgn_ResizeStripRgn(hRgn, *pnCount);
+    int nCount = *pnCount;
+    int nCapacity = *pnCapacity;
+    if (nCapacity > nCount) {
+        Rgn_ResizeStripRgn(hRgn, nCount);
     }
 }
 
@@ -365,19 +364,14 @@ static void Rgn_CombineRgns(int hDest, int hSrc1, int hSrc2, pfnStripRgnBandProc
             if (nTop < nBottom && bStarted) {
                 nTop = nBottom;
             }
-            bool bAfter = true;
-            if (pBand1 == 0) {
-                nBottom = pBand2->bottom;
-                pfnBandProc(s_hScratchRgn, nTop, nBottom - nTop, 0, pBand1Last, pBand2, pBand2Last);
-            } else if (nTop < pBand1->top) {
+            if (pBand1 == 0 || nTop < pBand1->top) {
                 int nEnd = pBand2->bottom;
-                nBottom = pBand1->top;
-                if (nEnd <= nBottom) {
-                    nBottom = nEnd;
+                if (pBand1 != 0 && pBand1->top < nEnd) {
+                    nEnd = pBand1->top;
                 }
+                nBottom = nEnd;
                 pfnBandProc(s_hScratchRgn, nTop, nBottom - nTop, 0, pBand1Last, pBand2, pBand2Last);
             }
-            (void)bAfter;
             if (pBand1 == 0) {
                 pNext1 = 0;
             } else {
@@ -781,10 +775,14 @@ static void Rgn_AddRectToStripRgn(int hRgn, const StripRect* pRect) {
     if (nCount == 0) {
         pRgn->tBounds = *pRect;
     } else {
-        pRgn->tBounds.left = pRect->left < pRgn->tBounds.left ? pRect->left : pRgn->tBounds.left;
-        pRgn->tBounds.top = pRect->top < pRgn->tBounds.top ? pRect->top : pRgn->tBounds.top;
-        pRgn->tBounds.right = pRect->right > pRgn->tBounds.right ? pRect->right : pRgn->tBounds.right;
-        pRgn->tBounds.bottom = pRect->bottom > pRgn->tBounds.bottom ? pRect->bottom : pRgn->tBounds.bottom;
+        LONG nLeft = pRgn->tBounds.left <= pRect->left ? pRgn->tBounds.left : pRect->left;
+        LONG nTop = pRgn->tBounds.top <= pRect->top ? pRgn->tBounds.top : pRect->top;
+        LONG nRight = pRgn->tBounds.right >= pRect->right ? pRgn->tBounds.right : pRect->right;
+        LONG nBottom = pRgn->tBounds.bottom >= pRect->bottom ? pRgn->tBounds.bottom : pRect->bottom;
+        pRgn->tBounds.left = nLeft;
+        pRgn->tBounds.top = nTop;
+        pRgn->tBounds.right = nRight;
+        pRgn->tBounds.bottom = nBottom;
     }
     pRgn->aRects[nCount] = *pRect;
     pRgn->nRects++;
