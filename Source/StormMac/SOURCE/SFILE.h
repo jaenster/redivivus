@@ -26,6 +26,11 @@ struct IDirectSoundBuffer {
     int SetCurrentPosition(DWORD dwPosition);
     int GetCurrentPosition(DWORD* pdwPlayCursor, DWORD* pdwWriteCursor);
     int Release();
+    int Lock(DWORD dwOffset, DWORD dwBytes, void** ppvAudioPtr1, DWORD* pdwAudioBytes1, void** ppvAudioPtr2,
+             DWORD* pdwAudioBytes2, DWORD dwFlags);
+    int Unlock();
+    int Stop();
+    int Play(DWORD dwReserved1, DWORD dwPriority, DWORD dwFlags);
 };
 
 struct D2MPQHashEntryStrc {
@@ -157,6 +162,12 @@ struct D2StormAsyncOpStrc {
     D2StormAsyncOpStrc() {}
     __attribute__((noinline)) ~D2StormAsyncOpStrc();
 };
+// What cancelling a request leaves for the I/O thread to signal.
+struct SFileEventNode {
+    TSLink<SFileEventNode> m_link;  // 0x00
+    HANDLE hEvent;                  // 0x08
+};
+
 typedef char D2MPQ_size_block[(sizeof(D2MPQBlockEntryStrc) == 0x1c) ? 1 : -1];
 typedef char D2MPQ_size_archive[(sizeof(D2ArchiveStrc) == 0x14c) ? 1 : -1];
 typedef char D2MPQ_size_file[(sizeof(D2MPQFileStrc) == 0x158) ? 1 : -1];

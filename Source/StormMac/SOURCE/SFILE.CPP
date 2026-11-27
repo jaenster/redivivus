@@ -39,8 +39,8 @@ static SFileCritSect s_tLock;
 // 1.14d mac: 003f0544
 static TSExplicitList<D2MPQFileStrc, 0> s_tFileList;
 // 1.14d mac: 003f0550
-// Requests that only carry a completion event: cancelling a request leaves one behind to signal it.
-static TSExplicitList<D2StormAsyncOpStrc, 0> s_tCompletionList;
+// The completion events of cancelled requests, for the I/O thread to signal.
+static TSExplicitList<SFileEventNode, 0> s_tCompletionList;
 // 1.14d mac: 003f055c
 static TSExplicitList<D2StormAudioStreamRec, 0> s_tStreamList;
 // 1.14d mac: 003f0568
@@ -160,8 +160,8 @@ SFILE_STATIC int SFILE_CancelAsyncRequest(HANDLE hBuffer, IDirectSoundBuffer* pS
             } else {
                 HANDLE hEvent = pRequest->hCompletionEvent;
                 if (hEvent != 0) {
-                    D2StormAsyncOpStrc* pSignal = s_tCompletionList.NewNode(STORM_LIST_LINK_BEFORE, 0, 0);
-                    pSignal->hCompletionEvent = hEvent;
+                    SFileEventNode* pSignal = s_tCompletionList.NewNode(STORM_LIST_LINK_BEFORE, 0, 0);
+                    pSignal->hEvent = hEvent;
                 }
                 pRequest = s_tRequestQueue.DeleteNode(pRequest);
                 nCancelled = 1;
@@ -1726,8 +1726,9 @@ D2StormAsyncOpStrc::~D2StormAsyncOpStrc() {
 
 // 1.14d mac: 003f05a4
 static uint32_t s_nWaveChunkSize;
-// The Storm option block (SSystem): the third dword is the size of one wave streaming chunk.
-extern uint32_t g_aStormOptions[3];
+// The Storm option block (SSystem): the third dword is the size of one wave streaming chunk,
+// the fourth asks for reads cut at sector boundaries.
+extern uint32_t g_aStormOptions[4];
 
 struct SFileDsBufferDesc {
     uint32_t dwSize;
@@ -2060,5 +2061,386 @@ SFILE_STATIC uint32_t SFILE_InternalReadAligned(D2MPQFileStrc* pFile, uint32_t n
         SMemFree(pReadBuffer, SFILE_FILE, 0x3cd, 0);
     }
     return nResult;
+}
+
+// What a request's completion pointer names: the function to call when a read is done.
+struct SFileCompletion {
+    void (*pfnComplete)(void* pBuffer, int nBytes, SFileCompletion* pCompletion);
+};
+
+// 1.14d mac: 00015e0c
+// The I/O thread. Each pass signals the events left by cancelled requests, tops up the
+// DirectSound streams (starting, refilling and finishing them), then picks the next request
+// by urgency (a stream about to run dry, an urgent read, one that is due, else the nearest
+// on the disc) and performs it, pacing plain reads to the byte budget.
+SFILE_STATIC DWORD SFILE_CdThreadProc(LPVOID pParam) {
+    uint32_t nLastTick = GetTickCount();
+    if (s_bCdThreadExit != 0) {
+        s_bCdThreadExit = 0;
+        return 0;
+    }
+    D2ArchiveStrc* pLastArchive = NULL;
+    uint32_t dwLastReadPos = 0;
+    while (true) {
+        uint32_t nNow = GetTickCount();
+        uint32_t nDelay = 0;
+        if (s_nAsyncBudget != 0) {
+            nDelay = (s_nDataChunkSize * 1000) / s_nAsyncBudget;
+        }
+        SFILE_LOCK();
+        SFileEventNode* pSignal = s_tCompletionList.Head();
+        while (pSignal != NULL) {
+            SetEvent(pSignal->hEvent);
+            pSignal = s_tCompletionList.DeleteNode(pSignal);
+        }
+        if (s_bCdThreadDraining == 0) {
+            D2StormAudioStreamRec* pStream = s_tStreamList.Head();
+            while (pStream != NULL) {
+                int nType = pStream->nStreamType;
+                if (nType == 3) {
+                    goto stream_end;
+                }
+                if (nType == 2) {
+                    if (pStream->nDataChunkSize + pStream->nDataChunkOffset <= pStream->pMpqFile->nFilePos) {
+                        goto stream_end;
+                    }
+                    goto stream_refill;
+                }
+                goto stream_start;
+            stream_end:
+                if (pStream->nNoCleanupFlag == 0) {
+                    int nPos = SFILE_GetStreamPosition(pStream);
+                    if (nPos != -1) {
+                        if (pStream->nCurrentPos < pStream->nDataChunkSize) {
+                            if (s_nWaveChunkSize <= (uint32_t)(nPos - pStream->nWritePos) % pStream->nBufferSize) {
+                                DWORD nLockSize = pStream->nBufferSize - pStream->nWritePos;
+                                if (s_nWaveChunkSize < nLockSize) {
+                                    nLockSize = s_nWaveChunkSize;
+                                }
+                                void* pLockPtr = NULL;
+                                int nLock = pStream->pStream->Lock(pStream->nWritePos, nLockSize, &pLockPtr, &nLockSize,
+                                                                   NULL, NULL, 0);
+                                if (nLock >= 0) {
+                                    memset(pLockPtr, pStream->bIs16Bit, nLockSize);
+                                    pStream->pStream->Unlock();
+                                    pStream->nBytePos = pStream->nBytePos + nLockSize;
+                                    pStream->nBytesPastEnd = pStream->nBytesPastEnd + nLockSize;
+                                    uint32_t nWrite = pStream->nWritePos + nLockSize;
+                                    pStream->nWritePos = nWrite;
+                                    if (pStream->nBufferSize <= nWrite) {
+                                        pStream->nWritePos = nWrite - pStream->nBufferSize;
+                                    }
+                                }
+                            }
+                            pStream->nStreamType = 3;
+                        } else {
+                            pStream->pStream->Stop();
+                            pStream->nStreamType = 4;
+                        }
+                    }
+                } else {
+                    pStream->pMpqFile->nFilePos = pStream->nDataChunkOffset;
+                    pStream->nBytePos = 0;
+                    pStream->nBytesPastEnd = 0;
+                    nType = pStream->nStreamType;
+                    goto stream_dispatch;
+                }
+                goto stream_next;
+            stream_start:
+                nType = pStream->nStreamType;
+            stream_dispatch:
+                if (nType == 0) {
+                    uint32_t nInitialPos = pStream->nInitialPos;
+                    uint32_t nFileOffset = pStream->nDataChunkOffset + nInitialPos;
+                    D2MPQFileStrc* pFile = pStream->pMpqFile;
+                    pFile->nFilePos = nFileOffset;
+                    uint32_t nTotal = pStream->nDataChunkSize - nInitialPos;
+                    if (pStream->nBufferSize < nTotal) {
+                        nTotal = pStream->nBufferSize;
+                    }
+                    uint32_t nDone = 0;
+                    if (g_aStormOptions[3] != 0) {
+                        nDone = s_nWaveChunkSize;
+                        if (nTotal <= s_nWaveChunkSize) {
+                            nDone = nTotal;
+                        }
+                        uint32_t nMisalign = (pFile->pArchive->nSectorSize - 1) & (nDone + nFileOffset);
+                        if (nMisalign == 0 || nDone <= nMisalign) {
+                            nMisalign = 0;
+                        }
+                        nDone -= nMisalign;
+                        IssueRequest(pFile, nFileOffset, NULL, NULL, pStream->pStream, 0, pStream, nDone, 0, -2, 0, 1,
+                                     0, NULL);
+                        pFile = pStream->pMpqFile;
+                        nFileOffset = pFile->nFilePos + nDone;
+                        pFile->nFilePos = nFileOffset;
+                    }
+                    if (nDone < nTotal) {
+                        int nDelayMs = 0;
+                        do {
+                            uint32_t nThis = nTotal - nDone;
+                            if (s_nWaveChunkSize < nThis) {
+                                nThis = s_nWaveChunkSize;
+                            }
+                            IssueRequest(pFile, nFileOffset, NULL, NULL, pStream->pStream, nDone, pStream, nThis,
+                                         nDelayMs, -2, 0, 1, 0, NULL);
+                            pFile = pStream->pMpqFile;
+                            nFileOffset = nThis + pFile->nFilePos;
+                            pFile->nFilePos = nFileOffset;
+                            nDelayMs += (s_nWaveChunkSize * 1000) / pStream->dwAvgBytesPerSec;
+                            nDone += s_nWaveChunkSize;
+                        } while (nDone < nTotal);
+                    }
+                    pStream->nStreamType = 1;
+                    pStream->nWritePos = nDone % pStream->nBufferSize;
+                } else if (nType == 2) {
+                    goto stream_refill;
+                }
+                goto stream_next;
+            stream_refill: {
+                int nPos = SFILE_GetStreamPosition(pStream);
+                if (nPos != -1) {
+                    uint32_t nWrite = pStream->nWritePos;
+                    uint32_t nBufSize = pStream->nBufferSize;
+                    if (s_nWaveChunkSize <= (uint32_t)(nPos - nWrite) % nBufSize) {
+                        uint32_t nLock = nBufSize - nWrite;
+                        if (s_nWaveChunkSize < nLock) {
+                            nLock = s_nWaveChunkSize;
+                        }
+                        D2MPQFileStrc* pFile = pStream->pMpqFile;
+                        uint32_t nFilePos = pFile->nFilePos;
+                        uint32_t nLength = (pStream->nDataChunkSize + pStream->nDataChunkOffset) - nFilePos;
+                        if (nLock < nLength) {
+                            nLength = nLock;
+                        }
+                        if (g_aStormOptions[3] != 0) {
+                            uint32_t nTail = (pFile->pArchive->nSectorSize - 1) & (nLength + nFilePos);
+                            if (nTail != 0 && nTail < nLength) {
+                                nLength -= nTail;
+                            }
+                        }
+                        IssueRequest(pFile, nFilePos, NULL, NULL, pStream->pStream, nWrite, pStream, nLength,
+                                     ((nBufSize + s_nWaveChunkSize * -2) * 1000) / pStream->dwAvgBytesPerSec, -2, 0, 1,
+                                     0, NULL);
+                        pStream->pMpqFile->nFilePos += nLength;
+                        uint32_t nNewWrite = pStream->nWritePos + s_nWaveChunkSize;
+                        pStream->nWritePos = nNewWrite;
+                        if (pStream->nBufferSize <= nNewWrite) {
+                            pStream->nWritePos = nNewWrite - pStream->nBufferSize;
+                        }
+                    }
+                }
+            }
+            stream_next:
+                pStream = s_tStreamList.Next(pStream);
+            }
+        }
+
+        // Pick the next request.
+        int nNow2 = GetTickCount();
+        D2StormAsyncOpStrc* pRequest = s_tRequestQueue.Head();
+        D2StormAsyncOpStrc* pBest = NULL;
+        if (pRequest != NULL) {
+            uint32_t nBestSeek = 0xffffffff;
+            int nBest = 0x7fffffff;
+            bool bDue = false;
+            bool bPriority = false;
+            bool bStream = false;
+            do {
+                TSLink<D2StormAsyncOpStrc>* pPrevLink = pRequest->m_link.m_prevlink;
+                D2StormAsyncOpStrc* pPrev =
+                    pPrevLink == &s_tRequestQueue.m_terminator ? NULL : (D2StormAsyncOpStrc*)pPrevLink;
+                if (pRequest->pReadBufferBase == NULL || pPrev == NULL ||
+                    pRequest->pReadBufferBase != pPrev->pReadBufferBase) {
+                    int nDue = pRequest->dwDueTick - nNow2;
+                    if (nDue < 1000 && pRequest->pParentStream != NULL && (!bStream || nDue < nBest)) {
+                        bStream = true;
+                        nBest = nDue;
+                        pBest = pRequest;
+                    }
+                    if (!bStream) {
+                        int nRequestPriority = pRequest->nPriority;
+                        if (0 < nRequestPriority && (!bPriority || nDue < nBest)) {
+                            bPriority = true;
+                            nBest = nDue;
+                            pBest = pRequest;
+                        }
+                        if (!bPriority) {
+                            if (nDue < 1000 && nDue < nBest) {
+                                bDue = true;
+                                pBest = pRequest;
+                                nBest = nDue;
+                            }
+                            if (!bDue && (pBest == NULL || pBest->nPriority <= nRequestPriority)) {
+                                uint32_t nSeek = 0;
+                                if (s_bSeekOptimization != 0) {
+                                    D2ArchiveStrc* pArchive = pRequest->pFile->pArchive;
+                                    uint32_t nBase = 0;
+                                    if (pArchive != NULL) {
+                                        nBase = dwLastReadPos - pArchive->nSectorSize;
+                                        if (dwLastReadPos < pArchive->nSectorSize || nBase == 0) {
+                                            nBase = 0;
+                                        }
+                                    }
+                                    nSeek = 0xfffffffe;
+                                    if (pArchive == pLastArchive) {
+                                        uint32_t nSeekPos = pRequest->nSeekFilePos;
+                                        nSeek = nSeekPos - nBase;
+                                        if (nSeekPos < nBase) {
+                                            nSeek = nSeekPos + 0x8000000;
+                                        }
+                                    }
+                                }
+                                if (pBest != NULL && nRequestPriority <= pBest->nPriority && nBestSeek <= nSeek) {
+                                    if (nSeek != nBestSeek) {
+                                        goto next_request;
+                                    }
+                                    if (nBest <= nDue) {
+                                        goto next_request;
+                                    }
+                                }
+                                nBest = nDue;
+                                pBest = pRequest;
+                                nBestSeek = nSeek;
+                            }
+                        }
+                    }
+                }
+            next_request:
+                pRequest = s_tRequestQueue.Next(pRequest);
+            } while (pRequest != NULL);
+            if (pBest != NULL) {
+                if (!bPriority && !bStream && !bDue && nNow - nLastTick < nDelay) {
+                    nDelay = (nLastTick - nNow) + nDelay;
+                    SFILE_UNLOCK();
+                    goto wait;
+                }
+                dwLastReadPos = pBest->nSeekFilePos;
+                pLastArchive = pBest->pFile->pArchive;
+                s_pCurrentRequest = pBest;
+                s_tRequestQueue.UnlinkNode(pBest);
+                SFILE_UNLOCK();
+
+                // Perform it.
+                D2StormAsyncOpStrc* pCurrent = s_pCurrentRequest;
+                void** ppDest = &pCurrent->pChunkWritePtr;
+                if (pCurrent->pStream != NULL) {
+                    ppDest = &s_pWaveBuffer;
+                }
+                void* pDest = *ppDest;
+                if (pDest == NULL) {
+                    pCurrent->nChunkBytesRead = 0;
+                } else {
+                    D2MPQFileStrc* pFile = pCurrent->pFile;
+                    if (pFile->hFile == 0) {
+                        uint32_t nRead = SFILE_InternalReadFile((uint32_t)(uintptr_t)pDest, pCurrent->nFilePos, pFile,
+                                                                pDest, pCurrent->nBytesToRead);
+                        pCurrent = s_pCurrentRequest;
+                        pCurrent->nChunkBytesRead = nRead;
+                        pFile = pCurrent->pFile;
+                        if (pFile->bChecksumEnabled != 0 && pFile->nChecksumState == 2 &&
+                            pFile->nExpectedFileSize == pFile->pBlockEntry->dwFileSize) {
+                            STORM_Crc32(NULL, 0, &pFile->dwComputedCRC, 4);
+                            pCurrent = s_pCurrentRequest;
+                            pCurrent->pFile->nChecksumState = 4;
+                        }
+                    } else {
+                        SFILE_SyncReadFile(pFile, pCurrent->nFilePos, pDest, pCurrent->nBytesToRead,
+                                           &pCurrent->nChunkBytesRead);
+                        pCurrent = s_pCurrentRequest;
+                    }
+                }
+                if (pCurrent->pStream != NULL) {
+                    if (pCurrent->nChunkBytesRead == 0) {
+                        if (pCurrent->nBytesToRead != 0) {
+                            pCurrent->pStream->Stop();
+                            if (s_pCurrentRequest->pParentStream != NULL) {
+                                s_pCurrentRequest->pParentStream->nStreamType = 4;
+                            }
+                        }
+                    } else {
+                        SFILE_LOCK();
+                        DWORD nLockedSize;
+                        int nLock = pCurrent->pStream->Lock(pCurrent->nStreamPos, s_nWaveChunkSize,
+                                                            &pCurrent->pChunkWritePtr, &nLockedSize, NULL, NULL, 0);
+                        if (nLock >= 0 && nLockedSize == s_nWaveChunkSize) {
+                            uint32_t nCopy = pCurrent->nChunkBytesRead;
+                            if (nLockedSize <= pCurrent->nChunkBytesRead) {
+                                nCopy = nLockedSize;
+                            }
+                            if (0 < (int)nCopy) {
+                                memmove(pCurrent->pChunkWritePtr, s_pWaveBuffer, nCopy);
+                            }
+                            if (nCopy < nLockedSize) {
+                                memset((uint8_t*)pCurrent->pChunkWritePtr + nCopy, pCurrent->pParentStream->bIs16Bit,
+                                       nLockedSize - nCopy);
+                            }
+                            pCurrent->pStream->Unlock();
+                            D2StormAudioStreamRec* pParent = pCurrent->pParentStream;
+                            uint32_t nBytePos = (pCurrent->nFilePos - pParent->nDataChunkOffset) + nLockedSize;
+                            pParent->nBytePos = nBytePos;
+                            uint32_t nDataSize = pParent->nDataChunkSize;
+                            if (nDataSize <= nBytePos && nBytePos - nDataSize != 0) {
+                                pParent->nBytesPastEnd = nBytePos - nDataSize;
+                            }
+                            if (pParent->nStreamType == 1) {
+                                if (0x10000 < nDataSize) {
+                                    nDataSize = 0x10000;
+                                }
+                                if (pParent->nBufferSize <= nDataSize) {
+                                    nDataSize = pParent->nBufferSize;
+                                }
+                                if (nDataSize <= (pCurrent->nFilePos - pParent->nDataChunkOffset) + pCurrent->nBytesToRead) {
+                                    pParent->pStream->Play(0, 0, 1);
+                                    pCurrent->pParentStream->nStreamType = 2;
+                                }
+                            }
+                        }
+                        SFILE_UNLOCK();
+                    }
+                }
+                SFileCompletion* pCompletion = (SFileCompletion*)s_pCurrentRequest->pCompletion;
+                if (pCompletion != NULL && pCompletion->pfnComplete != NULL) {
+                    D2MPQFileStrc* pFile = s_pCurrentRequest->pFile;
+                    if (pFile->bChecksumEnabled != 0 && pFile->nChecksumState == 4 &&
+                        pFile->dwComputedCRC != pFile->pBlockEntry->dwCRC32) {
+                        SErrDisplayError(0x85100083, pFile->szFileName, -4, NULL, 0, 1);
+                        pCompletion = (SFileCompletion*)s_pCurrentRequest->pCompletion;
+                    }
+                    pCompletion->pfnComplete(s_pCurrentRequest->pReadBufferBase,
+                                             (int)s_pCurrentRequest->pChunkWritePtr +
+                                                 (s_pCurrentRequest->nChunkBytesRead -
+                                                  (int)s_pCurrentRequest->pReadBufferBase),
+                                             pCompletion);
+                }
+                HANDLE hEvent = s_pCurrentRequest->hCompletionEvent;
+                SFILE_LOCK();
+                D2StormAsyncOpStrc* pDone = s_pCurrentRequest;
+                if (pDone->bAutoFree != 0 && pDone != NULL) {
+                    delete pDone;
+                }
+                s_pCurrentRequest = NULL;
+                SFILE_UNLOCK();
+                if (hEvent != 0) {
+                    SetEvent(hEvent);
+                }
+                nLastTick = nNow;
+                if (s_bCdThreadExit == 1) {
+                    s_bCdThreadExit = 0;
+                    return 0;
+                }
+                continue;
+            }
+        }
+        // Nothing to do: sleep a quarter second or until woken.
+        SFILE_UNLOCK();
+        nDelay = 0xfa;
+    wait:
+        WaitForSingleObject(s_hCdEvent, nDelay);
+        if (s_bCdThreadExit != 0) {
+            s_bCdThreadExit = 0;
+            return 0;
+        }
+    }
 }
 #endif  // D2_OS_MAC

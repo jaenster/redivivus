@@ -17,7 +17,7 @@ The original folder names contain spaces. They are kept without them:
 |here|original|
 |-|-|
 |`Source/StormMac/`|`StormMac/Storm Mac/`|
-|`Source/StormMac/SOURCE/`|`Storm Mac/SOURCE/` (Storm proper: STORM.CPP, SBig.cpp, SBLT.CPP, SBMP.CPP, SCMD.CPP, SCODE.CPP, SCOMP.CPP, SERR.CPP, SEVT.CPP reconstructed; SFILE.CPP, SRegMac.mm, IOUnit/... not yet)|
+|`Source/StormMac/SOURCE/`|`Storm Mac/SOURCE/` (Storm proper: STORM.CPP, SBig.cpp, SBLT.CPP, SBMP.CPP, SCMD.CPP, SCODE.CPP, SCOMP.CPP, SERR.CPP, SEVT.CPP reconstructed; SFILE.CPP reconstructed; SRegMac.mm, IOUnit/... not yet)|
 |`Source/StormMac/H/`|`Storm Mac/H/` (stpl.h)|
 |`Source/StormMac/Win32Mac/Source/Win32/`|`Storm Mac/Win32 Mac/Source/Win32/` (the Win32-on-Mac layer; Win32_utils.cpp, WinCompat.cpp)|
 
@@ -81,7 +81,7 @@ decides, the boundary is chosen as follows.
 
 |File|Range|Note|
 |-|-|-|
-|`SFILE.CPP`|0001204e..00017700|ends with its static initialiser (00017700); its tail 00017484..000176a0 is the record destructors and the lock|
+|`SFILE.CPP`|0001204e..00017700|ends with its static initialiser (00017700); the run 00016a2e..0001719c and 000175b6..0001762c is the instantiations of the lists of its five record types (TSLink, TSExplicitList), and its tail 00017484..000176a0 is the stream and request destructors and the lock. The records' destructors are the `SFILE_Free...Record` functions (the callers delete the record themselves); the completion-event list has a node type of its own (SFileEventNode)|
 |`SGDI.cpp`|00017886..00017c32|`__FILE__` (SGDI.CPP, 0x118/0x136 in SGdiDestroy's frees); ends with its static initialiser (00017be0)|
 |`SLOG.cpp`|00017c32..00018b0b|SLogClose is its first function (the Windows build's asserts name SLOG.CPP); no static initialiser, so the end is the first function of the next file, SMemAlloc|
 |`SMEM.cpp`|00018b0b..00018cdb|SMemAlloc .. SMemInitialize; SMsgBreakHandlerChain (00018cdb) is the first of SMSG|
