@@ -387,7 +387,8 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
 void __fastcall MONMODE_EndTrappedSoulAttack(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     BOOL bIsModeZeroDeath;
     D2Common::Units::SetCurrentSkill(pUnit, nullptr);
-    D2ModeChangeStrc sMonsterKill = {};
+    D2ModeChangeStrc sMonsterKill;
+    memset(&sMonsterKill, 0, sizeof(sMonsterKill));
     sMonsterKill.nUnitMode = eD2MonsterAnimMode_ns::Skill1;
     sMonsterKill.pUnit = pUnit;
     int32_t byAnimMode2 = 'd';
