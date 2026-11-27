@@ -394,140 +394,140 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 000193f0	Storm::SMSG::TSList_LinkNode_Wnd	116	StormMac/Storm Mac/SOURCE/SMSG.CPP	file-map	Source/StormMac/SOURCE/SMSG.CPP	blizzard-mac	missing		-	
 00019464	Storm::WindowHandle::WND_RemoveAndFreeRecord	112	StormMac/Storm Mac/SOURCE/SMSG.CPP|StormMac/Storm Mac/SOURCE/SNET.CPP	between	Source/StormMac/SOURCE/SMSG.CPP|Source/StormMac/SOURCE/SNET.CPP	blizzard-mac	missing		-	00420970
 000194e0	Storm::SMSG_InitStaticLists	82	StormMac/Storm Mac/SOURCE/SMSG.CPP|StormMac/Storm Mac/SOURCE/SNET.CPP	between	Source/StormMac/SOURCE/SMSG.CPP|Source/StormMac/SOURCE/SNET.CPP	blizzard-mac	missing		-	
-00019532	Storm::Source::SNet::SNetLeaveGame	777	StormMac/Storm Mac/SOURCE/SNET.CPP	__FILE__	Source/StormMac/SOURCE/SNET.CPP	blizzard-mac	missing		-	
-0001983b	StormMac::SNET::SNET_DestroyAllConnections	92	StormMac/Storm Mac/SOURCE/SNET.CPP	file-map	Source/StormMac/SOURCE/SNET.CPP	blizzard-mac	missing		-	
-00019897	Storm::Source::SNet::SNetDestroy	432	StormMac/Storm Mac/SOURCE/SNET.CPP	__FILE__	Source/StormMac/SOURCE/SNET.CPP	blizzard-mac	missing		-	
-00019a47	Storm::Source::SNet::SpiDestroy	193	StormMac/Storm Mac/SOURCE/SNET.CPP	file-map	Source/StormMac/SOURCE/SNET.CPP	blizzard-mac	missing		-	
-00019b0b	StormMac::SNET::SNET_ConnSendMessage	696	StormMac/Storm Mac/SOURCE/SNET.CPP	__FILE__	Source/StormMac/SOURCE/SNET.CPP	blizzard-mac	missing		-	
-00019dc6	StormMac::SNET::SNET_ConnResendMessage	234	StormMac/Storm Mac/SOURCE/SNET.CPP	__FILE__	Source/StormMac/SOURCE/SNET.CPP	blizzard-mac	missing		-	
-00019eb2	StormMac::SNET::SNET_ConnSendPacket	428	StormMac/Storm Mac/SOURCE/SNET.CPP	file-map	Source/StormMac/SOURCE/SNET.CPP	blizzard-mac	missing		-	
-0001a05f	Storm::Source::dump_packet	541	StormMac/Storm Mac/SOURCE/SNET.CPP	file-map	Source/StormMac/SOURCE/SNET.CPP	blizzard-mac	missing		-	
-0001a27c	StormMac::SNET::SNET_ComputePacketChecksum	84	StormMac/Storm Mac/SOURCE/SNET.CPP	file-map	Source/StormMac/SOURCE/SNET.CPP	blizzard-mac	missing		-	
-0001a2d0	StormMac::SNET::SNET_FreeLocalMessage	73	StormMac/Storm Mac/SOURCE/SNET.CPP	__FILE__	Source/StormMac/SOURCE/SNET.CPP	blizzard-mac	missing		-	
-0001a319	StormMac::SNET::SNET_DestroyConnection	142	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001a3a7	Storm::SNET_ClearPacketQueue	152	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001a43f	StormMac::SNET::SNET_CreateConnection	99	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001a4a2	Storm::SNET_DestroyLogInfo	29	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001a4c4	Storm::TSList_Destructor_Spi	33	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001a4e6	Storm::TSList_Destructor_SNetConn	33	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001a508	Storm::TSFixedArray_Destructor	61	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001a54a	Storm::FUN_0001a54a	33	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001a56c	Storm::TSList_DeleteNode_SNetConn	104	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001a5d4	Storm::TSList_DeleteNode_SNetPacket	112	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001a644	Storm::FUN_0001a644	71	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001a68c	Storm::FUN_0001a68c	63	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001a6cc	Storm::FUN_0001a6cc	53	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001a702	Storm::TSLink_Unlink_SNetPacket	63	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001a742	Storm::TSLink_NextLink_SNetPacket	53	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001a778	Storm::SNET_ConnectionDestructor	188	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001a834	Storm::TSLink_Unlink_SNetConn	63	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001a874	Storm::TSLink_NextLink_SNetConn	53	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001a8aa	Storm::TSList_UnlinkAll_SNetPacket	71	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001a8f2	Storm::TSList_UnlinkAll_SNetConn	71	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001a93a	Storm::TSList_UnlinkAll_Spi	71	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001a982	Storm::TSLink_Unlink_Spi	63	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001a9c2	Storm::TSLink_NextLink_Spi	53	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001a9f8	Storm::SLOG_EnsureLogCreated	105	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001aa62	Storm::SLOG_CreateFromRegistry	162	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001ab04	Storm::TSList_LinkNode_SNetPacket	116	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001ab78	StormMac::SNET::TSList_DeleteNode	112	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001abe8	StormMac::SNET::TSList_NewNode_SNetPacket	118	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001ac5e	Storm::TSList_NewNode_SNetConn	290	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001ad80	Storm::TSList_LinkNode_SNetConn	116	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001adf4	StormMac::SNET::TSList_Clear	136	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001ae80	Storm::Source::__sinit_SNET_CPP	519	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001b087	Storm::SRgnDelete	92	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001b0e3	Storm::Source::SRgn::SRgnDestroy	35	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001b106	TSExportTableSync<RGN,_HSRGN__*,_HLOCKEDRGN__*,_CCritSect,_1>::~TSExportTableSync	46	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001b13a	Storm::TSExportTableSync_Lock	89	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001b194	Storm::TSExportTableSync_DeleteUnlock	58	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001b1ce	Storm::TSHashTable_Unlink	42	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001b1f8	Storm::TSLink_Unlink_RGN	63	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001b238	Storm::TSLink_NextLink_RGN	53	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001b26e	Storm::TSList_LinkNode_RGN	130	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001b2f0	Storm::TSList_UnlinkAll_RGN	75	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001b33c	Storm::TSHashTable_Ptr_RGN	109	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001b3aa	Storm::TSExportTableSync_Constructor	76	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001b408	TSHashTableReuse<RGN,_HASHKEY_NONE,_1>::vslot0	74	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001b452	TSHashTableReuse<RGN,_HASHKEY_NONE,_1>::vslot1	193	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001b514	TSExportTableSync<RGN,_HSRGN__*,_HLOCKEDRGN__*,_CCritSect,_1>::~TSExportTableSync_D0	54	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001b550	TSHashTableReuse<RGN,_HASHKEY_NONE,_1>::vslot4	61	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001b58e	Storm::TSList_Clear_RGNReuse	139	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001b61a	Storm::TSList_Clear_RGN	264	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001b732	Storm::TSFixedArray_Destroy_RGN	263	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001b84e	Storm::TSLink_Unlink_RGNReuse	63	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001b88e	Storm::TSLink_NextLink_RGNReuse	53	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001b8c4	Storm::TSHashTable_Clear	187	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001b980	Storm::TSList_NewNode_RGNReuse	146	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001ba12	Storm::TSGrowableArray_Reserve_RGN	113	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001ba84	Storm::TSFixedArray_ReallocData_RGN	573	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001bce0	Storm::SRGN_CopyRegionRecord	245	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001be5a	Storm::TSFixedArray_Set_Elem8	78	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001bea8	Storm::TSFixedArray_ReallocData_Elem8	82	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001befa	Storm::TSFixedArray_Set_Elem16	90	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001bf54	Storm::TSFixedArray_ReallocData_Elem16	82	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001bfa6	Storm::TSFixedArray_Set_Elem1C	110	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001c014	Storm::TSFixedArray_ReallocData_Elem1C	82	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001c066	Storm::TSList_LinkNode_RGNReuse	130	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001c0e8	Storm::TSGrowableArray_New_RGN	206	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001c1b6	TSHashTableReuse<RGN,_HASHKEY_NONE,_1>::~TSHashTableReuse_D2	108	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001c258	TSHashTable<RGN,_HASHKEY_NONE>::~TSHashTable_D2	82	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001c2d0	TSHashTableReuse<RGN,_HASHKEY_NONE,_1>::~TSHashTableReuse	9	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001c2da	TSHashTableReuse<RGN,_HASHKEY_NONE,_1>::~TSHashTableReuse_D0	26	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001c2f4	TSHashTable<RGN,_HASHKEY_NONE>::vslot0	203	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001c3ce	TSHashTable<RGN,_HASHKEY_NONE>::vslot1	44	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001c3fa	TSHashTable<RGN,_HASHKEY_NONE>::~TSHashTable	9	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001c404	TSHashTable<RGN,_HASHKEY_NONE>::~TSHashTable_D0	26	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001c41e	TSHashTable<RGN,_HASHKEY_NONE>::vslot4	78	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001c46c	Storm::TSFixedArray_Destructor_RGNBuckets	123	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001c4ec	Storm::TSList_NewNode_RGN	217	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001c5c6	Storm::TSList_UnlinkAll_RGNReuse	75	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001c612	Storm::TSHashTableReuse_Constructor	212	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001c6f0	Storm::SRGN_InitStatics	63	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001c730	Storm::Source::SSTR::SStrChr	54	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	00413490
-0001c766	Storm::Source::SSTR::SStrChrR	58	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	004134d0
-0001c7a0	Storm::Source::SSTR::SStrCmp	51	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	00413550
-0001c7d3	Storm::Source::SSTR::SStrCmpI	51	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	00413590
-0001c806	Storm::Source::SSTR::SStrCopy	439	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	004135d0
-0001c9bd	Storm::Source::SSTR::SStrDup	115	StormMac/Storm Mac/SOURCE/SSTR.CPP	__FILE__	Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	00414310
-0001ca30	Storm::Source::SSTR::SStrLen	125	StormMac/Storm Mac/SOURCE/SSTR.CPP	bracketed	Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	00413750
-0001caaf	Storm::Source::SSTR::SStrPack	550	StormMac/Storm Mac/SOURCE/SSTR.CPP	bracketed	Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	00413800
-0001ccd5	Storm::Source::SSTR::SStrPrintf	92	StormMac/Storm Mac/SOURCE/SSTR.CPP	bracketed	Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	00413a40
-0001cd31	Storm::Source::SSTR::SStrVPrintf	89	StormMac/Storm Mac/SOURCE/SSTR.CPP	bracketed	Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	00413a80
-0001cd8c	Storm::Source::SSTR::SStrTokenize	286	StormMac/Storm Mac/SOURCE/SSTR.CPP	file-map	Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	
-0001ceaa	Storm::Source::SSTR::SStrHash	260	StormMac/Storm Mac/SOURCE/SSTR.CPP	bracketed	Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	00413ce0
-0001cfaf	Storm::Source::SSTR::SStrHashHT	787	StormMac/Storm Mac/SOURCE/SSTR.CPP	file-map	Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	00414150
-0001d2f0	Storm::Source::SSTR::SStrUpper	9	StormMac/Storm Mac/SOURCE/SSTR.CPP	file-map	Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	missing		-	004141e0
-0001d2f9	Storm::Source::SSTR::SStrLower	9	StormMac/Storm Mac/SOURCE/SSTR.CPP|StormMac/Storm Mac/SOURCE/SSignature.cpp	between	Source/StormMac/SOURCE/SSTR.CPP|Source/StormMac/SOURCE/SSignature.cpp	blizzard-mac	missing		-	00414200
-0001d302	Storm::Source::SSignature::SSignatureVerifyStream_Begin	114	StormMac/Storm Mac/SOURCE/SSignature.cpp	__FILE__	Source/StormMac/SOURCE/SSignature.cpp	blizzard-mac	missing		-	0041d3b0
-0001d374	Storm::Source::SSignature::SSignatureVerifyStream_GetSignatureLength	11	StormMac/Storm Mac/SOURCE/SSignature.cpp	file-map	Source/StormMac/SOURCE/SSignature.cpp	blizzard-mac	missing		-	0041d410
-0001d37f	Storm::Source::SSignature::SSignatureVerifyStream_ProvideData	217	StormMac/Storm Mac/SOURCE/SSignature.cpp	file-map	Source/StormMac/SOURCE/SSignature.cpp	blizzard-mac	missing		-	0041d420
-0001d458	Storm::Source::SSignature::SSignatureVerifyStream_Finish	486	StormMac/Storm Mac/SOURCE/SSignature.cpp	__FILE__	Source/StormMac/SOURCE/SSignature.cpp	blizzard-mac	missing		-	0041d6d0
-0001d69e	StormMac::STRANS::STRANS_DeleteTransRecord	130	StormMac/Storm Mac/SOURCE/STRANS.CPP	__FILE__	Source/StormMac/SOURCE/STRANS.CPP	blizzard-mac	missing		-	
-0001d720	Storm::Source::STrans::STransDestroy	228	StormMac/Storm Mac/SOURCE/STRANS.CPP	__FILE__	Source/StormMac/SOURCE/STRANS.CPP	blizzard-mac	missing		-	
-0001d804	Storm::TSList_Destructor_STrans	33	StormMac/Storm Mac/SOURCE/STRANS.CPP|StormMac/Storm Mac/SOURCE/SVID.CPP	between	Source/StormMac/SOURCE/STRANS.CPP|Source/StormMac/SOURCE/SVID.CPP	blizzard-mac	missing		-	
-0001d826	StormMac::STRANS::TSList_DeleteNode_STrans	112	StormMac/Storm Mac/SOURCE/STRANS.CPP|StormMac/Storm Mac/SOURCE/SVID.CPP	between	Source/StormMac/SOURCE/STRANS.CPP|Source/StormMac/SOURCE/SVID.CPP	blizzard-mac	missing		-	
-0001d896	Storm::TSLink_Unlink_STrans	63	StormMac/Storm Mac/SOURCE/STRANS.CPP|StormMac/Storm Mac/SOURCE/SVID.CPP	between	Source/StormMac/SOURCE/STRANS.CPP|Source/StormMac/SOURCE/SVID.CPP	blizzard-mac	missing		-	
-0001d8d6	Storm::TSLink_NextLink_STrans	53	StormMac/Storm Mac/SOURCE/STRANS.CPP|StormMac/Storm Mac/SOURCE/SVID.CPP	between	Source/StormMac/SOURCE/STRANS.CPP|Source/StormMac/SOURCE/SVID.CPP	blizzard-mac	missing		-	
-0001d90c	Storm::TSList_UnlinkAll_STrans	71	StormMac/Storm Mac/SOURCE/STRANS.CPP|StormMac/Storm Mac/SOURCE/SVID.CPP	between	Source/StormMac/SOURCE/STRANS.CPP|Source/StormMac/SOURCE/SVID.CPP	blizzard-mac	missing		-	
-0001d960	Storm::STRANS_InitStatics	82	StormMac/Storm Mac/SOURCE/STRANS.CPP|StormMac/Storm Mac/SOURCE/SVID.CPP	between	Source/StormMac/SOURCE/STRANS.CPP|Source/StormMac/SOURCE/SVID.CPP	blizzard-mac	missing		-	
-0001d9b5	Storm::Source::SSTR::UTF16_ToUTF8	280	StormMac/Storm Mac/SOURCE/STRANS.CPP|StormMac/Storm Mac/SOURCE/SVID.CPP	between	Source/StormMac/SOURCE/STRANS.CPP|Source/StormMac/SOURCE/SVID.CPP	blizzard-mac	missing		-	006c7130
-0001dad0	Storm::Source::SSTR::UTF8_IsValidString	250	StormMac/Storm Mac/SOURCE/STRANS.CPP|StormMac/Storm Mac/SOURCE/SVID.CPP	between	Source/StormMac/SOURCE/STRANS.CPP|Source/StormMac/SOURCE/SVID.CPP	blizzard-mac	missing		-	
-0001dbca	Storm::Source::SSTR::UTF8_ToUTF16	497	StormMac/Storm Mac/SOURCE/STRANS.CPP|StormMac/Storm Mac/SOURCE/SVID.CPP	between	Source/StormMac/SOURCE/STRANS.CPP|Source/StormMac/SOURCE/SVID.CPP	blizzard-mac	missing		-	006c7410
-0001ddd4	Storm::Source::SSTR::TRANSTBL_Latin1ToUnicode	44	StormMac/Storm Mac/SOURCE/STRANS.CPP|StormMac/Storm Mac/SOURCE/SVID.CPP	between	Source/StormMac/SOURCE/STRANS.CPP|Source/StormMac/SOURCE/SVID.CPP	blizzard-mac	missing		-	006c7960
-0001de00	Storm::Source::SSTR::TRANSTBL_SingleByteToUnicode	103	StormMac/Storm Mac/SOURCE/STRANS.CPP|StormMac/Storm Mac/SOURCE/SVID.CPP	between	Source/StormMac/SOURCE/STRANS.CPP|Source/StormMac/SOURCE/SVID.CPP	blizzard-mac	missing		-	006c78c0
-0001de67	Storm::Source::SVid::SVidDestroy	259	StormMac/Storm Mac/SOURCE/SVID.CPP	__FILE__	Source/StormMac/SOURCE/SVID.CPP	blizzard-mac	missing		-	
-0001df6a	Storm::Source::SVid::SVidPlayEnd	253	StormMac/Storm Mac/SOURCE/SVID.CPP	__FILE__	Source/StormMac/SOURCE/SVID.CPP	blizzard-mac	missing		-	
-0001e067	StormMac::Storm_Mac::SOURCE::SVID::SVID_IsVideoInList	102	StormMac/Storm Mac/SOURCE/SVID.CPP|StormMac/Storm Mac/SOURCE/?	between	Source/StormMac/SOURCE/SVID.CPP|Source/StormMac/SOURCE/?	blizzard-mac	missing		-	
-0001e0ce	Storm::TSList_Destructor_SVid	33	StormMac/Storm Mac/SOURCE/SVID.CPP|StormMac/Storm Mac/SOURCE/?	between	Source/StormMac/SOURCE/SVID.CPP|Source/StormMac/SOURCE/?	blizzard-mac	missing		-	
-0001e0f0	StormMac::Storm_Mac::SOURCE::SVID::SVID_DeleteVideoNode	141	StormMac/Storm Mac/SOURCE/SVID.CPP|StormMac/Storm Mac/SOURCE/?	between	Source/StormMac/SOURCE/SVID.CPP|Source/StormMac/SOURCE/?	blizzard-mac	missing		-	
-0001e182	Storm::TSLink_Unlink_SVid	63	StormMac/Storm Mac/SOURCE/SVID.CPP|StormMac/Storm Mac/SOURCE/?	between	Source/StormMac/SOURCE/SVID.CPP|Source/StormMac/SOURCE/?	blizzard-mac	missing		-	
-0001e1c2	Storm::TSLink_NextLink_SVid	53	StormMac/Storm Mac/SOURCE/SVID.CPP|StormMac/Storm Mac/SOURCE/?	between	Source/StormMac/SOURCE/SVID.CPP|Source/StormMac/SOURCE/?	blizzard-mac	missing		-	
-0001e1f8	Storm::TSList_UnlinkAll_SVid	71	StormMac/Storm Mac/SOURCE/SVID.CPP|StormMac/Storm Mac/SOURCE/?	between	Source/StormMac/SOURCE/SVID.CPP|Source/StormMac/SOURCE/?	blizzard-mac	missing		-	
-0001e240	Storm::SVID_InitStatics	82	StormMac/Storm Mac/SOURCE/SVID.CPP|StormMac/Storm Mac/SOURCE/?	between	Source/StormMac/SOURCE/SVID.CPP|Source/StormMac/SOURCE/?	blizzard-mac	missing		-	
-0001e292	Storm::STORM_LaunchURL	62	StormMac/Storm Mac/SOURCE/SVID.CPP|StormMac/Storm Mac/SOURCE/?	between	Source/StormMac/SOURCE/SVID.CPP|Source/StormMac/SOURCE/?	blizzard-mac	missing		-	
-0001e2d0	Storm::STORM_LaunchURLCallback	25	StormMac/Storm Mac/SOURCE/SVID.CPP|StormMac/Storm Mac/SOURCE/?	between	Source/StormMac/SOURCE/SVID.CPP|Source/StormMac/SOURCE/?	blizzard-mac	missing		-	
-0001e2e9	Storm::FUN_0001e2e9	20	StormMac/Storm Mac/SOURCE/SVID.CPP|StormMac/Storm Mac/SOURCE/?	between	Source/StormMac/SOURCE/SVID.CPP|Source/StormMac/SOURCE/?	blizzard-mac	missing		-	
+00019532	Storm::Source::SNet::SNetLeaveGame	777	StormMac/Storm Mac/SOURCE/SNET.CPP	__FILE__	Source/StormMac/SOURCE/SNET.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SNET.cpp	no	
+0001983b	StormMac::SNET::SNET_DestroyAllConnections	92	StormMac/Storm Mac/SOURCE/SNET.CPP	file-map	Source/StormMac/SOURCE/SNET.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SNET.cpp	no	
+00019897	Storm::Source::SNet::SNetDestroy	432	StormMac/Storm Mac/SOURCE/SNET.CPP	__FILE__	Source/StormMac/SOURCE/SNET.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SNET.cpp	no	
+00019a47	Storm::Source::SNet::SpiDestroy	193	StormMac/Storm Mac/SOURCE/SNET.CPP	file-map	Source/StormMac/SOURCE/SNET.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SNET.cpp	no	
+00019b0b	StormMac::SNET::SNET_ConnSendMessage	696	StormMac/Storm Mac/SOURCE/SNET.CPP	__FILE__	Source/StormMac/SOURCE/SNET.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SNET.cpp	no	
+00019dc6	StormMac::SNET::SNET_ConnResendMessage	234	StormMac/Storm Mac/SOURCE/SNET.CPP	__FILE__	Source/StormMac/SOURCE/SNET.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SNET.cpp	no	
+00019eb2	StormMac::SNET::SNET_ConnSendPacket	428	StormMac/Storm Mac/SOURCE/SNET.CPP	file-map	Source/StormMac/SOURCE/SNET.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SNET.cpp	no	
+0001a05f	Storm::Source::dump_packet	541	StormMac/Storm Mac/SOURCE/SNET.CPP	file-map	Source/StormMac/SOURCE/SNET.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SNET.cpp	no	
+0001a27c	StormMac::SNET::SNET_ComputePacketChecksum	84	StormMac/Storm Mac/SOURCE/SNET.CPP	file-map	Source/StormMac/SOURCE/SNET.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SNET.cpp	no	
+0001a2d0	StormMac::SNET::SNET_FreeLocalMessage	73	StormMac/Storm Mac/SOURCE/SNET.CPP	__FILE__	Source/StormMac/SOURCE/SNET.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SNET.cpp	no	
+0001a319	StormMac::SNET::SNET_DestroyConnection	142	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SNET.cpp	no	
+0001a3a7	Storm::SNET_ClearPacketQueue	152	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SNET.cpp	no	
+0001a43f	StormMac::SNET::SNET_CreateConnection	99	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SNET.cpp	no	
+0001a4a2	Storm::SNET_DestroyLogInfo	29	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SNET.cpp	no	
+0001a4c4	Storm::TSList_Destructor_Spi	33	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SNET.cpp	no	
+0001a4e6	Storm::TSList_Destructor_SNetConn	33	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SNET.cpp	no	
+0001a508	Storm::TSFixedArray_Destructor	61	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SNET.cpp	no	
+0001a54a	Storm::FUN_0001a54a	33	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SNET.cpp	no	
+0001a56c	Storm::TSList_DeleteNode_SNetConn	104	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SNET.cpp	no	
+0001a5d4	Storm::TSList_DeleteNode_SNetPacket	112	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SNET.cpp	no	
+0001a644	Storm::FUN_0001a644	71	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SNET.cpp	no	
+0001a68c	Storm::FUN_0001a68c	63	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SNET.cpp	no	
+0001a6cc	Storm::FUN_0001a6cc	53	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SNET.cpp	no	
+0001a702	Storm::TSLink_Unlink_SNetPacket	63	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SNET.cpp	no	
+0001a742	Storm::TSLink_NextLink_SNetPacket	53	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SNET.cpp	no	
+0001a778	Storm::SNET_ConnectionDestructor	188	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SNET.cpp	no	
+0001a834	Storm::TSLink_Unlink_SNetConn	63	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SNET.cpp	no	
+0001a874	Storm::TSLink_NextLink_SNetConn	53	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SNET.cpp	no	
+0001a8aa	Storm::TSList_UnlinkAll_SNetPacket	71	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SNET.cpp	no	
+0001a8f2	Storm::TSList_UnlinkAll_SNetConn	71	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SNET.cpp	no	
+0001a93a	Storm::TSList_UnlinkAll_Spi	71	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SNET.cpp	no	
+0001a982	Storm::TSLink_Unlink_Spi	63	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SNET.cpp	no	
+0001a9c2	Storm::TSLink_NextLink_Spi	53	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SNET.cpp	no	
+0001a9f8	Storm::SLOG_EnsureLogCreated	105	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SNET.cpp	no	
+0001aa62	Storm::SLOG_CreateFromRegistry	162	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SNET.cpp	no	
+0001ab04	Storm::TSList_LinkNode_SNetPacket	116	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SNET.cpp	no	
+0001ab78	StormMac::SNET::TSList_DeleteNode	112	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SNET.cpp	no	
+0001abe8	StormMac::SNET::TSList_NewNode_SNetPacket	118	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SNET.cpp	no	
+0001ac5e	Storm::TSList_NewNode_SNetConn	290	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SNET.cpp	no	
+0001ad80	Storm::TSList_LinkNode_SNetConn	116	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SNET.cpp	no	
+0001adf4	StormMac::SNET::TSList_Clear	136	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SNET.cpp	no	
+0001ae80	Storm::Source::__sinit_SNET_CPP	519	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SNET.cpp	no	
+0001b087	Storm::SRgnDelete	92	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001b0e3	Storm::Source::SRgn::SRgnDestroy	35	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001b106	TSExportTableSync<RGN,_HSRGN__*,_HLOCKEDRGN__*,_CCritSect,_1>::~TSExportTableSync	46	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001b13a	Storm::TSExportTableSync_Lock	89	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001b194	Storm::TSExportTableSync_DeleteUnlock	58	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001b1ce	Storm::TSHashTable_Unlink	42	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001b1f8	Storm::TSLink_Unlink_RGN	63	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001b238	Storm::TSLink_NextLink_RGN	53	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001b26e	Storm::TSList_LinkNode_RGN	130	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001b2f0	Storm::TSList_UnlinkAll_RGN	75	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001b33c	Storm::TSHashTable_Ptr_RGN	109	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001b3aa	Storm::TSExportTableSync_Constructor	76	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001b408	TSHashTableReuse<RGN,_HASHKEY_NONE,_1>::vslot0	74	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001b452	TSHashTableReuse<RGN,_HASHKEY_NONE,_1>::vslot1	193	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001b514	TSExportTableSync<RGN,_HSRGN__*,_HLOCKEDRGN__*,_CCritSect,_1>::~TSExportTableSync_D0	54	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001b550	TSHashTableReuse<RGN,_HASHKEY_NONE,_1>::vslot4	61	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001b58e	Storm::TSList_Clear_RGNReuse	139	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001b61a	Storm::TSList_Clear_RGN	264	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001b732	Storm::TSFixedArray_Destroy_RGN	263	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001b84e	Storm::TSLink_Unlink_RGNReuse	63	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001b88e	Storm::TSLink_NextLink_RGNReuse	53	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001b8c4	Storm::TSHashTable_Clear	187	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001b980	Storm::TSList_NewNode_RGNReuse	146	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001ba12	Storm::TSGrowableArray_Reserve_RGN	113	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001ba84	Storm::TSFixedArray_ReallocData_RGN	573	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001bce0	Storm::SRGN_CopyRegionRecord	245	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001be5a	Storm::TSFixedArray_Set_Elem8	78	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001bea8	Storm::TSFixedArray_ReallocData_Elem8	82	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001befa	Storm::TSFixedArray_Set_Elem16	90	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001bf54	Storm::TSFixedArray_ReallocData_Elem16	82	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001bfa6	Storm::TSFixedArray_Set_Elem1C	110	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001c014	Storm::TSFixedArray_ReallocData_Elem1C	82	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001c066	Storm::TSList_LinkNode_RGNReuse	130	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001c0e8	Storm::TSGrowableArray_New_RGN	206	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001c1b6	TSHashTableReuse<RGN,_HASHKEY_NONE,_1>::~TSHashTableReuse_D2	108	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001c258	TSHashTable<RGN,_HASHKEY_NONE>::~TSHashTable_D2	82	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001c2d0	TSHashTableReuse<RGN,_HASHKEY_NONE,_1>::~TSHashTableReuse	9	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001c2da	TSHashTableReuse<RGN,_HASHKEY_NONE,_1>::~TSHashTableReuse_D0	26	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001c2f4	TSHashTable<RGN,_HASHKEY_NONE>::vslot0	203	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001c3ce	TSHashTable<RGN,_HASHKEY_NONE>::vslot1	44	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001c3fa	TSHashTable<RGN,_HASHKEY_NONE>::~TSHashTable	9	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001c404	TSHashTable<RGN,_HASHKEY_NONE>::~TSHashTable_D0	26	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001c41e	TSHashTable<RGN,_HASHKEY_NONE>::vslot4	78	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001c46c	Storm::TSFixedArray_Destructor_RGNBuckets	123	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001c4ec	Storm::TSList_NewNode_RGN	217	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001c5c6	Storm::TSList_UnlinkAll_RGNReuse	75	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001c612	Storm::TSHashTableReuse_Constructor	212	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001c6f0	Storm::SRGN_InitStatics	63	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SRGN.cpp	no	
+0001c730	Storm::Source::SSTR::SStrChr	54	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SSTR.cpp	no	00413490
+0001c766	Storm::Source::SSTR::SStrChrR	58	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SSTR.cpp	no	004134d0
+0001c7a0	Storm::Source::SSTR::SStrCmp	51	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SSTR.cpp	no	00413550
+0001c7d3	Storm::Source::SSTR::SStrCmpI	51	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SSTR.cpp	no	00413590
+0001c806	Storm::Source::SSTR::SStrCopy	439	StormMac/Storm Mac/SOURCE/SNET.CPP|StormMac/Storm Mac/SOURCE/SSTR.CPP	between	Source/StormMac/SOURCE/SNET.CPP|Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SSTR.cpp	no	004135d0
+0001c9bd	Storm::Source::SSTR::SStrDup	115	StormMac/Storm Mac/SOURCE/SSTR.CPP	__FILE__	Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SSTR.cpp	no	00414310
+0001ca30	Storm::Source::SSTR::SStrLen	125	StormMac/Storm Mac/SOURCE/SSTR.CPP	bracketed	Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SSTR.cpp	no	00413750
+0001caaf	Storm::Source::SSTR::SStrPack	550	StormMac/Storm Mac/SOURCE/SSTR.CPP	bracketed	Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SSTR.cpp	no	00413800
+0001ccd5	Storm::Source::SSTR::SStrPrintf	92	StormMac/Storm Mac/SOURCE/SSTR.CPP	bracketed	Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SSTR.cpp	no	00413a40
+0001cd31	Storm::Source::SSTR::SStrVPrintf	89	StormMac/Storm Mac/SOURCE/SSTR.CPP	bracketed	Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SSTR.cpp	no	00413a80
+0001cd8c	Storm::Source::SSTR::SStrTokenize	286	StormMac/Storm Mac/SOURCE/SSTR.CPP	file-map	Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SSTR.cpp	no	
+0001ceaa	Storm::Source::SSTR::SStrHash	260	StormMac/Storm Mac/SOURCE/SSTR.CPP	bracketed	Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SSTR.cpp	no	00413ce0
+0001cfaf	Storm::Source::SSTR::SStrHashHT	787	StormMac/Storm Mac/SOURCE/SSTR.CPP	file-map	Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SSTR.cpp	no	00414150
+0001d2f0	Storm::Source::SSTR::SStrUpper	9	StormMac/Storm Mac/SOURCE/SSTR.CPP	file-map	Source/StormMac/SOURCE/SSTR.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SSTR.cpp	no	004141e0
+0001d2f9	Storm::Source::SSTR::SStrLower	9	StormMac/Storm Mac/SOURCE/SSTR.CPP|StormMac/Storm Mac/SOURCE/SSignature.cpp	between	Source/StormMac/SOURCE/SSTR.CPP|Source/StormMac/SOURCE/SSignature.cpp	blizzard-mac	match	Source/StormMac/SOURCE/SSTR.cpp	no	00414200
+0001d302	Storm::Source::SSignature::SSignatureVerifyStream_Begin	114	StormMac/Storm Mac/SOURCE/SSignature.cpp	__FILE__	Source/StormMac/SOURCE/SSignature.cpp	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SSignature.cpp	yes	0041d3b0
+0001d374	Storm::Source::SSignature::SSignatureVerifyStream_GetSignatureLength	11	StormMac/Storm Mac/SOURCE/SSignature.cpp	file-map	Source/StormMac/SOURCE/SSignature.cpp	blizzard-mac	match	Source/StormMac/SOURCE/SSignature.cpp	yes	0041d410
+0001d37f	Storm::Source::SSignature::SSignatureVerifyStream_ProvideData	217	StormMac/Storm Mac/SOURCE/SSignature.cpp	file-map	Source/StormMac/SOURCE/SSignature.cpp	blizzard-mac	match	Source/StormMac/SOURCE/SSignature.cpp	yes	0041d420
+0001d458	Storm::Source::SSignature::SSignatureVerifyStream_Finish	486	StormMac/Storm Mac/SOURCE/SSignature.cpp	__FILE__	Source/StormMac/SOURCE/SSignature.cpp	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SSignature.cpp	yes	0041d6d0
+0001d69e	StormMac::STRANS::STRANS_DeleteTransRecord	130	StormMac/Storm Mac/SOURCE/STRANS.CPP	__FILE__	Source/StormMac/SOURCE/STRANS.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/STRANS.cpp	no	
+0001d720	Storm::Source::STrans::STransDestroy	228	StormMac/Storm Mac/SOURCE/STRANS.CPP	__FILE__	Source/StormMac/SOURCE/STRANS.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/STRANS.cpp	no	
+0001d804	Storm::TSList_Destructor_STrans	33	StormMac/Storm Mac/SOURCE/STRANS.CPP|StormMac/Storm Mac/SOURCE/SVID.CPP	between	Source/StormMac/SOURCE/STRANS.CPP|Source/StormMac/SOURCE/SVID.CPP	blizzard-mac	match	Source/StormMac/SOURCE/STRANS.cpp	no	
+0001d826	StormMac::STRANS::TSList_DeleteNode_STrans	112	StormMac/Storm Mac/SOURCE/STRANS.CPP|StormMac/Storm Mac/SOURCE/SVID.CPP	between	Source/StormMac/SOURCE/STRANS.CPP|Source/StormMac/SOURCE/SVID.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/STRANS.cpp	no	
+0001d896	Storm::TSLink_Unlink_STrans	63	StormMac/Storm Mac/SOURCE/STRANS.CPP|StormMac/Storm Mac/SOURCE/SVID.CPP	between	Source/StormMac/SOURCE/STRANS.CPP|Source/StormMac/SOURCE/SVID.CPP	blizzard-mac	match	Source/StormMac/SOURCE/STRANS.cpp	no	
+0001d8d6	Storm::TSLink_NextLink_STrans	53	StormMac/Storm Mac/SOURCE/STRANS.CPP|StormMac/Storm Mac/SOURCE/SVID.CPP	between	Source/StormMac/SOURCE/STRANS.CPP|Source/StormMac/SOURCE/SVID.CPP	blizzard-mac	match	Source/StormMac/SOURCE/STRANS.cpp	no	
+0001d90c	Storm::TSList_UnlinkAll_STrans	71	StormMac/Storm Mac/SOURCE/STRANS.CPP|StormMac/Storm Mac/SOURCE/SVID.CPP	between	Source/StormMac/SOURCE/STRANS.CPP|Source/StormMac/SOURCE/SVID.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/STRANS.cpp	no	
+0001d960	Storm::STRANS_InitStatics	82	StormMac/Storm Mac/SOURCE/STRANS.CPP|StormMac/Storm Mac/SOURCE/SVID.CPP	between	Source/StormMac/SOURCE/STRANS.CPP|Source/StormMac/SOURCE/SVID.CPP	blizzard-mac	match	Source/StormMac/SOURCE/STRANS.cpp	no	
+0001d9b5	Storm::Source::SSTR::UTF16_ToUTF8	280	StormMac/Storm Mac/SOURCE/STRANS.CPP|StormMac/Storm Mac/SOURCE/SVID.CPP	between	Source/StormMac/SOURCE/STRANS.CPP|Source/StormMac/SOURCE/SVID.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/STRANS.cpp	no	006c7130
+0001dad0	Storm::Source::SSTR::UTF8_IsValidString	250	StormMac/Storm Mac/SOURCE/STRANS.CPP|StormMac/Storm Mac/SOURCE/SVID.CPP	between	Source/StormMac/SOURCE/STRANS.CPP|Source/StormMac/SOURCE/SVID.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/STRANS.cpp	no	
+0001dbca	Storm::Source::SSTR::UTF8_ToUTF16	497	StormMac/Storm Mac/SOURCE/STRANS.CPP|StormMac/Storm Mac/SOURCE/SVID.CPP	between	Source/StormMac/SOURCE/STRANS.CPP|Source/StormMac/SOURCE/SVID.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/STRANS.cpp	no	006c7410
+0001ddd4	Storm::Source::SSTR::TRANSTBL_Latin1ToUnicode	44	StormMac/Storm Mac/SOURCE/STRANS.CPP|StormMac/Storm Mac/SOURCE/SVID.CPP	between	Source/StormMac/SOURCE/STRANS.CPP|Source/StormMac/SOURCE/SVID.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/STRANS.cpp	no	006c7960
+0001de00	Storm::Source::SSTR::TRANSTBL_SingleByteToUnicode	103	StormMac/Storm Mac/SOURCE/STRANS.CPP|StormMac/Storm Mac/SOURCE/SVID.CPP	between	Source/StormMac/SOURCE/STRANS.CPP|Source/StormMac/SOURCE/SVID.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/STRANS.cpp	no	006c78c0
+0001de67	Storm::Source::SVid::SVidDestroy	259	StormMac/Storm Mac/SOURCE/SVID.CPP	__FILE__	Source/StormMac/SOURCE/SVID.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SVID.cpp	no	
+0001df6a	Storm::Source::SVid::SVidPlayEnd	253	StormMac/Storm Mac/SOURCE/SVID.CPP	__FILE__	Source/StormMac/SOURCE/SVID.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SVID.cpp	no	
+0001e067	StormMac::Storm_Mac::SOURCE::SVID::SVID_IsVideoInList	102	StormMac/Storm Mac/SOURCE/SVID.CPP|StormMac/Storm Mac/SOURCE/?	between	Source/StormMac/SOURCE/SVID.CPP|Source/StormMac/SOURCE/?	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SVID.cpp	no	
+0001e0ce	Storm::TSList_Destructor_SVid	33	StormMac/Storm Mac/SOURCE/SVID.CPP|StormMac/Storm Mac/SOURCE/?	between	Source/StormMac/SOURCE/SVID.CPP|Source/StormMac/SOURCE/?	blizzard-mac	match	Source/StormMac/SOURCE/SVID.cpp	no	
+0001e0f0	StormMac::Storm_Mac::SOURCE::SVID::SVID_DeleteVideoNode	141	StormMac/Storm Mac/SOURCE/SVID.CPP|StormMac/Storm Mac/SOURCE/?	between	Source/StormMac/SOURCE/SVID.CPP|Source/StormMac/SOURCE/?	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SVID.cpp	no	
+0001e182	Storm::TSLink_Unlink_SVid	63	StormMac/Storm Mac/SOURCE/SVID.CPP|StormMac/Storm Mac/SOURCE/?	between	Source/StormMac/SOURCE/SVID.CPP|Source/StormMac/SOURCE/?	blizzard-mac	match	Source/StormMac/SOURCE/SVID.cpp	no	
+0001e1c2	Storm::TSLink_NextLink_SVid	53	StormMac/Storm Mac/SOURCE/SVID.CPP|StormMac/Storm Mac/SOURCE/?	between	Source/StormMac/SOURCE/SVID.CPP|Source/StormMac/SOURCE/?	blizzard-mac	match	Source/StormMac/SOURCE/SVID.cpp	no	
+0001e1f8	Storm::TSList_UnlinkAll_SVid	71	StormMac/Storm Mac/SOURCE/SVID.CPP|StormMac/Storm Mac/SOURCE/?	between	Source/StormMac/SOURCE/SVID.CPP|Source/StormMac/SOURCE/?	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SVID.cpp	no	
+0001e240	Storm::SVID_InitStatics	82	StormMac/Storm Mac/SOURCE/SVID.CPP|StormMac/Storm Mac/SOURCE/?	between	Source/StormMac/SOURCE/SVID.CPP|Source/StormMac/SOURCE/?	blizzard-mac	match	Source/StormMac/SOURCE/SVID.cpp	no	
+0001e292	Storm::STORM_LaunchURL	62	StormMac/Storm Mac/SOURCE/SVID.CPP|StormMac/Storm Mac/SOURCE/?	between	Source/StormMac/SOURCE/SVID.CPP|Source/StormMac/SOURCE/?	blizzard-mac	match	Source/StormMac/SOURCE/SVID.cpp	no	
+0001e2d0	Storm::STORM_LaunchURLCallback	25	StormMac/Storm Mac/SOURCE/SVID.CPP|StormMac/Storm Mac/SOURCE/?	between	Source/StormMac/SOURCE/SVID.CPP|Source/StormMac/SOURCE/?	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SVID.cpp	no	
+0001e2e9	Storm::FUN_0001e2e9	20	StormMac/Storm Mac/SOURCE/SVID.CPP|StormMac/Storm Mac/SOURCE/?	between	Source/StormMac/SOURCE/SVID.CPP|Source/StormMac/SOURCE/?	blizzard-mac	match	Source/StormMac/SOURCE/SVID.cpp	no	
 0001e2fd	Storm::Win32Mac::Mem_SetDefaultAllocators	35	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Heap.cpp	no	
 0001e320	Storm::FUN_0001e320	5	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Heap.cpp	no	
 0001e325	Storm::Win32Mac::MemReAlloc	79	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Heap.cpp	no	
@@ -869,224 +869,224 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 0002e8a4	Storm::TSGROWABLEARRAY_Reserve_Elem14	113	StormMac/Storm Mac/Win32 Mac/Source/Win32/Win32_utils.cpp	unit	Source/StormMac/Win32Mac/Source/Win32/Win32_utils.cpp	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_utils.cpp	yes	
 0002e916	Storm::TSGROWABLEARRAY_SetMaxCount_Elem14	334	StormMac/Storm Mac/Win32 Mac/Source/Win32/Win32_utils.cpp	unit	Source/StormMac/Win32Mac/Source/Win32/Win32_utils.cpp	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_utils.cpp	yes	
 0002ea70	Storm::STORM_StaticInitMutexes	111	StormMac/Storm Mac/Win32 Mac/Source/Win32/Win32_utils.cpp	unit	Source/StormMac/Win32Mac/Source/Win32/Win32_utils.cpp	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_utils.cpp	yes	
-0002eae0	Storm::Win32Mac::DefWindowProc	1007	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0002ef30	Storm::Proc_DesktopWndProc	26	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0002ef4a	Storm::Win32Mac::Proc_ButtonWndProc	1386	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0002f500	Storm::Win32Mac::Proc_RegisterBuiltInClasses	659	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0002f793	Storm::Proc_StaticWndProc	245	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0002f888	Storm::Win32Mac::Wnd_CreateDesktopWindow	341	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0002f9e0	Storm::Win32Mac::Wnd_InitWnd	64	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0002fa20	Storm::Win32Mac::Wnd_FindClassByName	86	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0002fa76	Storm::Win32Mac::Wnd_Shutdown	97	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0002fad7	Storm::Win32Mac::Wnd_FreeWnd	33	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0002faf8	Storm::Win32Mac::Wnd_NewWndClass	92	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0002fb57	Storm::Win32Mac::Wnd_IsSelfOrDescendant	70	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0002fb9f	Storm::Win32Mac::Wnd_SendParentNotify	88	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0002fbf8	Storm::Win32Mac::Wnd_CalculateVisibleRgn	461	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0002fdc5	Storm::Win32Mac::GetClientRect	57	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0002fdfe	Storm::Win32Mac::Wnd_Iterate_RemoveWindowFromVisRgn	157	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0002fe9b	Storm::Win32Mac::Wnd_GetTopParent	39	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0002fec2	Storm::Win32Mac::ClientToScreen	49	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0002fef3	Storm::Win32Mac::ScreenToClient	49	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0002ff24	Storm::Win32Mac::Wnd_ChildFromPoint	185	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0002ffdd	Storm::Win32Mac::GetDesktopWindow	17	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0002ffee	Storm::Win32Mac::CallWindowProc	91	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00030049	Storm::Win32Mac::IsWindow	46	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00030077	Storm::Win32Mac::RegisterClassEx	235	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00030162	Storm::Win32Mac::RegisterClass	101	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000301c7	Storm::Win32Mac::UnregisterClass	68	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0003020c	Storm::Win32Mac::DestroyWindow	508	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00030408	Storm::Win32Mac::ShowWindow	173	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000304b5	Storm::Win32Mac::SetFocus	242	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000305a7	Storm::Win32Mac::GetFocus	79	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000305f6	Storm::Win32Mac::SetActiveWindow	411	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00030791	Storm::Win32Mac::Wnd_UnlinkFromParent	56	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000307c9	Storm::Win32Mac::CreateWindowEx	858	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00030b23	Storm::Win32Mac::Wnd_LinkToParent	109	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00030b93	Storm::Win32Mac::GetParent	73	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00030bdf	Storm::Win32Mac::GetCapture	33	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00030c00	Storm::Win32Mac::SetCapture	86	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00030c56	Storm::Win32Mac::ReleaseCapture	92	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00030cb2	Storm::Win32Mac::GetActiveWindow	75	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00030cfd	Storm::Win32Mac::SetWindowPos	721	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00030fce	Storm::Win32Mac::WindowFromPoint	146	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00031060	Storm::Win32Mac::GetWindowRect	94	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000310be	Storm::Wnd_InvalidateInParent	299	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000311e9	Storm::Win32Mac::Wnd_InvalidateWndRect	204	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000312b5	Storm::Win32Mac::AdjustWindowRectEx	10	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000312bf	Storm::Win32Mac::InvalidateRect	155	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0003135a	Storm::Win32Mac::UpdateWindow	32	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0003137a	Storm::Win32Mac::Wnd_SendPaintIfPending	53	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000313af	Storm::Win32Mac::BeginPaint	237	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0003149c	Storm::Win32Mac::Wnd_ClearUpdateRegion	93	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000314f9	Storm::Win32Mac::EndPaint	36	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0003151d	Storm::Win32Mac::IsWindowVisible	25	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00031539	Storm::Win32Mac::Wnd_IsVisibleAndEnabled	40	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00031564	Storm::FUN_00031564	7	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0003156b	Storm::Win32Mac::GetWindowLong	136	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00031618	Storm::Win32Mac::GetProp	78	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00031666	Storm::Win32Mac::SetProp	140	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000316f2	Storm::Win32Mac::RemoveProp	116	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00031766	Storm::Win32Mac::Wnd_ClearUpdateRegionTree	70	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000317ac	Storm::Wnd_ReorderOwnedWindows	200	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00031874	Storm::Win32Mac::Wnd_MarkOwnedWindows	75	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000318bf	Storm::Win32Mac::Wnd_InvalidateRectRecursive	331	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00031a0a	Storm::Win32Mac::Wnd_AddToUpdateRegion	122	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00031a84	Storm::Source::Win32VirtualKey_From_MacScanCode	114	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00031af6	Storm::Key_VirtualKeyToMacKeyCode	23	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00031b0d	Storm::Win32Mac::NewEmptyStripRgn	11	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00031b18	Storm::Win32Mac::Rgn_NewStripRgn	465	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00031ce9	Storm::Win32Mac::Rgn_SetStripRgnRect	225	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00031dca	Storm::Win32Mac::DisposeStripRgn	76	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00031e16	Storm::Win32Mac::CountStripRgnRects	37	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00031e3b	Storm::Win32Mac::GetStripRgnRects	151	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00031ed2	Storm::Win32Mac::GetStripRgnBoundingRect	69	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00031f17	Storm::Win32Mac::IsStripRgnEmpty	42	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00031f41	Storm::Win32Mac::Rgn_ResizeStripRgn	228	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00032025	Storm::Win32Mac::Rgn_CompactStripRgn	59	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00032060	Storm::Win32Mac::Rgn_SetEmptyStripRgn	70	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000320a6	Storm::Win32Mac::CopyStripRgn	184	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0003215e	Storm::Win32Mac::Rgn_UnionStripRgn	120	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000321d6	Storm::Win32Mac::Rgn_CombineRgns	1203	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00032689	Storm::Win32Mac::Rgn_UnionBandProc	203	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00032754	Storm::Win32Mac::Rgn_IntersectStripRgn	118	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000327ca	Storm::Win32Mac::Rgn_IntersectBandProc	189	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00032887	Storm::Win32Mac::Rgn_SubtractStripRgn	118	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000328fd	Storm::Win32Mac::Rgn_SubtractBandProc	180	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000329b1	Storm::Win32Mac::Rgn_DestroyAllRegions	124	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00032a2d	Storm::Win32Mac::Rgn_AddRectToStripRgn	291	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00032b50	Storm::DirectDrawCreate	49	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00032b83	Storm::Win32Mac::DirectSoundCreate	72	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00032bcd	Storm::FUN_00032bcd	46	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00032bfc	Storm::IDirectSound::Construct	108	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00032c68	Storm::IDirectSound::SndChannelCallback	527	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00032e78	Storm::IDirectSound::Destroy	185	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00032f3c	Storm::IDirectSound::Release	40	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00032f64	Storm::IDirectSound::CreateSoundBuffer	312	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000330ae	Storm::IDirectSound::GetCaps	17	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000330c0	Storm::IDirectSound_SetCooperativeLevel	7	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000330c8	Storm::IDirectSoundBuffer::Release	129	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0003314e	Storm::IDirectSoundBuffer::Stop	156	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000331ea	Storm::IDirectSoundBuffer_QueryInterface	10	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000331f4	Storm::IDirectSoundBuffer::GetCaps	83	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00033248	Storm::IDirectSoundBuffer::GetCurrentPosition	52	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0003327c	Storm::IDirectSoundBuffer::GetStatus	74	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000332c6	Storm::IDirectSoundBuffer::Lock	126	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00033344	Storm::IDirectSoundBuffer::Play	750	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00033632	Storm::IDirectSound::AcquireSoundChannel	124	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000336ae	Storm::IDirectSoundBuffer::UpdatePanAndVolume	299	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000337da	Storm::IDirectSoundBuffer_Restore	10	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000337e4	Storm::IDirectSound::GetFreeChannelFromPool	126	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00033862	Storm::IDirectSound::ReleaseSoundChannel	89	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000338bc	Storm::IDirectSoundBuffer::SetCurrentPosition	16	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000338cc	Storm::IDirectSoundBuffer::SetFormat	70	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00033912	Storm::IDirectSoundBuffer::SetPan	73	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0003395c	Storm::IDirectSoundBuffer::SetVolume	93	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000339ba	Storm::IDirectSoundBuffer::Unlock	49	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000339ec	Storm::IKsPropertySet_Release	28	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00033a08	Storm::IKsPropertySet_QuerySupport	19	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00033a1c	Storm::IKsPropertySet_Set	7	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00033a24	Storm::_stricmp	75	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	006841e9
-00033a6f	Storm::Win32Mac::_strnicmp	85	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00033ac4	Storm::_strrev	56	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	00687860
-00033afc	Storm::Win32Mac::_strupr	64	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00033b3c	Storm::Win32Mac::_strlwr	64	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00033b7c	Storm::_itoa	93	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	00687605
-00033bd9	Storm::Win32Mac::_ui64toa	134	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00033c5f	Storm::Win32Mac::_ultoa	75	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00033caa	Storm::Source::_vsnprintf	9	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00033cb3	Storm::rand	40	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	00687461
-00033cdb	Storm::FUN_00033cdb	20	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	00687454
-00033cef	Storm::Source::GetFileTypeAndCreatorForPath	683	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00033f9a	Storm::Source::GetApplicationInformation	387	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-0003411f	Storm::Source::LaunchURL	744	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00034428	Storm::Source::GetICInstance	135	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-000344af	Storm::Source::ReleaseICInstance	45	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-000344dc	Storm::Win32Mac::MacResolveAliasFile	61	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00034519	Storm::Source::fp_fatal	61	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00034556	Storm::Win32Mac::GetVolumeInfoNoName	154	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-000345f0	Storm::Win32Mac::GetCatInfoNoName	118	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00034666	Storm::Win32Mac::DetermineVRefNum	61	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-000346a3	Storm::Win32Mac::UnmountVolume	68	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-000346e7	Storm::Win32Mac::GetDirectoryID	89	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00034740	Storm::GetDialogItemRect	58	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-0003477a	Storm::Win32Mac::MacCopyUserName	109	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-000347e7	Storm::Win32Mac::MacCopyMachineName	355	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-0003494a	Storm::Source::SaveFSSpecFromMem	1597	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00034f87	Storm::Source::SaveFileFromMemCreateDirs	440	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-0003513f	Storm::Source::SaveWinPathFileFromMem	262	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00035246	Storm::Source::InitAppLocation	69	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00035290	Storm::Source::StaticInitAppLocation	31	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-000352af	Storm::Source::GetTextState	97	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00035310	Storm::Source::SetTextState	65	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00035351	Storm::STORM_IsCDVolume	364	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-000354bd	Storm::StormMacInit	55	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-000354f4	Storm::Source::MyRuntimeTerminate	81	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00035545	Storm::Source::SSystem::StormGetInstance	23	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	0041bef0
-0003555c	Storm::Dlg_DisableMenusForModal	387	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-000356df	Storm::Dlg_UpdateEditMenu	543	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-000358fe	Storm::Dlg_RestoreMenus	229	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-000359e3	Storm::Dlg_ModalDialogLoop	1258	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00035ef1	Storm::Dlg_ModalDialog	67	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00035f34	Storm::Dlg_HandleEditMenuCommand	247	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-0003602b	FUN_0003602b	10	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036035	Storm::Source::SDraw::SDrawDestroy	141	StormMac/Storm Mac/SOURCE/SDRAW_VidDriver.CPP	__FILE__	Source/StormMac/SOURCE/SDRAW_VidDriver.CPP	blizzard-mac	missing		-	
-000360c2	Storm::Win32Mac::PathToFSSpecCreateDirs	776	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000363ca	Storm::Win32Mac::FOpenResolveMacPath	118	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00036440	GetMemFile2Ptr	29	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0003645d	Storm::Win32Mac::AllocateMemFile2	291	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00036580	Storm::Win32Mac::FreeMemFile2	155	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-0003661b	Storm::Win32Mac::LockMemFile2	421	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-000367c0	Storm::Win32Mac::UnLockMemFile2	112	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	missing		-	
-00036830	MACCURSOR_ShowDisplayCursor	23	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036847	MACCURSOR_HideDisplayCursor	23	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-0003685e	MACDISPLAY_Init	218	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036938	MACDISPLAY_Shutdown	55	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-0003696f	FUN_0003696f	7	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036976	FUN_00036976	10	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036980	FUN_00036980	10	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-0003698a	FUN_0003698a	7	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036991	MACCURSOR_GetCursorPos	49	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-000369c2	FUN_000369c2	7	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-000369c9	FUN_000369c9	49	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-000369fa	FUN_000369fa	7	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036a01	MACCURSOR_SetCursorPos	49	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036a32	MACCURSOR_HideCursor	58	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036a6c	MACCURSOR_ShowCursor	56	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036aa4	MACCURSOR_GetShowCount	17	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036ab5	MACCURSOR_RestoreCursor	57	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036aee	MACCURSOR_SuspendCursorProcs	63	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036b2d	MACCURSOR_ResumeCursorProcs	81	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036b7e	FUN_00036b7e	7	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036b85	FUN_00036b85	7	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036b8c	FUN_00036b8c	7	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036b93	FUN_00036b93	7	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036b9a	FUN_00036b9a	7	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036ba1	FUN_00036ba1	59	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036bdc	FUN_00036bdc	10	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036be6	FUN_00036be6	7	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036bed	FUN_00036bed	7	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036bf4	MACDISPLAY_SetPaletteEntries	66	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036c36	MACDISPLAY_GetPaletteEntries	66	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036c78	FUN_00036c78	5	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036c7d	FUN_00036c7d	7	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036c84	FUN_00036c84	27	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036c9f	MACCURSOR_SetSuspendCallbacks	34	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036cc1	MACCURSOR_SetCursorProcs	43	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036cec	FUN_00036cec	7	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036cf3	FUN_00036cf3	20	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036d07	FUN_00036d07	18	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036d19	MACDISPLAY_SelectDriver	69	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036d5e	FUN_00036d5e	45	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036d8b	FUN_00036d8b	20	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036d9f	MACCURSOR_RegisterSetCursorPosProc	20	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036db3	MACCURSOR_RegisterGetCursorPosProc	20	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
+0002eae0	Storm::Win32Mac::DefWindowProc	1007	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+0002ef30	Storm::Proc_DesktopWndProc	26	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+0002ef4a	Storm::Win32Mac::Proc_ButtonWndProc	1386	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+0002f500	Storm::Win32Mac::Proc_RegisterBuiltInClasses	659	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+0002f793	Storm::Proc_StaticWndProc	245	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+0002f888	Storm::Win32Mac::Wnd_CreateDesktopWindow	341	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+0002f9e0	Storm::Win32Mac::Wnd_InitWnd	64	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+0002fa20	Storm::Win32Mac::Wnd_FindClassByName	86	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+0002fa76	Storm::Win32Mac::Wnd_Shutdown	97	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+0002fad7	Storm::Win32Mac::Wnd_FreeWnd	33	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+0002faf8	Storm::Win32Mac::Wnd_NewWndClass	92	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+0002fb57	Storm::Win32Mac::Wnd_IsSelfOrDescendant	70	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+0002fb9f	Storm::Win32Mac::Wnd_SendParentNotify	88	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+0002fbf8	Storm::Win32Mac::Wnd_CalculateVisibleRgn	461	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+0002fdc5	Storm::Win32Mac::GetClientRect	57	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+0002fdfe	Storm::Win32Mac::Wnd_Iterate_RemoveWindowFromVisRgn	157	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+0002fe9b	Storm::Win32Mac::Wnd_GetTopParent	39	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+0002fec2	Storm::Win32Mac::ClientToScreen	49	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+0002fef3	Storm::Win32Mac::ScreenToClient	49	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+0002ff24	Storm::Win32Mac::Wnd_ChildFromPoint	185	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+0002ffdd	Storm::Win32Mac::GetDesktopWindow	17	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+0002ffee	Storm::Win32Mac::CallWindowProc	91	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+00030049	Storm::Win32Mac::IsWindow	46	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+00030077	Storm::Win32Mac::RegisterClassEx	235	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+00030162	Storm::Win32Mac::RegisterClass	101	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+000301c7	Storm::Win32Mac::UnregisterClass	68	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+0003020c	Storm::Win32Mac::DestroyWindow	508	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+00030408	Storm::Win32Mac::ShowWindow	173	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+000304b5	Storm::Win32Mac::SetFocus	242	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+000305a7	Storm::Win32Mac::GetFocus	79	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+000305f6	Storm::Win32Mac::SetActiveWindow	411	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+00030791	Storm::Win32Mac::Wnd_UnlinkFromParent	56	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+000307c9	Storm::Win32Mac::CreateWindowEx	858	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+00030b23	Storm::Win32Mac::Wnd_LinkToParent	109	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+00030b93	Storm::Win32Mac::GetParent	73	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+00030bdf	Storm::Win32Mac::GetCapture	33	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+00030c00	Storm::Win32Mac::SetCapture	86	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+00030c56	Storm::Win32Mac::ReleaseCapture	92	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+00030cb2	Storm::Win32Mac::GetActiveWindow	75	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+00030cfd	Storm::Win32Mac::SetWindowPos	721	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+00030fce	Storm::Win32Mac::WindowFromPoint	146	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+00031060	Storm::Win32Mac::GetWindowRect	94	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+000310be	Storm::Wnd_InvalidateInParent	299	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+000311e9	Storm::Win32Mac::Wnd_InvalidateWndRect	204	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+000312b5	Storm::Win32Mac::AdjustWindowRectEx	10	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+000312bf	Storm::Win32Mac::InvalidateRect	155	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+0003135a	Storm::Win32Mac::UpdateWindow	32	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+0003137a	Storm::Win32Mac::Wnd_SendPaintIfPending	53	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+000313af	Storm::Win32Mac::BeginPaint	237	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+0003149c	Storm::Win32Mac::Wnd_ClearUpdateRegion	93	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+000314f9	Storm::Win32Mac::EndPaint	36	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+0003151d	Storm::Win32Mac::IsWindowVisible	25	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+00031539	Storm::Win32Mac::Wnd_IsVisibleAndEnabled	40	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+00031564	Storm::FUN_00031564	7	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+0003156b	Storm::Win32Mac::GetWindowLong	136	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+00031618	Storm::Win32Mac::GetProp	78	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+00031666	Storm::Win32Mac::SetProp	140	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+000316f2	Storm::Win32Mac::RemoveProp	116	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+00031766	Storm::Win32Mac::Wnd_ClearUpdateRegionTree	70	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+000317ac	Storm::Wnd_ReorderOwnedWindows	200	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+00031874	Storm::Win32Mac::Wnd_MarkOwnedWindows	75	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+000318bf	Storm::Win32Mac::Wnd_InvalidateRectRecursive	331	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+00031a0a	Storm::Win32Mac::Wnd_AddToUpdateRegion	122	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+00031a84	Storm::Source::Win32VirtualKey_From_MacScanCode	114	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+00031af6	Storm::Key_VirtualKeyToMacKeyCode	23	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no	
+00031b0d	Storm::Win32Mac::NewEmptyStripRgn	11	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Region.cpp	no	
+00031b18	Storm::Win32Mac::Rgn_NewStripRgn	465	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Region.cpp	no	
+00031ce9	Storm::Win32Mac::Rgn_SetStripRgnRect	225	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Region.cpp	no	
+00031dca	Storm::Win32Mac::DisposeStripRgn	76	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Region.cpp	no	
+00031e16	Storm::Win32Mac::CountStripRgnRects	37	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Region.cpp	no	
+00031e3b	Storm::Win32Mac::GetStripRgnRects	151	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Region.cpp	no	
+00031ed2	Storm::Win32Mac::GetStripRgnBoundingRect	69	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Region.cpp	no	
+00031f17	Storm::Win32Mac::IsStripRgnEmpty	42	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Region.cpp	no	
+00031f41	Storm::Win32Mac::Rgn_ResizeStripRgn	228	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Region.cpp	no	
+00032025	Storm::Win32Mac::Rgn_CompactStripRgn	59	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Region.cpp	no	
+00032060	Storm::Win32Mac::Rgn_SetEmptyStripRgn	70	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Region.cpp	no	
+000320a6	Storm::Win32Mac::CopyStripRgn	184	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Region.cpp	no	
+0003215e	Storm::Win32Mac::Rgn_UnionStripRgn	120	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Region.cpp	no	
+000321d6	Storm::Win32Mac::Rgn_CombineRgns	1203	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Region.cpp	no	
+00032689	Storm::Win32Mac::Rgn_UnionBandProc	203	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Region.cpp	no	
+00032754	Storm::Win32Mac::Rgn_IntersectStripRgn	118	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Region.cpp	no	
+000327ca	Storm::Win32Mac::Rgn_IntersectBandProc	189	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Region.cpp	no	
+00032887	Storm::Win32Mac::Rgn_SubtractStripRgn	118	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Region.cpp	no	
+000328fd	Storm::Win32Mac::Rgn_SubtractBandProc	180	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Region.cpp	no	
+000329b1	Storm::Win32Mac::Rgn_DestroyAllRegions	124	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Region.cpp	no	
+00032a2d	Storm::Win32Mac::Rgn_AddRectToStripRgn	291	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Region.cpp	no	
+00032b50	Storm::DirectDrawCreate	49	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+00032b83	Storm::Win32Mac::DirectSoundCreate	72	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+00032bcd	Storm::FUN_00032bcd	46	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+00032bfc	Storm::IDirectSound::Construct	108	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+00032c68	Storm::IDirectSound::SndChannelCallback	527	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+00032e78	Storm::IDirectSound::Destroy	185	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+00032f3c	Storm::IDirectSound::Release	40	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+00032f64	Storm::IDirectSound::CreateSoundBuffer	312	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+000330ae	Storm::IDirectSound::GetCaps	17	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+000330c0	Storm::IDirectSound_SetCooperativeLevel	7	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+000330c8	Storm::IDirectSoundBuffer::Release	129	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+0003314e	Storm::IDirectSoundBuffer::Stop	156	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+000331ea	Storm::IDirectSoundBuffer_QueryInterface	10	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+000331f4	Storm::IDirectSoundBuffer::GetCaps	83	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+00033248	Storm::IDirectSoundBuffer::GetCurrentPosition	52	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+0003327c	Storm::IDirectSoundBuffer::GetStatus	74	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+000332c6	Storm::IDirectSoundBuffer::Lock	126	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+00033344	Storm::IDirectSoundBuffer::Play	750	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+00033632	Storm::IDirectSound::AcquireSoundChannel	124	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+000336ae	Storm::IDirectSoundBuffer::UpdatePanAndVolume	299	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+000337da	Storm::IDirectSoundBuffer_Restore	10	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+000337e4	Storm::IDirectSound::GetFreeChannelFromPool	126	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+00033862	Storm::IDirectSound::ReleaseSoundChannel	89	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+000338bc	Storm::IDirectSoundBuffer::SetCurrentPosition	16	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+000338cc	Storm::IDirectSoundBuffer::SetFormat	70	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+00033912	Storm::IDirectSoundBuffer::SetPan	73	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+0003395c	Storm::IDirectSoundBuffer::SetVolume	93	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+000339ba	Storm::IDirectSoundBuffer::Unlock	49	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+000339ec	Storm::IKsPropertySet_Release	28	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+00033a08	Storm::IKsPropertySet_QuerySupport	19	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+00033a1c	Storm::IKsPropertySet_Set	7	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no	
+00033a24	Storm::_stricmp	75	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_String.cpp	no	006841e9
+00033a6f	Storm::Win32Mac::_strnicmp	85	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_String.cpp	no	
+00033ac4	Storm::_strrev	56	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_String.cpp	no	00687860
+00033afc	Storm::Win32Mac::_strupr	64	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_String.cpp	no	
+00033b3c	Storm::Win32Mac::_strlwr	64	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_String.cpp	no	
+00033b7c	Storm::_itoa	93	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_String.cpp	no	00687605
+00033bd9	Storm::Win32Mac::_ui64toa	134	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_String.cpp	no	
+00033c5f	Storm::Win32Mac::_ultoa	75	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_String.cpp	no	
+00033caa	Storm::Source::_vsnprintf	9	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_String.cpp	no	
+00033cb3	Storm::rand	40	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_String.cpp	no	00687461
+00033cdb	Storm::FUN_00033cdb	20	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_String.cpp	no	00687454
+00033cef	Storm::Source::GetFileTypeAndCreatorForPath	683	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/unknown_appinfo.cpp	no	
+00033f9a	Storm::Source::GetApplicationInformation	387	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/unknown_appinfo.cpp	no	
+0003411f	Storm::Source::LaunchURL	744	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/unknown_appinfo.cpp	no	
+00034428	Storm::Source::GetICInstance	135	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_appinfo.cpp	no	
+000344af	Storm::Source::ReleaseICInstance	45	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_appinfo.cpp	no	
+000344dc	Storm::Win32Mac::MacResolveAliasFile	61	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_appinfo.cpp	no	
+00034519	Storm::Source::fp_fatal	61	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/unknown_appinfo.cpp	no	
+00034556	Storm::Win32Mac::GetVolumeInfoNoName	154	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/unknown_appinfo.cpp	no	
+000345f0	Storm::Win32Mac::GetCatInfoNoName	118	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_appinfo.cpp	no	
+00034666	Storm::Win32Mac::DetermineVRefNum	61	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_appinfo.cpp	no	
+000346a3	Storm::Win32Mac::UnmountVolume	68	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_appinfo.cpp	no	
+000346e7	Storm::Win32Mac::GetDirectoryID	89	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/unknown_appinfo.cpp	no	
+00034740	Storm::GetDialogItemRect	58	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_appinfo.cpp	no	
+0003477a	Storm::Win32Mac::MacCopyUserName	109	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_appinfo.cpp	no	
+000347e7	Storm::Win32Mac::MacCopyMachineName	355	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/unknown_appinfo.cpp	no	
+0003494a	Storm::Source::SaveFSSpecFromMem	1597	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/unknown_appinfo.cpp	no	
+00034f87	Storm::Source::SaveFileFromMemCreateDirs	440	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/unknown_appinfo.cpp	no	
+0003513f	Storm::Source::SaveWinPathFileFromMem	262	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/unknown_appinfo.cpp	no	
+00035246	Storm::Source::InitAppLocation	69	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_appinfo.cpp	no	
+00035290	Storm::Source::StaticInitAppLocation	31	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_appinfo.cpp	no	
+000352af	Storm::Source::GetTextState	97	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_appinfo.cpp	no	
+00035310	Storm::Source::SetTextState	65	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_appinfo.cpp	no	
+00035351	Storm::STORM_IsCDVolume	364	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/unknown_appinfo.cpp	no	
+000354bd	Storm::StormMacInit	55	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_appinfo.cpp	no	
+000354f4	Storm::Source::MyRuntimeTerminate	81	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/unknown_appinfo.cpp	no	
+00035545	Storm::Source::SSystem::StormGetInstance	23	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_appinfo.cpp	no	0041bef0
+0003555c	Storm::Dlg_DisableMenusForModal	387	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/unknown_dialog.cpp	no	
+000356df	Storm::Dlg_UpdateEditMenu	543	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/unknown_dialog.cpp	no	
+000358fe	Storm::Dlg_RestoreMenus	229	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/unknown_dialog.cpp	no	
+000359e3	Storm::Dlg_ModalDialogLoop	1258	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/unknown_dialog.cpp	no	
+00035ef1	Storm::Dlg_ModalDialog	67	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_dialog.cpp	no	
+00035f34	Storm::Dlg_HandleEditMenuCommand	247	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/unknown_dialog.cpp	no	
+0003602b	FUN_0003602b	10	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_dialog.cpp	no	
+00036035	Storm::Source::SDraw::SDrawDestroy	141	StormMac/Storm Mac/SOURCE/SDRAW_VidDriver.CPP	__FILE__	Source/StormMac/SOURCE/SDRAW_VidDriver.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SDRAW_VidDriver.cpp	no	
+000360c2	Storm::Win32Mac::PathToFSSpecCreateDirs	776	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Paths.cpp	no	
+000363ca	Storm::Win32Mac::FOpenResolveMacPath	118	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Paths.cpp	no	
+00036440	GetMemFile2Ptr	29	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_MemFile.cpp	no	
+0003645d	Storm::Win32Mac::AllocateMemFile2	291	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_MemFile.cpp	no	
+00036580	Storm::Win32Mac::FreeMemFile2	155	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_MemFile.cpp	no	
+0003661b	Storm::Win32Mac::LockMemFile2	421	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_MemFile.cpp	no	
+000367c0	Storm::Win32Mac::UnLockMemFile2	112	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_MemFile.cpp	no	
+00036830	MACCURSOR_ShowDisplayCursor	23	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036847	MACCURSOR_HideDisplayCursor	23	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+0003685e	MACDISPLAY_Init	218	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/MacDisplayDriver.cpp	no	
+00036938	MACDISPLAY_Shutdown	55	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+0003696f	FUN_0003696f	7	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036976	FUN_00036976	10	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036980	FUN_00036980	10	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+0003698a	FUN_0003698a	7	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036991	MACCURSOR_GetCursorPos	49	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+000369c2	FUN_000369c2	7	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+000369c9	FUN_000369c9	49	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+000369fa	FUN_000369fa	7	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036a01	MACCURSOR_SetCursorPos	49	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036a32	MACCURSOR_HideCursor	58	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036a6c	MACCURSOR_ShowCursor	56	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036aa4	MACCURSOR_GetShowCount	17	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036ab5	MACCURSOR_RestoreCursor	57	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036aee	MACCURSOR_SuspendCursorProcs	63	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036b2d	MACCURSOR_ResumeCursorProcs	81	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036b7e	FUN_00036b7e	7	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036b85	FUN_00036b85	7	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036b8c	FUN_00036b8c	7	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036b93	FUN_00036b93	7	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036b9a	FUN_00036b9a	7	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036ba1	FUN_00036ba1	59	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/MacDisplayDriver.cpp	no	
+00036bdc	FUN_00036bdc	10	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036be6	FUN_00036be6	7	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036bed	FUN_00036bed	7	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036bf4	MACDISPLAY_SetPaletteEntries	66	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/MacDisplayDriver.cpp	no	
+00036c36	MACDISPLAY_GetPaletteEntries	66	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/MacDisplayDriver.cpp	no	
+00036c78	FUN_00036c78	5	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036c7d	FUN_00036c7d	7	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036c84	FUN_00036c84	27	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036c9f	MACCURSOR_SetSuspendCallbacks	34	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036cc1	MACCURSOR_SetCursorProcs	43	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036cec	FUN_00036cec	7	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036cf3	FUN_00036cf3	20	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036d07	FUN_00036d07	18	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036d19	MACDISPLAY_SelectDriver	69	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/MacDisplayDriver.cpp	no	
+00036d5e	FUN_00036d5e	45	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/MacDisplayDriver.cpp	no	
+00036d8b	FUN_00036d8b	20	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036d9f	MACCURSOR_RegisterSetCursorPosProc	20	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036db3	MACCURSOR_RegisterGetCursorPosProc	20	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
 00036dc7	IterateDirectory	260	MoreFiles/IterateDirectory.c	unit	-	third-party	missing		-	
 00036ecb	IterateDirectoryLevel	198	MoreFiles/IterateDirectory.c	unit	-	third-party	missing		-	
 00036f91	FSpIterateDirectory	66	MoreFiles/IterateDirectory.c	unit	-	third-party	missing		-	
-00036fd3	Storm::Source::Accel_DeleteAcceleratorList	34	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036ff5	MACCURSOR_InitCursor	9	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
-00036ffe	MACDISPLAY_FindBestDisplayMode	507	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	missing		-	
+00036fd3	Storm::Source::Accel_DeleteAcceleratorList	34	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036ff5	MACCURSOR_InitCursor	9	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/MacDisplayDriver.cpp	no	
+00036ffe	MACDISPLAY_FindBestDisplayMode	507	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/MacDisplayDriver.cpp	no	
 000371f9	Storm::_3rdparty::zlib::adler32::adler32	628	3rdParty/zlib/?	unit	-	third-party	missing		-	0042b660
 0003746d	Storm::_3rdparty::zlib::crc32::crc32	606	3rdParty/zlib/?	unit	-	third-party	missing		-	0042dc00
 000376cb	Storm::_3rdparty::zlib::inffast::inflate_fast	1482	3rdParty/zlib/?	unit	-	third-party	missing		-	0042dca0

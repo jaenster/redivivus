@@ -30,7 +30,7 @@ uint16_t g_nFontVerdana;
 // 1.14d mac: 003f0e94
 uint16_t g_nFontTimes;
 // 1.14d mac: 003f0e98
-static StripRgn* g_pEmptyStripRgn;
+static int g_hEmptyStripRgn;
 // 1.14d mac: 003f0e9c
 HPEN g_hBlackPen;
 // 1.14d mac: 003f0ea0
@@ -112,8 +112,8 @@ static inline void UnlockDC(HDC hDC) {
 }
 
 // A region handle's data is the strip region itself.
-static inline StripRgn** LockRgn(HRGN hRgn) {
-    return (StripRgn**)Mem_HandleLock(GDI_TYPE_RGN, hRgn);
+static inline int* LockRgn(HRGN hRgn) {
+    return (int*)Mem_HandleLock(GDI_TYPE_RGN, hRgn);
 }
 
 static inline void UnlockRgn(HRGN hRgn) {
@@ -174,7 +174,7 @@ HDC GDI_NewHDC(void* hWnd) {
 // 1.14d mac: 00022da9
 HRGN CreateRectRgn(int nLeft, int nTop, int nRight, int nBottom) {
     HRGN hRgn = Mem_HandleAlloc(GDI_TYPE_RGN, 4, NULL);
-    StripRgn** ppRgn = LockRgn(hRgn);
+    int* ppRgn = LockRgn(hRgn);
     if (ppRgn != NULL) {
         *ppRgn = NewEmptyStripRgn();
     }
@@ -294,7 +294,7 @@ BOOL DeleteObject(HGDIOBJ hObject) {
             break;
         }
         case OBJ_REGION: {
-            StripRgn* pRgn = *LockRgn(hObject);
+            int pRgn = *LockRgn(hObject);
             UnlockRgn(hObject);
             bResult = Mem_HandleFree(GDI_TYPE_RGN, hObject);
             if (bResult != 0 && pRgn != NULL) {
@@ -384,7 +384,7 @@ void GDI_InitStockObjects(void) {
     GDI_GetFontNumByName((const unsigned char*)"\x06" "Geneva", &g_nFontArial);
     GDI_GetFontNumByName((const unsigned char*)"\x06" "Geneva", &g_nFontVerdana);
     GDI_GetFontNumByName((const unsigned char*)"\x05" "Times", &g_nFontTimes);
-    g_pEmptyStripRgn = NewEmptyStripRgn();
+    g_hEmptyStripRgn = NewEmptyStripRgn();
     Win32MacStockInit* pInit = (Win32MacStockInit*)aInit;
 
     pInit->bStock = 0;
@@ -540,9 +540,9 @@ void ShutdownWin32GDI(void) {
         GDI_DeleteFont(g_hStockFont);
         g_hStockFont = NULL;
     }
-    if (g_pEmptyStripRgn != NULL) {
-        DisposeStripRgn(g_pEmptyStripRgn);
-        g_pEmptyStripRgn = NULL;
+    if (g_hEmptyStripRgn != NULL) {
+        DisposeStripRgn(g_hEmptyStripRgn);
+        g_hEmptyStripRgn = NULL;
     }
     if (g_hBlackPen != NULL) {
         *(LONG*)Mem_HandleLock(GDI_TYPE_PEN, g_hBlackPen) = 0;
@@ -719,9 +719,9 @@ int CombineRgn(HRGN hrgnDest, HRGN hrgnSrc1, HRGN hrgnSrc2, int nMode) {
         if (hrgnDest == NULL || hrgnSrc1 == NULL || hrgnSrc2 == NULL) {
             return 0;
         }
-        StripRgn** ppDest = LockRgn(hrgnDest);
-        StripRgn** ppSrc1 = LockRgn(hrgnSrc1);
-        StripRgn** ppSrc2 = LockRgn(hrgnSrc2);
+        int* ppDest = LockRgn(hrgnDest);
+        int* ppSrc1 = LockRgn(hrgnSrc1);
+        int* ppSrc2 = LockRgn(hrgnSrc2);
         if (nCombineMode == 1) {
             Rgn_IntersectStripRgn(*ppDest, *ppSrc1, *ppSrc2);
         } else if (nCombineMode == 2) {
@@ -739,8 +739,8 @@ int CombineRgn(HRGN hrgnDest, HRGN hrgnSrc1, HRGN hrgnSrc2, int nMode) {
         if (hrgnDest == NULL || hrgnSrc1 == NULL || hrgnDest == hrgnSrc1) {
             return 0;
         }
-        StripRgn** ppDest = LockRgn(hrgnDest);
-        StripRgn** ppSrc1 = LockRgn(hrgnSrc1);
+        int* ppDest = LockRgn(hrgnDest);
+        int* ppSrc1 = LockRgn(hrgnSrc1);
         CopyStripRgn(*ppDest, *ppSrc1);
         bEmpty = IsStripRgnEmpty(*ppDest);
         UnlockRgn(hrgnSrc1);
@@ -759,7 +759,7 @@ int CombineRgn(HRGN hrgnDest, HRGN hrgnSrc1, HRGN hrgnSrc2, int nMode) {
 static BOOL GDI_IsRgnEmpty(HRGN hRgn) {
     bool bEmpty = true;
     if (hRgn != NULL) {
-        StripRgn** ppRgn = LockRgn(hRgn);
+        int* ppRgn = LockRgn(hRgn);
         bEmpty = IsStripRgnEmpty(*ppRgn);
         UnlockRgn(hRgn);
     }
@@ -771,7 +771,7 @@ static BOOL GDI_IsRgnEmpty(HRGN hRgn) {
 BOOL SetRectRgn(HRGN hRgn, int nLeft, int nTop, int nRight, int nBottom) {
     BOOL bResult = 0;
     if (hRgn != NULL) {
-        StripRgn** ppRgn = LockRgn(hRgn);
+        int* ppRgn = LockRgn(hRgn);
         if (ppRgn != NULL) {
             RECT rcRect;
             rcRect.left = nLeft;
@@ -779,7 +779,7 @@ BOOL SetRectRgn(HRGN hRgn, int nLeft, int nTop, int nRight, int nBottom) {
             rcRect.right = nRight;
             rcRect.bottom = nBottom;
             if (!IsRectEmpty(&rcRect)) {
-                Rgn_SetStripRgnRect(*ppRgn, &rcRect);
+                Rgn_SetStripRgnRect(*ppRgn, (Win32MacRect*)&rcRect);
             } else {
                 Rgn_SetEmptyStripRgn(*ppRgn);
             }
@@ -811,9 +811,9 @@ int GetRgnBox(HRGN hRgn, RECT* pRect) {
     int nRegionType = 0;
     if (hRgn != NULL) {
         RECT rcBounds;
-        StripRgn** ppRgn = LockRgn(hRgn);
+        int* ppRgn = LockRgn(hRgn);
         if (!IsStripRgnEmpty(*ppRgn)) {
-            GetStripRgnBoundingRect(*ppRgn, &rcBounds);
+            GetStripRgnBoundingRect(*ppRgn, (Win32MacRect*)&rcBounds);
             int nRectCount = CountStripRgnRects(*ppRgn);
             nRegionType = (1 < nRectCount) | 2;
         } else {
@@ -1040,7 +1040,7 @@ DWORD SetBkColor(HDC hDC, DWORD crColor) {
 UINT GetRegionData(HRGN hRgn, UINT nBufSize, Win32MacRgnData* pRgnData) {
     UINT nResult = 0;
     if (hRgn != NULL) {
-        StripRgn** ppRgn = LockRgn(hRgn);
+        int* ppRgn = LockRgn(hRgn);
         nResult = 0;
         if (ppRgn != NULL) {
             int nRectCount = CountStripRgnRects(*ppRgn);
@@ -1053,8 +1053,8 @@ UINT GetRegionData(HRGN hRgn, UINT nBufSize, Win32MacRgnData* pRgnData) {
                 if (nRectCount < 1) {
                     SetRect(&pRgnData->rcBound, 0, 0, 0, 0);
                 } else {
-                    GetStripRgnBoundingRect(*ppRgn, &pRgnData->rcBound);
-                    GetStripRgnRects(*ppRgn, pRgnData->aRects, nRectCount);
+                    GetStripRgnBoundingRect(*ppRgn, (Win32MacRect*)&pRgnData->rcBound);
+                    GetStripRgnRects(*ppRgn, (Win32MacRect*)pRgnData->aRects, nRectCount);
                 }
                 nResult = 1;
             }

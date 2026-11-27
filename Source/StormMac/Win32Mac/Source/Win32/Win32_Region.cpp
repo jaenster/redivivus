@@ -42,7 +42,6 @@ static int s_hScratchRgn;
 
 static void Rgn_ResizeStripRgn(int hRgn, int nCapacity);
 static void Rgn_CompactStripRgn(int hRgn);
-static void Rgn_SetEmptyStripRgn(int hRgn);
 static void Rgn_AddRectToStripRgn(int hRgn, const StripRect* pRect);
 static void Rgn_CombineRgns(int hDest, int hSrc1, int hSrc2, pfnStripRgnBandProc pfnBandProc);
 static void Rgn_UnionBandProc(int, int, int, StripRect*, StripRect*, StripRect*, StripRect*);
@@ -245,7 +244,7 @@ static void Rgn_CompactStripRgn(int hRgn) {
 }
 
 // 1.14d mac: 00032060
-static void Rgn_SetEmptyStripRgn(int hRgn) {
+void Rgn_SetEmptyStripRgn(int hRgn) {
     if (hRgn != 0) {
         StripRgn* pRgn = ((StripRgn**)*s_hRegions)[hRgn - 1];
         memset(&pRgn->tBounds, 0, sizeof(StripRect));

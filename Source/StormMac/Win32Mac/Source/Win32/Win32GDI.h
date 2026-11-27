@@ -151,32 +151,8 @@ BOOL OffsetRect(RECT* pRect, int nDX, int nDY);
 // 1.14d mac: 0002b4ab
 BOOL IsRectEmpty(RECT* pRect);
 
-// The strip-region engine (a region is a handle to a pointer to one).
-struct StripRgn;
-// 1.14d mac: 00031b0d
-StripRgn* NewEmptyStripRgn(void);
-// 1.14d mac: 00031ce9
-void Rgn_SetStripRgnRect(StripRgn* pRgn, const RECT* pRect);
-// 1.14d mac: 00031dca
-void DisposeStripRgn(StripRgn* pRgn);
-// 1.14d mac: 00031e16
-int CountStripRgnRects(StripRgn* pRgn);
-// 1.14d mac: 00031e3b
-void GetStripRgnRects(StripRgn* pRgn, RECT* pRects, int nCount);
-// 1.14d mac: 00031ed2
-void GetStripRgnBoundingRect(StripRgn* pRgn, RECT* pRect);
-// 1.14d mac: 00031f17
-bool IsStripRgnEmpty(StripRgn* pRgn);
 // 1.14d mac: 00032060
-void Rgn_SetEmptyStripRgn(StripRgn* pRgn);
-// 1.14d mac: 000320a6
-void CopyStripRgn(StripRgn* pDest, StripRgn* pSrc);
-// 1.14d mac: 0003215e
-void Rgn_UnionStripRgn(StripRgn* pDest, StripRgn* pSrc1, StripRgn* pSrc2);
-// 1.14d mac: 00032754
-void Rgn_IntersectStripRgn(StripRgn* pDest, StripRgn* pSrc1, StripRgn* pSrc2);
-// 1.14d mac: 00032887
-void Rgn_SubtractStripRgn(StripRgn* pDest, StripRgn* pSrc1, StripRgn* pSrc2);
+void Rgn_SetEmptyStripRgn(int hRgn);
 
 // 1.14d mac: 0002fbf8
 void Wnd_CalculateVisibleRgn(void* hWnd, HRGN hRgn, int bClient);
