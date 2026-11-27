@@ -7965,6 +7965,29 @@ BOOL __stdcall MAINMENU_OnPressReturnToMainMenu(D2ControlMsg * pControlMsg) {
     return 1;
 }
 
+#if D2_OS_MAC
+// 1.14d mac: 002c1dd4
+// The Mac keeps no wait screen here: a full volume goes straight to the popup, otherwise the
+// terms of service follow. The save path is a Mac path token, so it is not cut at a backslash.
+BOOL __stdcall UIMENU_AndOneMorePleaseWait(D2ControlMsg * pControlMsg) {
+    char szSavePath[1024];
+    MAINMENU_SaveAccountAndPasswordToINI(&gpBnetAccountEditBox->sControl, &gpBnetPasswordEditBox->sControl);
+    Fog::Source::SFile::GetAndCreateSavePath(szSavePath, 0x400);
+    uint64_t nFreeBytesAvailable = 0;
+    uint64_t nTotalBytes = 0;
+    uint64_t nTotalFreeBytes = 0;
+    GetDiskFreeSpaceEx(szSavePath, &nFreeBytesAvailable, &nTotalBytes, &nTotalFreeBytes);
+    BOOL nTosResult;
+    if (nTotalFreeBytes < 5000) {
+      uint16_t* wszText = D2Lang::StrTable::strtable::GetLocaleString(0x141d);
+      MAINMENU_ShowPopupDialog(wszText, MAINMENU_CloseAndLaunchCharSelect, 1);
+      nTosResult = 1;
+    } else {
+      nTosResult = UIMENU_ShowTermsOfService();
+    }
+    return nTosResult;
+}
+#else
 // BNet login flow continuation. Checks gbPasswordChangeInProgress flag to determine if showing password change or normal login. Creates UI forms, validates credentials, dispatches to launcher subsystem.
 BOOL __stdcall UIMENU_AndOneMorePleaseWait(D2ControlMsg * pControlMsg) {
     D2ControlStrc* pBgForm;
@@ -7986,14 +8009,6 @@ BOOL __stdcall UIMENU_AndOneMorePleaseWait(D2ControlMsg * pControlMsg) {
       nCharIdx++;
     } while (nCharIdx < 0x400);
 
-#if D2_OS_MAC
-    // 1.14d mac: 002c1dd4 asks for the free bytes of the volume
-    uint64_t nFreeBytesAvailable = 0;
-    uint64_t nTotalBytes = 0;
-    uint64_t nTotalFreeBytes = 0;
-    GetDiskFreeSpaceEx(szSavePath, &nFreeBytesAvailable, &nTotalBytes, &nTotalFreeBytes);
-    if (nTotalFreeBytes >= 5000) {
-#else
     DWORD dwSectorsPerCluster;
     dwSectorsPerCluster = 0;
     DWORD dwBytesPerSector;
@@ -8004,7 +8019,6 @@ BOOL __stdcall UIMENU_AndOneMorePleaseWait(D2ControlMsg * pControlMsg) {
     dwTotalClusters = 0;
     GetDiskFreeSpaceA(szSavePath, &dwSectorsPerCluster, &dwBytesPerSector, &dwFreeClusters, &dwTotalClusters);
     if (dwFreeClusters * dwBytesPerSector * dwSectorsPerCluster >= 5000) {
-#endif
       nTosResult = UIMENU_ShowTermsOfService();
       return nTosResult;
     }
@@ -8066,6 +8080,7 @@ BOOL __stdcall UIMENU_AndOneMorePleaseWait(D2ControlMsg * pControlMsg) {
     Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x610);
     exit(-1);
 }
+#endif
 
 BOOL __stdcall MAINMENUS_OnPressReturnToMainMenu_ForCreditsAndMainMenuAgain(D2ControlMsg * pControlMsg) {
     UIMENU_MainMenu();
@@ -8947,6 +8962,14 @@ BOOL __stdcall MAINMENU_OnPressCreateCharacterOk(D2ControlStrc * pControl) {
     }
 
     Fog::Source::SFile::GetAndCreateSavePath(szSavePath, 0x400);
+#if D2_OS_MAC
+    // 1.14d mac: 002c2af6 tests the first (available) figure and does not cut the Mac path token at a backslash
+    uint64_t nFreeBytesAvailable = 0;
+    uint64_t nTotalBytes = 0;
+    uint64_t nTotalFreeBytes = 0;
+    GetDiskFreeSpaceEx(szSavePath, &nFreeBytesAvailable, &nTotalBytes, &nTotalFreeBytes);
+    if (nFreeBytesAvailable < 5000) {
+#else
     uint32_t nIndex = 0;
     do {
       if (szSavePath[nIndex] == '\\') {
@@ -8957,13 +8980,6 @@ BOOL __stdcall MAINMENU_OnPressCreateCharacterOk(D2ControlStrc * pControl) {
       nIndex++;
     } while (nIndex < 0x400);
 
-#if D2_OS_MAC
-    uint64_t nFreeBytesAvailable = 0;
-    uint64_t nTotalBytes = 0;
-    uint64_t nTotalFreeBytes = 0;
-    GetDiskFreeSpaceEx(szSavePath, &nFreeBytesAvailable, &nTotalBytes, &nTotalFreeBytes);
-    if (nTotalFreeBytes < 5000) {
-#else
     DWORD dwSectorsPerCluster = 0;
     DWORD dwFreeClusters = 0;
     DWORD dwBytesPerSector = 0;

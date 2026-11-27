@@ -385,8 +385,13 @@ BOOL __stdcall D2GFX_Initialize(HINSTANCE hInstance, WNDPROC pfWndProc, eD2Rende
     pRendererFns->nfpSetOption(8, (uint32_t)(bWindowed == 1));
     bIsExpansion = RENDERER_CurrentRenderedFunctions->nfpInitialize(hInstance);
     if (!bIsExpansion) {
+#if D2_OS_MAC
+      // 1.14d mac: 002b4975 reports nothing when the first initialise fails.
+      return 0;
+#else
       Fog::Src::ErrorManager::FOG_ErrorHandler(ERROR_RegistryError, nullptr, 0, "%s", s_Error_1__Diablo_II_is_unable_to_p_0072daf0);
       return 0;
+#endif
     }
     if ((int)eRendererMode < 4) {
       D2GFXRenderedData.bPerspectiveCapable = 0;
@@ -422,6 +427,8 @@ BOOL __stdcall D2GFX_ToggleLowQuality() {
 }
 
 #if D2_OS_MAC
+// 1.14d mac: the Mac binary has no standalone cursor helpers. Their bodies are inlined into
+// D2GFX_CreateWindow 002b576b, D2GFX_DestroyWindow 002b5a1c and UpdateOSCursorVisibilty 002b5bc7.
 void __stdcall HideOSCursor() {
     if (!IsOSCursorHidden) {
       while (ShowCursor(0) >= 0) {
@@ -693,6 +700,7 @@ BOOL __stdcall D2GFX_CreateWindow(BOOL bWindowed, int32_t nResolution) {
 }
 #endif
 
+// 1.14d mac: 002b5a1c
 BOOL __stdcall D2GFX_DestroyWindow() {
     BOOL bSuccess = TRUE;
     if (!RENDERER_CurrentRenderedFunctions) {
@@ -744,16 +752,18 @@ int32_t __stdcall D2GFX_GetScreenSize(int * pWidth, int * pHeight) {
     return nResult;
 }
 
-void __stdcall UpdateOSCursorVisibilty(int32_t shouldHide) {
 #if D2_OS_MAC
+// 1.14d mac: 002b5bc7
+void __stdcall UpdateOSCursorVisibilty(int32_t shouldHide) {
     if (shouldHide == 0) {
       ShowOSCursor();
       return;
     }
 
     HideOSCursor();
-    return;
-#endif
+}
+#else
+void __stdcall UpdateOSCursorVisibilty(int32_t shouldHide) {
     if (!(bD2GFX_Windowed && eRendererMode != RENDERER_Glide && eRendererMode != RENDERED_Unused5 && eRendererMode != RENDERER_Direct3D)) {
       return;
     }
@@ -764,6 +774,7 @@ void __stdcall UpdateOSCursorVisibilty(int32_t shouldHide) {
 
     ShowOSCursor();
 }
+#endif
 
 uint32_t __stdcall IsFullscreen() {
     uint32_t bIsFullscreen = 0;

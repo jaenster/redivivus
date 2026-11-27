@@ -1331,6 +1331,7 @@ BOOL __stdcall MessagePump(pfnFramePump pfnFrameCallback)
     return 0;
 }
 
+// 1.14d mac: 0004b5ef (no TrackMouseEvent)
 void __stdcall MOUSE_CaptureMousePosition(D2UIMouseMsgStrc * phWnd) {
     uint32_t Y;
     bool bXOutOfRange;

@@ -2507,7 +2507,7 @@ void __stdcall CHATDLG_ProcessPendingMessages() {
 }
 
 #if D2_OS_MAC
-// The Mac build has this inline in CHATDLG_DisplayTimestampedMessage (002d1dc6).
+// 1.14d mac: 002d1dc6 (inline in CHATDLG_DisplayTimestampedMessage; no standalone function)
 static void __stdcall CHATDLG_FormatFileTimeToDate(FILETIME * pFileTime, int32_t nBufSize, char * szText) {
     uint16_t wszWideBuf[256];
     SYSTEMTIME systemTime;
@@ -2549,7 +2549,12 @@ int __fastcall CHATDLG_DisplayTimestampedMessage(uint32_t nUnixTime, char * pszM
       exit(-1);
     }
     if (nUnixTime) {
+#if D2_OS_MAC
+      // 1.14d mac: 002d1dc6 builds the 64-bit FILETIME directly
+      utcFileTime = d2_bits_as<FILETIME>((uint64_t)nUnixTime * 10000000 + 0x19db1ded53e8000ULL);
+#else
       utcFileTime = d2_bits_as<FILETIME>(_allmul(nUnixTime + 0xb6109100, 0x49ef6eff < nUnixTime ? 3 : 2, 10000000, 0));
+#endif
       /* LPFILETIME lpLocalFileTime for FileTimeToLocalFileTime */ /* FILETIME * lpFileTime for FileTimeToLocalFileTime */ FileTimeToLocalFileTime(&utcFileTime, &localFileTime);
       CHATDLG_FormatFileTimeToDate(&localFileTime, 0x40, szDateStr);
       StoreData(0, 0, szDateStr);
