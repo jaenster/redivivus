@@ -348,14 +348,6 @@ BOOL __stdcall ListCheck(D2ControlMsg * pList) {
 
 // 1.14d mac: 00049d87 D2Win::Src::D2WinList::Key
 BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
-    D2WinListEntry* pDVar2;
-    int nKeyCode;
-    D2WinListEntry* pCurrentEntry;
-    BOOL bCallbackResult;
-    D2WinListEntry* pDVar3;
-    int nTopIndex;
-    D2WinListEntry* pPrevEntry;
-    fpListEntryCallback pfnOnActivate;
     ::D2WinList* pList = (::D2WinList*)pControlMsg->pControl;
     if (pList->sControl.neD2FormType != FORM_List) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 399);
@@ -365,99 +357,78 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
       return 0;
     }
 
-    WPARAM WVar1 = pControlMsg->wParam;
-    switch (WVar1) {
-      case 0xd:
-        {
-          D2WinMain::D2WINMAIN_SetFocusedControl(nullptr);
-          pfnOnActivate = pList->sEntriesControl.pSelectedEntry->pfnOnActivate;
-          if (pfnOnActivate) {
-            bCallbackResult = (*pfnOnActivate)(pControlMsg);
-            return bCallbackResult;
-          }
-
-          break;
+    switch (pControlMsg->wParam) {
+      case 0xd: {
+        D2WinMain::D2WINMAIN_SetFocusedControl(nullptr);
+        fpListEntryCallback pfnOnActivate = pList->sEntriesControl.pSelectedEntry->pfnOnActivate;
+        if (pfnOnActivate) {
+          return pfnOnActivate(pControlMsg);
         }
-      case 0x26:
-        {
-          pDVar3 = pList->sEntriesControl.pFirstEntry;
-          pPrevEntry = pList->sEntriesControl.pSelectedEntry;
-          pDVar2 = pDVar3->pNext;
-          pCurrentEntry = pDVar3;
-          if (pDVar3 == pPrevEntry) {
-            for (; pDVar2; pDVar2 = pDVar2->pNext) {
-              pCurrentEntry = pDVar2;
-            }
-          } else {
-            for (; pDVar2 != pPrevEntry; pDVar2 = pDVar2->pNext) {
-              pCurrentEntry = pDVar2;
-            }
+        break;
+      }
+      case 0x26: {
+        D2WinListEntry* pPrevEntry = pList->sEntriesControl.pFirstEntry;
+        D2WinListEntry* pSelectedEntry = pList->sEntriesControl.pSelectedEntry;
+        if (pList->sEntriesControl.pFirstEntry == pSelectedEntry) {
+          while (pPrevEntry->pNext) {
+            pPrevEntry = pPrevEntry->pNext;
           }
-
-          pList->sEntriesControl.pSelectedEntry = pCurrentEntry;
-          pList->sEntriesControl.nSelectedIndex = 0;
-          for (; pDVar3 != pCurrentEntry; pDVar3 = pDVar3->pNext) {
-            pList->sEntriesControl.nSelectedIndex++;
+        } else {
+          while (pPrevEntry->pNext != pSelectedEntry) {
+            pPrevEntry = pPrevEntry->pNext;
           }
+        }
 
-          nKeyCode = pList->sEntriesControl.nSelectedIndex;
-          nTopIndex = pList->sEntriesControl.nTopIndex;
-          if (nTopIndex > nKeyCode) {
-            pList->sEntriesControl.nTopIndex = nKeyCode;
-            D2WinMain::D2WINMAIN_SetFocusedControl(nullptr);
-            return 1;
-          }
+        pList->sEntriesControl.pSelectedEntry = pPrevEntry;
+        pList->sEntriesControl.nSelectedIndex = 0;
+        for (D2WinListEntry* pEntry = pList->sEntriesControl.pFirstEntry; pEntry != pPrevEntry; pEntry = pEntry->pNext) {
+          pList->sEntriesControl.nSelectedIndex++;
+        }
 
-          nKeyCode -= nTopIndex;
-          while (nKeyCode > pList->sEntriesControl.nMaxVisibleIndex) {
+        int nSelectedIndex = pList->sEntriesControl.nSelectedIndex;
+        int nTopIndex = pList->sEntriesControl.nTopIndex;
+        if (nTopIndex > nSelectedIndex) {
+          pList->sEntriesControl.nTopIndex = nSelectedIndex;
+        } else {
+          for (int nRow = nSelectedIndex - nTopIndex; nRow > pList->sEntriesControl.nMaxVisibleIndex; nRow--) {
             pList->sEntriesControl.nTopIndex++;
-            nKeyCode--;
           }
-
-          D2WinMain::D2WINMAIN_SetFocusedControl(nullptr);
-          return 1;
         }
-      case 0x28:
-        {
-          pDVar3 = pList->sEntriesControl.pSelectedEntry->pNext;
-          if (!pDVar3) {
-            pDVar3 = pList->sEntriesControl.pFirstEntry;
-          }
 
-          pPrevEntry = pList->sEntriesControl.pFirstEntry;
-          pList->sEntriesControl.pSelectedEntry = pDVar3;
-          pList->sEntriesControl.nSelectedIndex = 0;
-          for (; pPrevEntry != pDVar3; pPrevEntry = pPrevEntry->pNext) {
-            pList->sEntriesControl.nSelectedIndex++;
-          }
+        D2WinMain::D2WINMAIN_SetFocusedControl(nullptr);
+        return 1;
+      }
+      case 0x28: {
+        D2WinListEntry* pNextEntry = pList->sEntriesControl.pSelectedEntry->pNext;
+        if (!pNextEntry) {
+          pNextEntry = pList->sEntriesControl.pFirstEntry;
+        }
 
-          nKeyCode = pList->sEntriesControl.nSelectedIndex;
-          nTopIndex = pList->sEntriesControl.nTopIndex;
-          if (nTopIndex > nKeyCode) {
-            pList->sEntriesControl.nTopIndex = nKeyCode;
-            D2WinMain::D2WINMAIN_SetFocusedControl(nullptr);
-            return 1;
-          }
+        pList->sEntriesControl.pSelectedEntry = pNextEntry;
+        pList->sEntriesControl.nSelectedIndex = 0;
+        for (D2WinListEntry* pEntry = pList->sEntriesControl.pFirstEntry; pEntry != pNextEntry; pEntry = pEntry->pNext) {
+          pList->sEntriesControl.nSelectedIndex++;
+        }
 
-          nKeyCode -= nTopIndex;
-          while (nKeyCode > pList->sEntriesControl.nMaxVisibleIndex) {
+        int nSelectedIndex = pList->sEntriesControl.nSelectedIndex;
+        int nTopIndex = pList->sEntriesControl.nTopIndex;
+        if (nTopIndex > nSelectedIndex) {
+          pList->sEntriesControl.nTopIndex = nSelectedIndex;
+        } else {
+          for (int nRow = nSelectedIndex - nTopIndex; nRow > pList->sEntriesControl.nMaxVisibleIndex; nRow--) {
             pList->sEntriesControl.nTopIndex++;
-            nKeyCode--;
           }
-
-          D2WinMain::D2WINMAIN_SetFocusedControl(nullptr);
-          return 1;
         }
+
+        D2WinMain::D2WINMAIN_SetFocusedControl(nullptr);
+        return 1;
+      }
     }
 
-    pDVar3 = pList->sEntriesControl.pFirstEntry;
-    while (pDVar3) {
-      if ((uint32_t)(uint16_t)pDVar3->nUserData == pControlMsg->wParam && pDVar3->pfnOnActivate) {
-        bCallbackResult = pDVar3->pfnOnActivate(pControlMsg);
-        return bCallbackResult;
+    for (D2WinListEntry* pEntry = pList->sEntriesControl.pFirstEntry; pEntry; pEntry = pEntry->pNext) {
+      if ((uint16_t)pEntry->nUserData == pControlMsg->wParam && pEntry->pfnOnActivate) {
+        return pEntry->pfnOnActivate(pControlMsg);
       }
-
-      pDVar3 = pDVar3->pNext;
     }
 
     return 0;
