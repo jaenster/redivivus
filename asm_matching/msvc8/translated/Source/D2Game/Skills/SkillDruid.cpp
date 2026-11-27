@@ -56,7 +56,8 @@ BOOL __fastcall Skills_SrvDoFunc_114_SummonRaven(::SGAMEDATA * pGame, D2UnitStrc
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    D2MonsterCastPetStrc sPetCast = {0};
+    D2MonsterCastPetStrc sPetCast;
+    memset(&sPetCast, 0, sizeof(sPetCast));
     sPetCast.classId = nClassId;
     sPetCast.nFlags = 0;
     sPetCast.nFunctionId = 0;
@@ -102,7 +103,8 @@ BOOL __fastcall Skills_SrvDoFunc_115_SummonPoisonCreeper(::SGAMEDATA * pGame, D2
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    D2MonsterCastPetStrc sPetCast = {0};
+    D2MonsterCastPetStrc sPetCast;
+    memset(&sPetCast, 0, sizeof(sPetCast));
     sPetCast.pPlayer = pUnit;
     sPetCast.classId = nClassId;
     sPetCast.nFlags = 0;
@@ -469,7 +471,8 @@ BOOL __fastcall Skills_SrvDoFunc_119_SummonDireWolf(::SGAMEDATA * pGame, D2UnitS
       return 0;
     }
 
-    D2MonsterCastPetStrc sPetCast = {0};
+    D2MonsterCastPetStrc sPetCast;
+    memset(&sPetCast, 0, sizeof(sPetCast));
     sPetCast.classId = nClassId;
     sPetCast.nFlags = 0;
     sPetCast.nFunctionId = 0;
@@ -514,7 +517,8 @@ BOOL __fastcall SKILLDRUID_CreateSummon(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    D2MonsterCastPetStrc sPetCast = {0};
+    D2MonsterCastPetStrc sPetCast;
+    memset(&sPetCast, 0, sizeof(sPetCast));
     sPetCast.classId = nClassId;
     sPetCast.nFlags = 0;
     sPetCast.nFunctionId = 0;
