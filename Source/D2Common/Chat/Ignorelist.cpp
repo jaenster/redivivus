@@ -2128,6 +2128,7 @@ BOOL __thiscall AddAccountMapping(::IgnoreList * pThis, char * szRaw, int32_t nR
 
 
 // @sourcefile .\Chat\Ignorelist.cpp
+// 1.14d mac: 0019784c
 void __stdcall MISC_InitIgnorelist() {
     uint32_t nSehState = -1; // steer-ok: generated form, kept as emitted
     pfnEHHandlerRoutine pExceptionLabel = __GSHandlerCheck_EH_6ca4b1; // steer-ok: generated form, kept as emitted
