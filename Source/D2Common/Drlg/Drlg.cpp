@@ -2382,42 +2382,16 @@ int __fastcall DRLGPLACE_ACT4_ValidatePlacementList2(D2DrlgLevelPlacementStrc * 
 // For outdoor (eDrlgType==3) Act 1 wilderness levels, walks the gaWildernessLevelSeedOffsets table and OR-writes orientation/connectivity flags into the level's pDrlgLevelData. Each 30-entry table record encodes five conditional rules matching level ID, excluded IDs, and two direction-table values; matching rules contribute a flag bit to the level data.
 // 1.14d mac: 0015b8f1
 void __fastcall ACT1_fpLevelDataFn2_A(D2DrlgLevelStrc * pLevel, int nNodeOffset, int * nDirTableBase) {
-    eD2LevelId eLevelId;
     if (pLevel->eDrlgType != 3) {
       return;
     }
 
-    D2DrlgLevelDataWildernessLevel* pDVar1 = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
-    int* pWildernessEntry = gaWildernessLevelSeedOffsets;
-    do {
-      eD2LevelId eCurLevelId;
-      eCurLevelId = pLevel->eD2LevelId;
-      if ((eCurLevelId == *pWildernessEntry || *pWildernessEntry == LEVEL_None) && eCurLevelId != pWildernessEntry[1] && eCurLevelId != pWildernessEntry[2] && nDirTableBase[nNodeOffset] == pWildernessEntry[3] && nDirTableBase[nNodeOffset + 1] == pWildernessEntry[4]) {
-        pDVar1->dwFlags |= pWildernessEntry[5];
+    D2DrlgLevelDataWildernessLevel* pOutdoorsData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
+    for (int i = 0; i < 15; i++) {
+      if ((pLevel->eD2LevelId == gaWildernessLevelSeedOffsets[i * 6] || gaWildernessLevelSeedOffsets[i * 6] == LEVEL_None) && pLevel->eD2LevelId != gaWildernessLevelSeedOffsets[i * 6 + 1] && pLevel->eD2LevelId != gaWildernessLevelSeedOffsets[i * 6 + 2] && nDirTableBase[nNodeOffset] == gaWildernessLevelSeedOffsets[i * 6 + 3] && nDirTableBase[nNodeOffset + 1] == gaWildernessLevelSeedOffsets[i * 6 + 4]) {
+        pOutdoorsData->dwFlags |= gaWildernessLevelSeedOffsets[i * 6 + 5];
       }
-
-      eLevelId = pLevel->eD2LevelId;
-      if ((eLevelId == pWildernessEntry[6] || pWildernessEntry[6] == LEVEL_None) && eLevelId != pWildernessEntry[7] && eLevelId != pWildernessEntry[8] && nDirTableBase[nNodeOffset] == pWildernessEntry[9] && nDirTableBase[nNodeOffset + 1] == pWildernessEntry[10]) {
-        pDVar1->dwFlags |= pWildernessEntry[0xb];
-      }
-
-      eLevelId = pLevel->eD2LevelId;
-      if ((eLevelId == pWildernessEntry[0xc] || pWildernessEntry[0xc] == LEVEL_None) && eLevelId != pWildernessEntry[0xd] && eLevelId != pWildernessEntry[0xe] && nDirTableBase[nNodeOffset] == pWildernessEntry[0xf] && nDirTableBase[nNodeOffset + 1] == pWildernessEntry[0x10]) {
-        pDVar1->dwFlags |= pWildernessEntry[0x11];
-      }
-
-      eLevelId = pLevel->eD2LevelId;
-      if ((eLevelId == pWildernessEntry[0x12] || pWildernessEntry[0x12] == LEVEL_None) && eLevelId != pWildernessEntry[0x13] && eLevelId != pWildernessEntry[0x14] && nDirTableBase[nNodeOffset] == pWildernessEntry[0x15] && nDirTableBase[nNodeOffset + 1] == pWildernessEntry[0x16]) {
-        pDVar1->dwFlags |= pWildernessEntry[0x17];
-      }
-
-      eLevelId = pLevel->eD2LevelId;
-      if ((eLevelId == pWildernessEntry[0x18] || pWildernessEntry[0x18] == LEVEL_None) && eLevelId != pWildernessEntry[0x19] && eLevelId != pWildernessEntry[0x1a] && nDirTableBase[nNodeOffset] == pWildernessEntry[0x1b] && nDirTableBase[nNodeOffset + 1] == pWildernessEntry[0x1c]) {
-        pDVar1->dwFlags |= pWildernessEntry[0x1d];
-      }
-
-      pWildernessEntry += 0x1e;
-    } while ((intptr_t)pWildernessEntry < (intptr_t)((char*)&gaWildernessLevelSeedOffsets + 360));
+    }
 }
 
 void __fastcall DRLGGRID_OrFlagOnCellList(D2DrlgGridStrc * nGridPtr, D2DrlgVertexStrc * pnCellNode, int32_t nFlag) {
