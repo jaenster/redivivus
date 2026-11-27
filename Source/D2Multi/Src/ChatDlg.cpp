@@ -77,6 +77,11 @@ static uint32_t gbLadderExpansionEnabled = 0x1; D2_STATIC_GUARD(gbLadderExpansio
 int gnChatTabCompletionIndex = -0x1; D2_GLOBAL_GUARD(gnChatTabCompletionIndex, "gnChatTabCompletionIndex");
 static int gnLadderBoardSelectedRank = -0x1; D2_STATIC_GUARD(gnLadderBoardSelectedRank, "gnLadderBoardSelectedRank");
 static uint32_t gnLadderRequestedCharIndex = -0x1; D2_STATIC_GUARD(gnLadderRequestedCharIndex, "gnLadderRequestedCharIndex");
+#if D2_OS_MAC
+// MacShell/GameSetup.cpp: text in a Mac script to UTF-16.
+void MAC_ConvertTextToUnicode(const char* pSrc, char* wszDest, int nSrcLength, int nDestSize, int nScript);
+#endif
+
 namespace D2Multi::OOGUtilities {
 int32_t gaMultiFormFontParamsFont4[2] = { 0x4, 0x0 }; D2_GLOBAL_GUARD(gaMultiFormFontParamsFont4, "D2Multi::OOGUtilities::gaMultiFormFontParamsFont4");
 } // namespace D2Multi::OOGUtilities
@@ -2501,6 +2506,19 @@ void __stdcall CHATDLG_ProcessPendingMessages() {
     }
 }
 
+#if D2_OS_MAC
+// The Mac build has this inline in CHATDLG_DisplayTimestampedMessage (002d1dc6).
+static void __stdcall CHATDLG_FormatFileTimeToDate(FILETIME * pFileTime, int32_t nBufSize, char * szText) {
+    uint16_t wszWideBuf[256];
+    SYSTEMTIME systemTime;
+    memset(wszWideBuf, 0, sizeof(wszWideBuf));
+    FileTimeToSystemTime(pFileTime, &systemTime);
+    GetDateFormat(0x400, 2, &systemTime, (LPCSTR)0x0, szText, nBufSize);
+    uint32_t nSrcLength = Storm::Source::SSTR::SStrLen(szText);
+    MAC_ConvertTextToUnicode(szText, (char*)wszWideBuf, nSrcLength, 0x100, -0x80);
+    D2Lang::WideCharToUTF8(szText, wszWideBuf, nBufSize);
+}
+#else
 static void __stdcall CHATDLG_FormatFileTimeToDate(FILETIME * pFileTime, int32_t nBufSize, char * szText) {
     int nZeroCount;
     uint16_t wszWideBuf[256];
@@ -2519,6 +2537,7 @@ static void __stdcall CHATDLG_FormatFileTimeToDate(FILETIME * pFileTime, int32_t
     /* UINT CodePage for MultiByteToWideChar */ MultiByteToWideChar(GetACP(), dwFlags, lpMultiByteStr, nZeroCount, (LPWSTR)pwszWide, cchWideChar);
     D2Lang::WideCharToUTF8(szText, wszWideBuf, nBufSize);
 }
+#endif
 
 int __fastcall CHATDLG_DisplayTimestampedMessage(uint32_t nUnixTime, char * pszMessage) {
     char szDateStr[64];

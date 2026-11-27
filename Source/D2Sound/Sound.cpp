@@ -245,6 +245,24 @@ void __stdcall SOUND_InitDirectSound() {
     gnDirectSoundInitialized = 1;
 }
 
+#if D2_OS_MAC
+// 1.14d mac: 002e71c0
+void __fastcall SOUND_Initialize(uint32_t dwLanguageCode, BOOL bSoundInBackground) {
+    LanguageCode = dwLanguageCode;
+    gbSoundInBackground = bSoundInBackground;
+    if (!gnDirectSoundInitialized) {
+      gbSound3DEnabled = 1;
+      SOUND_InitDirectSound();
+      if (!gnDirectSoundInitialized) {
+        gbSound3DEnabled = 0;
+        SOUND_InitDirectSound();
+        if (!gnDirectSoundInitialized) {
+          Fog::Src::LogManager::LOGFILE_WriteStringToFile("\tCouldn\'t initialize DirectSound");
+        }
+      }
+    }
+}
+#else
 void __fastcall SOUND_Initialize(uint32_t dwLanguageCode, BOOL bSoundInBackground) {
     // Frame slots -12..-4 are ONE object: &dwVerMinor is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -314,6 +332,7 @@ void __fastcall SOUND_Initialize(uint32_t dwLanguageCode, BOOL bSoundInBackgroun
     Fog::Src::LogManager::LOGFILE_WriteStringToFile("\tCouldn\'t initialize DirectSound");
     D2TraceFmt("SOUND: couldn't initialize DirectSound, the game runs silent");
 }
+#endif
 
 void __fastcall SOUND_InitMusicBuffer(BOOL bSoundInBackground) {
     // Static local variables (originally global data)

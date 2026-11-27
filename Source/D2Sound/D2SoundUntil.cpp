@@ -139,6 +139,8 @@ void __fastcall SOUNDUTIL_AppendToLinkedList(D2SoundListNodeStrc * * ppListHead,
 }
 
 // Maps file szText read-only and copies the size-prefixed blob located at image base + the dword at e_lfanew header (signature dword 0x454c 'LE', checked at 00516b61) +0xb8 (size at +8, data at +0xc) into pBuffer; returns TRUE on success, last error 0x7a when *pnBufferSize is too small.
+// Not in the 1.14d Mac binary: it reads the version resource of a Windows driver file.
+#if !D2_OS_MAC
 BOOL __fastcall SOUNDUTIL_ReadVersionResource(LPCSTR szText, uint32_t * pnBufferSize, void * pBuffer) {
     uint32_t* pnBufferSizeSaved;
     HANDLE hFileSaved;
@@ -260,5 +262,6 @@ BOOL __fastcall SOUNDUTIL_GetFileVersionInfo(LPCSTR szText, uint32_t * pnFileVer
     *pnFileVerLS = (uint32_t)(uint16_t)pVerInfo->dwFileVersionLS;
     return 1;
 }
+#endif
 
 } // namespace D2Sound::D2SoundUntil

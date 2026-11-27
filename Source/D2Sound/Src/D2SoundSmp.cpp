@@ -831,7 +831,12 @@ DWORD __stdcall D2SOUNDSMP_SoundUpdateThreadProc(void * lpThreadParam) {
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gSoundSmpCs);
       __frame0.nPrevMinimized = gbWindowIsMinimized;
       hWnd = D2gfx::D2GFX::GetHwnd();
+      #if D2_OS_MAC
+      // 1.14d mac: 00031564, the layer's IsIconic stub
+      gbWindowIsMinimized = Wnd_ReturnZero();
+#else
       /* HWND hWnd for IsIconic */ gbWindowIsMinimized = IsIconic(hWnd);
+#endif
       bMusicOn = D2SoundFast::SOUND_GetMusicEnabled();
       ppSoundSmp = gpSoundSampleList;
       if (bMusicOn) {

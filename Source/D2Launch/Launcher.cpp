@@ -14,6 +14,9 @@
 #include "Source/D2Launch/Src/CharSel.data.h"
 #include "Source/D2Launch/Launcher.data.h"
 #include "Source/D2Launch/Src/MainMenus.data.h"
+#if D2_OS_MAC
+#include "Source/D2gfx/Src/D2GFX.h"
+#endif
 #include "Source/D2Win/D2WinScrollbar.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -591,6 +594,15 @@ uint32_t __stdcall CLIENT_ConnectToBattleNet() {
         }
         Storm::Source::SReg::SRegSaveValue("Diablo II", "UseCmdLine", 0, 1);
         Storm::Source::SReg::SRegSaveValue("Diablo II", "Skip To Open", 0, bSkipToOpen);
+#if D2_OS_MAC
+        // 1.14d mac: 002ba6f5 asks the window to close instead of ending the process
+        gpBNetCallbacks->pfnDisconnect();
+        gnBNetConnectInProgress = 0;
+        pGatewayAccess = (D2BNetGatewayAccessStr*)gpBNetCallbacks->pfnBnetLoadAndReturn();
+        Bnclient::BNGatewayAccess::SaveAndUnload(pGatewayAccess);
+        PostMessage(D2gfx::D2GFX::GetHwnd(), 0x10, 0, 0);
+        return 0;
+#else
         D2Win::D2GFX::D2GFX_ShutdownSpriteCacheAndWindow();
         gpBNetCallbacks->pfnDisconnect();
         gnBNetConnectInProgress = 0;
@@ -598,6 +610,7 @@ uint32_t __stdcall CLIENT_ConnectToBattleNet() {
         Bnclient::BNGatewayAccess::SaveAndUnload(pGatewayAccess);
         TerminateProcess(GetCurrentProcess(), 0);
         return 0;
+#endif
       }
       if (!nResult) {
         gnBNetConnectInProgress = 0;

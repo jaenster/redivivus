@@ -203,6 +203,8 @@ int gnProfileUserExpansionFlag = 0; D2_GLOBAL_GUARD(gnProfileUserExpansionFlag, 
 
 namespace D2Multi::OOGUtilities {
 
+// Not in the 1.14d Mac binary: it has no registry.
+#if !D2_OS_MAC
 static uint32_t __stdcall LAUNCHER_ReadRegistryValue(LPCSTR szSubKey, LPCSTR szValueName, LPBYTE pbData, DWORD dwDataSize, LPDWORD pdwDataSize) {
     DWORD dwValueType;
     HKEY hKey;
@@ -222,6 +224,7 @@ static uint32_t __stdcall LAUNCHER_ReadRegistryValue(LPCSTR szSubKey, LPCSTR szV
     /* HKEY hKey for RegCloseKey */ lStatus = RegCloseKey(hKey);
     return (uint32_t)!lStatus;
 }
+#endif
 
 int __stdcall OOG_DisableControlCallback(D2ControlMsg * pControlMsg) {
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(&pGameListCache->sControl, 1);
@@ -261,6 +264,25 @@ int __stdcall OOG_PollMCPCharLogonPump(int nFrameIndex) {
 }
 
 // Opens a URL in the default system browser by querying registry for .html file association. Reads "SOFTWARE\\Classes\\.html" to get file type, then reads "SOFTWARE\\Classes\\{type}\\shell\\open\\command" to get the command line. Appends the URL to the command string, creates a process via CreateProcessA with NORMAL_PRIORITY_CLASS flag, and closes process handles. Shows error dialog (locale 5340) if registry lookup fails. Uses 1024-byte buffers for registry paths and 1025-byte buffer for final command line construction.
+#if D2_OS_MAC
+// 1.14d mac: 002cdd63
+int __stdcall OOGUTIL_OpenBrowserWithURL(D2ControlMsg * pControlMsg) {
+    char* pszUrl;
+    pszUrl = pNetworkUnknown->pfnSendQueryAdURL(ghBannerAdProcess);
+    if (!pszUrl || !*pszUrl) {
+      return 1;
+    }
+
+    if (::STORM_LaunchURL(pszUrl)) {
+      pNetworkUnknown->pfnSendClickAd(ghBannerAdProcess, 1);
+      ChatDlg::UIMENU_DrawTitleOnCenterSmaller(D2Lang::StrTable::strtable::GetLocaleString(0x14dc), nullptr);
+      return 0;
+    }
+
+    pNetworkUnknown->pfnSendClickAd(ghBannerAdProcess, 0);
+    return 1;
+}
+#else
 int __stdcall OOGUTIL_OpenBrowserWithURL(D2ControlMsg * pControlMsg) {
     char szFileType[2048];
     char szRegistryCommandPath[1024];
@@ -304,6 +326,7 @@ int __stdcall OOGUTIL_OpenBrowserWithURL(D2ControlMsg * pControlMsg) {
     pNetworkUnknown->pfnSendClickAd(ghBannerAdProcess, (uint32_t)!bLaunched);
     return 1;
 }
+#endif
 
 // Opens the Create/Join Channels dialog: title 0x148d "Create/Join Channels", labels 0x148e "Channel Name" and 0x148f "Channels", the channel-name edit box gpCtlChannelNameEditBox (submit OOGUTIL_JoinChannelFromInput) prefilled with gszCurrentChannelName, the OK button gpCtlChannelOkButton and the channel list gpCtlChannelList filled with the two channel names saved in the multiplayer ini data, then the names returned by pfnSendGetChannelList.
 // Provenance: asm 00440fc0; forms gaPredefinedForms_b[0x38..0x3f]; called from CHATDLG_DestroyFormsAndOpenChannelDialog, the OnPress of the lobby CHANNEL button.

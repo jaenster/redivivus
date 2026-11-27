@@ -6127,7 +6127,11 @@ uint32_t __fastcall MAINMENU_DetectDoubleClick(D2ControlMsg * pMsg) {
       bIsDoubleClick = 0;
     }
 
+    #if D2_OS_MAC
+    GetCursorPos((POINT*)&cursorPos);
+#else
     /* LPPOINT lpPoint for GetCursorPos */ GetCursorPos(&cursorPos);
+#endif
     if (abs(cursorPos.y - gnDoubleClickLastY) + abs(cursorPos.x - gnDoubleClickLastX) > 4) {
       bIsDoubleClick = 0;
     }
@@ -7982,6 +7986,14 @@ BOOL __stdcall UIMENU_AndOneMorePleaseWait(D2ControlMsg * pControlMsg) {
       nCharIdx++;
     } while (nCharIdx < 0x400);
 
+#if D2_OS_MAC
+    // 1.14d mac: 002c1dd4 asks for the free bytes of the volume
+    uint64_t nFreeBytesAvailable = 0;
+    uint64_t nTotalBytes = 0;
+    uint64_t nTotalFreeBytes = 0;
+    GetDiskFreeSpaceEx(szSavePath, &nFreeBytesAvailable, &nTotalBytes, &nTotalFreeBytes);
+    if (nTotalFreeBytes >= 5000) {
+#else
     DWORD dwSectorsPerCluster;
     dwSectorsPerCluster = 0;
     DWORD dwBytesPerSector;
@@ -7992,6 +8004,7 @@ BOOL __stdcall UIMENU_AndOneMorePleaseWait(D2ControlMsg * pControlMsg) {
     dwTotalClusters = 0;
     GetDiskFreeSpaceA(szSavePath, &dwSectorsPerCluster, &dwBytesPerSector, &dwFreeClusters, &dwTotalClusters);
     if (dwFreeClusters * dwBytesPerSector * dwSectorsPerCluster >= 5000) {
+#endif
       nTosResult = UIMENU_ShowTermsOfService();
       return nTosResult;
     }
@@ -8944,12 +8957,20 @@ BOOL __stdcall MAINMENU_OnPressCreateCharacterOk(D2ControlStrc * pControl) {
       nIndex++;
     } while (nIndex < 0x400);
 
+#if D2_OS_MAC
+    uint64_t nFreeBytesAvailable = 0;
+    uint64_t nTotalBytes = 0;
+    uint64_t nTotalFreeBytes = 0;
+    GetDiskFreeSpaceEx(szSavePath, &nFreeBytesAvailable, &nTotalBytes, &nTotalFreeBytes);
+    if (nTotalFreeBytes < 5000) {
+#else
     DWORD dwSectorsPerCluster = 0;
     DWORD dwFreeClusters = 0;
     DWORD dwBytesPerSector = 0;
     DWORD dwTotalClusters = 0;
     /* LPDWORD lpBytesPerSector for GetDiskFreeSpaceA */ /* LPDWORD lpSectorsPerCluster for GetDiskFreeSpaceA */ /* LPCSTR lpRootPathName for GetDiskFreeSpaceA */ GetDiskFreeSpaceA(szSavePath, &dwSectorsPerCluster, &dwFreeClusters, &dwBytesPerSector, &dwTotalClusters);
     if (dwBytesPerSector * dwFreeClusters * dwSectorsPerCluster < 5000) {
+#endif
       uint16_t* wszPopupText;
       wszPopupText = D2Lang::StrTable::strtable::GetLocaleString(0x141d);
       UIMENU_CreateSmallPopup(wszPopupText, MAINMENU_CloseAndLaunchCharSelect);
