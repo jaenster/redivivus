@@ -12,10 +12,10 @@
 void MAC_ProcessEvents(void);
 // 1.14d mac: 0019ce5a
 void MAC_EnableMenus(void);
-// The text services' input hook and document (GameSetup.cpp).
+// The text services' input hook and document (unknown_tsm.cpp).
 void MAC_SetTSMInputCallback(void (*pfnCallback)(const char*, bool, int*));
 void MAC_CreateTSMDocument(void);
-// Between a text script (-0x80: the game language's) and UTF-16 (GameSetup.cpp).
+// Between a text script (-0x80: the game language's) and UTF-16 (unknown_tsm.cpp).
 void MAC_ConvertTextToUnicode(const char* pSrc, char* wszDest, int nSrcLength, int nDestSize, int nScript);
 void MAC_ConvertUnicodeToText(const char* wszSrc, char* szDest, int nSrcChars, int nDestSize, int nScript);
 // 1.14d mac: 0019cb78

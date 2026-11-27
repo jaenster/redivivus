@@ -6,7 +6,7 @@
 // ".../Diablo2/Source/DiabloAll/../MacSpecific/Source/Mac Shell/D2FlamingLogo.cpp"
 // (0031a9d3), passed to SMemAlloc/SMemFree by FLAMINGLOGO_Init and FLAMINGLOGO_Shutdown.
 // The Baal AI follows at 0019f900, so the file ends there; where it starts is not proven
-// (0019f1c4, the working-directory helper before it, uses no file name).
+// (0019f18a and 0019f1c4 before it use no file name; they are kept in unknown_util.cpp).
 //
 // Mac-only: the guard is spelled `#if !defined(_WIN32) && D2_OS_MAC` (see
 // Source/MacSpecific/README.md).
