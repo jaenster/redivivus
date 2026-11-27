@@ -25,6 +25,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2QuestDataA3Q7Strc) == 0x14, "D2_N
 namespace D2Game::Quests::QUESTS::A3Q7 {
 
 // A3Q7 (a3q7.cpp) = Act3 internal quest slot #20 QUESTINT_TheGuardian (= ext QUEST_TheGuardian, Mephisto/Durance). Act3 has 6 player quests; this "Q7" file is the engine's slot-20 logic + the Mephisto->Act4 transition (Dark Wanderer + red town portals). Objects_InitFn52: object init-fn for The Guardian. Lazily spawns/keeps a guardian-type monster (classId 0x129) and copies its DRLG map AI into quest-specific data. Guarded by: only runs while the quest is NOT already JustCompleted.
+// 1.14d mac: 002336f9
 void __fastcall Objects_InitFn52_NatalyaStart(D2ObjectInitFnArg * pInitArg) {
     D2UnitStrc* pGuardianQuest;
     int32_t iVar1;
@@ -84,6 +85,7 @@ void __fastcall Q23_NotifyGuardianStateToPlayers(::SGAMEDATA * pGame, char bRest
 }
 
 // A3Q7 / slot QUESTINT_TheGuardian. Q24_HandleKhalimsWillCompletion(pGame): on the Guardian quest data, force Khalim's-Eye and Khalim's-Flail counts to 2 (mark Khalim's Will assembled), then if the orb unit exists flag it for client update (SetupUpdateFlag 1, and mode-2 update for the secondary orb ref). Cross-quest helper: pokes the Khalim's-Will item bookkeeping that gates the Mephisto fight. No quest-state transitions.
+// 1.14d mac: 002338e5
 void __fastcall Q24_HandleKhalimsWillCompletion(::SGAMEDATA * pGame, D2UnitStrc * nEventCode) {
     D2UnitStrc* pQuestData;
     D2QuestDataStrc* pOrbUnit = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheGuardian);
@@ -136,11 +138,13 @@ void __thiscall Q24_SetupDarkWandererMapAi(void * pThis, D2MapAIStrc * pMapAI) {
 }
 
 // A3Q7 / slot QUESTINT_TheGuardian. Q24_StatusFilter: quest status-string filter callback (installed by Q24_InitData into fpStatusFilter). Stub - always returns false (no special status-bit suppression for this slot).
+// 1.14d mac: 00233cfd
 bool __fastcall Q24_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode) {
     return false;
 }
 
 // A3Q7 / slot QUESTINT_TheGuardian. Q24_ActiveFilter: quest active/monster filter callback (installed by Q24_InitData into fpActiveFilter). Stub - always returns false.
+// 1.14d mac: 00233d04
 bool __fastcall Q24_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     return false;
 }
@@ -151,6 +155,7 @@ bool __fastcall Q24_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 // probes TestCollisionByCoordinates(mask 0x3C01) at (X, Y-0x14), then (X, Y-0xB), (X+2, Y-0xB),
 // (X-2, Y-0xB), then (X, Y-8); it takes the first free point, and if (X, Y-8) is blocked stores
 // (X, Y-3) without probing it. The chosen point is stored back in nDarkWandererX/Y. Returns 1. Only caller: AITHINK_Fn1_DarkWanderer.
+// 1.14d mac: 0023397e
 BOOL __fastcall Q24_GetDarkWandererSpawnCoords(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int * pnCoords) {
     BOOL bCollisionBlocked;
     D2QuestDataStrc* pWandererQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_UnknownDuplicate1);
@@ -217,6 +222,7 @@ BOOL __fastcall Q24_GetDarkWandererSpawnCoords(::SGAMEDATA * pGame, D2UnitStrc *
 // nDarkWandererX/Y (+4/+8), picks a room with DRLGROOM_FindBetterNearbyRoom and spawns monster
 // class 0x170 there with SpawnMonsterAtRoomPos. If the spawn succeeds it clears bQuestCompleted.
 // It always sets bHasSpawnCoords (+0) so that Q24_GetDarkWandererSpawnCoords can answer.
+// 1.14d mac: 00233ab9
 void __fastcall Objects_InitFn43_DarkWanderer(D2ObjectInitFnArg * pInitArg) {
     D2UnitStrc* pSpawnedMonster;
     int32_t nSpawnY;
@@ -242,6 +248,7 @@ void __fastcall Objects_InitFn43_DarkWanderer(D2ObjectInitFnArg * pInitArg) {
 }
 
 // A3Q7 secondary slot QUESTINT_UnknownDuplicate1. Q24_Callback_13: quest state-handler installed at sStateFunctions[0xd] (the JustCompleted slot) by Q24_InitData. Reads the firing player's per-difficulty QuestRecord: if QUEST_UnknownDuplicate1 is Completed in the record, promote the live quest to JustCompleted and clear bQuestCompleted (one-shot completion latch syncing record->live state).
+// 1.14d mac: 00233c96
 void __fastcall Q24_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2UnitStrc* t2_c0 = pQuestArgs->pPlayer;
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
@@ -261,6 +268,7 @@ void __fastcall Q24_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 
 // A3Q7 quest-table REGISTRATION/init for slot QUESTINT_TheGuardian (referenced from quest-descriptor table @0x731750). Q24_InitData(pQuestData): zero the 0x3c-byte state-fn block; install Q24_Callback_13 at sStateFunctions[0xd] (JustCompleted handler); mark quest active, nStateFlag=0; alloc 0x14-byte quest-specific block (from "a3q7.cpp":0xb9) and zero its fields; set nQuestIdReal = QUEST_SpokeToHratli (the external id this slot reports); install Q24_StatusFilter/Q24_ActiveFilter; set bQuestCompleted=true as the initial latch. This is the per-game setup entry for the Mephisto/Act3-final + Act4-transition quest slot.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q7.cpp
+// 1.14d mac: 00233bdc
 void __fastcall Q24_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->sStateFunctions.fpQuestStateHandler[0xd] = Q24_Callback13_PlayerStartedGame;
@@ -278,6 +286,7 @@ void __fastcall Q24_InitData(D2QuestDataStrc * pQuestData) {
 }
 
 // A3Q7 secondary slot QUESTINT_UnknownDuplicate1. Q24_TimerCallback_SpawnPortals(pGame,pQuestData): quest-timer cb (armed by Q24_StartDarkWandererPortalTimer). One-shot (bTomePickedUp gate): grant all party members the AbleGoToAct4 flag (IteratePlayerOrMonsterUnits + Q24_PartyMember_SetAbleGoToAct4), advance the quest control seed, then spawn up to 8 town-portal objects (CreateUnit UNIT_OBJECT type 0x83) around the trigger unit at offsets from the gnA3Q7ArchonState* coord tables, each placement validated via FindSpawnableLocation. This is the red Mephisto->Act4 portal burst. No GetQuestState/SetQuestState calls.
+// 1.14d mac: 00233d76
 uint8_t __fastcall Q24_TimerCallback_SpawnPortals(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
     // Static local variables (originally global data)
     static int gnA3Q7ArchonState2[16] = {
@@ -343,6 +352,7 @@ uint8_t __fastcall Q24_TimerCallback_SpawnPortals(::SGAMEDATA * pGame, D2QuestDa
 // bTimerStarted (+0xD) are false, it sets bTimerStarted, stores pUnit's GUID (-1 if no unit) in
 // nDarkWandererGUID (+0x10) and calls AddQuestTimer(Q24_TimerCallback_SpawnPortals, 2). It
 // changes no quest state.
+// 1.14d mac: 00233d0b
 void __fastcall Q24_StartDarkWandererPortalTimer(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_UnknownDuplicate1);
     if (!pQuestData) {

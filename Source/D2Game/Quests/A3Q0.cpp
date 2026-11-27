@@ -21,6 +21,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2QuestDataA3Q0Strc) == 0x1c, "D2_N
 namespace D2Game::Quests::QUESTS::A3Q0 {
 
 // A3Q0 handler [0x0b] — dialog/quote-finished event. If the speaking NPC is Hratli (0xfd) and the played message is 0x1d1/0x1d2 (Hratli's intro quotes), mark QUEST_SpokeToHratli Completed for this player and broadcast it as JustCompleted to the game. Transition: SpokeToHratli -> Completed.
+// 1.14d mac: 0022bf1b
 void __fastcall Q17_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     uint16_t nMessageIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
     if (pQuestArgs->sQuestArgs.sNpcMessage.nNPCNo != 0xfd) {
@@ -45,6 +46,7 @@ static inline int GetClassIdInline(D2UnitStrc * pUnit) {
 }
 
 // A3Q0 handler [0x00] — on-interact gossip. If target is Hratli (0xfd) and this player has NOT yet completed SpokeToHratli, queue a gossip line on him: variant 1 for Amazon (nClassId==1), variant 0 otherwise. Pure flavor; no state change.
+// 1.14d mac: 0022bf99
 void __fastcall Q17_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     if (!(GetClassIdInline(pQuestArgs->pTarget) == 0xfd)) {
       return;
@@ -66,11 +68,13 @@ void __fastcall Q17_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 }
 
 // A3Q0 status filter — stub, always returns false (SpokeToHratli is never gated by the status-filter path).
+// 1.14d mac: 0022c08f
 bool __fastcall Q17_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode) {
     return false;
 }
 
 // A3Q0 active filter — decides whether Hratli (0xfd) is "interactable" for the SpokeToHratli interaction. Returns true (active) only while this player has NOT completed SpokeToHratli; once spoken, returns false.
+// 1.14d mac: 0022c096
 bool __fastcall Q17_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     if (nTargetClassId == 0xfd) {
       BOOL bIsQuestCompleted;
@@ -85,6 +89,7 @@ bool __fastcall Q17_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 }
 
 // A3Q0 handler [0x0d] — player join / quest refresh. If this player already has SpokeToHratli Completed, re-broadcast it as JustCompleted so the joining client's quest log syncs. No new progress.
+// 1.14d mac: 0022c02f
 void __fastcall Q17_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     /* GetQuestState(QUEST_SpokeToHratli, QUESTSTATE_Completed) — only resync if
@@ -100,6 +105,7 @@ void __fastcall Q17_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 
 // A3Q0 / QUEST_SpokeToHratli init (Act 3 quest-slot 0, internal Q17). NOT a numbered player quest — it is the hidden "Spoke To Hratli" tracking pseudo-quest. Hratli = monstats/NPC class 0xfd (253). Zeroes the 0xf-entry state-handler table, installs 3 handlers: [0x00]=Q17_Callback_00 (interact/gossip), [0x0b]=Q17_Callback_11 (dialog-played), [0x0d]=Q17_callback_13 (player-join refresh). Sets pNpcMessages=aNpcGossipData (Hratli string 0x1d1, menu), nQuestIdReal=QUEST_SpokeToHratli, status/active filters. Allocs 0x1c-byte A3Q0 specific block (Hratli spawn/coords/GUID + DRLG map ptr) and zeroes it.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q0.cpp
+// 1.14d mac: 0022be4e
 void __fastcall Q17_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGame = pQuestData->pGame;

@@ -34,6 +34,7 @@ typedef void (__fastcall *fpSUnitIterateCallback)(::SGAMEDATA * pGame, D2UnitStr
 namespace D2Game::Quests::QUESTS::A2Q7 {
 
 // Q14 predicate (used as a quest-display/state filter): true if The Seven Tombs is NOT yet started (no quest record, or introduced and stateFlag < 2). nStateFlag<2 == still in step 0/1.
+// 1.14d mac: 002268ff
 uint8_t __fastcall Q14_IsSevenTombsNotStarted(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pDVar1 = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSevenTombs);
     if (pDVar1 && pDVar1->bIsNotIntroduction != '\0' && pDVar1->nStateFlag < 2) {
@@ -44,6 +45,7 @@ uint8_t __fastcall Q14_IsSevenTombsNotStarted(::SGAMEDATA * pGame) {
 }
 
 // Q14 predicate: true if The Seven Tombs is introduced and stateFlag != 0 (any progress made).
+// 1.14d mac: 0022722e
 uint8_t __fastcall Q14_IsSevenTombsAtState1(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSevenTombs);
     if (pQuestData && pQuestData->bIsNotIntroduction != '\0' && pQuestData->nStateFlag == 1) {
@@ -76,6 +78,7 @@ uint8_t __fastcall Q14_GetPortalCreatedFlag(D2QuestArgStrc * pQuestArgs) {
 // IterateAllUnits callback for Q14_IsNpcStationary: if the player is within collision
 // distance < 0xC of pA2Q6Data->pTyraelSpawnAnchor (+0x40), sets
 // pA2Q6Data->bTyraelSpawnSpotOccupied (+0x44). Q14_IsNpcStationary passes its pA2Q6Data as pArgs.
+// 1.14d mac: 0022a431
 void __fastcall Q14_CheckUnitDistanceToTyrael(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2QuestDataA2Q6Strc * pA2Q6Data) {
     int32_t nDistance = D2Common::Collision::GetCollisionDistance(pUnit, pA2Q6Data->pTyraelSpawnAnchor);
     if (nDistance >= 0xc) {
@@ -107,6 +110,7 @@ BOOL __fastcall Q14_IsNpcStationary(::SGAMEDATA * pGame, D2UnitStrc * pNpc) {
 }
 
 // Q14 predicate: true if The Seven Tombs is introduced and stateFlag < 4 (not yet at the Duriel-killed/Tyrael step).
+// 1.14d mac: 0022a45c
 bool __fastcall Q14_IsSevenTombsLessThanState4(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pDVar1 = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSevenTombs);
     if (pDVar1 && pDVar1->bIsNotIntroduction != '\0' && pDVar1->nStateFlag < 4) {
@@ -117,6 +121,7 @@ bool __fastcall Q14_IsSevenTombsLessThanState4(::SGAMEDATA * pGame) {
 }
 
 // Q14: compute Tyrael's post-Duriel spawn coordinates. Only if the portal-spawn-in-progress flag is set: picks a spot in Lut Gholein (LEVEL_LutGholein) near object class 0xc, finds free WARP-collision coords, writes x/y into pPoint and the room into *pdwParam. Returns 1 on success, 0 otherwise.
+// 1.14d mac: 0022a491
 BOOL __fastcall Q14_GetTyraelSpawnCoords(::SGAMEDATA * pGame, POINT * pPoint, D2RoomStrc * * ppSpawnRoom) {
     LONG nSpawnY;
     LONG nSpawnX;
@@ -141,6 +146,7 @@ BOOL __fastcall Q14_GetTyraelSpawnCoords(::SGAMEDATA * pGame, POINT * pPoint, D2
 }
 
 // Q14: set/clear the Izual(Tyrael) placement flag in A2Q6 data, only while the quest is introduced and field_0x0E unset. cParam==0 -> mark located (bIzualLocationSet=1) and set pIzualUnit sentinel (8 single-player / 9 multiplayer); cParam!=0 -> clear bIzualLocationSet. No quest-record state change.
+// 1.14d mac: 0022a556
 void __fastcall Q14_SetTyraelState(D2QuestDataStrc * pQuestData, char bClear) {
     D2QuestDataStrc* pA4Q1Data = GetQuestDataByQuestNoInternal(pQuestData->pGame, QUESTINT_TheSevenTombs);
     if (!(pA4Q1Data && pA4Q1Data->bIsNotIntroduction != '\0')) {
@@ -167,6 +173,7 @@ void __fastcall Q14_SetTyraelState(D2QuestDataStrc * pQuestData, char bClear) {
 }
 
 // Q15 (Act2Guard4Gossip / Jerhyn gossip pseudo-quest) state-2 handler. When the kill/target unit is Jerhyn (classId 0x179) and the one-shot bBloodRavenKilled-style flag is set, clears it and unhooks itself (handler[2]=null). One-time post-trigger cleanup; no quest-record write.
+// 1.14d mac: 0022abac
 void __fastcall Q15_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     if (!(pQuestArgs->pTarget && (short int)pQuestArgs->pTarget->nClassId == 0x179 && pQuestData->pQuestSpecificData.pA2Q7->bGossipAwaits == '\x01')) {
       return;
@@ -177,6 +184,7 @@ void __fastcall Q15_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // Q15 (Act2Guard4Gossip / Jerhyn gossip) message-handler. On a dialog with Jerhyn (NPC 0x179): for the special intro lines 0x3b/0x3c set the gossip record to JustCompleted and arm the state-2 cleanup handler; for any other line set it to Completed. This records "player has spoken to Jerhyn" in the quest-record bitbuffer.
+// 1.14d mac: 0022a675
 void __fastcall Q15_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     if (pQuestArgs->sQuestArgs.sNpcMessage.nNPCNo != 0x179) {
       return;
@@ -196,6 +204,7 @@ void __fastcall Q15_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // Q15 (Act2Guard4Gossip / Jerhyn gossip) primary dialog-select handler for Jerhyn (NPC 0x179). Chooses which gossip text to play based on Radament's Lair progress: if the Jerhyn-spoke record is unset and Radament is done/in-progress it picks a "post-Radament" line; otherwise a generic seeded line. Read-only on quest records (only Gets); advances the player RNG seed when speaking. Drives Jerhyn's act-progression chatter, not a real quest.
+// 1.14d mac: 0022a700
 void __fastcall Q15_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     uint32_t DVar1;
     D2QuestDataStrc* pRadamentsQuestData;
@@ -253,16 +262,19 @@ void __fastcall Q15_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 }
 
 // Q15 (Act2Guard4Gossip) state-8 handler: empty stub. No behavior.
+// 1.14d mac: 0022a882
 void __fastcall Q15_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
 
 }
 
 // Q15 (Act2Guard4Gossip) status filter: always returns false. The Jerhyn gossip pseudo-quest never shows in the quest-log status pass.
+// 1.14d mac: 0022a887
 bool __fastcall Q15_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode) {
     return false;
 }
 
 // Q15 (Act2Guard4Gossip) active filter for Jerhyn (NPC 0x179): returns true (gossip is "active"/available) when the Jerhyn-spoke record is neither Completed nor JustCompleted, or when Radament's Lair just completed but Jerhyn not yet marked complete. Read-only on quest records. Decides whether Jerhyn currently has act-progress gossip to offer.
+// 1.14d mac: 0022a88e
 bool __fastcall Q15_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     BOOL bQuestState;
     ::SGAMEDATA* pGame;
@@ -297,6 +309,7 @@ bool __fastcall Q15_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 }
 
 // Q15 (Act2Guard4Gossip) quest-init: registers this slot as the Jerhyn gossip pseudo-quest. Zeroes the state-handler table, installs handler[0]=Callback_00 (dialog select), handler[8]=Callback_08 (stub), handler[0xb]=Callback_11 (message), sets pNpcMessages to the 0x179/0x3b gossip table, allocates A2Q7 quest-specific data, marks bIsActive, and crucially sets nQuestIdReal = QUEST_Act2Guard4Gossip with the status/active filters. This is the "extra" Act2 slot: NOT a public quest but the Jerhyn spoke-to gossip tracker.
+// 1.14d mac: 0022a5b5
 void __fastcall Q15_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGame = pQuestData->pGame;

@@ -50,6 +50,7 @@ static char gszSrcFileAiBaal[16] = {
 
 namespace D2Game::Monster::AI::Baal {
 
+// 1.14d mac: 002b0375
 D2UnitStrc * __fastcall AI_Baal_IsPortalInRange(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * portal, D2MonsterAiParameterStruct * pAiParam) {
     if (portal && portal->eUnitType == UNIT_OBJECT && portal->nClassId == 0x233) {
       int32_t nCollisionDist;
@@ -62,6 +63,7 @@ D2UnitStrc * __fastcall AI_Baal_IsPortalInRange(::SGAMEDATA * pGame, D2UnitStrc 
 
 // Calculate threat/risk score for Baal monster based on target distance, resistances, and skill levels
 // @sourcefile .\Ai\AiBaal.cpp
+// 1.14d mac: 001a125d
 static int32_t __stdcall RiskAssignmentBaal(D2UnitStrc * pUnit, D2UnitStrc * pTarget, void * pAnchorData) {
     BOOL bInMeleeRange = D2Common::Units::IsInMeleeRange(pUnit, pTarget, 0);
     int nAnchorBonus = 0;
@@ -129,6 +131,7 @@ static int32_t __stdcall RiskAssignmentBaal(D2UnitStrc * pUnit, D2UnitStrc * pTa
 }
 
 // Baal-AI target selector: scans the game's per-act player unit-node lists (pGame->pUnitNodes[0..]) to pick the highest-scoring player target for the Baal monster pUnit2. For the first list it calls an indirect predicate (pUnit, called as code ptr) to gate candidates, skipping dead/dying players, then scores survivors via RiskAssignmentBaal; later lists are filtered by matching act. Tracks a separate best-of-secondary-list candidate and, if it's very close (collision dist <5) and not already in melee range, repaths Baal toward it (SetTarget/PATH_CalculatePath); if no path, that candidate becomes the result. Writes candidate count to *pnParam2 and best score to *pnParam1; returns the chosen target unit. Halts via Fog error if pUnit is null or a node holds a non-player. Custom calling convention (pUnit2 in EBX).
+// 1.14d mac: 0019fb67
 static D2UnitStrc * __stdcall SelectTargetBaal(::SGAMEDATA * pGame, int * pBestScore, int * pCandidateCount, void * pAnchorData, fpAiTargetPredicate pUnit, D2UnitStrc * pUnit2) {
     int nScore;
     BOOL bInMeleeRange;
@@ -284,6 +287,7 @@ uint32_t __fastcall AI_BAAL_IsUnitInRange(D2UnitStrc * pUnit, int * pCandidate) 
 }
 
 // @sourcefile .\Ai\AiBaal.cpp
+// 1.14d mac: 001a11ce
 static BOOL AI_BAAL_IsSkillPowerful(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
     if (!pSkill) {
       return 0;
@@ -634,6 +638,7 @@ static int32_t __stdcall AI_Baal_SelectActionWeighted(::SGAMEDATA * pGame, D2AiG
 }
 
 // Evaluates and returns the next combat action index for Baal's AI. When nCombatAiState==0 and no target (pUnit2 null): checks collision at Baal's current position and returns 4 if blocked, else 1 with 8% chance or 1. When a target is present: determines if the target's player-object is in the Throne Room within 75 units, measures distance to anchor point, tests melee range and wall collision, then delegates to AI_BAAL_CloneChooseAction (melee), AI_Baal_SelectActionWeighted (wall), or AI_BAAL_ThroneRoomChooseAction. Returns the chosen action index.
+// 1.14d mac: 0019ff05
 static int32_t __stdcall AI_BaalEvaluateCombatAction(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2AiGeneralStrc * pAiGeneral, int32_t nBestScore, int32_t nCandidateCount, D2MonsterAiCmdStrc * pAnchorAiCmd, D2UnitStrc * pUnit2) {
     int _bInThroneRoom;
     uint32_t _bVeryFarFromAnchor;
@@ -865,6 +870,7 @@ static bool __stdcall AI_Baal_SpawnClone(::SGAMEDATA * pGame, D2AiGeneralStrc * 
 
 // Executes a specific Baal AI action. Handles Baal clone spawning, teleport positioning, and multi-skill attack selection during the boss encounter.
 // @sourcefile .\Ai\AiBaal.cpp
+// 1.14d mac: 001a04f2
 void __fastcall AI_Baal_ExecuteAction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiGeneralStrc * nParam, D2UnitStrc * pTarget, int nAction, D2MonsterAiCmdStrc * pClientSideData) {
     // Frame slots -24..-4 are ONE object: &nUnitX is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -1011,6 +1017,7 @@ void __fastcall AI_Baal_ExecuteAction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     }
 }
 
+// 1.14d mac: 0019f926
 void __fastcall BaalCrabAi_ResetInfernoAndReattach(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2AiGeneralStrc* pSavedAiGeneral = pAiParam->pMonsterAiGeneral;
     int storedCommandArg1 = 0;
@@ -1040,6 +1047,7 @@ void __fastcall BaalCrabAi_ResetInfernoAndReattach(::SGAMEDATA * pGame, D2UnitSt
 }
 
 // Baal Crab (Baal's crab minion) AI tick. Selects best target via SelectTargetBaal, stores an anchor position AI-cmd (id=10) on first tick, then calls AI_BaalEvaluateCombatAction to choose an action and AI_Baal_ExecuteAction to perform it. Schedules next tick in 25 frames (RestartAiThink 0x19).
+// 1.14d mac: 0019fa16
 void __fastcall AI_Fn1_BaalCrab(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     eD2UnitType eUnitType;
     int nCandidateCount = 0;
@@ -1138,11 +1146,13 @@ void __fastcall AI_Baal_SpawnTentacle(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2Common::DATATBLS::ItemStats::SetState(pTentacle, STATE_uberminion, 1);
 }
 
+// 1.14d mac: 001a0f4e
 void __fastcall AI_Fn1_UberBaal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
 
 }
 
 // Baal Crab Clone AI tick. Verifies its owner (both AI-general owner and unit owner) is still alive; kills itself via SERVER_KillMonster if owner is dead. If alive, runs the same SelectTargetBaal + anchor + AI_BaalEvaluateCombatAction loop as the real crab, but suppresses action ids 7/9/14/15 (special Baal-only actions), replacing them with action 2. Walks to idle position if no target found.
+// 1.14d mac: 001a0f53
 void __fastcall AI_Fn1_BaalCrabClone(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     BOOL bIsDead;
     int nAction;

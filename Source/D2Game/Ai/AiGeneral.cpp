@@ -38,6 +38,7 @@ typedef void (__fastcall *pfnMinionForEachCallback)(D2UnitStrc * pMinion, void *
 namespace D2Game::Ai::AiGeneral {
 
 // @sourcefile .\Ai\AiGeneral.cpp
+// 1.14d mac: 001a15da
 D2AiGeneralStrc * __fastcall AllocAiGeneral(::SGAMEDATA * pGame) {
     D2AiGeneralStrc* pAiGeneral = D2_NEW_POOL_AT(pGame->pMemoryPool, D2AiGeneralStrc, ".\\Ai\\AiGeneral.cpp", 0x1b);
     memset(pAiGeneral, 0, sizeof(*pAiGeneral));
@@ -48,6 +49,7 @@ D2AiGeneralStrc * __fastcall AllocAiGeneral(::SGAMEDATA * pGame) {
     return pAiGeneral;
 }
 
+// 1.14d mac: 001a164d
 void __fastcall SetAiArgument(D2UnitStrc * pMonster, int32_t nArgNumber, int32_t nValue) {
     if (!((pMonster ? pMonster->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pMonster->pUnitData.pUnitDataMonster)) {
       return;
@@ -77,6 +79,7 @@ void __fastcall SetAiArgument(D2UnitStrc * pMonster, int32_t nArgNumber, int32_t
     }
 }
 
+// 1.14d mac: 001a168e
 int __fastcall GetAiArgument(D2UnitStrc * pMonster, int32_t nArgNumber) {
     if (!((pMonster ? pMonster->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pMonster->pUnitData.pUnitDataMonster)) {
       return 0;
@@ -106,6 +109,7 @@ int __fastcall GetAiArgument(D2UnitStrc * pMonster, int32_t nArgNumber) {
 }
 
 // @sourcefile .\Ai\AiGeneral.cpp
+// 1.14d mac: 001a16ce
 D2MonsterAiCmdStrc * __fastcall CreateAiCmdStrc(::SGAMEDATA * pGame, D2UnitStrc * pMonster) {
     D2AiGeneralStrc* pGeneralStrc = nullptr;
     if (pMonster && pMonster->eUnitType == UNIT_MONSTER && pMonster->pUnitData.pUnitDataMonster) {
@@ -136,6 +140,7 @@ D2MonsterAiCmdStrc * __fastcall CreateAiCmdStrc(::SGAMEDATA * pGame, D2UnitStrc 
 }
 
 // @sourcefile .\Ai\AiGeneral.cpp
+// 1.14d mac: 001a177f
 void __fastcall FreeAi(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
       return;
@@ -192,6 +197,7 @@ static void FreeAiCmds(D2AiGeneralStrc * pAiGeneral, ::SGAMEDATA * pGame) {
 
 // Drains and frees all pending AI command nodes (D2MonsterAiCmdStrc) from a monster unit's AiGeneral command ring. Iterates pCmdLast, unlinks each node from the doubly-linked circular list, then frees it via FreeServerMemory. No-ops if unit is null, non-monster, or has no AiGeneral/command list.
 // @sourcefile .\Ai\AiGeneral.cpp
+// 1.14d mac: 001a1813
 void __fastcall ResetAiGeneralStrc(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2AiGeneralStrc* pMonAi2;
     if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
@@ -232,6 +238,7 @@ void __fastcall ResetAiGeneralStrc(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 001a1859
 D2MonsterAiCmdStrc * __fastcall GetAiCmd(D2UnitStrc * pUnit) {
     D2AiGeneralStrc* pAiGeneral = nullptr;
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
@@ -244,6 +251,7 @@ D2MonsterAiCmdStrc * __fastcall GetAiCmd(D2UnitStrc * pUnit) {
     return pAiGeneral->pCmdCurrent;
 }
 
+// 1.14d mac: 001a187d
 void __fastcall AI_SetCurrentAiCommand(D2UnitStrc * pUnit, int32_t nStepDelta, D2MonsterAiCmdStrc * pAiCmd) {
     if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
       return;
@@ -279,6 +287,7 @@ void __fastcall AI_SetCurrentAiCommand(D2UnitStrc * pUnit, int32_t nStepDelta, D
 }
 
 // Searches a monster's AI command ring for a node whose first arg (nCmdArg[0]) matches nParam. Starts from pCmdCurrent->pNext and wraps around. If bSetCurrent is non-zero, advances pCmdCurrent to the found node. Returns the matching D2MonsterAiCmdStrc* or NULL if not found or unit invalid.
+// 1.14d mac: 001a18c3
 D2MonsterAiCmdStrc * __fastcall FindMonsterAiCmd(D2UnitStrc * pUnit, int nCmdArg0, int32_t bSetCurrent) {
     D2AiGeneralStrc* pAiGeneral = pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster ? pUnit->pUnitData.pUnitDataMonster->pAiGeneral : nullptr;
     if (!pAiGeneral) {
@@ -311,6 +320,7 @@ D2MonsterAiCmdStrc * __fastcall FindMonsterAiCmd(D2UnitStrc * pUnit, int nCmdArg
     return pNext;
 }
 
+// 1.14d mac: 001a1a32
 void __fastcall CreateAiCmdAndFill(::SGAMEDATA * pGame, D2UnitStrc * pmonster, D2AiCmdArgumentsStrc * pArgs) {
     D2MonsterAiCmdStrc* pNewCmd = CreateAiCmdStrc(pGame, pmonster);
     pNewCmd->nCmdArg[0] = pArgs->nCmdId;
@@ -330,6 +340,7 @@ void __fastcall CreateAiCmdAndFill(::SGAMEDATA * pGame, D2UnitStrc * pmonster, D
     pAiGeneral->pCmdCurrent = pNewCmd;
 }
 
+// 1.14d mac: 001a1a86
 D2MonsterAiCmdStrc * __fastcall AI_CreateCmdIfNotExists(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int nId, int32_t nId2) {
     if (!FindMonsterAiCmd(pUnit, nId, nId2)) {
       D2AiCmdArgumentsStrc aiCmdArgs;
@@ -344,10 +355,12 @@ D2MonsterAiCmdStrc * __fastcall AI_CreateCmdIfNotExists(::SGAMEDATA * pGame, D2U
     return FindMonsterAiCmd(pUnit, nId, nId2);
 }
 
+// 1.14d mac: 001a1c38
 D2MapAIStrc * * __stdcall GetMonsterMapAi(D2UnitStrc * pMonster) {
     return (D2MapAIStrc**)((uintptr_t)(pMonster && pMonster->eUnitType == UNIT_MONSTER && pMonster->pUnitData.pUnitDataMonster ? pMonster->pUnitData.pUnitDataMonster->pAiGeneral : 0) + offsetof(D2AiGeneralStrc, pMapAi));
 }
 
+// 1.14d mac: 001a1c58
 void __fastcall AssignMinionOwner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nOwnerGUID, eD2UnitType eOwnerType, int32_t nParam, BOOL bTransferBoss) {
     D2AiGeneralStrc* pAiGeneral;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
@@ -372,6 +385,7 @@ void __fastcall AssignMinionOwner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32
 
 static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit);
 
+// 1.14d mac: 001a1cd0
 void __fastcall AIGENERAL_GetOwnerData(D2UnitStrc * pUnit, uint32_t * pnOwnerGUID, int * peOwnerType) {
     if (GetTypeInline(pUnit) != UNIT_MONSTER) {
       *pnOwnerGUID = -1;
@@ -390,6 +404,7 @@ void __fastcall AIGENERAL_GetOwnerData(D2UnitStrc * pUnit, uint32_t * pnOwnerGUI
 }
 
 // Returns the owner unit for a monster. Walks pMonsterData->pAiGeneral->pGame to call FindUnitFromTable with the owner's type and GUID.
+// 1.14d mac: 001a19ec D2Game::Ai::AiGeneral::GetOwnerUnit
 D2UnitStrc * __fastcall GetOwnerUnit(D2UnitStrc * pUnit) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return nullptr;
@@ -417,6 +432,7 @@ static inline D2UnitDataMonsterStrc * GetMonsterDataInline(D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\Ai\AiGeneral.cpp
+// 1.14d mac: 001a1d0d
 void __fastcall AddMinionToList(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pMinion) {
     int nMinionGUID;
     D2AiGeneralStrc* pAiGeneral;
@@ -447,6 +463,7 @@ void __fastcall AddMinionToList(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitS
 
 // Removes pUnit from its owner monster's minion list and clears pUnit's owner reference (sets nOwnerGUIDEx=-1). Walks the owner's pMinionList, finds the entry matching pUnit's GUID, resets the found minion's AiGeneral owner fields, unlinks the list node, and frees its memory. Safe variant: aborts if owner lookup fails.
 // @sourcefile .\Ai\AiGeneral.cpp
+// 1.14d mac: 001a1d9c
 void __fastcall FreeAiOfMinions(D2UnitStrc * pUnit) {
     D2AiGeneralStrc* pOtherMonster;
     D2MonsterDataMinionList** ppNextNode;
@@ -503,6 +520,7 @@ void __fastcall FreeAiOfMinions(D2UnitStrc * pUnit) {
 
 // Bulk-clears all entries from pUnit's own pMinionList (treating pUnit as the owner rather than a minion). For each minion node, resets that minion's AiGeneral owner fields and frees the list node. Less safe than FreeAiOfMinions: only fires when the looked-up owner unit equals pUnit itself, no per-entry abort on missing minion.
 // @sourcefile .\Ai\AiGeneral.cpp
+// 1.14d mac: 001a1e8a
 void __fastcall FreeAiOfMinionsLessSafe(D2UnitStrc * pUnit) {
     D2AiGeneralStrc* pMinionAiGeneral;
     D2AiGeneralStrc* pAiOwner;
@@ -552,6 +570,7 @@ void __fastcall FreeAiOfMinionsLessSafe(D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\Ai\AiGeneral.cpp
+// 1.14d mac: 001a1be5
 void __fastcall ClearMinionList(::SGAMEDATA * pGame, D2MonsterDataMinionList * pMinionList) {
     while (pMinionList) {
       D2MonsterDataMinionList* pNextMinion;
@@ -562,6 +581,7 @@ void __fastcall ClearMinionList(::SGAMEDATA * pGame, D2MonsterDataMinionList * p
 }
 
 // Iterates all minions in pUnit's owner's pMinionList and calls pfnProc(pArgument) for each resolved minion unit. Validates pfnProc via IsBadCodePtr first — halts with an unrecoverable error if the pointer is bad. Traverses owner->pMinionList and calls the callback only when the minion unit resolves successfully.
+// 1.14d mac: 001a1f5f
 void __fastcall CallForEachMinion(D2UnitStrc * pUnit, void * pContext, void * pArgument, pfnMinionForEachCallback pfnProc) {
     if (IsBadCodePtr((FARPROC)pfnProc)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x24e);
@@ -604,6 +624,7 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
     return (eD2UnitType)6;
 }
 
+// 1.14d mac: 001a2002
 void __fastcall GetAndRemoveMinionList(D2UnitStrc * pUnit, int * pOwnerId, eD2UnitType * pType, uint32_t * nFlagBit1, uint32_t * nFlagBit2, D2MonsterDataMinionList * * pMinionList) {
     D2AiGeneralStrc* pAiGeneral;
     if (GetTypeInline(pUnit) != UNIT_MONSTER) {
@@ -631,6 +652,7 @@ void __fastcall GetAndRemoveMinionList(D2UnitStrc * pUnit, int * pOwnerId, eD2Un
     pAiGeneral->pMinionList = 0;
 }
 
+// 1.14d mac: 001a208c
 void __fastcall ReplaceMinionList(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nUnitGUID, eD2UnitType eUnitType, int32_t nParam, BOOL bTransferBoss, D2MonsterDataMinionList * pMinionList) {
     D2AiGeneralStrc* pAiGeneral;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
@@ -717,6 +739,7 @@ static void __stdcall AddMinionToAi(D2UnitStrc * pOwner, D2AiGeneralStrc * pTarg
 }
 
 // Conditionally manages minion ownership based on AI flags 1 and 2. If flag 1 is set and flag 2 is NOT set, detaches all minions from the owner (resets their nOwnerGUIDEx to -1). If both flags are set, calls AddMinionToAi instead. No-ops when flag 1 is clear.
+// 1.14d mac: 001a20f7
 void __fastcall RemoveMinionsFromAiIfFlag1Set2Not(D2UnitStrc * pUnit) {
     D2AiGeneralStrc* pMinionAi;
     D2AiGeneralStrc* pAiGeneral;
@@ -758,6 +781,7 @@ void __fastcall RemoveMinionsFromAiIfFlag1Set2Not(D2UnitStrc * pUnit) {
     AddMinionToAi(pUnit, pAiGeneral);
 }
 
+// 1.14d mac: 001a22a1
 int32_t __fastcall MONSTER_GetUnitData_AiGeneral_Offset0x3C(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
       return pUnit->pUnitData.pUnitDataMonster->pAiGeneral->nGenericSpawnerSpecific;
@@ -767,6 +791,7 @@ int32_t __fastcall MONSTER_GetUnitData_AiGeneral_Offset0x3C(D2UnitStrc * pUnit) 
 }
 
 // Propagates an AI command (from pAiArguments) to every minion in pOwner's owner's pMinionList. For each resolved minion, allocates a D2MonsterAiCmdStrc via CreateAiCmdStrc, copies the 5 command args from pAiArguments, and sets the minion's pCmdCurrent to the new node. Effectively issues a coordinated AI command to all minions of the owner chain.
+// 1.14d mac: 001a192b
 void __fastcall CreateMinion(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2AiCmdArgumentsStrc * pAiArguments) {
     D2MonsterAiCmdStrc* pCmd;
     D2AiGeneralStrc* pAiMinion;

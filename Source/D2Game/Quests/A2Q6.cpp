@@ -40,6 +40,7 @@ typedef bool (__fastcall *QUESTACTIVE)(D2QuestDataStrc * pQuestData, int32_t nTa
 namespace D2Game::Quests::QUESTS::A2Q6 {
 
 // a2q5.cpp - AI callback for The Summoner. When Summoner is killed, advances quest state and notifies players.
+// 1.14d mac: 00227e69
 void __fastcall Q13_AICallback_Summoner(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSummoner);
     if (!(pQuestData && pQuestData->bIsNotIntroduction == '\x01')) {
@@ -60,11 +61,13 @@ void __fastcall Q13_AICallback_Summoner(::SGAMEDATA * pGame) {
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)A2Q5::Q13_UpdateQuestRecord);
 }
 
+// 1.14d mac: 00228073
 void __fastcall Q14_OnPlayerJoinNoop(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit) {
 
 }
 
 // A2Q6 "The Seven Tombs" — gossip/talk callback (state 0). Builds the NPC dialogue line shown when the player talks to Atma(0xc9)/Drognan(0xd2)/Cain(0xfb)/Tyrael(0xb1) etc. Reads the player's TheSevenTombs quest-record bits (JustCompleted/Step0x03/0x04 + per-NPC Step0x06..0x11 "already-talked" flags) plus nStateFlag to pick which gossip message index to display. Read-only w.r.t. quest state (only GetQuestState + GetQuestRecordState for TheArcaneSanctuary). Quest flow: TheSevenTombs is the Act2 finale — talk Jerhyn, kill Duriel, free Tyrael; completing opens Act3.
+// 1.14d mac: 0022890e
 void __fastcall Q14_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     // Static local variables (originally global data)
     static uint32_t gdwQ12QuestStateMessages[6] = { 0xffffffff, 0x0, 0x1, 0x2, 0x3, 0x4 }; D2_STATIC_GUARD(gdwQ12QuestStateMessages, "D2Game::Quests::QUESTS::A2Q6::Q14_Callback00_NpcActivate::gdwQ12QuestStateMessages");
@@ -219,11 +222,13 @@ BOOL __fastcall Q14_NotifySevenTombsComplete(::SGAMEDATA * pGame, D2UnitStrc * p
 }
 
 // JMP thunk
+// 1.14d mac: 002292e4
 void __fastcall Q14_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::D2Game::Quests::QUESTS::SetRewardAndFinishFlags(pQuestData, pQuestArgs);
 }
 
 // A2Q6 "The Seven Tombs" — per-player quest-record step advance. If the player's record is NOT yet RewardAwaits(1), and the live quest nStateFlag > 1 (player has reached the staff-tomb stage), stamps the record to Step0x02 so the journal shows the quest started/in-progress. Iterated over players to keep records in sync.
+// 1.14d mac: 0022adf6
 BOOL __fastcall Q14_UpdateQuestRecordStep(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -241,6 +246,7 @@ BOOL __fastcall Q14_UpdateQuestRecordStep(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // A2Q6 "The Seven Tombs" — per-player completion-sound callback. If the player's TheSevenTombs record is JustCompleted(0xd), attaches/plays the quest-complete sound event (id 0x36) on that unit. Read-only on quest state.
+// 1.14d mac: 002280ae
 BOOL __fastcall Q14_PlayCompletionSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     /* GetQuestState(TheSevenTombs, 0xd=JustCompleted) — play complete sound only
                          for just-completed */ D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
@@ -253,11 +259,13 @@ BOOL __fastcall Q14_PlayCompletionSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 }
 
 // A2Q6 "The Seven Tombs" — fan out Q14_PlayCompletionSound across all player/monster units in the game so every player who has JustCompleted hears the quest-done sting.
+// 1.14d mac: 00228078
 void __fastcall Q14_PlayCompletionSoundAll(::SGAMEDATA * pGame) {
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q14_PlayCompletionSound);
 }
 
 // A2Q6 "The Seven Tombs" — talk callback for state 2 (slot fpQuestStateHandler[2]). On talking to Cain(0xfb): if bCainSaved, broadcasts quest state 4 then clears the slot. On talking to Jerhyn(0xc9): if field_0x08 set, broadcasts state 1; else if field_0x0A set, broadcasts state 6; then clears the slot and re-syncs every player's quest record via Q14_UpdateQuestRecordStep. Drives the post-Duriel Jerhyn/Cain dialogue that gates the reward & Act3 travel. (eFlags zeroed before each broadcast.)
+// 1.14d mac: 002292ed
 void __fastcall Q14_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame;
     int32_t nNpcClassId = !pQuestArgs->pTarget ? -1 : pQuestArgs->pTarget->nClassId;
@@ -292,6 +300,7 @@ void __fastcall Q14_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // A2Q6 "The Seven Tombs" — mark Duriel dead / quest just-completed for one player's record. Sets TheSevenTombs Step0x03 + JustCompleted(0xd) on the player's quest-record bitbuffer, then bumps that client's status to 2 (act-progress) for the current difficulty. This is the core "Duriel killed" record stamp; called per qualifying player in Duriel's Lair.
+// 1.14d mac: 002281c7
 static void __stdcall Q14_SetDurielComplete(::SGAMEDATA * pQuestControl, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer) {
     /* SetQuestState(TheSevenTombs, 0xd=JustCompleted) — Duriel killed self game
                           */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_JustCompleted);
@@ -300,6 +309,7 @@ static void __stdcall Q14_SetDurielComplete(::SGAMEDATA * pQuestControl, D2UnitS
 }
 
 // A2Q6 "The Seven Tombs" — per-player check: if this player is standing in Duriel's Lair and their record has none of JustCompleted/Step0x03/Step0x04 set yet, stamp completion via Q14_SetDurielComplete. Iterated after Duriel dies so anyone present in the lair gets credit. Asserts the quest-data pointer is non-null.
+// 1.14d mac: 0022ae6c
 BOOL __fastcall Q14_CheckDurielLairAndComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     eD2LevelId eLevelId;
     BOOL bQuestState;
@@ -332,6 +342,7 @@ BOOL __fastcall Q14_CheckDurielLairAndComplete(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // A2Q6 "The Seven Tombs" — party-propagation variant of the Duriel-complete stamp. For a party member: if their record has none of Completed(0)/Step0x03/Step0x04 and they are anywhere in Act II, stamp completion via Q14_SetDurielComplete. Lets party members not standing in the lair still get Duriel credit.
+// 1.14d mac: 00228105
 void __fastcall Q14_SetDurielCompleteOnPartyMember(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2QuestDataStrc* pPlayerData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSevenTombs);
     if (!pPlayerData) {
@@ -371,6 +382,7 @@ void __fastcall Q14_SetDurielCompleteOnPartyMember(::SGAMEDATA * pGame, D2UnitSt
 }
 
 // A2Q6 "The Seven Tombs" — if this player's record is JustCompleted(0xd), propagate Duriel-kill credit to their whole party by running Q14_SetDurielCompleteOnPartyMember for every party member. The reward fan-out trigger after a player completes.
+// 1.14d mac: 0022af56
 BOOL __fastcall Q14_PropagateRewardToParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     BOOL BVar2 = D2Common::QuestRecord::GetQuestState(GetQuestBitBufferInline(pGame, pUnit), QUEST_TheSevenTombs, QUESTSTATE_JustCompleted);
     if (!BVar2) {
@@ -387,6 +399,7 @@ BOOL __fastcall Q14_PropagateRewardToParty(::SGAMEDATA * pGame, D2UnitStrc * pUn
 }
 
 // A2Q6 "The Seven Tombs" — per-player "you missed your chance" stamp. If the player's record has none of Completed/Step0x03/Step0x04 (i.e. they never got Duriel credit) at the moment completion is being finalized, sets CannotCompleteQuestInGame(0xe) and pushes a state-0xd packet. Marks latecomers as unable to finish this quest in the current game.
+// 1.14d mac: 0022afd3
 BOOL __fastcall Q14_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];
@@ -408,6 +421,7 @@ BOOL __fastcall Q14_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, v
 }
 
 // A2Q6 "The Seven Tombs" — fpStatusFilter: computes the journal status code (*nUnknown) shown for this quest. Gated on QUEST_AbleGoToAct2 Completed. If Jerhyn's gate already opened, uses cached code; else derives from TheSevenTombs record: Step0x03 -> 5, Step0x04 -> 6, Step0x05 -> nStateFlagPrev, nStateFlag<3 -> nStateFlagPrev, else 0xc. Read-only on quest state.
+// 1.14d mac: 0022824b
 bool __fastcall Q14_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode) {
     BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_AbleGoToAct2, QUESTSTATE_Completed);
     if (!BVar1) {
@@ -456,6 +470,7 @@ bool __fastcall Q14_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
 }
 
 // A2Q6 "The Seven Tombs" — main NPC-dialogue (state 0xb) driver, the quest's spine. Cain(0xfb)/msg 0x12e: spawns the Lut Gholein town portal (Tyrael's), sets nStateFlag 4, then runs CheckDurielLairAndComplete+PropagateRewardToParty+SetCannotComplete to finalize. Jerhyn(0xc9): msg 0x1ae sets flag 2 and kicks TheTaintedSun's sequence filter (opens the seven tombs storyline); msg 0x1ba (requires record Step0x03) advances record Step0x03->Step0x04 and sets flag 5. Drognan(0xd2)/msg 0x1c2 (requires Step0x04 + TheHoradricStaff Completed): strips the staff/viper/shaft quest items, and if JustCompleted writes the game-wide TheSevenTombs record + broadcasts state 0xd + marks record Completed + clears Step0x04 + records the finishing player GUID. switch(msg): 0x1bc/0x1bd/0x1be/0x1bf/0x1c1/0x1c4 set the per-NPC "talked" record bits Step0x09/06/07/0x11/08/0x10.
+// 1.14d mac: 00228cfc
 void __fastcall Q14_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     BOOL bPortalSpawned;
     D2QuestDataStrc* pTaintedSunData;
@@ -602,6 +617,7 @@ void __fastcall Q14_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // A2Q6 "The Seven Tombs" — quest timer callback armed by Q14_Callback_08 (8 frames after entering Duriel's chamber). If nStateFlagPrev is not already 3/4/5, broadcasts quest state 3 (Duriel-encounter reached). Clears the bBloodRavenKilled-aliased flag. Returns 1 to indicate the timer is done.
+// 1.14d mac: 0022abdd
 uint8_t __fastcall Q14_OnEndCallback(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
     uint8_t bPrevFlag = pQuestData->nStateFlagPrev;
     D2QuestDataA2Q6Strc* pBloodRavenData = pQuestData->pQuestSpecificData.pA2Q6;
@@ -615,6 +631,7 @@ uint8_t __fastcall Q14_OnEndCallback(::SGAMEDATA * pGame, D2QuestDataStrc * pQue
 }
 
 // A2Q6 "The Seven Tombs" — party variant: for a party member whose record has none of Completed/Step0x03/Step0x04/Step0x05, if they are in Act II, set record Step0x05 (entered the true tomb / Duriel's antechamber). Propagates "tomb entered" credit across the party.
+// 1.14d mac: 00228337
 void __fastcall Q14_SetTombEntryOnPartyMember(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2QuestDataStrc* pPlayerData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSevenTombs);
     if (!pPlayerData) {
@@ -660,6 +677,7 @@ void __fastcall Q14_SetTombEntryOnPartyMember(::SGAMEDATA * pGame, D2UnitStrc * 
 }
 
 // A2Q6 "The Seven Tombs" — per-player: if standing in Duriel's Lair and record has none of Completed/Step0x03/Step0x04/Step0x05, set record Step0x05 (true tomb entered) and propagate it to the whole party via Q14_SetTombEntryOnPartyMember. The "entered Duriel's chamber" record trigger.
+// 1.14d mac: 0022ac37
 BOOL __fastcall Q14_CheckTombEntryAndPropagate(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     eD2LevelId eLevelId;
     BOOL bQuestState;
@@ -695,6 +713,7 @@ BOOL __fastcall Q14_CheckTombEntryAndPropagate(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // A2Q6 "The Seven Tombs" — state-8 callback: fired when a player enters Duriel's chamber (the true tomb). Sets nStateFlag 3 and arms the Q14_OnEndCallback quest timer (8). For the triggering player, if record lacks Completed/Step0x03/Step0x04/Step0x05, sets record Step0x05 and propagates to party (Q14_SetTombEntryOnPartyMember). Clears handler slots [2] and [8], flags field_0x01, stores the room ptr, notifies players of event 8, fans out CheckTombEntryAndPropagate, and (if viper-amulet object initialized) re-enables the chamber object event. Sets specific-data byte[1]=2.
+// 1.14d mac: 00229574
 void __fastcall Q14_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     uint16_t nPartyId;
     D2UnitDataPlayerStrc* pQuestSpecificData;
@@ -757,6 +776,7 @@ void __fastcall Q14_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // A2Q6 "The Seven Tombs" — state-3 callback: level-transition handler keyed on level id (nIndex). Caches the Horadric-staff tomb level id (the randomly-chosen true tomb) on first use. When the player enters the staff tomb (iVar1==tomb id): if nStateFlag!=2 sets flag 2 and, if prev>1, advances the record (Q14_UpdateQuestRecordStep). Entering Duriel's Lair (0x2e): sets flag 2 + record step, then broadcasts state 1 (reward awaits) if prev==0. Entering Lut Gholein (0x49): sets flag 2 if flag<=1. Tail broadcasts state 2 (in-progress) + syncs record. Read/writes nStateFlag, not the bitbuffer record directly.
+// 1.14d mac: 00228730
 void __fastcall Q14_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int nLevelId = pQuestArgs->sQuestArgs.sLevelChange.nNewLevel;
     if (nLevelId - 0x28U > 0x22) {
@@ -826,6 +846,7 @@ void __fastcall Q14_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 }
 
 // A2Q6 "The Seven Tombs" — fpActiveFilter: decides whether a given NPC currently has active quest dialogue. Jerhyn(0xc9): active only while not Completed and (flag set & not Step0x03 & not Step0x04) OR record Step0x03. Drognan(0xd2): active iff record Step0x04. Cain(0xfb): active iff bIsNotIntroduction & specific-data field_0x01 & !bJerhynInitial. Other NPCs (Tyrael 0xb1, Meshif 0xb0, Geglash 0xaf, Warriv 0xca, Lysander 0xf4, Fara 0xb2): active only post-JustCompleted and only if their per-NPC "talked" record bit (Step0x06..0x11) is NOT yet set. Read-only on quest state.
+// 1.14d mac: 00228424
 bool __fastcall Q14_ActiveFilter(D2QuestDataStrc * pQuestData, eD2MonsterClassId nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     if (nTargetClassId == MonsterUnitJerhyn) {
       if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Completed) != 1) {
@@ -878,6 +899,7 @@ bool __fastcall Q14_ActiveFilter(D2QuestDataStrc * pQuestData, eD2MonsterClassId
 }
 
 // A2Q6 "The Seven Tombs" — fpSequenceFilter: if quest not yet started (nStateFlag==0) and introduced, sets nStateFlag 1 (quest visible/started). Then chains into TheTaintedSun's sequence filter (the two Act2 quests are linked). No bitbuffer record changes.
+// 1.14d mac: 002297de
 bool __fastcall Q14_SequenceFilter(D2QuestDataStrc * pQuestData) {
     BOOL BVar1;
     if (!pQuestData->nStateFlag && pQuestData->bIsNotIntroduction == '\x01') {
@@ -901,6 +923,7 @@ bool __fastcall Q14_SequenceFilter(D2QuestDataStrc * pQuestData) {
 }
 
 // A2Q6 "The Seven Tombs" — handler slot 0xe: on this event, clears the player's TheHoradricStaff record Step0x09 bit (cross-quest cleanup tying staff completion into the tombs quest).
+// 1.14d mac: 00229537
 void __fastcall Q14_Callback14_PlayerJoinedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     /* UnsetQuestState(TheHoradricStaff=0xa, 9=Step0x09) — cross-quest cleanup:
@@ -909,6 +932,7 @@ void __fastcall Q14_Callback14_PlayerJoinedGame(D2QuestDataStrc * pQuestData, D2
 }
 
 // A2Q6 "The Seven Tombs" — handler slot 0xd: on-player-join state reconstruction. Clears TheHoradricStaff Step0x09; if staff Completed, arms Jerhyn AI + spawn flags. If TheSevenTombs record is Completed or FinishedInPreviousGame -> mark bCompletedPlayerJoined and bail. Else rebuild live nStateFlag/nStateFlagPrev from the record: Step0x02 -> (prev1,flag2); Step0x03 -> (prev5,flag5); Step0x04 -> (prev6,flag5). Restores in-progress quest state for a joining player from their saved record.
+// 1.14d mac: 0022941e
 void __fastcall Q14_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
@@ -957,6 +981,7 @@ void __fastcall Q14_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 }
 
 // A2Q6 "The Seven Tombs" — Q14_InitData: per-game quest init. Allocates the 0x68-byte A2Q6 specific-data block, wires the state-handler table (slot0=Callback_00 gossip, 2=Callback_02, 3=Callback_03, 8=Callback_08 chamber-enter, 0xa=Callback_10 participation, 0xb=Callback_11 main dialogue, 0xd=Callback_13 join, 0xe=Callback_14 staff-cleanup), sets fpStatusFilter/fpActiveFilter/fpSequenceFilter, nQuestIdReal=QUEST_TheSevenTombs, nInitNo=4, the NPC gossip table (Jerhyn 0xc9 / string 0x1ae), zeroes the block, nStateFlag=0. No record reads/writes here.
+// 1.14d mac: 002285f4
 void __fastcall Q14_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGame = pQuestData->pGame;
@@ -988,6 +1013,7 @@ void __fastcall Q14_InitData(D2QuestDataStrc * pQuestData) {
 }
 
 // Q14 (The Seven Tombs / Act2 Q6). Sends packet 0x50 QuestSpecial type 0xd to the operating player's client: the offset (Tal Rasha tomb levelId - 0x42) of the true Horadric-orifice tomb, so the client can mark the correct tomb symbol on the map. Caches the chosen tombLevelId into A2Q6 quest-specific data. No quest-state transition.
+// 1.14d mac: 0022987e
 void __fastcall Q14_SendTombLevelInfo(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2GSPacketSrv0x50 sPacket;
     D2QuestDataStrc* pSevenTombsData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSevenTombs);
@@ -1006,6 +1032,7 @@ void __fastcall Q14_SendTombLevelInfo(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 }
 
 // Q14 helper: returns the next "arcane" object classId to spawn (Tal Rasha sarcophagus/orifice decoy set: 0x133..0x139). On first call lazily fills a 6-entry ring (skipping the index matching the real tomb level), then cycles through it round-robin. Returns 0x133 if no tomb level is set yet. No quest-state transition.
+// 1.14d mac: 0022990c
 uint32_t __fastcall A2Q6_GetNextFalseTombPortalClassId(D2QuestDataStrc * pQuestData) {
     // Static local variables (originally global data)
     static uint32_t gaArkaneThingIdTable[7] = { 0x139, 0x138, 0x134, 0x136, 0x137, 0x135, 0x133 }; D2_STATIC_GUARD(gaArkaneThingIdTable, "D2Game::Quests::QUESTS::A2Q6::A2Q6_GetNextFalseTombPortalClassId::gaArkaneThingIdTable");
@@ -1063,6 +1090,7 @@ static inline int GetClassIdInline(D2UnitStrc * pUnit) {
     return (int)(-1);
 }
 // A2Q7 (The Tainted Sun) timer callback that creates the two warp portals after the Horadric Staff is placed. If the pending-create flag (offset +0xd) is set: waits for the orifice object to reach Death/open anim and fires its open event; spawns the red town-portal object (class 100) in a nearby room and toggles HasPortal flags on both rooms. On success sets portal-created flag (+0xb=1) and clears the pending flag. No quest-record state change.
+// 1.14d mac: 00229bff
 uint8_t __fastcall Q14_TimerCreatePortal(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
     D2ObjectsTxt* pOrificeTxt;
     int32_t nOrificeX;
@@ -1122,6 +1150,7 @@ uint8_t __fastcall Q14_TimerCreatePortal(::SGAMEDATA * pGame, D2QuestDataStrc * 
 }
 
 // Q14 helper: scans the victim object's room for any UNIT_WARP and walks the operating player through it (SUnit::TakeStairs). Used by the tomb-stairs operate fn.
+// 1.14d mac: 00229a13 D2Game::Quests::QUESTS::A2Q6::TakeStairs
 void __fastcall TakeStairs(D2ObjectOperateFnArg * pOperateArg) {
     D2UnitStrc* pObject;
     D2RoomStrc* pDVar1 = D2Common::Units::UNITS_GetRoom(pOperateArg->sArg.pVictim);
@@ -1149,6 +1178,7 @@ uint32_t __fastcall Q14_OperateStairsToTombs(D2ObjectOperateFnArg * pOperateArg)
 }
 
 // Q14 object InitFn (Objects_InitFn37): on spawn of a Q14 quest object, records its GUID into A2Q6 data (field_0x28) and marks it present (field_0x6=1). Sets the object's client visibility/update mode: hidden(2) if quest not introduced or already-portal-created flag set, else visible(0). No quest-record state change.
+// 1.14d mac: 00229a5b
 void __fastcall Objects_InitFn37(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataA2Q6Strc* pA2Q6Data;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TheSevenTombs);
@@ -1182,6 +1212,7 @@ void __fastcall Objects_InitFn37(D2ObjectInitFnArg * pInitArg) {
 }
 
 // Q14 object InitFn (Objects_InitFn38): records this object's GUID into A2Q6 data and sets bAllPlayersLeft. Update mode = hidden(2) if quest not introduced, else field_0x18. No quest-record state change.
+// 1.14d mac: 00229ad1
 void __fastcall Objects_InitFn38_TyraelsDoor(D2ObjectInitFnArg * pInitArg) {
     int nObjectGUID;
     D2QuestDataStrc* pDVar2 = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TheSevenTombs);
@@ -1207,6 +1238,7 @@ void __fastcall Objects_InitFn38_TyraelsDoor(D2ObjectInitFnArg * pInitArg) {
 }
 
 // Q14 predicate: true if The Seven Tombs is introduced AND the Duriel/town portal has NOT yet been created (!field_0x0B). Inverse of Q14_GetPortalCreatedFlag.
+// 1.14d mac: 00229b32
 BOOL __fastcall Q14_IsPortalNotCreated(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSevenTombs);
     if (pQuestData && pQuestData->bIsNotIntroduction != '\0') {
@@ -1217,6 +1249,7 @@ BOOL __fastcall Q14_IsPortalNotCreated(::SGAMEDATA * pGame) {
 }
 
 // Q14 object InitFn (Objects_InitFn21): orifice/Tal Rasha chamber object init. Records GUID, marks present. If the staff has been used (state byte [3]) but portal not yet created ([0xb]==0), schedules the Q14_TimerCreatePortal timer to spawn the portals and marks timer-armed. Sets object hidden(2). No quest-record state change.
+// 1.14d mac: 00229b68
 void __fastcall Objects_InitFn21_HoradricOrifice(D2ObjectInitFnArg * pInitArg) {
     int nStaffUsedFlag;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TheSevenTombs);
@@ -1248,6 +1281,7 @@ void __fastcall Objects_InitFn21_HoradricOrifice(D2ObjectInitFnArg * pInitArg) {
 }
 
 // Q14 per-party-member callback: completes The Horadric Staff quest record for one player if not already complete and the player is in Act II. Sets Completed+JustCompleted and (unless mid-trade) strips the 3 staff component quest items (hsu/vip/msf). Invoked for every party member when the staff is placed in the orifice.
+// 1.14d mac: 00229eb5
 void __fastcall Q14_CompleteHoradricStaffOnPartyMember(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -1283,6 +1317,7 @@ void __fastcall Q14_CompleteHoradricStaffOnPartyMember(::SGAMEDATA * pGame, D2Un
 
 // A2Q6 Horadric orifice operate fn (OperateFn 25, Tal Rasha's tomb). If the object is closed and the player is not trading: with the assembled Horadric Staff ('hsu ') it sets the interact target and sends 0x58 to open the staff-insert UI, otherwise it plays the "can't do that" sound. Closes the interaction when the object returns to Neutral; the quest record changes in Q14_OnStaffUsedInOrifice.
 // Slot from objects.txt OperateFn 25.
+// 1.14d mac: 00229fa9
 BOOL __fastcall OBJOP_A2Q6_UseHoradricOrifice(D2ObjectOperateFnArg * pOperation) {
     uint32_t nOrificeGUID;
     eD2ObjectAnimMode eOrificeAnimMode;
@@ -1350,6 +1385,7 @@ BOOL __fastcall OBJOP_A2Q6_UseHoradricOrifice(D2ObjectOperateFnArg * pOperation)
 }
 
 // Q14 core event: the Horadric Staff has been placed in the orifice. Completes The Horadric Staff quest record (Completed+JustCompleted) for the acting player and every party member, strips the staff component items, broadcasts event 3 (cinematic/quest log), flags Jerhyn to spawn (bShouldSpawnJerhyn) + field_0x0E, arms Q14_TimerCreatePortal (delay derived from missile 0x152 Range), and toggles HasPortal flags on the chamber rooms. This is the Seven Tombs / Tal Rasha chamber opening trigger.
+// 1.14d mac: 0022a10b
 void __fastcall Q14_OnStaffUsedInOrifice(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     D2MissilesTxt* pMissileTxt;
     int nPosY;

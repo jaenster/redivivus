@@ -46,6 +46,7 @@ typedef void (__fastcall *pfnSkillRangeCb)(D2UnitStrc * pUnit, void * pCtx);
 
 namespace D2Game::SKILLS::SkillNec {
 
+// 1.14d mac: 002625ea
 void __fastcall SKILLNEC_ApplyBloodCost(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nSkillId, uint32_t nSkillLvl) {
     D2DamageStrc sDamage;
     if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER && pUnit->nClassId == 3)) {
@@ -62,6 +63,7 @@ void __fastcall SKILLNEC_ApplyBloodCost(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     UNIT::SUnitDmg::SERVER_GetHitCalculation(pGame, pUnit, pUnit, &sDamage);
 }
 
+// 1.14d mac: 0026267c
 BOOL __fastcall Skills_SrvStFunc_15_IsConsumableCorpseOutsideTown(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     if (!pTarget) {
@@ -79,6 +81,7 @@ BOOL __fastcall Skills_SrvStFunc_15_IsConsumableCorpseOutsideTown(::SGAMEDATA * 
 }
 
 // Necromancer skill strike-step: applies a ToHit roll and damage to the current target, but skips entirely if the target is in town (DRLGROOM_IsRoomInTown guard). On hit: sets enhanced-damage (calc[0]), optional elemental conversion (calc[3]/EType), calls SetDamageOnEvent, then applies via DAMAGE_CalculateAndApplyDamage with SrcDam (defaulting to 0x80 if zero).
+// 1.14d mac: 002626c9
 BOOL __fastcall Skills_SrvStFunc_16_ApplyHitAndDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
@@ -120,6 +123,7 @@ BOOL __fastcall Skills_SrvStFunc_16_ApplyHitAndDamage(::SGAMEDATA * pGame, D2Uni
     return 1;
 }
 
+// 1.14d mac: 00262894
 BOOL __fastcall Skills_SrvStFunc_17_IsSelectableCorpseOutsideTown(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     if (!pTarget) {
@@ -136,6 +140,7 @@ BOOL __fastcall Skills_SrvStFunc_17_IsSelectableCorpseOutsideTown(::SGAMEDATA * 
     return bIsSelectableCorpse;
 }
 
+// 1.14d mac: 002628d9
 uint32_t __fastcall SKILLNEC_ValidateCorpseTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pCorpse) {
     if (!pCorpse) {
       return 0;
@@ -166,10 +171,12 @@ uint32_t __fastcall SKILLNEC_ValidateCorpseTarget(::SGAMEDATA * pGame, D2UnitStr
     return (uint32_t)(nCanAttack != 0);
 }
 
+// 1.14d mac: 00262951
 BOOL __fastcall Skills_SrvStFunc_18_AlwaysAllow(::SGAMEDATA * pGame, D2UnitStrc * pAttacker, eD2Skills eD2Skill, int nSkillLvl) {
     return 1;
 }
 
+// 1.14d mac: 0026295b
 BOOL __fastcall Skills_SrvStFunc_19_IsTargetOutsideTown(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     if (!pTarget) {
@@ -181,6 +188,7 @@ BOOL __fastcall Skills_SrvStFunc_19_IsTargetOutsideTown(::SGAMEDATA * pGame, D2U
     return (uint32_t)!bIsInTown;
 }
 
+// 1.14d mac: 00262998
 BOOL __fastcall Skills_SrvStFunc_20_IsGroundItemForIronGolem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     if (!pTarget) {
@@ -207,6 +215,7 @@ BOOL __fastcall Skills_SrvStFunc_20_IsGroundItemForIronGolem(::SGAMEDATA * pGame
     return (uint32_t)!pTarget;
 }
 
+// 1.14d mac: 00262a51
 static BOOL CorpseConsumedCheck(D2UnitStrc * pUnit) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
@@ -231,6 +240,7 @@ static BOOL CorpseConsumedCheck(D2UnitStrc * pUnit) {
     return (uint32_t)(bIsCorpse != 0);
 }
 
+// 1.14d mac: 00262a23
 BOOL __fastcall Skills_SrvStFunc_21_IsRevivableCorpse(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     if (!pTarget) {
@@ -243,6 +253,7 @@ BOOL __fastcall Skills_SrvStFunc_21_IsRevivableCorpse(::SGAMEDATA * pGame, D2Uni
 
 static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit);
 
+// 1.14d mac: 00262b10
 void __fastcall SKILLNEC_OnCurseExpire(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * dwParam) {
     if (!pUnit) {
       return;
@@ -310,6 +321,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_3(D2UnitStrc * p) {
     return p->eUnitFlags >> 3 & 1;
 }
 
+// 1.14d mac: 00262b8c
 uint32_t __fastcall SKILLNEC_ValidateAttackableTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     if (!pTarget) {
       return 0;
@@ -338,6 +350,7 @@ uint32_t __fastcall SKILLNEC_ValidateAttackableTarget(::SGAMEDATA * pGame, D2Uni
     return UNIT::SUnit::UNITS_CheckIfCanAttackTarget(pGame, pUnit, pTarget) != 0;
 }
 
+// 1.14d mac: 00262c64
 void __fastcall SKILLNEC_AssignCurseAiBehavior(::SGAMEDATA * pGame, D2UnitStrc * pCaster, D2UnitStrc * pUnit, int32_t nSkillId, int32_t nSkillLvl) {
     uint32_t nFunctionId;
     D2SkillsTxt* pSkillsTxt = nSkillId >= 0 && nSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;
@@ -366,6 +379,7 @@ void __fastcall SKILLNEC_AssignCurseAiBehavior(::SGAMEDATA * pGame, D2UnitStrc *
     Monster::AI::AttachCorrectAiFunctionToMonster(pGame, pUnit, pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster ? pUnit->pUnitData.pUnitDataMonster->pAiGeneral : nullptr, nFunctionId);
 }
 
+// 1.14d mac: 00262cfd
 int32_t __fastcall SKILLNEC_ClampResistPenalty(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, int32_t nValue) {
     uint32_t nMercType;
     int32_t nCurrentResist;
@@ -403,6 +417,7 @@ static inline int SKILLNEC_AiSpecialStateFromAuraState(int nAuraState) {
 }
 
 // Applies a Necromancer curse (e.g. Dim Vision, Taunt, Terror, Attract and resist-penalty curses) to a target unit. If the curse requires AI registration, validates the target is an attackable monster of non-good alignment and that the corpse-consume gate passes. Clamps the primary resist-penalty stat; if attackable, builds a D2StateExArgStrc (skill, level, duration, aura state, optional expire-callback SKILLNEC_OnCurseExpire selected branchlessly) and applies the curse state via SetStateWithExpiryTime. Adds up to 5 extra clamped stats to the state's stat list, optionally registers curse AI behavior, updates anim speed, and fires aura target/aura events. Returns 1 on success, 0 if rejected.
+// 1.14d mac: 00262d71
 int32_t __fastcall SKILLNEC_ApplyCurseToUnit(D2UnitStrc * pUnit, D2NecroSkillArgStrc * pNecroSkillArg) {
     if (pNecroSkillArg->bRegisterExpireCallback) {
       const int nType = pUnit ? pUnit->eUnitType : UNIT_COUNT;
@@ -480,6 +495,7 @@ static int32_t SKILLNEC_ApplyCurseDifficultyDivisor(uint8_t nDifficulty, int32_t
 }
 
 // Server-side do-function for Necromancer curse skills (e.g. Amplify Damage, Decrepify, Lower Resist). Reads aurastat[0..5], auralencalc, aurarangecalc, and auratargetstate from Skills.txt, applies a difficulty-based duration divisor for revive/skeleton curses, then calls SKILLS_ApplyEffectToUnitsInRange with SKILLNEC_ApplyCurseToUnit as the per-unit callback. Marks the caster with UNITFLAG_SKSRVDOFUNC. Returns FALSE if Skills.txt entry is invalid.
+// 1.14d mac: 00262fde
 BOOL __fastcall Skills_SrvDoFunc_030_CastCurseAoE(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -539,6 +555,7 @@ BOOL __fastcall Skills_SrvDoFunc_030_CastCurseAoE(::SGAMEDATA * pGame, D2UnitStr
 }
 
 // Applies the Dim Vision curse (skill 0x47) to pTarget. Calculates the duration via auralencalc and divides by the difficulty's AiCurseDivisor, then iterates up to 6 aurastat/aurastatcalc entries to build a D2NecroSkillArgStrc and calls SKILLNEC_ApplyCurseToUnit. Sets bUpdateAnimSpeed if any stat has ITEMSTATCOSTFLAG_UPDATEANIMRATE.
+// 1.14d mac: 00263275
 void __fastcall SKILLNEC_ApplyDimVision(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt = (int)SKILL_DimVision >= 0 && (int)SKILL_DimVision < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + SKILL_DimVision : nullptr;
     if (pSkillsTxt) {
@@ -583,6 +600,7 @@ void __fastcall SKILLNEC_ApplyDimVision(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 }
 
 // Three arguments, not two: the epilogue at 005c3b2a is RET 0x4, so there is one stack argument the body never reads. It is stored in the same D2StateExArgStrc.pFunction slot as SKILLNEC_OnCurseExpire (005c3370) and SKILLNEC_OnConvertExpire (005c3db0), both of which are already declared with the third parameter, and the slot's type is void(*)(D2UnitStrc*, eD2States, int32_t). Declaring only two made the assignment in Skills_SrvDoFunc_059_CastCorpseSkill a type error - which only became visible once the CALL_RETURN override that had split that function was cleared, so the body compiles for the first time.
+// 1.14d mac: 002636e8
 void __fastcall SKILLS_NecroShredAlignmentCallback(D2UnitStrc * pUnit, eD2States eAlignmentState, D2StatListExStrc * pStatListEx) {
     UNIT::SUnit::SetAlignment(pUnit, '\0', 1);
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eAlignmentState, 0);
@@ -590,6 +608,7 @@ void __fastcall SKILLS_NecroShredAlignmentCallback(D2UnitStrc * pUnit, eD2States
     GAME::Targets::MONSTER_FreeUnitNodes(pGame, pUnit);
 }
 
+// 1.14d mac: 00263650
 BOOL __fastcall SKILLNEC_CorpseTarget_ValidateAndScheduleEvent(D2UnitStrc * pUnit, D2CorpseSkillEventArgStrc * pSkillData) {
     int32_t nSwitchAiMode;
     uint32_t nTargetGUID;
@@ -614,6 +633,7 @@ BOOL __fastcall SKILLNEC_CorpseTarget_ValidateAndScheduleEvent(D2UnitStrc * pUni
 // Body continues at 005c3bcc, the JNZ target of 005c3bc0 - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named 'SKILLNEC_CastCorpseSkill'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
 // Retired notes from 'SKILLNEC_CastCorpseSkill':
 // Server-side execution body for Necromancer corpse-targeting skills (e.g. Corpse Explosion, Bone Spirit from corpse). Validates the targeted corpse via SKILLNEC_ValidateCorpseTarget, sets the corpse's alignment/aura-state, frees its minions, computes radius and duration from skill calcs with difficulty divisor, then calls SKILLS_ApplyEffectToUnitsInRange with SKILLNEC_CorpseTarget_ValidateAndScheduleEvent, and finally applies the necro-shred alignment state. Returns 1 on success, 0 on invalid target.
+// 1.14d mac: 002633eb
 BOOL __fastcall Skills_SrvDoFunc_059_CastCorpseSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -664,6 +684,7 @@ BOOL __fastcall Skills_SrvDoFunc_059_CastCorpseSkill(::SGAMEDATA * pGame, D2Unit
     return 1;
 }
 
+// 1.14d mac: 0026373b
 uint32_t __fastcall SKILLNEC_ValidateReviveTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pCorpse) {
     if ((pCorpse ? pCorpse->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
@@ -688,6 +709,7 @@ uint32_t __fastcall SKILLNEC_ValidateReviveTarget(::SGAMEDATA * pGame, D2UnitStr
     return (uint32_t)(bCheckResult != 0);
 }
 
+// 1.14d mac: 00267c99
 void __fastcall SKILLNEC_OnConvertExpire(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * dwArg1) {
     UNIT::SUnit::SetAlignment(pUnit, '\0', 1);
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
@@ -696,6 +718,7 @@ void __fastcall SKILLNEC_OnConvertExpire(D2UnitStrc * pUnit, eD2States eState, D
 }
 
 // Server-side event callback that applies the Necromancer Attract/Convert curse to pUnit. Validates the revive target, clamps the resist penalty stat, builds a D2StateExArgStrc with skill/level/duration from the event context array (ppGame), calls SetStateWithExpiryTime with SKILLNEC_OnConvertExpire, adds up to 5 clamped resist-penalty stats, updates animation speed if flagged, sets the unit's alignment to friendly (1), adds it to the player's target node table, switches its AI to mode 3, and schedules an expiry event. Returns 1 on success.
+// 1.14d mac: 002639f8
 int32_t __fastcall SKILLNEC_ApplyConvertToUnit(D2UnitStrc * pUnit, D2SkillAuraCtxStrc * pCtx) {
     int32_t nClampedStatCalc;
     uint32_t bReviveValid = SKILLNEC_ValidateReviveTarget(pCtx->pGame, pCtx->pCaster, pUnit);
@@ -749,6 +772,7 @@ int32_t __fastcall SKILLNEC_ApplyConvertToUnit(D2UnitStrc * pUnit, D2SkillAuraCt
 }
 
 // Server do-function for Necromancer Conversion (Attract/Conversion) AoE skill (SrvDoFunc 61). Validates the skill entry and its aurastat/auratargetstate fields. Sets UNITFLAG_SKSRVDOFUNC on the caster. Computes aura range and duration (reduced by difficulty via SKILLNEC_ApplyCurseDifficultyDivisor), collects up to 6 aura stats and their calc values from SkillsTxt. Calls SKILLS_ApplyEffectToUnitsInRange with SKILLNEC_ApplyConvertToUnit as the per-unit callback.
+// 1.14d mac: 002637a4
 BOOL __fastcall Skills_SrvDoFunc_061_CastConvertAoE(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2ItemStatCostTxt* pStatCostTxt;
     int32_t nDurationCalc;
@@ -811,6 +835,7 @@ BOOL __fastcall Skills_SrvDoFunc_061_CastConvertAoE(::SGAMEDATA * pGame, D2UnitS
 }
 
 // Applies the necromancer's passive_summon_resist bonus as elemental resistances to a newly-created summon. Skips fire/light/cold if the summon already has the corresponding absorb stat. Called after revive/skeleton creation.
+// 1.14d mac: 00263bcb
 void __fastcall SKILLNEC_ApplySummonResistPassive(D2UnitStrc * pUnit, D2UnitStrc * pSummon) {
     int nResistValue;
     int nValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_passive_summon_resist, 0);
@@ -931,6 +956,7 @@ static void __stdcall SKILLNEC_SpawnSkeletonsForRevive(int * pSummon, D2UnitStrc
     SKILLNEC_SetSkeletonComponentsByMasteryLvl(0, 1, pUnit, (D2UnitStrc*)pSummon, nMasteryLvl);
 }
 
+// 1.14d mac: 00263d20
 void __fastcall SKILLNEC_DispatchSummonMastery(D2UnitStrc * pUnit, int * pSummon, int32_t nSkillLevel, int32_t nSkillLvl2) {
     int nSummonSkillId = !pSummon ? -1 : pSummon[1];
     switch (nSummonSkillId) {
@@ -948,6 +974,7 @@ void __fastcall SKILLNEC_DispatchSummonMastery(D2UnitStrc * pUnit, int * pSummon
 }
 
 // Server-side: applies a summon skill's full buff package onto a newly created pet/summon. Reads the skill's passivestat/passivecalc (5 entries) and aurastat/aurastatcalc (6 entries) from SkillsTxt, computing each value via D2GetSkillCalc and adding it to the summon's stat lists; for stats with itemevents it registers aura unit-events (D2SetAuraEvent). Sets the aurastate, scales the summon's max/current HP by the skill's calc[0] percentage, grants sumskill skills (auto-selecting flagged ones), wires auraevent callbacks, applies sumumod monster mods and sumoverlay. Finally calls SKILLASS_EquipSummonItems. pUnit=summoner, pSummonStatList/pSummon=the summon, eSkill=summon skill, nParam1=skill level, nParam2=item level (auto-derived from summoner level if 0). Returns 1 on success, 0 if skill is Attack or stat-list alloc fails.
+// 1.14d mac: 00263ec0
 BOOL __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pSummonStatList, eD2Skills eSkill, int32_t nSkillLvl, int32_t nItemLevel) {
     int32_t nStatCalc;
     D2SUnitEventStrc* fEventSearchResult;
@@ -1148,6 +1175,7 @@ BOOL __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // Sets the combat stats (level, AC, to-hit) on a corpse unit being revived by the Necromancer's Revive skill. If nLevel < 1, derives the minion level as 75% of the caster's level plus nParam2 (clamped to at least 1). Looks up the D2MonLvlTxt row for the final level, then adds the difficulty- and ladder-adjusted AC and TH values. Returns 1 on success, 0 if MonLvl data is out of range.
+// 1.14d mac: 0026462a
 BOOL __fastcall SKILLS_SetSummonBaseStats(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2UnitStrc * pPet, int32_t nLevel, int32_t nLevelOffset) {
     if (nLevel <= 0) {
       int nOwnerLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, UNITSTAT_level, 0);
@@ -1181,6 +1209,7 @@ BOOL __fastcall SKILLS_SetSummonBaseStats(::SGAMEDATA * pGame, D2UnitStrc * pOwn
 }
 
 // Server-side cast handler for the Necromancer Revive skill (SrvDoFunc 031). Finds the targeted corpse, verifies it is consumable, applies blood cost, determines the revived monster class via SKILLS_GetSummonMonsterClassId, frees the corpse unit, spawns a new summon at the corpse position, then applies mastery/buffs/passive resistances and registers it in the node table. Returns TRUE on success.
+// 1.14d mac: 0026474c
 BOOL __fastcall Skills_SrvDoFunc_031_RaiseSkeletonFromCorpse(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2MonsterCastPetStrc sPet;
     D2UnitStrc* pCorpse = UNIT::SUnit::GetTargetEx(pGame, pUnit);
@@ -1224,6 +1253,7 @@ BOOL __fastcall Skills_SrvDoFunc_031_RaiseSkeletonFromCorpse(::SGAMEDATA * pGame
     return 0;
 }
 
+// 1.14d mac: 002649ed
 BOOL __fastcall Skills_SrvDoFunc_032_ApplyDirectDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
@@ -1239,6 +1269,7 @@ BOOL __fastcall Skills_SrvDoFunc_032_ApplyDirectDamage(::SGAMEDATA * pGame, D2Un
 }
 
 // Corpse Explosion per-target callback, passed to SKILLS_ApplyAreaEffect by Skills_SrvDoFunc_055_CorpseExplosion (005c5069). pCallbackArg points at {D2DamageStrc *pDamage, nX, nY, nRadiusSq}: copies the damage, zeroes dwPhysDamage when the target is farther than nRadiusSq from (nX,nY), then DAMAGE_ApplyDamageToUnit + SERVER_GetHitCalculation.
+// 1.14d mac: 00264a3e
 uint32_t __fastcall SKILLNEC_ApplyCorpseExplosionToUnit(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pUnit) {
     int nPosY;
     int32_t nDistFromMissile;
@@ -1282,6 +1313,7 @@ uint32_t __fastcall SKILLNEC_ApplyCorpseExplosionToUnit(D2SkillCallbackContextSt
 }
 
 // Necromancer Corpse Explosion - detonate corpse with explosion damage at location
+// 1.14d mac: 00264b4d
 BOOL __fastcall Skills_SrvDoFunc_055_CorpseExplosion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pCorpseTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     if (!pCorpseTarget || !D2Common::Skills::SKILLS_IsSelectableCorpse2(pCorpseTarget)) {
@@ -1349,10 +1381,12 @@ BOOL __fastcall Skills_SrvDoFunc_055_CorpseExplosion(::SGAMEDATA * pGame, D2Unit
 }
 
 // JMP thunk
+// 1.14d mac: 00265270
 BOOL __fastcall SKILLNEC_CorpseExplosionDispatch(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     return ::D2Game::SKILLS::SkillNec::Skills_SrvDoFunc_055_CorpseExplosion(pGame, pUnit, eSkill, nSkillLvl);
 }
 
+// 1.14d mac: 00265279
 void __fastcall SKILLNEC_InitializeSummon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pSummon, eD2Skills eSkill, int32_t nSkillLvl) {
     SKILLS_SetSummonBaseStats(pGame, pUnit, pSummon, 0, nSkillLvl);
     SKILLNEC_ApplySummonBuffs(pGame, pUnit, pSummon, eSkill, nSkillLvl, 0);
@@ -1360,6 +1394,7 @@ void __fastcall SKILLNEC_InitializeSummon(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // Generic Necromancer summon do-func (raise skeleton/golem etc.). Sets UNITFLAG_SKSRVDOFUNC on caster, looks up pettype and summon class from skills.txt, enforces petmax limit via D2GetSkillCalc, creates the summon unit via SKILL_CreateSummon, initializes it via SKILLNEC_InitializeSummon, sends a 0x7F ally/party info packet to the client, and adds the unit to the target node table.
+// 1.14d mac: 002652e6
 BOOL __fastcall Skills_SrvDoFunc_056_SummonGolem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt;
     D2MonsterCastPetHeadStrc sSummonArgs;
@@ -1407,6 +1442,7 @@ BOOL __fastcall Skills_SrvDoFunc_056_SummonGolem(::SGAMEDATA * pGame, D2UnitStrc
 }
 
 // Server DoFunc for Necromancer Iron Golem (skill 57). Verifies a valid ground item target via SrvStFunc_20, then summons the golem via SKILL_CreateSummon using the skill's pettype/petmax calculus. On success, consumes the target item (removes it from the room and equips it to the golem), initializes the summon, broadcasts ally info to the client, and adds the golem to the unit node table. Returns 1 on success, 0 on failure.
+// 1.14d mac: 0026547c
 BOOL __fastcall Skills_SrvDoFunc_057_IronGolem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     if (!Skills_SrvStFunc_20_IsGroundItemForIronGolem(pGame, pUnit, eSkill, nSkillLvl)) {
       return 0;
@@ -1564,6 +1600,7 @@ static void __stdcall SKILLNEC_ApplyReviveToCorpse(D2UnitStrc * pUnit, eD2Skills
     GAME::Event::SetEvent(pGame, pUnit2, 7, pGame->dwGameFrame + nOwnerGUID, 0, 0);
 }
 
+// 1.14d mac: 0026578e
 BOOL __fastcall Skills_SrvDoFunc_058_ReviveCorpseCheck(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2MonStatsInitStrc local_4c;
     int32_t local_14;
@@ -1621,6 +1658,7 @@ BOOL __fastcall Skills_SrvDoFunc_058_ReviveCorpseCheck(::SGAMEDATA * pGame, D2Un
 }
 
 // Server-side skill DoFunc 60 (Necromancer golem summon at cursor, e.g. Blood/Clay/Iron/Fire golem). Resolves the cursor/target position, finds a valid non-town room nearby (DRLGROOM_FindBetterNearbyRoom). Resolves the summon's monster class id and pettype via SKILLS_GetSummonMonsterClassId, then creates the golem with SKILL_CreateSummon at the target position. On success: assigns the caster as minion owner (AssignMinionOwner), applies umods (InitUmods) and summon buffs (SKILLNEC_ApplySummonBuffs), registers it in the targets node table. If the golem's room is not in town and a server missile (srvmissilea) is configured with calc[1]/2 > 1, fires two CreatingMissile missiles perpendicular to the caster-to-golem vector (an emerge/spawn effect), each retargeted to the golem GUID. Returns 1 on full success (missiles spawned), 0 on failure or invalid target. Side effect: sets UNITFLAG_SKSRVDOFUNC on caster.
+// 1.14d mac: 00265e40
 BOOL __fastcall Skills_SrvDoFunc_060_SummonBoneWall(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nX;
     int nY;
@@ -1760,6 +1798,7 @@ static D2UnitStrc * __stdcall SKILLNEC_CreateSummonAtPosition(::SGAMEDATA * pGam
 }
 
 // srvdofunc 62: spawns 12 bone-structure segments using gaMissileOffsets_BoneStructure offsets. Skills.txt mapping suggests Bone Prison, but body shares the BoneStructure offset table with Bone Wall. Cannot distinguish wall vs prison from body alone — keep current name until Skills.txt confirms.
+// 1.14d mac: 002663a2
 BOOL __fastcall Skills_SrvDoFunc_062_BonePrison(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     // Static local variables (originally global data)
     static int gaMissileOffsets_BoneStructure[12] = {
@@ -1855,6 +1894,7 @@ BOOL __fastcall Skills_SrvDoFunc_062_BonePrison(::SGAMEDATA * pGame, D2UnitStrc 
     return 1;
 }
 
+// 1.14d mac: 00266788
 BOOL __fastcall Skills_SrvDoFunc_063_PoisonExplosion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? 0 : D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
     if (eSkill == SKILL_Attack) {
@@ -1880,6 +1920,7 @@ BOOL __fastcall Skills_SrvDoFunc_063_PoisonExplosion(::SGAMEDATA * pGame, D2Unit
     return 1;
 }
 
+// 1.14d mac: 00266dbe
 static int32_t SKILLNEC_AddHitpoints(D2UnitStrc * pUnit, int32_t nHpAmount) {
     if (nHpAmount <= 0) {
       return 0;
@@ -1898,6 +1939,7 @@ static int32_t SKILLNEC_AddHitpoints(D2UnitStrc * pUnit, int32_t nHpAmount) {
 }
 
 // Item/skill event handler (__fastcall) implementing a Thorns-style reflect aura with conditional life steal. Validates pTarget/pUnit (must be PLAYER or MONSTER, alive) and an incoming-damage param (>0). Looks up the skill's auratargetstate; only fires if pUnit carries that aura state. Computes reflected physical damage as a percent (D2ApplyPercent) of the incoming damage using a skill calc index chosen by whether owner is merc/player and target is player, then applies it to the target via DAMAGE_ApplyDamageToUnit + SERVER_GetHitCalculation. For a specific monster class (0x122, neutral alignment) it also steals a portion of dealt damage back as hitpoints to the owner and/or pUnit (SKILLNEC_AddHitpoints) and plays overlay 0x97. Returns TRUE if processed, FALSE on validation failure.
+// 1.14d mac: 00266886
 BOOL __fastcall ITEMEVENT_AuraThornsWithLifeSteal(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pOwnerUnit;
     uint32_t nMercTypeId;
@@ -2018,6 +2060,7 @@ BOOL __fastcall ITEMEVENT_AuraThornsWithLifeSteal(::SGAMEDATA * pGame, uint32_t 
 }
 
 // Item-event callback for aura-based healing (e.g. Necromancer Life Tap). Given a target unit, looks up the aura's target state on pUnit to find the caster's stat list, computes heal amount via the skill's calc[0] expression scaled by a percentage from pParam, clamps result to [1, maxHP], and writes it back via STATLIST_SetUnitStat UNITSTAT_hitpoints. Also plays the skill's prgoverlay effect on the target. Returns TRUE if heal was applied.
+// 1.14d mac: 00266e2b
 BOOL __fastcall ITEMEVENT_AuraHealTarget(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pSkillLvlCast, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pTargetUnit = pSkillLvlCast;
     if (!pUnit || !pSkillLvlCast) {
@@ -2087,6 +2130,7 @@ BOOL __fastcall ITEMEVENT_AuraHealTarget(::SGAMEDATA * pGame, uint32_t nUnitEven
 }
 
 // Item-event callback for Necromancer aura-based stat absorption (e.g. Life Tap / Decrepify drain effects). Looks up the skill's aura state on pUnit, reads the absorb-capacity stat (aurastat[1]) and current absorb-pool stat (aurastat[0]) from the state's stat list, subtracts incoming damage (pParam+8) from the pool, and either removes the state entirely when exhausted or updates the visual intensity via D2StatesTogglegfx when the pool percentage changes by more than 4 points.
+// 1.14d mac: 002670d0
 BOOL __fastcall ITEMEVENT_BoneArmorAbsorb(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
     eD2UnitStat eAuraStat;
     int nAbsorbedAmt;
@@ -2164,6 +2208,7 @@ BOOL __fastcall ITEMEVENT_BoneArmorAbsorb(::SGAMEDATA * pGame, uint32_t nUnitEve
 }
 
 // Item-event callback implementing the Life Tap curse leech. Computes the leech amount from damage dealt (pParam+8), capped by the target's current HP and scaled by the monster's per-difficulty life-steal percentage. Splits the heal between the summoner (pOwnerUnit, via GetSkilParam2 ratio) and the direct attacker (pUnit) via SKILLNEC_AddHitpoints, then shows overlay 0x97 on healed units. Returns 0 if target is dead, alignment-blocked, or leech percentage is zero.
+// 1.14d mac: 0026732d
 BOOL __fastcall ITEMEVENT_BloodGolemLifeSteal(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL bIsDead;
     int32_t nOwnerHealAmt;
@@ -2256,6 +2301,7 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
     return (eD2UnitType)6;
 }
 // Item-event callback that drains life from a revived necromancer minion back to its owner. Fires when pUnit is a monster with pParam->offset_0x4c damage dealt. Looks up the owner via GetOwnerUnit, checks owner is alive and above 0xFF HP, reads the monster's Skill1 leech rate from MonStats.txt via GetSkillParam4, subtracts a percentage of the dealt damage from owner HP (floor 0x100), and reduces the tracked damage value in pParam.
+// 1.14d mac: 002676d5
 BOOL __fastcall ITEMEVENT_BloodGolemShareDamage(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nDivisor;
     if (!pUnit || !pDamage) {
@@ -2304,6 +2350,7 @@ BOOL __fastcall ITEMEVENT_BloodGolemShareDamage(::SGAMEDATA * pGame, uint32_t nU
 }
 
 // Item-event callback that applies the Slows Target item modifier to pTarget. Reads UNITSTAT_item_slow from pUnit's gear, caps it at 50% for players/slow-immune monsters or 90% for normal monsters, then applies STATE_slowed via SetStateWithExpiryTime (750-frame duration) and additionally slows UNITSTAT_attackrate and UNITSTAT_other_animrate by the same amount, triggering an animation-speed update.
+// 1.14d mac: 002678d4
 BOOL __fastcall ITEMEVENT_ItemSlowTarget(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
     if (!pUnit || !pTarget) {
       return 0;
@@ -2361,6 +2408,7 @@ static inline int SKILLNEC_IsBloodGolem(D2UnitStrc * pUnit) {
     return pUnit && pUnit->eUnitType == UNIT_MONSTER && (!pUnit ? -1 : pUnit->nClassId) == 0x122;
 }
 
+// 1.14d mac: 00267a19
 int32_t __fastcall BloodGolemLifeLeech(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nHealAmount) {
     if (!pUnit) {
       return nHealAmount;

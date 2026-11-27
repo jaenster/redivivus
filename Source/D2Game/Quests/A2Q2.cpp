@@ -31,6 +31,7 @@ namespace D2Game::Quests::QUESTS::A2Q2 {
 // advances Radament internal quest-data state: sets nStateFlag=3, and if first
 // kill (nStateFlagPrev<2) flips to broadcast state 2 (saves Cain flag) + notifies
 // all players. Uses the internal D2QuestDataStrc state machine, NOT QuestRecord bits.
+// 1.14d mac: 00222ca3
 void __fastcall Q09_AICallback_GreaterMummy(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_RadamentsLair);
     if (!(pQuestData && pQuestData->bIsNotIntroduction == '\x01' && (pQuestData->nStateFlag < 3 || pQuestData->nStateFlagPrev < 2))) {
@@ -69,6 +70,7 @@ void __fastcall Q09_AICallback_GreaterMummy(::SGAMEDATA * pGame, D2UnitStrc * pU
 // Q10_IsRadamentCompleted. Predicate: returns true if Radament's Lair (A2Q0)
 // internal quest-data is absent/uninitialized OR its nStateFlag==5 (fully done).
 // Gate used so The Horadric Staff dialog/flow only proceeds once Radament is dealt with.
+// 1.14d mac: 00222f19
 bool __fastcall Q10_IsRadamentCompleted(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_RadamentsLair);
     if (pQuestData && pQuestData->bIsNotIntroduction != '\0') {
@@ -82,6 +84,7 @@ bool __fastcall Q10_IsRadamentCompleted(::SGAMEDATA * pGame) {
 // Returns 1 (quest "live"/should be shown) when NOT yet Completed and NOT
 // FinishedInPreviousGame, OR when JustCompleted/CannotCompleteQuestInGame is set;
 // returns 0 once fully closed out. Drives whether to push a quest-log update to client.
+// 1.14d mac: 0022b6ec
 static BOOL __stdcall Q10_CheckHoradricStaffState(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
     D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pGame, pUnit);
     if (!D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Completed) && !D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_FinishedInPreviousGame)) {
@@ -110,6 +113,7 @@ static int __stdcall Q10_NotifyHoradricStaffActive(::SGAMEDATA * pGame, D2UnitSt
 // For each held item it reads the matching QuestRecord step bit (Step0x03/04/05/06/10)
 // and emits the not-yet-told message (low index) or the already-told message
 // (high index). Returns nonzero if a relevant item is held. Read-only on quest state.
+// 1.14d mac: 00222f9f
 static uint8_t __stdcall Q10_CheckQuestItemsForDialog(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, uint8_t * pOutput) {
     BOOL bQuestStepSet;
     *pOutput = 0xff;
@@ -179,6 +183,7 @@ static uint8_t __stdcall Q10_CheckQuestItemsForDialog(D2QuestDataStrc * pQuestDa
 // Q10_ActiveFilter. Quest-active filter for NPC 0xf4 (Drognan). Returns true (show
 // this quest's dialog) only for classId 0xf4 AND when either RewardAwaits bit is set
 // OR Q10_CheckQuestItemsForDialog finds a relevant quest item. Read-only.
+// 1.14d mac: 00222f4d
 bool __fastcall Q10_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     if (nTargetClassId == 0xf4) {
       BOOL BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_RewardAwaits);
@@ -199,6 +204,7 @@ bool __fastcall Q10_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 // Skill scroll ('rt1 '). For each player who does NOT already hold the scroll and is
 // not past Step0x03, bumps a counter in A2Q2 quest-specific data so the portal-drop
 // loop knows how many scrolls to spawn. No QuestRecord writes.
+// 1.14d mac: 00223f80
 BOOL __fastcall Q10_CountPlayersNeedingScroll(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -220,6 +226,7 @@ BOOL __fastcall Q10_CountPlayersNeedingScroll(::SGAMEDATA * pGame, D2UnitStrc * 
 // Q10_OnStaffOrViperPickup. Per-player iterate callback for the Amulet-of-the-Viper
 // ('msf ') drop path. For each player not yet Completed who holds neither 'msf ' nor
 // 'tsh ' (Staff of Kings), bumps the A2Q2 drop counter. No QuestRecord writes.
+// 1.14d mac: 00224150
 BOOL __fastcall Q10_CountPlayersNeedingStaff(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2QuestDataStrc* pQuestItem;
     D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
@@ -244,6 +251,7 @@ BOOL __fastcall Q10_CountPlayersNeedingStaff(::SGAMEDATA * pGame, D2UnitStrc * p
 // Q10_OnHoradricCubePickup. Per-player iterate callback for the Horadric Cube
 // ('box ') drop path. Bumps the A2Q2 drop counter for each player not already
 // holding the cube. No QuestRecord writes.
+// 1.14d mac: 00224319
 BOOL __fastcall Q10_CountPlayersNeedingCube(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitStrc* pQuestData = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20786f62);
     if (!pQuestData) {
@@ -258,6 +266,7 @@ BOOL __fastcall Q10_CountPlayersNeedingCube(::SGAMEDATA * pGame, D2UnitStrc * pU
 }
 
 // A2Q2 (Horadric Staff) NPC-gossip callback for Drognan (classId 0xf4). Dispatches on dialog message index: 0x14f removes the Staff of Kings item from inventory and sets Step0x03; 0x150/0x151/0x152 set the corresponding step bit plus Step0x03; 0x153 (told-everything) clears RewardAwaits, registers the player GUID in the quest list, sets Step0x10+0x04+0x06+0x05+0x03, and sends an NPC gossip packet. Early-exits if NPC is not Drognan.
+// 1.14d mac: 002237ad
 void __fastcall Q10_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     uint16_t nNpcNo = pQuestArgs->sQuestArgs.sNpcMessage.nNPCNo; // steer-ok: the original reads the NPC number before the bit-buffer lookup; folded OUR-2
     uint16_t nMessageIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
@@ -312,6 +321,7 @@ static inline int GetClassIdInline(D2UnitStrc * pUnit) {
 // from Q10_CheckQuestItemsForDialog; else if player already participated -> msg 5;
 // else default item/Step0x03-gated msg (>=10 collapses to 6). JustCompleted/Completed
 // gate suppresses re-offer.
+// 1.14d mac: 00223655
 void __fastcall Q10_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int32_t nPlayerGUID;
     uint8_t byItemDialogMsg;
@@ -372,6 +382,7 @@ void __fastcall Q10_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 
 // Q10_Callback_03. Gossip sub-event handler: when the text-control id == 0x28,
 // removes the player from the quest GUID participation list. No QuestRecord writes.
+// 1.14d mac: 0022363f
 void __fastcall Q10_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     if (pQuestArgs->sQuestArgs.sLevelChange.nOldLevel != 0x28) {
       return;
@@ -381,11 +392,13 @@ void __fastcall Q10_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 }
 
 // JMP thunk
+// 1.14d mac: 00223968
 void __fastcall Q10_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::D2Game::Quests::QUESTS::SetRewardAndFinishFlags(pQuestData, pQuestArgs);
 }
 
 // Q10_Callback_08. Empty quest state-handler slot (handler[8]); no-op stub.
+// 1.14d mac: 00223b55
 void __fastcall Q10_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
 
 }
@@ -396,6 +409,7 @@ void __fastcall Q10_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 // player is in the quest's act, refreshes the quest-log entry via
 // Q10_CheckHoradricStaffState / Q10_NotifyHoradricStaffActive. Reads Step0x03 only;
 // no QuestRecord writes.
+// 1.14d mac: 00223971
 void __fastcall Q10_Callback04_ItemPickedUp(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     uint32_t nItemClassId = !pQuestArgs->pTarget ? -1 : pQuestArgs->pTarget->nClassId;
     D2ItemsTxt* pItemTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
@@ -454,6 +468,7 @@ void __fastcall Q10_Callback04_ItemPickedUp(D2QuestDataStrc * pQuestData, D2Ques
 // a quest piece, clears the matching "told Drognan about it" step bit so the dialog
 // will re-offer: viper ('vip ')->clear Step0x04, cube ('box ')->clear Step0x06,
 // msf ('msf ')->clear Step0x05. Each clear is gated on the bit currently being set.
+// 1.14d mac: 00223a53
 void __fastcall Q10_Callback05_ItemDropped(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     uint32_t nItemClassId;
     BOOL bQuestStateFlag;
@@ -511,6 +526,7 @@ BOOL __fastcall Unreferenced_00599bf0(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 
 // A2Q2 Horadric Scroll chest operate fn (OperateFn 40). Opens the chest, sets the drop item code 'rt1 ', counts eligible players via Q10_OnScrollPickup, drops that many scrolls, then rolls gold. No QuestRecord writes.
 // Slot from objects.txt OperateFn 40.
+// 1.14d mac: 00223e51
 BOOL __fastcall OBJOP_A2Q2_OpenHoradricScrollChest(D2ObjectOperateFnArg * pOperation) {
     D2QuestDataA2Q2Strc* pA1Q1Scratch;
     BOOL bPortalActive = QUESTS_OpenQuestChest(pOperation);
@@ -551,6 +567,7 @@ BOOL __fastcall OBJOP_A2Q2_OpenHoradricScrollChest(D2ObjectOperateFnArg * pOpera
 
 // A2Q2 Staff of Kings chest operate fn (OperateFn 41). Opens the chest, sets the drop item code 'msf ', counts eligible players via Q10_OnStaffOrViperPickup, drops that many identified reward items (bumps nMsfCount/bHasViperAmulet), then rolls gold. No QuestRecord writes.
 // Slot from objects.txt OperateFn 41.
+// 1.14d mac: 00223ffa
 BOOL __fastcall OBJOP_A2Q2_OpenStaffOfKingsChest(D2ObjectOperateFnArg * pOperation) {
     if (QUESTS_OpenQuestChest(pOperation)) {
       pOperation->sArg.pVictim->dwDropItemCode = 0x2066736d;
@@ -582,6 +599,7 @@ BOOL __fastcall OBJOP_A2Q2_OpenStaffOfKingsChest(D2ObjectOperateFnArg * pOperati
 
 // A2Q2 Horadric Cube chest operate fn (OperateFn 39). Opens the chest, counts eligible players via Q10_OnHoradricCubePickup, drops that many cubes ('box ', bumps nBoxCount/bHasCube), then rolls gold. No QuestRecord writes.
 // Slot from objects.txt OperateFn 39.
+// 1.14d mac: 002241df
 BOOL __fastcall OBJOP_A2Q2_OpenHoradricCubeChest(D2ObjectOperateFnArg * pOperation) {
     D2ObjectOperateFnArg* pOperationLocal;
     D2QuestDataA2Q2Strc* pA2Q2Data;
@@ -627,16 +645,19 @@ BOOL __fastcall OBJOP_A2Q2_OpenHoradricCubeChest(D2ObjectOperateFnArg * pOperati
 }
 
 // Objects_InitFn31. Empty object init fn (no-op stub) for an A2Q2 quest object.
+// 1.14d mac: 00224360
 void __fastcall Objects_InitFn31(D2ObjectInitFnArg * pInitArg) {
 
 }
 
 // Objects_InitFn33. Empty object init fn (no-op stub) for an A2Q2 quest object.
+// 1.14d mac: 00224365
 void __fastcall Objects_InitFn33(D2ObjectInitFnArg * pInitArg) {
 
 }
 
 // Objects_InitFn32. Empty object init fn (no-op stub) for an A2Q2 quest object.
+// 1.14d mac: 0022436a
 void __fastcall Objects_InitFn32_HoradricScrollChest(D2ObjectInitFnArg * pInitArg) {
 
 }
@@ -663,6 +684,7 @@ void __fastcall Q10_GetQuestInfo(::SGAMEDATA * pGame, uint32_t * pdwBoxCount, bo
 // count, records assembling player's GUID, pushes quest info to the unit, sets
 // QuestRecord Step0x11 (staff-built), then tail-calls A2Q4::Q12_OnHoradricStaffAssembled
 // to progress the Tainted Sun / Seven Tombs chain.
+// 1.14d mac: 0022314f
 void __fastcall Q10_OnStaffAssembledViaCube(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2QuestDataA2Q2Strc* pA2Q2Data;
     D2QuestDataStrc* pPlayerData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheHoradricStaff);
@@ -692,6 +714,7 @@ void __fastcall Q10_OnStaffAssembledViaCube(::SGAMEDATA * pGame, D2UnitStrc * pU
 //  - Else (in progress) it inspects held items (rt1/msf/box/vip/tsh) and the
 //    Step0x03/04/05/06/10 bits to pick status 1,2,3,4,6,9. Status 9 = "ready to
 //    build staff" (has cube+amulet pieces, counts satisfied / TaintedSun flag).
+// 1.14d mac: 00223271
 bool __fastcall Q10_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode) {
     D2UnitStrc* pItemRt1;
     D2UnitStrc* pItemMsf;
@@ -768,6 +791,7 @@ bool __fastcall Q10_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
 }
 
 // A2Q2 (Horadric Staff) inventory-recount handler, handler index 0xd. Increments per-piece counters in D2QuestDataA2Q2Strc for each staff component (msf/box/vip/tsh) the player currently holds. If quest not Completed, Seven Tombs introduced, Izual not set, and player lacks the Staff of Kings, clears step bits Step0x04/0x05/0x06 so the relevant dialog re-offers.
+// 1.14d mac: 00223b5a
 void __fastcall Q10_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame;
     pGame = pQuestArgs->pGame;
@@ -847,6 +871,7 @@ void __fastcall Q10_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 // counters for any of msf/vip/box/tsh now held, then, if the "all pieces present"
 // condition is met (has staff, or has cube+viper+amulet pieces), clears Seven Tombs'
 // bJerhynGateOpened flag to keep the gate logic consistent. No QuestRecord writes.
+// 1.14d mac: 00223cd2
 void __fastcall Q10_Callback14_PlayerJoinedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2QuestDataA2Q2Strc* pA1Q1QuestData = pQuestData->pQuestSpecificData.pA2Q2;
     D2UnitStrc* pQuestSpecific = ITEMS::Items::Drop::HasQuestItem(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x2066736d);
@@ -885,6 +910,7 @@ void __fastcall Q10_Callback14_PlayerJoinedGame(D2QuestDataStrc * pQuestData, D2
 // Izual/Arcane-Sanctuary spawn condition is satisfied (piece counters + TaintedSun
 // state) and, on first satisfaction, sets Seven Tombs' bIzualLocationSet and seeds
 // pIzualUnit (SP vs MP variant). No QuestRecord writes.
+// 1.14d mac: 00223d9a
 void __fastcall Q10_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2QuestDataStrc* pOtherQuestData;
     D2QuestDataA2Q2Strc* pA2Q2Data = pQuestData->pQuestSpecificData.pA2Q2;
@@ -944,6 +970,7 @@ void __fastcall Q10_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc * pQue
 //  [5]=Callback_05 (drop)  [8]=Callback_08 (stub)  [9]=Callback_09 (item lost)
 //  [0xa]=Callback_10  [0xb]=Callback_11 (dialog advance)  [0xd]=Callback_13 (recount)
 //  [0xe]=Callback_14 (item gained). Sets nStateFlagPrev=0xd initial. No QuestRecord I/O.
+// 1.14d mac: 0022351c
 void __fastcall Q10_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->pNpcMessages = A2Q2::aNpcGossipData;

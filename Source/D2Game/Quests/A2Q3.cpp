@@ -59,6 +59,7 @@ BOOL __fastcall Q11_NotifyTaintedSunComplete(::SGAMEDATA * pGame, D2UnitStrc * p
 // A2Q3 "The Tainted Sun" - state-10 quest-event callback (registered in fpQuestStateHandler[10]).
 // Calls SetRewardAndFinishFlags then removes the acting player from the quest's participant GUID list
 // (or removes all, GUID -1, when pPlayer is null). No quest-record GetQuestState/SetQuestState here.
+// 1.14d mac: 00224c8d
 void __fastcall Q11_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     SetRewardAndFinishFlags(pQuestData, pQuestArgs);
     D2QuestDataA2Q3Strc* t2_c0 = pQuestData->pQuestSpecificData.pA2Q3;
@@ -69,6 +70,7 @@ void __fastcall Q11_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2
 // (neither Completed nor RewardAwaits), mark their record CannotCompleteQuestInGame and push quest-state
 // packet (quest 10). Run after the altar is destroyed so players who weren't present can't still finish it.
 // __fastcall: nParam=pUnit-like ptr carrying difficulty at +0x6d; selects pQuestRecordPool[diff+1].
+// 1.14d mac: 00225725
 BOOL __fastcall Q11_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -89,6 +91,7 @@ BOOL __fastcall Q11_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, v
 // A2Q3 - per-unit iterator cb (Q11_PropagateRewardToParty): if THIS player's record is JustCompleted,
 // run Q11_SetTaintedSunRewardOnPartyMember across the player's whole party so partymates also get the
 // RewardAwaits credit. Read-only on the quest record; the write happens in the party callback.
+// 1.14d mac: 00225651
 BOOL __fastcall Q11_PropagateRewardToParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     /* GetQuestState(buf, A2Q3, 0xd=JustCompleted) - only propagate reward if self
                          player just completed it */ D2BitBufferStrc* pQuestRecord = GetQuestBitBufferInline(pGame, pUnit);
@@ -107,6 +110,7 @@ BOOL __fastcall Q11_PropagateRewardToParty(::SGAMEDATA * pGame, D2UnitStrc * pUn
 // A2Q3 - per-unit iterator cb (Q11_SendDarknessPacket): for each player in an act, send 0x53 "darkness"
 // env packet (subcmd 5) to blot out the sun, then a 0x5D quest-state packet (quest 10, flag 0x10).
 // No quest-record access; pure client notification of the Tainted-Sun darkening.
+// 1.14d mac: 0022b65a
 BOOL __fastcall Q11_SendDarknessPacket(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2GSPacketSrv0x53 sPacket53;
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q3.cpp", 0x142);
@@ -131,6 +135,7 @@ BOOL __fastcall Q11_SendDarknessPacket(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 // A2Q3 - per-unit iterator cb (Q11_SendSunRestoredPacket): for each player in an act, send 0x53
 // "darkness" env packet (subcmd 2 = restore daylight) when the Tainted Sun Altar is destroyed.
 // No quest-record access; mirror of Q11_SendDarknessPacket that lifts the darkness.
+// 1.14d mac: 0022b4c6
 BOOL __fastcall Q11_SendSunRestoredPacket(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q3.cpp", 0x165);
     uint8_t nActNo = GAME::Clients::GetAct(pClient);
@@ -150,6 +155,7 @@ BOOL __fastcall Q11_SendSunRestoredPacket(::SGAMEDATA * pGame, D2UnitStrc * pUni
 // should react/gossip about the quest. Returns true only when quest is NOT Completed but IS RewardAwaits
 // and the target classId is one of the Viper-cult monsters (0xaf,0xb0,0xb1,0xc6,0xc7,0xc9,0xca,0xd2,0xf4,0xc8),
 // or class 0xb1 with the quest's stateFlag set. Read-only on the quest record.
+// 1.14d mac: 00224422
 bool __fastcall Q11_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
     if (BVar1 == 1) {
@@ -172,6 +178,7 @@ bool __fastcall Q11_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 // about the Tainted Sun. If RewardAwaits -> gossip msg 3. Else if not CannotComplete: msg 4 if this player
 // already participated, otherwise pick a msg from gdwQ10QuestStateMessages[stateFlag] when the intro is done,
 // quest not Completed and stateFlag<=3. AddGossipMessageOnMonster shows the chosen line. Read-only on record.
+// 1.14d mac: 002247f5
 void __fastcall Q11_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     // Static local variables (originally global data)
     static int32_t gdwQ10QuestStateMessages[6] = { -0x1, 0x0, 0x1, 0x2, 0x3, 0x0 }; D2_STATIC_GUARD(gdwQ10QuestStateMessages, "D2Game::Quests::QUESTS::A2Q3::Q11_Callback00_NpcActivate::gdwQ10QuestStateMessages");
@@ -242,6 +249,7 @@ void __fastcall Q11_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 // QUEST_SetStateAndBroadcast w/ Q11_NotifyTaintedSunComplete), bumps stateFlag to 1 on first run, then if
 // Act 2 DRLG is loaded calls DRLGENV_TaintedSunBegin() (darkens the act) and iterates players sending
 // Q11_SendDarknessPacket. Returns nonzero(low byte 1) on success; 0 if act not yet loaded (deferred).
+// 1.14d mac: 00224584
 static uint8_t __stdcall Q11_BeginTaintedSun(D2QuestDataStrc * pQuestData) {
     pQuestData->nQuestPacketFlags = '\0';
     QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q11_NotifyTaintedSunComplete, 1);
@@ -277,6 +285,7 @@ static void __stdcall Q11_EndTaintedSun(D2QuestDataStrc * pQuestData, ::SGAMEDAT
 // GUID, and if the intro is done and stateFlag<2 kicks off Q11_BeginTaintedSun (darkening); sets pending vs
 // darkened flags by its result and advances stateFlag to 3. If no prior stateFlag, broadcasts display state 2
 // (via QUEST_SetStateAndBroadcast). Finally flags the unit for client update.
+// 1.14d mac: 002244dc
 void __fastcall Q11_OnViperAmuletInit(D2QuestDataStrc * pQuestData, D2ObjectInitFnArg * pInitArg) {
     int32_t nViperAmuletGUID;
     D2QuestDataA2Q3Strc* pA2Q3Data = pQuestData->pQuestSpecificData.pA2Q3;
@@ -313,6 +322,7 @@ void __fastcall Q11_OnViperAmuletInit(D2QuestDataStrc * pQuestData, D2ObjectInit
 // A2Q3 - fpSequenceFilter (Q11_SequenceFilter): chains to the next quest in the sequence. When this quest's
 // stateFlag==5 (finished) or intro not done, looks up the sequence-linked quest data and invokes its own
 // fpSequenceFilter (asserting the fn ptr is valid first). No quest-record access.
+// 1.14d mac: 00224e35
 bool __fastcall Q11_SequenceFilter(D2QuestDataStrc * pQuestData) {
     if (pQuestData->nStateFlag != 5 && pQuestData->bIsNotIntroduction != '\0') {
       return true;
@@ -336,6 +346,7 @@ bool __fastcall Q11_SequenceFilter(D2QuestDataStrc * pQuestData) {
 // A2Q3 - per-unit iterator cb (Q11_UpdateQuestRecord): mirrors the server quest stateFlag into each player's
 // saved quest record. If not yet Completed/RewardAwaits, reads the live stateFlag and writes the matching
 // progress sub-state: any flag -> Step0x02, ==2 -> Step0x03, ==3 -> Step0x04. Keeps client save in sync.
+// 1.14d mac: 0022b52b
 BOOL __fastcall Q11_UpdateQuestRecord(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];
@@ -393,6 +404,7 @@ static void __stdcall Q11_OnPlayerInteract(D2QuestDataStrc * pQuestData, D2UnitS
 // stateFlag from a player's saved record on (re)entry. If record is Completed or RewardAwaits ->
 // SetQuestRecordState JustCompleted and return. Else only proceeds if Step0x02 is set: re-runs the start
 // (Q11_OnPlayerInteract) then sets stateFlag/prev from progress sub-states (Step0x04->3, Step0x03->2, else 1).
+// 1.14d mac: 00224ccf
 void __fastcall Q11_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
@@ -435,6 +447,7 @@ void __fastcall Q11_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 // A2Q3 - per-unit iterator cb (Q11_CheckViperAmuletRoomComplete): when a player is in the same level as the
 // destroyed altar (nMalusMode==current room level) and their record is not yet Completed/FinishedInPreviousGame,
 // mark it JustCompleted + RewardAwaits. Grants quest credit to everyone in the temple room at completion.
+// 1.14d mac: 00225583
 BOOL __fastcall Q11_CheckViperAmuletRoomComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     BOOL bQuestState;
     D2QuestDataA2Q3Strc* pA2Q3SpecificData;
@@ -466,6 +479,7 @@ BOOL __fastcall Q11_CheckViperAmuletRoomComplete(::SGAMEDATA * pGame, D2UnitStrc
 
 // A2Q3 - per-unit iterator cb (Q11_PlayCompletionSound): if this player's record is JustCompleted, fire the
 // quest-complete sound/event (SetupUpdateEvent_AttachEventSound id 0x34). Read-only on the quest record.
+// 1.14d mac: 002256ce
 BOOL __fastcall Q11_PlayCompletionSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     /* GetQuestState(buf, A2Q3, 0xd=JustCompleted) - play complete sound only on the
                          just-finished tick */ D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
@@ -480,6 +494,7 @@ BOOL __fastcall Q11_PlayCompletionSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 // A2Q3 - per-unit iterator cb (Q11_OnStaffViperPickup): counts players eligible for a body-part reward drop.
 // For a player NOT holding the 'vip ' or 'hst ' quest item and whose Horadric-Staff quest isn't Completed,
 // increments the A2Q3 nQuestItemCount (drives how many reward items the altar drops). Read of HoradricStaff only.
+// 1.14d mac: 002254f1
 BOOL __fastcall Q11_CountPlayersNeedingViperAmulet(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2QuestDataStrc* pPlayerData;
     D2UnitStrc* pQuestData = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20706976);
@@ -505,6 +520,7 @@ BOOL __fastcall Q11_CountPlayersNeedingViperAmulet(::SGAMEDATA * pGame, D2UnitSt
 
 // A2Q3 Tainted Sun altar operate fn (OperateFn 24, Claw Viper Temple). If the player already finished or holds the staff/amulet items it only plays a sound. Otherwise it ends the darkening (DRLGENV_TaintedSunEnd and the sun-restored packets), sets state flag 4 and marks the players' records RewardAwaits and JustCompleted.
 // Slot from objects.txt OperateFn 24.
+// 1.14d mac: 00224eb4
 BOOL __fastcall OBJOP_A2Q3_ActivateTaintedSunAltar(D2ObjectOperateFnArg * pOperation) {
     D2UnitStrc* pPlayerData;
     D2RoomStrc* pRoom;
@@ -672,6 +688,7 @@ BOOL __fastcall OBJOP_A2Q3_ActivateTaintedSunAltar(D2ObjectOperateFnArg * pOpera
 
 // A2Q3 - Q11_IsTaintedSunComplete: returns true if the Tainted Sun quest has progressed past stateFlag 3
 // (i.e. altar destroyed / quest finished), or true if quest data missing / intro not started. Read-only.
+// 1.14d mac: 0022580c
 bool __fastcall Q11_IsTaintedSunComplete(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheTaintedSun);
     if (pQuestData && pQuestData->bIsNotIntroduction != '\0') {
@@ -684,6 +701,7 @@ bool __fastcall Q11_IsTaintedSunComplete(::SGAMEDATA * pGame) {
 // A2Q3 - Q11_InitTaintedSunForAct: on Act 2 (re)load, if the quest is mid-darkening (pending flag at +3 set),
 // re-applies DRLGENV_TaintedSunBegin() to re-darken the act and flips pending(+3)->0, darkened(+2)->1.
 // Restores the visual darkness after a level/act reload. No quest-record access.
+// 1.14d mac: 00225840
 void __fastcall Q11_InitTaintedSunForAct(::SGAMEDATA * pGame, char nActNo) {
     if (nActNo != '\x01') {
       return;
@@ -721,6 +739,7 @@ uint8_t __fastcall Q11_GetTaintedSunFlag(D2QuestDataStrc * pCallerQuestData) {
 // state 0xd and set stateFlag 5 (finalize) + run sequence filter; then on RewardAwaits, flip the record to
 // Completed (UnsetQuestState RewardAwaits), add player to participant GUID list, and if pre-intro set record
 // JustCompleted. This is the reward/turn-in finalization path.
+// 1.14d mac: 00224936
 void __fastcall Q11_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2BitBufferStrc* pBitBuffer;
     D2UnitDataPlayerStrc* pPlayerData;
@@ -784,6 +803,7 @@ void __fastcall Q11_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     }
 }
 
+// 1.14d mac: 0022b5f4
 uint8_t __fastcall Q11_TimerCheckDarkness(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
     D2QuestDataA2Q3Strc* pA2Q3Data = pQuestData->pQuestSpecificData.pA2Q3;
     pA2Q3Data->bDarknessTimerArmed = 0;
@@ -821,6 +841,7 @@ static void __stdcall Q11_StartDarknessTimer(D2QuestDataStrc * pQuestData) {
 // On indices 0x2c/0x2d with stateFlag 0 and intro done -> Q11_StartDarknessTimer (schedule darkening). On index
 // 0x28 with bAcceptedQuest -> Q11_BeginTaintedSun and, on success, sync records (Q11_UpdateQuestRecord) and
 // clear bAcceptedQuest. On gossip control 0x28: remove player from GUID list and bump stateFlag 2->3. No record reads.
+// 1.14d mac: 00224b7f
 void __fastcall Q11_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int nLevelIndex = pQuestArgs->sQuestArgs.sLevelChange.nNewLevel;
     int32_t nOldLevel = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
@@ -853,6 +874,7 @@ void __fastcall Q11_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 // gossip message table (aNpcGossipData, 0xb entries: monStatsId->stringIndex), sets nQuestIdReal =
 // QUEST_TheTaintedSun, fpActiveFilter=Q11_ActiveFilter, fpSequenceFilter=Q11_SequenceFilter, initNo 4,
 // stateFlag 0, and zero-inits the participant GUID list. No quest-record access.
+// 1.14d mac: 002246e7
 void __fastcall Q11_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGame = pQuestData->pGame;

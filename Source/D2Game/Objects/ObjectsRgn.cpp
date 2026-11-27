@@ -42,6 +42,7 @@ namespace D2Game::Objects::ObjectsRgn {
 
 // Allocates and initializes the per-game object-control region (D2ObjectControlStrc, pGame->pObjectControl) from the game memory pool. Seeds it deterministically from the game seed, then allocates one per-level D2ObjectRngStrc (init monster-class -1, act from LvlTbls, min-distance MAX) for every level in Levels.txt. Builds the shrine RNG buckets: counts Shrines.txt lines per effect-class (0..7), allocates a per-class index array, and fills each bucket with the shrine line indices so shrines can later be drawn randomly by effect class. Halts (ERROR) if pGame is null. Returns the low dword of the freshly advanced game seed.
 // @sourcefile .\OBJECTS\objrgn.cpp
+// 1.14d mac: 001f556c
 int32_t __fastcall AllocObjectControl(::SGAMEDATA * pGame) {
     D2ObjectRngStrc* pLevelObjRng;
     D2ShrinesTxt* pShrinesTxt;
@@ -152,6 +153,7 @@ int32_t __fastcall AllocObjectControl(::SGAMEDATA * pGame) {
 
 // Tears down and frees the game's D2ObjectControlStrc. Walks and frees the pSub0x1110 linked list (arena-allocated sub-records), then frees every per-level D2ObjectRngStrc in aLevelsRng (indices 1..nTxtLevelsSize-1), then frees all 8 shrine RNG arrays in sShrinesRng.aShrinesRng, and finally frees the control block itself from the game memory pool. Halts with an internal error if pGame is NULL.
 // @sourcefile .\OBJECTS\objrgn.cpp
+// 1.14d mac: 001f57e2
 void __fastcall FreeObjectControl(::SGAMEDATA * pGame) {
     D2ObjectControlSub0x1110* pPrevSub;
     if (!pGame) {
@@ -189,10 +191,12 @@ void __fastcall FreeObjectControl(::SGAMEDATA * pGame) {
     D2_FREE_POOL_AT(pGame->pMemoryPool, pGame->pObjectControl, ".\\OBJECTS\\objrgn.cpp", 0xec);
 }
 
+// 1.14d mac: 001f595d
 D2ObjectRngStrc * __fastcall GetObjectLevelRng(::SGAMEDATA * pGame, eD2LevelId eLevelId) {
     return pGame->pObjectControl->aLevelsRng[eLevelId];
 }
 
+// 1.14d mac: 001f5972
 D2SeedStrc * __fastcall GetObjectControlSeed(::SGAMEDATA * pGame, D2RoomStrc * pRoom) {
     return &pGame->pObjectControl->sSeed;
 }
@@ -253,6 +257,7 @@ void __fastcall Debug(::SGAMEDATA * pGame) {
 }
 
 // @sourcefile .\OBJECTS\objrgn.cpp
+// 1.14d mac: 001f5991
 void __fastcall AllocObjectControlSub0x1110(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2RoomStrc * pRoom) {
     int32_t nCoord;
     D2ObjectControlStrc* pObjectControl = pGame->pObjectControl;
@@ -284,6 +289,7 @@ void __fastcall AllocObjectControlSub0x1110(::SGAMEDATA * pGame, D2UnitStrc * pU
 
 // Object initializer for region-based objects (objrgn.cpp). Walks the pSub0x1110 linked list looking for an entry whose room matches pInitArg->pRoom (or whose coords fall inside that room). If found and the object is absent or dead, schedules a game event using the object's FrameCnt animation timing, then frees the entry. If not found and the room is a town room, calls SetupUpdateFlag(obj, 2).
 // @sourcefile .\OBJECTS\objrgn.cpp
+// 1.14d mac: 001f5a51
 void __fastcall Objects_InitFn17_Waypoint(D2ObjectInitFnArg * pInitArg) {
     D2ObjectsTxt* pObjectsTxt;
     int nCoord;
@@ -324,6 +330,7 @@ void __fastcall Objects_InitFn17_Waypoint(D2ObjectInitFnArg * pInitArg) {
     D2Common::Units::ChangeAnimMode(pInitArg->pObject, 2);
 }
 
+// 1.14d mac: 001f5b85
 bool __fastcall OBJECTRGN_CheckPoints2Capacity(::SGAMEDATA * pGame, eD2LevelId eLevel) {
     D2ObjectRngStrc* pDVar1 = pGame->pObjectControl->aLevelsRng[eLevel];
     int iVar2 = pDVar1->nPointsSize2;
@@ -338,6 +345,7 @@ bool __fastcall OBJECTRGN_CheckPoints2Capacity(::SGAMEDATA * pGame, eD2LevelId e
     return true;
 }
 
+// 1.14d mac: 001f5bc1
 uint8_t __fastcall OBJECTRGN_CheckDensityThreshold(::SGAMEDATA * pGame, eD2LevelId eLevel) {
     D2ObjectRngStrc* pLevelRng = pGame->pObjectControl->aLevelsRng[eLevel];
     if (pLevelRng->nLevelRooms > 0 && (pLevelRng->pad_0x4 << 7) / pLevelRng->nLevelRooms > 0x60 && !pLevelRng->pad_0x10) {
@@ -347,6 +355,7 @@ uint8_t __fastcall OBJECTRGN_CheckDensityThreshold(::SGAMEDATA * pGame, eD2Level
     return 0;
 }
 
+// 1.14d mac: 001f5bfa
 bool __fastcall OBJECTRGN_CheckPointsCapacity(::SGAMEDATA * pGame, eD2LevelId eLevel) {
     D2ObjectRngStrc* pDVar1 = pGame->pObjectControl->aLevelsRng[eLevel];
     int iVar2 = pDVar1->nPointsSize1;
@@ -361,10 +370,12 @@ bool __fastcall OBJECTRGN_CheckPointsCapacity(::SGAMEDATA * pGame, eD2LevelId eL
     return true;
 }
 
+// 1.14d mac: 001f5c36
 void __fastcall OBJECT_IncrementLevelSpawnCount(::SGAMEDATA * pGame, eD2LevelId eLevel) {
     pGame->pObjectControl->aLevelsRng[eLevel]->pad_0x10++;
 }
 
+// 1.14d mac: 001f5c4e
 bool __fastcall OBJECTRGN_IsPositionClearOfPoints2(::SGAMEDATA * pGame, eD2LevelId eLevel, int32_t nX, int32_t nY) {
     D2ObjectRngStrc* pDVar1 = pGame->pObjectControl->aLevelsRng[eLevel];
     int iVar2 = pDVar1->nPointsSize2;
@@ -397,6 +408,7 @@ bool __fastcall OBJECTRGN_IsPositionClearOfPoints2(::SGAMEDATA * pGame, eD2Level
     return true;
 }
 
+// 1.14d mac: 001f5ca0
 void __fastcall AddPointsToLevelRngPoints2(::SGAMEDATA * pGame, eD2LevelId eLevel, int32_t nX, int32_t nY) {
     D2ObjectRngStrc* pRng = pGame->pObjectControl->aLevelsRng[eLevel];
     if (pRng->nPointsSize2 >= 4) {
@@ -408,6 +420,7 @@ void __fastcall AddPointsToLevelRngPoints2(::SGAMEDATA * pGame, eD2LevelId eLeve
     pRng->nPointsSize2++;
 }
 
+// 1.14d mac: 001f5cd4
 bool __fastcall OBJECTRGN_IsPositionClearOfPoints1(::SGAMEDATA * pGame, eD2LevelId eLevel, int32_t nX, int32_t nY) {
     D2ObjectRngStrc* pDVar1 = pGame->pObjectControl->aLevelsRng[eLevel];
     int iVar2 = pDVar1->nPointsSize1;
@@ -440,6 +453,7 @@ bool __fastcall OBJECTRGN_IsPositionClearOfPoints1(::SGAMEDATA * pGame, eD2Level
     return true;
 }
 
+// 1.14d mac: 001f5d26
 void __fastcall AddPointsToLevelRngPoints1(::SGAMEDATA * pGame, eD2LevelId eLevel, int32_t nX, int32_t nY) {
     D2ObjectRngStrc* pRng = pGame->pObjectControl->aLevelsRng[eLevel];
     if (pRng->nPointsSize1 >= 10) {
@@ -452,6 +466,7 @@ void __fastcall AddPointsToLevelRngPoints1(::SGAMEDATA * pGame, eD2LevelId eLeve
 }
 
 // Resolves the monster class ID to use for object-mode spawns in a given room/level. If the level's cached nMonClassId is invalid, builds an act-specific table of valid skeleton/zombie base IDs, searches the room's monster region entries for a matching class range, caches the result in pLevelRng->nMonClassId, and returns it. Falls back to 0xEA (default skeleton) if no region match is found.
+// 1.14d mac: 001f5d56
 int32_t __fastcall OBJECTRGN_GetTrapMonsterClassId(D2ObjectModeArg * pObjectModeArg) {
     D2ObjectRngStrc* pLevelRng;
     int32_t nDefaultMonId;

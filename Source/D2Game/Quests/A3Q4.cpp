@@ -36,6 +36,7 @@ namespace D2Game::Quests::QUESTS::A3Q4 {
 //   target 0x108 = bird/jade interact obj: active if player carries Jade Figurine ("j34"=0x2034336a).
 //   target 0xf5 = Meshif: active if holds Jade and NOT yet Step0x02, OR holds Golden Bird and NOT yet Step0x04.
 // Quest items: j34=Jade Figurine, g34=Golden Bird. Reward (later) xyz=Potion of Life.
+// 1.14d mac: 0022fd9a
 bool __fastcall Q21_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     D2UnitStrc* pQuestItem;
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheGoldenBird, QUESTSTATE_Completed);
@@ -114,6 +115,7 @@ BOOL __fastcall Q21_PlayerNotifyCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // A3Q4 (Golden Bird) gossip-line selector, quest handler index 0. Reads quest state and which quest item the player holds (Golden Bird "g34" or Jade Figurine "j34") to pick the correct NPC gossip line (0–7) via AddGossipMessageOnMonster. Branches on Completed/RewardAwaits/Step flags and NPC id (Meshif=0xf5, Cain=0xfc, Alkor=0xfe). Read-only on quest record; no state changes.
+// 1.14d mac: 0023048d
 void __fastcall Q21_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2UnitStrc* pQuestItem;
     int nMonStatsId;
@@ -193,6 +195,7 @@ void __fastcall Q21_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 // Q21_Callback_03 -- Golden Bird quest-state-3 handler. When the gossip text-control id == 0x4b
 // (the bird-quest-finished trigger), removes the player from the participant list
 // (QUESTGUID_RemovePlayerFromList). No QuestRecord state changes here.
+// 1.14d mac: 00230c31
 void __fastcall Q21_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     if (pQuestArgs->sQuestArgs.sLevelChange.nOldLevel != 0x4b) {
       return;
@@ -240,6 +243,7 @@ void __fastcall Q21_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
 //   holds Golden Bird -> 3, +1 if Step0x04 (4).  holds Jade -> 1, +1 if Step0x02 (2).
 //   else if quest active (bIsNotIntroduction): clamps nStateFlagPrev, >5 -> 6 (+1 if multiplayer).
 // Always returns true (out byte written).
+// 1.14d mac: 0022fee8
 bool __fastcall Q21_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode) {
     BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_AbleGoToAct3, QUESTSTATE_Completed);
     if (!BVar1) {
@@ -293,6 +297,7 @@ bool __fastcall Q21_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
 // copies the quest-leader's golden-bird sub-state (pA3Q4->sQuestGUID.aPlayerGUID[6], the cached
 // nGoldenBirdState 0/1/2/4) into that member's QuestRecord via SetQuestState. Keeps the whole party's
 // log step in lockstep when one member advances (talked to Meshif / gave bird to Alkor).
+// 1.14d mac: 00230039
 void __fastcall Q21_PlayerSetGoldenBirdQuestState(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheGoldenBird);
     if (!pQuestData) {
@@ -318,6 +323,7 @@ void __fastcall Q21_PlayerSetGoldenBirdQuestState(::SGAMEDATA * pGame, D2UnitStr
 // Q21_PartySetGoldenBirdState (custom regs) -- broadcast the player's current Golden Bird sub-state to
 // every party member. Gets the player's party id (SUnit::GetPartyId); if in a party, runs
 // Q21_PlayerSetGoldenBirdQuestState over all members (ExecuteFunctionForEveryPartyMember). No-op solo.
+// 1.14d mac: 00234a13
 int __thiscall Q21_PartySetGoldenBirdState(D2UnitStrc * pThis, ::SGAMEDATA * pGame) {
     uint16_t nPartyId = UNIT::SUnit::GetPartyId(pThis);
     if (nPartyId != 0xffff) {
@@ -339,6 +345,7 @@ int __thiscall Q21_PartySetGoldenBirdState(D2UnitStrc * pThis, ::SGAMEDATA * pGa
 //   Object 0x108 msg 0x211 (Jade in cairn/altar): if has "j34" -> remove Jade, reward Golden Bird "g34", flag->3.
 // Item codes: g34=Golden Bird, j34=Jade Figurine, xyz=Potion of Life.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q4.cpp
+// 1.14d mac: 0023071a
 void __fastcall Q21_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2UnitStrc* pQuestItem;
     int32_t nUnitGUID;
@@ -467,6 +474,7 @@ void __fastcall Q21_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 
 // A3Q4 Golden Bird quest event callback for slot 4 (item acquired). Fires when the player picks up a quest item; bails silently if quest is already Completed or RewardAwaits. Identifies the picked-up item by its 4-char code: \"g34\" (Golden Bird) advances stateFlag to 3 and broadcasts via Q21_PlayerNotifyCompleted; \"j34\" (Jade Figurine) broadcasts stateFlag 1, sets stateFlag to 1, and on first pickup sets Step0x06 and fires the bird-attach sound event (0x48). No-op for any other item code.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q4.cpp
+// 1.14d mac: 002302dc
 void __fastcall Q21_Callback04_ItemPickedUp(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     uint32_t nItemClassId;
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
@@ -516,6 +524,7 @@ void __fastcall Q21_Callback04_ItemPickedUp(D2QuestDataStrc * pQuestData, D2Ques
 // or quest is active. Chains the next quest's sequence filters: runs the filter of nSequenceQuestId
 // (QUEST_SpokeToHratli prereq) and of QUESTINT_BladeOfTheOldReligion (Gidbinn) to advance the act's
 // quest chain. No QuestRecord state changes of its own; pure dispatch/IsBadCodePtr-guarded fp calls.
+// 1.14d mac: 002301f9
 bool __fastcall Q21_SequenceFilter(D2QuestDataStrc * pQuestData) {
     BOOL bBadCodePtr;
     if (pQuestData->nStateFlag != 5 && pQuestData->bIsNotIntroduction != '\0') {
@@ -559,6 +568,7 @@ bool __fastcall Q21_SequenceFilter(D2QuestDataStrc * pQuestData) {
 //   holds Golden Bird ("g34"): nStateFlag=3, prev = 3 (Step0x04 unset) or 4 (set/shown to Meshif).
 //   holds Jade ("j34"): nStateFlag/prev = 1 (Step0x02 unset) or 2 (set/given to Meshif).
 // No QuestRecord writes; read-only restore.
+// 1.14d mac: 00230c47
 void __fastcall Q21_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     D2UnitDataPlayerStrc* pQuestSpecificData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
@@ -617,6 +627,7 @@ void __fastcall Q21_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 }
 
 // JMP thunk
+// 1.14d mac: 00230d8f
 void __fastcall Q21_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::D2Game::Quests::QUESTS::SetRewardAndFinishFlags(pQuestData, pQuestArgs);
 }
@@ -626,6 +637,7 @@ void __fastcall Q21_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2
 // and state flag < 4, it sets a re-show guard (field_0x15=1), clears eFlags, and broadcasts state 6
 // (QUEST_SetStateAndBroadcast 6, notify=Q21_PlayerNotifyCompleted) -- i.e. player no longer holds a
 // bird/jade item, roll the quest-log step back. No QuestRecord (Get/Set)QuestState calls.
+// 1.14d mac: 00230e4b
 void __fastcall Q21_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2QuestDataA3Q4Strc* pA3Q4Data = pQuestData->pQuestSpecificData.pA3Q4;
     int32_t* pnBirdItemCount = &pA3Q4Data->nBirdItemCount;
@@ -644,6 +656,7 @@ void __fastcall Q21_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc * pQue
 // Golden Bird ("g34"), bumping the count per item held. If count>0, quest active, and the re-show guard
 // (field_0x15) is set, clears the guard + eFlags and broadcasts the matching log step:
 // state 3 if the player now holds the Golden Bird, else state 1 (Jade). No QuestRecord state calls.
+// 1.14d mac: 00230d98
 void __fastcall Q21_Callback14_PlayerJoinedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2QuestDataA3Q4Strc* pA3Q4Data = pQuestData->pQuestSpecificData.pA3Q4;
     bool bHasSecondItem = false;
@@ -679,6 +692,7 @@ void __fastcall Q21_Callback14_PlayerJoinedGame(D2QuestDataStrc * pQuestData, D2
 // Confirms this file (A3Q4 namespace) is actually Act3 Q1 The Golden Bird. Zeroes the spec struct,
 // then enables bird drop (bBirdDropEnabled/bCanDropBird=true).
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q4.cpp
+// 1.14d mac: 002300c6
 void __fastcall Q21_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->pNpcMessages = A3Q4::aNpcGossipData;
@@ -709,6 +723,7 @@ void __fastcall Q21_InitData(D2QuestDataStrc * pQuestData) {
 // Q21_Callback_08 (GOLDEN BIRD helper; src=a3q4.cpp) — quest-state[8]=boss-killed handler for Quest "The Golden Bird" (Q1, internal Q21). NOT Blackened Temple. On a tracked Council/boss kill while bCouncilMemberTracking && bKhalimsWillComplete: if killer hasn't already Completed the quest, force-drops the Jade Figurine (dwDropItemCode 0x2034336a = "j34 " / jade fig) as a shield-slot reward. On success: clears handler[8], increments killer-GUID list, clears bKhalimsWillComplete, and if nStateFlag==0 advances internal stateFlag 0->1; if nStateFlagPrev==0 broadcasts state 1 (RewardAwaits) via A3Q4::Q21_PlayerNotifyCompleted. Stops council tracking.
 // State transitions: stateFlag 0->1, broadcast progress state 1.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q4.cpp
+// 1.14d mac: 00230f44
 void __fastcall Q21_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int32_t nDroppedItemGUID;
     D2QuestArgStrc* pQuestArgsSaved = pQuestArgs;

@@ -26,6 +26,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2UnitNodeStrc) == 0x10, "D2_NEW_AT
 namespace D2Game::GAME::Targets {
 
 // @sourcefile .\GAME\Targets.cpp
+// 1.14d mac: 001b483f
 void __fastcall TARGETS_AddTargetToTrackingList(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2NodeUnkownStrc * pNodeUnknown) {
     if (!(pGame && pUnit && pUnit->eUnitType == UNIT_PLAYER && pUnit->nNodeTableIndex == 0xb)) {
       return;
@@ -59,6 +60,7 @@ void __fastcall TARGETS_AddTargetToTrackingList(::SGAMEDATA * pGame, D2UnitStrc 
 }
 
 // @sourcefile .\GAME\Targets.cpp
+// 1.14d mac: 001b4900
 void __fastcall CreateUnitNode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2NodeUnkownStrc * pUnknown, int32_t nTableIndex) {
     if (!(pGame && pUnit && pUnit->nNodeTableIndex == 0xb && nTableIndex < 8 && (pUnit->eUnitType == UNIT_PLAYER || pUnit->eUnitType == UNIT_MONSTER))) {
       return;
@@ -88,6 +90,7 @@ void __fastcall CreateUnitNode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2NodeUn
 }
 
 // @sourcefile .\GAME\Targets.cpp
+// 1.14d mac: 001b49d2
 void __fastcall AddNodeToTable(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2NodeUnkownStrc * pNodeUnknown, int32_t nNodeTableIndex) {
     if (!(pGame && pUnit && pUnit->nNodeTableIndex == 0xb && nNodeTableIndex - 8U <= 1 && (pUnit->eUnitType == UNIT_PLAYER || pUnit->eUnitType == UNIT_MONSTER))) {
       return;
@@ -112,6 +115,7 @@ void __fastcall AddNodeToTable(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2NodeUn
 }
 
 // @sourcefile .\GAME\Targets.cpp
+// 1.14d mac: 001b4a91
 void __fastcall UNIT_FreeUnitNodes(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     if (!(pGame && pUnit && (pUnit->eUnitType == UNIT_PLAYER || pUnit->eUnitType == UNIT_MONSTER))) {
       return;
@@ -139,6 +143,7 @@ void __fastcall UNIT_FreeUnitNodes(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 
 // Unlinks and frees the D2UnitNodeStrc entry for pUnit from the game's pUnitNodes target table. Walks the doubly-linked node list for the unit's current nNodeTableIndex, patches predecessor/successor pointers (and updates the list head for tail-anchored tables, index >= 8), frees the node via FogServerMemory, then sets nNodeTableIndex to 0xB (sentinel = not in table). No-ops if pGame/pUnit is null, the unit type is not PLAYER or MONSTER, or index is already 0xB.
 // @sourcefile .\GAME\Targets.cpp
+// 1.14d mac: 001b4b24
 void __fastcall MONSTER_FreeUnitNodes(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     if (!pGame) {
       return;

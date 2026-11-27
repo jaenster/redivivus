@@ -108,10 +108,12 @@
 
 namespace D2Game::GAME::Event::Dispatch::Monster {
 
+// 1.14d mac: 001db955
 void __fastcall RemoveStatListFromUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
     D2Common::Stats::StatsEx::RemoveStatListAfterTimeout(pUnit, pGame->dwGameFrame);
 }
 
+// 1.14d mac: 001db978
 void __fastcall MONMODE_UpdateHoverTextExpiry(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
     if (!pUnit) {
       return;
@@ -134,11 +136,13 @@ void __fastcall MONMODE_UpdateHoverTextExpiry(::SGAMEDATA * pGame, D2UnitStrc * 
     SetEvent(pGame, pUnit, 6, nExpireFrame, 0, 0);
 }
 
+// 1.14d mac: 001dbd60
 void __fastcall AI_ClearSwitchAiTargetParamsCallback(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
     D2Game::Monster::MonsterAI::AI_ClearSwitchAiTargetParams(pUnit);
 }
 
 // Server-side monster timer-event dispatcher. Routes a fired timer event (eTimerType) to the appropriate handler in pTimerMethods.fpFunctionExByType[]. For freeze-sensitive event types (STATREGEN, TRAP, ACTIVESTATE, PERIODICSKILLS, REMOVESTATE), dispatches unconditionally. For all other types, first checks that the monster is not frozen (STATE_freeze) or is in mode-zero-death before dispatching. Events beyond UNITEVENTCALLBACK_REMOVESKILLCOOLDOWN are silently ignored.
+// 1.14d mac: 001db9ff
 void __fastcall MONSTEREVENT_DefaultCallback(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2TimerTypeDWORD eTimerType, int32_t nArg1, int32_t nArg2) {
     bool bIsModeZeroDeath;
     if (eTimerType > UNITEVENTCALLBACK_REMOVESKILLCOOLDOWN) {
@@ -175,6 +179,7 @@ void __fastcall MONSTEREVENT_DefaultCallback(::SGAMEDATA * pGame, D2UnitStrc * p
     }
 }
 
+// 1.14d mac: 001dbd76
 void __fastcall BarbFindItemSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pAttacker, uint32_t dwParam) {
     D2ModeChangeStrc sModeChange;
     sModeChange.pTargetUnit = pAttacker;
@@ -187,6 +192,7 @@ void __fastcall BarbFindItemSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Uni
 // Special cases for bosses: Baal(0x76,0xe6,0xe7), Diablo(0x6e), Duriel(0xf7), Mephisto(0x88), Baal2(0x193)
 // Executes AI at specific animation frames (SplEndGeneric flag)
 // Clears uninterruptable state and resets to neutral on completion
+// 1.14d mac: 001dc03f
 void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
     static uint8_t UnknownModeValueArray[16] = {
@@ -449,6 +455,7 @@ void __fastcall MONMODE_EndTrappedSoulSkill(::SGAMEDATA * pGame, D2UnitStrc * pU
     }
 }
 
+// 1.14d mac: 001dcadb
 BOOL __fastcall MONMODE_ProcessWalkWithTrails(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     BOOL eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_blaze);
     if (eState) {
@@ -469,6 +476,7 @@ BOOL __fastcall MONMODE_ProcessWalkWithTrails(::SGAMEDATA * pGame, D2UnitStrc * 
     return 1;
 }
 
+// 1.14d mac: 001dd228
 BOOL __fastcall MONMODE_ProcessRunMovement(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     int32_t nMoveResult = UNIT::SUnit::UNITS_ProcessUnitMovement(pGame, pUnit);
     if (nMoveResult == 2) {
@@ -480,6 +488,7 @@ BOOL __fastcall MONMODE_ProcessRunMovement(::SGAMEDATA * pGame, D2UnitStrc * pUn
 }
 
 // Processes the get-hit recovery event for a monster. Restores path velocity, checks monster's GetHit stat flag; if absent, schedules a delayed re-event instead. Special-cases monster base ID 0x4E (Diablo) with longer stun-dependent recovery delays. Otherwise clears current skill and transitions the monster to GetHit mode via MONSTERAI_ExecuteLifecycleTransition.
+// 1.14d mac: 001dcf53
 void __fastcall MONMODE_EndKnockback(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     int pDelayFrame;
     D2ModeChangeStrc sMonsterKill;
@@ -525,6 +534,7 @@ void __fastcall MONMODE_EndKnockback(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2Game::Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sMonsterKill, 1);
 }
 
+// 1.14d mac: 001dcf06
 BOOL __fastcall MONMODE_UpdateKnockback(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     UNIT::SUnit::UNITS_ProcessUnitMovement(pGame, pUnit);
     D2Common::Units::AdvanceAnimFrame(pUnit);
@@ -545,6 +555,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_6(D2UnitStrc * p) {
     return p->eUnitFlags >> 6 & 1;
 }
 
+// 1.14d mac: 001dd10c
 BOOL __fastcall MONSTER_UpdateSkillCastAnimation(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     uint32_t bAtEndOfFrame = D2Common::Units::IsAtEndOfFrameCycle(pUnit);
     if (bAtEndOfFrame) {

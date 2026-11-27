@@ -38,6 +38,7 @@ typedef uint32_t (__fastcall *PFN_AreaEffectCallback)(D2SkillCallbackContextStrc
 namespace D2Game::SKILLS::SkillPal {
 
 // Paladin melee strike-step with range guard. Checks target is within melee range (IsInMeleeRange) before rolling ToHit + DAMAGE_CalculateHitCheck. On hit: calculates physical damage via calc[0], optional elemental conversion (calc[3]/EType), calls SetDamageOnEvent, then ORs the skill's ResultFlags and HitFlags into the damage struct before applying via DAMAGE_CalculateAndApplyDamage (SrcDam=0x80).
+// 1.14d mac: 002722b2
 BOOL __fastcall SKILLPAL_SrvStFn29_Sacrifice(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -84,6 +85,7 @@ BOOL __fastcall SKILLPAL_SrvStFn29_Sacrifice(::SGAMEDATA * pGame, D2UnitStrc * p
 }
 
 // Sacrifice do-func: deals a percentage of the hit damage back to the casting paladin as self-damage. Finds the combat entry for the (pUnit, pTarget) pair, caps nDmgFromHit at target's current HP, applies calc[1]% of that as physical damage to the caster via DAMAGE_ApplyDamageToUnit + SERVER_GetHitCalculation, then processes the combat queue entry to complete the hit against pTarget.
+// 1.14d mac: 002724dc
 BOOL __fastcall Skills_SrvDoFunc_064_Sacrifice(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -115,6 +117,7 @@ BOOL __fastcall Skills_SrvDoFunc_064_Sacrifice(::SGAMEDATA * pGame, D2UnitStrc *
 // Body continues at 005cea2c, the JNZ target of 005cea20 - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named 'SKILLPAL_SmiteAttack'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
 // Retired notes from 'SKILLPAL_SmiteAttack':
 // Server-side Paladin Smite skill attack. Resolves the unit's current melee target (GetTargetEx), bails if none or out of melee range. For players: reads the equipped shield's base min/max damage, adds Holy Shield bonus damage if that state is active, runs to-hit and physical/elemental skill-damage calcs (D2GetSkillCalc against the skill's per-level columns), then performs the hit check. Finally applies the assembled D2DamageStrc via DAMAGE_CalculateAndApplyDamage and flushes the combat queue. Uses a caller-provided stack frame (nParam2) as scratch for the damage struct and intermediates.
+// 1.14d mac: 002726eb
 BOOL __fastcall Skills_SrvDoFunc_150_Smite(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t nItemClassId;
     D2StatListExStrc* pStatList;
@@ -214,6 +217,7 @@ BOOL __fastcall Skills_SrvDoFunc_150_Smite(::SGAMEDATA * pGame, D2UnitStrc * pUn
     return 0;
 }
 
+// 1.14d mac: 00276505
 void __fastcall SKILLPAL_OnAuraExpire(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * dwArg1) {
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
     BOOL eNoManaRegenState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_nomanaregen);
@@ -276,6 +280,7 @@ BOOL __stdcall SKILLPAL_ReducePoisonAndCurseDuration(::SGAMEDATA * pGame, D2Unit
 
 // Aura-state hit callback (PFN_AreaEffectCallback shape): pContext->pCallbackArg is a D2SkillAuraArgStrc. Applies nAuraState to pUnit for nDelayFrame frames through SetStateWithExpiryTime (expire callback pExtra, else SKILLPAL_OnAuraExpire when the caster is the target), stores the new stat list in pStatList, then for each of the 6 anStats/anCalcs pairs with a non-zero value adds the stat (clamped by SKILLNEC_ClampResistPenalty and the difficulty floor for stats 0x43/0x44) or raises the current stat up to its maxstat, counting each applied pair in nAppliedCount. Finally tags the list with the skill and level and removes the state in nFlag if set. Returns 1 when the state was applied, 0 otherwise.
 // Provenance: asm 005cedc0..; callers SKILL_HitTargetApplyDamageAndShatter, SKILLPAL_HandleFistOfHeavensLightningBolt and the aura area callbacks.
+// 1.14d mac: 00272dbd
 int __fastcall SKILLPAL_ApplyAuraStateToTarget(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pUnit) {
     BOOL nValue;
     int32_t nValue_00;
@@ -400,6 +405,7 @@ int __fastcall SKILLPAL_ApplyAuraStateToTarget(D2SkillCallbackContextStrc * pCon
 }
 
 // Server skill DoFunc #65 (Paladin Prayer-family healing/regen auras): per-interval aura tick for pUnit. Validates eSkill, computes mana cost and the next per-delay interval, gathers the skill's aurastat/aurastatcalc list and (when mana permits) its passivestat/passivecalc list into a target statlist, applies the area effect to valid targets via SKILLS_ApplyAreaEffect filtered by SKILLPAL_IsHolyBoltValidTarget, and for players deducts mana / toggles STATE_nomanaregen. Returns 1. Note: the decompile shows pAuraStatList/nManaRemaining read before assignment (decompiler artifact / possible stack-slot aliasing) — behavior around the passive-stat branch is uncertain from pseudocode alone.
+// 1.14d mac: 00272a9e
 BOOL __fastcall Skills_SrvDoFunc_065_Prayer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillAuraArgStrc sAuraArg;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -466,6 +472,7 @@ BOOL __fastcall Skills_SrvDoFunc_065_Prayer(::SGAMEDATA * pGame, D2UnitStrc * pU
 }
 
 // Applies Fist of the Heavens lightning-bolt damage to pUnit. Reads pre-computed damage params from pContext: copies all D2DamageStrc fields, calls SKILLPAL_ApplyAuraStateToTarget if aura flag set, then applies and calculates hit via DAMAGE_ApplyDamageToUnit + SERVER_GetHitCalculation. Returns 1 always.
+// 1.14d mac: 0027383b
 uint32_t __fastcall SKILLPAL_AuraCallback_OffensiveAura(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pUnit) {
     ::SGAMEDATA* pGame = pContext->pGame;
     D2SkillAuraArgStrc* pAuraArgs = (D2SkillAuraArgStrc*)pContext->pCallbackArg;
@@ -512,6 +519,7 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
     return (eD2UnitType)6;
 }
 // Server skill handler for Conviction - reduces enemy resistances in area of effect
+// 1.14d mac: 00273424
 BOOL __fastcall Skills_SrvDoFunc_066_Conviction(::SGAMEDATA * pGame, D2UnitStrc * pCaster, eD2Skills eSkill, int32_t nSkillLvl) {
     int nMana;
     eD2UnitType eUnitType;
@@ -620,6 +628,7 @@ BOOL __fastcall Skills_SrvDoFunc_066_Conviction(::SGAMEDATA * pGame, D2UnitStrc 
 
 static inline int GetGUIDInline(D2UnitStrc * pUnit);
 // Server start-func 31 for a Paladin charge-style movement skill. Validates the skill row and the unit's current skill/static path. If a target is in melee range it just force-attacks (players) or switches the monster into its attack anim and dispatches a monster AI lifecycle transition. Otherwise it stores the target's unit type/GUID into skill Param1/Param2 (or 6/0 when none), computes a charge velocity from the unit's RunVelocity (CharStats) or monster Run (MonStats) scaled by the velocity-percent stat and the skill's mana-cost multiplier, writes it onto the dynamic path, calculates the path, sets skill flags 0x1001 and applies STATE_skill_move. Returns TRUE.
+// 1.14d mac: 00273930
 BOOL __fastcall SKILPAL_SrvStFn31_Charge(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -704,6 +713,7 @@ BOOL __fastcall SKILPAL_SrvStFn31_Charge(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     return 1;
 }
 
+// 1.14d mac: 00273d83
 int32_t __fastcall SKILLPAL_GetAttackFrameIndex(D2UnitStrc * pUnit) {
     int nFrameIdx;
     D2MonSeqTxt* pSeqTxt = D2Common::Merc::MERC_GetSequenceTxt(pUnit);
@@ -722,6 +732,7 @@ int32_t __fastcall SKILLPAL_GetAttackFrameIndex(D2UnitStrc * pUnit) {
 }
 
 // Server skill do-func 67 (Paladin Charge). Runs the multi-stage charge state machine on pUnit toward a SKILL_GetParam1/Param2-stored target: when the charge flag is unset it performs the charge-hit (queues 0xA5 anim packet, area-hits to find a target via SKILLS_FindNextUnitInAreaByGUID, checks melee range, builds a D2DamageStrc with to-hit/skill-calc/elemental damage, applies it and sets the hit overlay). When in-progress it advances the charge: re-finds/locks the target in skill params or steps the charge anim each frame, scheduling ENDANIM/MODECHANGE timer events. Returns 1 if it acted/continued, 0 to end the skill.
+// 1.14d mac: 00273dc7
 BOOL __fastcall Skills_SrvDoFunc_067_Charge(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pDVar1 = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pDVar1) {
@@ -908,6 +919,7 @@ static int32_t SKILLPAL_RollRandomDamage(D2UnitStrc * pUnit) {
 }
 
 // Server strike function for Paladin skill index 35 (Zeal-tier elemental strike). Performs a to-hit check against the current skill target, then calculates fire, cold, and lightning damage from skill calc[0..2], applies passive elemental mastery bonuses to each element, cycles the hit-class through three states (0x20/0x30/0x40) via SKILL_GetParam1/SetParam1, and calls DAMAGE_CalculateAndApplyDamage.
+// 1.14d mac: 0027444a
 BOOL __fastcall SKILPAL_SrvStFn35_Vengeance(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nMasteryBonus;
     int32_t nFireCalcPct;
@@ -999,6 +1011,7 @@ BOOL __fastcall SKILPAL_SrvStFn35_Vengeance(::SGAMEDATA * pGame, D2UnitStrc * pU
 }
 
 // Server do-function for skill 73 (Fist of the Heavens). Resolves the charge-up missile via SKILLASS_GetChargeUpMissile, gets the target/cursor position, spawns the FotH missile via CreatingMissile with path type 0xE (arcing), then applies Concentration aura magic-damage bonus to the missile's magicmindam/magicmaxdam stats if active. Returns 1 on success, 0 on invalid skill or no target.
+// 1.14d mac: 00274c2e
 BOOL __fastcall Skills_SrvDoFunc_073_BlessedHammer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -1049,6 +1062,7 @@ BOOL __fastcall Skills_SrvDoFunc_073_BlessedHammer(::SGAMEDATA * pGame, D2UnitSt
     return 1;
 }
 
+// 1.14d mac: 00274eef
 BOOL __fastcall SKILPAL_SrvStFn36_HolyShield(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     if (!pUnit->pInventory) {
       return 0;
@@ -1058,6 +1072,7 @@ BOOL __fastcall SKILPAL_SrvStFn36_HolyShield(::SGAMEDATA * pGame, D2UnitStrc * p
     return (uint32_t)(bHasShield != 0);
 }
 
+// 1.14d mac: 0027551a
 void __fastcall SKILLPAL_OnConversionExpire(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * pStatList) {
     uint32_t dwAlignmentRaw;
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
@@ -1127,6 +1142,7 @@ static BOOL __stdcall SKILLPAL_CanConvertTarget(D2UnitStrc * pUnit, int32_t nSki
 }
 
 // Server-side skill DoFunc 79 (Paladin Conversion). Attempts to convert the caster's current target into a temporary ally. Resolves the target (GetTargetEx) and, if a combat-queue entry exists, checks SKILLPAL_CanConvertTarget. On success: applies/refreshes the auratargetstate state-list on the target with a duration from D2GetSkillCalc(auralencalc) and an OnConversionExpire expire-function, sets a frame-12 event, frees the monster's own minions, sets the target's alignment to friendly (2), reparents it as the caster's unit-node, clears the caster's target, and strips flag-8 stat-lists. If the target's level exceeds the caster's, saves a STATE_conversion_save stat-list (conversion_level/conversion_maxhp) and rescales the target's level/HP/maxHP down to the caster via D2ApplyPercent. Returns 1 on conversion (or on plain combat-queue processing when state invalid), 0 on failure. Side effect: sets UNITFLAG_SKSRVDOFUNC on caster.
+// 1.14d mac: 00274f1e
 BOOL __fastcall Skills_SrvDoFunc_079_Conversion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nConvertCheckOrFrame;
     int32_t nMinExpiryFrame;
@@ -1262,6 +1278,7 @@ static inline int GetGUIDInline(D2UnitStrc * pUnit) {
     return (int)(-1);
 }
 // Server do-function for skill 80 (Smite). Gets the current attack target, spawns the Smite missile via CreatingMissile aimed at the target's position, sets the missile's target unit type/GUID, and applies the skill's srvoverlay to the target unit. Returns 1 on success, 0 on invalid skill, no missile ID, or no target.
+// 1.14d mac: 00275706
 BOOL __fastcall Skills_SrvDoFunc_080_FistOfTheHeavens(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillArgStrc sSkillArg;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -1302,6 +1319,7 @@ BOOL __fastcall Skills_SrvDoFunc_080_FistOfTheHeavens(::SGAMEDATA * pGame, D2Uni
     return 1;
 }
 
+// 1.14d mac: 00275c8e
 void __fastcall SKILLPAL_OnFreezeExpire(D2UnitStrc * pUnit, eD2States eState, uint32_t dwParam) {
     BOOL bIsModeZeroDead = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
     if (bIsModeZeroDead) {
@@ -1322,6 +1340,7 @@ void __fastcall SKILLPAL_OnFreezeExpire(D2UnitStrc * pUnit, eD2States eState, ui
 }
 
 // Per-target hit callback. Skips monsters already cold-affected for the current difficulty, copies damage params from the arg struct into a D2DamageStrc, optionally applies an aura state, then applies damage + hit calculation. Advances the unit RNG and sets/clears STATE_shatter on a 20% roll. Returns 1 when processed, 0 if skipped.
+// 1.14d mac: 00275d19
 uint32_t __fastcall SKILL_HitTargetApplyDamageAndShatter(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pUnit) {
     ::SGAMEDATA* pGame = pContext->pGame;
     D2SkillAuraArgStrc* pAuraArgs = (D2SkillAuraArgStrc*)pContext->pCallbackArg;
@@ -1374,6 +1393,7 @@ uint32_t __fastcall SKILL_HitTargetApplyDamageAndShatter(D2SkillCallbackContextS
 }
 
 // Server-side skill DoFunc 081 (Paladin Holy Freeze aura). Validates the skill id and its aurastate, computes mana cost, builds a self-aura stat block (aurastate + passive stat/calc pairs) and applies it via SKILLS_InvokeCallbackNoTarget. When not in town it builds a target-aura stat/damage block from auratargetstate/aurastat/auratargetcalc plus skill HitClass/HitFlags, then SKILLS_ApplyAreaEffect spreads the chilling aura over aurarangecalc range. Deducts mana and toggles STATE_nomanaregen for player casters. Returns TRUE on success, FALSE if the skill record is invalid.
+// 1.14d mac: 00275889
 BOOL __fastcall Skills_SrvDoFunc_081_HolyFreeze(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     D2SkillAuraArgStrc sAuraSelfArg;
@@ -1554,6 +1574,7 @@ uint32_t __fastcall SKILLPAL_AuraCallback_Redemption(D2SkillCallbackContextStrc 
 }
 
 // Server-side do-function for Paladin skill Holy Shock (skill 82). Validates the skill record's aurastate, calculates mana cost and delay interval, iterates passivestat/passivecalc pairs to build self-buff arrays, then broadcasts SKILLPAL_ApplyAuraStateToTarget to all units in range via SKILLS_InvokeCallbackNoTarget. Outside town, applies lightning damage to enemies in the aura radius via SKILLS_ApplyAreaEffect. Deducts mana from player casters and manages the nomanaregen state.
+// 1.14d mac: 002760a2
 BOOL __fastcall Skills_SrvDoFunc_082_Redemption(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nMana;
     eD2UnitType eUnitType;

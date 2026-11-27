@@ -300,6 +300,7 @@ int __stdcall FreeServer() {
     return 1;
 }
 
+// 1.14d mac: 001abcff
 uint32_t __fastcall SERVER_IsTokenValid(uint16_t nToken) {
     uint32_t nResult = 0;
     EnterCriticalSection(&gQServerGameListCs);
@@ -312,6 +313,7 @@ uint32_t __fastcall SERVER_IsTokenValid(uint16_t nToken) {
     return nResult;
 }
 
+// 1.14d mac: 001abe46
 void __stdcall QSERVER_SetGlobalInstance(TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>* pQServerState, void * pInitState) {
     if (!pQServerState) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x15b);
@@ -336,6 +338,7 @@ void __stdcall SetupAsBnetServer(D2BattleNetEventCallbackTable * pBnetCallbacks)
     IsBattleNetServer = 0;
 }
 
+// 1.14d mac: 001ac333
 void __stdcall QSERVER_PutNewGameOnTokenList(uint32_t dwGameToken, uint16_t nToken) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerGameListCs);
     if (gaQServerGameTokens[nToken - 1] == 0xffffffff) {
@@ -349,6 +352,7 @@ void __stdcall QSERVER_PutNewGameOnTokenList(uint32_t dwGameToken, uint16_t nTok
 }
 
 // Allocates a 16-bit server token from the global 1024-slot token array. Locks csTokenHash critical section, increments QServerNextToken_Maybe (wraps at 0x400), scans for first unused slot (value == 0), marks it as allocated (0xffffffff), and returns the token. If all slots occupied, returns without allocating (upper 16 bits zero).
+// 1.14d mac: 001ac1d9
 uint16_t __stdcall QSERVER_GenerateToken() {
     EnterCriticalSection(&gQServerGameListCs);
     uint16_t nStartToken = QServerNextToken;
@@ -387,12 +391,14 @@ void __fastcall CLIENT_LoadActAndSetState2(::SGAMEDATA * pGame, D2ClientStrc * p
     Clients::CLIENT_SetConnectionState(pClient, 2);
 }
 
+// 1.14d mac: 001ac73e
 static void CLIENT_SendGameFlagsAndSetState1(::SGAMEDATA * pGame, D2ClientStrc * pClient) {
     SCmd::NET_D2GS_SERVER_Send_0x01_NEWGAME(pClient, 1, pGame);
     SCmd::NET_D2GS_SERVER_SendStateCommand(pClient, 0);
     Clients::CLIENT_SetConnectionState(pClient, 1);
 }
 
+// 1.14d mac: 001ac276 D2Game::GAME::Server::RollSeed
 static void __stdcall RollSeed(::SGAMEDATA * pGamee) {
     uint32_t nRandSeed;
     ::SGAMEDATA* pGame;
@@ -419,10 +425,12 @@ static void __stdcall RollSeed(::SGAMEDATA * pGamee) {
     D2Common::Seed::InitSeed_Param_666(&pGamee->pGameSeed, GameSeed);
 }
 
+// 1.14d mac: 001abf20
 void __stdcall GAME_SetForcedGameSeed(uint32_t dwForcedSeed) {
     GameSeed = dwForcedSeed;
 }
 
+// 1.14d mac: 001ac116
 BOOL __fastcall SetupGameChecks(int32_t nClientID2, D2GSMsg67GameLogonSPStrc * pMsg) {
     BOOL bGotPlayerName;
     char szPlayerName[16];
@@ -455,6 +463,7 @@ void __stdcall QSERVER_InitializeMemoryCounters(uint32_t nInitialValue) {
     g_nMemoryCounterSecondary = 0;
 }
 
+// 1.14d mac: 001ac3ea
 void __fastcall NET_SendPong(uint32_t nClientID, int32_t nPingTime, int32_t nSeqNum, uint32_t dwPingData) {
     Clients::SendPongByClientId(nClientID, nPingTime, nSeqNum, dwPingData);
 }
@@ -605,6 +614,7 @@ static uint32_t STRING_CheckIfPlayerNameDoNotContainForbidenChars(char * szText,
 }
 
 // Validates an incoming client join request before admitting them to a game. Checks: player name length ≤16 and language < 14, existing client name matches pPlayerName, token is valid, char class < 7, name contains no forbidden chars, then calls BattleNetServerService->fpFindPlayerToken to verify the BNet token. Calls GuardStack(1) on success, GuardStack(0) on any failure — callers treat the stack-cookie result as the admit/reject signal.
+// 1.14d mac: 001aca16
 BOOL __fastcall NET_D2GS_SERVER_IsValidChecks(int32_t nClientID, uint16_t nGameToken, uint8_t charClass, char * pPlayerName, uint32_t gameHash, char * byRef1, uint32_t * byRef2, uint8_t language, uint32_t * byRef3, uint32_t * byRef4, uint32_t * byRef5, uint32_t * byRef6, uint32_t dwParam) {
     int32_t nCheckResult2;
     uint32_t bNameValid;
@@ -645,6 +655,7 @@ BOOL __fastcall NET_D2GS_SERVER_IsValidChecks(int32_t nClientID, uint16_t nGameT
 
 // Tears down game completely. First clears token from global 1024-slot table (0x882d18-0x883d38) under csGameHash lock. Then frees subsystems in order: MonsterRegion, ObjectControl, QuestControl, NpcControl, all clients, all units (5 types), inactive unit lists, timer queue, party, arena. Frees all 5 acts via FreeDungeons. Finally destroys memory pool, leaves and deletes critical section. Called after 5 min idle timeout or when game empties (frames 1500-7500 with zero clients).
 // @sourcefile .\GAME\Game.cpp
+// 1.14d mac: 001acf33
 void __fastcall GAME_DestroyGame(uint32_t nGameToken, ::SGAMEDATA * pGame) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerGameListCs);
     uint32_t* pnTokenEntry = gaQServerGameTokens;
@@ -691,12 +702,14 @@ void __fastcall GAME_DestroyGame(uint32_t nGameToken, ::SGAMEDATA * pGame) {
     D2_FREE_POOL_AT(nullptr, lpCriticalSection, ".\\GAME\\Game.cpp", 0x8da);
 }
 
+// 1.14d mac: 001ad04e
 uint32_t __fastcall NET_IsClientAllowedToLeave(uint32_t nClientId) {
     uint32_t bIsAllowed = Clients::QSERVER_IsClientAllowedToJoin(nClientId, 4);
     return (uint32_t)(bIsAllowed != 0);
 }
 
 // Game-cleanup save: force-saves the disconnecting client's character (SaveGameAllGameTypes with bForceFullSave=1), then iterates all remaining clients in the game and soft-saves each (bForceFullSave=0). For non-singleplayer games, also invokes BattleNetServerService->fpUpdateCharacterLadder with the player's level, experience, char status, guild info, and file-time pointer so the ladder record stays current. No-ops if pClient or its player unit is null.
+// 1.14d mac: 001ad074
 void __fastcall SavePlayerOnCleanUp(D2ClientStrc * pClient, ::SGAMEDATA * pGame) {
     fnUpdateCharacterLadder* ppfpUpdateLadder;
     uint8_t nGuildRank;
@@ -737,6 +750,7 @@ void __fastcall SavePlayerOnCleanUp(D2ClientStrc * pClient, ::SGAMEDATA * pGame)
 }
 
 // Saves all connected players to persistent storage. Iterates client list, gets player unit for each, calls SaveGameAllGameTypes to write character data (inventory/stats/quests/waypoints). For BNet non-singleplayer games, also updates ladder ranking via fpUpdateCharacterLadder callback with level, experience, character status, guild info (rank/emblem), and file timestamp. Called every 8192 frames (5.5 minutes) or on disconnects/timeouts. Critical for preventing rollback on crashes.
+// 1.14d mac: 001ad20e
 void __fastcall SaveAllPlayers(::SGAMEDATA * pGame) {
     fnUpdateCharacterLadder* pfpUpdateLadder;
     uint8_t nGuildRank;
@@ -762,6 +776,7 @@ void __fastcall SaveAllPlayers(::SGAMEDATA * pGame) {
 }
 
 // Gracefully disconnects a single client from a game. Broadcasts a 0x5A leave-game event message with char name and account name, calls CleanUpClient to remove the client from game state, sends 0xB0 ConnectionTerminated packet, then calls QSERVER_KillConnection to close the network connection. nDisconnectReason byte is embedded in the event packet.
+// 1.14d mac: 001ad34e
 void __fastcall SERVER_DisconnectClient(::SGAMEDATA * pGame, D2ClientStrc * pClient, uint8_t nDisconnectReason) {
     D2Packet0x5aEventStructure packet0x5a;
     int32_t nCleanupFlag;
@@ -784,6 +799,7 @@ void __fastcall SERVER_DisconnectClient(::SGAMEDATA * pGame, D2ClientStrc * pCli
     }
 }
 
+// 1.14d mac: 001adaba
 BOOL __fastcall FindMe_6E_Handler(int32_t nClientId) {
     char szPlayerName[16];
     BOOL bGotName = Clients::NET_D2GS_SERVER_GetPlayerNameByClientId(nClientId, szPlayerName);
@@ -965,6 +981,7 @@ static void __stdcall SERVER_PopulateRoom(::SGAMEDATA * pGameStrc, D2RoomStrc * 
     Monsters::Spawn::MONSTER_SpawnRoomMonsters(pGameStrc, pRoomStrc);
 }
 
+// 1.14d mac: 001adeb9
 void __fastcall SetSomeRoomFlags(::SGAMEDATA * pGame, D2RoomStrc * pRoom) {
     Monsters::Spawn::MONSTER_TrySpawnWanderingMonster(pGame, pRoom);
     if (!(pRoom->eFlags & 1)) {
@@ -1310,6 +1327,7 @@ void __fastcall UpdateActEnvironments(::SGAMEDATA * pGame) {
 
 // Core 25 FPS server game loop. Updates environment→metrics→rooms→timers(missiles/players/monsters/objects/items)→clients→unit flags. Periodic cleanup: quests every 20 frames, idle rooms every 12 frames, dungeon levels every 11 frames, dropped items every 1500 frames (60 seconds). Debug modes 1-4 trigger crashes/allocs for testing. Called from QSERVER_TickAllGames (cooperative loop) or TASK_GameTickCallback (BNet task scheduler).
 // @sourcefile .\GAME\Game.cpp
+// 1.14d mac: 001ae017
 void __fastcall ServerGameLoop(::SGAMEDATA * pGame) {
     int nUpdateTickMode = pGame->dwUpdateTick;
     pGame->dwGameFrame++;
@@ -1420,6 +1438,7 @@ static void GAME_SendNearbyUnitPositions(D2ClientStrc * pClient) {
     }
 }
 
+// 1.14d mac: 001abdda
 void __fastcall Unlock(::SGAMEDATA * pGame) {
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1063);
@@ -1450,6 +1469,7 @@ BOOL __stdcall Return1_GameSetup_1() {
     return 1;
 }
 
+// 1.14d mac: 001aeb42
 BOOL __fastcall CLIENT_ReceiveUploadedSave(uint32_t nClientId, D2GSMsg6CUploadSaveStrc * pMsg) {
     int bResult = Clients::CLIENT_AccumulateSaveData(nClientId, pMsg + 1, (uint32_t)pMsg->nChunkSize, pMsg->nTotalSize, 0, 0, 0);
     return bResult;
@@ -1465,6 +1485,7 @@ void __stdcall QSERVER_GetMemoryUsage(uint32_t * pOutCurrent, uint32_t * pOutMax
     *pOutMax = maxMemoryUsage;
 }
 
+// 1.14d mac: 001aec84
 static int32_t GetUnitCount(D2UnitStrc * * ppUnitBuckets) {
     D2UnitStrc* pCurUnit;
     int nCount = 0;
@@ -1609,6 +1630,7 @@ void __fastcall MissileIdToname(char * szText, int32_t nId) {
     sprintf(szText, "Missile %d", nId);
 }
 
+// 1.14d mac: 001ad9f8
 void __fastcall ForEachClient(::SGAMEDATA * pGame, fpForEachClientFn fpFunction, void * pUnit) {
     D2ClientStrc* pClientIter;
     if (!pGame) {
@@ -1632,6 +1654,7 @@ void __fastcall ForEachClient(::SGAMEDATA * pGame, fpForEachClientFn fpFunction,
     }
 }
 
+// 1.14d mac: 001abf5f
 void __stdcall LeaveCriticalSectionLastGameServer() {
     if (!gpQServerLockedGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1063);
@@ -1656,6 +1679,7 @@ void __stdcall SetupStartingAct(int nAct) {
     StartingAct = nAct;
 }
 
+// 1.14d mac: 001aed4e
 void __fastcall RemoveObject(D2ClientStrc * pClient, D2UnitStrc * pUnit) {
     D2RoomStrc** pAdjacentRooms;
     uint32_t nAdjacentCount;
@@ -1693,6 +1717,7 @@ void __fastcall RemoveObject(D2ClientStrc * pClient, D2UnitStrc * pUnit) {
     SCmd::NET_D2GS_SERVER_Send_0x0A_REMOVEUNIT(pClient, 10, pUnit->eUnitType, pUnit->nUnitGUID);
 }
 
+// 1.14d mac: 001aed11
 void __fastcall RemoveObjects(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
     ForEachClient(pGame, (fpForEachClientFn)(void (__fastcall *)(D2ClientStrc*, D2UnitStrc*))Server::RemoveObject, pUnit);
     UNIT::SUnit::FreeServerUnit(pGame, pUnit);
@@ -1729,6 +1754,7 @@ void * __fastcall QSERVER_GetTaskQueuePointer(uint8_t * pObject) {
 
 // GAME_SendSaveFileChunk - Sends save file to client in 255-byte chunks via 0xB3 packet. Iterates save buffer with offset tracking.
 // @sourcefile .\GAME\Game.cpp
+// 1.14d mac: 001aee28
 static void __stdcall NET_D2GS_SERVER_Send_0xB3_SendSaveFile(::SGAMEDATA * pGame, D2ClientStrc * pClient) {
     BOOL nChunkSize = Clients::CLIENT_HasSaveData(pClient);
     if (!nChunkSize) {
@@ -1787,6 +1813,7 @@ static void __stdcall NET_D2GS_SERVER_Send_0xB3_SendSaveFile(::SGAMEDATA * pGame
     SERVER_DisconnectClient(pGame, pClient, '\0');
 }
 
+// 1.14d mac: 001ad484
 void __fastcall SendSaveFileToClient(::SGAMEDATA * pGame) {
     D2ClientStrc* pClient;
     int bHasSaveData;
@@ -1813,6 +1840,7 @@ void __fastcall SendSaveFileToClient(::SGAMEDATA * pGame) {
 }
 
 // Flushes the server-side outbound packet queue for one client. If nParam != 0 and the client is connected (state 4), optionally sends nearby unit positions and player vital stats first. For OBNet/LAN games also sends the save-file packet (0xB3). Then drains the client's dispatch list by calling NET_D2GS_SERVER_SendPacketToClient in a loop; on send failure increments a retry counter and requeues the list, disconnecting the client after 3 consecutive failures. Halts with an internal error if pGame or pClient is NULL.
+// 1.14d mac: 001ad6d3
 static void __stdcall FlushClientPackets(::SGAMEDATA * pGame, int32_t bSendStatusUpdates, D2ClientStrc * pClient) {
     BOOL bSendFailed;
     int32_t nErrorLine;
@@ -1881,6 +1909,7 @@ void __fastcall FlushAllClientPackets(::SGAMEDATA * pGame) {
 }
 
 // Destroys a game by token using lock escalation. Locks csGameHash, looks up game, optionally notifies BattleNet service (fpCloseGame callback with player count and game time in seconds), acquires per-game lock, calls GAME_DestroyGame to tear down all units/rooms/quests, then frees game from hash-map and releases all locks.
+// 1.14d mac: 001ae938
 void __fastcall QSERVER_DestroyGameByToken(uint32_t nToken) {
     if (!gpQServerGameState) {
       return;
@@ -1915,6 +1944,7 @@ void __fastcall QSERVER_DestroyGameByToken(uint32_t nToken) {
 }
 
 // Locks global csGameHash, looks up game by token in hash-map, acquires per-game critical section, then releases global lock. Returns locked SGAMEDATA pointer or NULL if not found. Lock escalation pattern: global -> per-game -> release global, ensuring deadlock-free access to individual game state.
+// 1.14d mac: 001abd47
 ::SGAMEDATA * __fastcall QSERVER_FindAndLockGame(uint32_t nToken) {
     if (!gpQServerGameState) {
       return nullptr;
@@ -1938,6 +1968,7 @@ void __fastcall QSERVER_DestroyGameByToken(uint32_t nToken) {
     return pGame;
 }
 
+// 1.14d mac: 001aea72
 void __stdcall RequestHostedGames(int32_t nClientId) {
     char szGameNameCopy[16];
     uint32_t dwStackCookie;
@@ -1974,6 +2005,7 @@ void __fastcall NET_RequestHostedGames(int32_t nClientId) {
 }
 
 // Server shutdown routine: iterates the global 1024-slot game-token table and destroys every active game. For each game, saves every connected player (SaveGameAllGameTypes), sends save-file data for open-BNet/LAN hosts (0xB3 packets until CLIENT_HasSaveData is false), sends a disconnect byte, cleans up the client, then calls QSERVER_DestroyGameByToken. Also frees all task slots via TASK_FreeAllSlots before iterating.
+// 1.14d mac: 001aeb89
 void __stdcall QSERVER_ShutdownAllGames() {
     D2ClientStrc* pClient;
     ::SGAMEDATA* pGame;
@@ -2241,6 +2273,7 @@ int32_t __stdcall QSERVER_FillServerTokenArray(uint16_t * pOutArray, int32_t nMa
     return nCount;
 }
 
+// 1.14d mac: 001aecb9
 int32_t __stdcall GetUnitCountByServerId(uint16_t nServerId) {
     uint32_t nToken = 0;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerGameListCs);
@@ -2562,6 +2595,7 @@ void __stdcall QSERVER_BroadcastChatByServerId(uint16_t nServerId, char * pMessa
     }
 }
 
+// 1.14d mac: 001abf34
 ::SGAMEDATA * __stdcall QSERVER_GetFirstActiveGame() {
     uint32_t nToken = 0;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerGameListCs);
@@ -2664,6 +2698,7 @@ uint32_t __stdcall QSERVER_GetFirstActiveGameSeed() {
 }
 
 // Scans the global game-token table (DATA_LastGameToken array) and checks whether szGameName is already in use by an active game. Returns 1 if the name is available, 0 if a case-insensitive match exists (max 16 chars). Halts fatally if a game entry has no critical section.
+// 1.14d mac: 001abf7e
 BOOL __fastcall GAME_CheckIfGameNameExistsSafely(char * szGameName) {
     int32_t nCmpResult;
     LPCRITICAL_SECTION lpCriticalSection;
@@ -2702,6 +2737,7 @@ BOOL __fastcall GAME_CheckIfGameNameExistsSafely(char * szGameName) {
 }
 
 // Assigns a unique name to pGame->szGameName. If szGameName is already taken, appends "~&lt;ptr&gt;" then iterates "~1".."~99" until a free name is found; halts fatally if all 99 suffixes are exhausted. Uses GAME_CheckIfGameNameExistsSafely for availability checks.
+// 1.14d mac: 001abfdf
 void __fastcall SetGameName(::SGAMEDATA * pGame, char * szGameName, uint32_t dwFlags) {
     char szDedupeName[16];
     char cScanChar;
@@ -2817,6 +2853,7 @@ void __fastcall NET_D2GS_SERVER_SrvJoinGame(int32_t nClientId, uint16_t nGameTok
 // the .\GAME\Game.cpp address span, not inside the .\Src\QServer\QServer.cpp span (006be3c0-006c08a0)
 // established by the 1.14d __FILE__ anchors. Blizzard's own prefix here is Srv.
 // Ticks all active games at 25 FPS (40ms target frame time). Calculates elapsed time since LastUpdateTick, skips frame if insufficient time passed. Iterates DATA_LastGameToken array (1024 slots), locks each game, calculates dwStatsTick based on frame delta (clamped 10-2048), calls ServerGameLoop, unlocks. Returns QueryPerformanceCounter delta if any game ticked, zero otherwise.
+// 1.14d mac: 001ae778
 int32_t __stdcall SrvProcessAllGames(int32_t bLimitFrameSkip) {
     // Static local variables (originally global data)
     static int gbQServerFixedStatsTick = 0x1; D2_STATIC_GUARD(gbQServerFixedStatsTick, "D2Game::GAME::Server::SrvProcessAllGames::gbQServerFixedStatsTick");
@@ -2897,6 +2934,7 @@ int32_t __stdcall SrvProcessAllGames(int32_t bLimitFrameSkip) {
 }
 
 // Server main-loop dispatcher: iterates the global game-token table, locks each active game, flushes all client packets via FlushClientPackets, and destroys games that have been empty for &gt;300 seconds or whose frame counter falls in the 0x5dc–0x1d4c cleanup window. Throttled to run at most every 40 ms unless pTokenCursor or bForceDispatch overrides. Returns elapsed QPC ticks if any game was dispatched, else 0.
+// 1.14d mac: 001ae82b
 int32_t __stdcall QSERVER_DispatchAndCleanup(uint32_t * pTokenCursor, int32_t bForceDispatch) {
     // Static local variables (originally global data)
     static int gdwQServerLastDispatchTick; D2_STATIC_GUARD_BSS(gdwQServerLastDispatchTick, "D2Game::GAME::Server::QSERVER_DispatchAndCleanup::gdwQServerLastDispatchTick");
@@ -2958,6 +2996,7 @@ int32_t __stdcall QSERVER_DispatchAndCleanup(uint32_t * pTokenCursor, int32_t bF
     return qpcElapsed.u.LowPart;
 }
 
+// 1.14d mac: 001ac3a0
 ::SGAMEDATA * __fastcall NET_SERVER_FindGameByClientId(int32_t nClientId) {
     uint32_t nToken = D2Net::Game::Server::QSERVER_GetClientGameToken(nClientId);
     ::SGAMEDATA* pGame = QSERVER_FindAndLockGame(nToken);
@@ -2974,6 +3013,7 @@ int32_t __stdcall QSERVER_DispatchAndCleanup(uint32_t * pTokenCursor, int32_t bF
     return nullptr;
 }
 
+// 1.14d mac: 001abc64
 void __stdcall QSERVER_ClientDisconnectCallback(int32_t nClientId, char * szFile, int32_t nLine) {
     uint32_t nToken = D2Net::Game::Server::QSERVER_GetClientGameToken(nClientId);
     ::SGAMEDATA* pGame = QSERVER_FindAndLockGame(nToken);
@@ -3001,6 +3041,7 @@ void __stdcall QSERVER_ClientDisconnectCallback(int32_t nClientId, char * szFile
 
 // Server join handler: finds game by token, verifies client membership, calls CLIENT_LoadCharacterAndSendGameData (state 1), CLIENT_LoadActAndSetState2 (state 2), CLIENT_PlacePlayerInRoom (state 3). On validation failure sends 0xB4 ConnectionRefused and adds to hack list. Final log "[JOIN 5] Added to game".
 // @sourcefile .\GAME\Game.cpp
+// 1.14d mac: 001ac90e
 void __fastcall NET_D2GS_SERVER_SrvJoinAct(int32_t nClientId) {
     D2ClientStrc* pClient;
     int32_t pDrlgActNull;
@@ -3034,6 +3075,7 @@ void __fastcall NET_D2GS_SERVER_SrvJoinAct(int32_t nClientId) {
     SRVLog(6, "[JOIN]  SrvJoinAct: No game found for client(%d)", nClientId);
 }
 
+// 1.14d mac: 001ad435
 void __fastcall QServer_AlternativeDisconnect(uint32_t nClientId, uint32_t nDisconnectReason) {
     if (!nClientId) {
       return;
@@ -3101,6 +3143,7 @@ void __stdcall QSERVER_DisconnectClientFromGame(uint32_t nClientId) {
 }
 
 // Graceful player disconnect: saves all players (unless BNet with incomplete save), sends state 5 (leaving), sends pending save data (0xB3 for LAN/Open), sends state 6 (terminated), sends 0xB0 ConnectionTerminated, broadcasts 0x5A PlayerLeave event. If all clients gone, loops until empty. Sleeps 100ms for LAN/Open before closing socket.
+// 1.14d mac: 001ad52f
 void __fastcall NET_D2GS_SERVER_LeaveServer(uint32_t nClientId, int32_t bBroadcastLeave) {
     D2ClientStrc* pClient;
     int bHasSaveData;
@@ -3175,6 +3218,7 @@ void __fastcall NET_D2GS_SERVER_LeaveServer(uint32_t nClientId, int32_t bBroadca
 }
 
 // Removes a client from the server by token, cleaning up their connection state.
+// 1.14d mac: 001ad973
 void __fastcall LeaveServer(::SGAMEDATA * pQServer, D2ClientStrc * nClientToken) {
     D2ClientStrc* pSaveCompleteClient = 0;
     D2ClientStrc* pActiveClient;
@@ -3192,6 +3236,7 @@ void __fastcall LeaveServer(::SGAMEDATA * pQServer, D2ClientStrc * nClientToken)
     }
 }
 
+// 1.14d mac: 001abbf2
 int __stdcall QSERVER_InitializeServerState() {
     int nCount;
     Storm::Source::SReg::SRegLoadValue("Diablo II", "PlayerPos", 0, &gbQServerSendPlayerPos);
@@ -3345,6 +3390,7 @@ uint32_t __stdcall GAME_CreateBattleNetGame(char * szGameName, char * szGamePass
 
 // Already-documented — existing description accurately covers SP/LAN game creation: allocates SGAMEDATA in hash map with generated token, initializes critical section and five unit-type lists, rolls seed, allocates Event/Arena/Party/MonsterRegion/ObjectControl/NpcControl/QuestControl subsystems, creates local D2ClientStrc, sends 0x01 GameFlags and state packets, and enqueues the game-loop task.
 // @sourcefile .\GAME\Game.cpp
+// 1.14d mac: 001ac3f3
 void __fastcall GAME_CreateSingleplayerGame(int32_t nClientId, char * szGameName, eD2HostGameType neD2HostGameType, eD2PlayerClassID ePlayerClass, char * szCharName, int32_t nArena, eD2ArenaFlags eArenaFlags, uint8_t nTemplate, uint8_t Unknown6, uint8_t Unknown7, uint8_t nDifficulty, uint8_t nLanguageCode, uint32_t arg11, uint32_t arg12) {
     if (!gpQServerGameState) {
       return;

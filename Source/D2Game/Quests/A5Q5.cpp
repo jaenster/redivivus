@@ -35,6 +35,7 @@ typedef BOOL (__fastcall *fpExecuteOnUnitFunction)(::SGAMEDATA * pGame, D2UnitSt
 namespace D2Game::Quests::QUESTS::A5Q5 {
 
 // A5Q5 (Rite of Passage) quest timer callback. Re-animates the three Ancient altar statues to anim mode 2 when the Ancients fight is abandoned or reset. Looks up each statue unit by GUID, schedules the re-animate event (FrameCnt-based delay), clears alive flags, and sets statue mode to 2. Returns success only when all three statues are found; no quest-state writes.
+// 1.14d mac: 002446ed
 uint8_t __fastcall Q35_ResetAncientsStatues(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
     D2ObjectsTxt* pObjectTxt;
     uint8_t* pAncientAliveFlag;
@@ -97,6 +98,7 @@ BOOL __fastcall Q35_NotifyQuestState(::SGAMEDATA * pGame, D2UnitStrc * pUnit, vo
 }
 
 // [A5Q5 = Rite of Passage] Q35_Callback_02 (quest sub-handler idx 2): on interaction with the Ancients altar (classId 0x203) once bQuestCompleted is latched, broadcasts state via QUEST_SetStateAndBroadcast(1=RewardAwaits, Q35_NotifyQuestState) and clears the completed flag. Drives the "go claim reward" transition.
+// 1.14d mac: 00241a9c
 void __fastcall Q35_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     if (!(pQuestArgs->pTarget && (short int)pQuestArgs->pTarget->nClassId == 0x203)) {
       return;
@@ -177,6 +179,7 @@ BOOL __stdcall Q35_PrepareAncientsForBattle(D2QuestDataStrc * pQuestData, D2Ques
 }
 
 // A5Q5 (Rite of Passage) full arena reset, called on player death or leaving during the fight. Iterates all three Ancient slots: kills and removes each spawned Ancient via Q35_KillAndRemoveAncient (or removes inactive unit if already dead), decrements alive/spawned counters, and restores all three altar statues to anim mode 0. Clears fight-active flags. No quest-state writes.
+// 1.14d mac: 00240be3
 static void __stdcall Q35_ResetAncientsArena(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData, D2QuestDataA5Q5Strc * pA5Q5Data) {
     bool bKillSuccess;
     D2UnitStrc* pStatue;
@@ -232,6 +235,7 @@ static inline int GetGUIDInline(D2UnitStrc * pUnit) {
 }
 
 // A5Q5 (Rite of Passage) timer that summons the three Ancients one per call. Maps statue classId to super-unique and slot: 0x1da→Madawc (superunique 0x2d, slot 1), 0x1db→Talic (0x2b, slot 0), 0x1dc→Korlic (0x2c, slot 2). If a player is already on the summit, resets the arena. On spawn failure reschedules the event 10 frames later. Tracks spawned GUIDs and increments alive/spawned counters; sets bFightActive on first spawn.
+// 1.14d mac: 00240a75
 void __fastcall Q35_SpawnAncientTimer(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit) {
     int nClassId;
     uint32_t nSuperUniqueId;
@@ -297,6 +301,7 @@ void __fastcall Q35_SpawnAncientTimer(D2QuestDataStrc * pQuestData, D2UnitStrc *
 }
 
 // [A5Q5 = Rite of Passage] Q35_UpdateQuestStep: per-player record sync (run via IteratePlayerOrMonsterUnits). If not Completed and player level >= (diff+1)*20 (the lvl-gate to read the Ancients' scroll), mirrors the live nStateFlag into the saved quest record: nStateFlag 2 -> Step0x02, 3 -> Step0x03.
+// 1.14d mac: 0024463d
 BOOL __fastcall Q35_UpdateQuestStep(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -327,6 +332,7 @@ BOOL __fastcall Q35_UpdateQuestStep(::SGAMEDATA * pGame, D2UnitStrc * pUnit, voi
 
 // [A5Q5 = Rite of Passage] Q35_Callback_11 (sub-handler idx 0xb): NPC/altar dialog router by (msgIndex, npcId). msg 0x4eb9 from altar 0x203 = read scroll -> nStateFlag 2 + broadcast 1(RewardAwaits) + sync records. msg 0x4e22 (altar activate) -> broadcast 3 then PrepareAncientsForBattle. msg 0x4ec9 -> record Step0x04. Tail switch maps Larzuk(0x1ff)/Qual-Kehk(0x200)/Anya(0x201)/altar(0x203)/Malah(0x208) talk-flags to Step0x05..0x09.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q5.cpp
+// 1.14d mac: 00241b02
 void __fastcall Q35_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     BOOL BVar1;
     int* pStatueModeEntry;
@@ -424,6 +430,7 @@ void __fastcall Q35_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // A5Q5 (Rite of Passage) gossip/log driver, handler index 0. Pre-completion: if NPC is an Ancient (class 0x219–0x21b) and reward not pending, queues gossip line 4; then looks up a state-flag-indexed gossip line from gdwQuestCallbackAddressQ35 and queues it. Post-completion: per recognized NPC (Larzuk/Drehya/Malah/Qualkhek/Cain) checks a per-NPC talk step-flag; not yet talked → line 5, already talked + JustCompleted → line 3.
+// 1.14d mac: 00241762
 void __fastcall Q35_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     // Static local variables (originally global data)
     static int32_t gdwQuestCallbackAddressQ35[7] = { -0x1, 0x0, 0x1, 0x2, 0x3, 0x4, 0x0 }; D2_STATIC_GUARD(gdwQuestCallbackAddressQ35, "D2Game::Quests::QUESTS::A5Q5::Q35_Callback00_NpcActivate::gdwQuestCallbackAddressQ35");
@@ -502,6 +509,7 @@ void __fastcall Q35_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 
 // A5Q5 (Rite of Passage) XP reward function. Grants 1,400,000 / 20,000,000 / 40,000,000 XP for Normal/Nightmare/Hell respectively, capped to one level's worth of experience. Loops awarding XP until the cap is exhausted or the level table is exceeded. Caller is responsible for setting Completed/JustCompleted quest states.
 // @returns void: EAX at the epilogue is whatever the last stat call left; none of the three callers (0058c741, 0058c89d, 0058caab) reads it. Found by KierTaylor on the Mac twin (Redivivus proposal #1207).
+// 1.14d mac: 00240e51
 static void __stdcall RewardExperienceFromAncients(::SGAMEDATA * pQuestData, D2UnitStrc * pUnit) {
     int32_t nExpNeeded;
     uint32_t nValue;
@@ -563,6 +571,7 @@ static void __stdcall RewardExperienceFromAncients(::SGAMEDATA * pQuestData, D2U
 }
 
 // [A5Q5 = Rite of Passage] Q35_SetCompleteForPartyMember: party-completion callback. If member not Completed, is level-gated (>=(diff+1)*20) and physically in Act V, sets RiteOfPassage Completed + JustCompleted and awards XP. Shares the kill credit with the whole party.
+// 1.14d mac: 00240d80
 void __fastcall Q35_SetCompleteForPartyMember(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -598,11 +607,13 @@ void __fastcall Q35_SetCompleteForPartyMember(::SGAMEDATA * pGame, D2UnitStrc * 
 
 // Quest event 10 (player leaves game) for Q35: removes the leaving player's GUID (pQuestArgs->pPlayer->dwUnitId, or -1 with no player) from pQuestData->sQuestGUID via a tail jump to QUESTGUID_RemovePlayerFromList.
 // Evidence: Q35_InitData stores it at sStateFunctions slot 10 (+0xc8); the slot is a QUESTCALLBACK (fastcall ECX=pQuestData, EDX=pQuestArgs). Was the label SERVER_QUEST_Q35_Callback_10 (kept as a secondary label).
+// 1.14d mac: 00241145
 void __fastcall Q35_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     QUESTGUID_RemovePlayerFromList(&pQuestData->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
 }
 
 // [A5Q5 = Rite of Passage] Q35_SetCannotComplete: per-player callback run after the Ancients die. If a player is NOT Completed and NOT JustCompleted (e.g. under the level gate, so they missed credit), marks RiteOfPassage CannotCompleteQuestInGame and sends packet 0x23 — they must re-fight in a new game.
+// 1.14d mac: 00244927
 BOOL __fastcall Q35_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -622,6 +633,7 @@ BOOL __fastcall Q35_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, v
 }
 
 // A5Q5 (Rite of Passage) per-player completion callback, called after all three Ancients are killed. For each eligible player (level ≥ (difficulty+1)*20, standing in LEVEL_ArreatSummit, not already Completed): sets JustCompleted and Completed in the QuestRecord, awards XP via RewardExperienceFromAncients, then propagates completion to all party members via Q35_SetCompleteForPartyMember.
+// 1.14d mac: 002447d0
 BOOL __fastcall Q35_OnAncientsDefeated(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2QuestDataStrc* pQuestData;
     eD2LevelId eLevelId;
@@ -711,6 +723,7 @@ static void __stdcall Q35_FireAncientDeathMissile(D2QuestArgStrc * pQuestArg, D2
 
 // [A5Q5 = Rite of Passage] Q35_Callback_08 (sub-handler idx 8, the kill handler): fires when an Ancient (classId 0x21c Talic / 0x21d Korlic / 0x21e Madawc) dies. Plays death missile, decrements alive count; when all 3 dead it grants the killer Completed+JustCompleted+XP, runs Q35_OnAncientsDefeated (party) and Q35_SetCannotComplete (under-level), spawns the Worldstone portal (obj 0x231), advances the next quest's sequence filter, then sets nStateFlag 5 and broadcasts state 0xd (JustCompleted).
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q5.cpp
+// 1.14d mac: 0024136c
 void __fastcall Q35_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int nKilledClassId;
     BOOL bIsCompleted;
@@ -805,6 +818,7 @@ void __fastcall Q35_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 
 // [A5Q5 = Rite of Passage] Q35_Callback_03 (sub-handler idx 3): level-entry/intro handler for the Arreat Summit. On first scroll-read (text id 0x6d) and not Completed, sets nStateFlag 3 and broadcasts 1(RewardAwaits)+syncs records. On entering LEVEL_ArreatSummit advances nStateFlag to 2/3 with broadcasts and re-syncs the Ancients-statue display.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q5.cpp
+// 1.14d mac: 00241174
 void __fastcall Q35_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2UnitStrc* pAncientAlive;
     ::SGAMEDATA* pGame;
@@ -862,6 +876,7 @@ void __fastcall Q35_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 }
 
 // [A5Q5 = Rite of Passage] Q35_ActiveFilter: predicate for the Ancients altar (classId 0x203). Returns true (quest interactable) iff the altar is in-play (nStateFlag set) and RiteOfPassage is not yet Completed.
+// 1.14d mac: 00240ff1
 bool __fastcall Q35_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     if (nTargetClassId == 0x203 && pQuestData->nStateFlag == 1) {
       BOOL bIsCompleted;
@@ -873,6 +888,7 @@ bool __fastcall Q35_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 }
 
 // [A5Q5 = Rite of Passage] Q35_SequenceFilter: quest-chain gate. While nStateFlag != 5 (Ancients not dead), parks the quest at nStateFlag 1; once finished, chains into the next quest (nSequenceQuestId = RescueOnMountArreat) sequence filter. No quest-record writes.
+// 1.14d mac: 00241faf
 bool __fastcall Q35_SequenceFilter(D2QuestDataStrc * pQuestData) {
     if (pQuestData->nStateFlag != 5 && pQuestData->bIsNotIntroduction != '\0') {
       if (!pQuestData->nStateFlag) {
@@ -898,6 +914,7 @@ bool __fastcall Q35_SequenceFilter(D2QuestDataStrc * pQuestData) {
 }
 
 // [A5Q5 = Rite of Passage] Q35_Callback_13 (sub-handler idx 0xd): on game load, reconstructs live nStateFlag/nStateFlagPrev from the saved quest record. Completed/FinishedInPreviousGame -> set field_0x4A (done). Step0x03 -> nStateFlag 3. Step0x02 -> nStateFlag 2. Read-only on records.
+// 1.14d mac: 00241ef4
 void __fastcall Q35_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
@@ -929,6 +946,7 @@ void __fastcall Q35_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 
 // [A5Q5 = Rite of Passage] Q35_InitData: quest table init. Allocates A5Q5 quest-specific data, wires sub-handlers (00/02/03/08/0b/0d), sets nQuestIdReal=QUEST_RiteOfPassage, fpActiveFilter=Q35_ActiveFilter, fpSequenceFilter=Q35_SequenceFilter, nSequenceQuestId=RescueOnMountArreat, and the altar gossip table (npc 0x203 -> string 0x4eb9).
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q5.cpp
+// 1.14d mac: 00241035
 void __fastcall Q35_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGame = pQuestData->pGame;
@@ -954,6 +972,7 @@ void __fastcall Q35_InitData(D2QuestDataStrc * pQuestData) {
 }
 
 // [A5Q5 = Rite of Passage] Q35_OnPlayerDeath: if a player dies on the Arreat Summit before the Ancients are beaten, bumps the resurrection counter and resets the arena (Q35_ResetAncientsArena) so the fight restarts. No quest-state writes.
+// 1.14d mac: 0024203a
 void __fastcall Q35_OnPlayerDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
@@ -973,6 +992,7 @@ void __fastcall Q35_OnPlayerDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 }
 
 // [A5Q5 = Rite of Passage] QUEST_OnPlayerLeaveArreatSummit: decrements the on-summit player count when a player leaves; if reward not yet dropped, sets the "reset pending" flag. No quest-state writes.
+// 1.14d mac: 0024208f
 void __fastcall QUEST_OnPlayerLeaveArreatSummit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
@@ -990,6 +1010,7 @@ void __fastcall QUEST_OnPlayerLeaveArreatSummit(::SGAMEDATA * pGame, D2UnitStrc 
 }
 
 // [A5Q5 = Rite of Passage] GetQuestDataAncients: BOOL accessor returning !bAncientsFightStarted (A5Q5 +0x11) (i.e. whether the Ancients fight is NOT currently engaged). No quest-state writes.
+// 1.14d mac: 002420d7
 BOOL __fastcall GetQuestDataAncients(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_RiteOfPassage);
     return (uint32_t)!pQuestData->pQuestSpecificData.pA5Q5->bAncientsFightStarted;
@@ -1002,6 +1023,7 @@ int __fastcall Q35_GetAncientsState(::SGAMEDATA * pGame) {
 }
 
 // [A5Q5 = Rite of Passage] Q35_Noop: empty stub.
+// 1.14d mac: 00242123
 void __fastcall Q35_Noop(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 
 }
@@ -1017,6 +1039,7 @@ BOOL __fastcall Q35_IsAncientsActive(::SGAMEDATA * pGame) {
 }
 
 // [A5Q5 = Rite of Passage] Q35_AreAncientsReadyToFight: returns 1 if Ancients were spawned but none remain alive (i.e. all defeated). No quest-state writes.
+// 1.14d mac: 0024215a
 BOOL __fastcall Q35_AreAncientsReadyToFight(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_RiteOfPassage);
     if (pQuestData && pQuestData->pQuestSpecificData.pA5Q5->bAncientsSpawned && !pQuestData->pQuestSpecificData.pA5Q5->nAncientsAlive) {
@@ -1059,6 +1082,7 @@ BOOL __fastcall Q35_CheckQuestNotStarted(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // [A5Q5 = Rite of Passage] Q35_SetStatueAnimMode: sets one altar statue's display/anim mode from the saved per-statue mode. classId 0x1da->slot[0x34], 0x1db->slot[0x30], 0x1dc->slot[0x38]. No quest-state writes.
+// 1.14d mac: 00242200
 static void Q35_SetStatueAnimMode(D2QuestDataA5Q5Strc * pQuestData, D2ObjectInitFnArg * pInitArg) {
     int nClassId;
     D2UnitStrc* pUnit = pInitArg->pObject;
@@ -1087,6 +1111,7 @@ static void Q35_SetStatueAnimMode(D2QuestDataA5Q5Strc * pQuestData, D2ObjectInit
 }
 
 // [A5Q5 = Rite of Passage] Objects_InitFn65: object init for one Ancient altar statue — records its GUID (slot 5) and applies its anim mode. No quest-state writes.
+// 1.14d mac: 002421c3
 void __fastcall Objects_InitFn65_AncientStatue2(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_RiteOfPassage);
     D2QuestDataA5Q5Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA5Q5;
@@ -1095,6 +1120,7 @@ void __fastcall Objects_InitFn65_AncientStatue2(D2ObjectInitFnArg * pInitArg) {
 }
 
 // [A5Q5 = Rite of Passage] Objects_InitFn63: object init for one Ancient altar statue — records its GUID (slot 6) and applies its anim mode. No quest-state writes.
+// 1.14d mac: 0024224d
 void __fastcall Objects_InitFn63_AncientStatue3(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_RiteOfPassage);
     D2QuestDataA5Q5Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA5Q5;
@@ -1103,6 +1129,7 @@ void __fastcall Objects_InitFn63_AncientStatue3(D2ObjectInitFnArg * pInitArg) {
 }
 
 // [A5Q5 = Rite of Passage] Objects_InitFn64: object init for one Ancient altar statue — records its GUID (slot 7) and applies its anim mode. No quest-state writes.
+// 1.14d mac: 0024228a
 void __fastcall Objects_InitFn64_AncientStatue1(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_RiteOfPassage);
     D2QuestDataA5Q5Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA5Q5;
@@ -1111,24 +1138,28 @@ void __fastcall Objects_InitFn64_AncientStatue1(D2ObjectInitFnArg * pInitArg) {
 }
 
 // [A5Q5 = Rite of Passage] OBJOP_A5Q5_AncientsTriggerSound1: object-operate stub that plays the "locked" sound (event 0x13) on the altar. No quest-state writes.
+// 1.14d mac: 002422c7
 BOOL __fastcall OBJOP_A5Q5_AncientsTriggerSound1(D2ObjectOperateFnArg * pOperation) {
     UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pOperation->pAttacker, 0x13, pOperation->pAttacker);
     return 0;
 }
 
 // [A5Q5 = Rite of Passage] OBJOP_A5Q5_AncientsTriggerSound2: object-operate stub that plays the "locked" sound (event 0x13). No quest-state writes.
+// 1.14d mac: 002422ee
 BOOL __fastcall OBJOP_A5Q5_AncientsTriggerSound2(D2ObjectOperateFnArg * pOperation) {
     UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pOperation->pAttacker, 0x13, pOperation->pAttacker);
     return 0;
 }
 
 // [A5Q5 = Rite of Passage] OBJOP_A5Q5_AncientsTriggerSound3: object-operate stub that plays the "locked" sound (event 0x13). No quest-state writes.
+// 1.14d mac: 00242315
 BOOL __fastcall OBJOP_A5Q5_AncientsTriggerSound3(D2ObjectOperateFnArg * pOperation) {
     UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pOperation->pAttacker, 0x13, pOperation->pAttacker);
     return 0;
 }
 
 // [A5Q5 = Rite of Passage] Objects_InitFn72: object init for the Ancients altar (records GUID slot 0x14, applies stored anim flag). No quest-state writes.
+// 1.14d mac: 0024233c
 void __fastcall Objects_InitFn72_AncientsAltar(D2ObjectInitFnArg * pInitArg) {
     int nUnitGUID;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_RiteOfPassage);
@@ -1146,6 +1177,7 @@ void __fastcall Objects_InitFn72_AncientsAltar(D2ObjectInitFnArg * pInitArg) {
 }
 
 // [A5Q5 = Rite of Passage] Objects_InitFn73: object init for the Worldstone Keep entrance portal — shows it (anim 2) if field_0x4A (quest done) else hides (0). No quest-state writes.
+// 1.14d mac: 00242386
 void __fastcall Objects_InitFn73_AncientsDoor(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_RiteOfPassage);
     if (!pQuestData) {
@@ -1160,6 +1192,7 @@ void __fastcall Objects_InitFn73_AncientsDoor(D2ObjectInitFnArg * pInitArg) {
 }
 
 // [A5Q5 = Rite of Passage] Q35_BootPlayerFromSummit: per-player callback — if the player is on the Arreat Summit, destroys their town-portal pair (kicks them out so they can't cheese the Ancients fight). No quest-state writes.
+// 1.14d mac: 002445e5
 BOOL __fastcall Q35_BootPlayerFromSummit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     eD2LevelId eLevelId;
     uint32_t nUnitGUID = PLAYER::Player::GetPlayerUniqueId(pUnit);
@@ -1183,6 +1216,7 @@ void __fastcall Q35_BootAllPlayersFromSummit(::SGAMEDATA * pGame) {
 
 // [A5Q5 = Rite of Passage] OBJOP_A5Q5_AncientsAltarActivate: player activates the Ancients altar. Boots TP'd players off the summit, sends the altar prompt (npc msg 0x4e22), and if quest not yet at the fight stage advances nStateFlag to 2 and broadcasts state 3 (the "Ancients challenge accepted" step). No quest-record writes (broadcast only).
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q5.cpp
+// 1.14d mac: 002423d5
 BOOL __fastcall OBJOP_A5Q5_AncientsAltarActivate(D2ObjectOperateFnArg * pOperation) {
     D2UnitStrc* pUnit;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_RiteOfPassage);
@@ -1225,6 +1259,7 @@ BOOL __fastcall OBJOP_A5Q5_AncientsAltarActivate(D2ObjectOperateFnArg * pOperati
 }
 
 // [A5Q5 = Rite of Passage] OBJOP_A5Q5_WorldstonePortalActivate: operate handler for the Worldstone Keep portal. Only opens (TakeStairs to next level) if RiteOfPassage is Completed or RewardAwaits AND the Ancients are dead; otherwise plays the locked sound. Read-only on quest record (GetQuestState only).
+// 1.14d mac: 002425f4
 BOOL __fastcall OBJOP_A5Q5_WorldstonePortalActivate(D2ObjectOperateFnArg * pOperation) {
     eD2ObjectAnimMode eAnimMode;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_RiteOfPassage);
@@ -1277,6 +1312,7 @@ BOOL __fastcall OBJOP_A5Q5_WorldstonePortalActivate(D2ObjectOperateFnArg * pOper
 }
 
 // [A5Q5 = Rite of Passage] ResurrectAncients: per-player callback — counts living players still on the Arreat Summit (field_0x54). Used to decide whether to reset the arena when everyone leaves. No quest-state writes.
+// 1.14d mac: 00242819
 BOOL __fastcall Q35_CountLivingPlayersOnSummit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2QuestDataStrc* pQuestData;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
@@ -1293,6 +1329,7 @@ BOOL __fastcall Q35_CountLivingPlayersOnSummit(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // [A5Q5 = Rite of Passage] Q35_OnPlayerLeavesSummit: when a player leaves the summit mid-fight, recounts players present (ResurrectAncients); if none remain, resets the Ancients arena so the fight restarts fresh next entry. No quest-state writes.
+// 1.14d mac: 00242765
 void __fastcall Q35_OnPlayerLeavesSummit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     if (!pRoom) {
@@ -1326,6 +1363,7 @@ void __fastcall Q35_OnPlayerLeavesSummit(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // [A5Q5 = Rite of Passage] OBJOP_A5Q5_AncientsQuestStateQuery: on altar operate, if quest is Completed but record Step0x04 not yet set, sends npc info packet 0x4ec9 (which makes Q35_Callback_11 write Step0x04). Read-only on records itself.
+// 1.14d mac: 0024286d
 BOOL __fastcall OBJOP_A5Q5_AncientsQuestStateQuery(D2ObjectOperateFnArg * pOperation) {
     BOOL _bQuestCompleted;
     bool bQuestCompleted;
@@ -1347,6 +1385,7 @@ BOOL __fastcall OBJOP_A5Q5_AncientsQuestStateQuery(D2ObjectOperateFnArg * pOpera
 }
 
 // [A5Q5 = Rite of Passage] Objects_InitFn76: object init for the Worldstone Keep stair/portal — records GUID, sets the in-play flag (0x11), and applies its display mode based on whether the Ancients are defeated. No quest-state writes.
+// 1.14d mac: 002428fd
 void __fastcall Objects_InitFn76_SummitDoor(D2ObjectInitFnArg * pInitArg) {
     int nUnitGUID;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_RiteOfPassage);
@@ -1369,6 +1408,7 @@ void __fastcall Objects_InitFn76_SummitDoor(D2ObjectInitFnArg * pInitArg) {
 }
 
 // [A5Q5 = Rite of Passage] OBJOP_A5Q5_WorldstoneStairPortal: operate handler for the Worldstone stairway. If the Ancients are dead (field_0x00) lets the player TakeStairs into the Worldstone Keep; otherwise plays the locked sound and keeps it sealed. No quest-record writes.
+// 1.14d mac: 0024296e
 BOOL __fastcall OBJOP_A5Q5_WorldstoneStairPortal(D2ObjectOperateFnArg * pOperation) {
     eD2ObjectAnimMode eAnimMode;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_RiteOfPassage);

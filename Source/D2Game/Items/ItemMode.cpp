@@ -149,6 +149,7 @@
 
 namespace D2Game::ITEMS::ItemMode {
 
+// 1.14d mac: 001a9e2e
 int32_t __fastcall GetSaveChecksum(D2ClientStrc * pClient) {
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7ff);
@@ -161,6 +162,7 @@ int32_t __fastcall GetSaveChecksum(D2ClientStrc * pClient) {
 // @wasnamed GetSavePacketList - one name on two different functions.
 // @evidence Writes pClient->pSavePacketList (line 0x80a). 00538350 reads it (line 0x7ff).
 // A setter had been given the getter's name.
+// 1.14d mac: 001a9e6f
 void __fastcall SetSaveChecksum(D2ClientStrc * pClient, int32_t nSaveChecksum) {
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x80a);
@@ -184,6 +186,7 @@ D2MonStatsTxt * __fastcall GetMonsterData(D2UnitStrc * pUnit) {
 
 // Server-side callback invoked when an item/stat modifier (op-function) changes a unit stat by (fParam1 old -> fParam2 new). Extracts the stat index from the eSkill packed param, looks up its ItemStatCost.txt line, and fires associated aura item-events. Switches on the affected stat: maxhp/maxmana/maxstamina proportionally rescales the current hitpoints/mana/stamina; item_addclassskills/addskill_tab/nonclassskill/singleskill grant or remove the granted skill (allocating, broadcasting via 0x21, updating passive/pet stats, deselecting if leveled to 0); state toggles a unit state and gfx; item_aura activates/deactivates a periodic aura; item_charged_skill adds/removes a charged item skill. Pure side-effects on pUnit's stats/skills/states.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001b5af6
 void __fastcall STATSLISTEX_FunctionCallback(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItemOwner, eD2Skills eSkill, int nOldValue, int nNewValue) {
     uint32_t _bIsMercUnit;
     int _bChargedCountActive;
@@ -488,6 +491,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_12(D2UnitStrc * p) 
     return p->eUnitFlags >> 12 & 1;
 }
 
+// 1.14d mac: 001b6418
 void __fastcall SendDropItemPacket(D2UnitStrc * pUnit, D2ClientStrc * pClient) {
     if (!(pUnit && !FlagBit_D2UnitStrc_eUnitFlags_4(pUnit) && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Run)) {
       return;
@@ -511,6 +515,7 @@ void __fastcall PacketUpdateForClient(D2UnitStrc * pUnit, D2ClientStrc * pClient
 }
 
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001b64a6
 void __fastcall SERVER_ITEM_SendStackableUsagePackets(D2UnitStrc * pUnit, char * szFile, int32_t nLine) {
     D2UnitStrc* pInvItem;
     BOOL bHasCursorFlag;
@@ -538,6 +543,7 @@ void __fastcall Unreferenced_0055bfe0(D2UnitStrc * pUnit) {
 }
 
 // Returns the skill ID associated with a scroll or book item unit. Checks if pUnit is a scroll (returns scrollskill) or book (returns bookskill) via the books.txt lookup using the item's magic suffix; returns -1 if not a scroll/book or if no books.txt record found. In: pUnit (ESI). Out: eD2Skills or 0xFFFFFFFF.
+// 1.14d mac: 001c10aa
 static eD2Skills ITEMMODE_GetItemSkillId(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x1ec);
@@ -561,6 +567,7 @@ static eD2Skills ITEMMODE_GetItemSkillId(D2UnitStrc * pUnit) {
 
 // Adjusts the quantity of the skill associated with a scroll/book item (pUnit2) on the caster unit (pUnit) by nParam (positive=add, negative=subtract). After updating the skill quantity via SKILL_SetQuantity, sends 0x22 UpdateItemSkill packet to the client. Halts if either unit pointer is null.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001bf3f2
 static void __stdcall ITEMMODE_UpdateBookSkillQuantity(int32_t nQuantityDelta, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     D2SkillStrc* pSkill;
     int32_t nSkillQuantity;
@@ -599,6 +606,7 @@ static void __stdcall ITEMMODE_UpdateBookSkillQuantity(int32_t nQuantityDelta, D
 
 // Server-side: adjusts the charge/quantity of a skill granted by a charged item (pUnit) on its owner (pUnit2). If nParam==0, decrements remaining charges; if nParam!=0, allocates the skill if missing then increments or adds charges. Sends NET_D2GS 0x22 update packet to the client. If charges reach zero, resets left/right hand skill to Attack if either was bound to this skill.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001b6609
 static void __stdcall ITEMMODE_UpdateItemSkill(int32_t bAddCharges, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     uint32_t _bIsBook;
     BOOL bIsBook;
@@ -674,6 +682,7 @@ static void __stdcall ITEMMODE_UpdateItemSkill(int32_t bAddCharges, D2UnitStrc *
     SKILLS::SkillsServer::Server_SelectSkill(pUnit2, 0, SKILL_Attack, -1);
 }
 
+// 1.14d mac: 001b658d
 void __fastcall ITEMMODE_ApplyItemToOwner(D2UnitStrc * pOwner, D2UnitStrc * pItem) {
     if (!pOwner) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x24d);
@@ -695,6 +704,7 @@ void __fastcall ITEMMODE_ApplyItemToOwner(D2UnitStrc * pOwner, D2UnitStrc * pIte
 // Applies a socketed item (gem/rune/jewel) to its host item then refreshes the owner. If the inserted item is a Gem or Rune, looks up its gems.txt line and calls ApplyRuneAndGemStats (mode 2 for gems, 5 for runes); a quality-5 (set) item instead runs ITEM_ProcessSetItemEquip. Then re-applies the host item to the owner unit, handles dual-wield/broken-weapon checks to decide if the stats become active (STATLIST_SetItemStatActive), and updates anim speed. No-op unless pUnit is an ITEM and the owner is not a player with the playerbody state set.
 // @sourcefile .\ITEMS\ItemMode.cpp
 // @blizzard sITEMSAddStatsList
+// 1.14d mac: 001b6823
 void __fastcall ITEMMODE_AddStatsList(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nApply) {
     uint32_t _bIsGem;
     BOOL bIsGem;
@@ -798,6 +808,7 @@ void __fastcall ITEMMODE_AddStatsList(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     D2Common::Units::UpdateAnimSpeed(pUnit_00, ".\\ITEMS\\ItemMode.cpp", 0x2cf);
 }
 
+// 1.14d mac: 001b6a76
 void __fastcall ITEMMODE_AddStatsList_ForMercSwap(::SGAMEDATA * dwParam, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nApply) {
     ITEMMODE_AddStatsList(dwParam, pUnit, pUnit2, nApply);
 }
@@ -846,6 +857,7 @@ static BOOL ITEMMODE_IsSkillUsableCheck(D2UnitStrc * pUnit, D2SkillStrc * pSkill
     }
 }
 
+// 1.14d mac: 001c1732
 static void ITEMMODE_ResetSkillToDefault(D2SkillStrc * pSkill, D2UnitStrc * pUnit, int32_t bIsLeftSkill) {
     eD2Skills eSkillId;
     uint32_t nSkillGUID;
@@ -898,6 +910,7 @@ static uint32_t __stdcall ITEMMODE_CanUseSkillWithWeapon(D2UnitStrc * pUnit, D2S
 }
 
 // Validates and corrects a player's left- and right-hand skill assignments after a weapon-mode change. For each hand: if the equipped weapon is a thrown-only item (ThrownWeapon but not MeleeWeapon) and the current skill cannot be used with that weapon, resets the skill and forces Throw (left) or LeftHandThrow (right). Then checks SKILLS_CanUseSkill; if the result is 2 or 7 (no-skill / weapon-mismatch codes), calls ITEMMODE_ResetSkillToDefault. No-op for non-player units or units with no left weapon equipped.
+// 1.14d mac: 001ba44b
 static void ITEMMODE_ValidateWeaponSkills(D2UnitStrc * pUnit) {
     D2UnitStrc* pRightWeapon;
     D2UnitStrc* pLeftWeapon;
@@ -965,6 +978,7 @@ static void ITEMMODE_ValidateWeaponSkills(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 001b6a9b
 void __fastcall ITEMMODE_RemoveItemStates(D2UnitStrc * pOwner, D2UnitStrc * pItem) {
     if (!pOwner) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x394);
@@ -985,6 +999,7 @@ void __fastcall ITEMMODE_RemoveItemStates(D2UnitStrc * pOwner, D2UnitStrc * pIte
 
 // Removes all stat contributions of an item being unequipped from its owner unit. Fires the periodic-stats timer trigger, handles set-item dequip logic, removes the stat list from the owner (unless broken and nEquipState==0), conditionally re-activates the off-hand weapon's stat list when dual-wielding, removes item states, and optionally updates resource stats (if nParam != 0). No-ops if either pointer is NULL or the item unit type is wrong.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001b6b17
 void __fastcall ITEMMODE_UnequipItemStats(::SGAMEDATA * pGame, D2UnitStrc * pItem, D2UnitStrc * pUnit, int32_t nEquipState, int32_t bUpdateResourceStats) {
     BOOL bIsBroken;
     D2UnitStrc* pOffhandOwner;
@@ -1044,6 +1059,7 @@ void __fastcall ITEMMODE_UnequipItemStats(::SGAMEDATA * pGame, D2UnitStrc * pIte
 }
 
 // Handles a player picking up a gold pile (pUnit=gold item, pUnit2=player). Computes how much gold fits under the player's inventory cap; if the pile has an owner, delegates to ChangeGoldForPlayer; if the player is in a party, splits via PARTY_SplitGoldToPartyMembers; otherwise credits directly via STATLIST_AddUnitStat. Removes the gold item from the room and deletes it. If the pile overflowed the cap, spawns the remainder as a new gold pile and plays a pickup sound (0x17).
+// 1.14d mac: 001b7699
 static void __stdcall PickingGold(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     eD2UnitType eUnitType;
     uint32_t nGoldCap;
@@ -1109,6 +1125,7 @@ static void __stdcall PickingGold(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Uni
     UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit2, 0x17, pUnit2);
 }
 
+// 1.14d mac: 001b75f8
 static void __stdcall ITEMMODE_GetItemPageForUnit(int32_t nUpdateType, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pUnit2), !pUnit2 ? UNIT_COUNT : pUnit2->eUnitType, !pUnit2 ? -1 : pUnit2->nUnitGUID);
     D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pUnit2, INVPAGE_None);
@@ -1132,6 +1149,7 @@ uint32_t __fastcall ITEMMODE_CheckQuestItemCodePair(D2ItemsTxt * pItemsTxt1, D2I
 }
 
 // Scans a unit's carried-item list (pUnit2 chain via INVENTORY_GetNextItem) to detect whether picking up the quest/unique item pUnit would create a forbidden duplicate. Returns 1 if a duplicate is found, 0 otherwise. Matches on (a) the same unique-item id (when pUnit is a carry-restricted unique, quality 7), or (b) quest-item code collisions against the txt row pointed to by nParam, including a hardcoded table of equivalent/exclusive 4-char quest item codes (e.g. j33/g33 keys, bks/bkd books, htsh/msf/pivt scrolls) and the fq2-pair checks via ITEMMODE_CheckQuestItemCodePair. Skips corpse-page items. Stops when reaching pUnit itself in the chain.
+// 1.14d mac: 001b70a4
 static BOOL __stdcall ITEMMODE_CheckDuplicateQuestItem(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2ItemsTxt * pOtherItemsTxt) {
     eInventoryPage eContainingPage;
     int nItemQuality;
@@ -1250,6 +1268,7 @@ static BOOL __stdcall ITEMMODE_CheckDuplicateQuestItem(D2UnitStrc * pUnit, D2Uni
 }
 
 // Server-side rule check: can pUnit (player) pick up pItem in pGame? Returns 1 if pickable, 0 otherwise. Rejects: a duplicate carry1 unique quest item already held; quest items whose owning quest gate is not satisfied for this player/difficulty (special-cases by 4-char item code -- ass(Radament book) j43(Golden Bird), yxz, g33(Khalim parts/PrisonOfIce), tr2). Then via gaQuestItemPickupRules and per-act quest-completion lookups (GetQuestBitBuffer/GetQuestState) blocks re-picking quest items the player or any party corpse in the room already owns (ITEMMODE_CheckDuplicateQuestItem over the player inventory and each corpse owner's inventory). Non-quest items are always pickable.
+// 1.14d mac: 001b6cb1
 BOOL __fastcall SERVER_CheckIfPickable(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem) {
     // Static local variables (originally global data)
     static D2PickableStrc gaQuestItemPickupRules[4] = {
@@ -1446,6 +1465,7 @@ BOOL __fastcall SERVER_CheckIfPickable(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 
 // Server-side item pick-up handler: moves a ground item (identified by nItemGUID) onto the player's cursor. Validates pGame/pUnit/inventory non-null, checks cursor is empty and player not trade-busy, calls SERVER_CheckIfPickable, then either calls PickingGold for gold stacks or removes the item from the room, sets ITEMCMD_CURSOR_PICKUP_ITEM, clears its page, refreshes inventory, and fires QUEST_OnItemPickedUp. Sets pbResult=1 if item was already being picked (anim mode). Returns immediately on failure; halts on null pGame/pUnit/inventory.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001b73f1
 void __fastcall SERVER_PickToCursor(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nItemGUID, uint32_t * pbResult) {
     D2UnitStrc* pItem;
     int nPickable;
@@ -1732,6 +1752,7 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
 }
 
 // Fills a 10-element flag array (pdwParam[0..9]) describing the weapon/item type of pUnit for use by item-mode evaluation. Flags: [0]=Bow, [1]=Crossbow, [2]=BowQuiver, [3]=CrossbowQuiver, [4]=AnyShield, [5]=Weapon, [6]=TwoHanded, [7]=Assassin-HTH or Druid special, [8]=Throwable, [9]=Ring. pnParam supplies the player unit for class checks; halts with error if either pointer is NULL.
+// 1.14d mac: 001b7b07
 static void ITEMMODE_GetItemTypeFlags(D2UnitStrc * pOwner, int32_t * pnTypeFlags, D2UnitStrc * pUnit) {
     uint32_t bIsOfType;
     int32_t nLine;
@@ -1809,6 +1830,7 @@ static void ITEMMODE_GetItemTypeFlags(D2UnitStrc * pOwner, int32_t * pnTypeFlags
     pnTypeFlags[9] = 1;
 }
 
+// 1.14d mac: 001b7cd0
 static BOOL ITEMMODE_CheckItemTypeConflict(int * pnExistingTypeFlags, int * pnNewTypeFlags) {
     if (*pnNewTypeFlags && pnExistingTypeFlags[2] || pnNewTypeFlags[2] && *pnExistingTypeFlags) {
       return 1;
@@ -1959,10 +1981,12 @@ void __fastcall ITEMMODE_NullSub_Unref_0055d920(::SGAMEDATA * pGame, D2UnitStrc 
 
 }
 
+// 1.14d mac: 001b9a0d
 void __fastcall ITEMMODE_ReturnOne(D2UnitStrc * pUnit, D2UnitStrc * pItem, int32_t nUnused) {
 
 }
 
+// 1.14d mac: 001ba02e
 static void __stdcall ITEMMODE_GetItemGoldValue(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     D2Common::INVENTORY::Inventory::INVENTORY_SwapPrimaryWeaponOnRemoval(pUnit2->pInventory, pUnit);
     int32_t nSeqMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
@@ -1973,6 +1997,7 @@ static void __stdcall ITEMMODE_GetItemGoldValue(::SGAMEDATA * pGame, D2UnitStrc 
     ITEMMODE_UnequipItemStats(pGame, pUnit, pUnit2, 1, 1);
 }
 
+// 1.14d mac: 001b9fb9
 static void __stdcall ITEMMODE_CheckCanPickup(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     D2InventoryStrc* pInventory = pUnit->pInventory;
     if (!pInventory) {
@@ -1996,6 +2021,7 @@ static void __stdcall ITEMMODE_CheckCanPickup(::SGAMEDATA * pGame, D2UnitStrc * 
 }
 
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001b9eb9
 static void ITEMMODE_ValidateItemForPlayer(D2UnitStrc * pUnit, int * pnSnapshot) {
     int32_t nOwnerGUID;
     eD2Skills eSkillId;
@@ -2030,6 +2056,7 @@ static void ITEMMODE_ValidateItemForPlayer(D2UnitStrc * pUnit, int * pnSnapshot)
 }
 
 // After a weapon swap, ensures the unit's active left/right skills are still usable. For each of the two skill slots in the swap-data block (nParam+0x10/+0x0C), if the skill exists, is not already the active slot skill, and SKILLS_CanUseSkill returns a disabling code, calls Server_SelectSkill to fall back to the Attack skill on that hand.
+// 1.14d mac: 001ba082
 static void ITEMMODE_RestoreSelectedSkills(D2UnitStrc * pUnit, int * pnSnapshot) {
     D2SkillStrc* pSwapSkill;
     D2SkillStrc* pActiveSkill;
@@ -2082,6 +2109,7 @@ static void ITEMMODE_RestoreSelectedSkills(D2UnitStrc * pUnit, int * pnSnapshot)
     }
 }
 
+// 1.14d mac: 001b9a12
 int32_t __fastcall ITEMMODE_CheckItemRequirements(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     D2UnitStrc* pEquippedItem;
     eD2ItemTypes eItemType;
@@ -2134,6 +2162,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_9(D2UnitStrc * p) {
 
 // Server-side recalculation of all equipped/charm item enable states for a player (or hireling, eUnitFlags bit 9). Validates each item against the wearer's current requirements: enables qualifying active charms, disables body-slot items that fail requirements (unequipping their stats), then runs a convergence loop re-enabling items whose requirements are now met (handling primary-weapon swap and socketed/set bonuses), and re-applies set bonuses for quality-5 (set) items. Finishes by validating item quality and refreshing inventory; if bSendPacket, sends S2C 0x48 (RecalcEquippedItems2) to the owning player's client. Counterpart to the client-side 0x47/0x48 handlers.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001b9b20
 void __fastcall ITEMS_RecalcEquippedItemStates(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t bSendPacket) {
     eD2BodyLoc eBodyLoc;
     D2UnitStrc* pSocketedItem;
@@ -2301,12 +2330,14 @@ void __fastcall ITEMS_RecalcEquippedItemStates(::SGAMEDATA * pGame, D2UnitStrc *
     GAME::SCmd::NET_D2GS_SERVER_Send_0x48_ITEMUPDATEREQUIREMENTSMET(pClient, pUnit, '\0');
 }
 
+// 1.14d mac: 001ba157
 void __fastcall ITEMS_RecalcAndRefreshInventory(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused, int32_t bSendPacket) {
     ITEMS_RecalcEquippedItemStates(pGame, pUnit, bSendPacket);
 }
 
 // Removes an item from a player's inventory and destroys it. Clears UNITFLAG_TARGETABLE, verifies the item belongs to the unit's inventory, clears its inventory page, optionally sends a RemoveObject packet to the client (bSendRemovePacket), then calls ITEM_DeleteItemAndFreeUnit. Halts on null game/unit or if item is not found in inventory.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001bc8e3
 void __fastcall ITEMMODE_DeleteItemFromInventory(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem, int32_t bSendRemovePacket) {
     D2UnitStrc* pItemInInv;
     D2ClientStrc* pClient;
@@ -2352,6 +2383,7 @@ void __fastcall ITEMMODE_DeleteItemFromInventory(::SGAMEDATA * pGame, D2UnitStrc
 }
 
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001bd250
 static void __stdcall ITEMMODE_ConsumeItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit2, ".\\ITEMS\\ItemMode.cpp", 0xf88);
     eD2ItemFlag eItemFlags = ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD);
@@ -2360,6 +2392,7 @@ static void __stdcall ITEMMODE_ConsumeItem(::SGAMEDATA * pGame, D2UnitStrc * pUn
     ITEMMODE_DeleteItemFromInventory(pGame, pUnit2, pUnit, 0);
 }
 
+// 1.14d mac: 001bd08c
 static eD2Skills ITEMMODE_GetItemCastSkill(D2UnitStrc * pUnit) {
     D2BooksTxt* pBooksTxtLine;
     eD2Skills eSkillId = ~SKILL_Attack;
@@ -2391,6 +2424,7 @@ static eD2Skills ITEMMODE_GetItemCastSkill(D2UnitStrc * pUnit) {
 
 // Consumes one charge from a scroll/tome skill when cast. Decrements the skill quantity via SKILL_SetQuantity; if it hits 0, deselects it from the right-hand slot (switches to SKILL_Attack). Sends 0x22 UpdateItemSkill packet to sync the new quantity to the client. Halts if the skill is not found on the unit.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001bd15a
 static void __stdcall ITEMMODE_DecrementBookSkillQuantity(eD2Skills eSkill, D2UnitStrc * pUnit) {
     int32_t nRemainingQty;
     D2SkillStrc* pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, eSkill, -1);
@@ -2418,6 +2452,7 @@ static void __stdcall ITEMMODE_DecrementBookSkillQuantity(eD2Skills eSkill, D2Un
 
 // Server-side handler for using a special/quest consumable item (right-click use). Resolves the item by GUID, requires no cursor item and the item be useable; for books validates quantity>0 and that the player isn't trading. Calls SKILLITEM_DispatchItemSpell; if that returns 0 (no skill), branches on the item's 4-char code to apply quest rewards: 'ass ' (Radament -> +1 skill point), 'xyz ' (Golden Bird -> +20 max HP), 'tr2 ' (Prison of Ice -> Anya resist bonus), 'toa ' (Token of Absolution -> reset skills/stats), each consuming the item and sending quest state. Otherwise (charges/tomes) decrements quantity or skill charges, sends 0x3E/0x22/0x7C update packets, casts the item skill and consumes. Writes BOOL *bResult; returns 1 on a handled use, 0 otherwise.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001bd2df
 BOOL __fastcall SpecialItemsBonuses(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nUnitGUID, int32_t nX, int32_t nY, BOOL * bResult) {
     D2UnitStrc* pCursor;
     int32_t iVar1;
@@ -2687,6 +2722,7 @@ static inline int GetClassIdInline(D2UnitStrc * pUnit) {
 }
 // Server handler for stacking a stackable/socketable item onto another. Validates game and player unit, sends stackable-usage packets, then looks up both source and destination item units. If the destination is on the merc inventory page the operation is silently skipped. If IsItemSocketable confirms compatibility and class IDs match, calls ITEMMODE_MergeStackableItems, marks the destination with ITEMCMD_CURSOR_STACK_ITEM, upserts it in the update list, and refreshes the inventory. Returns 1 on success/handled, 0 if not applicable; calls ERROR_Halt on null game/player.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001bd884
 BOOL __fastcall StackItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nItemGUID, DWORD nScrollGUID, BOOL * pbBadParams) {
     D2UnitStrc* pSrcItem;
     D2UnitStrc* pDstItem;
@@ -2783,12 +2819,14 @@ static void __stdcall ITEMMODE_InitItemCreateContext(int nItemClassId, D2UnitStr
     pItemGenContext->nModSeed = nModSeed;
 }
 
+// 1.14d mac: 001bdd99
 BOOL __fastcall RemoveStackItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwItemGUID, uint32_t * pnSize) {
     return 0;
 }
 
 // Server-side handler: validates and places a beltable item (by GUID) into a specific belt slot for pUnit. If nParam==0, checks slot capacity via INVENTORY_CanPlaceItemInBelt; if non-zero, auto-finds a slot via INVENTORY_PlacePotionInBelt. On success, applies item effects to owner, clears TARGETABLE flag, handles charm activation, and broadcasts inventory refresh. Returns 1 on success, 0 on failure; writes error code to *pdwParam.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001bdda0
 BOOL __fastcall ITEM_TryPlaceInBelt(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nItemGUID, uint32_t nBeltSlot, int32_t bAutoPlace, BOOL * pbBadParams) {
     uint32_t _bIsActiveCharm;
     bool bIsActiveCharm;
@@ -2869,6 +2907,7 @@ BOOL __fastcall ITEM_TryPlaceInBelt(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWO
 
 // Server-side handler that swaps a carried item (nItemGUID, mode=GetHit) into an occupied belt slot (nBeltSlot). Removes the existing belt item, checks placement via INVENTORY_CanPlaceItemInBelt, inserts the new item at the same X slot, applies item stats, and sets pdwParam=1 if the target slot was busy. Returns 1 on success, 0 otherwise; halts on invalid game/unit pointers.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001be2be
 BOOL __fastcall SERVER_BeltSwapItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nItemGUID, DWORD nBeltSlot, BOOL * pbBadParams) {
     D2UnitStrc* pExistingBeltItem;
     D2UnitStrc* pInvOwner;
@@ -2959,6 +2998,7 @@ BOOL __fastcall SERVER_BeltSwapItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWO
     }
 }
 
+// 1.14d mac: 001bcb3d
 void __fastcall ITEMMODE_RemoveInventoryItem(::SGAMEDATA * pGame, D2UnitStrc * pOwnerUnit, D2UnitStrc * pItem) {
     int32_t nPosX;
     if (pItem) {
@@ -2994,6 +3034,7 @@ void __fastcall ITEMMODE_RemoveInventoryItem(::SGAMEDATA * pGame, D2UnitStrc * p
 
 // Compacts a single belt column (0-3) by sliding all items in that column toward the bottom row. For each item that is out of order it repositions it via INVENTORY_CanPlaceItemInBelt, sets ITEMFLAG_SORTED/RELOAD, clears ITEMFLAG_DISABLED, and queues a RefreshInventory + UpsertToUpdateList.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001be188
 void __fastcall ITEMMODE_SortBeltColumn(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, int nColumn) {
     BOOL bIsDisabled;
     int nStartSlot = nColumn & 3;
@@ -3035,6 +3076,7 @@ void __fastcall ITEMMODE_SortBeltColumn(::SGAMEDATA * pGameStrc, D2UnitStrc * pU
 }
 
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001beb16
 BOOL __fastcall ITEMMODE_RemoveItemIfOnCursor(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2UnitStrc * pItem) {
     uint32_t dwSecurityCookie;
     D2InventoryStrc* pInventory = pPlayer->pInventory;
@@ -3059,6 +3101,7 @@ BOOL __fastcall ITEMMODE_RemoveItemIfOnCursor(::SGAMEDATA * pGame, D2UnitStrc * 
 
 // Server-side handler that inserts a single scroll into a matching tome/book, adding one charge. Looks up both units by GUID (nScrollGUID, nBookGUID) in the game unit table, validates the scroll is an ITEMTYPE_Scroll in a usable anim mode and the book is an ITEMTYPE_Book. Requires their magic suffixes (scroll/tome subtype) to match and the book to be below its max stack. Consumes the scroll: pulls it to cursor (ToCursorItem) and, if not held, removes it from its room, clears targetable flag and deletes/frees it. Increments the book's quantity stat by 1, sends a 0x3E item-stat update to the player's client and updates the tome skill quantity. *pdwParam is an out-flag set to 0 on entry and 1 on validation-failure (no-op) paths. Returns 1 on success, 0 on rejection; halts via ErrorManager on null game/unit/inventory.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001bf10a
 BOOL __fastcall ITEM_InsertScrollIntoBook(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nScrollGUID, DWORD nBookGUID, BOOL * pbBadParams) {
     uint16_t wScrollSuffix;
     D2UnitStrc* pScroll;
@@ -3148,16 +3191,19 @@ BOOL __fastcall ITEM_InsertScrollIntoBook(::SGAMEDATA * pGame, D2UnitStrc * pUni
     }
 }
 
+// 1.14d mac: 001bfb7a
 void __fastcall ITEMMODE_NullSub(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 
 }
 
+// 1.14d mac: 001bfb7f
 void __fastcall ITEMMODE_RemoveExpiredStatLists(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2Common::Stats::StatsEx::RemoveStatListAfterTimeout(pUnit, pGame->dwGameFrame);
 }
 
 // Server-side: scans the unit's inventory for a key (ITEMTYPE_Key) in INVPAGE_INVENTORY. If found and quantity &gt; 1, decrements quantity by 1 and sends a 0x3E stat-update packet. If quantity reaches 1, destroys the key via ITEMMODE_ConsumeItem. Returns 1 if a key was consumed, 0 otherwise. Halts on null pGame/pUnit.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001bfba2
 BOOL __fastcall ITEMMODE_ConsumeKey(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2UnitStrc* pCurItem;
     D2UnitStrc* pKey;
@@ -3223,6 +3269,7 @@ D2UnitStrc * __fastcall ITEMMODE_CanEquipOnBodyLoc(D2InventoryStrc * pInventory,
 }
 
 // Decides whether item pUnit2 can be equipped to body-loc *pdwParam on unit pUnit given up-to-two items (*ppConflict1/*ppConflict2) already occupying the slot/alt-slot. Normalizes which conflict is "the other hand" (swapping to the alternate body-loc via ITEMMODE_GetAlternateBodyLoc when needed). For arm slots (R/L/swapped R/L) it enforces missile-weapon rules: bow/xbow ("shoots") needs a matching-ammo conflict, quiver/arrows must match the other hand's shoots type, and two one-handed weapons may coexist only for dual-wield-capable units (monster, class 4 = Barbarian, or class 6 with two hand-to-hand weapons), rejecting illegal two-handed combos via IsTwoHanded/BARBARIAN_CheckItemData. Returns 1 if the equip is allowed, 0 otherwise. Note: pSwappedConflict is read before assignment (likely intended NULL) — minor decompiler artifact.
+// 1.14d mac: 001c016d
 uint32_t __fastcall ITEMMODE_ResolveEquipConflict(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2UnitStrc * * ppConflict1, D2UnitStrc * * ppConflict2, eD2BodyLocDWORD * peBodyLoc) {
     int _eAltBodyLoc;
     uint32_t _bIsWeaponType;
@@ -3358,10 +3405,12 @@ uint32_t __fastcall ITEMMODE_ResolveEquipConflict(D2UnitStrc * pUnit, D2UnitStrc
 }
 
 // Registers: pGame (ECX) and pUnit (EDX) are passed by the callers but not read.
+// 1.14d mac: 001ba446
 void __fastcall ITEMMODE_ReturnZero3(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwParam) {
 
 }
 
+// 1.14d mac: 001c0933
 void __fastcall ITEMMODE_RecalcAllEquippedStats(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit) {
     D2UnitStrc* pCarriedItem;
     int aItemValidateSnapshot[7];
@@ -3397,6 +3446,7 @@ void __fastcall ITEMMODE_RecalcAllEquippedStats(::SGAMEDATA * pGameStrc, D2UnitS
     ITEMMODE_RestoreSelectedSkills(pUnit, aItemValidateSnapshot);
 }
 
+// 1.14d mac: 001b92f5
 BOOL __fastcall ITEMMODE_HasSocketedItems(D2UnitStrc * pUnit, char * szFile, int32_t nLine) {
     if (pUnit && pUnit->eUnitType == UNIT_ITEM) {
       int32_t nSocketedCount;
@@ -3462,6 +3512,7 @@ D2UnitStrc * __fastcall ITEMMODE_FindBookWithSpaceForScroll(::SGAMEDATA * pGameS
 
 // NOTE: Register param types inferred (medium confidence): pGameStrc (ECX): SGAMEDATA *, pUnit (EDX): D2UnitStrc *
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001c0c8f
 void __fastcall ITEMMODE_AddItemQuantity(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, D2UnitStrc * pItem, int32_t nAmount) {
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pItem, UNITSTAT_quantity, nAmount, 0);
     uint16_t wStatLayer = 0;
@@ -3525,6 +3576,7 @@ D2UnitStrc * __fastcall ITEMMODE_HandleItemDurability(uint32_t dwParam, D2UnitSt
 }
 
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001c0d36
 void __fastcall ITEMMODE_BreakItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem) {
     D2InventoryStrc* pInventory = pUnit->pInventory;
     D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pItem, ITEMFLAG_BROKEN, 1);
@@ -3545,6 +3597,7 @@ void __fastcall ITEMMODE_BreakItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Un
 
 // Repairs/restores an item: sets ITEMFLAG_RESTORED and clears ITEMFLAG_BROKEN, recalculates equipped-item states, queues inventory refresh, restores durability to max (sending 0x3E stat packet to the owning client), re-applies set-item equip bonuses, and validates weapon skills.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001c0e4f
 void __fastcall ITEMMODE_ProcessItemFlags(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem) {
     uint16_t wStatLayer;
     D2InventoryStrc* pInventory = 0;
@@ -3581,6 +3634,7 @@ void __fastcall ITEMMODE_ProcessItemFlags(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001c0fdd
 void __fastcall ITEMMODE_ResetBookScrollSkillQuantity(D2UnitStrc * pUnit, D2UnitStrc * pItem) {
     int nOwnerGUID;
     uint32_t byUnitType;
@@ -3604,6 +3658,7 @@ void __fastcall ITEMMODE_ResetBookScrollSkillQuantity(D2UnitStrc * pUnit, D2Unit
 }
 
 // Iterates the unit's inventory; for each carried item whose eAnimMode equals Death (expired/consumed flag), calls ITEMMODE_SetItemFlags. Counts how many such expired items were in INVPAGE_INVENTORY and for each calls ITEMMODE_UpdateItemSkill to clean up associated skill entries.
+// 1.14d mac: 001c116b
 void __fastcall ITEMMODE_RebuildBookScrollSkillQuantities(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit) {
     eInventoryPage eInvPage;
     D2UnitStrc* pNextItem;
@@ -3647,6 +3702,7 @@ void __fastcall ITEMMODE_RebuildBookScrollSkillQuantities(::SGAMEDATA * pGameStr
     }
 }
 
+// 1.14d mac: 001bbca3
 BOOL __fastcall ITEMMODE_PutItemOnCursor(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, D2UnitStrc * pItem) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x19a0);
@@ -3718,6 +3774,7 @@ uint32_t __fastcall ITEMMODE_HandleItemPickup(::SGAMEDATA * nParam, uint8_t * pI
 }
 
 // Iterates all items in a player's inventory; for each item in a body-location grid slot (type 3) or an active-charm slot (type 1), unequips its stats (ITEMMODE_UnequipItemStats), swaps the primary weapon slot if needed, recalculates equipped item states, then frees all recursive inventory children after the loop. Halts with an internal error if the item pointer is inconsistent.
+// 1.14d mac: 001c123f
 void __fastcall ITEMMODE_RemoveEquippedItemsAndStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2UnitStrc* pCarriedItem;
     uint32_t bIsActiveCharm;
@@ -3778,6 +3835,7 @@ void __fastcall ITEMMODE_RemoveEquippedItemsAndStats(::SGAMEDATA * pGame, D2Unit
     }
 }
 
+// 1.14d mac: 001b8b89
 void __fastcall UpdatePlayerItemState(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t connectionIsUp) {
     ITEMS_RecalcEquippedItemStates(pGame, pUnit, 0);
     if (!connectionIsUp) {
@@ -3787,6 +3845,7 @@ void __fastcall UpdatePlayerItemState(::SGAMEDATA * pGame, D2UnitStrc * pUnit, i
     D2Common::Units::RefreshInventory(pUnit, 1);
 }
 
+// 1.14d mac: 001bea91
 void __fastcall ITEMMODE_SetItemIdentified(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOwner) {
     D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pUnit, ITEMFLAG_IDENTIFIED, 1);
     if (!(!pUnit || pUnit->eAnimMode.ePlayerMode == Death)) {
@@ -3803,12 +3862,14 @@ void __fastcall ITEMMODE_SetItemIdentified(::SGAMEDATA * pGame, D2UnitStrc * pUn
     D2Common::Units::RefreshInventory(pOwner, 1);
 }
 
+// 1.14d mac: 001c13d4
 void __fastcall ITEMMODE_ApplyItemStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOwner) {
     ITEMMODE_AddStatsList(pGame, pUnit, pOwner, 0);
 }
 
 // Recharges all charged-skill stats (stat 0xCC) on an item that are below their maximum charge count. For each under-charged skill, calls ITEMMOD_SetChargedSkillCharges and sends a 0x3E UpdateItemStats packet to the owning player's client. Returns 1 if any charge was restored, 0 otherwise.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001bef3f
 void __fastcall ITEMMODE_RechargeItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem) {
     uint32_t nMaxCharges;
     int nLevel;
@@ -3894,6 +3955,7 @@ static BOOL ITEMMODE_CheckInventorySpace(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // Places an item into a unit's inventory grid at the given page, applies it to the owner, sets its page, fires QUEST_OnItemPickedUp and refreshes inventory.
+// 1.14d mac: 001b8bc6
 static BOOL __stdcall ITEMMODE_PlaceItemInInventoryPage(::SGAMEDATA * pGame, int32_t bRemoveFromRoom, int32_t nInvPage, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, char * szSourceFile, int32_t nLine) {
     BOOL bPutResult;
     uint32_t bIsActiveCharm;
@@ -3964,6 +4026,7 @@ static BOOL __stdcall ITEMMODE_PlaceItemInInventoryPage(::SGAMEDATA * pGame, int
 // Server-side: moves the item identified by nItemGUID into pUnit's (or pInventory's) inventory grid, either at explicit coords (nParam1==0, via INVENTORY_PlaceItemAtCoords) or auto-placed into a free grid slot (INVENTORY_PlaceItemInGrid). Validates the item is a UNIT_ITEM in GetHit mode, computes source/dest inventory pages, then PutItemInInventory and, unless the source was the stash, ITEMMODE_ApplyItemToOwner. Clears the targetable flag, applies socketed/charm effects, optionally (nParam2) tags the item for an INVENTORY_PUT_ITEM client update + reload/un-disable, refreshes inventory, and adds merc-page items to the active trade. Returns 1 on success, 0 on failure.
 // @sourcefile .\ITEMS\ItemMode.cpp
 // Stack-slot reuse: the low byte of the pUnit slot holds eSrcPage (ITEM_GetContainingInventoryPage of the item) for the rest of the function.
+// 1.14d mac: 001b9334
 int __fastcall SERVER_ItemToInventory(char * szSourceFile, int32_t bAutoPlaceGrid2, ::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nItemGUID, int32_t nDestX, int32_t nDestY, int32_t bAutoPlace, int32_t bSendUpdate, D2InventoryStrc * pInventory) {
     BOOL bIsDisabled;
     int pGridSlot;
@@ -4069,6 +4132,7 @@ int __fastcall SERVER_ItemToInventory(char * szSourceFile, int32_t bAutoPlaceGri
 
 // Server-side: picks up an item (by nItemGUID) into the unit's cursor/hand, removing it from its current inventory page. Validates the unit isn't already holding an item (unless nParam3 forces it), that the item exists and is on the INVPAGE_INVENTORY page when picked up by a player (rejects mid-trade), unequips its stats/states, recomputes equipped-charm state, records the previous page, and detaches it from the source inventory. When nParam1==1 finalizes the take (sets REMOVED flag if nParam2, ITEMCMD_INVENTORY_TAKE_ITEM, RELOAD if socketed, clears DISABLED, refreshes inventory). Writes result code into *pdwResult (1=not found/blocked), returns 1 on success else 0. Halts with Fog error on inventory-consistency failures.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001b961a
 BOOL __fastcall SERVER_TakeItemToCursor(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nItemGUID, uint32_t * pdwResult, int32_t nParam1, int32_t bSetRemovedFlag, D2InventoryStrc * pInventory, int32_t bIgnoreHandItem) {
     bool bIsDisabled;
     D2UnitStrc* pCursorItem_lcl;
@@ -4203,6 +4267,7 @@ BOOL __fastcall SERVER_TakeItemToCursor(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 
 // Server-side equip: places item nItemGUID onto body slot eTargetBodyLoc of pUnit. Looks up the item by GUID, validates the equip action for the slot, and (unless nParam bypasses) checks equip requirements. Handles weapon-swap slots specially, swaps out any currently equipped weapon, calls PutItemInInventory, sets body-loc, applies socketed mods, clears targetable flag, sets reload/cmd item flags, refreshes inventory and recalcs equipped-item states. Returns 1 on success, 0 on failure (with *pdwParam set to a result code). Halts via Fog ErrorManager on null pGame/pUnit.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001ba17b
 BOOL __fastcall SERVER_EquipItemToBodyLoc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nItemGUID, eD2BodyLoc eTargetBodyLoc, int32_t bSkipRequirementsCheck, BOOL * pbBadParams) {
     int32_t pConflictItem;
     D2UnitStrc* pWeapon;
@@ -4297,6 +4362,7 @@ BOOL __fastcall SERVER_EquipItemToBodyLoc(::SGAMEDATA * pGame, D2UnitStrc * pUni
 
 // Server-side: removes all belt items beyond the belt's box capacity (e.g. after un-equipping a belt that shrinks slot count) and relocates or drops them. Looks up the belt's BeltsTxt record (from the equipped belt item, or row 2 default if none) to get nBoxes; iterates belt slots 0..15. For each occupied slot at or beyond nBoxes: sends a 0x9C remove-from-belt update to the client, validates the item belongs to this inventory, clears its belt state, sets its page to INVPAGE_INVENTORY, then tries to place it back into the player's main inventory grid (handling trade/stash special-case pages, applying owner item effects, charm/socketed reapply, reload/disabled flag fixups and refreshing the inventory). If it cannot be re-placed, finds the best floor spot near the player and drops it. Halts via Fog error on inventory/ownership inconsistencies. Stack-guarded.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001baa4a
 void __fastcall ITEMMODE_RemoveItemFromBelt(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pBeltItem) {
     BOOL bIsDisabled;
     eInventoryPage eInvPage;
@@ -4468,6 +4534,7 @@ void __fastcall ITEMMODE_RemoveItemFromBelt(::SGAMEDATA * pGame, D2UnitStrc * pU
 
 // Server-side unequip/take action for an equipped item by body location (eBodyLoc, read as a byte). Requires an empty cursor and an item at that body slot. Validates the equip action (must be 3 or 4) via INVENTORY_GetEquipActionForBodySlot, then removes the item: swaps primary weapon, clears the body location, handles belt removal, either puts the item on the cursor (bRemoveItem == 0) or flags it ITEMFLAG_REMOVED (bRemoveItem != 0), unequips its stats, marks it for client update, sets RELOAD if it has sockets, clears ITEMFLAG_DISABLED, refreshes inventory and recomputes equipped item states. Writes status (0/1) to *pdwParam; returns 1 on success, 0 on no-op, halts on consistency errors.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001bad4c
 BOOL __fastcall ITEMMODE_TakeItemFromBodyLoc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2BodyLoc eBodyLoc, int32_t bRemoveItem, uint32_t * pbBadParams) {
     bool bIsDisabled;
     D2UnitStrc* pItemInInv;
@@ -4572,6 +4639,7 @@ BOOL __fastcall ITEMMODE_TakeItemFromBodyLoc(::SGAMEDATA * pGame, D2UnitStrc * p
 
 // Server-side: swaps a cursor/source item (nItemGUID) into an equipped body-location slot (eTargetBodyLoc), handling the two-handed weapon special case. Validates the item is a UNIT_ITEM in cursor mode and that the equip action is a swap (action==5). If the requirement check fails (nForceEquip==0) it aborts and queues an attach-sound event. Otherwise unequips the current slot item, removes/returns it to the cursor, places the new item on the body loc, reapplies socketed stats, revalidates weapon skills and recalcs equipped-item states. Writes *pdwParam=1 on placement failure. Returns 1 on success, 0 on failure/no-op. Halts on internal ownership inconsistencies.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001bb08b
 BOOL __fastcall SERVER_Swap2HandItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nItemGUID, eD2BodyLoc eTargetBodyLoc, int32_t nForceEquip, uint32_t * pbBadParams) {
     BOOL bIsDisabled;
     int32_t pEquippedWeapon;
@@ -4709,6 +4777,7 @@ BOOL __fastcall SERVER_Swap2HandItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DW
 
 // Server-side: equips the item nItemGUID onto body slot eTargetBodyLoc for pUnit, specifically handling the weapon/shield arm-swap case (L_ARM<->R_ARM). Validates the item exists and is in the cursor/GetHit state, that the equip action resolves to slot type 7, and equip requirements pass. Frees the conflicting arm slot: unequips the existing arm item, places it back into the inventory grid (or fails), then equips the new item to the target slot, updating socketed stats, weapon skills, body-loc, page, and item command flags, and recalculates equipped item states. Writes a result token into pOutToken->nToken (1 = blocked). Returns 1 on full success, 0 otherwise; halts (Fog error) on null game/unit or inventory inconsistency.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001bb560
 BOOL __fastcall ITEMMODE_EquipItemToBodyLoc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nItemGUID, eD2BodyLoc eTargetBodyLoc, int * pOutToken) {
     uint32_t _bCanMoveSwappedToInv;
     BOOL bIsDisabled;
@@ -5093,6 +5162,7 @@ BOOL __fastcall ITEMMODE_WeaponSwap(::SGAMEDATA * pGame, D2UnitStrc * pUnit, boo
 // Server item-mode op: swaps the item identified by nItemGUID into the player inventory grid in place of the item at nX (destX/destY). Validates both units are UNIT_ITEM, resolves the destination inventory page (rejecting cube/merc cases), unequips/relocates the old item, places the new one via INVENTORY_PlaceItemAtCoords/PutItemInInventory, reapplies socketed/charm/disabled flags and stats, and refreshes the inventory. *pdwParam is set to 1 on a recoverable placement failure. Returns 1 on success, 0 on rejection; halts via Fog ErrorManager on null pGame/pUnit or inventory-ownership errors.
 // @sourcefile .\ITEMS\ItemMode.cpp
 // Stack-slot reuse: the low byte of the nX slot holds eSrcInvPage (ITEM_GetContainingInventoryPage of pDestItem).
+// 1.14d mac: 001bc387
 int __fastcall ITEMMODE_ExchangeInventoryItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nCursorItemGUID, uint32_t nGridItemGUID, int32_t nDestX, int32_t nDestY, uint32_t * pbBadParams) {
     // Static local variables (originally global data)
     static uint32_t gnBoxItemClassId; D2_STATIC_GUARD_BSS(gnBoxItemClassId, "D2Game::ITEMS::ItemMode::ITEMMODE_ExchangeInventoryItem::gnBoxItemClassId");
@@ -5247,6 +5317,7 @@ int __fastcall ITEMMODE_ExchangeInventoryItem(::SGAMEDATA * pGame, D2UnitStrc * 
 }
 
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001bcab8
 void __fastcall ITEMMODE_ConsumeItemAndRemove(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem) {
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0xf94);
     uint32_t eItemFlags = 0;
@@ -5257,6 +5328,7 @@ void __fastcall ITEMMODE_ConsumeItemAndRemove(::SGAMEDATA * pGame, D2UnitStrc * 
 
 // Server-side handler implementing 'use one item on another' (e.g. scroll/book on a target item). Resolves both items by GUID via FindUnitFromTable, validates the scroll/book is a Scroll type and the player isn't trading, then dispatches the item's spell via SKILLITEM_DispatchItemSpell against the target. On success consumes/decrements the consumable (quantity stat for books, ConsumeItemAndRemove for scrolls), sends 0x3E item-stat updates and 0x7C remove packets, and emits stackable-usage packets. Writes a 4-byte bResult flag array (offset 0 = 'no-op/abort'). Returns 1 if a spell was cast, 0 otherwise.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001bcc07
 BOOL __fastcall ITEMMODE_UseItemOnItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nItemGUID, int32_t nScrollGUID, bool * bResult) {
     uint32_t _bIsScrollType;
     BOOL bIsScrollType;
@@ -5430,6 +5502,7 @@ BOOL __fastcall ITEMMODE_UseItemOnItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 
 // Server handler: moves an item from the belt to the cursor. Looks up the item by GUID, validates it is in Walk mode (not already held), removes it from its belt slot via INVENTORY_StubNoOp, clears UNITFLAG_TARGETABLE, strips item stats via ITEMMODE_UnequipItemStats, marks it with ITEMCMD_BELT_TAKE_ITEM, queues a belt column sort, and refreshes inventory. Sets *pdwResult=1 on failure.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001bdfb4
 BOOL __fastcall SERVER_BeltTakeItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nItemGUID, uint32_t * pdwResult) {
     D2UnitStrc* pItem;
     int32_t nBeltSlotTmp;
@@ -5486,6 +5559,7 @@ BOOL __fastcall SERVER_BeltTakeItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWO
 
 // Server handler for using a charged/useable item (e.g. wand/scroll/potion charges) at a target. Looks up the item by nItemGUID, requires it be a UNIT_ITEM with no cursor item held, in Walk anim mode, and IsUseable. Rejects use while trading. If bUseMerc and in Expansion and the item is a healing/thawing/antidote potion, redirects the effect to the player's hireling pet. Dispatches the item's spell via SKILLITEM_DispatchItemSpell; on success decrements the associated cast skill's charge quantity (deselecting it from the right-skill slot when depleted), sends NET_D2GS_SERVER_Send_0x22_UpdateItemSkill to the client, then consumes/removes the item and re-sorts the belt column. Returns 1 on success, 0 on rejection; halts via ErrorManager if pGame or pUnit is null.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001be66a
 BOOL __fastcall SERVER_UseItemAtCoords(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nItemGUID, int32_t nX, int32_t nY, int32_t * pbBadItem, int32_t bUseMerc) {
     uint32_t _bIsPotionType;
     BOOL bIsUseable;
@@ -5603,6 +5677,7 @@ BOOL __fastcall SERVER_UseItemAtCoords(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 }
 
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001be96a
 void __fastcall ITEMMODE_IdentifyItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem) {
     BOOL _bFlagResult;
     uint32_t _bHasCursorCmd;
@@ -5768,6 +5843,7 @@ BOOL __fastcall PutItemInItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nIt
 
 // Server-side item-repair interaction handler. Given a cursor item and a Horadric Cube (nCubeGUID), validates that the cube is open and in the player's inventory (not while trading), then moves the cursor item into the cube page via SERVER_ItemToInventory. Sets *eResult=1 on soft failure (item not found, wrong mode). Returns 1 on successful placement, 0 otherwise. Halts fatally on null pGame/pUnit.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001bf4f1
 BOOL __fastcall ITEMMODE_PlaceItemInCube(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nCursorItemGUID, int32_t nCubeGUID, int * eResult) {
     D2UnitStrc* pCube;
     uint32_t nCubeItemCode;
@@ -5829,6 +5905,7 @@ BOOL __fastcall ITEMMODE_PlaceItemInCube(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 
 // Server-side handler that moves a shop item from a vendor's inventory to the player's equipped body location after purchase. Validates the item exists and meets equip requirements, unregisters it from the vendor inventory, places it at the requested eBodyLoc, updates the primary weapon slot, applies socketed effects, clears the disabled flag, and refreshes inventory stats. Calls ERROR_UnrecoverableInternalError_Halt on any invariant violation.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001bf6a3
 BOOL __fastcall ITEMMODE_EquipStoredItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nUnitGUID, eD2BodyLoc eBodyLoc) {
     bool bIsDisabled;
     BOOL nEquipResult;
@@ -5922,6 +5999,7 @@ BOOL __fastcall ITEMMODE_EquipStoredItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 
 // Replenishment tick handler: increments eUnitStat on pUnit by 1 if it is below nParam, then sends a 0x3E stat-update to the item owner's client. If the item was broken and the new value is positive, restores it via ITEMMODE_ProcessItemFlags. Schedules the next replenishment event based on eStat replenish rate. Returns 1 if incremented, 0 if already at max.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001c1535
 static BOOL __stdcall ITEMMODE_ReplenishItemStat(::SGAMEDATA * pGame, D2UnitStrc * pItem, eD2UnitStat eRateStat, eD2UnitStat eValueStat, int32_t nMaxValue) {
     D2UnitStrc* pOwner;
     D2ClientStrc* pClient;
@@ -5965,6 +6043,7 @@ static BOOL __stdcall ITEMMODE_ReplenishItemStat(::SGAMEDATA * pGame, D2UnitStrc
 }
 
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001bfad5
 void __fastcall ITEMMODE_ReplenishItem(::SGAMEDATA * pGame, D2UnitStrc * pItem) {
     int32_t nMaxDurability;
     BOOL bIsBroken = D2Common::ITEMS::Items::CheckItemFlag(pItem, ITEMFLAG_BROKEN, 0x15a6, ".\\ITEMS\\ItemMode.cpp");
@@ -5989,6 +6068,7 @@ void __fastcall ITEMMODE_ReplenishItem(::SGAMEDATA * pGame, D2UnitStrc * pItem) 
     ITEMMODE_ReplenishItemStat(pGame, pItem, UNITSTAT_item_replenish_quantity, UNITSTAT_quantity, nStatMax);
 }
 
+// 1.14d mac: 001bfa88
 void __fastcall ITEMEVENT_DefaultCallback(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2TimerTypeDWORD eTimerType) {
     BOOL bIsBadCodePtr = IsBadCodePtr((FARPROC)GAME::Event::Dispatch::pTimerMethods.fpFunctionByType[eTimerType]);
     if (bIsBadCodePtr) {
@@ -6000,6 +6080,7 @@ void __fastcall ITEMEVENT_DefaultCallback(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // Attempts to equip pItem to the best available body location on pUnit. Calls ITEMMODE_FindBestBodyLocForItem to select a slot, verifies the slot is free, then calls PutItemInInventory, applies socketed-item bonuses, sets body location, clears UNITFLAG_TARGETABLE and UNITFLAG_ISRESURRECT, queues inventory update, and validates weapon skills. Halts with an internal error if the slot is already occupied or invalid.
+// 1.14d mac: 001b899d
 BOOL __fastcall ITEMMODE_EquipItemAtBestBodyLoc(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, D2UnitStrc * pItem, int32_t eBodyLoc) {
     D2InventoryStrc* pInventory = pUnit->pInventory;
     BOOL nPutResult = ITEMMODE_FindBestBodyLocForItem(pUnit, pItem, (uint32_t*)&eBodyLoc, eBodyLoc);
@@ -6048,6 +6129,7 @@ BOOL __fastcall ITEMMODE_EquipItemAtBestBodyLoc(::SGAMEDATA * pGameStrc, D2UnitS
 
 // Server-side: re-equips and restocks a player's items from a corpse inventory when reviving/reclaiming a corpse. First loop re-equips body-slot items (head..ring) into the live player, resolving equip conflicts via ITEMMODE_ResolveEquipConflict, applying socketed/owner stats and refreshing durability/quantity. Second loop drains remaining carried items into the inventory grid or belt (potions via INVENTORY_PlacePotionInBelt). Updates targetable/resurrect flags, queues item updates, and finally ITEMS_RecalcEquippedItemStates. Returns nonzero on success. Halts (Fog error) on inventory inconsistencies.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001c03aa
 int32_t __fastcall ITEMMODE_EquipCorpseItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * nCorpseIndex) {
     int32_t _bIsBeltable;
     BOOL bIsBeltable;
@@ -6252,6 +6334,7 @@ int32_t __fastcall ITEMMODE_EquipCorpseItems(::SGAMEDATA * pGame, D2UnitStrc * p
 }
 
 // Processes picking up items from a corpse into pItem (a socket or container). Iterates all items in the corpse's inventory, clones each via ITEM_CloneFromSerializedData, copies the clone's map coordinates, then calls PutItemInItem to place the clone into the target item slot. Returns 0 immediately if the corpse has no inventory or if any PutItemInItem call fails; returns 1 on full success.
+// 1.14d mac: 001c09d4
 BOOL __fastcall ITEMMODE_ProcessCorpsePickup(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pCorpse, D2UnitStrc * pItem, int32_t bApplyRuneword) {
     int32_t nPutItemResult;
     if (D2Common::ITEMS::Items::ITEM_GetItemsTxt_bHasInv(pCorpse)) {
@@ -6290,6 +6373,7 @@ BOOL __fastcall ITEMMODE_ProcessCorpsePickup(::SGAMEDATA * pGame, D2UnitStrc * p
 }
 
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001c13fa
 void __fastcall ITEM_RemoveItemFromCurrentLocation(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2UnitStrc * pRuneword) {
     eInventoryPage ePreviousPage;
     int32_t nBodyLocOrXPos;
@@ -6334,6 +6418,7 @@ void __fastcall ITEM_RemoveItemFromCurrentLocation(::SGAMEDATA * pGame, D2UnitSt
 
 // Server-side item pickup handler: moves the ground item with GUID itemUID onto pUnit (player). Out-param *pbResult is set to 1 to signal a "can't pick / not pickable" client notification, 0 otherwise. Aborts if a cursor item is already held or the player is busy/trading. Resolves the item by GUID, requires it to be a UNIT_ITEM currently in its "on ground" anim mode, and checks pickability. Gold goes through PickingGold. Otherwise tries, in order: free inventory-grid space, auto-belt for beltable potions, or an auto-equip body slot. On a successful inventory/belt placement it removes the item from the room (collision + room link), puts it in the inventory, recomputes owner item stats, clears targetable/resurrect flags, refreshes inventory, and re-applies charm states if it is an active charm. Returns 1 on success, 0 on failure; calls the unrecoverable error halt on an inventory-corruption path.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001b7d8b
 BOOL __fastcall SERVER_PickToInventory(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD itemUID, uint32_t * pbResult) {
     BOOL bIsBeltable;
     BOOL nResult;
@@ -6659,6 +6744,7 @@ static void __stdcall ITEMMODE_RemoveItemsFromCube(::SGAMEDATA * pGame, D2UnitSt
     }
 }
 
+// 1.14d mac: 001b8e66
 void __stdcall ITEMMODE_RemoveItemsFromCube_HaltTail(int nLine) {
     Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nLine);
     exit(-1);
@@ -6718,6 +6804,7 @@ void __fastcall SERVER_DropItemFromPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUni
 
 // Server-side weapon-swap equip: equips item nItemGUID into the player's swap (alternate) weapon slot at eTargetBodyLoc (L_ARM->slot 4 / R_ARM->slot 5). Unequips and removes the currently-swapped item there (updating its stats, primary-weapon links, belt handling and inventory list), then places the new item, sets its body loc, applies socketed mods, flags ITEMCMD_BODYLOC_EXCHANGE_OPPOSITE_ITEM + RELOAD, revalidates weapon skills and recalcs equipped states, and refreshes the inventory. Returns 1 on success, 0 on rejected swap (sets *pdwParam=1 on failure paths). Halts fatally on null pGame/pUnit or inventory ownership inconsistency.
 // @sourcefile .\ITEMS\ItemMode.cpp
+// 1.14d mac: 001ba618
 BOOL __fastcall ITEMMODE_EquipItemToSwapBodyLoc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nItemGUID, eD2BodyLoc eTargetBodyLoc, int32_t bSkipRequirementsCheck, BOOL * pbBadParams) {
     BOOL bIsDisabled;
     uint32_t uSwapBodyLoc;
@@ -6853,6 +6940,7 @@ BOOL __fastcall ITEMMODE_EquipItemToSwapBodyLoc(::SGAMEDATA * pGame, D2UnitStrc 
 }
 
 // Explicit GuardStack(0)/GuardStack(1) tails on the two normal-completion paths; all error paths tail into a noreturn halt.
+// 1.14d mac: 001bfd42 D2Game::ITEMS::ItemMode::Transmorgify
 BOOL __fastcall Transmorgify(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem) {
     D2UnitStrc* pNewItem;
     uint32_t nRandQty;

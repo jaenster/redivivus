@@ -80,6 +80,7 @@ void __fastcall ChangeGoldForPlayer(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, i
 }
 
 // @sourcefile .\UNIT\Party.cpp
+// 1.14d mac: 00276659
 void __fastcall AllocPartyControl(::SGAMEDATA * pGame) {
     D2UnitPartyControl* pPartyControl;
     if (!pGame) {
@@ -103,6 +104,7 @@ void __fastcall AllocPartyControl(::SGAMEDATA * pGame) {
 }
 
 // @sourcefile .\UNIT\Party.cpp
+// 1.14d mac: 0027672b
 void __fastcall FreePartyControl(::SGAMEDATA * pGame) {
     D2UnitPartyControlSubSub* pMemoryToFree_01;
     D2UnitPartyControlSub* pNextSub;
@@ -163,6 +165,7 @@ static uint16_t PARTY_UpdateNextPartyId(::SGAMEDATA * pGame) {
 }
 
 // @sourcefile .\UNIT\Party.cpp
+// 1.14d mac: 00276834
 int16_t __fastcall PARTY_CreateParty(::SGAMEDATA * pGame) {
     D2UnitPartyControlSub* pNewSub;
     D2UnitPartyControl* pPartyCtrl = pGame->pPartyControl;
@@ -222,6 +225,7 @@ static void __stdcall PARTY_FreePartyMembers(D2UnitPartyControlSub * pPartyContr
 }
 
 // Removes a party sub-record matching nPartyId from the game's party control linked list and frees its members. Walks the pSub chain, unlinks the matching entry by patching the predecessor's pPrev pointer (or updating pPartyControl->pSub for the head), then calls PARTY_FreePartyMembers. Halts with an internal error if pPartyControl is null.
+// 1.14d mac: 00276929
 void __fastcall PARTY_DisbandParty(::SGAMEDATA * pGame, int16_t nPartyId) {
     D2UnitPartyControl* pPartyControl = pGame->pPartyControl;
     D2UnitPartyControlSub* pPrevSub = nullptr;
@@ -248,6 +252,7 @@ void __fastcall PARTY_DisbandParty(::SGAMEDATA * pGame, int16_t nPartyId) {
     PARTY_FreePartyMembers(pFoundSub, pGame);
 }
 
+// 1.14d mac: 00276c1e
 static D2UnitPartyControlSub * FindPartyControlSub(::SGAMEDATA * pGame, int16_t nPartyId) {
     short int* pnPartyId;
     if (!pGame->pPartyControl) {
@@ -293,6 +298,7 @@ static BOOL CheckUnitGUIDInAllPartyControlSubs(int32_t nUnitGUID, D2UnitPartyCon
 
 // Adds a player unit to an existing party slot identified by nPartyId. Searches pGame->pPartyControl->pSub for the matching party, allocates a new D2UnitPartyControlSubSub node with the unit's GUID, prepends it to the party's member list, broadcasts 0x8D (AssignPlayerToParty), and clears hostile relations between the newcomer and all existing members. Returns 1 on success. Halts with an internal error if the party control, party slot, or unit is invalid.
 // @sourcefile .\UNIT\Party.cpp
+// 1.14d mac: 00276a7d
 int __fastcall PARTY_AddUnitToParty(::SGAMEDATA * pGame, int16_t nPartyId, D2UnitStrc * pUnit) {
     D2UnitPartyControlSubSub* pNewSubSub;
     D2UnitStrc* pExistingMember;
@@ -354,6 +360,7 @@ int __fastcall PARTY_AddUnitToParty(::SGAMEDATA * pGame, int16_t nPartyId, D2Uni
     }
 }
 
+// 1.14d mac: 00276e5d
 int32_t __fastcall CountPartyControlSubSize(::SGAMEDATA * pGame, int16_t nPartyId) {
     int nCount;
     D2UnitPartyControlSub* pFoundSub;
@@ -394,6 +401,7 @@ BOOL __fastcall CountAliveUnitsLevelSum(int32_t nContext, D2UnitStrc * pUnit, in
     return bIsDead;
 }
 
+// 1.14d mac: 00276f8c
 void __fastcall PARTY_CountLivingUnitsCallback(int32_t * pContext, D2UnitStrc * pUnit, int * pCount) {
     if (!pUnit) {
       return;
@@ -407,6 +415,7 @@ void __fastcall PARTY_CountLivingUnitsCallback(int32_t * pContext, D2UnitStrc * 
     (*pCount)++;
 }
 
+// 1.14d mac: 00276faf
 void __fastcall ExecuteFunctionForEveryPartyMember(::SGAMEDATA * pGame, uint16_t nPartyId, ::fpExecuteOnUnitFunction fpFunction, void * pArgs) {
     D2UnitStrc* pUnit;
     D2UnitPartyControlSubSub* pSubSub;
@@ -440,6 +449,7 @@ void __fastcall ExecuteFunctionForEveryPartyMember(::SGAMEDATA * pGame, uint16_t
 }
 
 // Calls fpFilter(pGame, pMember, pDataForFunction) once for each party member of pUnit that is in the same level. Looks up pUnit's room and level ID, resolves its party ID, then iterates the party's sub-sub list; for each member found in the unit table whose room maps to the same level ID, invokes the filter callback. Also calls the callback (once, with pUnit itself) if pUnit has no room or no party, acting as a fallback. The callback is __fastcall(pGame@ECX, pUnit@EDX, pUserData@stack) - all three known implementations end in RET 0x4 - and its return value is discarded.
+// 1.14d mac: 00276e8e
 void __fastcall PARTY_IteratePartyMembersInSameLevel(::SGAMEDATA * pGame, D2UnitStrc * pUnit, pfnPartyMemberFilter pfnCallback, void * pArgs) {
     D2RoomStrc* pOtherRoom;
     eD2LevelId eOtherLevelId;
@@ -477,6 +487,7 @@ void __fastcall PARTY_IteratePartyMembersInSameLevel(::SGAMEDATA * pGame, D2Unit
     }
 }
 
+// 1.14d mac: 002772a8
 static void __stdcall GoldCalculations(D2UnitStrc * pUnit, int * pnGoldAccepted, int * pnGoldOverflow, int32_t nGoldAmount) {
     uint32_t nGoldLimit = D2Common::Units::GetInventoryGoldLimit(pUnit);
     int nCurrentGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
@@ -489,6 +500,7 @@ static void __stdcall GoldCalculations(D2UnitStrc * pUnit, int * pnGoldAccepted,
 }
 
 // @sourcefile .\UNIT\Party.cpp
+// 1.14d mac: 002772fc
 void __fastcall BroadcastAutomapAllyPartyInfo(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2UnitPartyControlSubSub* pSubSub;
     D2ClientStrc* pClient = SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\Party.cpp", 0x24f);
@@ -512,6 +524,7 @@ void __fastcall BroadcastAutomapAllyPartyInfo(::SGAMEDATA * pGame, D2UnitStrc * 
 }
 
 // Returns the party ID for a player unit by searching the game's party control table. Resolves the search GUID from the unit (or its cursor item if pInventory is set), then walks all party sub-records and their member lists looking for a GUID match. Returns the matching nPartyId, or -1 if the unit is a player with no party. Halts if pUnit is null or not a player type.
+// 1.14d mac: 00276da8
 int16_t __fastcall GetPartyIdFromUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     int nSearchGUID;
     D2UnitPartyControlSubSub* pSubSub;
@@ -564,6 +577,7 @@ static inline int GetGUIDInline(D2UnitStrc * pUnit) {
 }
 // Removes a player unit from its current party. Looks up the unit's party ID, finds the D2UnitPartyControlSub, then walks the linked list of D2UnitPartyControlSubSub entries to find and unlink the matching GUID node. Broadcasts updated party info to all players via SendAllPlayersPartyInfo and sends packet 0x8D (AssignPlayerToParty) to notify the client. Frees the node from the server memory pool. If the party drops below 2 members, calls PARTY_DisbandParty. Halts on null-unit or missing party sub (error lines 0x130/0x138).
 // @sourcefile .\UNIT\Party.cpp
+// 1.14d mac: 00276c75
 void __fastcall PARTY_RemoveUnitFromParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     uint16_t nPartyId;
     D2UnitPartyControlSub* pPartySub;
@@ -624,6 +638,7 @@ uint32_t __fastcall GetPartiedUnitsLevelSum(::SGAMEDATA * pGame, D2UnitStrc * pU
     return nLevelSum;
 }
 
+// 1.14d mac: 00276f4e
 uint32_t __fastcall PARTY_GetLivingPartyMemberCountInSameLevel(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     DWORD dwCount = 0;
     PARTY_IteratePartyMembersInSameLevel(pGame, pUnit, (pfnPartyMemberFilter)PARTY_CountLivingUnitsCallback, &dwCount);
@@ -631,6 +646,7 @@ uint32_t __fastcall PARTY_GetLivingPartyMemberCountInSameLevel(::SGAMEDATA * pGa
 }
 
 // Distributes a gold amount among party members in the same level, respecting each member's carry limit. If fewer than 2 alive party members are present, all gold goes to the source player. Otherwise, divides nAmount evenly among alive same-level members (via GoldCalculations/ChangeGoldForPlayer), then grants the remainder to the source player. Returns the amount that could not be deposited due to carry limits.
+// 1.14d mac: 00277016
 DWORD __fastcall PARTY_SplitGoldToPartyMembers(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nAmount) {
     uint32_t nGoldLimit;
     int nGold;

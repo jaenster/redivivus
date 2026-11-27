@@ -181,6 +181,7 @@ static void __stdcall MONSTERMODE_ConsumeStoredPosition(int * pX, int * pY, char
 }
 
 static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit);
+// 1.14d mac: 001da750
 void __fastcall ResetEngagedCombatAndStats(D2UnitStrc * pUnit) {
     D2MonsterPathParamStrc* pAiParam = GetTypeInline(pUnit) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster ? pUnit->pUnitData.pUnitDataMonster->pPathParamOrName.pPathParam : nullptr;
     pAiParam->nPathTypeOverride = 0;
@@ -198,6 +199,7 @@ int __fastcall Unreferenced_005a6250(int param_1) {
     return param_1 + 0x14;
 }
 
+// 1.14d mac: 001da77f
 void __fastcall MONSTERMODE_SetPathOverrides(D2MonsterPathParamStrc * pPathParam, int32_t nPathType, int32_t nVelocity, uint8_t nSteps) {
     if (nPathType) {
       pPathParam->nPathTypeOverride = nPathType;
@@ -330,6 +332,7 @@ static void __stdcall AddGamePathCount(int32_t ePathTypeOrEngaged, uint8_t byMon
 }
 
 // @sourcefile .\MONSTER\MonsterMode.cpp
+// 1.14d mac: 001da7ae
 D2MonsterPathParamStrc * __fastcall AllocAiParam(::SGAMEDATA * pGame) {
     D2MonsterPathParamStrc* pMonsterMode = D2_NEW_POOL_AT(pGame->pMemoryPool, D2MonsterPathParamStrc, ".\\MONSTER\\MonsterMode.cpp", 0x13f);
     memset(pMonsterMode, 0, sizeof(*pMonsterMode));
@@ -337,11 +340,13 @@ D2MonsterPathParamStrc * __fastcall AllocAiParam(::SGAMEDATA * pGame) {
 }
 
 // @sourcefile .\MONSTER\MonsterMode.cpp
+// 1.14d mac: 001da805
 void __fastcall MONSTERDATA_FreeMonsterMode(::SGAMEDATA * pGame, D2MonsterPathParamStrc * pPathParam) {
     D2_FREE_POOL_AT(pGame->pMemoryPool, pPathParam, ".\\MONSTER\\MonsterMode.cpp", 0x147);
 }
 
 // Death transition handler for a monster unit. Frees hover-text, calls RemoveMinionsFromAiIfFlag1Set2Not, clears targeting flags (ISVALIDTARGET, CANBEATTACKED), recalculates stats, filters states by boss context, removes light state targetability, optionally enables corpse collision (if deadCol flag not set in MonStats2), sets final facing direction, and starts regen timers via MONSTER_StartAiAndRegenTimers.
+// 1.14d mac: 001dd266
 static void __stdcall MONSTERMODE_OnDeath(uint8_t nDirection, ::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     BOOL _bHasLightState;
     bool bHasLightState;
@@ -386,6 +391,7 @@ static void __stdcall MONSTERMODE_OnDeath(uint8_t nDirection, ::SGAMEDATA * pGam
     MONSTER_RemoveAiAndRegenTimers(pGame, pUnit);
 }
 
+// 1.14d mac: 001da9c7
 void __stdcall SERVER_ITEM_DecideDrops(::SGAMEDATA * pGame, D2UnitStrc * pUnit, BOOL bIsItemFindDrop, D2ModeChangeStrc * pUnitKill) {
     BOOL _bHasCurseState;
     bool bQuestStateCheck;
@@ -501,6 +507,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_17(D2UnitStrc * p) 
 }
 
 // Drops the dead monster's treasure: validates the victim unit from pUnitKill->pUnit, skips units with flag bit 0x11 set and classId 0x158 (bonewall), checks COLLISION_ITEMS at the victim's position, then calls SERVER_ITEM_DecideDrops. Called once from MONSTER_OnDeathDispatch (0x005a7027).
+// 1.14d mac: 001da845
 void __fastcall MONSTERMODE_TryDropTreasure(::SGAMEDATA * pGame, D2ModeChangeStrc * pUnitKill, uint32_t dwParam) {
     D2RoomStrc* pFreeCoordRoom;
     D2MonStatsTxt* pVictimMonStats;
@@ -554,6 +561,7 @@ static void SetAiState(D2UnitStrc * pUnit, uint32_t nNewAiState) {
 }
 
 // Periodic server HP-regen/poison-tick event handler for a unit (reschedules itself each game frame). Computes net HP regen (subtracting the server-side hpregen component when a progressive state applies); unless STATE_preventheal blocks healing, applies the delta to UNITSTAT_hitpoints clamped to TxtMaxHp. Town rooms skip damage so you don't die in town. When the HP% changes by more than the threshold it broadcasts packet 0xAB and updates last_sent_hp_pct. If HP reaches zero (and not already dying), it locates the poison/state attacker via GetStatsByState/owner-GUID lookup and either sets STATE_death_delay (if uninterruptable) or calls SERVER_KillMonster and dispatches death (event 10) and kill-credit (event 9) events.
+// 1.14d mac: 001dba79
 void __fastcall RegenAndPsnDecreaser(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
     D2RoomStrc* pUnitRoom;
     eD2States aPoisonStateSearch[2];
@@ -639,6 +647,7 @@ void __fastcall RegenAndPsnDecreaser(::SGAMEDATA * pGame, D2UnitStrc * pUnit, in
 }
 
 // Queries whether a monster supports a given animation mode (eAnimMode, 0..0xF). Consults the global gnMonsterAnimModeSequenceFlags table: returns 1 if that mode has sequence flags set, or if its alt-flags are clear and it requires MonStats it checks the unit's MonStats2 movement-flag bit ((&byMvFlags0)[mode>>3] & bitmask[mode&7]). Returns nonzero if the anim mode is available for this unit, 0 otherwise (incl. null unit or mode>=0x10). Pure lookup, no side effects.
+// 1.14d mac: 001db803
 static uint32_t MONSTER_HasAnimModeSequence(D2UnitStrc * pUnit, eD2MonsterAnimMode eAnimMode) {
     // Static local variables (originally global data)
     static D2MonsterAnimModeFlagsStrc gnMonsterAnimModeSequenceFlags[16] = {
@@ -837,6 +846,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_9(D2UnitStrc * p) {
     return p->eUnitFlags >> 9 & 1;
 }
 
+// 1.14d mac: 001dacb7
 BOOL __fastcall MONSTER_FireSpecialMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nSkillLevel) {
     if (!pUnit) {
       return 0;
@@ -861,6 +871,7 @@ BOOL __fastcall MONSTER_FireSpecialMissile(::SGAMEDATA * pGame, D2UnitStrc * pUn
     return 1;
 }
 
+// 1.14d mac: 001dca67
 BOOL __fastcall MONMODE_RemoveModeChangeTimer(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
     return 1;
@@ -954,6 +965,7 @@ void __stdcall MONMODE_OwnerCastOrDie(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 }
 
 // The live monster-death dispatcher.
+// 1.14d mac: 001dc19d
 BOOL __fastcall MONSTER_OnDeathDispatch(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonsterKill) {
     int nClassId;
     D2UnitStrc* pUnit_00;
@@ -1067,6 +1079,7 @@ BOOL __fastcall MONSTER_OnDeathDispatch(::SGAMEDATA * pGame, D2ModeChangeStrc * 
     return 1;
 }
 
+// 1.14d mac: 001dc96e
 void __fastcall MONMODE_HandleSpecialEndDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2UnitStrc* pOwner;
     short int nMinionClassId;
@@ -1106,6 +1119,7 @@ void __fastcall MONMODE_HandleSpecialEndDeath(::SGAMEDATA * pGame, D2UnitStrc * 
     }
 }
 
+// 1.14d mac: 001dc90c
 BOOL __fastcall MONMODE_UpdateDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     BOOL bIsAndariel = D2Common::Monsters::MONSTERS::MONSTER_IsSandLeaper(pUnit, 0);
     if (!bIsAndariel) {
@@ -1126,6 +1140,7 @@ BOOL __fastcall MONMODE_UpdateDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     return 1;
 }
 
+// 1.14d mac: 001dcd18
 BOOL __fastcall MONMODE_StartDead(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonsterKill) {
     D2UnitStrc* pUnit = pMonsterKill->pUnit;
     if (pUnit && pUnit->eAnimMode.ePlayerMode != Death) {
@@ -1139,6 +1154,7 @@ BOOL __fastcall MONMODE_StartDead(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonst
 }
 
 // Schedules the deferred death animation for a monster. Clears combat state via FreeCombatAndChangeAnimMode, then if no AITHINK timer is pending: if the unit is stunned, schedules the death event 45 frames out; otherwise reads aidel from MonStatsTxt (SP) or TreasureClass offset by difficulty (MP/BNet) as the death-animation delay, defaulting to 15 frames if zero.
+// 1.14d mac: 001db72b
 BOOL __fastcall MONMODE_StartNeutral(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonsterKill) {
     int32_t _bTimerExists;
     bool bTimerExists;
@@ -1177,11 +1193,13 @@ BOOL __fastcall MONMODE_StartNeutral(::SGAMEDATA * pGame, D2ModeChangeStrc * pMo
     return 1;
 }
 
+// 1.14d mac: 001dcc36
 BOOL __fastcall MONMODE_StartSkill3(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonsterKill) {
     UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pMonsterKill->pUnit, 10);
     return 1;
 }
 
+// 1.14d mac: 001dcc63
 BOOL __fastcall MONMODE_UpdateSkill3(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     UNIT::SUnit::UNITS_ProcessUnitMovement(pGame, pUnit);
     D2Common::Units::AdvanceAnimFrame(pUnit);
@@ -1193,10 +1211,12 @@ BOOL __fastcall MONMODE_UpdateSkill3(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     return 1;
 }
 
+// 1.14d mac: 001dccb1
 void __fastcall MONSTERMODE_Mode10_OnEndFrame_NoOp(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 
 }
 
+// 1.14d mac: 001dccb6
 BOOL __fastcall MONMODE_StartSkill4(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonsterKill) {
     D2UnitStrc* pUnit = pMonsterKill->pUnit;
     UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pUnit, 0xb);
@@ -1204,6 +1224,7 @@ BOOL __fastcall MONMODE_StartSkill4(::SGAMEDATA * pGame, D2ModeChangeStrc * pMon
     return 1;
 }
 
+// 1.14d mac: 001dca99
 BOOL __fastcall MONMODE_StartWalking(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonsterKill) {
     D2UnitStrc* pUnit = pMonsterKill->pUnit;
     int32_t nPathPoints = D2Common::PATH::DynamicPath::GetPathPointsSize(pUnit->pPath.pDynamicPath);
@@ -1215,6 +1236,7 @@ BOOL __fastcall MONMODE_StartWalking(::SGAMEDATA * pGame, D2ModeChangeStrc * pMo
     return 1;
 }
 
+// 1.14d mac: 001dd1e6
 BOOL __fastcall MONMODE_StartRunning(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonsterKill) {
     D2UnitStrc* pUnit = pMonsterKill->pUnit;
     int32_t nPathPoints = D2Common::PATH::DynamicPath::GetPathPointsSize(pUnit->pPath.pDynamicPath);
@@ -1226,6 +1248,7 @@ BOOL __fastcall MONMODE_StartRunning(::SGAMEDATA * pGame, D2ModeChangeStrc * pMo
     return 1;
 }
 
+// 1.14d mac: 001dcb59
 BOOL __fastcall MONMODE_StartGetHit(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonsterKill) {
     D2UnitStrc* pUnit = pMonsterKill->pUnit;
     if (!(pUnit && pUnit->eAnimMode.ePlayerMode != Death && pUnit->eAnimMode.ePlayerMode != Kick)) {
@@ -1241,6 +1264,7 @@ BOOL __fastcall MONMODE_StartGetHit(::SGAMEDATA * pGame, D2ModeChangeStrc * pMon
     return 1;
 }
 
+// 1.14d mac: 001dbda3
 BOOL __fastcall MONMODE_StartAttackOrSkill(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonsterKill) {
     int32_t nPathPoints;
     int32_t nBaseId;
@@ -1274,6 +1298,7 @@ BOOL __fastcall MONMODE_StartAttackOrSkill(::SGAMEDATA * pGame, D2ModeChangeStrc
 }
 
 // Monster animation-mode tick for the skill-cast frame cycle (called from the game event dispatcher). If no current skill: advances the anim frame, fires a special missile at the action frame (or end-of-cycle), falls back to MONSTER_AttackTarget + DAMAGE_ProcessCombatQueueEntry. If a skill is active and flagged as in-motion (flag bit 0): calls GetTarget + UNITS_ProcessUnitMovement; on reaching the destination (result 2) marks skill flag bit 1, runs SKILLS_PeriodicSkillSpawnAndTimer, and advances the frame at the action point. Otherwise calls SKILLS_PeriodicSkillSpawnAndTimer and advances. Returns 1 normally, 2 at end-of-cycle.
+// 1.14d mac: 001dbebd
 BOOL __fastcall MONMODE_ProcessSkillCast(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     eD2MonsterAnimMode eAnimMode;
     uint32_t nSkillLevel;
@@ -1344,12 +1369,14 @@ BOOL __fastcall MONMODE_ProcessSkillCast(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     return 1;
 }
 
+// 1.14d mac: 001dcc09
 BOOL __fastcall MONMODE_StartBlock(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonsterKill) {
     UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pMonsterKill->pUnit, 6);
     return 1;
 }
 
 // Attempts to make a monster flee from its current target. Checks MonStatsTxt flags 3 and 0xD (flee-capable); if both set and unit is not in Death mode, sets path type 8 (flee), calculates flee distance (10 for classId 0x4E/Andariel, else 5), computes a new path, and transitions to Flee anim mode (0xD). Returns 1 if flee was attempted, 0 if monster cannot flee.
+// 1.14d mac: 001dcd9b
 BOOL __fastcall MONMODE_StartKnockback(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonsterKill) {
     int32_t nMonStatsRow;
     int nClassId;
@@ -1392,6 +1419,7 @@ BOOL __fastcall MONMODE_StartKnockback(::SGAMEDATA * pGame, D2ModeChangeStrc * p
     return 1;
 }
 
+// 1.14d mac: 001dd0c9
 BOOL __fastcall MONMODE_StartSequence(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonsterKill) {
     D2UnitStrc* pUnit = pMonsterKill->pUnit;
     UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pUnit, 0xe);
@@ -1404,6 +1432,7 @@ BOOL __fastcall MONMODE_StartSequence(::SGAMEDATA * pGame, D2ModeChangeStrc * pM
 }
 
 // Looks up the death/drop event-dispatch callback record for a monster. Given a UNIT_MONSTER and an event index nParam (0..0xF), returns a pointer into the global DropHandlerArray. Returns NULL for non-monsters, out-of-range class ids, or nParam>0xF. Most monsters map directly (DropHandlerArray + nParam), but special bosses override specific events by class id: Diablo / DiabloClone / UberDiablo and Baal variants (Throne/Uber) redirect their death/drop events to dedicated handler slots (e.g. +7, +0x10, +0x11), TrappedSoul to +0x12/+0x13, and Warrior/Master act-boss minions event 0xB to +0x14. Used by the monster event dispatcher to pick the correct on-death behavior.
+// 1.14d mac: 001dafc4
 D2MonModeTableRowStrc * __fastcall MONMODE_GetModeTableRow(D2UnitStrc * pUnit, uint32_t nAnimMode) {
     // Static local variables (originally global data)
     static D2MonModeTableRowStrc gaMonModeTable[21] = {
@@ -1591,6 +1620,7 @@ D2MonModeTableRowStrc * __fastcall MONMODE_GetModeTableRow(D2UnitStrc * pUnit, u
     return gaMonModeTable + nAnimMode;
 }
 
+// 1.14d mac: 001db174
 static BOOL __stdcall MONMODE_RequestNeutral(::SGAMEDATA * pGame, eD2MonsterAnimMode eAnimMode, D2UnitStrc * pUnit) {
     D2Common::Units::SetCurrentSkill(pUnit, nullptr);
     if (eAnimMode != Death && eAnimMode != eD2MonsterAnimMode_ns::Dead) {
@@ -1609,6 +1639,7 @@ static BOOL __stdcall MONMODE_RequestNeutral(::SGAMEDATA * pGame, eD2MonsterAnim
     return 0;
 }
 
+// 1.14d mac: 001db128
 void __fastcall MONMODE_EventModeUpdate(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
     int nCurrentAnimMode = !pUnit ? 0 : pUnit->eAnimMode.eMonsterMode;
     D2MonModeTableRowStrc* pDropHandler = MONMODE_GetModeTableRow(pUnit, nCurrentAnimMode);
@@ -1625,6 +1656,7 @@ void __fastcall MONMODE_EventModeUpdate(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     return;
 }
 
+// 1.14d mac: 001db1da
 void __fastcall MONMODE_EventEndAnimation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
     eD2MonsterAnimMode eUnitAnimMode = !pUnit ? Death : pUnit->eAnimMode.eMonsterMode;
     D2MonModeTableRowStrc* pDropHandler = MONMODE_GetModeTableRow(pUnit, eUnitAnimMode);
@@ -1642,6 +1674,7 @@ void __fastcall MONMODE_EventEndAnimation(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // Server-side monster mode/lifecycle transition driver. Given a D2MonsterKillStrc (victim, attacker/target, requested nUnitMode), validates the victim is a monster, halts on a stuck uninterruptable state, then for non-GetHit modes sets the dynamic-path target/SP and recomputes combat stats & UMod-on-spawn. Looks up the per-mode AI drop/death handler (GetDropHandler) and invokes its pFn1; on a 0 result clears the current skill and schedules execution (PlanExecutionOfMonster). Flags MONMODEISCHANGING, re-inits the anim frame, applies velocity%, dispatches UMod-on-death, then re-resolves the handler for the unit's actual anim mode to (re)arm or clear anim timer events. Returns pFn1's result, or 0 (falling through to MONSTER_InitiateDefaultDeath) when no actual-mode handler exists. __stdcall(pGame,pMonsterKill,nParam).
+// 1.14d mac: 001db226
 int32_t __stdcall MONSTERAI_ExecuteLifecycleTransition(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonsterKill, int32_t bResetSkillOnSameMode) {
     BOOL bIsModeZeroDeath;
     BOOL BVar1;
@@ -1749,6 +1782,7 @@ int32_t __stdcall MONSTERAI_ExecuteLifecycleTransition(::SGAMEDATA * pGame, D2Mo
     return 0;
 }
 
+// 1.14d mac: 001db8aa
 void __stdcall MONMODE_InitModeChange(D2UnitStrc * pUnit, eD2MonsterAnimMode nUnitMode, D2ModeChangeStrc * pModeChange) {
     if ((int)nUnitMode >= 0x10) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7b8);

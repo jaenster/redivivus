@@ -32,6 +32,7 @@ typedef BOOL (__fastcall *fpExecuteOnUnitFunction)(::SGAMEDATA * pGame, D2UnitSt
 namespace D2Game::Quests::QUESTS::A1Q6 {
 
 // A1Q6 object init-fn 47. Registers this object's GUID into the A1Q6 quest-specific GUID list (dedup, max 8 entries), bumps the count, runs A1Q5 Countess death-effect, then fires game event 7 (delayed +10 frames) if the recorded flags warrant it. List/event bookkeeping; no GetQuestState/SetQuestState.
+// 1.14d mac: 0021f2ac
 void __fastcall Objects_InitFn47_CountessChest(D2ObjectInitFnArg * pInitArg) {
     int nObjectGUID;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_ForgottenTower);
@@ -93,6 +94,7 @@ BOOL __fastcall Q06_NotifyQuestStateToPlayer(::SGAMEDATA * pGame, D2UnitStrc * p
 }
 
 // A1Q6 state-callback 02 ("quest accepted"). When target is Cain (classId 0x109) and bQuestAccepted set: advances quest stateFlag to 1 via QUEST_SetStateAndBroadcast (broadcasts Q06_NotifyQuestStateToPlayer to all), clears bQuestAccepted, and unhooks itself (handler slot 2 = null) so it fires once.
+// 1.14d mac: 0022011f
 void __fastcall Q06_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     if (!(pQuestArgs->pTarget && (short int)pQuestArgs->pTarget->nClassId == 0x109)) {
       return;
@@ -147,6 +149,7 @@ BOOL __fastcall Q06_SyncQuestStepToPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUni
 
 // A1Q6 NPC-gossip dispatch callback (state slot 0xb). Routes by NPC classId/message: Cain(0x109)+msg0xa6 = accept quest (stateFlag 2, bQuestAccepted, sync all players, gossip); Cain+0xb8 / Akara(0x94)+0xb3 / Kashya(0x96)+0xb5 = remove player from that NPC's GUID list; Warriv(0x9b)+0xb7 = collect Act2-travel reward: if RewardAwaits&JustCompleted set stateFlag 0xd (JustCompleted) + flag 5 + SetQuestRecordState JustCompleted, then clear RewardAwaits / set Completed in player record and register player as participant.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q6.cpp
+// 1.14d mac: 0021feab
 void __fastcall Q06_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2BitBufferStrc* pBitBuffer;
     D2UnitDataPlayerStrc* pPlayerData;
@@ -219,6 +222,7 @@ void __fastcall Q06_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // A1Q6 gossip-text builder (state slot 0). Reads player quest record (Completed/JustCompleted/RewardAwaits) and target NPC (Cain 0x109 / Akara 0x94 / Kashya 0x96), then picks which gossip line to queue via AddGossipMessageOnMonster: msg 3 if player already in that NPC's done-list, msg 4 if quest finished/participated, else maps server stateFlag through gdwQuestCallbackAddressQ41[] to a line index. Read-only on quest state; chooses dialogue.
+// 1.14d mac: 0021fc5e
 void __fastcall Q06_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     // Static local variables (originally global data)
     static int32_t gdwQuestCallbackAddressQ41[7] = { -0x1, 0x0, 0x1, 0x2, 0x3, 0x4, 0x0 }; D2_STATIC_GUARD(gdwQuestCallbackAddressQ41, "D2Game::Quests::QUESTS::A1Q6::Q06_Callback00_NpcActivate::gdwQuestCallbackAddressQ41");
@@ -314,6 +318,7 @@ void __fastcall Q06_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 
 // A1Q6 "entered level" / area-trigger callback (state slot 3). On entering the relevant area (index field): if first time, bumps stateFlag to 3, and broadcasts state 2 (started, idx 0x25) or state 1 via QUEST_SetStateAndBroadcast(Q06_NotifyQuestStateToPlayer), then syncs all players. Also handles re-entry (textControl==1): removes player from list and, if stateFlag==2 and player record not Completed/RewardAwaits, advances to flag 3 and re-syncs. Drives quest start from walking into the Catacombs.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q6.cpp
+// 1.14d mac: 0021f73e
 void __fastcall Q06_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int nNewLevel = pQuestArgs->sQuestArgs.sLevelChange.nNewLevel;
     int nOldLevel = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
@@ -368,6 +373,7 @@ void __fastcall Q06_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 }
 
 // A1Q6 completion-sound callback (IteratePlayerOrMonsterUnits). If player record has both RewardAwaits and JustCompleted set, plays the quest-complete sound/event (event sound 0x21) on that player. Read-only on quest state.
+// 1.14d mac: 002209a6
 BOOL __fastcall Q06_PlayCompletionSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -382,6 +388,7 @@ BOOL __fastcall Q06_PlayCompletionSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     return 0;
 }
 
+// 1.14d mac: 00220a19
 void __fastcall Q06_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArg) {
     int nPlayerGUID;
     SetRewardAndFinishFlags(pQuestData, pQuestArg);
@@ -399,6 +406,7 @@ void __fastcall Q06_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2
 
 // A1Q6 helper: mark Sisters-to-the-Slaughter complete + grant reward for one player. Sets JustCompleted and RewardAwaits in the player's quest record, then SetClientStatus(1, difficulty) to flag the act-progress/Act2-unlock client state. Called from Andariel-death and L4-entry paths.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q6.cpp
+// 1.14d mac: 0021f45e
 static void __stdcall Q06_SetQuestCompletedAndReward(D2BitBufferStrc * pBitBuffer, ::SGAMEDATA * pQuestControl, D2UnitStrc * pUnit) {
     /* SetQuestState(JustCompleted): mark quest just-completed for self player
                          (drives completion sound + UI) */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_SistersToTheSlaughter, QUESTSTATE_JustCompleted);
@@ -408,6 +416,7 @@ static void __stdcall Q06_SetQuestCompletedAndReward(D2BitBufferStrc * pBitBuffe
 }
 
 // A1Q6 per-player callback: if player record not Completed/FinishedInPreviousGame and player is in Catacombs Level 4, register them on all three NPC GUID lists (Cain/Akara/Kashya) and call Q06_SetQuestCompletedAndReward. Credits players present in the boss room when Andariel dies.
+// 1.14d mac: 002206f3
 BOOL __fastcall Q06_OnPlayerEnterCatacombsL4(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     eD2LevelId eLevelId;
     D2QuestDataStrc* pA1Q6QuestData;
@@ -442,6 +451,7 @@ BOOL __fastcall Q06_OnPlayerEnterCatacombsL4(::SGAMEDATA * pGame, D2UnitStrc * p
 }
 
 // A1Q6 per-party-member callback: if record not Completed/RewardAwaits and member is anywhere in Act I, register them on all three NPC GUID lists and Q06_SetQuestCompletedAndReward. Spreads quest credit/reward to party members in Act I (invoked via Q06_PropagateRewardToParty).
+// 1.14d mac: 0021f36f
 void __fastcall Q06_RegisterActIPlayerForCompletion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     int nPlayerGUID;
     D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pGame, pUnit);
@@ -485,6 +495,7 @@ void __fastcall Q06_RegisterActIPlayerForCompletion(::SGAMEDATA * pGame, D2UnitS
 }
 
 // A1Q6 per-player callback: for players who did NOT get credit (record not Completed/RewardAwaits) when Andariel died, set CannotCompleteQuestInGame in their record and send quest-state packet (idx 6). Locks the quest as un-completable in this game for absent players.
+// 1.14d mac: 0022085c
 BOOL __fastcall Q06_SetCannotCompleteInGame(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -501,6 +512,7 @@ BOOL __fastcall Q06_SetCannotCompleteInGame(::SGAMEDATA * pGame, D2UnitStrc * pU
 }
 
 // A1Q6 per-player callback: if this player's record has JustCompleted set and they are in a party, runs Q06_RegisterActIPlayerForCompletion over every party member to propagate quest credit/reward across the party. Read-only on quest state (gate); writes happen in the per-member callback.
+// 1.14d mac: 002207df
 BOOL __fastcall Q06_PropagateRewardToParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2BitBufferStrc* pQuestRecord = GetQuestBitBufferInline(pGame, pUnit);
     BOOL bJustCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_SistersToTheSlaughter, QUESTSTATE_JustCompleted);
@@ -516,6 +528,7 @@ BOOL __fastcall Q06_PropagateRewardToParty(::SGAMEDATA * pGame, D2UnitStrc * pUn
 }
 
 // A1Q6 per-player callback: if player is in Catacombs Level 4, spawns a return Town Portal (SERVER_SpawnPortal -> Rogue Encampment) at their coords. Fired from the death timer at tick 10. No quest-state access.
+// 1.14d mac: 00220a7c
 BOOL __fastcall Q06_SpawnReturnPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     if (!pRoom) {
@@ -534,6 +547,7 @@ BOOL __fastcall Q06_SpawnReturnPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, v
 }
 
 // A1Q6 post-Andariel-death quest timer. Increments nDeathEventCounter each tick: at 10, spawns return portals for all players in L4 (Q06_SpawnReturnPortal); at 12, if stateFlag not already 3/0xd, broadcasts state 3 (final) via QUEST_SetStateAndBroadcast(Q06_NotifyQuestStateToPlayer) and ends the timer. Drives the celebratory portal + completion broadcast.
+// 1.14d mac: 002208ed
 uint8_t __fastcall Q06_TimerSpawnPortalAndNotify(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
     D2QuestDataA1Q6Strc* pDVar1 = pQuestData->pQuestSpecificData.pA1Q6;
     pDVar1->nDeathEventCounter++;
@@ -557,6 +571,7 @@ uint8_t __fastcall Q06_TimerSpawnPortalAndNotify(::SGAMEDATA * pGame, D2QuestDat
 
 // A1Q6 deferred quest-update (scheduled by Q06_SequenceFilter timer): if stateFlag is still 0, bump to 1 (quest now introduced/visible in log). One-shot init nudge.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q6.cpp
+// 1.14d mac: 0022054b
 uint8_t __fastcall Q06_QuestUpdate(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
     if (!pQuestData->nStateFlag) {
       QUEST_SetStateFlag(pQuestData, 1, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q6.cpp", 0x25d);
@@ -567,6 +582,7 @@ uint8_t __fastcall Q06_QuestUpdate(::SGAMEDATA * pGame, D2QuestDataStrc * pQuest
 
 // Already documented.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q6.cpp
+// 1.14d mac: 0021f969
 void __fastcall Q06_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     // Static local variables (originally global data)
     static uint32_t gaNpcGossipData_Q37[7] = { 0x20766367, 0x20726367, 0x20626367, 0x20796367, 0x20676367, 0x20776367, 0x20636b73 }; D2_STATIC_GUARD(gaNpcGossipData_Q37, "D2Game::Quests::QUESTS::A1Q6::Q06_Callback08_MonsterKilled::gaNpcGossipData_Q37");
@@ -637,6 +653,7 @@ void __fastcall Q06_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // A1Q6 (Sisters to the Slaughter) fpActiveFilter — read-only gate deciding whether a given NPC currently has quest dialogue for this player. Cain (0x109): active if player GUID is in the quest GUID list, or quest not Completed/RewardAwaits and stateFlag==1. Warriv (0x9b): active iff RewardAwaits and not Completed (Act II travel reward). Akara (0x94) / Kashya (0x96): active iff player GUID is in their respective completion lists. Returns false for all other targets.
+// 1.14d mac: 0021f4e2
 bool __fastcall Q06_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     BOOL BVar1;
     int32_t iValue = !pUnit ? -1 : pUnit->nUnitGUID;
@@ -690,6 +707,7 @@ uint32_t __fastcall Q06_GetQuestSpecificFlag(D2QuestDataStrc * pQuestData) {
 }
 
 // A1Q6 fpSequenceFilter: if stateFlag==0 and quest is live (bIsNotIntroduction), schedules Q06_QuestUpdate on a 0x14-tick timer to introduce the quest. No quest-record access.
+// 1.14d mac: 0022026e
 bool __fastcall Q06_SequenceFilter(D2QuestDataStrc * pQuestData) {
     if (!pQuestData->nStateFlag && pQuestData->bIsNotIntroduction == '\x01') {
       AddQuestTimer(pQuestData, Q06_QuestUpdate, 0x14);
@@ -699,6 +717,7 @@ bool __fastcall Q06_SequenceFilter(D2QuestDataStrc * pQuestData) {
 }
 
 // A1Q6 load/restore callback (state slot 0xd) — reconstructs server stateFlag/stateFlagPrev from the persisted player quest record on game (re)load. If not Completed/FinishedInPreviousGame: Step0x04 -> flag 3/prev 2; Step0x03 -> flag 3/prev 1; Step0x02 -> flag 2/prev 1. Pure read of record bits to rebuild in-memory progress.
+// 1.14d mac: 00220197
 void __fastcall Q06_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
@@ -738,6 +757,7 @@ void __fastcall Q06_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 
 // A1Q6 quest constructor (nInitNo 4). Zeroes the state-handler table then installs callbacks: slot0=Callback_00(gossip), 2=Callback_02(accept), 3=Callback_03(area), 8=Callback_08(Andariel death), 0xb=Callback_11(NPC gossip dispatch), 0xd=Callback_13(load). Sets fpSequenceFilter=Q06_SequenceFilter, fpActiveFilter=Q06_ActiveFilter, nQuestIdReal=SistersToTheSlaughter, nSequenceQuestId=PrisonOfIce, allocates 0x198-byte A1Q6 specific data and zeroes its GUID lists/flags. No quest-record state transitions.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q6.cpp
+// 1.14d mac: 0021f603
 void __fastcall Q06_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGame = pQuestData->pGame;

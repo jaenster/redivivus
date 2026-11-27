@@ -21,6 +21,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2QuestDataA2Q8Strc) == 0x2, "D2_NE
 namespace D2Game::Quests::QUESTS::A2Q8 {
 
 // Q16_Callback_11 - A2Q8 gossip ACK handler (state-fn slot 0xb). Fires when the player actually picks the gossip dialog (NPC 0x17a, message 0x12f); marks QUEST_Act2Guard5Gossip = Completed in the player's difficulty quest record so the line is not re-offered. No reward, no items - just records "already spoken".
+// 1.14d mac: 0022a9f3
 void __fastcall Q16_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     if (!(pQuestArgs->sQuestArgs.sNpcMessage.nNPCNo == 0x17a && pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex == 0x12f)) {
       return;
@@ -33,6 +34,7 @@ void __fastcall Q16_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // Q16_Callback_00 - A2Q8 gossip OFFER handler (state-fn slot 0). When player interacts with NPC 0x17a (Act2 guard), queues gossip line 0x12f via AddGossipMessageOnMonster ONLY in the window: Seven Tombs not yet past step1 (active, stateFlag<2) AND Tainted Sun finished/absent (no longer in-progress) AND Seven Tombs reward NOT awaiting AND NOT completed. I.e. guard gossips only after Tainted Sun is done but before you finish the Seven Tombs / kill Duriel.
+// 1.14d mac: 0022aa46
 void __fastcall Q16_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int nTargetClassId = !pQuestArgs->pTarget ? -1 : pQuestArgs->pTarget->nClassId;
     ::SGAMEDATA* pGame = pQuestData->pGame;
@@ -65,11 +67,13 @@ void __fastcall Q16_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0x17a, 0);
 }
 
+// 1.14d mac: 0022ab03
 bool __fastcall Q16_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode) {
     return false;
 }
 
 // Q16_ActiveFilter - A2Q8 gossip ELIGIBILITY predicate. Returns true (offer the guard 0x17a gossip) when: Seven Tombs active & stateFlag<2, Tainted Sun reached state 0xd (JustCompleted), and Seven Tombs reward NOT awaiting & NOT completed. Same window as Q16_Callback_00, used to decide whether the gossip topic is available. StatusFilter (0x59e4a0) is a hard stub returning false (no journal status).
+// 1.14d mac: 0022ab0a
 bool __fastcall Q16_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     D2UnitDataPlayerStrc* pPlayerData;
     D2QuestDataStrc* pSevenTombsQuest;
@@ -103,6 +107,7 @@ bool __fastcall Q16_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 }
 
 // Q16_InitData - A2Q8 / QUEST_Act2Guard5Gossip: HIDDEN GOSSIP PSEUDO-QUEST (Act2 7th internal slot, not a journal quest). NPC 0x17a = Lut Gholein "Act2Guard5" (a Desert/Palace guard). Registers the quest dispatch handlers: gossip handler[0]=Q16_Callback_00 (offer gossip line), handler[0xb]=Q16_Callback_11 (mark gossip "spoken"). nQuestIdReal=QUEST_Act2Guard5Gossip; aNpcGossipData = single entry {monStat 0x17a, string 0x12f, menu}. Allocs 2-byte per-game scratch (D2QuestDataA2Q8Strc) zeroed. No journal/reward/items: purely a conditional one-line dialog gate.
+// 1.14d mac: 0022a93b
 void __fastcall Q16_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGame = pQuestData->pGame;

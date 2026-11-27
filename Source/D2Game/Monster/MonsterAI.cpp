@@ -51,6 +51,7 @@ typedef void (__fastcall *fpAiClear)(D2UnitStrc * pUnit);
 namespace D2Game::Monster::MonsterAI {
 
 // Queues 0x9E stat-update packets for a player's hireable mercenary covering: level, strength, dexterity, maxhp, hitpoints, armorclass, experience, nextexp, min/max damage (primary+secondary combined), and all four resistances. No-ops if the player has no hireable pet.
+// 1.14d mac: 001d8a87
 void __fastcall SendMercPackets(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, int32_t nUnused) {
     D2UnitStrc* pMerc = PLAYER::PlayerPets::SERVER_GetUnitPetByTypeId(pGame, pPlayer, PETTYPE_hireable, 0);
     if (!pMerc) {
@@ -91,6 +92,7 @@ void __fastcall SendMercPackets(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, int32
 }
 
 // Recomputes a hireling/mercenary's stats for a target level. Resolves the player's merc pet (PETTYPE_hireable) if pMerc is null; if nLevel==0 uses merc level+1. Sets UNITSTAT_level, looks up the hireling.txt row for the merc type/level, and derives nextexp/experience, str/dex (min 10), maxhp/hitpoints (min 0x2800), armorclass, secondary min/max damage, tohit, the four resistances, and hpregen by interpolating the txt base + per-level columns over (level - row.level). Finally grants up to 6 innate skills (clamped 1..0x20) gated by reqlevel/skill mode. Asserts pGame/pPlayer non-null and pPlayer is UNIT_PLAYER (halts otherwise).
+// 1.14d mac: 001d850e
 void __fastcall MERC_ApplyLevelStats(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2UnitStrc * pMerc, int32_t nLevel) {
     int nTmp;
     D2HirelingTxt* pHirelingTxt;
@@ -226,6 +228,7 @@ void __fastcall MERC_ApplyLevelStats(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, 
 }
 
 // @sourcefile .\MONSTER\MonsterAI.cpp
+// 1.14d mac: 001d8d62
 D2MonsterAiStrc * __fastcall AllocMonsterAI(::SGAMEDATA * pGame) {
     D2MonsterAiStrc* pMonsterAi = D2_NEW_POOL_AT(pGame->pMemoryPool, D2MonsterAiStrc, ".\\MONSTER\\MonsterAI.cpp", 0x17b);
     pMonsterAi->pAiSub = 0;
@@ -233,6 +236,7 @@ D2MonsterAiStrc * __fastcall AllocMonsterAI(::SGAMEDATA * pGame) {
 }
 
 // @sourcefile .\MONSTER\MonsterAI.cpp
+// 1.14d mac: 001d8db9
 void __fastcall FreeMonsterAi(::SGAMEDATA * pGame, D2MonsterAiStrc * pMonster) {
     D2MonsterAiSubStrc* pMemoryToFree = pMonster->pAiSub;
     while (pMemoryToFree) {
@@ -247,6 +251,7 @@ void __fastcall FreeMonsterAi(::SGAMEDATA * pGame, D2MonsterAiStrc * pMonster) {
 
 // Initiates a player-NPC interaction on the server. Guards against double-interaction (checks existing pAiSub list and GetInteractedNpc), verifies the NPC is interactable (MonStats interact flag) and not in Death/Kick mode, and that the player is not already trading. Allocates a D2MonsterAiSubStrc to track the interaction participant, sends the mercenary hire list (SendMercForHireList, first-time flag), sets the interact info on the player unit, then sends 0x27 NPC-info and 0x28 player-quest-info packets. Also triggers QUEST_OnNpcInteraction for quest dialogue and 0x29 quest-log prep.
 // @sourcefile .\MONSTER\MonsterAI.cpp
+// 1.14d mac: 001d90d2
 static uint32_t __stdcall NPC_BeginInteraction(::SGAMEDATA * pGame, D2MonsterAiStrc * pAi, uint8_t questActionType, D2UnitStrc * pPlayer, D2UnitStrc * pNpcUnit) {
     uint32_t _bFirstInteraction;
     BOOL bIsTrading;
@@ -308,6 +313,7 @@ static uint32_t __stdcall NPC_BeginInteraction(::SGAMEDATA * pGame, D2MonsterAiS
     return 0;
 }
 
+// 1.14d mac: 001d8e43
 int32_t __fastcall CountMonstersByAi(D2MonsterAiStrc * pMonsterAi) {
     D2MonsterAiSubStrc* pAiSub;
     int nCount = 0;
@@ -320,6 +326,7 @@ int32_t __fastcall CountMonstersByAi(D2MonsterAiStrc * pMonsterAi) {
     return nCount;
 }
 
+// 1.14d mac: 001d8e5e
 BOOL __fastcall HasAiSub(D2MonsterAiStrc * pMonsterAi) {
     D2MonsterAiSubStrc* pAiSub = pMonsterAi->pAiSub;
     while (true) {
@@ -336,6 +343,7 @@ BOOL __fastcall HasAiSub(D2MonsterAiStrc * pMonsterAi) {
     return 1;
 }
 
+// 1.14d mac: 001d8e7b
 BOOL __fastcall HasUnitInSubAi(D2MonsterAiStrc * pMonsterAiArg, D2UnitStrc * pUnit) {
     D2MonsterAiSubStrc* pAiSub = pMonsterAiArg->pAiSub;
     while (true) {
@@ -353,6 +361,7 @@ BOOL __fastcall HasUnitInSubAi(D2MonsterAiStrc * pMonsterAiArg, D2UnitStrc * pUn
 }
 
 // @sourcefile .\MONSTER\MonsterAI.cpp
+// 1.14d mac: 001d8e9a
 void __fastcall FreeSpecificAiForUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2MonsterAiStrc * pAi) {
     if (!pAi) {
       return;
@@ -407,6 +416,7 @@ static inline D2MonsterAiStrc * GetMonsterAiInline(D2UnitStrc * pUnit) {
     return nullptr;
 }
 
+// 1.14d mac: 001d8f33
 void __fastcall NpcState_MoveState1To2(D2UnitStrc * pNpc, D2UnitStrc * pUnit) {
     D2MonsterAiStrc* pMonsterAi = GetMonsterAiInline(pNpc);
     D2MonsterAiSubStrc* pAiSub = pMonsterAi->pAiSub;
@@ -428,6 +438,7 @@ void __fastcall NpcState_MoveState1To2(D2UnitStrc * pNpc, D2UnitStrc * pUnit) {
     pAiSub->nState = 2;
 }
 
+// 1.14d mac: 001d8f5e
 uint32_t __fastcall NpcStateIs2(D2UnitStrc * pNpc, D2UnitStrc * pPlayer) {
     D2MonsterAiStrc* pMonsterAi = GetMonsterAiInline(pNpc);
     D2MonsterAiSubStrc* pAiSub = pMonsterAi->pAiSub;
@@ -447,6 +458,7 @@ uint32_t __fastcall NpcStateIs2(D2UnitStrc * pNpc, D2UnitStrc * pPlayer) {
 
 // Removes a specific unit (pUnit) from a monster's AI sub-list (pMonsterAi->pAiSub), frees the D2MonsterAiSubStrc from the game memory pool, and clears any interact-info on pUnit if it was targeting a monster. If the sub-list becomes empty after removal, also strips the player's proxy inventory via SUNITPROXY_RemovePlayerProxyInventory. Fires QUEST_OnNpcDeactivate on entry. Handles both active (nState > 0) and pending (nState == 0) sub-AI records.
 // @sourcefile .\MONSTER\MonsterAI.cpp
+// 1.14d mac: 001d8f88
 void __fastcall FreeAndResetAiSub(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pMonster, D2MonsterAiStrc * pMonsterAi) {
     BOOL _bHasInteractInfo;
     bool bHasInteractInfo;
@@ -531,6 +543,7 @@ static BOOL __stdcall UnitHasSwitchAiSet(D2UnitStrc * pMonster) {
 static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit);
 
 // nParam arrives in EDX, survives the UnitHasSwitchAiSet call (that callee clobbers only EAX/ECX) and is stored to nAiRelated2.
+// 1.14d mac: 001d930b
 BOOL __fastcall AI_SetSwitchAiTargetParams(D2UnitStrc * pUnit, int32_t nSwitchAiMode, uint32_t nTargetGUID) {
     if (GetTypeInline(pUnit) != UNIT_MONSTER || nSwitchAiMode >= 5) {
       return 0;
@@ -555,6 +568,7 @@ static inline D2UnitDataMonsterStrc * GetMonsterDataInline(D2UnitStrc * pUnit) {
     return nullptr;
 }
 
+// 1.14d mac: 001d938f
 int32_t __fastcall AI_GetSwitchAiParam1(D2UnitStrc * pUnit) {
     if (GetTypeInline(pUnit) == UNIT_MONSTER) {
       D2UnitDataMonsterStrc* pMonsterData = GetMonsterDataInline(pUnit);
@@ -565,6 +579,7 @@ int32_t __fastcall AI_GetSwitchAiParam1(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 001d93ac
 uint32_t __fastcall AI_GetSwitchAiParam2(D2UnitStrc * pUnit) {
     if (GetTypeInline(pUnit) == UNIT_MONSTER) {
       D2UnitDataMonsterStrc* pMonsterData = GetMonsterDataInline(pUnit);
@@ -575,6 +590,7 @@ uint32_t __fastcall AI_GetSwitchAiParam2(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 001d93c9
 void __fastcall AI_ClearSwitchAiTargetParams(D2UnitStrc * pUnit) {
     if (GetTypeInline(pUnit) != UNIT_MONSTER) {
       return;
@@ -595,6 +611,7 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
     }
     return (eD2UnitType)6;
 }
+// 1.14d mac: 001d93ef
 uint32_t __fastcall NpcStateIsntZero(D2UnitStrc * pUnit, D2UnitStrc * pPlayer) {
     if (!pUnit) {
       return 0;
@@ -625,6 +642,7 @@ uint32_t __fastcall NpcStateIsntZero(D2UnitStrc * pUnit, D2UnitStrc * pPlayer) {
 
 // Tears down a monster's D2MonsterAiSubStrc list. For each sub-AI node: sends 0x62 MakeUnitTargetable packet to the interacting client, optionally clears that client's interact-info (if bClientSide and the client was interacting with this monster), calls an optional fpFunction cleanup callback, then frees the node. Sets pMonsterAi->pAiSub to NULL when done.
 // @sourcefile .\MONSTER\MonsterAI.cpp
+// 1.14d mac: 001d9431
 void __fastcall ClearAISub(::SGAMEDATA * pGame, D2UnitStrc * pUnit, fpAiClear fpFunction, bool bClientSide) {
     uint32_t nMonsterGUID2;
     uint32_t nUnitGUID;
@@ -660,6 +678,7 @@ void __fastcall ClearAISub(::SGAMEDATA * pGame, D2UnitStrc * pUnit, fpAiClear fp
 
 // Hires a new mercenary unit for a player, replacing any existing one. Removes the current hired merc (fires 0x9B revive-cost packet, unassigns ownership, frees the unit), then rolls new merc stats via RollMercStats, assigns ownership and pet slot, applies level stats, and zeros name-record fields in the new merc's monster data. bSkipUnitNodeCreate skips adding the unit to the room node list (used during game-join restore).
 // @sourcefile .\MONSTER\MonsterAI.cpp
+// 1.14d mac: 001d8214
 void __fastcall MERC_HireAndReplaceMerc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pMinion, int16_t nMercLevelOverride, D2MercForHire * pHireInfo, BOOL bSkipUnitNodeCreate) {
     D2UnitStrc* pExistingMerc;
     int32_t nAct;

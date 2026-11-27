@@ -55,11 +55,13 @@ void __fastcall Q00_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 }
 
 // Q00_StatusFilter (QUEST_SpokeToWarriv). Always returns false — this pseudo-quest has no status/journal entry to display. Stub.
+// 1.14d mac: 002175f2
 bool __fastcall Q00_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode) {
     return false;
 }
 
 // Q00_ActiveFilter (QUEST_SpokeToWarriv). Returns true (gossip/quest active) only for Warriv (class 0x9b) while the "spoke to Warriv" flag is still unset; false once greeted or for any other NPC. Gates whether Warriv's intro gossip is offered.
+// 1.14d mac: 002175f9
 bool __fastcall Q00_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     /* If target is Wariv (Act 1) */ if (nTargetClassId == 0x9b) {
       BOOL bIsQuestInState;
@@ -74,6 +76,7 @@ bool __fastcall Q00_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 }
 
 // Q00_InitData (QUEST_SpokeToWarriv, quest slot 0). Wires up the "spoke to Warriv" pseudo-quest: zeroes the state-handler table, installs Q00_Callback_00 at slot 0 (NPC interact) and Q00_Callback_11 at slot 0x0b (dialog complete), sets nQuestIdReal=QUEST_SpokeToWarriv, points pNpcMessages at the single-entry Warriv gossip table, marks active, and installs the status/active filters. NOT a numbered player quest — Act 1 intro greeting bookkeeping only (no reward, no journal).
+// 1.14d mac: 00217478
 void __fastcall Q00_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->sStateFunctions.fpQuestStateHandler[0] = Q00_Callback00_NpcActivate;

@@ -51,6 +51,7 @@ static int32_t PlayerCountOverride = 0; D2_STATIC_GUARD(PlayerCountOverride, "Pl
 
 namespace D2Game::PLAYER::Player {
 
+// 1.14d mac: 001f6df0
 void __fastcall PLAYER_AllocPlayerInteractedArray(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     if (!pPlayerData) {
@@ -83,6 +84,7 @@ static void FreePartyData(::SGAMEDATA * pGame, D2UnitDataPlayerStrc * pPlayerDat
     pPlayerData->pPartyData = 0;
 }
 
+// 1.14d mac: 001f6e30
 void __fastcall PLAYERDATA_FreeInteractions(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2UnitDataPlayerStrc* pPlayerDataStrc = D2Common::Units::GetPlayerData(pUnit);
     if (!pPlayerDataStrc) {
@@ -100,6 +102,7 @@ void __fastcall PLAYERDATA_FreeInteractions(::SGAMEDATA * pGame, D2UnitStrc * pU
     } while (nCount);
 }
 
+// 1.14d mac: 001f6ec7
 void __fastcall STRUCT_FillPlayerUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t dwUnitGUID) {
     D2SkillListStrc* pSkillsList;
     if (!pUnit) {
@@ -151,6 +154,7 @@ static void PLAYER_FreeAllCorpseUnits(D2UnitStrc * pPlayer, ::SGAMEDATA * pGame)
 }
 
 // Tears down all server-side state for a departing player unit: frees pets, removes from party, frees combat/player-list data, destroys all corpse units in the player's inventory, frees inventory items and inventory struct, releases arena slot, frees interaction state, player data, hover-text, and all event timers.
+// 1.14d mac: 001f6fbd
 void __fastcall PLAYER_FreeAllResources(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     PlayerPets::FreePets(pGame, pUnit);
     UNIT::Party::PARTY_RemoveUnitFromParty(pGame, pUnit);
@@ -193,6 +197,7 @@ void __fastcall PLAYER_ClearTargetIfMatch(::SGAMEDATA * pGame, D2UnitStrc * pUni
     D2Common::Units::SetTargetUnitForDynamicUnit(pUnit, nullptr);
 }
 
+// 1.14d mac: 001f711d
 void __fastcall PLAYER_MoveToLocationWithTimeout(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nTargetX, int32_t nTargetY) {
     PlayerModes::PLRMODES_MoveToLocation(pGame, pUnit, nullptr, 1, nTargetX, nTargetY, 1);
     GAME::Event::SetEvent(pGame, pUnit, 3, pGame->dwGameFrame + 1, 0, 0);
@@ -200,6 +205,7 @@ void __fastcall PLAYER_MoveToLocationWithTimeout(::SGAMEDATA * pGame, D2UnitStrc
 }
 
 // @sourcefile .\PLAYER\Player.cpp
+// 1.14d mac: 001f763d
 static uint32_t __stdcall PLAYER_PlaceItemInInventory(::SGAMEDATA * pGame, int32_t nParam, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     int32_t nErrorLine;
     if (!pUnit2) {
@@ -299,6 +305,7 @@ static D2UnitStrc * __stdcall PLAYER_CreateStartItemUnit(::SGAMEDATA * pGame, in
 }
 
 // Server-side: grants a class's starting equipment loop from a starter-item template entry (pnParam: item code, body-loc, count byte at +5). For each of count copies it creates the item (PLAYER_CreateRewardItemFromTemplate), flags it ITEMFLAG_BEGINNER and sets its body-loc. Beltable items go to the belt (ITEM_TryPlaceInBelt, fallback to inventory). Non-beltable: if a body-loc is set it equips (PLAYER_EquipItemToBodyLoc, fallback inventory) else places in inventory; then seeds durability (or quantity 250 / charges 100 for bow-quiver ammo). Used during new-character creation. No return value.
+// 1.14d mac: 001f71c6
 void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2CharStatsTxt * pCharStatsTxt, int32_t nItemIndex, D2CharItemStrc * pCharItem) {
     // Frame slots -20..-4 are ONE object: &dwBeltSlotOut is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -401,6 +408,7 @@ void __fastcall PLAYER_CreateStarterItems(::SGAMEDATA * pGame, D2UnitStrc * pUni
     } while (__frame0.i < (int)(uint32_t)(uint8_t)pCharItem->nItemCount);
 }
 
+// 1.14d mac: 001f7760
 void __fastcall PLAYER_CreateAllStarterItems(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, uint8_t byAct) {
     int i;
     D2CharStatsTxt* pCharStatsTxt = pUnit && (i = pUnit->nClassId) >= 0 && i < D2Common::ITEMS::Items::sgptDataTable->nTxtCharStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtCharStats + i : nullptr;
@@ -417,6 +425,7 @@ void __fastcall PLAYER_CreateAllStarterItems(D2UnitStrc * pUnit, ::SGAMEDATA * p
     } while (i < 10);
 }
 
+// 1.14d mac: 001f77db
 void __fastcall PLAYER_SendAllItemsToClient(D2UnitStrc * pUnit, D2ClientStrc * pClient) {
     D2UnitStrc* pItem;
     D2UnitStrc* pCarriedItem;
@@ -449,6 +458,7 @@ void __fastcall PLAYER_SendAllItemsToClient(D2UnitStrc * pUnit, D2ClientStrc * p
     }
 }
 
+// 1.14d mac: 001f78fb
 int32_t __fastcall GetPlayerTradeTickOrBusy(D2UnitStrc * pPlayer) {
     D2UnitStrc* pCursorItem_lcl;
     D2UnitDataPlayerStrc* pPlayerData;
@@ -474,6 +484,7 @@ int32_t __fastcall GetPlayerTradeTickOrBusy(D2UnitStrc * pPlayer) {
     return 0;
 }
 
+// 1.14d mac: 001f7953
 void __fastcall PLAYER_ClearCutsceneFlag(D2UnitStrc * pUnit) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     if (!pPlayerData->bCutscenePending) {
@@ -484,6 +495,7 @@ void __fastcall PLAYER_ClearCutsceneFlag(D2UnitStrc * pUnit) {
     pPlayerData->bCutscenePending = 0;
 }
 
+// 1.14d mac: 001f79a1
 void __fastcall PLAYER_EndInteraction(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2ItemsTxt* pItemTxt;
     uint32_t nInteractUnitId;
@@ -520,6 +532,7 @@ void __fastcall PLAYER_EndInteraction(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 
 // Ends the player's active interaction with any unit type (player trade, NPC, object, or Horadric Cube item). Dispatches to the appropriate close handler per unit type, then sends packet 0x62 (MakeUnitTargetable) to notify the client the interaction has ended.
 // @sourcefile .\PLAYER\Player.cpp
+// 1.14d mac: 001f7a7c
 void __fastcall PLAYER_CancelInteraction(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     eD2UnitType eInteractUnitType;
     uint32_t nInteractUnitId;
@@ -553,6 +566,7 @@ void __fastcall PLAYER_CancelInteraction(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     GAME::SCmd::NET_D2GS_SERVER_Send_0x62_INTERACTION_STOP(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\Player.cpp", 0x217), 'b', UNIT_COUNT, 0, 0);
 }
 
+// 1.14d mac: 001f7c58
 void __fastcall PLAYER_PlaceCorpse(::SGAMEDATA * pGame, D2RoomStrc * pRoom, DWORD dwPlayerId, POINT * pPoint) {
     int32_t nLine;
     if (!pRoom) {
@@ -583,6 +597,7 @@ void __fastcall PLAYER_PlaceCorpse(::SGAMEDATA * pGame, D2RoomStrc * pRoom, DWOR
     GAME::SCmd::NET_D2GS_SERVER_Send_0x8E_CorpseAssign_Sender(pGame, nLine, dwPlayerId, true);
 }
 
+// 1.14d mac: 001f7dc1
 void __fastcall PLAYER_SetUniqueId(D2UnitStrc * pUnit, uint32_t dwUniqueId) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x240);
@@ -600,6 +615,7 @@ void __fastcall PLAYER_SetUniqueId(D2UnitStrc * pUnit, uint32_t dwUniqueId) {
     }
 }
 
+// 1.14d mac: 001f7e31
 uint32_t __fastcall GetPlayerUniqueId(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x24d);
@@ -617,6 +633,7 @@ uint32_t __fastcall GetPlayerUniqueId(D2UnitStrc * pUnit) {
 }
 
 // Destroys the town-portal object (classId 0x3b) owned by the player and its paired destination portal. Fires the A5Q5 Arreat Summit leave callback for each portal, removes them from the dungeon via AllocDrlgDelete and FreeServerUnit, and clears the HasPortal room flag on both sides.
+// 1.14d mac: 001f7e9c
 void __fastcall PLAYER_DestroyPortalPair(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2UnitStrc* pPortal;
     D2UnitStrc* pPairedPortal;
@@ -663,6 +680,7 @@ void __fastcall PLAYER_DestroyPortalPair(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // Validates and executes a gold-drop request: confirms the requester matches the acting player, checks the requested amount against current gold and inventory gold limit, spawns gold pile units via DROP_SpawnGoldPiles, marks them owned by the player, and deducts each pile's value from the player's UNITSTAT_gold.
+// 1.14d mac: 001f7fe5
 BOOL __fastcall GOLD_DropGoldFromInventory(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD dwRequesterId, uint32_t nGoldAmount) {
     eD2UnitType eUnitType;
     int nPlayerGold;
@@ -743,6 +761,7 @@ uint32_t __fastcall CheckItemMovePermission(::SGAMEDATA * pGame, D2UnitStrc * pU
 
 // NOTE: Register params: pGame (ECX): SGAMEDATA *, pUnit (EDX): D2UnitStrc *
 // @sourcefile .\PLAYER\Player.cpp
+// 1.14d mac: 001f8253 D2Game::PLAYER::Player::SetHotkey
 int32_t __fastcall SetHotkey(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nHotkey, uint16_t wSkillId, int32_t byHand, int32_t nItemGUID) {
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\Player.cpp", 0x2f3);
     if (!pClient) {
@@ -778,6 +797,7 @@ int32_t __fastcall PLAYER_CountLivingPlayersInLevel(::SGAMEDATA * pGame, eD2Leve
     return sArgs.nCount;
 }
 
+// 1.14d mac: 001f8327
 void __fastcall PLAYER_CountLivingPlayersCallback(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD * pnAlivePlayerCount) {
     BOOL _hasModeZero;
     bool hasModeZero;
@@ -798,6 +818,7 @@ void __fastcall COMMAND_playersX(DWORD count) {
     PlayerCountOverride = count;
 }
 
+// 1.14d mac: 001f82d1
 int32_t __fastcall SERVER_GAME_CountPlayers(::SGAMEDATA * pGame) {
     int ModeZeroCount = 0;
     UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)PLAYER_CountLivingPlayersCallback, &ModeZeroCount);
@@ -971,6 +992,7 @@ static void __stdcall EXP_ApplyDeathExpPenalty(::SGAMEDATA * pGame, D2UnitStrc *
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_experience, nNewExp, 0);
 }
 
+// 1.14d mac: 001f8346
 void __fastcall PLAYER_HandleDeathPenalties(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pKillerUnit) {
     PLAYER_ApplyGoldPenaltyOnDeath(pGame, pKillerUnit, pUnit);
     if (pKillerUnit) {
@@ -988,6 +1010,7 @@ void __fastcall PLAYER_HandleDeathPenalties(::SGAMEDATA * pGame, D2UnitStrc * pU
     EXP_ApplyDeathExpPenalty(pGame, pUnit);
 }
 
+// 1.14d mac: 001f87f2
 void __fastcall PLAYER_CheckIsHostileToPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2PlayerHostileCheckArgStrc * pbHostile) {
     uint32_t dwHostileFlags = UNIT::PlayerList::PLAYERLIST_GetFlagsMasked(pbHostile->pPlayer, pUnit, 8);
     if (!dwHostileFlags) {
@@ -997,6 +1020,7 @@ void __fastcall PLAYER_CheckIsHostileToPlayer(::SGAMEDATA * pGame, D2UnitStrc * 
     pbHostile->bHostile = 1;
 }
 
+// 1.14d mac: 001f878a
 BOOL __fastcall PLAYER_HasHostilePlayer(::SGAMEDATA * pGame, D2UnitStrc * pPlayer) {
     if (pGame && pPlayer && pPlayer->eUnitType == UNIT_PLAYER) {
       D2PlayerHostileCheckArgStrc sHostileArgs;
@@ -1033,6 +1057,7 @@ DWORD __fastcall PLAYER_CountPlayersWithFilter2(::SGAMEDATA * pGame, D2UnitStrc 
 }
 
 // Returns the weapon unit the player should use when casting the current skill, respecting dual-wield and weapon-switch rules. For non-dual-wield classes returns the equipped primary weapon. For dual-wield capable classes dispatches on SkillsTxt.weapsel: 2=off-hand preference with main-hand fallback if no valid off-hand, 3=switch-state dependent (reads nSeqFrame weapon-switch bit), 4=no weapon (returns null), default/1=primary then off-hand fallback. Returns the equipped default if the resolved weapon is broken or disabled.
+// 1.14d mac: 001f8826
 D2UnitStrc * __fastcall PLAYER_GetActiveWeaponForSkill(D2UnitStrc * pUnit) {
     D2UnitStrc* pEquippedWeapon;
     int32_t nWeaponSwitch;
@@ -1098,6 +1123,7 @@ D2UnitStrc * __fastcall PLAYER_GetActiveWeaponForSkill(D2UnitStrc * pUnit) {
 }
 
 // Recalculates active stat-list flags for dual-wield weapon slots on pUnit. If nParam is non-zero, deactivates stat lists for currently equipped and primary weapons (cleanup pass). Then, if the unit can dual-wield, activates the correct weapon's stat list based on the active-weapon-for-skill selection: primary-only, swap-only, or the dual-wield split. Uses STATLIST_SetItemStatActive(1=active, 0=inactive).
+// 1.14d mac: 001f89d4
 void __fastcall EQUIPMENT_RecalcDualWieldWeaponStats(D2UnitStrc * pUnit, int32_t bResetWeaponStats) {
     D2UnitStrc* pEquippedWeapon;
     D2UnitStrc* pPrimaryWeapon;
@@ -1162,6 +1188,7 @@ void __fastcall EQUIPMENT_RecalcDualWieldWeaponStats(D2UnitStrc * pUnit, int32_t
     }
 }
 
+// 1.14d mac: 001f8b1d
 void __fastcall WEAPON_ApplyEquippedWeaponStats(D2UnitStrc * pUnit, int32_t bResetWeaponStats) {
     if (!bResetWeaponStats) {
       return;

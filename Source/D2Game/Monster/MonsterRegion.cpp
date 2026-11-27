@@ -247,6 +247,7 @@ static void __stdcall MONREGION_PopulateMonsterTypes(BOOL bIsNotNormalDifficulty
 
 // Allocates and populates a D2MonsterRegionStrc for every level (index 1..nTxtLevelsSize-1) in the game. Per level: pool-allocates a zeroed region, fills monster density/boss counts/wander/quest flags from LevelsTxt, rolls monster types via MONREGION_PopulateMonsterTypes, then seeds champion-pack data for each monster slot. Halts with fatal error 0x83 if DifficultyLevels txt lookup fails.
 // @sourcefile .\MONSTER\MonsterRegion.cpp
+// 1.14d mac: 001dfb23
 void __fastcall AllocMonsterRegion(D2PoolManagerStrc * pMemory, D2MonsterRegionStrc * * pMonsterRegionList, D2SeedStrc * pSeed, int32_t nSeedLow, eD2Difficulty nDifficulty, BOOL bExpansion) {
     D2LevelsTxt* pLevelTxt;
     D2MonsterRegionFieldStrc* pMonField;
@@ -312,6 +313,7 @@ void __fastcall AllocMonsterRegion(D2PoolManagerStrc * pMemory, D2MonsterRegionS
 }
 
 // @sourcefile .\MONSTER\MonsterRegion.cpp
+// 1.14d mac: 001dff6e
 void __fastcall FreeMonsterRegion(D2PoolManagerStrc * pMemory, D2MonsterRegionStrc * * ppMonsterRegion) {
     ++ppMonsterRegion;
     for (int32_t i = 1; i < D2Common::ITEMS::Items::sgptDataTable->nTxtLevelsSize; ++i, ++ppMonsterRegion) {
@@ -322,11 +324,13 @@ void __fastcall FreeMonsterRegion(D2PoolManagerStrc * pMemory, D2MonsterRegionSt
     }
 }
 
+// 1.14d mac: 001dffd9
 D2MonsterRegionStrc * __fastcall ReturnMonsterRegionEntryForLevel(D2MonsterRegionStrc * * ppMonsterRegion, eD2LevelId eLevel) {
     return ppMonsterRegion[eLevel];
 }
 
 // Looks up a monster's entry in the region spawn table by class ID, or registers a new entry if the monster qualifies as a multi-piece champion (TxtMonStatsEx.TotalPieces > 2). Returns a pointer to the matching D2MonsterRegionFieldStrc, or NULL if the monster is a special-cased superunique (IDs 0xC3, 0xC4, 0x126, 0x128) or the table is full. Rolls champion-pack seed via SEED_RollChampionPack on insertion.
+// 1.14d mac: 001dffe7
 D2MonsterRegionFieldStrc * __fastcall InitializeSpawnCount(D2MonsterRegionStrc * * ppMonsterRegion, D2RoomStrc * pRoom, D2UnitStrc * pUnit) {
     int nMonStatIdClamped;
     uint16_t nClassId = !pUnit ? 0xffff : (uint16_t)pUnit->nClassId;
@@ -386,6 +390,7 @@ D2MonsterRegionFieldStrc * __fastcall InitializeSpawnCount(D2MonsterRegionStrc *
 // @wasnamed AllocMonsterRegion - one name on two different functions.
 // @evidence Derives pGame->dwMonSeed via the LCG multiplier 0x6ac690c5 with
 // seedHigh 0x29a, then calls 005479c0. A seeding wrapper, not the allocator.
+// 1.14d mac: 001e012d
 void __fastcall AllocMonsterRegionForGame(::SGAMEDATA * pGame) {
     D2SeedStrc monSeed;
     D2Common::Seed::SEED_InitDefault(&monSeed);
@@ -396,6 +401,7 @@ void __fastcall AllocMonsterRegionForGame(::SGAMEDATA * pGame) {
     AllocMonsterRegion(pGame->pMemoryPool, pGame->pMonsterRegion, &monSeed, nInitSeed, pGame->nDifficulty, pGame->bExpansion);
 }
 
+// 1.14d mac: 001e01cf
 void __fastcall IncreaseMonsterSpawnCount(D2MonsterRegionStrc * * ppMonsterRegion, D2RoomStrc * pRoom, D2UnitStrc * pUnit, int32_t bIsSummoner) {
     if (bIsSummoner) {
       SetUnsetSummonerFlags(pUnit, 2, 1);
@@ -406,6 +412,7 @@ void __fastcall IncreaseMonsterSpawnCount(D2MonsterRegionStrc * * ppMonsterRegio
     ppMonsterRegion[eLevel]->dwMonSpawnCount++;
 }
 
+// 1.14d mac: 001e0216
 void __fastcall DecreaseMonsterSpawnCount(D2MonsterRegionStrc * * ppMonsterRegion, D2UnitStrc * pUnit, int32_t nPrevMode, int32_t nCurrMode) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
@@ -436,6 +443,7 @@ void __fastcall DecreaseMonsterSpawnCount(D2MonsterRegionStrc * * ppMonsterRegio
     pMonsterRegion->dwMonSpawnCount++;
 }
 
+// 1.14d mac: 001e0299
 void __fastcall IncreaseMonKillCount(D2MonsterRegionStrc * * ppMonsterRegion, D2UnitStrc * pUnit) {
     uint32_t dwMonFlags = GetMonsterFlags(pUnit, 2);
     if (dwMonFlags) {
@@ -452,6 +460,7 @@ void __fastcall IncreaseMonKillCount(D2MonsterRegionStrc * * ppMonsterRegion, D2
     pMonsterRegion->dwMonKillCount++;
 }
 
+// 1.14d mac: 001e02df
 void __fastcall DecreaseMonKillCount(D2MonsterRegionStrc * * ppMonsterRegion, D2UnitStrc * pUnit) {
     uint32_t dwMonFlags = GetMonsterFlags(pUnit, 2);
     if (dwMonFlags) {
@@ -468,6 +477,7 @@ void __fastcall DecreaseMonKillCount(D2MonsterRegionStrc * * ppMonsterRegion, D2
     pMonsterRegion->dwMonKillCount--;
 }
 
+// 1.14d mac: 001e0325
 void __fastcall UpdateMonsterRegion(D2MonsterRegionStrc * * ppMonsterRegion, eD2LevelId eLevel, eD2LevelId eLevel2, int32_t nMonFlags, BOOL bIsDead, int32_t nParam, D2UnitStrc * pUnit) {
     D2MonsterRegionStrc* pOldRegion = ppMonsterRegion[eLevel];
     D2MonsterRegionStrc* pNewRegion = ppMonsterRegion[eLevel2];

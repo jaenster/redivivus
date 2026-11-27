@@ -21,6 +21,7 @@
 
 namespace D2Game::MISSILES::Missiles {
 
+// 1.14d mac: 001c54bb
 void __fastcall ITEMS_RemoveAll(::SGAMEDATA * pGame) {
     D2UnitStrc** ppUnitSlot = pGame->pUnitList[3];
     int nSlotCount = 0x80;
@@ -41,6 +42,7 @@ void __fastcall ITEMS_RemoveAll(::SGAMEDATA * pGame) {
     } while (nSlotCount);
 }
 
+// 1.14d mac: 001ca615
 void __fastcall STRUCT_FillDataMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t dwUnitGUID) {
     if (!pUnit) {
       return;
@@ -53,6 +55,7 @@ void __fastcall STRUCT_FillDataMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     GAME::Event::EVENT_TriggerImmediate(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0, 0);
 }
 
+// 1.14d mac: 001ca675
 void __fastcall ClearMissileUnitData(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     if (!pUnit) {
       return;
@@ -105,6 +108,7 @@ static void __stdcall CalculatePierce(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
 }
 
 // Core server-side missile spawner: creates and initialises a UNIT_MISSILE from a D2SkillArgStrc. Validates owner (must be player/monster) and the missiles.txt row, resolves spawn position (explicit X/Y or from a source missile), finds a valid nearby room, and computes the target point (absolute, relative, or unit-targeted per nFlags). Derives launch velocity from missiles.txt Vel/VelLev scaled by skill level, applies the slow-missiles state modifier and a fixed 0x4b/100 factor, and bails if the straight-line distance to target exceeds 99 subtiles. Then CreateUnit and configures: total/current/activate frames (range from txt or override), dynamic-path velocities, target unit or SP1 destination, collision type/pattern from txt, acceleration, max velocity, optional homing frame count, stat list, skill/level, damage stats (MISSILES_EvalDamageAndSetStats), pierce, and UMod-on-skill dispatch. Invokes the optional fpFunction callback. Returns the new missile unit, or null on any validation/creation failure.
+// 1.14d mac: 001ca698
 D2UnitStrc * __fastcall CreatingMissile(::SGAMEDATA * pGame, D2SkillArgStrc * pArgs) {
     int nPosY;
     D2StatListExStrc* pStatList;
@@ -345,6 +349,7 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
 }
 
 // Sends packet 0x73 (MissileData) to the given client for a missile unit, but only if the missile's txt-row has the network-visible flag (0x20) set. Packs classId, current position, optional target coords, animation frame, owner type/GUID, missile level, and pierce index into the packet buffer.
+// 1.14d mac: 001cb225
 void __fastcall MISSILES_SendMissilePacket(D2ClientStrc * pClient, ::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nVelocity) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE)) {
       return;

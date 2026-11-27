@@ -273,6 +273,7 @@ void __stdcall STAFFMOD_RollStaffModSkills(D2UnitStrc * pUnit, int32_t nSkillId,
 }
 
 // Staff mod entry point. Checks item eligibility (Staves, Orbs, Wands, Scepters, Javelins, Claws, Druid helms). Delegates to ITEMMOD_RollStaffModSkills for skill selection. Stores in separate stat list (flag 0x40).
+// 1.14d mac: 001c7cb3
 void __fastcall StaffMod(D2UnitStrc * pUnit, D2ItemGenContextStrc * pItemData) {
     uint32_t nClassId = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_staffmods(pUnit);
     if (nClassId > 6) {
@@ -296,6 +297,7 @@ void __fastcall StaffMod(D2UnitStrc * pUnit, D2ItemGenContextStrc * pItemData) {
 
 // Rolls one magic affix for items with wItemVersion 0 (pre-1.08 legacy items): counts eligible rows and picks one uniformly with RollBetweenMinAndMax on the item seed. Called by the version dispatchers 0x005c18e0/0x005c1940 and the rare/prefix rollers.
 // bSpawnableOnly (argument 2) skips rows whose byte at legacy row+0x32 is 0 (005c13e8), the same filter as ITEMMOD_RollMagicAffix's spawnable test.
+// 1.14d mac: 001c8874
 uint16_t __stdcall ITEMMOD_RollMagicAffixLegacy(D2UnitStrc * pUnit, int32_t bSpawnableOnly, int bForceRoll, int32_t bApplyStats, int bIsPrefix, int nForcedAffix) {
     BOOL BVar2;
     D2MagicAffixTxt* pDVar3;
@@ -442,6 +444,7 @@ static BOOL HasSufixOrPrefix(int32_t nGroupId, D2UnitStrc * pUnit) {
 // bIsPrefix and nAutoMagicGroup select which sub-table range to walk: automagic when nAutoMagicGroup is set, prefix when bIsPrefix is set, suffix otherwise. nForcedAffix, when > 0, is a one-based row index that is taken directly.
 // The last five arguments are INTEGERS. They were typed D2ItemsTxt *, which is not merely cosmetic: the decompiler then wrote the loop counter's increment as `pBaseItemTxt->szFlippyFile + 1`, so the emitted C++ advanced it by offsetof(szFlippyFile)+1 instead of by 1, and the group compare became `&pExclude2[-1].pad422 + 1`. Every caller passes small literals - ITEMMOD_GenerateRareAffixes passes 1, 0, and a group id read out of the item's own affix table - which is what gave it away.
 // bSpawnableOnly (argument 2) skips rows whose spawnable byte is 0 (row+0x54, tested at 005c16d3); it is not a suffix selector.
+// 1.14d mac: 001c835c
 uint16_t __stdcall ITEMMOD_RollMagicAffix(D2UnitStrc * pItem, int32_t bSpawnableOnly, int32_t bForceRoll, int32_t bApplyAffixStats, int32_t bIsPrefix, int32_t nForcedAffix, int32_t nAutoMagicGroup) {
     uint32_t nClassId;
     int32_t pItemTxt;
@@ -637,6 +640,7 @@ uint16_t __stdcall ITEMMOD_RollMagicAffix(D2UnitStrc * pItem, int32_t bSpawnable
 }
 
 // Version dispatcher: wItemVersion 0 -> ITEMMOD_RollMagicAffixLegacy (uniform pick), otherwise ITEMMOD_RollMagicAffix (weighted pick).
+// 1.14d mac: 001c82f0
 int16_t __fastcall ITEMMOD_RollMagicAffixVersioned(D2UnitStrc * pUnit, int32_t bSpawnableOnly, int bForceRoll, int32_t bApplyAffixStats, int bIsPrefix, int nForcedAffix) {
     uint16_t uVar1;
     uint16_t wItemVersion = D2Common::ITEMS::Items::ITEM_GetItemData_wItemVersion(pUnit);
@@ -650,6 +654,7 @@ int16_t __fastcall ITEMMOD_RollMagicAffixVersioned(D2UnitStrc * pUnit, int32_t b
 }
 
 // Version dispatcher: tail-calls ITEMMOD_RollMagicAffix (char*, "affix index+1") or ITEMMOD_RollMagicAffixLegacy (uint32_t, "affix index") as a bare statement, dropping the result both branches compute.
+// 1.14d mac: 001c8aec
 uint16_t __fastcall ITEMMOD_RollMagicAffixVersionedEx(D2UnitStrc * pUnit, int32_t bSpawnableOnly, int bForceRoll, int32_t bApplyAffixStats, int bIsPrefix, int nForcedAffix, int nAutoMagicGroup) {
     uint16_t uVar1;
     uint16_t wItemVersion = D2Common::ITEMS::Items::ITEM_GetItemData_wItemVersion(pUnit);
@@ -769,6 +774,7 @@ uint16_t __thiscall GetMaxToRoll(int32_t pThis, D2UnitStrc * pUnit) {
 }
 
 // Version dispatcher: tail-calls GetMaxToRoll or ITEMMOD_GetMaxAffixGroupClassic, both uint32_t-returning ("chosen affix table index + 1, or 0"), as a bare statement.
+// 1.14d mac: 001c8b57
 uint16_t __fastcall ITEMMOD_SelectMagicAffixVersioned(D2UnitStrc * pUnit, int32_t bIsPrefix) {
     uint16_t uVar1;
     uint16_t wItemVersion = D2Common::ITEMS::Items::ITEM_GetItemData_wItemVersion(pUnit);
@@ -1095,6 +1101,7 @@ static BOOL __stdcall RollPrefixes(D2ItemGenContextStrc * pItemGenContext, D2Uni
 }
 
 // Early-out returns bCanBeRare (0) directly; the dispatched branches tail-call ITEMMOD_GenerateRareAffixes or RollPrefixes, both documented "Returns 1 on success, 0 ..." and both dropped as bare statements.
+// 1.14d mac: 001c8d4b
 BOOL __fastcall RollingItem(D2UnitStrc * pUnit, D2ItemGenContextStrc * pItemGenContext) {
     BOOL BVar1;
     uint32_t bCanBeRare = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_rare(pUnit);
@@ -1113,6 +1120,7 @@ BOOL __fastcall RollingItem(D2UnitStrc * pUnit, D2ItemGenContextStrc * pItemGenC
 }
 
 // Rare affix selection. Count: 1-6 based on ilvl (>70=4-6, >50=3-6, >30=2-6, else 1-6). Alternates prefix/suffix by seed LSB. Enforces 3-slot cap per type. 252 retry limit for duplicates. Applies name filtering from RarePrefix/RareSuffix tables.
+// 1.14d mac: 001c9421
 BOOL __fastcall ITEMMOD_RollRareAffixes(D2UnitStrc * pUnit, D2ItemGenContextStrc * pItemGenContext) {
     uint16_t wRarePrefix;
     uint16_t wRareSuffix;
@@ -1280,6 +1288,7 @@ BOOL __fastcall ITEMMOD_RollRareAffixes(D2UnitStrc * pUnit, D2ItemGenContextStrc
 }
 
 // Returns the book-table index for a scroll or tome item. Fetches the global book table via TXT_Books_GetTableInfo; looks up the item's class code in that table, matching either the book code (nParam==0) or the scroll code (nParam!=0). Returns the matched index, or the total book count if not found, or -1 if the table is null.
+// 1.14d mac: 001c97d4
 int32_t __fastcall ITEMMOD_GetScrollBookIndex(D2UnitStrc * pUnit, int32_t bMatchScrollCode) {
     uint32_t nItemTxtIdx;
     D2BooksTableStrc* pBookTableInfo = D2Common::DATATBLS::ItemTbls::TXT_Books_GetTableInfo();
@@ -1489,6 +1498,7 @@ BOOL __stdcall ITEMMOD_GenerateLegacySetItem(D2UnitStrc * pItem) {
 // Called by ITEM_ApplyQualityAndAffixes for QUALITY_SET: when the item version
 // (ITEM_GetItemData_wItemVersion) is non-zero returns ITEMMOD_GenerateSetItem, otherwise
 // ITEMMOD_GenerateUniqueItem. It makes no magic item.
+// 1.14d mac: 001c984b
 BOOL __fastcall ITEMMOD_GenerateSetOrUniqueVersioned(D2UnitStrc * pUnit, D2ItemGenContextStrc * pItemGenContext) {
     BOOL BVar1;
     uint16_t wItemVersion = D2Common::ITEMS::Items::ITEM_GetItemData_wItemVersion(pUnit);
@@ -1569,6 +1579,7 @@ static BOOL __thiscall ITEMMOD_GenerateQualityItem(D2UnitStrc * pUnit, D2ItemGen
 // ITEMMOD_GenerateQualityItem(pUnit, pItemGenContext): rolls a superior-quality mod row from
 // QualityItems.txt. Callers: ITEM_ApplyQualityAndAffixes case QUALITY_SUPERIOR and
 // ITEM_FallbackToSuperiorQuality. It applies no set affixes.
+// 1.14d mac: 001c9cd1
 BOOL __fastcall ITEMMOD_RollSuperiorQualityMods(D2UnitStrc * pUnit, D2ItemGenContextStrc * pItemGenContext) {
     D2Common::ITEMS::Items::ITEM_GetItemData_wItemVersion(pUnit);
     BOOL BVar1 = ITEMMOD_GenerateQualityItem(pUnit, pItemGenContext);
@@ -1576,6 +1587,7 @@ BOOL __fastcall ITEMMOD_RollSuperiorQualityMods(D2UnitStrc * pUnit, D2ItemGenCon
 }
 
 // Applies the "crude/low-quality" item modifier to an item unit. Picks a random LowQualityItems.txt entry (via seed modulo) and stores it as the item file index. If the item has durability, sets durability/maxdurability to roughly one-third of base Items.txt durability (randomized). Then degrades combat stats to 75% (0x4b/100): armorclass for armor; min/max/secondary damage for weapons, plus throw min/max damage for throwables. Mutates the unit's stats in place; returns FALSE when the tables are missing or the item is neither weapon nor armor, else TRUE (asm: XOR EAX,EAX / MOV EAX,[EBP-4]).
+// 1.14d mac: 001c9e53
 BOOL __fastcall ITEMMOD_ApplyCrudeQuality(D2UnitStrc * pUnit, D2ItemGenContextStrc * pItemGenContext) {
     uint32_t nClassId;
     int32_t nStatValue;
@@ -1684,6 +1696,7 @@ BOOL __fastcall ITEMMOD_ApplyCrudeQuality(D2UnitStrc * pUnit, D2ItemGenContextSt
 }
 
 // Applies "Low Quality" (Crude/Cracked/etc.) item generation. Picks a random low-quality prefix index from LowQualityItems.txt (via the item's seed) and stores it as the item file index. If the item has durability, sets durability/maxdurability to roughly a third of base (with a random partial-durability roll). For weapons, scales min/max (and secondary, and throwable min/max) damage to 75% (0x4b/100) with floors; for armor, scales armorclass to 75%. Finally applies staff-skill mods via StaffMod. Mutates the item unit's stats in place; returns FALSE when the tables are missing or the item is neither weapon nor armor, else TRUE (asm: XOR EAX,EAX / MOV EAX,[EBP-4]).
+// 1.14d mac: 001ca1ec
 BOOL __fastcall ITEMMOD_ApplyCrudeQualityClassic(D2UnitStrc * pUnit, D2ItemGenContextStrc * pItemGenContext) {
     uint32_t nClassId;
     int32_t nStatValue;
@@ -1800,6 +1813,7 @@ BOOL __fastcall ITEMMOD_ApplyCrudeQualityClassic(D2UnitStrc * pUnit, D2ItemGenCo
     return bResult;
 }
 
+// 1.14d mac: 001ca59b
 BOOL __fastcall ITEMMOD_ApplyCrudeQualityVersioned(D2UnitStrc * pUnit, D2ItemGenContextStrc * pItemGenContext) {
     BOOL BVar1;
     uint16_t nVersion = D2Common::ITEMS::Items::ITEM_GetItemData_wItemVersion(pUnit);

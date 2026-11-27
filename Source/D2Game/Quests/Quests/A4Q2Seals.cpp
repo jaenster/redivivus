@@ -66,6 +66,7 @@ namespace D2Game::Quests::QUESTS {
 D2QuestDataStrc * __fastcall GetQuestDataByQuestNoInternal(::SGAMEDATA * pGame, eD2QuestsInternal eQuestNoInternal);
 void __fastcall FindSpawnableLocation(struct D2RoomStrc * pRoom, POINT * pPoint, uint32_t nScanRadius, int32_t neCollisionFlags, struct D2RoomStrc * * pRoomsNear, int32_t nMaxTries, int32_t nSearchIterations);
 
+// 1.14d mac: 0023756f
 static void CreateSealGlow(D2ObjectOperateFnArg * pOperateArg, POINT * pPoint, int32_t nSealIndex) {
     D2RoomStrc* pVictimRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pOperateArg->sArg.pVictim), pPoint->x, pPoint->y);
     if (!pVictimRoom) {
@@ -86,6 +87,7 @@ static void CreateSealGlow(D2ObjectOperateFnArg * pOperateArg, POINT * pPoint, i
     A4Q2::OBJOP_A4Q2_DiabloSealActivateKillChaos(pOperateArg);
 }
 
+// 1.14d mac: 00237509
 BOOL __fastcall OBJOP_A4Q2_DiabloSealCreateGlow1(D2ObjectOperateFnArg * pOperation) {
     D2QuestDataA4Q2Strc* pA4Q2Data;
     POINT* pGlowCoord;
@@ -106,6 +108,7 @@ BOOL __fastcall OBJOP_A4Q2_DiabloSealCreateGlow1(D2ObjectOperateFnArg * pOperati
     return 0;
 }
 
+// 1.14d mac: 002376ed
 BOOL __fastcall OBJOP_A4Q2_DiabloSealCreateGlow2(D2ObjectOperateFnArg * pOperation) {
     D2QuestDataA4Q2Strc* pA4Q2Data;
     POINT* pCoord;
@@ -126,6 +129,7 @@ BOOL __fastcall OBJOP_A4Q2_DiabloSealCreateGlow2(D2ObjectOperateFnArg * pOperati
     return 0;
 }
 
+// 1.14d mac: 00237753
 BOOL __fastcall OBJOP_A4Q2_DiabloSealCreateGlow3(D2ObjectOperateFnArg * pOperation) {
     D2QuestDataA4Q2Strc* pA4Q2Data;
     POINT* pCoord;

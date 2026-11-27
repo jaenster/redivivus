@@ -70,6 +70,7 @@ static int gaNPCSpokenBitIndexMap_1__0_[35][2] = { 0 }; D2_STATIC_GUARD(gaNPCSpo
 
 namespace D2Game::PLAYER::PlayerIntro {
 
+// 1.14d mac: 001fb649
 void __fastcall PLAYER_SetSpokenWithNPC(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, int32_t nMonStatsId) {
     D2UnitDataPlayerInteractedNPCStrc* pInteractedNPCs = D2Common::Units::GetPlayerData(pUnit)->pInteractedNPCs[pGame->nDifficulty];
     int nBitIndex;
@@ -91,6 +92,7 @@ void __fastcall PLAYER_SetSpokenWithNPC(D2UnitStrc * pUnit, ::SGAMEDATA * pGame,
     Fog::BitBuffer::SetBitAtOffset((char*)pInteractedNPCs->pIntro->pBuffer, nBitIndex);
 }
 
+// 1.14d mac: 001fb6a1
 BOOL __fastcall PLAYER_CheckIfSpokenWithNPC(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, int32_t nMonStatsId) {
     D2UnitDataPlayerInteractedNPCStrc* pInteractedNPCs = D2Common::Units::GetPlayerData(pUnit)->pInteractedNPCs[pGame->nDifficulty];
     int nBitIndex;
@@ -112,6 +114,7 @@ BOOL __fastcall PLAYER_CheckIfSpokenWithNPC(D2UnitStrc * pUnit, ::SGAMEDATA * pG
     return Fog::BitBuffer::CheckBitAtOffset((char*)pInteractedNPCs->pIntro->pBuffer, nBitIndex);
 }
 
+// 1.14d mac: 001fb6f9
 void __fastcall INTRONPC_SetSpokenWithNPC_Intro2(D2UnitDataPlayerInteractedNPCStrc * pInteractedNPCs, int32_t nMonStatsId) {
     int nBitIndex;
     for (int i = 0; i < gnNPCSpokenBitIndexMapCount; i++) {
@@ -125,6 +128,7 @@ found:
     Fog::BitBuffer::SetBitAtOffset((char*)pInteractedNPCs->pIntro2->pBuffer, nBitIndex);
 }
 
+// 1.14d mac: 001fb73f
 BOOL __fastcall INTRONPC_CheckIfSpokenWithNPC_Intro2(D2UnitDataPlayerInteractedNPCStrc * pInteractedNPCs, int32_t nMonStatsId) {
     int nBitIndex;
     for (int i = 0; i < gnNPCSpokenBitIndexMapCount; i++) {
@@ -138,6 +142,7 @@ found:
     return Fog::BitBuffer::CheckBitAtOffset((char*)pInteractedNPCs->pIntro2->pBuffer, nBitIndex);
 }
 
+// 1.14d mac: 001fb785
 void __fastcall PLAYER_UnsetSpokenWithNPC_Intro2(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nMonStatsId) {
     D2UnitDataPlayerInteractedNPCStrc* pInteractedNPCs = D2Common::Units::GetPlayerData(pUnit)->pInteractedNPCs[pGame->nDifficulty];
     int nBitIndex;
@@ -159,24 +164,28 @@ void __fastcall PLAYER_UnsetSpokenWithNPC_Intro2(::SGAMEDATA * pGame, D2UnitStrc
     Fog::BitBuffer::UnsetBitAtOffset((char*)pInteractedNPCs->pIntro2->pBuffer, nBitIndex);
 }
 
+// 1.14d mac: 001fb7de
 void __fastcall PLAYERINTRO_CopyIntroToBuffer(D2UnitDataPlayerInteractedNPCStrc * pInteractedNPC, char * pDest) {
     uint32_t* pSrcBuf = (uint32_t*)pInteractedNPC->pIntro->pBuffer;
     *(uint32_t*)pDest = *pSrcBuf;
     *(uint32_t*)(pDest + 4) = pSrcBuf[1];
 }
 
+// 1.14d mac: 001fb807
 void __fastcall PLAYERINTRO_CopyIntro2ToBuffer(D2UnitDataPlayerInteractedNPCStrc * pInteractedNPC, uint8_t * pDest) {
     uint32_t* pSizePosData = (uint32_t*)pInteractedNPC->pIntro2->pBuffer;
     *(uint32_t*)pDest = *pSizePosData;
     *(uint32_t*)(pDest + 4) = pSizePosData[1];
 }
 
+// 1.14d mac: 001fb831
 void __fastcall PLAYERINTRO_CopyIntroData8Bytes(D2UnitDataPlayerInteractedNPCStrc * pInteractedNpc, uint32_t * pdwSrc) {
     uint8_t* pDstBuf = pInteractedNpc->pIntro->pBuffer;
     *(uint32_t*)pDstBuf = *pdwSrc;
     *(uint32_t*)(pDstBuf + 4) = pdwSrc[1];
 }
 
+// 1.14d mac: 001fb85a
 void __fastcall PLAYERINTRO_CopyIntroDataIndirect(D2UnitDataPlayerInteractedNPCStrc * pSrc, uint32_t * pdwIntroData) {
     uint32_t* pDst = (uint32_t*)pSrc->pIntro2->pBuffer;
     *pDst = *pdwIntroData;
@@ -184,6 +193,7 @@ void __fastcall PLAYERINTRO_CopyIntroDataIndirect(D2UnitDataPlayerInteractedNPCS
 }
 
 // @sourcefile .\PLAYER\PlrIntro.cpp
+// 1.14d mac: 001fb884
 D2UnitDataPlayerInteractedNPCStrc * __fastcall STRUCT_AllocPlayerInteractedNPC(::SGAMEDATA * pGame) {
     D2UnitDataPlayerInteractedNPCStrc* pInteractedNPC = D2_NEW_POOL_AT(pGame->pMemoryPool, D2UnitDataPlayerInteractedNPCStrc, ".\\PLAYER\\PlrIntro.cpp", 0xc4);
     D2BitBufferStrc* pBitBuf = D2_NEW_POOL_AT(pGame->pMemoryPool, D2BitBufferStrc, ".\\PLAYER\\PlrIntro.cpp", 0xc5);
@@ -200,6 +210,7 @@ D2UnitDataPlayerInteractedNPCStrc * __fastcall STRUCT_AllocPlayerInteractedNPC(:
 }
 
 // @sourcefile .\PLAYER\PlrIntro.cpp
+// 1.14d mac: 001fb9ca
 void __fastcall PLAYERDATA_FreeInteractedNPCs(::SGAMEDATA * pGame, D2UnitDataPlayerInteractedNPCStrc * pInteractedNPCs) {
     if (pInteractedNPCs->pIntro) {
       D2_FREE_POOL_AT(pGame->pMemoryPool, pInteractedNPCs->pIntro->pBuffer, ".\\PLAYER\\PlrIntro.cpp", 0xdb);

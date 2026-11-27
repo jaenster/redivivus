@@ -12,6 +12,7 @@
 namespace D2Game::Quests::QUESTS::Quest37 {
 
 // Quest 37 (Anya rescue / Prison of Ice) NPC-gossip callback. When a specific NPC (monster stats IDs 0x93, 0x94, 0x96, or 0x9a — Act V town NPCs) delivers one of two expected message indices, marks that NPC as spoken-with via PLAYER_SetSpokenWithNPC to advance the intro-dialogue tracking.
+// 1.14d mac: 00217247
 void __fastcall Q37_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int32_t nMonStatsId = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
     uint16_t nMessageIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
@@ -40,6 +41,7 @@ void __fastcall Q37_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // A5Q4 "Betrayal of Harrogath" gossip callback (index 0): fired when a player interacts with an NPC companion (Qual-Kehk 0x93, Malah 0x94, Larzuk 0x96, Nihlathak 0x9a, or the ghost variants). Maps the target NPC class ID to an expected player class; if the player has not yet spoken with this NPC (PLAYER_CheckIfSpokenWithNPC), queues a class-matched (flag=1) or generic (flag=0) gossip message via AddGossipMessageOnMonster. Returns without action for unrecognized NPCs or already-spoken interactions.
+// 1.14d mac: 00217324
 void __fastcall Q37_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int nCharClass;
     int nMonStatsId;
@@ -94,11 +96,13 @@ void __fastcall Q37_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nMonStatsId, 0);
 }
 
+// 1.14d mac: 002173f8
 bool __fastcall Q37_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode) {
     *pbyStatusCode = '\0';
     return false;
 }
 
+// 1.14d mac: 00217405
 bool __fastcall Q37_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     ::SGAMEDATA* pGame = pQuestData->pGame;
     D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
@@ -114,6 +118,7 @@ bool __fastcall Q37_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 }
 
 // InitData for quest slot 37, an act-intro "ActIntroduced" pseudo-quest (nQuestIdReal=QUEST_ActIntroduced). Zeroes the 0x3c state-handler table, installs state-0 handler Q37_Callback_00 (NPC gossip while pending) and state-0xb handler Q37_Callback_11 (dialog complete), points pNpcMessages at aNpcGossipData, marks the slot active, and wires Q37_StatusFilter/Q37_ActiveFilter. Not a journaled player quest.
+// 1.14d mac: 002171c0
 void __fastcall Q37_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->sStateFunctions.fpQuestStateHandler[0] = Q37_Callback00_NpcActivate;

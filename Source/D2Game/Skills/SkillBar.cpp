@@ -34,6 +34,7 @@
 namespace D2Game::SKILLS::SkillBar {
 
 // Server-side skill start function for skill index 32 (likely Fist of the Heavens or similar melee/charge). Validates skill and retrieves the current attack target via GetTargetEx; returns 0 if target is in town. Applies an attack-rate buff from calc[2], performs a to-hit check via SKILLS_CalcToHit + DAMAGE_CalculateHitCheck, builds a D2DamageStrc with damage/conversion from calc[0]/calc[3], calls DAMAGE_CalculateAndApplyDamage, adds a combat-queue bonus from calc[1], and applies/creates the skill's aura state via D2SetAurastatsFromSkills.
+// 1.14d mac: 0024ec3b
 BOOL __fastcall SKILLBAR_SrvStFn32_StrikeWithAuraState(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     D2SkillsTxt* pSkillsTxt = ((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : 0;
@@ -108,6 +109,7 @@ BOOL __fastcall SKILLBAR_SrvStFn32_StrikeWithAuraState(::SGAMEDATA * pGame, D2Un
     return 1;
 }
 
+// 1.14d mac: 0024efc5
 BOOL __fastcall SKILLBAR_SrvStFn33_TargetRevivableCorpse(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pUnit_00 = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     if (!pUnit_00) {
@@ -179,6 +181,7 @@ static uint32_t __stdcall SKILLAMZ_CreateLightningFuryBolts(::SGAMEDATA * pGame,
 }
 
 // Find Potion SrvDoFunc. Gets the target corpse, validates it is revive-eligible and not already flagged STATE_corpse_noselect, marks it no-select, rolls the unit seed mod 100 against calc[0] drop chance, and on success resolves a potion item code via SKILLAMZ_CreateLightningFuryBolts then drops it via SKILLS_DropItemByCode. Returns 1 if the corpse was processed.
+// 1.14d mac: 0024f016
 BOOL __fastcall Skills_SrvDoFunc_069_FindPotion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -214,6 +217,7 @@ BOOL __fastcall Skills_SrvDoFunc_069_FindPotion(::SGAMEDATA * pGame, D2UnitStrc 
 }
 
 // Applies a War Cry aura buff to pUnit from pCaster. Computes duration via auralencalc, allocates or reuses the aura stat list keyed on aurastate, sets its expiry frame and expire callback (DefaultExpireFunction), attaches it to pUnit, toggles state GFX, schedules a game event (0xC) for expiry, populates aura stats via D2SetAurastatsFromSkills, and refreshes passives/pets.
+// 1.14d mac: 0024f240
 void __fastcall SKILLBAR_ApplyWarCryBuff(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pCaster, eD2Skills eSkill, int32_t nSkillLevel) {
     if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
       return;
@@ -261,6 +265,7 @@ void __fastcall SKILLBAR_ApplyWarCryBuff(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     SkillsServer::SKILLS_UpdatePassivesAndPets(pUnit);
 }
 
+// 1.14d mac: 0024f42d
 BOOL __fastcall Skills_SrvDoFunc_068_WarCry(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
@@ -281,6 +286,7 @@ BOOL __fastcall Skills_SrvDoFunc_068_WarCry(::SGAMEDATA * pGame, D2UnitStrc * pU
     return 0;
 }
 
+// 1.14d mac: 0024f4eb
 BOOL __fastcall Skills_SrvDoFunc_070_DoubleSwing(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t nSeqFlags;
     D2UnitStrc* pTargetUnit = UNIT::SUnit::GetTargetEx(pGame, pUnit);
@@ -310,6 +316,7 @@ BOOL __fastcall Skills_SrvDoFunc_070_DoubleSwing(::SGAMEDATA * pGame, D2UnitStrc
     return 1;
 }
 
+// 1.14d mac: 0024f5d2
 BOOL __fastcall SKILLBAR_Callback_FindTargetForTaunt(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     int eMonsterUnitType;
     uint32_t eMonsterQuestId;
@@ -337,6 +344,7 @@ BOOL __fastcall SKILLBAR_Callback_FindTargetForTaunt(::SGAMEDATA * pGame, D2Unit
 
 // Server do-func 71: Taunt (Barbarian). Reads the skill's aura stats and target state from skills.txt, applies them to the target via SKILLNEC_ApplyCurseToUnit and forces the target monster's AI to re-evaluate.
 // Slot from skills.txt srvdofunc 71.
+// 1.14d mac: 0024f638
 BOOL __fastcall Skills_SrvDoFunc_071_Taunt(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -400,6 +408,7 @@ BOOL __fastcall Skills_SrvDoFunc_071_Taunt(::SGAMEDATA * pGame, D2UnitStrc * pUn
     return 1;
 }
 
+// 1.14d mac: 0024f911
 BOOL __fastcall SKILLBAR_SrvStFn34_FindItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     if (!pTarget) {
@@ -411,6 +420,7 @@ BOOL __fastcall SKILLBAR_SrvStFn34_FindItem(::SGAMEDATA * pGame, D2UnitStrc * pU
 }
 
 // Server do-func for Barbarian Find Item (skill 72). Validates the target corpse is selectable and not yet looted (STATE_corpse_noselect), rolls against calc[0] drop-chance, then draws a second RNG roll to select one of four gold-tier tiers (controlled by Param[0..3] thresholds), and calls BarbFindItemSkill to drop the gold. Returns TRUE on a successful drop attempt.
+// 1.14d mac: 0024f946
 BOOL __fastcall Skills_SrvDoFunc_072_FindItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -452,6 +462,7 @@ BOOL __fastcall Skills_SrvDoFunc_072_FindItem(::SGAMEDATA * pGame, D2UnitStrc * 
 }
 
 // Server do-func for Barbarian Double Throw (skill 74). Gets the active throwing weapon, reads its missile type, and spawns a missile via CreatingAMissile (or SKILLS_CreateMissileFromUnit for potion-type weapons). Applies to-hit (UNITSTAT_tohit) and damage-percent bonus (calc[0], UNITSTAT_damagepercent) stats to the created missile unit.
+// 1.14d mac: 0024fb08
 BOOL __fastcall Skills_SrvDoFunc_074_DoubleThrow(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nValue;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -486,6 +497,7 @@ BOOL __fastcall Skills_SrvDoFunc_074_DoubleThrow(::SGAMEDATA * pGame, D2UnitStrc
 }
 
 // Server-side do-function for Grim Ward (skill 75). Finds the Barbarian's current target corpse, validates it as revivable, locates a collision-free position near it, then selects the ward missile type based on MonStats2 size flags (large=srvmissilec, small=srvmissileb, normal=srvmissilea). Spawns the ward missile via CreatingMissile and marks the corpse with STATE_corpse_nodraw + STATE_corpse_noselect, adding it to the room update list.
+// 1.14d mac: 0024fcbe
 BOOL __fastcall Skills_SrvDoFunc_075_GrimWard(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     POINT sTargetPos;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -558,6 +570,7 @@ BOOL __fastcall Skills_SrvDoFunc_075_GrimWard(::SGAMEDATA * pGame, D2UnitStrc * 
 }
 
 // Generic server-side melee attack handler used by multiple Barbarian skills. Sets the target unit, calculates to-hit via SKILLS_CalcToHit, resolves hit/miss via DAMAGE_CalculateHitCheck, applies elemental damage conversion (EType/ConvPct from skills.txt), builds a D2DamageStrc, then calls DAMAGE_CalculateAndApplyDamage and DAMAGE_ProcessCombatQueueEntry. Stores hit result (1=hit, 0=miss) in skill param1.
+// 1.14d mac: 0024ffe0
 BOOL __fastcall SKILLBAR_SkillMeleeAttack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     D2SkillsTxt* pSkillsTxt = ((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : 0;
@@ -610,6 +623,7 @@ BOOL __fastcall SKILLBAR_SkillMeleeAttack(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // Server-side Frenzy skill stack accumulator. Each hit: allocates or retrieves the aura state stat list, resets its expiry timer (auralencalc frames from now), fires a game event, increments UNITSTAT_skill_frenzy capped at nSkillLvl, then recalculates aura stats via D2SetAurastatsFromSkills. No-ops if skill has no param1 or aurastate is invalid.
+// 1.14d mac: 002501e4
 int32_t __fastcall SKILLBAR_ApplyFrenzyStack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -654,6 +668,7 @@ int32_t __fastcall SKILLBAR_ApplyFrenzyStack(::SGAMEDATA * pGame, D2UnitStrc * p
     return 1;
 }
 
+// 1.14d mac: 00250443
 BOOL __fastcall Skills_SrvDoFunc_009_FrenzyMeleeHit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     if (!pTarget) {
@@ -679,6 +694,7 @@ BOOL __fastcall Skills_SrvDoFunc_009_FrenzyMeleeHit(::SGAMEDATA * pGame, D2UnitS
     return SKILLBAR_SkillMeleeAttack(pGame, pUnit, pTarget, eSkill, nSkillLvl);
 }
 
+// 1.14d mac: 002505b8
 void __fastcall SKILLBAR_StateCallback_Whirlwind(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * dwParam) {
     int32_t nRemoveFlag = 1;
     eD2States eExpireState = eState;
@@ -698,6 +714,7 @@ void __fastcall SKILLBAR_StateCallback_Whirlwind(D2UnitStrc * pUnit, eD2States e
 }
 
 // Server-side skill "start" function (srvstfunc 38): a charge/leap-to-target movement skill (e.g. War Cry / charge class). Validates eSkill against skills.txt and that the unit has the skill; resolves target/cursor position. If a melee target is already in range, queues client packet 0xA5 and force-attacks it. Otherwise sets the unit's dynamic path collision pattern/type, calculates a path toward the cursor, applies walk velocities, lands the unit at the final path point, registers collision there, sets uninterruptable + skill_move state, and stores the destination into the skill's Param1-4. Finally applies the skill's aurastate (if valid): updates state, sets an expiry-timed state via SetStateWithExpiryTime (SKILLBAR_StateCallback_Whirlwind callback), copies aura/passive stats and the modifier skill/level stats, and fires up to 3 auraevent handlers. Returns 1 on success, 0 on any validation/path failure (queuing 0xA5 to the client on failure).
+// 1.14d mac: 0025064b
 BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL bHasTargetPos;
     D2PathPointStrc* pPathPoints;
@@ -901,6 +918,7 @@ static int32_t __stdcall SKILLAMZ_CreatePlagueJavelinClouds(::SGAMEDATA * pGame,
 }
 
 // Cleans up a transport/charge-type skill on the caster: clears skill flags, removes the uninterruptable state, broadcasts packet 0xA5 (skill end), removes the temporary collision footprint at (nCollideX, nCollideY), and resets the dynamic path's collision type and pattern to the normal player/monster defaults. Also removes and frees any aura stat-list associated with the skill's aurastate.
+// 1.14d mac: 00250b0a
 void __fastcall SKILL_DeactivateAndRestoreCollision(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, D2SkillStrc * pSkill, eD2Skills eSkill, int32_t nCollideX, int32_t nCollideY) {
     D2Common::Skills::SKILL_SetFlags(pSkill, 0);
     UNIT::SUnit::SetUninterruptableState(pUnit, 0);
@@ -939,6 +957,7 @@ void __fastcall SKILL_DeactivateAndRestoreCollision(::SGAMEDATA * pGameStrc, D2U
 }
 
 // Server-side skill DoFunc 76 (Barbarian Leap Attack): runs on the landing frame. Reads the active skill's param1/param2 (leap destination); if either is zero, or the skill's done/landed flags are set, it deactivates the leap and restores the unit's collision. Otherwise, after a death/anim-mode check it sets up the player's landing animation and applies an area melee hit at the landing spot via SKILLS_FindNextUnitInAreaByGUID, looping over each affected target: rolls to-hit (DAMAGE_CalculateHitCheck), builds a D2DamageStrc from the SkillsTxt result/hit flags and calc[0] damage, applies damage, and processes the combat queue. Returns BOOL (1 if leap handled, 0 on missing skill row). __fastcall.
+// 1.14d mac: 00250c7e
 BOOL __fastcall Skills_SrvDoFunc_076_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -1018,6 +1037,7 @@ BOOL __fastcall Skills_SrvDoFunc_076_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // Server-side skill start function (index 39 in the SrvSt dispatch table). Resolves the skill's target, performs a to-hit check, applies damage (with optional energy-type conversion from pSkillsTxt), and if the skill has an aura-state, allocates or refreshes a timed stat-list for that state using calc[1] duration, then propagates aura stats via D2SetAurastatsFromSkills.
+// 1.14d mac: 002511be
 BOOL __fastcall SKILLBAR_SrvStFn39_Berserk(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     int32_t nExpireGameFrame;
@@ -1252,6 +1272,7 @@ static inline int GetGUIDInline(D2UnitStrc * pUnit) {
     return (int)(-1);
 }
 // Server-side skill StFunc 40: start/setup handler for a charge-leap movement skill (e.g. Leap/Charge). Validates the skill id and the unit's current skill. For player units it resolves the target/cursor position and validates it (SKILLBAR_CanTargetPosition / SKILLBAR_FindValidLeapTarget). For monster units it derives a leap-past destination from the target's position (or cursor) and finds free collision coordinates. It then reserves the destination room, adds a COLLIDE_PLAYER collision marker at the landing point, sets the unit uninterruptible + STATE_skill_move, and stores the destination X/Y (and target type/GUID for monsters) into the skill params with flag 0x80. Returns TRUE on success, FALSE if validation fails (clearing the current skill).
+// 1.14d mac: 00251552
 BOOL __fastcall SKILLBAR_SrvStFn40_Leap(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pTarget;
     BOOL nResult;
@@ -1353,6 +1374,7 @@ BOOL __fastcall SKILLBAR_SrvStFn40_Leap(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 }
 
 // Initialises the movement path for a transport-type skill (e.g. Leap, Charge start). Sets skill flags to 0x1101, zeros the collision type/pattern, reads destination coords from skill param1/param2, sets path type 9 (teleport-style), looks up run speed from MonStats or CharStats, sets path velocities, and triggers PATH_CalculatePath. Returns 1 on success, 0 if no dynamic path or no valid destination.
+// 1.14d mac: 00252499
 static BOOL __stdcall SKILL_InitTransportPath(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     if (!pDynamicPath) {
@@ -1433,6 +1455,7 @@ static BOOL __stdcall SKILLBAR_CalculateChargePath(::SGAMEDATA * pGame, int32_t 
 }
 
 // Called each server tick while a charging unit (player or monster) is en route to its charge destination. Reads target (nX, nY) from skill params 1/2. If the unit has reached the target: removes old collision, restores normal collision type and path type, fires UNITEVENTCALLBACK_ENDANIM, schedules a follow-up event, and sends a 0xA5 packet with the current skill ID. Special cases: Baal (monBaseId 0x4E) calls SKILLBAR_CalculateChargePath instead; Iron Golem (0x21C) adjusts sequence frame based on remaining distance. If not yet at target, advances the sequence frame (monsters) or resets the anim timer (players). Returns 1 when arrival is processed, 0 otherwise.
+// 1.14d mac: 00251f24
 static BOOL __stdcall SKILLBAR_UpdateLeap(::SGAMEDATA * pGame, D2SkillStrc * pSkill, D2UnitStrc * pUnit) {
     int nUnitX;
     int32_t nCollisionWidth;
@@ -1520,6 +1543,7 @@ static BOOL __stdcall SKILLBAR_UpdateLeap(::SGAMEDATA * pGame, D2SkillStrc * pSk
 }
 
 // Server do-func for Barbarian Leap Attack (skill 77). On the outbound leap (flag 0x80 set, 0x100 clear) delegates to SKILL_InitTransportPath. On arrival (flag 0x100 set), calls SKILLBAR_ArriveAtChargeTarget; if arrived and unit is a player, triggers ENDANIM event then applies AoE melee damage (calc[0] radius, hit class 9) via SKILLS_ApplyAreaDamage. Monster casters only reset skill flags.
+// 1.14d mac: 00251da1
 BOOL __fastcall Skills_SrvDoFunc_077_Leap(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL bArrived;
     D2DamageStrc sDamage;
@@ -1564,6 +1588,7 @@ BOOL __fastcall Skills_SrvDoFunc_077_Leap(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // Finds the next valid melee target for Whirlwind/Charge-type skills. First checks if the current target unit is still in melee range. Falls back to the unit stored in skill param3/param4 (type/GUID). If still not found, scans a melee-range-plus-four radius for any hostile unit via SKILLS_FindNextUnitInAreaByGUID. Stores the chosen target's type and GUID back into param3/param4 and returns the target, or NULL and sets param3=6 if none found.
+// 1.14d mac: 00252af6
 static D2UnitStrc * __stdcall SKILLBAR_AcquireNextTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
     if (!pSkill) {
       return nullptr;
@@ -1595,6 +1620,7 @@ static D2UnitStrc * __stdcall SKILLBAR_AcquireNextTarget(::SGAMEDATA * pGame, D2
 }
 
 // Server skill-start function for Barbarian skill index 41 (Leap Attack). Looks up the skill, finds a teleport destination via SKILL_FindTeleportPosition. If a valid position is found, marks a collision tile, sets the unit uninterruptable, stores destination coords in skill params 1-2, sets SKILL_MOVE state, and optionally stuns the target. If no teleport pos is found but a target is in melee range, forces a direct attack instead. Returns 1 on success, 0 if the skill is not present.
+// 1.14d mac: 002525d3
 BOOL __fastcall SKILLBAR_SrvStFn41_LeapAttack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t nDestY;
     D2SkillStrc* pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, eSkill);
@@ -1702,6 +1728,7 @@ static BOOL __stdcall SKILLBAR_WhirlwindHitCycle(::SGAMEDATA * pGame, eD2Skills 
 }
 
 // Server do-func for Barbarian Whirlwind (skill 78). State machine: if flag 0x100 clear and 0x80 set, initiates movement via SKILL_InitTransportPath; if flag 0x200 set, executes a hit cycle via SKILLBAR_WhirlwindHitCycle; otherwise clears to flag 0x1000. When flag 0x100 is set (arrived), calls SKILLBAR_ArriveAtChargeTarget then SKILLBAR_AcquireNextTarget — ending the spin if no target remains, or re-arming anim timer events for the next arc.
+// 1.14d mac: 00252786
 BOOL __fastcall Skills_SrvDoFunc_078_LeapAttack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillStrc* pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, eSkill);
     if (!pSkill) {

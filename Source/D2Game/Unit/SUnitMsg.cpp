@@ -169,6 +169,7 @@ static inline int GetClassIdInline(D2UnitStrc * pUnit) {
 }
 
 // Sets all base stats for a newly created player unit from CharStats.txt (str, dex, vit, energy, HP, mana, stamina at fixed-point *256, level=1, nextexp for level 1, attack/velocity/animrate=100). If nAct != 0, also raises the unit to gaStartingLevelByAct[nAct] via DAMAGE_SetUnitToLevel. The third argument is the act (both call sites pass D2Game::Game::Clients::GetAct(pClient)), not a character class.
+// 1.14d mac: 001faa79
 void __fastcall PLAYER_InitBaseStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t nAct) {
     if (nAct >= 5) {
       nAct = 4;
@@ -214,6 +215,7 @@ void __fastcall PLAYER_InitBaseStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit, ui
     SUnitDmg::DAMAGE_SetUnitToLevel(pGame, pUnit, gaStartingLevelByAct[nActIndex]);
 }
 
+// 1.14d mac: 001fb62c
 void __fastcall thunk_NET_D2GS_SERVER_Send_0x75_PlayerPartyInfo(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOtherUnit) {
     GAME::SCmd::NET_D2GS_SERVER_Send_0x75_UPDATEROSTER(pUnit, pOtherUnit);
 }
@@ -273,6 +275,7 @@ void __fastcall PLAYERSTATS_LevelUp(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     (**ppfnUpdateGameInfo)(pGame->nServerToken, szCharName, nCharClassId, nNewLevel);
 }
 
+// 1.14d mac: 001fb1e6
 static void PLAYER_AddEnergyStatPoints(D2UnitStrc * pUnit, int32_t nPoints) {
     if (!(nPoints && pUnit)) {
       return;
@@ -301,6 +304,7 @@ static void PLAYER_AddEnergyStatPoints(D2UnitStrc * pUnit, int32_t nPoints) {
 }
 
 // Spends nParam stat points into Vitality: decrements statpts by nParam, adds nParam to vitality, adds LifePerVitality*nParam*64 to maxhp (and to current HP if nParam>0, capped at maxhp), and adds StaminaPerVitality*nParam*64 to maxstamina (and stamina if nParam>0, capped). Uses CharStats.txt per-vitality multipliers.
+// 1.14d mac: 001fb387
 static void PLAYER_AddVitalityStatPoints(int32_t nPoints, D2UnitStrc * pUnit) {
     if (!(nPoints && pUnit)) {
       return;
@@ -339,6 +343,7 @@ static void PLAYER_AddVitalityStatPoints(int32_t nPoints, D2UnitStrc * pUnit) {
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_stamina, nMaxStat, 0);
 }
 
+// 1.14d mac: 001fb076
 void __fastcall ClearStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
       return;
@@ -368,6 +373,7 @@ void __fastcall ClearStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     PLAYER_AddVitalityStatPoints((uint32_t)pCharStats->vit - D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_vitality, 0), pUnit);
 }
 
+// 1.14d mac: 001fb585
 BOOL __fastcall PLAYER_AssignStatPoint(D2UnitStrc * pUnit, uint32_t eStatType) {
     int nStatPoints = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_statpts, 0);
     if (!nStatPoints) {
@@ -397,6 +403,7 @@ BOOL __fastcall PLAYER_AssignStatPoint(D2UnitStrc * pUnit, uint32_t eStatType) {
 }
 
 // Send all active buff/debuff states for unit to client. Iterates state flags, encodes state list via bit buffer with per-state stat lists using ItemStatCost config. Sends via 0xA8 opcode.
+// 1.14d mac: 0028440d
 void __fastcall PLAYER_SendStateListToClient(D2UnitStrc * pUnit, D2ClientStrc * pClient) {
     int nFlagDwordCount;
     uint32_t nSetBitIdx;
@@ -719,11 +726,13 @@ void __fastcall PLAYER_SendOverlayToClient(D2UnitStrc * pUnit, D2ClientStrc * pC
     GAME::SCmd::NET_D2GS_SERVER_Send_0x11_UnitDoOverlay(pClient, !pUnit ? 6 : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID, (uint16_t)nOverlayId);
 }
 
+// 1.14d mac: 00284c80
 void __fastcall SendRemoveObject(D2UnitStrc * pItem, D2ClientStrc * pClient) {
     GAME::SCmd::NET_D2GS_SERVER_Send_0x0A_REMOVEUNIT(pClient, 10, (eD2UnitType)(uint8_t)(char)pItem->eUnitType, pItem->nUnitGUID);
 }
 
 // Sends a unit's hover-text (name tag) to a specific client. If the unit has a D2HoverTextStrc, checks whether the viewing player has hostile/party relationship flags; if allowed, formats a 0x26 chat packet with language code and copies the hover message string. If the unit has no hover text, falls back to sending a 0x76 unit-type/GUID packet to clear the hover display.
+// 1.14d mac: 002842c0
 void __fastcall PLAYER_SendHoverTextToClient(D2UnitStrc * pUnit, D2ClientStrc * pClient) {
     int _byUnitTypeFallback;
     uint32_t nLangCodeOrFlags;
@@ -799,6 +808,7 @@ void __fastcall UNITMSG_SendSoundPacketToClient(D2UnitStrc * pUnit, D2ClientStrc
 }
 
 // @sourcefile .\UNIT\SUnitMsg.cpp
+// 1.14d mac: 00284d1a
 void __fastcall UnitQueuePacket0x99(D2UnitStrc * pUnit, int32_t nSkillId, uint8_t byArg1, uint8_t byArg2, uint32_t dwTargetGUID, uint8_t bParam)
 {
     D2PoolManagerStrc* pSyncPool = !pUnit ? nullptr : pUnit->pMemory;
@@ -825,6 +835,7 @@ void __fastcall UnitQueuePacket0x99(D2UnitStrc * pUnit, int32_t nSkillId, uint8_
 }
 
 // @sourcefile .\UNIT\SUnitMsg.cpp
+// 1.14d mac: 00284dd4
 void __fastcall UnitQueuePacket0x9A(D2UnitStrc * pUnit, int32_t nSkillId, uint8_t byArg1, uint16_t wArg2, uint16_t wTargetY, uint8_t bParam) {
     D2PoolManagerStrc* pAllocPool = !pUnit ? nullptr : pUnit->pMemory;
 
@@ -851,6 +862,7 @@ void __fastcall UnitQueuePacket0x9A(D2UnitStrc * pUnit, int32_t nSkillId, uint8_
 
 // Allocates a 0x14-byte D2SUnitMsgStrc with packet id 0x9E (stat update) and enqueues it on pUnit's message list. Payload: unit GUID (4B), stat id (1B), new stat value (4B). Asserts eUnitStat <= 0xFE. Calls ROOM_LinkUnitToUpdateList to mark unit dirty.
 // @sourcefile .\UNIT\SUnitMsg.cpp
+// 1.14d mac: 00284e66
 void __fastcall UnitQueuePacket0x9E(D2UnitStrc * pUnit, uint16_t eUnitStat, uint32_t dwStatValue) {
     D2PoolManagerStrc* pMemory;
     int nUnitGUID;
@@ -930,6 +942,7 @@ void __fastcall UnitQueuePacket0xA1(D2UnitStrc * pUnit, uint16_t nStatId, int32_
 }
 
 // @sourcefile .\UNIT\SUnitMsg.cpp
+// 1.14d mac: 00284f08
 void __fastcall UnitQueuePacket0xAB(D2UnitStrc * pUnit, uint8_t nHpPercent128) {
     D2SUnitMsgStrc* pMsg = (D2SUnitMsgStrc*)D2_ALLOC_POOL_AT(!pUnit ? nullptr : pUnit->pMemory, offsetof(D2SUnitMsgStrc, uArgs) + sizeof(D2SUnitMsgABStrc), ".\\UNIT\\SUnitMsg.cpp", 0x2d9);
     memset(pMsg, 0, offsetof(D2SUnitMsgStrc, uArgs) + sizeof(D2SUnitMsgABStrc));
@@ -950,6 +963,7 @@ void __fastcall UnitQueuePacket0xAB(D2UnitStrc * pUnit, uint8_t nHpPercent128) {
 
 // Allocates one 0x28-byte D2SUnitMsgStrc from pUnit->pMemory with packet id 0xA3 (unit message) and enqueues it on pUnit's message list (pMsgFirst/pMsgLast, +0xEC/+0xF0). First block carries wArg1/wArg2/byParam and the source unit's type+GUID; second block carries dwParam1/dwParam2 and the target unit (pTarget) type+GUID, or GUID -1 when pTarget is NULL. Marks pUnit dirty via ROOM_LinkUnitToUpdateList.
 // @sourcefile .\UNIT\SUnitMsg.cpp
+// 1.14d mac: 00284fa1
 void __fastcall SERVER_SendUnitMessagePacket(D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint16_t wArg1, uint16_t wArg2, uint32_t dwParam1, uint32_t dwParam2, uint8_t byParam) {
     int32_t nUnitGUID;
     D2PoolManagerStrc* pMemPool = 0;
@@ -1011,6 +1025,7 @@ void __fastcall SERVER_SendUnitMessagePacket(D2UnitStrc * pUnit, D2UnitStrc * pT
 
 // Clears STATE_skill_move on pUnit, allocates a D2SUnitMsgStrc (packet 0xA5) from the unit's memory pool, fills in the unit type, GUID, and wParam, appends it to the unit's message queue (pMsgFirst/pMsgLast), then calls ROOM_LinkUnitToUpdateList to schedule the unit for a network update.
 // @sourcefile .\UNIT\SUnitMsg.cpp
+// 1.14d mac: 0028509f
 void __fastcall UnitQueuePacket0xA5(D2UnitStrc * pUnit, int wSkillId) {
     D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_skill_move, 0);
     D2SUnitMsgStrc* pMsg = (D2SUnitMsgStrc*)D2_ALLOC_POOL_AT(!pUnit ? nullptr : pUnit->pMemory, offsetof(D2SUnitMsgStrc, uArgs) + sizeof(D2SUnitMsgA5Strc), ".\\UNIT\\SUnitMsg.cpp", 0x30f);
@@ -1032,6 +1047,7 @@ void __fastcall UnitQueuePacket0xA5(D2UnitStrc * pUnit, int wSkillId) {
 }
 
 // @sourcefile .\UNIT\SUnitMsg.cpp
+// 1.14d mac: 00285159
 void __fastcall SERVER_UnitQueuePacket0xA4(D2UnitStrc * pUnit, int32_t nClassId) {
     D2PoolManagerStrc* pMemory;
     if (!pUnit) {
@@ -1056,6 +1072,7 @@ void __fastcall SERVER_UnitQueuePacket0xA4(D2UnitStrc * pUnit, int32_t nClassId)
 }
 
 // @sourcefile .\UNIT\SUnitMsg.cpp
+// 1.14d mac: 002851bf
 void __fastcall SERVER_SendPacket0x23(D2UnitStrc * pMemory, int byTypeId, uint16_t wCoords, uint32_t dwData) {
     D2PoolManagerStrc* pAllocPool;
     if (!pMemory) {
@@ -1082,6 +1099,7 @@ void __fastcall SERVER_SendPacket0x23(D2UnitStrc * pMemory, int byTypeId, uint16
 }
 
 // Drains a unit's outbound message queue and sends each pending packet to the given client. Iterates pUnit->pMsgFirst, dispatching on nPacketId: 0x23=SetSkill, 0x99=UnitCastSkill (targeted), 0x9A=UnitCastSkill (XY), 0x9E=MercAttribute, 0xA1=MercExperience, 0xA3=SkillAuraStat, 0xA4=BaalWaves, 0xA5=StateSkillMove, 0xAB=NpcHeal (only if attacker can legally attack the unit).
+// 1.14d mac: 00283fb9
 void __fastcall SERVER_UnitQueuePacketSend(D2UnitStrc * pUnit, D2ClientStrc * pClient) {
     int32_t _byAttackerType;
     uint8_t byAttackerType;
@@ -1156,6 +1174,7 @@ void __fastcall SERVER_UnitQueuePacketSend(D2UnitStrc * pUnit, D2ClientStrc * pC
 }
 
 // @sourcefile .\UNIT\SUnitMsg.cpp
+// 1.14d mac: 00285234
 void __fastcall SERVER_UnitQueuePacketFree(D2UnitStrc * pUnit) {
     D2SUnitMsgStrc* pMessage = pUnit->pMsgFirst;
     if (!pMessage) {

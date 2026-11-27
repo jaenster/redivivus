@@ -406,6 +406,7 @@ void __stdcall thunk_QueryPerformanceFrequency_B() {
 }
 
 // @sourcefile .\GAME\Task.cpp
+// 1.14d mac: 001b4c2b
 void __stdcall TASK_FreeAllSlots() {
     D2LinkNodeStrc* pSlotLink;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0088caa8);
@@ -473,6 +474,7 @@ uint32_t __stdcall TASK_AllocateTaskQueue() {
 
 // Enqueues a game task: stamps pTaskNode->dwTimestamp with TASK_GetTimestamp(), stores dwCallbackId and dwUserData, then, under lpCriticalSection_0088caa8, links pTaskNode->sLink at the tail of the last slot in the gsTaskQueueListHead ring, under that slot's critical section, bumps the slot's nTaskCount and gnTaskQueueTailIndex, and moves the slot link to the ring tail. Returns 1 when queued, 0 when the ring was uninitialised (it only self-links the head) or empty. Halts on NULL links (lines 0x77, 0x78, 0x6c).
 // Provenance: asm 00564a00..00564b1b, EDI is the result (00564a49, 00564b15); RET 4.
+// 1.14d mac: 001b4d2b
 BOOL __fastcall TASK_EnqueueGameTask(D2TaskNodeStrc * pTaskNode, uint32_t dwCallbackId, uint32_t dwUserData) {
     BOOL bSuccess = 0;
     pTaskNode->dwTimestamp = TASK_GetTimestamp();
@@ -568,11 +570,13 @@ void __fastcall TASK_Dispatch(uint32_t nParam, D2TaskNodeStrc * pTaskNode) {
     TASK_GameTickCallback(nParam, pTaskNode);
 }
 
+// 1.14d mac: 00002e3e
 BOOL __fastcall TASK_ReturnTrue(D2UnitStrc * pItem) {
     return 1;
 }
 
 // Registers: pItem (ECX) is passed by the callers but not read.
+// 1.14d mac: 00002e48
 void __fastcall TASK_Nop(D2UnitStrc * pItem) {
 
 }

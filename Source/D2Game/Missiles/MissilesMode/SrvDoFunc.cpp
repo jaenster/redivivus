@@ -108,6 +108,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_2(D2UnitStrc * p) {
     return p->eUnitFlags >> 2 & 1;
 }
 
+// 1.14d mac: 001d6df5
 static BOOL __stdcall fpMissileDoSrvFuncHandler(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit1, D2MissilesTxt * pMissileTxt, D2UnitStrc * pUnit2) {
     bool bIsOwner;
     BOOL eState;
@@ -140,6 +141,7 @@ static BOOL __stdcall fpMissileDoSrvFuncHandler(::SGAMEDATA * pGame, D2UnitStrc 
     return 0;
 }
 
+// 1.14d mac: 001cc4b4
 int32_t __fastcall fpMissileSrvDoFuncData_MonsterOnly(D2UnitStrc * pUnit, D2MissileSrvCollideCtxStrc * pCtx) {
     if (pCtx && pCtx->pMissileTxt && pUnit && pUnit->eUnitType == UNIT_MONSTER) {
       BOOL nResult;
@@ -150,6 +152,7 @@ int32_t __fastcall fpMissileSrvDoFuncData_MonsterOnly(D2UnitStrc * pUnit, D2Miss
     return 0;
 }
 
+// 1.14d mac: 001cc44f
 int32_t __fastcall fpMissileSrvDoFuncData_PlayerOrAllyMonster(D2UnitStrc * pUnit, D2MissileSrvCollideCtxStrc * pCtx) {
     int32_t nUnitAlignment;
     BOOL bHitResult;
@@ -183,6 +186,7 @@ int32_t __fastcall fpMissileSrvDoFuncData_PlayerOrAllyMonster(D2UnitStrc * pUnit
     return 0;
 }
 
+// 1.14d mac: 001cc501
 int32_t __fastcall fpMissileSrvDoFuncData_PlayerOrMonster(D2UnitStrc * pUnit, D2MissileSrvCollideCtxStrc * pCtx) {
     if (pCtx && pCtx->pMissileTxt && pUnit && (int)pUnit->eUnitType >= 0 && (int)pUnit->eUnitType <= 1) {
       BOOL nHitResult;
@@ -193,6 +197,7 @@ int32_t __fastcall fpMissileSrvDoFuncData_PlayerOrMonster(D2UnitStrc * pUnit, D2
     return 0;
 }
 
+// 1.14d mac: 001cc54e
 int32_t __fastcall fpMissileSrvDoFuncData_MissileFlagCheck(D2UnitStrc * pUnit, D2MissileSrvCollideCtxStrc * pCtx) {
     if (pUnit && pUnit->eUnitType == UNIT_MISSILE) {
       int nClassId;

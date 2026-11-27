@@ -51,6 +51,7 @@ BOOL __fastcall Q31_NpcGossipHandler(::SGAMEDATA * pGame, D2UnitStrc * pUnit, vo
 }
 
 // A5Q1 status-icon filter: decides the quest-log icon/flag (*nUnknown) for Siege on Harrogath. If RewardAwaits(1) or JustCompleted(0xd): icon 3 (reward pending) unless Step0x05(5) reward-given -> icon 4. Else if intro shown and not Completed(0): CannotComplete(0xe) -> icon 0xc; otherwise default to nStateFlagPrev icon.
+// 1.14d mac: 0023ac11
 bool __fastcall Q31_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * pbyIconFlag) {
     *pbyIconFlag = '\0';
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_SiegeOnHaggorath, QUESTSTATE_RewardAwaits);
@@ -87,6 +88,7 @@ bool __fastcall Q31_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
 }
 
 // A5Q1 state-2 handler variant: when talking to Larzuk (class 0x1ff), flush deferred flags - if bLarzukTalked broadcast state 1 (intro/quest-given), if bRewardAccepted broadcast state 4 (reward-claimed). Clears each flag after.
+// 1.14d mac: 0023a82d
 void __fastcall Q31_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     if (!(pQuestArgs->pTarget && (short int)pQuestArgs->pTarget->nClassId == 0x1ff)) {
       return;
@@ -166,6 +168,7 @@ BOOL __fastcall Q31_SyncQuestProgress(::SGAMEDATA * pGame, D2UnitStrc * pUnit, v
 
 // A5Q1: Larzuk (NPC 0x1ff) dialog-select handler. Two menu strings: 0x4e6d = first conversation -> set in-memory stateFlag=2 and persist via Q31_SyncQuestProgress, then send gossip packet. 0x4e7a = "accept the reward": only if RewardAwaits(1) set -> mark bRewardAccepted, clear all Step bits, set Step0x05(5) (reward-given marker). If also JustCompleted(0xd) and stateFlag!=5, advance stateFlag to 5, chain the sequence filter, and broadcast state 0xd; finally register the player in the quest GUID list.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q1.cpp
+// 1.14d mac: 0023a8d2
 void __fastcall Q31_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2QuestDataA5Q1Strc* pA5Q1Data = pQuestData->pQuestSpecificData.pA5Q1;
     uint16_t nMessageIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
@@ -215,6 +218,7 @@ void __fastcall Q31_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // A5Q1 gossip-text builder (state 0). Picks which monster/NPC gossip line to add based on persisted state: if RewardAwaits(1) and NOT Step0x05(5) -> line 3 (claim reward); else if not Completed(0), progress<4 (or JustCompleted), intro shown -> map nStateFlag via table to a gossip index. Read-only on quest state.
+// 1.14d mac: 0023a70f
 void __fastcall Q31_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     // Static local variables (originally global data)
     static int32_t gdwQuestCallbackAddressQ31[6] = { -0x1, 0x0, 0x1, 0x2, 0x3, 0x4 }; D2_STATIC_GUARD(gdwQuestCallbackAddressQ31, "D2Game::Quests::QUESTS::A5Q1::Q31_Callback00_NpcActivate::gdwQuestCallbackAddressQ31");
@@ -250,11 +254,13 @@ void __fastcall Q31_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 }
 
 // A5Q1 state-10 (player-left) handler: removes the player's GUID from this quest's participant list. No quest-state bit changes.
+// 1.14d mac: 0023a45c
 void __fastcall Q31_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     QUESTGUID_RemovePlayerFromList(&pQuestData->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
 }
 
 // A5Q1: per-player "am I near Shenk's room?" check, run after Shenk dies. Skips if quest already Completed. Compares player's current room (and its adjacent rooms) against the saved Shenk-room GUID; if the player witnessed the kill, sets RewardAwaits(1) + JustCompleted(0xd) on their quest record so Larzuk will offer the socket reward. Iterator cb, returns 0.
+// 1.14d mac: 0024534e
 BOOL __fastcall Q31_CheckNearShenk(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2RoomStrc** pAdjacentRooms;
     uint32_t nAdjRoomCount;
@@ -300,6 +306,7 @@ BOOL __fastcall Q31_CheckNearShenk(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void
 }
 
 // A5Q1 party-member completion stamp: for each party member, if Siege not already Completed(0)/RewardAwaits(1)/JustCompleted(0xd) AND they are physically in Act 5, set RewardAwaits(1)+JustCompleted(0xd) so the whole party gets credit for Shenk's death.
+// 1.14d mac: 0023a1c1
 void __fastcall Q31_SetCompleteForPartyMember(::SGAMEDATA * pGameRaw, D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGameRaw->nDifficulty];
@@ -338,6 +345,7 @@ void __fastcall Q31_SetCompleteForPartyMember(::SGAMEDATA * pGameRaw, D2UnitStrc
 }
 
 // A5Q1: if this player just completed the quest (JustCompleted 0xd) and is in a party, propagate completion to every party member via Q31_SetCompleteForPartyMember.
+// 1.14d mac: 0024543e
 BOOL __fastcall Q31_PropagateCompleteToParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2BitBufferStrc* pQuestRecord = GetQuestBitBufferInline(pGame, pUnit);
     BOOL bJustCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_SiegeOnHaggorath, QUESTSTATE_JustCompleted);
@@ -353,6 +361,7 @@ BOOL __fastcall Q31_PropagateCompleteToParty(::SGAMEDATA * pGame, D2UnitStrc * p
 }
 
 // A5Q1: per-player, if not Completed(0)/RewardAwaits(1)/JustCompleted(0xd), set CannotCompleteQuestInGame(0xe) and push a quest-update packet (id 0x1f) - marks players who were not present for Shenk's kill as unable to finish this session.
+// 1.14d mac: 002454bb
 BOOL __fastcall Q31_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -372,6 +381,7 @@ BOOL __fastcall Q31_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, v
 }
 
 // A5Q1: per-player, if JustCompleted(0xd) play the quest-complete sound/event (SetupUpdateEvent 0x50). Iterator cb after Shenk's death.
+// 1.14d mac: 00245569
 BOOL __fastcall Q31_PlayCompletionSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_SiegeOnHaggorath, QUESTSTATE_JustCompleted);
@@ -383,6 +393,7 @@ BOOL __fastcall Q31_PlayCompletionSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 }
 
 // A5Q1 state-8 handler (Shenk dies). Caches Shenk's room, then fans out over all players/party: Q31_CheckNearShenk (set RewardAwaits/JustCompleted for nearby), Q31_PropagateCompleteToParty, Q31_SetCannotComplete (absent players), Q31_PlayCompletionSound; sets the shared quest-record JustCompleted(0xd), notifies players (event 0xf), and if progress<3 broadcasts state 3.
+// 1.14d mac: 0023a5df
 void __fastcall Q31_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     if (pQuestData->bIsNotIntroduction == '\0') {
       return;
@@ -410,6 +421,7 @@ void __fastcall Q31_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 
 // A5Q1 state-3 handler. On monster-gossip indices 0x6e..0x70 with intro shown: bump in-memory stateFlag to 3 and persist (Q31_SyncQuestProgress). On the Larzuk-leave path (index 0x6d): remove from GUID list; if stateFlag==2 and not Completed(0)/RewardAwaits(1), force stateFlag=3, and if prev==0 broadcast state 1, then re-persist.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q1.cpp
+// 1.14d mac: 0023a48b
 void __fastcall Q31_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int nOldLevel = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
     switch (pQuestArgs->sQuestArgs.sLevelChange.nNewLevel) {
@@ -442,6 +454,7 @@ void __fastcall Q31_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 }
 
 // A5Q1 active filter for Larzuk (class 0x1ff): returns true (quest is interactable) if RewardAwaits(1) and reward not yet given (Step0x05 unset), OR if intro shown, in-progress, and not Completed(0)/RewardAwaits(1). Read-only.
+// 1.14d mac: 0023a295
 bool __fastcall Q31_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     if (nTargetClassId == 0x1ff) {
       BOOL bQuestState;
@@ -467,6 +480,7 @@ bool __fastcall Q31_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 }
 
 // A5Q1 sequence filter: chains to the next quest's sequence filter (nSequenceQuestId). Only proceeds when this quest reached stateFlag 5 (reward given) or intro shown; validates the chained fn ptr before calling. No quest-state bit reads.
+// 1.14d mac: 0023ace1
 bool __fastcall Q31_SequenceFilter(D2QuestDataStrc * pQuestData) {
     if (pQuestData->nStateFlag != 5 && pQuestData->bIsNotIntroduction != '\0') {
       return true;
@@ -496,6 +510,7 @@ void __fastcall Unreferenced_005875d0(uint8_t * pData) {
 }
 
 // A5Q1: on game load, rebuild volatile in-memory state (nStateFlagPrev@+0xb, nStateFlag@+0xc) from the player's persisted quest-record bits. Priority: Completed(0)/FinishedPrev(0xf)/RewardAwaits(1) -> prev=5 (done); Step0x04(4) -> prev2,flag3; Step0x03(3) -> prev1,flag3; Step0x02(2) -> prev1,flag2; else if player has spoken with Larzuk-intro NPC 0x201 and intro shown -> flag=1. Decompiler shows nQuestIdReal via [ESI+0xe0].
+// 1.14d mac: 0023aad3
 void __fastcall Q31_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
@@ -546,6 +561,7 @@ void __fastcall Q31_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 
 // A5Q1 init: allocates the A5Q1-specific data block, wires up the state-handler table (Callback 0/2/3/8/10/11/13), the Larzuk NPC gossip message table (mon 0x1ff, string 0x4e6d), and the filter fn ptrs (status/active/sequence). Sets nQuestIdReal=Q35/SiegeOnHarrogath, nInitNo=4, nSequenceQuestId; zeroes all progress flags.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q1.cpp
+// 1.14d mac: 0023a34a
 void __fastcall Q31_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGame = pQuestData->pGame;
@@ -571,6 +587,7 @@ void __fastcall Q31_InitData(D2QuestDataStrc * pQuestData) {
 }
 
 // A5Q1: finalize Siege on Harrogath when the player accepts Larzuk's reward (socketing). Sets Completed(0), clears RewardAwaits(1), then reads FinishedInPreviousGame(0xf): if NOT carried over from a prior game, asserts the live quest-data record exists (server consistency check). Larzuk then adds sockets to one item.
+// 1.14d mac: 0023ad60
 void __fastcall Q31_ClaimReward(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -592,6 +609,7 @@ void __fastcall Q31_ClaimReward(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 }
 
 // A5Q1 object init fn 70: empty stub (no-op). Placeholder object initializer slot.
+// 1.14d mac: 0023ae0c
 void __fastcall Objects_InitFn70(D2ObjectInitFnArg * pInitArg) {
 
 }
@@ -603,6 +621,7 @@ static inline int GetGUIDInline(D2UnitStrc * pUnit) {
     return (int)(-1);
 }
 // A5Q1 object init fn 71: spawns Shenk the Overseer (monstats 0x1ff) once per quest at a valid location in the room, records his unit GUID + spawn-guard flags, and copies the preset DRLG map file for his AI. Guards via per-quest "already spawned" byte. No quest-record bit changes.
+// 1.14d mac: 0023ae11
 void __fastcall Objects_InitFn71_LarzukStandard(D2ObjectInitFnArg * pInitArg) {
     D2MapAIStrc** pMonsterMapAi;
     POINT sSpawnPos;
@@ -642,6 +661,7 @@ void __fastcall Objects_InitFn71_LarzukStandard(D2ObjectInitFnArg * pInitArg) {
 }
 
 // A5Q1 death hook: when a monster dies, if it is boss 0x2a (Shenk the Overseer) and quest progress<2 with intro shown, broadcast state 2 (Shenk slain) which drives the state-8 completion fan-out.
+// 1.14d mac: 0023af11
 void __fastcall Q31_OnOverseerDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_SiegeOnHaggorath);
     if (!(pQuestData && pQuestData->bIsNotIntroduction != '\0' && pQuestData->nStateFlagPrev < 2)) {

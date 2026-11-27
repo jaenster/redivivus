@@ -243,16 +243,19 @@ uint32_t __fastcall ReturnFirstArgument_Unref_00518b90(uint32_t * pdwParam) {
 }
 
 // Returns the squared Euclidean distance between two units' world positions. Reads static path coords for objects/items (unit types 2, 4-5) and dynamic path coords for monsters/players. Used by monster AI range checks.
+// 1.14d mac: 001a6e42
 int32_t __fastcall GetDistanceBetween(D2UnitStrc * pUnit, D2UnitStrc * pOther) {
     int nDiffX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit) - D2Common::Units::GetXPosFromDynamicPathUnitInline(pOther);
     int nDiffY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit) - D2Common::Units::GetYPosFromDynamicPathUnitInline(pOther);
     return nDiffY * nDiffY + nDiffX * nDiffX;
 }
 
+// 1.14d mac: 001a4088
 void __fastcall AI_Fn1_None(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
 
 }
 
+// 1.14d mac: 001a408d
 void __fastcall AI_Fn1_Idle(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     if (!pRoom) {
@@ -262,6 +265,7 @@ void __fastcall AI_Fn1_Idle(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamSt
     PlanNextAiMove(pGame, pUnit, 200);
 }
 
+// 1.14d mac: 001a43bd
 D2UnitStrc * __fastcall AI_FindClosestAllyOfSameType(int nUnusedCtx, D2UnitStrc * pUnit, D2UnitStrc * pCandidate, D2MonsterAiParameterStruct * ppBestResult) {
     int32_t nBaseIdCandidate;
     BOOL BVar1;
@@ -289,6 +293,7 @@ uint32_t __fastcall ReturnFirstArgument(uint32_t * pdwParam) {
     return *pdwParam;
 }
 
+// 1.14d mac: 001a44a6
 void __fastcall SetDwArgsIfNotNeg0x29a(D2AiGeneralStrc * pMonsterAi, int32_t dwArg0, int32_t dwArg1, int32_t dwArg2) {
     if (!pMonsterAi) {
       return;
@@ -307,6 +312,7 @@ void __fastcall SetDwArgsIfNotNeg0x29a(D2AiGeneralStrc * pMonsterAi, int32_t dwA
 }
 
 // EDX pMonStatsTxtRecord: callers pass TXT_MonStats_GetLine(pUnit->dwClassId); not read here.
+// 1.14d mac: 001a44dc
 uint32_t __fastcall AI_CanSwitchAi(D2UnitStrc * pUnit, D2MonStatsTxt * pMonStatsTxtRecord, int32_t nAiSpecialState, int32_t nParam) {
     uint32_t bCanSwitch;
     if (!nAiSpecialState) {
@@ -331,6 +337,7 @@ uint32_t __fastcall AI_CanSwitchAi(D2UnitStrc * pUnit, D2MonStatsTxt * pMonStats
 }
 
 // Assigns or switches the active AI function for a monster unit. Validates pGame/pUnit/pMonsterAiGeneral and that nFunctionId < 0x12. If the monster is in STATE_uninterruptable, halts with an error. If the current fpFunction differs from the table entry or there is no secondary function, resets dwArg0/1/2, calls ResetAiGeneralStrc, looks up the new AI entry, runs its fpInit initializer (populating a scratch D2AiParamStrc), then sets fpFunction to fpMain (or AI_Function1_Idle if null). If a valid secondary function exists, installs it instead without reinitializing.
+// 1.14d mac: 001a41b8
 void __fastcall AttachCorrectAiFunctionToMonster(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiGeneralStrc * pMonsterAiGeneral, int32_t nFunctionId) {
     D2AiListStrc* pAiListEntry;
     D2UnitStrc* pUnitOrErrCode = pUnit;
@@ -395,6 +402,7 @@ static inline int GetClassIdInline(D2UnitStrc * pUnit);
 static inline int GetGUIDInline(D2UnitStrc * pUnit);
 static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit);
 
+// 1.14d mac: 001a45b1
 BOOL __fastcall MonsterNeedsToOpenDoor(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2MonsterAiParameterStruct params;
     if (pAiParam->pMonStats->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
@@ -416,6 +424,7 @@ BOOL __fastcall MonsterNeedsToOpenDoor(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 }
 
 // AI tick for summoned monsters: verifies the owning unit is still alive and reachable. If owner is dead or not found, clears nOwnerGUID and returns 0. If alive and close (dist &lt; 2 and owner is player), walks toward owner; if distant (&gt;= 0x15) applies combat stat 7 and walks randomly around owner. Returns 1 when the summon moved, 0 otherwise.
+// 1.14d mac: 001a4689
 BOOL __fastcall SUMMON_CheckOwnerAlive(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     BOOL bOwnerDead;
     int32_t nMonsterId;
@@ -471,6 +480,7 @@ BOOL __fastcall SUMMON_CheckOwnerAlive(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 // 2. Door opening check (opens door, returns)
 // 3. Summon owner alive check (kills summon if owner dead)
 // Returns 1 to skip remaining AI stages
+// 1.14d mac: 001a47fe
 BOOL __fastcall CheckStunnedOpenDoorAndParent(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     bool bOpenedDoor;
     bool bOwnerAlive;
@@ -490,6 +500,7 @@ BOOL __fastcall CheckStunnedOpenDoorAndParent(::SGAMEDATA * pGame, D2UnitStrc * 
 }
 
 // Returns TRUE if pUnit is a boss or the Summoner (classId 0xFA), has a player target within distance 0x14, and has not yet fired its alert event (AI flag 0x10). On first trigger: fires event sound 0x10, sets the flag, and schedules the next AI move at offset 0x14.
+// 1.14d mac: 001a4980
 BOOL __fastcall MonsterIsBossHasCloseByPlayerTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     BOOL isBoss;
     int nClassId;
@@ -518,6 +529,7 @@ BOOL __fastcall MonsterIsBossHasCloseByPlayerTarget(::SGAMEDATA * pGame, D2UnitS
 }
 
 // Decides whether a boss monster should emergency-teleport. Returns 1 and triggers teleport if: unit is alive, AI flag 0x20 is set, a 40% seed roll passes, and either HP is below 30% or the monster is melee-type with its dwArg5 threshold exceeded — and a 15% secondary roll hits. Finds a valid non-town spawn position; if HP &lt; 30% and a 25% roll hits and STATE_preventheal is absent, heals the boss by level*256 HP (capped at max). Casts SKILL_MonTeleport to the new position. Returns 0 if any check fails.
+// 1.14d mac: 001a4a78
 BOOL __fastcall CheckIfBossNeedsToTeleport(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiGeneral) {
     if (UNIT::SUnit::CheckForModeZeroDeath(pUnit)) {
       return 0;
@@ -584,6 +596,7 @@ BOOL __fastcall CheckIfBossNeedsToTeleport(::SGAMEDATA * pGame, D2UnitStrc * pUn
 // 4. LOS test - if no LOS, find alternate target via ForEach
 // 5. Random wander if all fail
 // Returns 1 to abort AI execution if can't reach target
+// 1.14d mac: 001a4e6d
 BOOL __fastcall DistanceAndCollisionChecks(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t _bHasSpecialFlag;
     bool bHasSpecialFlag;
@@ -659,6 +672,7 @@ BOOL __fastcall DistanceAndCollisionChecks(::SGAMEDATA * pGame, D2UnitStrc * pUn
     return 0;
 }
 
+// 1.14d mac: 001a40c0
 void __fastcall HirelingFarWander(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     int nOwnerDist = pAiParam->nDistanceToTarget;
     D2UnitStrc* pTarget = pAiParam->pTarget;
@@ -694,6 +708,7 @@ void __fastcall HirelingFarWander(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
 }
 
 // Resolves the AI behavior descriptor (D2AiListStrc) a monster should run. If nFunctionId is nonzero it returns the override entry arrOverwriteAi[nFunctionId] — except for the switch-AI ids (10/11/12), which only apply when Units::CanSwitchAI(classId) permits, otherwise it falls through. Default path indexes arrGeneralAiList by the monster's MonStats 'AI' column (bounds-checked), falling back to entry 0. Returns a pointer into the static AI dispatch tables; never null.
+// 1.14d mac: 001a4538
 D2AiListStrc * __fastcall MONSTERAI_GetAiFunctionFromTable(D2UnitStrc * pUnit, int32_t nFunctionId) {
     // Static local variables (originally global data)
     static D2AiListStrc arrGeneralAiList[148] = {
@@ -1743,6 +1758,7 @@ D2AiListStrc * __fastcall MONSTERAI_GetAiFunctionFromTable(D2UnitStrc * pUnit, i
 // - AI_MULTILAYER (3): GetTarget_Hidden - LOS required
 // - AI_HIDDEN (4): GetTarget_Hidden no bail
 // Sets pAiParam->pTarget, nDistanceToTarget, bEngagedInCombat
+// 1.14d mac: 001a487a
 uint32_t __fastcall AiDecideTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2UnitStrc* pTarget;
     struct D2AiGeneralStrc* t2_c0 = pAiParam->pMonsterAiGeneral;
@@ -1777,6 +1793,7 @@ uint32_t __fastcall AiDecideTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
 // 3. DistanceAndCollisionChecks - pathfinding prereqs (melee range, LOS, boss teleport)
 // 4. Execute AI function pointer from MonStatsEx.pAiGeneral->fpFunction
 // Called every frame by MONSTER_EndOfFrameAiDispatch for active monsters
+// 1.14d mac: 001a5023
 void __fastcall MONSTERAI_ExecuteAiFunction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
     int nClassId;
     BOOL bNoTarget;
@@ -1847,6 +1864,7 @@ void __fastcall AI_Fn1_None_Unref_005b8740(::SGAMEDATA * pGame, D2UnitStrc * pUn
 }
 
 // Computes the weighted Chebyshev distance between two units, supporting both dynamic-path (moving) and static-path (object/warp) unit types. Reads X/Y coords via path accessors, takes abs(dx) and abs(dy), subtracts pUnit's size in both axes (clamped to 0), then returns (max + 2*min) / 2 — the standard D2 diagonal-weighted tile metric. Used by monster AI to range-check targets.
+// 1.14d mac: 001a5190 D2Game::Monster::AI::GetDistance
 int32_t __fastcall GetDistance(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     int nAbsDiffY;
     int nUnit2Coord;
@@ -1916,6 +1934,7 @@ int32_t __fastcall GetDistance(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
 }
 
 // Computes a weighted Chebyshev-style distance from pUnit to (nTargetX, nTargetY), subtracting half the unit's X size from each axis delta (clamped to 0). Returns (max*2 + min)/2, biasing toward the dominant axis. Used by monster AI to score approach distance accounting for unit collision size.
+// 1.14d mac: 001a5291
 int32_t __fastcall AI_GetWeightedDistanceToPoint(D2UnitStrc * pUnit, int32_t nTargetX, int32_t nTargetY) {
     int nDiffX;
     int nDiffY;
@@ -1967,6 +1986,7 @@ int32_t __fastcall AI_GetWeightedDistanceToPoint(D2UnitStrc * pUnit, int32_t nTa
     return nHalfSizeOffset / 2;
 }
 
+// 1.14d mac: 001a533d
 int32_t __fastcall GetCollisionDistanceFromXY(D2UnitStrc * pUnit, int32_t nTargetX, int32_t nY) {
     int nDiffX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit) - nTargetX;
     int nDiffY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit) - nY;
@@ -1983,6 +2003,7 @@ int32_t __fastcall GetCollisionDistanceFromXY(D2UnitStrc * pUnit, int32_t nTarge
     return (nDiffX + nDiffY * 2) / 2;
 }
 
+// 1.14d mac: 001a53d2
 int32_t __fastcall MONSTERAI_GetDistanceToCoords(D2UnitStrc * pUnit, int32_t nX, int32_t nY) {
     int nAbsDiffY;
     int nDiffX;
@@ -2018,6 +2039,7 @@ int32_t __fastcall MONSTERAI_GetDistanceToCoords(D2UnitStrc * pUnit, int32_t nX,
 }
 
 // Line-of-sight check for monster AI: returns BOOL (TRUE if pUnit has a clear shot at pTarget). Computes the tile distance via GetDistance and picks a perpendicular spread offset from a distance-indexed table (2 at dist<3, 3 mid, 4 far; default 3 beyond 0x18). Then runs three COLLISION_LOS collision tests via TestCollisionByCoordinates: the direct line to the target plus two offset rays (target +/- the perpendicular offset) so a target peeking past a wall corner still counts as hittable. Returns FALSE on null args (still wrapped through Fog::Debug::GuardStack). Read-only; no game-state mutation.
+// 1.14d mac: 001a5470
 BOOL __fastcall TestIfMonsterCanHitTarget(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     int nUnitCoord;
     BOOL bHasLOS;
@@ -2149,6 +2171,7 @@ int __fastcall Unreferenced_005dc840(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 001a58e5
 D2UnitStrc * __fastcall MONSTERAI_FindNearestAllyCallback(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOther, D2AiNearbyAllyScanStrc * pScan) {
     BOOL _bIsDead;
     uint32_t _bCanAttack;
@@ -2182,6 +2205,7 @@ D2UnitStrc * __fastcall MONSTERAI_FindNearestAllyCallback(::SGAMEDATA * pGame, D
     return 0;
 }
 
+// 1.14d mac: 001a5955
 D2UnitStrc * __fastcall AI_ForEachFn04_FindDyingMonster(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOther, uint32_t * test) {
     if ((pOther ? pOther->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return nullptr;
@@ -2194,6 +2218,7 @@ D2UnitStrc * __fastcall AI_ForEachFn04_FindDyingMonster(::SGAMEDATA * pGame, D2U
     return (uint32_t)nCallbackResult < *test ? (D2UnitStrc*)pOther : nullptr;
 }
 
+// 1.14d mac: 001a6cdc
 uint32_t __fastcall MONSTERAI_GetThreatLevel(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return 0;
@@ -2220,6 +2245,7 @@ uint32_t __fastcall MONSTERAI_GetThreatLevel(D2UnitStrc * pUnit) {
 }
 
 // Validates that a monster (pUnit) may legally target pTarget. Checks: both are monsters/players, neither is dead, target's room is not a town room, target has UNITFLAG_CANBEATTACKED, and if target is invisible: player invis targets succeed only on melee range or a 50% seed roll; monster invis targets are blocked unless in melee range. Falls through to UNITS_CheckIfCanAttackTarget.
+// 1.14d mac: 001a6d32
 static uint32_t __stdcall MONSTERAI_CanTargetUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     uint32_t _bAttackable;
     bool bAttackable;
@@ -2303,6 +2329,7 @@ static uint32_t __stdcall MONSTERAI_IsValidTarget(::SGAMEDATA * pGame, D2UnitStr
 }
 
 // ForEach callback used during AI target scanning. For each candidate pOther unit: if it is a valid attackable player/monster (alive, TARGETABLE flag set, can-attack check passes), records it in ppResults as a preferred (threat>=2 → ppResults[0]/[1]) or secondary (ppResults[5]/[6]) target when within distance ppResults[3]/[6] respectively, skipping if already blocked by LOS (TestCollisionWithUnit). If the unit fails those checks but is an aligned monster with nAiFlags bit 3 set, checks grid index against ppResults[4] and clears ppResults[2] on match (pack-leader slot invalidation). Always returns 0.
+// 1.14d mac: 001a5993
 D2UnitStrc * __fastcall AI_ForEachFn05_ScanTargetsByThreat(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOther, D2AiThreatScanStrc * pScan) {
     BOOL _bIsDead;
     uint32_t _bCanAttack;
@@ -2362,6 +2389,7 @@ D2UnitStrc * __fastcall AI_ForEachFn05_ScanTargetsByThreat(::SGAMEDATA * pGame, 
     return 0;
 }
 
+// 1.14d mac: 001a5b37
 D2UnitStrc * __fastcall AI_ForEachFn06_NearestTargetByThreat(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOther, D2MonsterAiParameterStruct * ppResults) {
     uint32_t nThreatLevel = MONSTERAI_CanTargetUnit(pGame, pUnit, pOther);
     if (!nThreatLevel) {
@@ -2399,6 +2427,7 @@ D2UnitStrc * __fastcall AI_ForEachFn06_NearestTargetByThreat(::SGAMEDATA * pGame
     return 0;
 }
 
+// 1.14d mac: 001a5bcb
 D2UnitStrc * __fastcall AI_ForEachFn07_AltHighThreatTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOther, D2MonsterAiParameterStruct * ppResults) {
     if (pOther == ppResults->pLOSFlagOrSecondary) {
       return 0;
@@ -2429,6 +2458,7 @@ D2UnitStrc * __fastcall AI_ForEachFn07_AltHighThreatTarget(::SGAMEDATA * pGame, 
     return 0;
 }
 
+// 1.14d mac: 001a5d07
 D2UnitStrc * __fastcall AI_ForEachFn11_AltHittableTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOther, D2MonsterAiParameterStruct * ppResults) {
     bool bCanHit;
     uint32_t nThreatLevel;
@@ -2458,6 +2488,7 @@ D2UnitStrc * __fastcall AI_ForEachFn11_AltHittableTarget(::SGAMEDATA * pGame, D2
     return 0;
 }
 
+// 1.14d mac: 001a5c54
 D2UnitStrc * __fastcall AI_ForEachFn08_NearestClosedDoor(::SGAMEDATA * pGame, int * pSourceUnit, D2UnitStrc * pUnit, D2MonsterAiParameterStruct * ppResults) {
     uint32_t pDistAsUnit;
     if (pUnit && pUnit->eUnitType == UNIT_OBJECT) {
@@ -2483,6 +2514,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_1(D2UnitStrc * p) {
     return p->eUnitFlags >> 1 & 1;
 }
 
+// 1.14d mac: 001a5c9f
 D2UnitStrc * __fastcall AI_ForEachFn09_FindOwnMinionCorpse(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOther, D2AiCorpseScanStrc * pScan) {
     int _bHasPassiveState;
     bool bHasPassiveState;
@@ -2503,6 +2535,7 @@ D2UnitStrc * __fastcall AI_ForEachFn09_FindOwnMinionCorpse(::SGAMEDATA * pGame, 
     return 0;
 }
 
+// 1.14d mac: 001a5d88
 D2UnitStrc * __fastcall AI_ForEachFn12_CountClassInRange(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOther, D2AiClassCountScanStrc * pScan) {
     BOOL _bIsDead;
     bool bIsDead;
@@ -2655,6 +2688,7 @@ static D2UnitStrc * __stdcall ForEachCallType3(D2UnitStrc * pUnit, ::SGAMEDATA *
 }
 
 // Monster AI dispatch helper. Looks up nParamValue in MonsterAiForEachTable to get a callback and dispatch type (1/2/3/other), then calls the corresponding ForEachCallTypeN routine. Falls back to pBackupFunc if the table entry has no callback. Returns the result of the dispatched call, or 0 if no callback is available.
+// 1.14d mac: 001a5625
 D2UnitStrc * __fastcall ForEach(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2MonsterAiParameterStruct * pParams, fpMonsterAiForEach pBackupFunc, int32_t nParamValue) {
     // Static local variables (originally global data)
     static D2MonsterForEachStruct MonsterAiForEachTable[13] = {
@@ -2801,10 +2835,12 @@ uint32_t __fastcall AI_CountNearbyMinionsByClass(uint32_t nUnused, D2UnitStrc * 
     return 0;
 }
 
+// 1.14d mac: 001a63c6
 uint32_t __fastcall GetFlagBit(D2AiGeneralStrc * pAiGeneral, uint16_t nFlags) {
     return (uint32_t)(((uint16_t)pAiGeneral->nAiFlags & nFlags) != 0);
 }
 
+// 1.14d mac: 001a63dc
 void __fastcall SetUnsetAiFlag(D2AiGeneralStrc * pAiGeneral, uint16_t nAiFlag, BOOL bSet) {
     if (bSet) {
       *(uint16_t*)&pAiGeneral->nAiFlags |= nAiFlag;
@@ -2814,6 +2850,7 @@ void __fastcall SetUnsetAiFlag(D2AiGeneralStrc * pAiGeneral, uint16_t nAiFlag, B
     *(uint16_t*)&pAiGeneral->nAiFlags &= ~nAiFlag;
 }
 
+// 1.14d mac: 001a6920
 void __fastcall SetUnsetAiFlags0x20(D2UnitStrc * pUnit, BOOL bSet) {
     D2AiGeneralStrc* pAiGeneral;
     if (!pUnit || pUnit->eUnitType != UNIT_MONSTER) {
@@ -2831,11 +2868,13 @@ void __fastcall SetUnsetAiFlags0x20(D2UnitStrc * pUnit, BOOL bSet) {
 }
 
 // Thin one-line thunk that tail-calls GetCurrentLifePercentage (already fixed to return int32_t) and drops the result as a bare statement.
+// 1.14d mac: 001a695b
 int32_t __fastcall thunk_GetCurrentLifePercentage(D2UnitStrc * pUnit) {
     int32_t nLifePercent = D2Common::Units::GetCurrentLifePercentage(pUnit);
     return nLifePercent;
 }
 
+// 1.14d mac: 001a6964
 uint32_t __fastcall CollisionWithWall(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     BOOL _bCollides;
     bool bCollides;
@@ -2843,6 +2882,7 @@ uint32_t __fastcall CollisionWithWall(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     return (uint32_t)!_bCollides;
 }
 
+// 1.14d mac: 001a6991
 BOOL __fastcall MONSTERAI_IsMonsterAttacking(D2UnitStrc * pUnit) {
     int nAiState = GetAiState(pUnit);
     if (nAiState != 3 && nAiState != 0x13) {
@@ -2852,6 +2892,7 @@ BOOL __fastcall MONSTERAI_IsMonsterAttacking(D2UnitStrc * pUnit) {
     return 1;
 }
 
+// 1.14d mac: 001a69b8
 BOOL __fastcall MONSTERAI_HasSkillInSlots(D2UnitStrc * pUnit, int32_t nSkillId) {
     D2MonStatsTxt* pMonStatsTxt = nullptr;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
@@ -2884,6 +2925,7 @@ static inline int GetGUIDInline(D2UnitStrc * pUnit) {
     return pUnit->nUnitGUID;
 }
 
+// 1.14d mac: 001a6a21
 void __fastcall MONSTERAI_SetOwnerGUIDAndType(D2UnitStrc * pUnit, D2UnitStrc * pOwner) {
     D2AiGeneralStrc* pAiData;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
@@ -2961,6 +3003,7 @@ D2UnitStrc * __fastcall AI_FindUnitAtPositionByBaseId(uint32_t nUnused, D2RoomSt
 }
 
 // Returns TRUE if eState can be applied to pUnit as a debuff. Guards: pUnit is a living monster, eState &lt; 0x14, unit is not already STATE_uninterruptable, CanSwitchAI is true, unit is attackable or alive, monster type != 10 (cold-immune-like flag), and AI_CanApplyColdState approves (unless eState is STATE_weaken). Used to gate AI debuff skill usage.
+// 1.14d mac: 001a6b69
 BOOL __fastcall MONSTERAI_CanSwitchAi(D2UnitStrc * pUnit, int32_t nAiSpecialState) {
     if (!pUnit) {
       return 0;
@@ -3001,6 +3044,7 @@ BOOL __fastcall MONSTERAI_CanSwitchAi(D2UnitStrc * pUnit, int32_t nAiSpecialStat
 }
 
 // Validates and optionally replaces a candidate switch-target (*ppUnit). Returns 0 (keep candidate) if pUnit is a player or nParam1==0. If nParam2 &lt; 6, probes a path to the candidate; if unreachable (zero path points), runs a ForEach scan for an alternative unit within distance 0x13 and updates *ppUnit and *pDistance accordingly. Returns 1 to signal the caller should use the secondary (LOS) target instead.
+// 1.14d mac: 001a66c0
 static BOOL __stdcall MONSTERAI_ValidateSwitchTarget(D2UnitStrc * * ppUnit, int * pDistance, D2UnitStrc * nParam1, int32_t nParam2, D2UnitStrc * pUnit) {
     uint32_t nPathSP1Y;
     D2MonsterAiParameterStruct sAiParams;
@@ -3058,6 +3102,7 @@ static BOOL __stdcall MONSTERAI_ValidateSwitchTarget(D2UnitStrc * * ppUnit, int 
 }
 
 // Resolves the current target for a monster's "switch AI" (the secondary AI targeting mode, e.g. for converted/charmed or special monsters). Only operates on UNIT_MONSTER units that have a switch-AI param. Param1 selects target domain: 1=player by GUID, 2=monster by GUID, 4=missile by GUID (looked up via FindUnitFromTable), 3=proximity scan (toggles alignment, runs AI ForEach over nearby units to pick the best by distance). For the resolved candidate, optionally requires line of sight (bRequireLOS) and that it is alive/valid; on success writes the unit to *ppOutUnit and distance to *pOutDistance and returns 1, else clears the switch-AI target params and returns 0. Custom register calling convention (pGame in EAX, pUnit in ESI).
+// 1.14d mac: 001a63fa
 static BOOL __stdcall MONSTERAI_FindSwitchAiTarget(int32_t bNeedLOS, int32_t bRequireLOS, D2UnitStrc * * ppOutUnit, int * pOutDistance, ::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2UnitStrc* pSwitchTarget;
     uint32_t nTargetGUID;
@@ -3176,6 +3221,7 @@ static BOOL __stdcall MONSTERAI_FindSwitchAiTarget(int32_t bNeedLOS, int32_t bRe
 // 3. Pick closest valid target
 // 4. Update last attacker tracking
 // 5. Set bEngagedInCombat if in melee range
+// 1.14d mac: 001a5dd2
 D2UnitStrc * __fastcall MONSTERAI_FindBestTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiGeneralStrc * pMonsterAiGeneral, int32_t * pnDistanceToTarget, BOOL * bEngagedInCombat) {
     int32_t nAlignment;
     uint32_t nDist;
@@ -3382,6 +3428,7 @@ D2UnitStrc * __fastcall MONSTERAI_FindBestTarget(::SGAMEDATA * pGame, D2UnitStrc
 }
 
 // Finds the nearest valid target unit and computes distance. Returns the target unit pointer and writes distance and melee-range flag to output parameters.
+// 1.14d mac: 001a6811
 D2UnitStrc * __fastcall FindTargetAndDistance(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t * pDistance, BOOL * pInMelee) {
     D2UnitStrc* pTargetTmp;
     uint32_t nDistanceTmp;
@@ -3427,6 +3474,7 @@ D2UnitStrc * __fastcall FindTargetAndDistance(::SGAMEDATA * pGame, D2UnitStrc * 
 }
 
 // Applies the Terror state to a target monster on behalf of pUnit. Guards: target must be alive, a UNIT_MONSTER, not uninterruptable, CanSwitchAI, not monster-type 10, and AI_CanApplyColdState must pass. Calls SetStateWithExpiryTime(STATE_terror, SKILL_Terror, nTerrorDurationFrames), redirects the target's path toward pUnit, reassigns AI to mode 0xb, then fires UNITEVENTCALLBACK_AITHINK and schedules a frame-advance event.
+// 1.14d mac: 001a6a60
 void __fastcall MONSTERAI_ApplyTerrorToMonster(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTargetMonster, uint32_t nUnused, uint32_t nUnused2, int32_t nTerrorDurationFrames) {
     D2AiGeneralStrc* pMonsterAiGeneral;
     BOOL bIsDead = UNIT::SUnit::CheckForModeZeroDeath(pTargetMonster);
@@ -3485,6 +3533,7 @@ void __fastcall MONSTERAI_ApplyTerrorToMonster(::SGAMEDATA * pGame, D2UnitStrc *
     GAME::Event::SetEvent(pGame, pTargetMonster, 2, pGame->dwGameFrame + 1, 0, 0);
 }
 
+// 1.14d mac: 001a28ad
 D2UnitStrc * __fastcall MONSTERAI_FindTargetInRange(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiGeneralStrc * pAiGeneral, int * pDistanceOut, BOOL * bResult, int32_t nMaxDistance) {
     D2UnitStrc* pBestTarget = MONSTERAI_FindBestTarget(pGame, pUnit, pAiGeneral, pDistanceOut, bResult);
     if (!(!pBestTarget || *pDistanceOut > nMaxDistance)) {
@@ -3495,6 +3544,7 @@ D2UnitStrc * __fastcall MONSTERAI_FindTargetInRange(::SGAMEDATA * pGame, D2UnitS
     return pBestTarget;
 }
 
+// 1.14d mac: 001a2971
 D2UnitStrc * __fastcall MONSTERAI_TargetCallback_FindNearbyPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pPlayerCandidate, D2MonsterAiParameterStruct * pSearchData) {
     uint32_t nDistance;
     int nClassId;
@@ -3512,6 +3562,7 @@ D2UnitStrc * __fastcall MONSTERAI_TargetCallback_FindNearbyPlayer(::SGAMEDATA * 
     return pPlayerCandidate;
 }
 
+// 1.14d mac: 001a28f5
 D2UnitStrc * __fastcall MONSTERAI_FindNearestUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, BOOL * pbIsClose) {
     D2MonsterAiParameterStruct sAiParams;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
@@ -3532,6 +3583,7 @@ D2UnitStrc * __fastcall MONSTERAI_FindNearestUnit(::SGAMEDATA * pGame, D2UnitStr
     return sAiParams.pBestUnit;
 }
 
+// 1.14d mac: 001a2a34
 int32_t __fastcall AI_ChangeModeAndTargetUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nAnimMode, D2UnitStrc * pTarget) {
     D2ModeChangeStrc killInfo;
     MonsterMode::MONMODE_InitModeChange(pUnit, nAnimMode, &killInfo);
@@ -3540,6 +3592,7 @@ int32_t __fastcall AI_ChangeModeAndTargetUnit(::SGAMEDATA * pGame, D2UnitStrc * 
     return nResult;
 }
 
+// 1.14d mac: 001a2a77
 int __fastcall MONSTERAI_CommandSkillAtPosition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nAnimMode, int32_t nX, int32_t nY) {
     D2ModeChangeStrc sKillInfo;
     MonsterMode::MONMODE_InitModeChange(pUnit, nAnimMode, &sKillInfo);
@@ -3549,6 +3602,7 @@ int __fastcall MONSTERAI_CommandSkillAtPosition(::SGAMEDATA * pGame, D2UnitStrc 
     return nResult;
 }
 
+// 1.14d mac: 001a2ac0
 int32_t __fastcall MONSTERAI_CommandSkillSequence(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, D2UnitStrc * pTarget, int32_t nX, int32_t nY) {
     int32_t nResult;
     D2ModeChangeStrc sKillInfo;
@@ -3583,6 +3637,7 @@ void __fastcall PlanNextAiMove(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t 
     GAME::Event::SetEvent(pGame, pUnit, 2, pGame->dwGameFrame + nFrames, 0, 0);
 }
 
+// 1.14d mac: 001a283f
 void __fastcall RestartAiThink(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nFrames) {
     if (!nFrames) {
       nFrames = 1;
@@ -3592,6 +3647,7 @@ void __fastcall RestartAiThink(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t 
     GAME::Event::SetEvent(pGame, pUnit, 2, pGame->dwGameFrame + nFrames, 0, 0);
 }
 
+// 1.14d mac: 001a2c2a
 void __fastcall ScheduleAiThink(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nDelayFrames) {
     if (!nDelayFrames) {
       nDelayFrames = 1;
@@ -3606,6 +3662,7 @@ void __fastcall ScheduleAiThink(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t
     GAME::Event::SetEvent(pGame, pUnit, 2, pGame->dwGameFrame + nDelayFrames, 0, 0);
 }
 
+// 1.14d mac: 001a2cc0
 void __fastcall AITACTICS_SetPathOverrides(D2UnitStrc * pUnit, int32_t nPathType, int32_t nVelocity, uint8_t nSteps) {
     if (nVelocity + 0x7eU <= 0xfc) {
       if (nPathType == 1) {
@@ -3622,6 +3679,7 @@ void __fastcall AITACTICS_SetPathOverrides(D2UnitStrc * pUnit, int32_t nPathType
 }
 
 // Tail-calls StartMonsterMove (already fixed to return int32_t) as its final statement and drops the result.
+// 1.14d mac: 001a249c
 int32_t __fastcall WalkRandomOffset(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nRadius) {
     int nX;
     int nY;
@@ -3676,6 +3734,7 @@ int32_t __fastcall WalkRandomOffset(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uin
 
 // Sends an NPC dialogue message to a player, either as a 0x27 NPC-info network packet (bSendPacket != 0) or as a hover-text overlay on the NPC unit (bSendPacket == 0). In packet mode, builds a minimal D2GSPacketSrv0x27 with one message entry and sends it to the player's client. In hover mode, formats the message index into a string, allocates a D2HoverTextStrc on the NPC, links it to the room update list, sets UNITFLAG_HASTXTMSG, and schedules an expiry event (event type 6). No-ops if nMessageId is 0.
 // @sourcefile .\Ai\AiTatics.cpp
+// 1.14d mac: 001a39ac
 void __fastcall SendNpcMessageOrHoverText(::SGAMEDATA * pGame, D2UnitStrc * pNpc, D2UnitStrc * pPlayer, uint32_t nMessageId, BOOL bSendPacket) {
     D2ClientStrc* pClient;
     D2HoverTextStrc* pHover;
@@ -3722,6 +3781,7 @@ void __fastcall SendNpcMessageOrHoverText(::SGAMEDATA * pGame, D2UnitStrc * pNpc
     }
 }
 
+// 1.14d mac: 001a3af9
 void __fastcall MONSTERAI_CommandMoveToPosition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nTargetX, int32_t nTargetY, int32_t nUnitMode) {
     D2ModeChangeStrc sKillInfo;
     MonsterMode::MONMODE_InitModeChange(pUnit, nUnitMode, &sKillInfo);
@@ -3731,6 +3791,7 @@ void __fastcall MONSTERAI_CommandMoveToPosition(::SGAMEDATA * pGame, D2UnitStrc 
     MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sKillInfo, 1);
 }
 
+// 1.14d mac: 001a3b57
 void __fastcall MONSTERAI_CommandSkillInPlace(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nTargetX, int32_t nTargetY, int32_t nUnitMode) {
     D2ModeChangeStrc sKillInfo;
     MonsterMode::MONMODE_InitModeChange(pUnit, nUnitMode, &sKillInfo);
@@ -3741,6 +3802,7 @@ void __fastcall MONSTERAI_CommandSkillInPlace(::SGAMEDATA * pGame, D2UnitStrc * 
 }
 
 // Monster AI helper: approaches pTarget to within nYOffset tiles (capped by nXOffset step) then casts nSkillId. Computes target/self tile coords (static or dynamic path), distributes the move distance across X/Y, derives approach direction, builds a D2MonsterKillStrc with the stepped target tile, sets nSkillId as the unit's current skill, and dispatches via MONSTERAI_ExecuteLifecycleTransition. Returns the transition result.
+// 1.14d mac: 001a3bb5
 int __fastcall MONSTERAI_MoveToDistance(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, int32_t nAnimMode, int32_t nMaxStep, int32_t nDistance) {
     D2ModeChangeStrc sKillInfo;
     int32_t nTargetPosY;
@@ -3843,12 +3905,14 @@ int __fastcall MONSTERAI_MoveToDistance(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 }
 
 // Thin wrapper: tail-calls MoveAndCastSkill (already fixed to return int) with a fixed distance mode and drops the result as a bare statement.
+// 1.14d mac: 001a3d98
 int __fastcall MONSTERAI_CommandWalkToDistance(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, int nMaxStep, int nDistance) {
     int nCastResult = MONSTERAI_MoveToDistance(pGame, pUnit, pTarget, 2, nMaxStep, nDistance);
     return nCastResult;
 }
 
 // Moves pUnit a fractional distance (nParam/totalDist) toward pTarget. Computes collision distance, scales the delta by the fraction, sets Walk skill, and dispatches a lifecycle transition. Returns 0 if already at target.
+// 1.14d mac: 001a3dd2
 int32_t __fastcall MONSTERAI_WalkPartialTowardTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiGeneralStrc * pAiGeneral, D2UnitStrc * pTarget, int32_t nDistanceFromTarget) {
     int nUnitX;
     int nUnitY;
@@ -3906,6 +3970,7 @@ int32_t __fastcall MONSTERAI_WalkPartialTowardTarget(::SGAMEDATA * pGame, D2Unit
     return 0;
 }
 
+// 1.14d mac: 001a3f10
 D2UnitStrc * __fastcall MONSTERAI_GetAliveKillerUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     uint32_t bCanAttack;
     D2UnitStrc* pKillerUnit = UNIT::SUnit::GetKillerUnit(pGame, pUnit);
@@ -3937,6 +4002,7 @@ D2UnitStrc * __fastcall MONSTERAI_GetAliveKillerUnit(::SGAMEDATA * pGame, D2Unit
 }
 
 // Already documented.
+// 1.14d mac: 001a22b2
 D2UnitStrc * __fastcall MONSTERAI_GetTarget_WithWander(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiGeneralStrc * pMonsterAiGeneral, int32_t * pnDistanceToTarget, BOOL * bEngagedInCombat) {
     D2UnitStrc* pFoundTarget = MONSTERAI_FindBestTarget(pGame, pUnit, pMonsterAiGeneral, pnDistanceToTarget, bEngagedInCombat);
     if (pFoundTarget) {
@@ -3998,6 +4064,7 @@ static inline int GetClassIdInline(D2UnitStrc * pUnit) {
 // Similar to GetTarget_WithWander but requires LOS
 // Used by lurker-type monsters that hide underground/invisible
 // MULTILAYER bails if no target, HIDDEN continues AI execution
+// 1.14d mac: 001a26a0
 D2UnitStrc * __fastcall MONSTERAI_GetTarget_Hidden(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiGeneralStrc * pMonsterAiGeneral, D2AiParamStrc * nDistanceToTarget, BOOL * bEngagedInCombat) {
     int32_t nY;
     int32_t nX;
@@ -4042,6 +4109,7 @@ D2UnitStrc * __fastcall MONSTERAI_GetTarget_Hidden(::SGAMEDATA * pGame, D2UnitSt
 }
 
 // Server-side skill cast at a target position. Validates mana/cooldown, deducts mana, starts cast animation, dispatches to skill handler. nParam=0 for normal cast, nTargetX/Y for positional targeting.
+// 1.14d mac: 001a2b6a
 BOOL __fastcall SERVER_UNIT_CastSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t nSkillMode, eD2Skills eSkill, D2UnitStrc * pTarget, int32_t nTargetX, int32_t nTargetY) {
     D2ModeChangeStrc sKillInfo;
     if (nSkillMode >= 0x10) {
@@ -4069,6 +4137,7 @@ BOOL __fastcall SERVER_UNIT_CastSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, u
 }
 
 // Initiates a monster walk/run move toward a target unit or explicit (nX,nY) coordinate. Downgrades Run to Walk if the monster is Decrepit. Sets step count, dispatches lifecycle transition. nFlags bit 0: sets AI flag 0x40; bit 1: RNG-based wander-or-plan; bit 2: re-fires AI think timer on fail.
+// 1.14d mac: 001a2d8a
 int32_t __fastcall StartMonsterMove(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, eD2MonsterAnimMode nAnimMode, int32_t nX, int32_t nY, uint8_t nSteps, uint8_t nFlags) {
     D2ModeChangeStrc sMonsterKill;
     D2AiGeneralStrc* pAiGeneral;
@@ -4117,11 +4186,13 @@ int32_t __fastcall StartMonsterMove(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2U
 }
 
 // Thin wrapper tail-calling StartMonsterMove (already fixed to return int32_t), dropping the result.
+// 1.14d mac: 001a2d46
 int32_t __fastcall MONSTERAI_CommandWalkToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint8_t nFlags) {
     int32_t nResult = StartMonsterMove(pGame, pUnit, pTarget, Walk, 0, 0, '\x01', nFlags);
     return nResult;
 }
 
+// 1.14d mac: 001a2ef1
 void __fastcall MONSTERAI_WalkToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2ModeChangeStrc killInfo;
     D2Common::PATH::DynamicPath::SetStepNum(pUnit->pPath.pDynamicPath, 1);
@@ -4136,6 +4207,7 @@ void __fastcall MONSTERAI_WalkToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
     MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &killInfo, 1);
 }
 
+// 1.14d mac: 001a2f35
 int __fastcall MONSTERAI_CommandRunToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint8_t nFlags) {
     int32_t nResult = StartMonsterMove(pGame, pUnit, pTarget, eD2MonsterAnimMode_ns::Run, 0, 0, '\x01', nFlags);
     return nResult;
@@ -4146,6 +4218,7 @@ void __fastcall MONSTERAI_CommandRunToUnitDirect(::SGAMEDATA * pGame, D2UnitStrc
 }
 
 // Sets combat state then tail-calls StartMonsterMove (already fixed to return int32_t), dropping the result.
+// 1.14d mac: 001a2fbd
 int32_t __fastcall MONSTERAI_CommandWalkToUnitPathType13(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint8_t nFlags) {
     D2MonsterPathParamStrc* pAiParam = !pUnit || pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataMonster ? 0 : pUnit->pUnitData.pUnitDataMonster->pPathParamOrName.pPathParam;
     MonsterMode::MONSTERMODE_SetPathOverrides(pAiParam, 0xd, 0, '\0');
@@ -4154,6 +4227,7 @@ int32_t __fastcall MONSTERAI_CommandWalkToUnitPathType13(::SGAMEDATA * pGame, D2
 }
 
 // Builds a D2MonsterKillStrc then tail-calls MONSTERAI_ExecuteLifecycleTransition (already fixed to return int32_t), dropping the result.
+// 1.14d mac: 001a3025
 int32_t __fastcall WalkToCoords(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nX, int32_t nY) {
     D2ModeChangeStrc sMonsterKill;
     D2Common::PATH::DynamicPath::SetStepNum(pUnit->pPath.pDynamicPath, 1);
@@ -4165,6 +4239,7 @@ int32_t __fastcall WalkToCoords(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t
 }
 
 // Builds a D2MonsterKillStrc then tail-calls MONSTERAI_ExecuteLifecycleTransition (already fixed to return int32_t), dropping the result.
+// 1.14d mac: 001a3068
 int32_t __fastcall MONSTERAI_CommandMoveToCoords(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nX, int32_t nY) {
     D2ModeChangeStrc sMonsterKill;
     eD2MonsterAnimMode nUnitMode = eD2MonsterAnimMode_ns::Run;
@@ -4182,6 +4257,7 @@ int32_t __fastcall MONSTERAI_CommandMoveToCoords(::SGAMEDATA * pGame, D2UnitStrc
     return nTransitionResult;
 }
 
+// 1.14d mac: 001a30ab
 int32_t __fastcall MONSTERAI_CommandWalkToCoords(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nX, int32_t nY) {
     D2ModeChangeStrc sKillInfo;
     D2Common::PATH::DynamicPath::SetStepNum(pUnit->pPath.pDynamicPath, 1);
@@ -4196,6 +4272,7 @@ int32_t __fastcall MONSTERAI_CommandWalkToCoords(::SGAMEDATA * pGame, D2UnitStrc
     return nResult;
 }
 
+// 1.14d mac: 001a30ee
 int32_t __fastcall MONSTERAI_CommandMoveToCoordsRetry(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nX, int32_t nY) {
     D2ModeChangeStrc sKillInfo;
     eD2MonsterAnimMode nUnitMode = eD2MonsterAnimMode_ns::Run;
@@ -4218,6 +4295,7 @@ int32_t __fastcall MONSTERAI_CommandMoveToCoordsRetry(::SGAMEDATA * pGame, D2Uni
 }
 
 // Builds a D2MonsterKillStrc then tail-calls MONSTERAI_ExecuteLifecycleTransition (already fixed to return int32_t), dropping the result.
+// 1.14d mac: 001a3131
 int32_t __fastcall MONSTERAI_CommandWalkToCoordsImmediate(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nX, int32_t nY) {
     D2ModeChangeStrc sMonsterKill;
     D2Common::PATH::DynamicPath::SetStepNum(pUnit->pPath.pDynamicPath, 0);
@@ -4229,6 +4307,7 @@ int32_t __fastcall MONSTERAI_CommandWalkToCoordsImmediate(::SGAMEDATA * pGame, D
 }
 
 // Thin wrapper tail-calling StartMonsterMove (already fixed to return int32_t), dropping the result.
+// 1.14d mac: 001a3174
 int32_t __fastcall MONSTERAI_CommandWalkToUnitMinStep(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint8_t nMinStep) {
     if (!nMinStep) {
       nMinStep = 1;
@@ -4238,6 +4317,7 @@ int32_t __fastcall MONSTERAI_CommandWalkToUnitMinStep(::SGAMEDATA * pGame, D2Uni
     return nResult;
 }
 
+// 1.14d mac: 001a31c2
 void __fastcall MONSTERAI_CommandRunToUnitMinStep(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint8_t nMinStep) {
     if (!nMinStep) {
       nMinStep = 1;
@@ -4247,6 +4327,7 @@ void __fastcall MONSTERAI_CommandRunToUnitMinStep(::SGAMEDATA * pGame, D2UnitStr
 }
 
 // Commands a monster to walk toward a target unit, offset by nOffset tiles in the direction of approach. Resolves world positions for both pUnit and pTarget (handling static vs dynamic paths), computes the unit-step direction vector (nDeltaX, nDeltaY each -1/0/1), then calls StartMonsterMove in Walk mode to a destination of (targetX + nOffset*dX, targetY + nOffset*dY). If nOffset > 5, first applies combat/mon-stats via ApplyCombatAndMonStats. Returns the result of StartMonsterMove (non-zero on success).
+// 1.14d mac: 001a3210
 int32_t __fastcall WalkTowardsUnitOffset(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint8_t nOffset, int32_t bForce) {
     int32_t nUnitPosX;
     int nDeltaY;
@@ -4317,6 +4398,7 @@ int32_t __fastcall WalkTowardsUnitOffset(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // Tail-calls StartMonsterMove (already fixed to return int32_t) as its final statement, dropping the result.
+// 1.14d mac: 001a3377
 int32_t __fastcall MONSTERAI_CommandRunAwayFromUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pFleeTarget, uint8_t nFleeDistance, int32_t nParam) {
     uint32_t nFleeTargetPosX;
     uint32_t nFleeTargetPosY;
@@ -4452,6 +4534,7 @@ void __fastcall MONSTERAI_CommandWalkAwayFromUnit(::SGAMEDATA * pGame, D2UnitStr
 }
 
 // Tail-calls MONSTERAI_ExecuteLifecycleTransition (already fixed to return int32_t) as its final statement, dropping the result.
+// 1.14d mac: 001a34dd
 int32_t __fastcall MONSTERAI_CommandWalkRandomOffset(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pCenterUnit, uint8_t nRadius) {
     uint32_t _nRadius;
     uint32_t nRandYOffset;
@@ -4517,6 +4600,7 @@ int32_t __fastcall MONSTERAI_CommandWalkRandomOffset(::SGAMEDATA * pGame, D2Unit
 }
 
 // Both branches tail-call an already-fixed int32_t-returning function (MONSTERAI_ExecuteLifecycleTransition, or WalkRandomOffset when pOther is null), dropping the result.
+// 1.14d mac: 001a3638
 int32_t __fastcall WalkRandomOffsetAroundUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOther, uint32_t nRadius) {
     int32_t nResult;
     uint32_t nRandXOffset;
@@ -4588,6 +4672,7 @@ int32_t __fastcall WalkRandomOffsetAroundUnit(::SGAMEDATA * pGame, D2UnitStrc * 
     return nResult;
 }
 
+// 1.14d mac: 001a391a
 int __fastcall SetCombatStateAndApproachTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint8_t nState, int32_t directionFlags) {
     uint32_t seedNext = D2_SeedRoll(&pUnit->sSeed);
     int32_t nCombatDist = 6;
@@ -4601,6 +4686,7 @@ int __fastcall SetCombatStateAndApproachTarget(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // Makes a monster cast eSkill at a randomly-offset world position within nRange tiles of its current position. Uses the unit's own seed (LCG step) to pick independent X and Y offsets in [-nRange, +nRange], then calls SERVER_UNIT_CastSkill with targetGUID=0 (ground-targeted). Handles static-path objects and dynamic-path units for position resolution.
+// 1.14d mac: 001a3f77
 void __fastcall MONSTERAI_CastSkillAtRandomOffset(D2UnitStrc * pUnit, int32_t nRange, eD2Skills eSkill, char nSkillMode) {
     uint32_t nRandom;
     int nPos;
@@ -4654,6 +4740,7 @@ static uint32_t MONSTERAI_CalculateTrapDamage(D2UnitStrc * pUnit, D2UnitStrc * p
 }
 
 // Computes and applies a retaliatory/trap-style damage hit from pUnit against pVictim. No-ops in town or when a wall/door blocks the line. Derives min/max damage from victim hitpoints (>>3 and >>5), rolls a to-hit/chance value from victim level/dexterity/AC and the unit RNG seed; on a hit rolls trap damage via MONSTERAI_CalculateTrapDamage and fills a D2DamageStrc whose element (fire/lightning/cold) is selected by nDmgType (1/2/3). Sets uninterruptable-aware result flags, applies defensive reduction and damage to the victim.
+// 1.14d mac: 001ee3f3
 void __fastcall MONSTERAI_CalculateCounterAttackDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pVictim, int32_t nDmgType) {
     D2DamageStrc sDamage;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pVictim);
@@ -4732,6 +4819,7 @@ void __fastcall MONSTERAI_CalculateCounterAttackDamage(::SGAMEDATA * pGame, D2Un
 }
 
 // Schedules a convert event (event type 7, UNITMOD 0x15) for all neutral monsters within radius 0x583 of pUnit. Filters by nUnitType; if bUndeadOnly is set, skips non-undead monsters. Skips class 0x14d. For each eligible monster picks a random game-frame delay in [nMinDelay, nMaxDelay) from pUnit's seed via RANDOM_RandomNumberSelector, then calls SetEvent. Asserts nMinDelay &lt; nMaxDelay != 0; halts on assertion failure. Used by Decrepify/Conversion-style AI effects.
+// 1.14d mac: 002455f5
 static void __stdcall QUESTFX_KillMonstersAroundBoss(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nRadius, int32_t nMinDelay, int32_t nMaxDelay, int32_t bUndeadOnly) {
     uint32_t nRandDelay;
     int32_t nTargetPosY;
@@ -4804,10 +4892,12 @@ static void __stdcall QUESTFX_KillMonstersAroundBoss(::SGAMEDATA * pGame, D2Unit
     }
 }
 
+// 1.14d mac: 002455c0
 void __fastcall QUESTFX_BloodRavenDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     QUESTFX_KillMonstersAroundBoss(pGame, pUnit, 0x23, 0x19, 0x7d, 1);
 }
 
+// 1.14d mac: 00245862
 void __fastcall AI_Mephisto_SpawnDeathMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2SkillArgStrc sSkillArg;
     memset(&sSkillArg, 0, sizeof(sSkillArg));
@@ -4824,6 +4914,7 @@ void __fastcall QUESTFX_AndarielDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     QUESTFX_KillMonstersAroundBoss(pGame, pUnit, 0x23, 1, 0x33, 0);
 }
 
+// 1.14d mac: 002458eb
 void __fastcall QUESTFX_RadamentDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2MissilesTxt* pDVar2;
     uint32_t nPosY;
@@ -4858,6 +4949,7 @@ void __fastcall QUESTFX_RadamentDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 }
 
 // Finds object 0x182 (Uber Tristram pentagram) in neighboring rooms and fires a MISSILE_Orbmist at it. Sets the missile's target X to the object's GUID and clears the room's portal flag. If missile creation fails and the object is in Death mode, schedules an object respawn event.
+// 1.14d mac: 002459d1
 void __fastcall AI_Boss_LaunchOrbAtObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2SkillArgStrc sSkillArg;
     int32_t nObjectClassId = 0x182;
@@ -4917,6 +5009,7 @@ void __fastcall QUESTFX_IzualDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     QUESTFX_KillMonstersAroundBoss(pGame, pUnit, 0x69, 1, 2, 0);
 }
 
+// 1.14d mac: 00245b91
 void __fastcall QUESTFX_ShenkDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     QUESTFX_KillMonstersAroundBoss(pGame, pUnit, 0x23, 0x19, 0x7d, 0);
 }
@@ -4926,6 +5019,7 @@ void __stdcall MONSTERAI_Noop() {
 }
 
 // Called when an Uber Tristram boss dies (UberMephisto 0x2C0, UberDiablo 0x2C1, UberBaal 0x2C5). Sets the corresponding game flags. Once all three are dead, drops the Key-of-Destruction (PlayerBodyPart) and one Shield reward per connected client.
+// 1.14d mac: 00245bcb
 void __fastcall AI_UberTristram_CheckDeathAndDropLoot(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     int nClassId;
     ::SGAMEDATA* pGameLocal;
@@ -4977,6 +5071,7 @@ void __fastcall AI_UberTristram_CheckDeathAndDropLoot(::SGAMEDATA * pGame, D2Uni
     } while (nClassId);
 }
 
+// 1.14d mac: 0029c184
 void __fastcall AI_Fn1_InvisoSpawner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t nMonsterBaseId;
     BOOL bFoundPosition;
@@ -5013,6 +5108,7 @@ void __fastcall AI_Fn1_InvisoSpawner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
 }
 
 // AI tick for mosquito-nest spawner monsters. If target is in range and spawn count exceeds MonStats2 cap, idles. Otherwise, if spawn cooldown (dwArg0) has expired and a valid spawn tile exists, increments dwArg1, resets cooldown, and casts Skill1 to spawn a minion. Falls back to PlanNextAiMove(25).
+// 1.14d mac: 0029c2ed
 void __fastcall AI_Fn1_MosquitoNest(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     int dwGameFrame;
     int nMonStatsCount;
@@ -5047,6 +5143,7 @@ void __fastcall AI_Fn1_MosquitoNest(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
     PlanNextAiMove(pGame, pUnit, 0x19);
 }
 
+// 1.14d mac: 0029c4bb
 void __fastcall AI_Fn0_BoneWall(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral; // steer-ok: house AI-param copy order, the general read at entry as the asm loads it
     if (!pAiParam->pMonStats) {
@@ -5063,6 +5160,7 @@ void __fastcall AI_Fn0_BoneWall(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPar
     pAiGeneral->dwArg0 = pGame->dwGameFrame + (!pSkillsTxt ? 0 : pSkillsTxt->Param[1]);
 }
 
+// 1.14d mac: 0029c51c
 void __fastcall AI_Fn1_BoneWall(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     if (pAiParam->pMonsterAiGeneral->dwArg0 < pGame->dwGameFrame) {
       MONSTERAI_CommandSkillAtPosition(pGame, pUnit, 0, 0, 0);
@@ -5072,6 +5170,7 @@ void __fastcall AI_Fn1_BoneWall(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPar
     PlanNextAiMove(pGame, pUnit, 0xf);
 }
 
+// 1.14d mac: 0029c577
 D2UnitStrc * __fastcall MONSTERAI_FindAlliedMonsterToHeal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pMonsterCandidate, D2AiAllyHealScanStrc * pScan) {
     int32_t bIsAlly;
     int32_t nLifePct;
@@ -5100,6 +5199,7 @@ D2UnitStrc * __fastcall MONSTERAI_FindAlliedMonsterToHeal(::SGAMEDATA * pGame, D
 }
 
 // Per-frame primary AI think routine for the High Priest / spellcaster boss class (monstats AI id 1 variant). Uses the unit's LCG seed for all probability rolls. When idle (dwArg0==0): if already in retreat (bEngagedInCombat) re-rolls to keep fleeing/walking; otherwise tries, in order, a heal cast (Skill2) on a wounded allied monster found via ForEach/MONSTERAI_FindAlliedMonsterToHeal, a ranged attack cast (Skill1) with positional jitter when target is in range, a missile attack (MissS1) when in missile range, then falls back to approach/walk. The post-idle block handles flee/reposition behaviour (WalkRandomOffset, MONSTERAI_CommandWalkToUnit, PlanNextAiMove) gated on seed rolls vs MonStats AI param columns (indexed off TreasureClass+difficulty). Ends each branch by scheduling the next move or CalledOnEndAiFunction1.
+// 1.14d mac: 0029c5ec
 void __fastcall AI_Fn1_HighPriest(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     // Static local variables (originally global data)
     static int gItemPower_t_PropertyTypeId2[8] = { -0x5, -0x5, 0x5, -0x5, 0x5, 0x5, -0x5, 0x5 }; D2_STATIC_GUARD(gItemPower_t_PropertyTypeId2, "D2Game::Monster::AI::AI_Fn1_HighPriest::gItemPower_t_PropertyTypeId2");
@@ -5206,6 +5306,7 @@ void __fastcall AI_Fn1_HighPriest(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
 }
 
 // Per-tick monster AI for a stationary turret-type monster (desert/turret). Fires its primary skill (Skill1/Sk1mode) at the current target when off cooldown (dwArg0 timer in D2AiGeneralStrc) and within range (MonStats.TreasureClass-relative range fields by difficulty). Computes target and self coordinates, picks a firing direction via gfx-offset/spawn-timer tables, validates the skill at the aim position, casts it, advances the burst counter (dwArg1) and reschedules dwArg0 cooldown; otherwise calls PlanNextAiMove to idle. No return.
+// 1.14d mac: 0029ccc8
 void __fastcall AI_Fn1_DesertTurret(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     // Static local variables (originally global data)
     static int gaTurretAimOffsets[16] = {
@@ -5408,6 +5509,7 @@ void __fastcall AI_Fn1_DesertTurret(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
 }
 
 // Server AI tick for the Megademon monster. Uses Skill1 from MonStats as a breath/inferno skill. If the target is in range and the inferno state is not active, rolls a difficulty-scaled RNG chance to cast the skill and set a cooldown timer (dwArg0). Once engaged in melee, uses a second RNG tier to either cast the skill, walk toward the target, or retreat. Clears the inferno state when target is out of range.
+// 1.14d mac: 0029d080
 void __fastcall AI_Fn1_Megademon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SkillStrc* pSkill;
     int nDifficulty;
@@ -5494,6 +5596,7 @@ void __fastcall AI_Fn1_Megademon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPa
     return;
 }
 
+// 1.14d mac: 0029d3ce
 void __fastcall AI_Fn1_ArcaneTower(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2UnitStrc* pAttacker = pAiParam->pTarget;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
@@ -5532,6 +5635,7 @@ void __fastcall AI_Fn1_ArcaneTower(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
 }
 
 // AI Function1 for Panther-Woman javelin throwers. At close range uses RNG to either walk toward the primary target or reposition. At long range uses RNG to strafe around the target. If no target or beyond max range, searches for the closest ally of the same type to group up with; otherwise casts a skill or idles.
+// 1.14d mac: 0029d4ff
 void __fastcall AI_Fn1_PantherJavelin(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     int nAiParam = pAiParam->nDistanceToTarget;
@@ -5570,6 +5674,7 @@ void __fastcall AI_Fn1_PantherJavelin(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
 }
 
 // Per-tick AI #1 for the Fetish Blowgun/Shaman ranged thrower (server-side). First drains any queued AI command (GetAiCmd): cmd type 1 ends the current attack on the referenced unit, cmd type 0xE re-targets and walks to it; otherwise frees the AI slot. Then runs a 3-state attack cycle held in pMonsterAiGeneral->dwArg0: state 0 counts ticks in dwArg1 (random 3..5) before advancing, ending attack on a found target or approaching; state 1 resets and engages at range 6; state 2 either melees (dist<0xD, WalkTowardsUnitOffset) or blow-darts (random gate, approach). Rolls the unit seed (UNIT_GetModuloFromSeed) against MonStats.TreasureClass AI parameter words. Side effects: casts/commands via ApplyCombatAndMonStats and the MONSTERAI helpers, schedules next think. No return.
+// 1.14d mac: 0029d72b
 void __fastcall AI_Fn1_FetishBlowgun(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t DVar1;
     uint32_t uRandPct;
@@ -5696,6 +5801,7 @@ void __fastcall AI_Fn1_FetishBlowgun(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
 }
 
 // AI Function1 handler for Reanimated Horde monster type. Decides between fleeing, casting skills, chasing target, or random movement based on RNG thresholds from MonStats2.
+// 1.14d mac: 0029db1d
 void __fastcall AI_Fn1_ReanimatedHorde(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc DVar1;
     uint32_t uRandPct;
@@ -5748,6 +5854,7 @@ void __fastcall AI_Fn1_ReanimatedHorde(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 }
 
 // ForEach callback that finds the closest eligible neutral monster for reanimate-type AI. Accepts pCandidate only if it is a living monster of the Reanimatable base ID (0x1EC), allied with pUnit, alignment 0, has no owner, and has dwArg0==-1 (not already targeted). Returns pCandidate pointer if it is nearer than *pBestDist, else 0.
+// 1.14d mac: 0029dd58
 D2UnitStrc * __fastcall MONSTERAI_FindUnassignedImpInRange(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pCandidate, D2AiImpScanStrc * pBestDist) {
     if (pUnit == pCandidate) {
       return nullptr;
@@ -5794,6 +5901,7 @@ D2UnitStrc * __fastcall MONSTERAI_FindUnassignedImpInRange(::SGAMEDATA * pGame, 
     return nBaseId > pBestDist->nMaxDistSq ? nullptr : pCandidate;
 }
 
+// 1.14d mac: 0029de61
 void __fastcall MONSTERAI_UpdateClosestTarget(D2UnitStrc * pUnit, D2UnitStrc * pCandidate) {
     D2AiGeneralStrc* pAiGeneral = !pUnit || pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataMonster ? 0 : pUnit->pUnitData.pUnitDataMonster->pAiGeneral;
     if (pCandidate) {
@@ -5812,6 +5920,7 @@ void __fastcall MONSTERAI_UpdateClosestTarget(D2UnitStrc * pUnit, D2UnitStrc * p
     }
 }
 
+// 1.14d mac: 0029def3
 void __fastcall AI_Fn1_SiegeTower(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2MonsterAiParameterStruct sParam;
     D2UnitStrc* pTarget = pAiParam->pTarget;
@@ -5831,6 +5940,7 @@ void __fastcall AI_Fn1_SiegeTower(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
 }
 
 // AI Function1 handler for Siege Beast monster type. Handles retreat logic, skill casting based on MonStats2 difficulty thresholds, and catapult rider mounting behavior.
+// 1.14d mac: 0029dfc4
 void __fastcall AI_Fn1_SiegeBeast(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     int32_t nAlignmentOrSkillParam;
     D2UnitStrc* pNeutralOrSelf;
@@ -5913,6 +6023,7 @@ void __fastcall AI_Fn1_SiegeBeast(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
 }
 
 // AI combat tick (Function1) for generic minion monsters. Checks for a live AiCmd targeting a specific unit; if the owner unit is alive reuses it as the combat target, otherwise frees the AiCmd. Uses seeded RNG against difficulty-scaled MonStats TreasureClass fields to decide whether to walk toward the target, use a ranged action (PlanNextAiMove), or trigger melee skill (CalledOnEndAiFunction1 with mode 4 or 5 depending on roll).
+// 1.14d mac: 0029e307
 void __fastcall AI_Fn1_Minion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     BOOL bOwnerDead;
     uint32_t sSeedResult;
@@ -5980,6 +6091,7 @@ void __fastcall AI_Fn1_Minion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParam
 }
 
 // AI Function1 for suicide-charge minions (e.g. Fallen Shaman reanimates). Waits for a dwArg0 timer; on expiry executes CalledOnEndAiFunction1 (skill 0 = suicide charge). If not yet engaged in combat, RNG-decides to walk toward target or idle. Sets dwArg0 timer on first engagement.
+// 1.14d mac: 0029e540
 void __fastcall AI_Fn1_SuicideMinion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t nDifficulty;
     D2MonStatsTxt* pMonStats;
@@ -6018,6 +6130,7 @@ void __fastcall AI_Fn1_SuicideMinion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
 }
 
 // Succubus monster AI action phase (AI function 1). If target lacks seduction stat-list, is in range, and a rand% roll passes: tries skills 1–4 in priority order (skill 1 if target life above threshold, skill 2 if self life below threshold, skill 3/4 based on target type). If bEngagedInCombat: rand roll decides PlanNextAiMove vs CalledOnEndAiFunction1(A4=walk). Idle: FindTargetAndDistance + skill 5 rand cast, or walk to target.
+// 1.14d mac: 0029e613
 void __fastcall AI_Fn1_Succubus(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t DVar1;
     int32_t nMaxMana;
@@ -6095,6 +6208,7 @@ void __fastcall AI_Fn1_Succubus(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPar
 }
 
 // Per-tick AI #1 for the Succubus/Witch (Vile Temptress) caster family (server-side). Spell-selection block (gated by distance, a seed roll vs MonStats.TreasureClass AI words, and the target not already carrying a stat flag 0x20, i.e. not already seduced): picks among Skill1..Skill4 by target life percentage and mana-vs-life / player checks (e.g. blood-star, seduce/mind-blast, attract reserved for players) and casts via SERVER_UNIT_CastSkill. If no cast and not yet engaged, may cast the ranged Skill5 on a found target, retreat-walk away from the target (WalkTowardsUnitOffset with negative offset), end the attack, or approach/replan. The engaged branch handles fleeing/kiting and re-engagement. Heavily seed-driven (per-difficulty probability words). No return.
+// 1.14d mac: 0029e971
 void __fastcall AI_Fn1_SuccubusWitch(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     int _bEngagedInCombat;
     D2SeedStrc DVar1;
@@ -6212,6 +6326,7 @@ void __fastcall AI_Fn1_SuccubusWitch(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
     }
 }
 
+// 1.14d mac: 0029eec0
 void __fastcall HirelingRandomMoveCheck(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc DVar1;
     D2UnitStrc* pTarget = pAiParam->pTarget;
@@ -6238,6 +6353,7 @@ void __fastcall HirelingRandomMoveCheck(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 }
 
 // ForEach callback used by Baal's heal-minion AI. Scans for living, allied Wave-of-Destruction minions (classId 0x1C5) that are not already bloodlusted and are within range. Populates pSearchParams[3] with the lowest-HP candidate and pSearchParams[4] with the nearest non-champion candidate.
+// 1.14d mac: 0029ef7b
 D2UnitStrc * __fastcall AI_Overseer_FindMinionCallback(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pCandidate, D2AiMinionHealScanStrc * pScan) {
     uint32_t _bCanAttackTarget;
     bool bCanAttackTarget;
@@ -6281,6 +6397,7 @@ D2UnitStrc * __fastcall AI_Overseer_FindMinionCallback(::SGAMEDATA * pGame, D2Un
 }
 
 // Per-tick AI #1 for the Overseer/whip demon (server-side; also drives Baal-minion-style healers). First calls Q31_OnOverseerDeath (Act5 quest hook). If currently attacking and off cooldown (pMonsterAiGeneral->dwArg0 < game frame) and an alive attacker exists that has Skill1 slotted, casts Skill1 (whip/morph) at the attacker and arms a per-difficulty cooldown. While engaged it may seed-roll into ending the attack (modes 4/5). Otherwise it scans nearby minions via ForEach + AI_Baal_FindMinionToHeal collecting a heal target (nMaxScanRadius), a buff target (nGridIndex), and a resurrect target (pBestSwitchUnit), then probabilistically casts Skill2 (heal) on the heal target, Skill3 (buff, skipped if alignment==2) on the buff target, or resurrects/walks. Falls back to approach/walk-to-target or PlanNextAiMove. All decisions seed- and TreasureClass-AI-word driven. No return.
+// 1.14d mac: 0029f09e
 void __fastcall AI_Fn1_Overseer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc DVar4;
     BOOL bIsAttacking;
@@ -6387,6 +6504,7 @@ void __fastcall AI_Fn1_Overseer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPar
     MONSTERAI_CommandWalkToUnit(pGame, pUnit, pTarget, 0);
 }
 
+// 1.14d mac: 0029f51b
 D2UnitStrc * __fastcall AI_MinionSpawner_CountMinionsCallback(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pMonsterCandidate, int * pCounter) {
     int nBaseId;
     int32_t nAlignment;
@@ -6418,6 +6536,7 @@ D2UnitStrc * __fastcall AI_MinionSpawner_CountMinionsCallback(::SGAMEDATA * pGam
 }
 
 // Takes the address of a function whose signature changed in the 1167 issue batch.
+// 1.14d mac: 0029f5b0
 void __fastcall AITHINK_Fn1_MinionSpawner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2MonsterAiParameterStruct tCountParams;
     int nGameFrame;
@@ -6455,6 +6574,7 @@ void __fastcall AITHINK_Fn1_MinionSpawner(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // Init function for Baal wave monster AI: selects a wave skill from gaBaalWaveSkillIndexTable via RNG and stores skill index + default state into pMonsterAiGeneral->dwArg1/dwArg2. Called as fpInit for BaalThrone entry.
+// 1.14d mac: 0029f6e9
 void __fastcall AITHINK_Fn0_SpecialMounting(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     // Static local variables (originally global data)
     static int gaBaalWaveSkillIndexTable[4] = { 0x2, 0x0, 0x4, 0x0 }; D2_STATIC_GUARD(gaBaalWaveSkillIndexTable, "D2Game::Monster::AI::AITHINK_Fn0_SpecialMounting::gaBaalWaveSkillIndexTable");
@@ -6483,6 +6603,7 @@ void __fastcall AITHINK_Fn0_SpecialMounting(::SGAMEDATA * pGame, D2UnitStrc * pU
 }
 
 // AI phase-1 tick for a monster that attaches to and casts spells at its owner's target (e.g. Iron Maiden-style attached caster). If the monster has lost its STATE_attached state or has no owner, falls back to its base AI via AttachCorrectAiFunctionToMonster. Otherwise: if target is farther than 24 units, casts a ranged spell at a random offset (MonStats row 0x1ec, Skill1). If target is near and owner is alive with dwArg1 set, rolls a chance to cast a close-range skill at the target using dwArg1/dwArg2 slot; otherwise 50% chance to reposition via CalledOnEndAiFunction1, else delays 20 ticks.
+// 1.14d mac: 0029f798
 void __fastcall AITHINK_Fn1_SpecialMounting(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t uRandPct;
     D2MonStatsTxt* pAttacherMonStats;
@@ -6571,11 +6692,13 @@ void __fastcall AITHINK_Fn1_SpecialMounting(::SGAMEDATA * pGame, D2UnitStrc * pU
     PlanNextAiMove(pGame, pUnit, 0x14);
 }
 
+// 1.14d mac: 0029faea
 void __fastcall AITHINK_Fn0_Imp(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     pAiParam->pMonsterAiGeneral->dwArg0 = -1;
 }
 
 // Per-tick combat AI for the Imp monster family (fastcall pGame,pUnit,pAiParam). Reads distance/combat/target from pAiParam and four MonStats rows (indices 0x1ec-0x1ef, the imp/spawner variants). If the imp is a spawned minion (alignment 0) it tracks its summoner: walks to or casts Skill1 at it when in range, else clears the AI general's arg0. In combat it may cast Skill1 at a random offset when below a life-percent threshold, or retreat (WalkTowardsUnitOffset) on a seeded random roll. Otherwise rolls seeded chances to cast Skill1, retreat, or find a fresh target and cast Skill4 (two range bands). Falls back to walk-toward / idle-reschedule / random-wander based on final seed rolls. All randomness advances pUnit->sSeed (LCG *0x6ac690c5). No return.
+// 1.14d mac: 0029fafb
 void __fastcall AITHINK_Fn1_Imp(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2UnitStrc* pOwner;
     int32_t nAlignment;
@@ -6711,6 +6834,7 @@ void __fastcall AITHINK_Fn1_Imp(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPar
     return;
 }
 
+// 1.14d mac: 002a003c
 void __fastcall AITHINK_Fn1_Catapult(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     uint32_t newSeed = D2_SeedRoll(&pUnit->sSeed);
@@ -6723,6 +6847,7 @@ void __fastcall AITHINK_Fn1_Catapult(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
 }
 
 // Frozen Horror AI decision function. If the monster's primary skill (Skill1) has a range exceeding the current distance to target and a difficulty-scaled RNG roll passes, casts that skill (freeze/cold attack) on the target provided the monster is not already in STATE_inferno. Otherwise, clears inferno state if present, then rolls again: if not engaged in combat and roll passes, resets to idle (ResetCombatTargetAndIdle); if engaged and roll passes, calls CalledOnEndAiFunction1 with mode 4; otherwise plans the next move using a difficulty-scaled step distance.
+// 1.14d mac: 002a00bd
 void __fastcall AITHINK_Fn1_FrozenHorror(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t DVar1;
     BOOL eFrostState;
@@ -6775,6 +6900,7 @@ void __fastcall AITHINK_Fn1_FrozenHorror(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     PlanNextAiMove(pGame, pUnit, (int)pMonStats->aip[3][uRandPct]);
 }
 
+// 1.14d mac: 002a0278
 void __fastcall AITHINK_Fn1_BloodLord(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc seedNext;
     D2UnitStrc* pAttacker = pAiParam->pTarget;
@@ -6810,6 +6936,7 @@ void __fastcall AITHINK_Fn1_BloodLord(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     return;
 }
 
+// 1.14d mac: 002a03c0
 void __fastcall AITHINK_Fn1_Spirit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     int t2_c2 = pAiParam->bEngagedInCombat;
     D2UnitStrc* pTarget = pAiParam->pTarget;
@@ -6826,6 +6953,7 @@ void __fastcall AITHINK_Fn1_Spirit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
     PlanNextAiMove(pGame, pUnit, 10);
 }
 
+// 1.14d mac: 002a042d
 void __fastcall AITHINK_Fn1_Smith(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2UnitStrc* pTarget = pAiParam->pTarget;
     if (pAiParam->bEngagedInCombat) {
@@ -6844,6 +6972,7 @@ void __fastcall AITHINK_Fn1_Smith(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
     MONSTERAI_CommandWalkToUnit(pGame, pUnit, pTarget, 7);
 }
 
+// 1.14d mac: 002a04bc
 void __stdcall MONSTERAI_CheckAdjacentUnit(D2UnitStrc * pUnit, D2UnitStrc * * ppUnit) {
     if (*ppUnit == pUnit) {
       return;
@@ -6859,6 +6988,7 @@ void __stdcall MONSTERAI_CheckAdjacentUnit(D2UnitStrc * pUnit, D2UnitStrc * * pp
 }
 
 // Executes one of several "follow the owner" movement behaviours for a hireling/merc (or pet) relative to its owning player, dispatched by nAction (switch 0-5). Action 0: pick a free flank tile around the owner (via composite-dimension offset table) at the owner's grid and walk there. Action 1: walk to one of the owner's interacted-NPC stored coords, with combat-mode setup and AiThink retries, falling back to a random offset walk near the owner once the slot list (20 entries) is exhausted. Action 2: random short reposition near owner. Action 3: relocate the merc to a random valid monster spawn position in the owner's room (SUNIT_RelocateUnit, sets UNITFLAGEX_TELEPORTED) - used to teleport a stuck merc. Action 4: count adjacent pets and walk toward owner with an offset. Action 5: walk in a random offset around the owner. Returns 1 if an action was taken/movement issued, 0 on failure (e.g. relocate failed) or unknown action. Side effects: ApplyCombatAndMonStats, walk commands, AiThink timer triggers.
+// 1.14d mac: 002a04ee
 int32_t __fastcall HirelingFollowOwnerAction(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2UnitStrc * pMerc, int32_t nAction, int32_t bRun, int32_t nVelocity, int32_t nWalkRadius) {
     // Static local variables (originally global data)
     static uint8_t gaMirroredDirection[8] = { 0x4, 0x3, 0x2, 0x1, 0x0, 0x7, 0x6, 0x5 }; D2_STATIC_GUARD(gaMirroredDirection, "D2Game::Monster::AI::HirelingFollowOwnerAction::gaMirroredDirection");
@@ -7538,6 +7668,7 @@ int __fastcall AI_Pet_EvaluateMovementPriority(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // Per-tick combat+follow AI for a summoned pet/minion (server-side; returns BOOL from the chosen movement helper). Resolves the owning player via GetOwnerUnit (caching its GUID in pMonsterAiGeneral->dwArg2); if the owner is gone it tries to re-find the player by GUID and trails it, else replans. If owner distance >0x32 it just follows; within 0x1D it actively fights: picks the best target (MONSTERAI_FindBestTarget, skipping units flagged uninteractable) and a nearby melee target (MONSTERAI_FindTargetInRange dist<=6/0x24), confirms line of sight via TestIfMonsterCanHitTarget, rolls the seed to pick a near/far follow radius, then delegates to AI_Pet_EvaluateMovementPriority. In-town vs. dungeon checks (DRLGROOM_IsRoomInTown) decide whether to flee, end-attack, or replan. Otherwise it follows the owner with a random offset. Side effects: issues movement/combat commands, schedules next think.
+// 1.14d mac: 002a1d9d
 void __fastcall AI_Pet_ThinkCombatAndFollow(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     int32_t pInteractData;
     D2RoomStrc* pRoom;
@@ -7654,6 +7785,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_30(D2UnitStrc * p) 
 }
 
 // Alternate combat-and-follow tick for pet monsters. Resolves the pet's owner (falls back to FindUnitFromTable if owner link is missing); if truly ownerless, tries to walk toward the stored owner GUID unit or idles. Finds the best nearby enemy (MONSTERAI_FindBestTarget) and the current closest target (FindTargetAndDistance); promotes the best enemy to active target if within 20 tiles with LOS. Rolls RNG to choose near (7) vs far (8) follow radius. Calls AI_Pet_EvaluateMovementPriority; if no movement decision was made and a target exists outside town, rolls to cast Skill1 (50%) or approach (SetCombatStateAndApproachTarget) or idle (PlanNextAiMove). Falls back to random walk around owner.
+// 1.14d mac: 002a20f1
 void __fastcall AITHINK4_PetThinkCastSkillAndFollow(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     BOOL bHasCollision;
     uint32_t nRandPct;
@@ -7744,6 +7876,7 @@ void __fastcall AITHINK4_PetThinkCastSkillAndFollow(::SGAMEDATA * pGame, D2UnitS
     MONSTERAI_CommandWalkRandomOffset(pGame, pUnit, pOwner, 4);
 }
 
+// 1.14d mac: 002a2408
 void __fastcall AITHINK_Fn1_NecroPet(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
     if (pAiParam->pMonsterAiGeneral->dwArg0) {
@@ -7755,6 +7888,7 @@ void __fastcall AITHINK_Fn1_NecroPet(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
 }
 
 // Hireling (merc) AI: chooses and casts a skill from the hireling's level-appropriate Hireling.txt row. Validates nMonStatIdx against MonStats table. Looks up the row via GetHirelingText (expansion, type, merc level), then for each of up to 6 listed skills computes a weighted chance (defaultchance + per-level-diff scaling), skipping skills the unit lacks, aura skills whose state is already active, and Inferno when the target is out of range. Rolls the merc seed (*pnParam) modulo the cumulative chance and selects the matching skill; casts it via SERVER_UNIT_CastSkill (or Server_SelectSkill for flagged skills). If no weighted skill fires, falls back by MonStat id to a default skill cast, melee approach (CalledOnEndAiFunction1) when in range, or PlanNextAiMove otherwise.
+// 1.14d mac: 002a244d
 void __fastcall AI_Hireling_SelectAndCastSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nMonStatIdx, int nHirelingType, D2UnitStrc * pUnit2, uint32_t * pSeed) {
     D2SkillStrc* pSkill;
     int32_t nCollisionDist;
@@ -7909,6 +8043,7 @@ void __fastcall AI_Hireling_SelectAndCastSkill(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // Per-tick combat logic for mercenary/hireling units. Computes a skill-use chance from the merc's level and MonStats2 base value (capped at 94%). Uses a seeded RNG to decide skill vs. normal attack. For ranged hirelings (no ranged skill): at close range may walk away, otherwise casts via AI_Hireling_SelectAndCastSkill. For melee hirelings: charges via MONSTERAI_CommandRunToUnit until in range, then attacks. Falls back to PlanNextAiMove if pet data is missing.
+// 1.14d mac: 002a2826
 void __fastcall HirelingCombatThink(::SGAMEDATA * pGame, D2UnitStrc * pMerc, int32_t nClassId, D2UnitStrc * pOwner, D2UnitStrc * pTarget, uint32_t * pSeed, D2AiParamStrc * pAiParam) {
     BOOL bIsInMeleeRange;
     int nMercGuid;
@@ -7994,6 +8129,7 @@ void __fastcall HirelingCombatThink(::SGAMEDATA * pGame, D2UnitStrc * pMerc, int
     return;
 }
 
+// 1.14d mac: 002a2ab6
 void __fastcall NihlathakMercAi_ClearInfernoState(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2AiGeneralStrc* pMonsterAiGeneral = pAiParam->pMonsterAiGeneral;
     BOOL eInfernoState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
@@ -8006,6 +8142,7 @@ void __fastcall NihlathakMercAi_ClearInfernoState(::SGAMEDATA * pGame, D2UnitStr
 }
 
 // Per-tick AI for hireable mercenary monsters. Resolves the owning unit; if none / owner not a player, re-attaches the appropriate non-hireling AI (mode 5 for class 0x10f, else 6) and idles. With a player owner: clears inferno state, then does follow logic by distance bands (warp/teleport at >100, run-follow / walk-follow at configurable min/max bands via HirelingFollowOwnerAction) and, when idle (Neutral), checks collision, looks for a combat target outside town (FindTargetAndDistance -> HirelingCombatThink within range 0x19), or wanders/repositions near the owner. Schedules the next think via PlanNextAiMove. No return.
+// 1.14d mac: 002a2b2a
 void __fastcall AITHINK_Fn1_Hireable(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     eD2CollisionShapeType nGridIndex;
     int32_t nUnitGridCell;
@@ -8184,6 +8321,7 @@ void __fastcall AITHINK_Fn1_Hireable(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
 }
 
 // Init function for summoned caster/pet AI: computes offset vector (dx,dy) from owner position to self and stores into pMonsterAiGeneral->dwArg0/dwArg1. Owner must exist or function halts with fatal error 0xe17.
+// 1.14d mac: 002a30cd
 void __fastcall AI_Function0_AttachedCasterInit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     int nSelfPosX;
     int nSelfPosY;
@@ -8247,6 +8385,7 @@ void __fastcall AI_Function0_AttachedCasterInit(::SGAMEDATA * pGame, D2UnitStrc 
 }
 
 // Monster AI tick for a summoner/master archetype. Reads its current AI command (GetAiCmd); if a command of type 8 is pending it skips the active logic. Otherwise flags whether any minion is dead/missing (CallForEachMinion + MONSTERAI_FlagIfDeadOrNull) and checks if it is currently attacking. If neither attacking nor needing minions: when the master is owned by another unit it walks toward the saved command offset (or PlanNextAiMove), else it performs a circular patrol around itself — phase counter dwArg2 (0..99) drives offset direction/sign via RNG, then MONSTERAI_CommandWalkToCoords; on success advances the phase, on failure creates a walk minion command and resets. If attacking/minions-needed it issues a CreateMinion cmd-8, frees minion AIs and reattaches the correct AI. Always ends scheduling the next move.
+// 1.14d mac: 002a3215
 void __fastcall AI_Function1_SummonMaster(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     // Frame slots -20..-4 are ONE object: &bMinionDeadOrNull is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -8388,6 +8527,7 @@ void __fastcall AI_Function1_SummonMaster(::SGAMEDATA * pGame, D2UnitStrc * pUni
     PlanNextAiMove(pGame, pUnit, 10);
 }
 
+// 1.14d mac: 002a3580
 void __fastcall AITHINK_Fn1_Griswold(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t DVar1;
     D2UnitStrc* pTarget = pAiParam->pTarget;
@@ -8409,6 +8549,7 @@ void __fastcall AITHINK_Fn1_Griswold(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
     PlanNextAiMove(pGame, pUnit, 10);
 }
 
+// 1.14d mac: 002a3620
 BOOL __fastcall AI_Monster_TryCastRateLimitedSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     eD2Skills eSkill;
     int nMapAiIdxOrFrameDiff;
@@ -8435,6 +8576,7 @@ BOOL __fastcall AI_Monster_TryCastRateLimitedSkill(::SGAMEDATA * pGame, D2UnitSt
 }
 
 // Per-tick AI think handler for a stationary "guard" monster that holds a home tile. Lazily creates/initializes a home AI command (cmd 10) from the unit's spawn coords. Computes the dungeon grid index of home, of the unit, and of the target via Dungeon::GetGridIndex; if the unit has wandered off its home cell it sets combat mode and walks back (re-arming the AI-think timer on move failure). If the target left the home cell and the unit is already home, it tries a rate-limited skill cast or plans the next move. Beyond a leash distance (>0x28) it forces a return home. Otherwise rolls a per-difficulty chance (from MonStats columns near TreasureClass) to chase/approach the target (CommandRunToUnitDirect) or plan the next move. Early-returns if no MonStats or room.
+// 1.14d mac: 002a3734
 void __fastcall AITHINK_Fn1_SpecialCountess(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     int nPosCoord;
     int32_t bMoveOk1;
@@ -8615,6 +8757,7 @@ void __fastcall AITHINK_Fn1_SpecialCountess(::SGAMEDATA * pGame, D2UnitStrc * pU
 }
 
 // Picks a random spawnable monster class from the current level's MonsterRegion table for use by generic-spawner AI. Uses pUnit's RNG seed to select an entry with genericSpawn=1; falls back to a linear scan if the random pick is invalid. Writes the chosen classId into pAiGeneral->nFunctionId. Returns 1 on success.
+// 1.14d mac: 002a3c73
 uint8_t __fastcall AI_GetRandomMonsterClassForLevel(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiGeneralStrc * pAiGeneral) {
     int nFallbackClassId;
     D2MonsterRegionFieldStrc* pMonData;
@@ -8651,12 +8794,14 @@ uint8_t __fastcall AI_GetRandomMonsterClassForLevel(::SGAMEDATA * pGame, D2UnitS
     return '\x01';
 }
 
+// 1.14d mac: 002a3dcc
 void __fastcall AITHINK_Fn0_GenericSpawner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     AITHINK_Fn0_SpawnTimerInit(pGame, pUnit, pAiParam);
     pAiParam->pMonsterAiGeneral->nGenericSpawnerSpecific = -1;
 }
 
 // AI Function1 for generic nest/spawner monsters. On first tick picks a random level-appropriate monster class via AI_GetRandomMonsterClassForLevel. While target is in range and spawn cap (dwArg1) not reached, fires SKILL_Nest on a cooldown (dwArg0) to spawn a minion. Idles if no target or cooldown active.
+// 1.14d mac: 002a3dfb
 void __fastcall AI_Fn1_GenericSpawner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     BOOL BVar2;
     D2UnitStrc* pTarget = pAiParam->pTarget;
@@ -8706,11 +8851,13 @@ void __fastcall AI_Fn1_GenericSpawner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     PlanNextAiMove(pGame, pUnit, 0x14);
 }
 
+// 1.14d mac: 002a3fd6
 void __fastcall AITHINK_Fn0_BloodRaven(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     pAiParam->pMonsterAiGeneral->dwArg2 = 0;
 }
 
 // Per-tick AI think handler for the Blood Raven boss (Burial Grounds, A1). Ensures a "home" AI command (cmd 10) exists at the unit's spawn position, then enforces a leash: if the target is too far (>0x2d) or the boss has strayed too far from home (>0x31/0x32) it runs back home and re-arms the AI-think timer. Within range it kites: randomly repositions near the target, and rolls (per-difficulty, gated by Skill1/combat state and dwArg counters) to cast Skill1 at an offset around the target (her bow/zombie-raise). Otherwise reacquires a target via FindTargetAndDistance, optionally casts Skill2 or melees, and runs away when cornered. Falls through to CalledOnEndAiFunction1 (mode 4). Uses pUnit->sSeed RNG throughout.
+// 1.14d mac: 002a3fe7
 void __fastcall AITHINK_Fn1_BloodRaven(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc* pSeed;
     int32_t bMoveOk1;
@@ -8897,6 +9044,7 @@ void __fastcall AITHINK_Fn1_BloodRaven(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 }
 
 // Seeds a monster's home position for the return-to-home AI. Returns a single byte: both exit paths write only AL (MOV AL,1 at 005e6843, XOR AL,AL at 005e684b), so the upper 24 bits of EAX are whatever the preceding call left there.
+// 1.14d mac: 002a476f
 bool __fastcall AI_Monster_InitializeHomePosition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2MonsterAiCmdStrc* pHomeCmd = Ai::AiGeneral::AI_CreateCmdIfNotExists(pGame, pUnit, 10, 0);
     if (pHomeCmd && !pHomeCmd->nCmdArg[1] && !pHomeCmd->nCmdArg[2]) {
@@ -8913,6 +9061,7 @@ bool __fastcall AI_Monster_InitializeHomePosition(::SGAMEDATA * pGame, D2UnitStr
 }
 
 // Decides whether a monster should abandon its current target and walk back to its home position. Returns a single byte: every exit path writes only AL, so the upper 24 bits of EAX are whatever the preceding call left there.
+// 1.14d mac: 002a4829
 bool __fastcall AI_Monster_CheckReturnToHome(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam, uint32_t nReturnThreshold) {
     D2MonsterAiCmdStrc* pReturnCmd;
     D2MonsterAiCmdStrc* pHomeCmd = Ai::AiGeneral::FindMonsterAiCmd(pUnit, 10, 0);
@@ -9036,6 +9185,7 @@ bool __fastcall _PlayerNpcInteraction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
 }
 
 // Server-side AI command-script executor for a monster unit. Polls the unit's queued monster-AI command slots (FindMonsterAiCmd ids 4=walk-to-coords, 5=random-walk, 7=animation-sequence) and advances whichever is active: walks toward a target tile (alternating attack/skill stance on parity), performs RNG random-walk offsets, or plays a forced anim/path-direction sequence (special cases per nClassId for act bosses/minions). Decrements the slot's remaining-step counter each tick and calls PlanNextAiMove to schedule the next think. Returns nonzero (low byte 1) if it consumed an action this tick, 0 if idle.
+// 1.14d mac: 002a4b1a
 bool __fastcall AI_Monster_ExecuteAiCommands(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     // Static local variables (originally global data)
     static int gnMonsterAiCommandCounter; D2_STATIC_GUARD_BSS(gnMonsterAiCommandCounter, "D2Game::Monster::AI::AI_Monster_ExecuteAiCommands::gnMonsterAiCommandCounter");
@@ -9175,6 +9325,7 @@ bool __fastcall AI_Monster_ExecuteAiCommands(::SGAMEDATA * pGame, D2UnitStrc * p
     return false;
 }
 
+// 1.14d mac: 002a4eee
 bool __fastcall AI_Monster_WalkToStoredPosition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t pAiParam, D2PathPosStrc * pPathPos) {
     D2MonsterAiCmdStrc* pWalkCmd;
     if (pUnit) {
@@ -9226,6 +9377,7 @@ bool __fastcall AITHINK4_MapAiHandler3_WalkToStoredPosition(::SGAMEDATA * pGame,
     return bResult;
 }
 
+// 1.14d mac: 002a5069
 bool __fastcall AI_Monster_WalkToPositionAndFace(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t pAiParam, D2PathPosStrc * pPathPos) {
     uint32_t bHasSpecialFlag;
     bool bVar1 = false;
@@ -9253,6 +9405,7 @@ bool __fastcall AI_Monster_WalkToPositionAndFace(::SGAMEDATA * pGame, D2UnitStrc
     return bVar1;
 }
 
+// 1.14d mac: 002a51b0
 bool __fastcall AITHINK4_WalkToPositionAndFace_MonStatFlag9(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t pAiParam, D2PathPosStrc * pPathPos) {
     uint32_t nHasSpecialAnim;
     bool bVar1 = false;
@@ -9280,6 +9433,7 @@ bool __fastcall AITHINK4_WalkToPositionAndFace_MonStatFlag9(::SGAMEDATA * pGame,
     return bVar1;
 }
 
+// 1.14d mac: 002a52f8
 bool __fastcall AI_Monster_ExecuteMapAiBehavior(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     // Static local variables (originally global data)
     static pfnAiMapDirectionHandler gaMapAiDirectionHandlers[7] = { nullptr, (pfnAiMapDirectionHandler)&D2Game::Monster::AI::AI_Monster_WalkToStoredPosition, (pfnAiMapDirectionHandler)&D2Game::Monster::AI::AI_Monster_WalkToStoredPositionSlow, (pfnAiMapDirectionHandler)&D2Game::Monster::AI::AITHINK4_MapAiHandler3_WalkToStoredPosition, (pfnAiMapDirectionHandler)&D2Game::Monster::AI::AI_Monster_WalkToPositionAndFace, (pfnAiMapDirectionHandler)&D2Game::Monster::AI::AITHINK4_WalkToPositionAndFace_MonStatFlag9, nullptr }; D2_STATIC_GUARD(gaMapAiDirectionHandlers, "D2Game::Monster::AI::AI_Monster_ExecuteMapAiBehavior::gaMapAiDirectionHandlers");
@@ -9311,6 +9465,7 @@ bool __fastcall AI_Monster_ExecuteMapAiBehavior(::SGAMEDATA * pGame, D2UnitStrc 
 }
 
 // Per-tick AI handler for friendly town/quest NPC monsters (fastcall pGame,pUnit,pAiParam). First tries AI_Monster_InitializeHomePosition; returns early if it took over. Then branches on the unit's nClassId for quest-specific scripted behavior: Cain portal walk (A1Q4 0x109), Act5 portal spawn (0x200), Mephisto/serpent (A3Q3 0xff), Jerhyn gateway logic (0xc9: QUEST_ShouldBlockJerhyn / Q12 gate, sets path target +9 X), and golden-bird quest (A3Q5 0xfe) — walking toward quest coords or casting skill 8 when in range. Falls through to _PlayerNpcInteraction, then AI command/map-behavior execution, finally PlanNextAiMove(8) idle reschedule if nothing else fired. No return value.
+// 1.14d mac: 002a53d3
 void __fastcall AI_Fn1_Npc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     int nClassId;
     BOOL BVar2;
@@ -9431,6 +9586,7 @@ void __fastcall AI_Fn1_Npc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStr
     PlanNextAiMove(pGame, pUnit, 8);
 }
 
+// 1.14d mac: 002a56c6
 BOOL __fastcall AI_Monster_TryDefaultIdleIfNoSub(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2MonsterAiStrc* pMonsterAi = !pUnit || pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataMonster ? 0 : pUnit->pUnitData.pUnitDataMonster->pMonsterAi;
     BOOL bHasAiSub = MonsterAI::HasAiSub(pMonsterAi);
@@ -9443,6 +9599,7 @@ BOOL __fastcall AI_Monster_TryDefaultIdleIfNoSub(::SGAMEDATA * pGame, D2UnitStrc
 }
 
 // AI think function for stationary NPCs (used by Meshif classId 0xFB and Izual classId 0x196). If no nearby player is found, handles quest-specific completion triggers: for Meshif checks Q14_IsNpcStationary and plays A2Q6 completion sound; for Izual checks Q26_CheckIzualNearPlayer and plays A4Q2 completion sound. If a player is near but busy trading or AI sub is active, defers action. Otherwise watches distance threshold and periodically emits an attract-sound event.
+// 1.14d mac: 002a5736
 void __fastcall AITHINK_Fn1_NpcStationary(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     int32_t nTradeState;
     BOOL bHasAiSub;
@@ -9521,6 +9678,7 @@ void __fastcall AITHINK_Fn1_NpcStationary(::SGAMEDATA * pGame, D2UnitStrc * pUni
     PlanNextAiMove(pGame, pUnit, 0x14);
 }
 
+// 1.14d mac: 002a5907
 void __fastcall AI_Fn1_Towner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     bool bVar1 = AI_Monster_InitializeHomePosition(pGame, pUnit, pAiParam);
     if (bVar1) {
@@ -9541,6 +9699,7 @@ void __fastcall AI_Fn1_Towner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParam
 }
 
 // Server AI tick for the JarJar NPC (Act II Summoner-area attendant). Initializes home position on first call. Before the Sanctuary quest (A2Q4) is complete, walks the unit toward the Summoner's coordinates and interacts with nearby players. After quest completion, wanders near its home position and reacts to close players with random idle movement or NPC interaction dialogue.
+// 1.14d mac: 002a5967
 void __fastcall AITHINK_Fn1_JarJar(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t nRandRoll2;
     int32_t nDistToNearest;
@@ -9619,6 +9778,7 @@ void __fastcall AITHINK_Fn1_JarJar(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
     PlanNextAiMove(pGame, pUnit, 0x78);
 }
 
+// 1.14d mac: 002a5bfb
 uint32_t __fastcall AI_QuestNpc_InitializeQuestPhase(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     fpQuestNpcPhaseFn pfnStoreCoordsFunc;
     BOOL bCoordsStored;
@@ -9655,6 +9815,7 @@ uint32_t __fastcall AI_QuestNpc_InitializeQuestPhase(::SGAMEDATA * pGame, D2Unit
 }
 
 // Server-side AI tick for quest NPCs that travel/act outside town (Cain rescue in A1Q4, frozen Anya rescue in A5Q3; branches on classId 0x20f=Anya). Runs the quest-phase state machine via AI_QuestNpc_InitializeQuestPhase, then drives the NPC: handles player interaction, walks toward quest target coords (cmd 3 args), invokes per-quest spawn/init callbacks (Q04_SpawnCainCage/Q33_SpawnPortalNearAnya etc.), and on arrival casts skill 0xc and zeroes the NPC's HP. Schedules the next AI move (delays 0x14/0x28) and returns.
+// 1.14d mac: 002a5de2
 void __fastcall AITHINK_Fn1_NpcOutOfTown(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     int32_t nDistToTarget;
     fpQuestNpcPhaseFn pfnSpawnFunc;
@@ -9759,6 +9920,7 @@ void __fastcall AITHINK_Fn1_NpcOutOfTown(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // AI Function1 for friendly ranged NPCs (e.g. Greiz, classId 0x10F gets special Skill1 cast). Only acts when in Neutral anim and outside town. If a hostile target is within 20 tiles: 30% chance cast ranged skill or CalledOnEndAiFunction1(4); 30% chance SetCombatStateAndApproachTarget. Otherwise 20% random wander, else idle.
+// 1.14d mac: 002a60d6
 void __fastcall AITHINK_Fn1_GoodNpcRanged(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     if (!pUnit) {
@@ -9806,6 +9968,7 @@ void __fastcall AITHINK_Fn1_GoodNpcRanged(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // AI Function1 for aggressive-neutral monsters (e.g. Barricade animals). Only acts in Neutral anim and outside town. If a target exists: 80% chance attack via CalledOnEndAiFunction1(4) when in combat range, else 30% walk toward target. Without a target: 20% random wander, else idle for 10 frames.
+// 1.14d mac: 002a62b4
 void __fastcall AITHINK_Fn1_SpecialHireNoOwner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t nRandRoll;
     int32_t nDistTmp;
@@ -9873,6 +10036,7 @@ int __fastcall Unreferenced_005e7d30(D2UnitStrc * pUnit) {
     return (uint32_t)(BVar1 != 0);
 }
 
+// 1.14d mac: 002a6410
 void __fastcall AITHINK_Fn1_TownRogue(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     int nAiParam = pAiParam->nDistanceToTarget;
     int nDistToTarget = pAiParam->bEngagedInCombat;
@@ -9885,6 +10049,7 @@ void __fastcall AITHINK_Fn1_TownRogue(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     PlanNextAiMove(pGame, pUnit, 0x32);
 }
 
+// 1.14d mac: 002a6486
 void __fastcall AITHINK_Fn1_SpecialTownRogue(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     int nAiParam = pAiParam->nDistanceToTarget;
     int nDistToTarget = pAiParam->bEngagedInCombat;
@@ -9898,6 +10063,7 @@ void __fastcall AITHINK_Fn1_SpecialTownRogue(::SGAMEDATA * pGame, D2UnitStrc * p
 }
 
 // Navigation AI tick for monsters using AI type 1 (e.g. town NPC wanderers). If the monster has an active AI sub-state, delegates immediately to PlanNextAiMove(10). Otherwise finds the nearest unit: if it is a non-trade-busy player and a random roll passes, plays an attach-sound event (0x12) and schedules move(0x14) with a 60-frame cooldown via dwArg1. If no player is close enough (distance >= 25 tiles), falls back to PlanNextAiMove(0x32). On proximity attack range, calls CalledOnEndAiFunction1 with mode 4.
+// 1.14d mac: 002a64fc
 void __fastcall AITHINK_Fn1_Navi(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2MonsterAiStrc* pMonsterAi;
     uint32_t nRandRoll;
@@ -9956,6 +10122,7 @@ void __fastcall AITHINK_Fn1_Navi(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPa
     PlanNextAiMove(pGame, pUnit, 0x32);
 }
 
+// 1.14d mac: 002a6647
 void __fastcall AITHINK_Fn1_Buffy(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     if (!pRoom) {
@@ -9965,6 +10132,7 @@ void __fastcall AITHINK_Fn1_Buffy(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
     PlanNextAiMove(pGame, pUnit, 200);
 }
 
+// 1.14d mac: 002a667a
 void __fastcall AITHINK_Fn1_MinionReset(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2AiCmdArgumentsStrc cmdArgs;
     const int nDistToTarget = pAiParam->nDistanceToTarget;
@@ -9996,6 +10164,7 @@ static inline uint32_t MonStatsFlagBit(int nClassId, int nFlag) {
 }
 
 // AI Function1 stub for monsters whose combat behavior is driven by the MonStats interact flag or monster stat flag 4. If engaged and the monster has the interact flag or flag-4 set, delegates to CalledOnEndAiFunction1(4). Otherwise 20% random wander, else idles 10 frames.
+// 1.14d mac: 002a6773
 void __fastcall AITHINK_Fn1_SpecialDimVision(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2UnitStrc* pTarget = pAiParam->pTarget;
     if (pAiParam->bEngagedInCombat && !MonStatsFlagBit(!pUnit ? -1 : pUnit->nClassId, 9) && D2Common::DATATBLS::MonsterTbls::GetSomeMonsterStatFlag(!pUnit ? -1 : pUnit->nClassId, 4)) {
@@ -10010,6 +10179,7 @@ void __fastcall AITHINK_Fn1_SpecialDimVision(::SGAMEDATA * pGame, D2UnitStrc * p
     }
 }
 
+// 1.14d mac: 002a68c6
 void __fastcall AI_Fn0_SpecialTerror(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2UnitStrc* pDVar1 = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     if (!pDVar1) {
@@ -10037,6 +10207,7 @@ void __fastcall AI_Fn0_SpecialTerror(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
 }
 
 // Monster AI Function1 for a feared/terrified monster. If the STATE_terror state has expired, restores the normal AI function, fires an AITHINK timer trigger and schedules the next think on the following game frame, then returns. While still feared: if the target is beyond the flee range (dwArg0, default 0x1e) it just re-plans; otherwise it computes a run speed modifier from MonStats Run/Velocity and flees from pTarget (MONSTERAI_CommandRunAwayFromUnit or WalkTowardsUnitOffset depending on a monster flag), with a one-time setup branch (dwArg2), interact-flag handling, and a random-offset walk fallback if the flee move fails.
+// 1.14d mac: 002a691d
 void __fastcall AITHINK_Fn1_SpecialTerror(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t nMonFlag;
     int32_t nClassId;
@@ -10129,6 +10300,7 @@ void __fastcall AITHINK_Fn1_SpecialTerror(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // AI think-tick for monsters that pursue a target. If target is in town or unreachable, resets AI via AttachCorrectAiFunctionToMonster and reschedules. On first approach (dwArg0==0) flees from target; once in melee range triggers attack sequence (CalledOnEndAiFunction1 mode 4); otherwise wanders toward target. Side-effect: updates dwArg0 state and retriggers AITHINK timer.
+// 1.14d mac: 002a6d6b
 void __fastcall AITHINK_Fn1_SpecialTaunt(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     BOOL bIsInTown;
     D2UnitStrc* pWanderTarget;
@@ -10179,6 +10351,7 @@ void __fastcall AITHINK_Fn1_SpecialTaunt(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     GAME::Event::SetEvent(pGame, pUnit, 2, pGame->dwGameFrame + 1, 0, 0);
 }
 
+// 1.14d mac: 002a6ee7
 void __fastcall DiabloAi_ResetInfernoAndReattach(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
     int nHomePosX = 0;
@@ -10207,6 +10380,7 @@ void __fastcall DiabloAi_ResetInfernoAndReattach(::SGAMEDATA * pGame, D2UnitStrc
     PlanNextAiMove(pGame, pUnit, 1);
 }
 
+// 1.14d mac: 002a6fd7
 int32_t __fastcall CalculateRiskAncientsAndDiablo(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2MonsterAiCmdStrc * pMonsterAi) {
     int32_t nDistToMarker;
     eD2Skills eSkillId;
@@ -10297,6 +10471,7 @@ int32_t __fastcall CalculateRiskAncientsAndDiablo(::SGAMEDATA * pGameStrc, D2Uni
 
 // Server-side Diablo (act boss) AI action selector; structurally identical to the Baal variant. Builds a 17-slot skill-weight table selected by melee-range vs wall-collision vs ranged branch, then biases weights by target fire/light resist, life%, cold state, difficulty (nChaosArenaRadius), distance, whether the target casts a feared mass-spell (Blizzard/Meteor/FireWall/ImmolationArrow above level threshold) and Chaos-Sanctuary arena positioning (pChaosArenaData marker). Zeroes weights for actions Diablo can't cast at the position, sums and seed-RNG weighted-picks. Returns the chosen action index (0..16, mapping to spell/move helpers), 0x10 if path blocked with no target, 0xb fallback. Returns dwArg0 immediately if a queued decision override is set.
 // Action weight slots (aActionWeights index): 5 melee skill mod, 6 lightning, 7 cold adjust, 8 fire adjust, 9 range bias, 10 fire, 12 skill, 13 cold, 14 teleport, 15 arena target. aActionWeightTemplate is built first and copied over aActionWeights with REP MOVSD (17 dwords).
+// 1.14d mac: 002a73ca
 int32_t __fastcall AI_Diablo_DecideAction(D2AiGeneralStrc * pDiabloAiCtx, D2UnitStrc * pDiabloUnit, D2UnitStrc * pTargetEnemyUnit, uint32_t nTargetDistance, int32_t nChaosArenaRadius, D2MonsterAiCmdStrc * pChaosArenaData) {
     bool bSignedGreater;
     int32_t nWeightedDist;
@@ -10652,6 +10827,7 @@ int32_t __fastcall AI_Diablo_DecideAction(D2AiGeneralStrc * pDiabloAiCtx, D2Unit
     return 0xb;
 }
 
+// 1.14d mac: 002a7c1a
 BOOL __fastcall AI_IsTargetWithinBossRange(D2UnitStrc * pSource, D2UnitStrc * pTarget) {
     int32_t nY;
     if (!pSource) {
@@ -10674,6 +10850,7 @@ BOOL __fastcall AI_IsTargetWithinBossRange(D2UnitStrc * pSource, D2UnitStrc * pT
 }
 
 // Monster AI target selection: scans all candidate units to pick the highest-"risk" (threat) target for pUnit. Iterates the game's 8 player/unit node buckets (pGame->pUnitNodes), applying caller-supplied filter callback pUnit2 to each player candidate and scoring live (non-dead) candidates via CalculateRiskAncientsAndDiablo (Ancients/Diablo-aware weighting); tracks the best target and its risk. After the player buckets it also scans monster nodes in the same act, and if the best monster is very close (collision distance <5) but not in melee range, it path-tests toward it and may prefer it. Writes the winning risk score to *param_1_00 and a count to *param_2_00; returns the chosen D2UnitStrc* target. Halts (unrecoverable) if pUnit2 is null or a player node holds a non-player.
+// 1.14d mac: 002a7cf7
 D2UnitStrc * __fastcall SelectTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int * pBestRisk, int * pCandidateCount, D2MonsterAiCmdStrc * pAi, fpAiTargetPredicate pUnit2) {
     uint32_t bTargetFilterOk;
     int fRawRiskScore;
@@ -10812,6 +10989,7 @@ D2UnitStrc * __fastcall SelectTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, in
 }
 
 // Per-tick AI think handler (Function1) for the Diablo boss. Ensures a "home position" command (CmdId 10, the boss spawn/leash point) exists, selects a target within boss range (SelectTarget + AI_IsTargetWithinBossRange), then asks AI_Diablo_DecideAction for an action code (1-0x10). A leading special case casts Skill8 ("Diablogeddon", only Diablo Clone actually has Skill8) when not already auraed. The switch maps action codes to: approach/walk to target (1), end-think variants via CalledOnEndAiFunction1 (2/3/4), cast Skill1-7 with aura/state gating (5,6,7,8,9,0xd,0xf), melee approach (0xc), walk back toward the home command coords with collision-retry offset (0xe), and a random short walk (0x10). Per-difficulty fallback. Side effects: casts skills (SERVER_UNIT_CastSkill), issues walk commands, sets aura states, resets AiGeneral->dwArg0.
+// 1.14d mac: 002a802a
 void __fastcall AITHINK_Fn1_Diablo(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     short int nSkillId;
     int nSkillIdx;
@@ -11420,10 +11598,12 @@ void __thiscall MONSTERAI_SpawnSpecificMinions(::SGAMEDATA * pThis, D2UnitStrc *
     Create::SpawnMonsterAtUnit(pThis, pUnit, 0x2c7, eD2MonsterAnimMode_ns::Neutral, 4, 0x40);
 }
 
+// 1.14d mac: 002a8777
 void __fastcall AITHINK_Fn1_UberDiablo(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
 
 }
 
+// 1.14d mac: 002a877c
 void __fastcall AITHINK_Fn1_Vendor(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t newSeed = D2_SeedRoll(&pUnit->sSeed);
     if ((int)(newSeed % 100) < 0x14) {
@@ -11434,6 +11614,7 @@ void __fastcall AITHINK_Fn1_Vendor(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
     PlanNextAiMove(pGame, pUnit, 0x1e);
 }
 
+// 1.14d mac: 002a87f5
 void __fastcall AITHINK_Fn1_Hydra(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     if (pAiParam->pMonsterAiGeneral->dwArg0 < pGame->dwGameFrame) {
@@ -11459,6 +11640,7 @@ void __fastcall AITHINK_Fn1_Hydra(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
 }
 
 // AI tick for Trapped Soul monster. Sets UNITFLAG_NOTC (no collision). If target is absent or farther than 4 units, idles (mode 8/15). On first engage (dwArg0==0) performs a charge attack (mode 9) and records game frame in dwArg1. On subsequent ticks, compares target vs self position and selects left (mode 4), right (mode 5), or idle (mode 8) attack direction based on relative coords; resets cooldown (dwArg1) to ~35 or 5 frames accordingly.
+// 1.14d mac: 002a88d9
 void __fastcall AITHINK_Fn1_TrappedSoul(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     POINT ptTargetPos;
     POINT ptUnitPos;
@@ -11517,6 +11699,7 @@ void __fastcall AITHINK_Fn1_TrappedSoul(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     pAiGeneral->dwArg1 = pGame->dwGameFrame + 5;
 }
 
+// 1.14d mac: 002a8a52
 void __fastcall AITHINK_Fn1_7TIllusion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     int nUnitPosY;
     int nUnitPosX;
@@ -11553,6 +11736,7 @@ void __fastcall AITHINK_Fn1_7TIllusion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 }
 
 // AI tick for the Dark Wanderer (Act 3 Q7 boss). Queries Q24_GetDarkWandererSpawnCoords; if coords unavailable or target too far (≥20 units) idles. State machine in dwArg0: 1=walk to spawn coords, 2=poll distance and cast BaalMonsterSpawn skill at position (mode 0) + start portal timer once within 2 units (retries up to 3 times via ApplyCombatAndMonStats before forcing cast). Directly tied to quest progression logic.
+// 1.14d mac: 002a8b26
 void __fastcall AITHINK_Fn1_DarkWanderer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2CoordStrc sSpawnCoord;
     D2UnitStrc* pDVar2 = pAiParam->pTarget;
@@ -11615,6 +11799,7 @@ void __fastcall AITHINK_Fn1_DarkWanderer(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     return;
 }
 
+// 1.14d mac: 002a8ca9
 void __fastcall AITHINK_Fn0_SentryTimerInit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2AiGeneralStrc* pDVar1 = pAiParam->pMonsterAiGeneral;
     pDVar1->dwArg0 = pGame->dwGameFrame;
@@ -11622,6 +11807,7 @@ void __fastcall AITHINK_Fn0_SentryTimerInit(::SGAMEDATA * pGame, D2UnitStrc * pU
 }
 
 // Checks and optionally decrements a per-summon skill cooldown stored in pSkillCooldownTable. Returns 1 (ready/abort) if owner is absent or in town, or if cooldown has reached 0. If cooldown entry is negative (uninitialised), looks up the skill's calc[3] (cooldown frames) via D2GetSkillCalc and initialises it. If bDecrement!=0 and cooldown&gt;0, decrements by 1 and returns 0 (not ready). Side-effect: writes initialised/decremented cooldown back into the table entry at +0x18.
+// 1.14d mac: 002a8cc6
 BOOL __fastcall AI_Summon_CheckSkillCooldownTimer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pSkillCooldownTable, int32_t bDecrement) {
     D2RoomStrc* pRoom;
     BOOL bIsInTown;
@@ -11677,6 +11863,7 @@ BOOL __fastcall AI_Summon_CheckSkillCooldownTimer(::SGAMEDATA * pGame, D2UnitStr
 }
 
 // AI tick for Assassin sentry traps (e.g. Lightning Sentry, Death Sentry). Reads attack range and Skill1 from MonStats. Calls AI_Summon_CheckSkillCooldownTimer (no-decrement) to bail early if on cooldown. Clears STATE_inferno if active. Finds nearest target via FindTargetAndDistance; if target is within attack range, rolls a random chance (per difficulty) to idle or cast: decrements cooldown via second CheckSkillCooldownTimer call, then fires SERVER_UNIT_CastSkill with Skill1 targeting the unit. Idle duration read from MonStats aip fields.
+// 1.14d mac: 002a8dfe
 void __fastcall AITHINK_Fn1_AssassinSentry(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     BOOL bTargetInRange;
     uint32_t nTargetDist;
@@ -11720,6 +11907,7 @@ void __fastcall AITHINK_Fn1_AssassinSentry(::SGAMEDATA * pGame, D2UnitStrc * pUn
     }
 }
 
+// 1.14d mac: 002a8fc8
 void __fastcall AITHINK_Fn0_BladeCreeper(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
     pAiGeneral->dwArg0 = -1;
@@ -11728,6 +11916,7 @@ void __fastcall AITHINK_Fn0_BladeCreeper(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // AI combat tick (Function1) for Blade Creeper monsters. Uses MonStats.Skill1 as the primary skill. Initialises a frame timer (dwArg0) from SkillsTxt calc[3] on first call. While the timer has not expired: if dwArg2==0 and the skill has a server missile (srvmissilea), spawns it at the creeper's position, adds owner attack-rate/item-tohit bonuses to the missile, sets dwArg2=1. Then walks toward two AiCmd waypoints alternately (tracked by dwArg1), or wanders around owner on arrival. After the timer expires, issues MONSTERAI_CommandSkillAtPosition at origin (detonation/expire behaviour).
+// 1.14d mac: 002a8fe7
 void __fastcall AITHINK_Fn1_BladeCreeper(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SkillStrc* pSkill;
     uint32_t nMissilePosY;
@@ -11817,6 +12006,7 @@ void __fastcall AITHINK_Fn1_BladeCreeper(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // AI tick for an invisible pet (InvisoPet) follower. Reads pAiParam range from MonStats TreasureClass fields scaled by difficulty; halves it when owner is Running. If the cooldown (dwArg0) has not expired and owner is not running and monster is not attacking, schedules the next move via PlanNextAiMove and returns. Otherwise picks a random position within ±range of the owner using the unit's internal seed (LCG), then casts SKILL_Teleport2 to that tile. Resets dwArg0 cooldown to current frame + move-interval. Key I/O: pGame, pUnit (the pet), pAiParam. Side-effect: mutates pUnit->sSeed and pAiGeneral->dwArg0.
+// 1.14d mac: 002a937c
 void __fastcall AITHINK_Fn1_InvisoPet(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
@@ -11862,6 +12052,7 @@ void __fastcall AITHINK_Fn1_InvisoPet(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
 }
 
 // Combat AI tick for the Death Sentry trap monster (Act 5). Each tick: checks skill cooldown timer; if ready, finds nearest target and searches for a nearby corpse via SKILLS_FindNearbyCorpse. If a new corpse is within half the bolt-travel distance, casts Skill1 (corpse explosion) on it and records corpse GUID in dwArg0. Otherwise, if target is within melee range and a random roll passes, casts Skill2 (lightning sentry bolt) on target. Falls through to PlanNextAiMove if no action taken.
+// 1.14d mac: 002a9545
 void __fastcall AITHINK_Fn1_DeathSentry(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     BOOL bTargetInRange;
     uint32_t nTargetDist;
@@ -11927,6 +12118,7 @@ void __fastcall AITHINK_Fn1_DeathSentry(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 }
 
 // Checks whether a monster AI can summon a specific pet type identified by skill enum byPetTypeB. Validates skill entry in TxtSkills; returns false (0) if skill has no summon field. If the existing pet (byPetTypeA) already matches the summon class, returns false. Otherwise checks pettype field against the owner unit's active pet type count via GetOwnersPetType; returns false if the pet slot is already filled, true if summoning is allowed. Used by Shadow Master AI to gate skill mirroring.
+// 1.14d mac: 002a97b4
 BOOL __fastcall MONSTERAI_CanSummonPetType(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2UnitStrc * pTarget, int32_t nSkillId) {
     uint32_t nExistingPetClass;
     D2SkillsTxt* pDVar1 = nSkillId >= 0 && nSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;
@@ -11961,6 +12153,7 @@ BOOL __fastcall MONSTERAI_CanSummonPetType(::SGAMEDATA * pGame, D2UnitStrc * pOw
 }
 
 // Validates whether a monster may cast a given skill at a candidate target right now; returns 1 if allowed, 0 otherwise. nParam points to a scan/context record (+0x18 = a mode/phase flag, +0x8 = a secondary unit). Bounds-checks nSkillId against the SkillsTxt table, confirms the pet-summon limit via MONSTERAI_CanSummonPetType, then branches on SkillsTxt.aitype: enforces that aura/buff types (4,0xD) only run when the context flag matches, rejects aura-type-1 skills whose aurastate is already active on the target (UNIT_GetUnitState), and for aura-type-2 rejects when either the target's aurastate or the secondary unit's auratargetstate is set. Finally, for flagged skills it rejects if the target already has the aura at a stacked value (>2 via STATLIST_GetBaseStatValue). Pure predicate, no side effects. With no secondary unit (context +0x8 null) the jump table at 005eac93 rejects aitypes 2, 4, 5, 0xb, 0xc and 0xd (reject_skill, return 0); aitypes 3 and 6..0xa go on to the aura checks.
+// 1.14d mac: 002a9866
 int __fastcall MONSTERAI_ValidateSkillConditions(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit, int32_t nSkillId, D2AiParamStrc * pAiParam) {
     eD2States eAuraActiveState;
     D2StatListExStrc* pStatList;
@@ -12101,6 +12294,7 @@ BOOL __fastcall MONSTERAI_ShouldCastSkill(::SGAMEDATA * pGame, D2UnitStrc * pUni
     return 1;
 }
 
+// 1.14d mac: 002a9c49
 int32_t __fastcall MONSTERAI_CalculateSkillAuraRange(D2UnitStrc * pUnitStrc, D2UnitStrc * pUnit, D2SkillStrc * pSkill, D2AiParamStrc * pAiStateBlock) {
     int nSkillLevel = 1;
     if (pUnit) {
@@ -12116,6 +12310,7 @@ int32_t __fastcall MONSTERAI_CalculateSkillAuraRange(D2UnitStrc * pUnitStrc, D2U
     return fRange;
 }
 
+// 1.14d mac: 002a9c9f
 void __fastcall AITHINK_Fn0_ShadowWarrior(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2AiGeneralStrc* pDVar1 = pAiParam->pMonsterAiGeneral;
     pDVar1->dwArg2 = 1;
@@ -12134,6 +12329,7 @@ void __fastcall AITHINK_Fn0_ShadowWarrior(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // Per-tick monster AI for the Shadow Warrior / Shadow Master assassin minion. Fires the AITHINK timer event, finds its owner (the summoning player), then mirrors the owner's currently equipped left/right skills onto itself (copies skill ids/levels via AddSkill), randomly picks one to cast, gates casting on a per-difficulty cast-chance and combat state, and either casts the chosen skill at the target (SERVER_UNIT_CastSkill, rescheduling dwArg0 cooldown by skill delay) or runs toward the target. Idles via PlanNextAiMove if no owner or skills unavailable. No return.
+// 1.14d mac: 002a9cfe
 void __fastcall AITHINK_Fn1_ShadowWarrior(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SkillStrc* pLeftSkill;
     eD2Skills eRightSkillId;
@@ -12301,6 +12497,7 @@ void __fastcall AITHINK_Fn1_ShadowWarrior(::SGAMEDATA * pGame, D2UnitStrc * pUni
     PlanNextAiMove(pGame, pUnit, 0x19);
 }
 
+// 1.14d mac: 002aa334
 int32_t __fastcall MONSTERAI_CalcEffectiveSkillLevel(::SGAMEDATA * pGame, D2UnitStrc * pAiUnit, D2UnitStrc * pUnit, int32_t nBaseSkillLevel, eD2Skills eSkill) {
     int nEffectiveLevel = 1;
     if (pUnit) {
@@ -12322,6 +12519,7 @@ int32_t __fastcall MONSTERAI_CalcEffectiveSkillLevel(::SGAMEDATA * pGame, D2Unit
 }
 
 // Initialisation AI tick (Function0) for the Shadow Master summon. Resets dwArg0/1 to 0 and dwArg2 to 1. Looks up the owner player's Shadow Master skill level (aip8) and stores it in dwArg2. Ensures SKILL_Attack is present on the shadow, selects it left-hand. Then iterates all class skills of the owner, calls MONSTERAI_CanSummonPetType to filter, and AddSkills each eligible skill to the shadow at a scaled level via MONSTERAI_CalcEffectiveSkillLevel. Side-effect: populates the shadow's skill list to mirror owner's class skills.
+// 1.14d mac: 002aa3a7
 void __fastcall AITHINK_Fn0_ShadowMaster(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     eD2Skills eSkill;
     BOOL bCanSummonSkill;
@@ -12371,6 +12569,7 @@ void __fastcall AITHINK_Fn0_ShadowMaster(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     } while (nAiParam < nClassSkillCount);
 }
 
+// 1.14d mac: 002aa558
 void __fastcall AITHINK_Fn0_ShadowMasterNoInit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2AiGeneralStrc* pDVar1 = pAiParam->pMonsterAiGeneral;
     pDVar1->dwArg2 = 1;
@@ -12395,6 +12594,7 @@ void __fastcall AITHINK_Fn0_ShadowMasterNoInit(::SGAMEDATA * pGame, D2UnitStrc *
     D2Common::Skills::SelectSkillRight(pUnit, 0, -1);
 }
 
+// 1.14d mac: 002aa651
 uint32_t __fastcall MONSTERAI_IsValidResurrectionTarget(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     if (!pUnit2) {
       return 0;
@@ -12440,6 +12640,7 @@ uint32_t __fastcall MONSTERAI_IsValidResurrectionTarget(D2UnitStrc * pUnit, D2Un
 }
 
 // Unit-scan callback for Baal's AI target search. For each nearby unit (pOtherUnit): counts allied minions matching Baal's specific servant class IDs (Destruction, Sentries, Creeper) into pScan->nMinionCount; for hostile attackable units, updates pScan closest/in-range/resurrection-target fields and nInRangeCount/nMaxScanRadius counters. Returns 0 always.
+// 1.14d mac: 002aa714
 D2UnitStrc * __fastcall AI_ShadowMaster_ScanCallback(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOtherUnit, D2AiShadowMasterScanStrc * pScan) {
     int32_t nDist;
     if (pUnit == pOtherUnit) {
@@ -12518,6 +12719,7 @@ D2UnitStrc * __fastcall AI_ShadowMaster_ScanCallback(::SGAMEDATA * pGame, D2Unit
 }
 
 // Returns non-zero if pUnit already has an active state belonging to the same state group as eState (as defined in StatesTxt.group). Iterates all entries in pTxtStates, skips eState itself, and calls UNIT_GetUnitState for any state sharing the same group value. Used to prevent applying conflicting status effects (e.g. two states from the same exclusive group) to a monster simultaneously.
+// 1.14d mac: 002aa851
 BOOL __fastcall MONSTERAI_HasConflictingStateInGroup(D2UnitStrc * pUnit, eD2States eState) {
     BOOL eFoundState;
     D2DataTableTxtStrc* pDataTable;
@@ -12567,6 +12769,7 @@ BOOL __fastcall MONSTERAI_HasConflictingStateInGroup(D2UnitStrc * pUnit, eD2Stat
 }
 
 // Helper used by monster AIs to cast a skill on a target unit. Guards against self-targeting and invalid states. Resolves the skill struct via GetSkillByIdAndOwner; if the skill requires a melee weapon class and no pParam6 is provided, commands a run-to-unit approach instead. Otherwise calls SERVER_UNIT_CastSkill with the skill's mode. Skips cast if caster is in town. Returns 1 on successful cast/approach command, 0 if aborted.
+// 1.14d mac: 002aa8fb
 int __fastcall AI_Monster_CastSkillOnTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, eD2Skills eSkill, int32_t bInMeleeRange, D2UnitStrc * pSkillTarget, int32_t nTargetX, int32_t nTargetY, D2AiParamStrc * pAiParam) {
     BOOL bIsInTown;
     int nWalkResult;
@@ -12606,6 +12809,7 @@ int __fastcall AI_Monster_CastSkillOnTarget(::SGAMEDATA * pGame, D2UnitStrc * pU
 }
 
 // Per-frame primary AI for the Assassin Shadow Master/Warrior pet (the non-init/main tick). Handles owner-follow leashing (runs back if too far from owner via AI_Pet_EvaluateMovementPriority), continues a queued multi-frame skill (dwArg0 countdown), and auto-applies passive/aura skills (aitype 1/6). Acquires a target (own target, owner's target, or a resurrectable corpse/minion found via AI_Baal_FindEnemyAndMinionCallback ForEach scan), then scores every owned skill by aitype/aibonus/reqlevel/resist/life% to build a candidate list, and casts the best one on the chosen target via AI_Monster_CastSkillOnTarget. Falls back to PlanNextAiMove on no action. Pure server-side AI think; no return.
+// 1.14d mac: 002aa9cf
 void __fastcall AITHINK_Fn1_ShadowMaster(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     BOOL bVar3;
     int32_t nDistSqOrResult;
@@ -13211,11 +13415,13 @@ void __fastcall AITHINK_Fn1_ShadowMaster(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     PlanNextAiMove(pGame, pUnit, 0xf);
 }
 
+// 1.14d mac: 002ac17c
 void __fastcall AITHINK_Fn0_VineInit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     pAiParam->pMonsterAiGeneral->dwArg0 = 0;
 }
 
 // Server AI tick for Vine-type pet monsters (e.g. Druid Vine minions). Requires a valid owner unit; if missing, idles via PlanNextAiMove. When within owner-follow range or unable to reposition via AI_Pet_ExecuteMovementBehavior, evaluates the combat situation outside town: finds the nearest target via FindTargetAndDistance, skips if beyond MonStats range, then evaluates movement priority. If no priority movement is needed and a target exists: walks toward already-poisoned targets or those with full poison resist; otherwise walks to engage or casts Skill1 if cooldown (dwArg1) has elapsed and the monster has melee range. In town, always defers to AI_Pet_EvaluateMovementPriority with no target.
+// 1.14d mac: 002ac18d
 void __fastcall AITHINK_Fn1_Vines(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     int nMovePriority;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
@@ -13275,6 +13481,7 @@ void __fastcall AITHINK_Fn1_Vines(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
 }
 
 // Per-frame server AI tick for a Necromancer-summon-style pet (classId 0x1aa/0x1ab = life/mana golem). Reads pMonStats/AiGeneral from pAiParam, follows its owner (returns if no owner), and if it strays too far hands off to AI_Pet_ExecuteMovementBehavior. Scans for a nearby corpse (SKILLEMONST_FindNearbyCorpse) within an aurarangecalc-derived radius; if the owner is below max HP/mana (the heal trigger) and a corpse is in melee range and the per-difficulty cooldown (AiGeneral->dwArg1) has elapsed, casts the monster's Skill1 (CycleOfLife heal) on the corpse and resets the cooldown. Otherwise re-engages the prior target, walks to the corpse, or plans a default move. Side effects: casts skill, issues walk commands, mutates AiGeneral cooldown.
+// 1.14d mac: 002ac431
 void __fastcall AITHINK_Fn1_CycleOfLife(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SkillStrc* pSkill;
     int nSkillLevel;
@@ -13402,6 +13609,7 @@ void __fastcall AITHINK_Fn1_CycleOfLife(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     return;
 }
 
+// 1.14d mac: 002ac7ff
 void __fastcall AITHINK_Fn0_Raven(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
@@ -13412,6 +13620,7 @@ void __fastcall AITHINK_Fn0_Raven(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
 }
 
 // Tail-calls MONSTERAI_ExecuteLifecycleTransition (already fixed to return int32_t) as its final statement, dropping the result.
+// 1.14d mac: 002ac842
 int32_t __fastcall MONSTERAI_CommandWalkToUnitWithCombat(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pWalkTarget, uint8_t nSteps, int32_t nPathType) {
     D2ModeChangeStrc killCtx;
     AITACTICS_SetPathOverrides(pUnit, nPathType, 0, nSteps);
@@ -13423,6 +13632,7 @@ int32_t __fastcall MONSTERAI_CommandWalkToUnitWithCombat(::SGAMEDATA * pGame, D2
 }
 
 // Per-tick AI for the Druid Raven summon (pet). Requires an owner (GetOwnerUnit) and MonStats; missing either plans the next move and returns. Lazily initializes a remaining-attacks counter in pAiGeneral->dwArg0 from the Raven skill's Param4 (SkillLevel of MonStats->Skill1); when it reaches 0 the raven self-kills (SERVER_KillMonster). Pet-follow logic by distance to owner (teleport >0x32, run >0x1c using a Run/Velocity speed ratio). Within range it picks a target (MONSTERAI_FindBestTarget), and if able and the attack-cooldown (dwArg1) elapsed, fires an attack via CalledOnEndAiFunction1 (decrementing dwArg0, resetting cooldown) or walks to the target; otherwise does combat-walk toward the owner and partial-walks toward the average skill range. Difficulty-scaled ranges/cooldowns are read from MonStats->TreasureClass-relative shorts. __fastcall(pGame,pUnit,pAiParam).
+// 1.14d mac: 002ac8ba
 void __fastcall AITHINK_Fn1_Raven(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t nAttackChanceRoll;
     int32_t bWalkResult;
@@ -13535,6 +13745,7 @@ void __fastcall AITHINK_Fn1_Raven(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
 }
 
 // Per-tick AI think handler for a ranged hireling/pet (e.g. Rogue Scout mercenary). Resolves the owner unit; if none, optionally casts the configured owner-buff skill at the owner's position and restarts AI think, else plans next move. Caches owner GUID. In town it just follows the owner (AI_Pet_EvaluateMovementPriority). In combat it finds a target in range (MONSTERAI_FindTargetInRange / FindBestTarget), validates line-of-sight (TestIfMonsterCanHitTarget), computes a velocity percentage from MonStats speed columns and the owner-distance. If too far from owner it buffs the owner; otherwise it executes pet movement/follow behavior keyed on owner anim-mode, then either approaches/melees the target, casts a skill at a distance offset, or wanders. Operates on a D2AiGeneralStrc table passed as ppAiGeneralTable; many per-difficulty params indexed by pGame->nDifficulty.
+// 1.14d mac: 002acd36
 void __fastcall AITHINK_Fn1_DruidWolf_SpiritWolf(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     int32_t nTargetOrSkillPosY;
     int nMoveOrFollowResult;
@@ -13662,6 +13873,7 @@ void __fastcall AITHINK_Fn1_DruidWolf_SpiritWolf(::SGAMEDATA * pGame, D2UnitStrc
 }
 
 // Per-think server AI for a melee hireling/pet (__fastcall: pGame, pUnit, ppAiGeneralTable). Resolves the owner unit (re-finding the player from a cached GUID if needed). If the owner is in town, defers to AI_Pet_EvaluateMovementPriority/PlanNextAiMove (follow behavior). Otherwise finds a target in range (MONSTERAI_FindTargetInRange) and the best reachable target (MONSTERAI_FindBestTarget), discarding ones that cannot be hit or are beyond range. Computes a run-speed-derived combat-speed pct. If the owner is too far (>distance threshold) casts the owner-recall/teleport skill or runs/walks back via AI_Pet_ExecuteMovementBehavior matching the owner's anim mode (Run/Walk/TownWalk). May seek and revive a nearby corpse (SKILLEMONST_FindNearbyCorpse) by casting its corpse skill in melee range. Otherwise engages the chosen target (CalledOnEndAiFunction1), runs toward it, or wanders, then schedules the next think. Reads difficulty-indexed ranges/chances from the AiGeneral table.
+// 1.14d mac: 002ad348
 void __fastcall AITHINK_Fn1_DruidWolf_Fenris(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     int32_t nTargetPosY;
     int nMoveResult;
@@ -13824,6 +14036,7 @@ void __fastcall AITHINK_Fn1_DruidWolf_Fenris(::SGAMEDATA * pGame, D2UnitStrc * p
     RestartAiThink(pGame, pUnit, (int)pAiGeneral->aip[0][pGame->nDifficulty]);
 }
 
+// 1.14d mac: 002ada4c
 void __fastcall AITHINK_Fn1_DruidWolf(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     if (pUnit && pUnit->nClassId == 0x1a4) {
       AITHINK_Fn1_DruidWolf_SpiritWolf(pGame, pUnit, pAiParam);
@@ -13834,6 +14047,7 @@ void __fastcall AITHINK_Fn1_DruidWolf(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
 }
 
 // Server-side per-tick AI think for the Druid Grizzly/Bear summon (AI Function1). Resolves its owner via GetOwnerUnit (falling back to a stored player GUID in the AiGeneral component slot); if no owner is reachable it just schedules the next think. Caches owner GUID, computes owner distance and the pet's velocity-scaled run speed, then issues pet follow/move behavior (AI_Pet_ExecuteMovementBehavior) to stay near the owner when far. When in range it finds the best hostile target (MONSTERAI_FindBestTarget / FindTargetInRange within radius 0x1c) and verifies line-of-fire (TestIfMonsterCanHitTarget); on a successful seed-RNG roll vs the monstats AI param it commands a skill sequence (MONSTERAI_CommandSkillSequence) or otherwise ends the attack and reschedules. No target/owner-in-range -> PlanNextAiMove idle. Pure server-side; mutates unit AI state and queues movement/skill, no return value.
+// 1.14d mac: 002ada6b
 void __fastcall AITHINK_Fn1_DruidBear(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     BOOL bCanHitTarget;
     uint32_t nRandRoll;
@@ -13948,6 +14162,7 @@ void __fastcall AITHINK_Fn1_DruidBear(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
 }
 
 // Monster AI Function1 for an owned pet/guardian (e.g. totem/valkyrie-style summon). Gets the owner unit (re-plans and returns if none). Looks for a nearby hostile target; with RNG chance gated by MonStats range columns (difficulty-indexed shorts near TreasureClass) it may attack-walk toward the target, or drop the target. Otherwise it keeps near the owner: if too far it relocates next to the owner (SUNIT_RelocateUnit), and follows the owner's movement mode (Walk/TownWalk/Run) via AI_Pet_ExecuteMovementBehavior, falling back to AI_Pet_EvaluateMovementPriority; re-plans the next think (PlanNextAiMove 0x19) when nothing else acts.
+// 1.14d mac: 002ade57
 void __fastcall AITHINK_Fn1_Totem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t DVar1;
     int32_t nWalkResult;
@@ -14047,11 +14262,13 @@ void __fastcall AI_SetStoredPosition(D2AiParamStrc * pAiParam, intptr_t nParam, 
     *(int32_t*)(nParam + 0x1c) = nY;
 }
 
+// 1.14d mac: 002ae162
 void __fastcall AITHINK_Fn0_NpcBarb(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
 
 }
 
 // AI think phase-1 for the NPC Barbarian monster. If the unit is in node-table slot 0xB it re-adds itself to the target table. When a target is present and the combat flag is set it commits the attack animation and schedules the next AI tick. If the target is within melee range it rolls the unit seed against a percentage from MonStats and either charges the target directly or wanders to a random offset (up to 3 attempts) before falling back to PlanNextAiMove.
+// 1.14d mac: 002ae167
 void __fastcall AITHINK_Fn1_NpcBarb(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     int nPosX;
     D2SeedStrc newSeed;
@@ -14129,6 +14346,7 @@ void __fastcall AITHINK_Fn1_NpcBarb(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
 }
 
 // Searches for a dead (inactive) monster corpse near pUnit's current room suitable for re-animation. Gets the unit's room coordinates and its upgrade skill offsets (used as search direction offsets). Iterates up to 3 times, shifting search coords by the offset each step, calling SUNITINACTIVE_CheckDeadMonsterAtCoords with a class-relative monster type filter (nClassId - 0x13). Returns non-zero handle to found dead unit, or 0 if none found within 3 tries. Halts with error 0x141b if room is null.
+// 1.14d mac: 002ae497
 int32_t __fastcall AI_Monster_FindDeadMonsterNearby(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     BOOL nDeadMonFound;
     int nSearchIter;
@@ -14170,6 +14388,7 @@ int32_t __fastcall AI_Monster_FindDeadMonsterNearby(::SGAMEDATA * pGame, D2UnitS
 }
 
 // Per-frame primary AI think routine for the catapult/siege "spotter" monster (monstats AI id 1 variant). On first activation it can scan for a nearby dead monster (AI_Monster_FindDeadMonsterNearby) and end its AI if found. Otherwise, on a cooldown derived from MonStats AI columns (TreasureClass+difficulty offsets) and dwArg2 timestamp, it picks/holds a skill index (dwArg0, reused for dwArg1 frames), computes a randomized spawn point near the target, validates it with GetFreeCoordinates_WithIncrementValue (LOS), and casts the chosen monster skill (geSkillEnumMonsterDefault[idx]) at that point — i.e. lobbing a catapult-style projectile. If no valid spot, schedules PlanNextAiMove. Uses the unit seed for all rolls; updates dwArg2 to the current game frame after a successful cast.
+// 1.14d mac: 002ae586
 void __fastcall AITHINK_Fn1_CatapultSpotter(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     // Static local variables (originally global data)
     static int geSkillEnumMonsterDefault[5] = { 0x11f, 0x120, 0x12f, 0x130, 0x131 }; D2_STATIC_GUARD(geSkillEnumMonsterDefault, "D2Game::Monster::AI::AITHINK_Fn1_CatapultSpotter::geSkillEnumMonsterDefault");
@@ -14271,6 +14490,7 @@ void __fastcall AITHINK_Fn1_CatapultSpotter(::SGAMEDATA * pGame, D2UnitStrc * pU
     PlanNextAiMove(pGame, pUnitCopy, nCooldownOrResult);
 }
 
+// 1.14d mac: 002ae8ba
 void __fastcall AITHINK_Fn1_DeathMauler(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t seedNext;
     D2UnitStrc* pAttacker = pAiParam->pTarget;
@@ -14304,6 +14524,7 @@ void __fastcall AITHINK_Fn1_DeathMauler(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 }
 
 // Server-side monster AI think routine for the "Wussie" (A5 quest, freed-prisoner/barricade NPCs). If a quest barricade portal exists (Q32_FindBarricadePortal): if still alive, walks toward the portal (distance-gated, RNG-driven between walk/random-offset/idle); if destroyed, increments the wussie kill count, fires the AITHINK timer trigger and despawns the unit (removes collision, frees server unit). Otherwise finds the nearest player; when all prisoners are freed (Q32) it has a 10% chance to send SCMD 0x8A (NPC-wants-interact) to that player's client; if prisoners remain it triggers barricade-destroyed handling and may schedule the next move. Falls back to PlanNextAiMove(0x19) idle.
+// 1.14d mac: 002aea31
 void __fastcall AITHINK_Fn1_Wussie(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     int32_t nY;
     uint32_t nDistToPortal;
@@ -14399,11 +14620,13 @@ void __fastcall AITHINK_Fn1_Wussie(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
     PlanNextAiMove(pGame, pUnit, 0x19);
 }
 
+// 1.14d mac: 002aed66
 void __fastcall AITHINK_Fn0_Nihlathak(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
 
 }
 
 // Per-think server AI for the boss Nihlathak (__fastcall: pGame, pUnit, pAiParam). First runs the A5Q4 quest hook (Q34_OnNihlathakAI) and clears its inferno state if set. Skill priority by seed-RNG rolls and difficulty-indexed MonStats chances: Skill1 (cast at random offset when idle-attacking or in combat), a short-range gap-closer (WalkTowardsUnitOffset), Skill3 corpse-explosion-style (finds a nearby corpse via SKILLS_FindNearbyCorpse and casts on it), Skill4 (close-range nova/teleport, gated by distance), and Skill2 minion-heal: scans for a wounded minion via ForEach+AI_Baal_FindMinionToHeal and casts the heal, or spawns a minion (Skill5) at a valid nearby location (MONSTERAI_CanSpawnMonsterAt) seeding nGenericSpawnerSpecific with the chosen monster base id. Falls back to ResetCombatTargetAndIdle/PlanNextAiMove. Uses pUnit->sSeed LCG for all probability rolls.
+// 1.14d mac: 002aed6b
 void __fastcall AITHINK_Fn1_Nihlathak(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc DVar2;
     char bySkillMode;
@@ -14526,6 +14749,7 @@ void __fastcall AITHINK_Fn1_Nihlathak(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[3], (int)pMonStats->aSkill[3], pTarget, 0, 0);
 }
 
+// 1.14d mac: 002af35d
 void __fastcall AITHINK_Fn1_AncientStatue(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     int32_t nTargetY;
     BOOL nQuestResult = Quests::QUESTS::A5Q5::Q35_IsAncientsActive(pGame);
@@ -14546,6 +14770,7 @@ void __fastcall AITHINK_Fn1_AncientStatue(::SGAMEDATA * pGame, D2UnitStrc * pUni
     PlanNextAiMove(pGame, pUnit, 0x19);
 }
 
+// 1.14d mac: 002af457
 BOOL __fastcall AI_SelectTarget_SameLevelFilter(D2UnitStrc * pSelf, D2UnitStrc * pTarget) {
     eD2LevelId eSelfLevelId;
     eD2LevelId eTargetLevelId;
@@ -14565,6 +14790,7 @@ BOOL __fastcall AI_SelectTarget_SameLevelFilter(D2UnitStrc * pSelf, D2UnitStrc *
 }
 
 // AI think function for Koric, one of the Ancients (Act 5 Q5). If quest data is absent (ancients not yet activated), selects a combat target and evaluates a charge attack: rolls the unit seed against a difficulty-scaled probability; if it fires, launches the charge skill toward the target's position via MONSTERAI_ExecuteLifecycleTransition. Otherwise chooses randomly between two melee skill modes (slots 4 or 5) or idles at range if out of melee.
+// 1.14d mac: 002af4e4
 void __fastcall AITHINK_AncientKoric(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     int32_t nDistToTarget;
     D2SkillStrc* pSkill;
@@ -14648,6 +14874,7 @@ void __fastcall AITHINK_AncientKoric(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
 }
 
 // Phase-1 AI tick for Ancient Talic (Arreat Summit). If the ancients quest is still active (GetQuestDataAncients returns non-null) defers for 0x19 frames and returns. Otherwise selects the nearest same-level target; at melee range rolls a chance (from MonStats TreasureClass field, difficulty-scaled) to perform a whirlwind-walk; independently checks skill-1 aura eligibility (aurastate + auratargetstate) and rolls a chance to cast it; if within distance threshold rolls a normal attack via CalledOnEndAiFunction1; otherwise walks toward the target. Calls PlanNextAiMove(0x19) if no target found or move fails.
+// 1.14d mac: 002af8a3
 void __fastcall AITHINK_AncientTalic(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SkillsTxt* pSkillTxt;
     eD2Skills eSkill1;
@@ -14715,6 +14942,7 @@ void __fastcall AITHINK_AncientTalic(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
 }
 
 // AI think-tick for Ancient Madawc (Act 5 Q5 Ancients boss). Idles (25 frames) while Ancient quest data is active. Selects a same-level target via AI_SelectTarget_SameLevelFilter. If in range of Skill1 (difficulty-scaled distance) and random roll (per difficulty) passes, fires MONSTERAI_CommandSkillSequence with Skill1 (throwing weapon attack). Otherwise, if in melee range, randomly selects melee attack direction (mode 4 or 5 via CalledOnEndAiFunction1); if out of melee range, approaches target. Falls back to 25-frame idle if no target.
+// 1.14d mac: 002afbb2
 void __fastcall AITHINK_AncientMadawc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t nRandRoll3;
     int nSeedHighTemp;
@@ -14768,6 +14996,7 @@ void __fastcall AITHINK_AncientMadawc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     PlanNextAiMove(pGame, pUnit, 0x19);
 }
 
+// 1.14d mac: 002afdd8
 void __fastcall AITHINK_Fn1_Ancient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     int nClassId = !pUnit ? -1 : pUnit->nClassId;
     switch (nClassId) {
@@ -14803,6 +15032,7 @@ void __fastcall AI_SetClearFlags(D2AiParamStrc * pAiParam, uint32_t nFlags, int3
 }
 
 // Callback invoked to spawn a Baal throne wave. Ensures SKILL_BaalMonsterSpawn is present on pUnit, sets its param1 to nParam (wave index), then fires SERVER_UNIT_CastSkill in mode 10 at the unit's own position +13 Y (spawning monsters at that location). Increments pMonsterAiGeneral->dwArg0 (wave counter), records next-wave frame in dwArg2 (currentFrame+100), and toggles dwArg1 bit-1 on then off (transient spawn-in-progress flag).
+// 1.14d mac: 002afe11
 void __fastcall BaalThroneClearFunc(D2UnitStrc * pUnit, int32_t nMonsterPresetId, D2AiParamStrc * pAiParam) {
     void* nPosX;
     int nPosY;
@@ -14841,11 +15071,13 @@ void __fastcall BaalThroneClearFunc(D2UnitStrc * pUnit, int32_t nMonsterPresetId
     pAiParam->pMonsterAiGeneral->dwArg1 &= -2;
 }
 
+// 1.14d mac: 002aff50
 void __fastcall AITHINK_Fn0_BaalThrone(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
 
 }
 
 // Server-side AI think for Baal's throne-room minion-wave controller (AI Function1). Gates on a per-monster next-wave frame counter (dwArg2) stored in the AiGeneral params; before that frame it just reschedules. Scans for nearby living monsters via ForEach(radius 0x40); while minions remain alive it idles. When the area is clear it advances the wave (dwArg0): for waves 0-4 it looks up the hardcoded SuperUnique for that wave (BAALWAVES_UniqueHardcodedIndex -> superuniques.txt), spawns/announces it (SERVER_UnitQueuePacket0xA4 sound), casts BaalCorpseExplode, sets the wave-in-progress bit (dwArg1|1) and arms the next-wave timer (+0xfa frames). On the final wave (>4, with the bit set) it transforms Baal into his real fight class 0x22f, re-attaches the correct AI, applies STATE_changeclass and a fresh statlist carrying shortparam1=0x22f. Otherwise (waves done) it does normal skill-1 casting against the current target subject to aurastate/auratargetstate checks and a difficulty-scaled seed-RNG roll. Pure server-side AI; no return value.
+// 1.14d mac: 002aff55
 void __fastcall AI_Fn1_BaalThrone(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     // Static local variables (originally global data)
     static uint32_t BAALWAVES_UniqueHardcodedIndex[5] = { 0x3d, 0x3e, 0x3f, 0x40, 0x41 }; D2_STATIC_GUARD(BAALWAVES_UniqueHardcodedIndex, "D2Game::Monster::AI::AI_Fn1_BaalThrone::BAALWAVES_UniqueHardcodedIndex");
@@ -14968,6 +15200,7 @@ void __fastcall AI_Fn1_BaalThrone(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
 }
 
 // Passes AI_Baal_IsPortalInRange by address.
+// 1.14d mac: 002b03b7
 void __fastcall AITHINK_Fn1_BaalToStairs(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2MonsterAiParameterStruct sPortalSearchParams2;
     int nGUID;
@@ -15002,6 +15235,7 @@ void __fastcall AITHINK_Fn1_BaalToStairs(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // Baal's taunt AI tick. If the target is in Neutral mode, increments dwArg0 and casts SKILL_BaalTaunt once the counter exceeds the MonStats TreasureClass threshold; then resets dwArg0. If the target is outside the outer range threshold, teleports Baal adjacent to the target via SUNIT_RelocateUnit. Falls back to ResetCombatTargetAndIdle if within a close band but no action triggered, otherwise calls PlanNextAiMove(0x19).
+// 1.14d mac: 002b050a
 void __fastcall AITHINK_Fn1_BaalTaunt(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     BOOL bTargetInNeutralMode;
     BOOL bTargetWasNeutral;
@@ -15054,6 +15288,7 @@ void __fastcall AITHINK_Fn1_BaalTaunt(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     PlanNextAiMove(pGame, pUnit, 0x19);
 }
 
+// 1.14d mac: 002b06ac
 void __fastcall AITHINK_Fn1_BaalTentacle(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t nRoll;
     uint32_t nModulo;
@@ -15090,6 +15325,7 @@ void __fastcall AITHINK_Fn1_BaalTentacle(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     UNIT::SUnitDmg::SERVER_KillMonster(pGame, pUnit, nullptr, 1);
 }
 
+// 1.14d mac: 002b07e8
 void __fastcall AITHINK_Fn1_BaalMinion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t DVar1;
     D2MonStatsTxt* pMonStats;
@@ -15125,6 +15361,7 @@ void __fastcall AITHINK_Fn1_BaalMinion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     RestartAiThink(pGame, pUnit, (int)pMonStats->aip[3][pGame->nDifficulty]);
 }
 
+// 1.14d mac: 002b0993
 D2UnitStrc * __fastcall AI_PutridDefiler_FindHostCallback(::SGAMEDATA * dwUnused, D2UnitStrc * pUnit, D2UnitStrc * pCandidate, uint32_t dwUnused2) {
     BOOL fBoltCount = SKILLS::SkillEMonst::SKILLMONST_CanImpregnateTarget(pUnit, pCandidate);
     if (!fBoltCount) {
@@ -15136,6 +15373,7 @@ D2UnitStrc * __fastcall AI_PutridDefiler_FindHostCallback(::SGAMEDATA * dwUnused
 }
 
 // Passes AI_PutridDefiler_FindHostCallback by address.
+// 1.14d mac: 002b09d2
 void __fastcall AITHINK_Fn1_PutridDefiler(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2MonsterAiParameterStruct sEnergySearchParams;
     D2UnitStrc* pCachedTarget = pAiParam->pTarget;
@@ -15169,6 +15407,7 @@ void __fastcall AITHINK_Fn1_PutridDefiler(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // AI think-tick for Brute-class monsters. If not yet in combat, scales flee chance by current HP percentage (clamped 40-100%), applies it, and flees from target (mode 7). In combat, rolls two RNG checks against difficulty-scaled MonStats thresholds: first decides attack vs idle, second (if attacking) chooses melee direction (mode 4 left vs mode 5 right). If neither attack roll passes, approaches target via SetCombatStateAndApproachTarget or idles 15 frames.
+// 1.14d mac: 0028d0fc
 void __fastcall AITHINK_Fn1_Brute(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2UnitStrc* pTarget = pAiParam->pTarget;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
@@ -15211,6 +15450,7 @@ void __fastcall AITHINK_Fn1_Brute(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
     return;
 }
 
+// 1.14d mac: 0028d27c
 void __fastcall AITHINK_Fn1_Skeleton(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc sNextSeed;
     D2UnitStrc* pTarget = pAiParam->pTarget;
@@ -15247,6 +15487,7 @@ void __fastcall AITHINK_Fn1_Skeleton(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
 }
 
 // AI think-tick for Zombie monsters. In combat, randomly selects melee direction (mode 4 or 5) via CalledOnEndAiFunction1 based on a MonStats run-chance threshold. Out of combat: if target is within melee range and random roll beats run-chance, or if in Burial Grounds level, runs directly to target (MONSTERAI_CommandRunToUnitDirect at speed 100). Otherwise wanders randomly 3 steps. Zombies do not flee.
+// 1.14d mac: 0028d3a0
 void __fastcall AITHINK_Fn1_Zombie(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t seedNext;
     D2MonStatsTxt* pMonStats;
@@ -15289,6 +15530,7 @@ void __fastcall AITHINK_Fn1_Zombie(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
 }
 
 // Phase-1 AI tick for Bighead-family monsters. If below the life-% threshold from MonStats (difficulty-scaled TreasureClass field -6): if not engaged in combat, seeks a target in range and rolls a chance to attack (skill 5); otherwise walks toward the target. If above the threshold and distance &lt; 3: applies a combat modifier and attempts a whirlwind-walk (skill 5 on hit); if distance 3-15: probabilistically attacks (skill 5) or sets combat approach (mode 3); if distance &gt; 15: walks with minimum step. Uses UNIT_GetModuloFromSeed for all RNG rolls.
+// 1.14d mac: 0028d4ef
 void __fastcall AITHINK_Fn1_Bighead(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2UnitStrc* pTarget = pAiParam->pTarget;
     int nAiParam = pAiParam->nDistanceToTarget;
@@ -15340,6 +15582,7 @@ void __fastcall AITHINK_Fn1_Bighead(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
 }
 
 // Blood Hawk AI tick (AI function 1). When not engaged, rolls against difficulty-scaled MonStats fields to decide: charge the target (sets dwArg0=1 and walks toward it), wander randomly, or stand still. When engaged (dwArg0==1 previously set), rolls again to decide whether to break off the charge via CalledOnEndAiFunction1 or continue walking toward the target. Uses the unit's seed RNG and pGame->nDifficulty to scale probabilities.
+// 1.14d mac: 0028d78c
 void __fastcall AITHINK_Fn1_BloodHawk(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc DVar1;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
@@ -15400,6 +15643,7 @@ void __fastcall AITHINK_Fn1_BloodHawk(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
 }
 
 // Server-side monster AI tick for the Fallen (and the shaman-revive interaction). Runs the AITHINK event timer, then scans the unit's room and adjacent rooms for a nearby (collision dist < 0xf) dead monster corpse; if found it flags the AI general (dwArg0=1), frees the current AI, applies combat/monstats, and walks toward the target — leading into a flee/revive reaction with a seeded sound chance. In Neutral mode, depending on whether already in combat and on per-difficulty MonStats columns (read off TreasureClass offsets) and seeded RNG rolls, it either spawns a minion + creates an AI command, commands a walk-to-target, does a random-offset walk, or selects an end action (CalledOnEndAiFunction1 codes 4/5/9) — including handling an existing AI command (cmd id 1). Falls through to PlanNextAiMove(10) to schedule the next think.
+// 1.14d mac: 0028da0d
 void __fastcall AITHINK_Fn1_Fallen(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2UnitStrc* pCorpse;
     uint32_t nCorpseDistance;
@@ -15565,6 +15809,7 @@ void __fastcall AITHINK_Fn1_Fallen(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
     PlanNextAiMove(pGame, pUnit, 10);
 }
 
+// 1.14d mac: 0028e016
 D2UnitStrc * __fastcall MONSTERAI_FindNearestEvilMonster(::SGAMEDATA * dwUnused, D2UnitStrc * pUnit, D2UnitStrc * pCandidate, D2AiNearestUnitScanStrc * pOutResult) {
     BOOL BVar1;
     int32_t nDistResult;
@@ -15588,6 +15833,7 @@ D2UnitStrc * __fastcall MONSTERAI_FindNearestEvilMonster(::SGAMEDATA * dwUnused,
 
 // Per-frame server AI tick for the Sand Raider / Desert monster (the burrow-and-emerge attacker). Uses AiGeneral->dwArg0 as a phase counter and dwArg1 as the emerged/submerged flag: while submerged it applies STATE_blue/red (invisibility/burrow), counts up to a per-difficulty threshold, plays the emerge overlay (0x96 or 0x2e) and re-plans; once over the threshold it sets the visible state and engages. When low on life it seeks the nearest evil monster (ForEach + MONSTERAI_FindNearestEvilMonster) to retreat toward. Uses the unit RNG (sSeed LCG, multiplier 0x6ac690c5) for probabilistic approach/cast decisions, casts Skill1 via SERVER_UNIT_CastSkill when engaged, and ends the burrow cycle (CalledOnEndAiFunction1) probabilistically. Side effects: sets states/overlays, RNG advance, walk/cast commands, resets phase counters.
 // Passes MONSTERAI_FindNearestEvilMonster by address.
+// 1.14d mac: 0028e06d
 void __fastcall AITHINK_Fn1_SandRaider(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2MonsterAiParameterStruct sNearestEvilParams;
     uint32_t nSeedHighScratch;
@@ -15695,6 +15941,7 @@ void __fastcall AITHINK_Fn1_SandRaider(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 }
 
 // AI Function1 handler for Wraith monster type. Decides between drain life skill, chase, and random movement based on RNG and MonStats2 thresholds.
+// 1.14d mac: 0028e44f
 void __fastcall AITHINK_Fn1_Wraith(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t DVar1;
     D2UnitStrc* pDVar2 = pAiParam->pTarget;
@@ -15722,6 +15969,7 @@ void __fastcall AITHINK_Fn1_Wraith(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
 }
 
 // AI think-tick for Corrupt Rogue monsters. Uses difficulty-scaled melee range (20 - difficulty*3). If target is beyond melee range, applies a run-speed modifier (aip13/difficulty) and commands MONSTERAI_CommandRunToUnitMinStep at step 3. In combat and within range, rolls against MonStats A2 threshold: on pass, attacks (CalledOnEndAiFunction1 mode 4); otherwise idles for A1 frames. Out of combat, rolls A3 chance: if pass, rolls A4 chance to decide run-to-unit vs walk-to-unit approach; otherwise idles.
+// 1.14d mac: 0028e515
 void __fastcall AITHINK_Fn1_CorruptRogue(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2MonsterLevelDataStrc sLevelDiffData;
     int64_t nSeedProduct;
@@ -15775,6 +16023,7 @@ void __fastcall AITHINK_Fn1_CorruptRogue(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // Per-tick AI controller for the Baboon/Fetish-type monster (AiType 1). Reads engagement/distance/target/MonStats from D2AiParamStrc and computes a run-speed bonus from MonStats Run vs Velocity (capped at 0x78). dwArg0==0 is the normal engage branch (roll MonStats odds to attack, flee, or approach with combat speed); dwArg0!=0 counts down a leech/feeding timer that decrements hpregen by the stored dwArg2 leech amount. Uses the unit RNG seed and MONSTERAI helpers; mutates hpregen stat and AI scratch fields dwArg0/1/2. Server-side.
+// 1.14d mac: 0028e6d0
 void __fastcall AITHINK_Fn1_Baboon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc DVar1;
     uint32_t nRoll;
@@ -15929,6 +16178,7 @@ void __fastcall AITHINK_Fn1_Baboon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
 }
 
 // QuillRat melee-range AI tick (Function1 slot). Checks for a pending AI command unit; if found, transitions via CalledOnEndAiFunction1(5) and frees. If already engaged in combat or currently attacking, ends with mode 4 or 5. When outside attack range (MonStats aMinHP/aMaxHP-derived field per difficulty), rolls a RNG walk toward target with a min-walk-speed clamp; when inside range, calls CalledOnEndAiFunction1(5) to trigger attack. Uses pAiParam->pMonStats TreasureClass offsets as difficulty-scaled range/speed/chance params.
+// 1.14d mac: 0028ed0f
 void __fastcall AITHINK_Fn1_QuillRat(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     int32_t nWalkResult;
     D2MonStatsTxt* pMonStats;
@@ -15990,6 +16240,7 @@ void __fastcall AITHINK_Fn1_QuillRat(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
     AI_ChangeModeAndTargetUnit(pGame, pUnit, 5, pTarget);
 }
 
+// 1.14d mac: 0028ee88
 void __fastcall AITHINK_Fn1_Goatman(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t DVar1;
     D2UnitStrc* pTarget = pAiParam->pTarget;
@@ -16017,6 +16268,7 @@ void __fastcall AITHINK_Fn1_Goatman(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
 }
 
 // Unit-iteration callback used to locate a dead Fallen corpse eligible for revival by a Fallen Shaman. Accepts pCandidate if: it is a different monster unit; its base MonStats ID is 0x13 (Fallen) or 0x3A (Carver); alignment is neutral (0) and the corpse-dead flag (eUnitFlags bit 1) is set; has no passive or light state active; is in death animation mode (Kick); and is within the search radius stored in pOutResult[3]. On match, stores candidate in pOutResult[0], distance in pOutResult[2], and increments count at pOutResult[1].
+// 1.14d mac: 0028ef46
 D2UnitStrc * __fastcall MONSTERAI_FindFallenForRevival(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pCandidate, D2AiCorpseScanStrc * pScan) {
     if (!(pUnit != pCandidate && (GetTypeInline(pCandidate)) == UNIT_MONSTER)) {
       return 0;
@@ -16059,6 +16311,7 @@ D2UnitStrc * __fastcall MONSTERAI_FindFallenForRevival(::SGAMEDATA * pGame, D2Un
 }
 
 // Per-tick server AI for the Fallen Shaman monster. Uses the unit's LCG seed (nSeedLow*0x6ac690c5 + nSeedHigh) plus difficulty-indexed parameter words read from MonStats (offsets off TreasureClass) as percentage rolls to decide behavior: chance to break off combat (CalledOnEndAiFunction1); ForEach scan (radius from params) using MONSTERAI_FindFallenForRevival to locate a dead/fallen unit to resurrect; chance to summon a minion (CreateMinion); if a revival target was found and validated (AI_Monster_ValidateSkillAtPosition) cast Skill1 on it (MONSTERAI_CommandSkillSequence); otherwise pick the current or a newly-found target and cast Skill2 (SERVER_UNIT_CastSkill), or fall through to PlanNextAiMove / SetCombatStateAndApproachTarget. Mutates pUnit->sSeed each roll.
+// 1.14d mac: 0028f030
 void __fastcall AITHINK_Fn1_FallenShaman(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2MonsterAiParameterStruct DStack_60;
     uint32_t nSeedHighScratch;
@@ -16137,6 +16390,7 @@ void __fastcall AITHINK_Fn1_FallenShaman(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     return;
 }
 
+// 1.14d mac: 0028f3c4
 void __fastcall SandMaggotAi_CastDelayedSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2MonsterAiCmdStrc* nAiCmdPtr = Ai::AiGeneral::AI_CreateCmdIfNotExists(pGame, pUnit, 0xe, 0);
     D2AiGeneralStrc* pMonsterAiGeneral = pAiParam->pMonsterAiGeneral;
@@ -16155,6 +16409,7 @@ void __fastcall SandMaggotAi_CastDelayedSkill(::SGAMEDATA * pGame, D2UnitStrc * 
 }
 
 // Per-think server AI routine for the Sand Maggot monster (__fastcall: pGame, pUnit, pAiParam). Drives a 4-phase spawn/burrow state machine stored in pMonsterAiGeneral->dwArg0 (0..3). Acquires nearest target via FindTargetAndDistance and uses the explicit pAiParam->pTarget. Casts Skill2 (burrow/spawn) when no target is engaged and a cooldown (dwArg1 vs game frame) has elapsed, Skill1 when in phase 3 with a target, and Skill3 (egg-laying, gated by dwArg2 counter and a difficulty-scaled MonStats chance) when in combat. Low life (<25%) with a near target triggers a 20%-chance Skill2 escape. Falls back to CalledOnEndAiFunction1 (engage) or SetCombatStateAndApproachTarget, scheduling the next think via ScheduleAiThink. Cooldowns/chances read from pMonStats->TreasureClass indexed by game difficulty.
+// 1.14d mac: 0028f4b6
 void __fastcall AITHINK_Fn1_SandMaggot(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t DVar1;
     uint32_t nRoll;
@@ -16266,6 +16521,7 @@ void __fastcall AITHINK_Fn1_SandMaggot(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 }
 
 // Claw Viper monster AI action phase (AI function 1). On entry, applies a color state (red/blue) to self if pMonsterAiGeneral->dwArg0 is set and MonStats speed param != 0. Not engaged: if in range and rand% passes, validates and fires Skill1 (sets/clears color state, marks dwArg0=1); else 50% walk or PlanNextAiMove. Engaged: rand roll picks PlanNextAiMove, CalledOnEndAiFunction1 mode 4, or mode 5.
+// 1.14d mac: 0028f984
 void __fastcall AITHINK_Fn1_ClawViper(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc DVar1;
     uint32_t bSkillValidated;
@@ -16362,6 +16618,7 @@ void __fastcall AITHINK_Fn1_ClawViper(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
 }
 
 // AI think function for Claw Viper variants (Act 2 snake monsters). Applies a color state (red/blue) if the viper has a pending state flag from a previous skill cast. If engaged in melee, rolls a seed-based chance to immediately attack (skill slot 5) or idle. At medium range, probabilistically triggers a melee charge (skill slot 4) with a frame-cooldown. At long range with Skill1 valid, validates and casts it then sets the state flag. Otherwise randomly walks toward target or idles.
+// 1.14d mac: 0028fcb4
 void __fastcall AITHINK_Fn1_ClawViperEx(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t bSkillValidated;
     eD2States eStateColor;
@@ -16459,6 +16716,7 @@ void __fastcall AITHINK_Fn1_ClawViperEx(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 }
 
 // Sand Leaper AI decision tick. If Skill1 is valid and target is within 5 tiles, rolls RNG against difficulty-scaled threshold; on success casts Skill1 at target. Otherwise, if not yet in combat: walks randomly when target is far (>10), probabilistically approaches or charges. If already in combat, rolls to call CalledOnEndAiFunction1(5). Falls through to PlanNextAiMove(10).
+// 1.14d mac: 00290004
 void __fastcall AITHINK_Fn1_SandLeaper(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc DVar1;
     int nDistToTarget = pAiParam->nDistanceToTarget;
@@ -16512,6 +16770,7 @@ void __fastcall AITHINK_Fn1_SandLeaper(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 }
 
 // Panther Woman AI decision tick. In combat: rolls RNG to end attack sequence (CalledOnEndAiFunction1 mode 4) or idle via PlanNextAiMove. Out of combat: RNG chance to flee from target; if a same-type ally exists beyond the group-radius threshold, walks toward that ally; otherwise 25% chance to approach target (mode 3). Uses difficulty-scaled TreasureClass offsets for all thresholds.
+// 1.14d mac: 00290286
 void __fastcall AITHINK_Fn1_PantherWoman(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     const int bInCombat = pAiParam->bEngagedInCombat;
     D2UnitStrc* pTarget = pAiParam->pTarget;
@@ -16551,6 +16810,7 @@ void __fastcall AITHINK_Fn1_PantherWoman(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     PlanNextAiMove(pGame, pUnit, (int)pMonStats->aip[3][pGame->nDifficulty]);
 }
 
+// 1.14d mac: 0029045d
 void __fastcall AITHINK_Fn1_Swarm(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t DVar1;
     D2UnitStrc* pTarget = pAiParam->pTarget;
@@ -16578,6 +16838,7 @@ void __fastcall AITHINK_Fn1_Swarm(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
 }
 
 // Per-tick AI think handler (Function1) for the Scarab / Beetle monster family. If carrying a CmdId==1 minion-spawn command (created via CreateMinion when an unowned scarab rolls under its TreasureClass-based spawn chance), it either casts Skill1 when engaged or walks to the target. Otherwise runs the standard approach/skill loop: when not in combat it approaches the target (dwArg0 state toggles walk vs. charge); when engaged it rolls per-difficulty MonStats chances to retreat (PlanNextAiMove), cast Skill1 (SERVER_UNIT_CastSkill via Sk1mode), or end the think via CalledOnEndAiFunction1 (mode 4/5). Uses the unit seed LCG for all probability rolls. Side effects: mutates pUnit->sSeed, AiGeneral->dwArg0, issues walk/cast commands.
+// 1.14d mac: 0029051b
 void __fastcall AITHINK_Fn1_Scarab(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc DVar1;
     int32_t bWalked;
@@ -16684,6 +16945,7 @@ void __fastcall AITHINK_Fn1_Scarab(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
 }
 
 // Mummy AI decision tick. If currently attacking but not yet engaged, walks toward target. Within melee range and engaged: double-RNG chooses between two CalledOnEndAiFunction1 modes (4 or 5) or idles. Within range but not engaged: walks toward target. Out of range: RNG to wander randomly vs idle. All thresholds difficulty-scaled via TreasureClass offsets.
+// 1.14d mac: 002908ac
 void __fastcall AITHINK_Fn1_Mummy(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc DVar1;
     int nDistToTarget = pAiParam->nDistanceToTarget;
@@ -16729,6 +16991,7 @@ void __fastcall AITHINK_Fn1_Mummy(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
 }
 
 // Unit-iterator callback used to find the best dead monster for a resurrection AI to raise. For each candidate: must be an allied UNIT_MONSTER, not pUnit itself, not alignment 2, flagged as dead (eUnitFlags bit 1 set), and have no passive state. Filters by undead type depending on whether pOutResult[5] is set. If within the range limit (pOutResult[4]), prefers monsters in Kick anim with no light state (written to *pOutResult), otherwise tracks partially-damaged non-Death candidates in pOutResult[1]. Always returns 0.
+// 1.14d mac: 00290a51
 D2UnitStrc * __fastcall MONSTERAI_FindMonsterToResurrect(::SGAMEDATA * dwUnused, D2UnitStrc * pUnit, D2UnitStrc * pCandidate, D2AiResurrectScanStrc * pScan) {
     uint32_t bIsUndeadType;
     if (!((pCandidate ? pCandidate->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit != pCandidate)) {
@@ -16792,6 +17055,7 @@ D2UnitStrc * __fastcall MONSTERAI_FindMonsterToResurrect(::SGAMEDATA * dwUnused,
 
 // Server-side per-tick AI mode-1 routine for the Greater Mummy (resurrector). Advances the monster RNG seed and uses per-difficulty MonStats AI columns as % chances: when engaged or in close range may end the AI step (CalledOnEndAiFunction1). Scans nearby units via ForEach + MONSTERAI_FindMonsterToResurrect to find a corpse/ally to revive (search radius from AI param column, with a special-case branch when this unit is the Q09 boss class, invoking Q09_AICallback_GreaterMummy). Rolls to cast Skill2 (revive) on the best found unit, else Skill1, else Skill3 on a re-acquired target (SERVER_UNIT_CastSkill); otherwise walks toward / approaches the target. No return; movement/skill side effects.
 // Passes MONSTERAI_FindMonsterToResurrect by address.
+// 1.14d mac: 00290b96
 void __fastcall AITHINK_Fn1_GreaterMummy(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2AiResurrectScanStrc DStack_44;
     uint32_t nSeedHighScratch2;
@@ -16887,6 +17151,7 @@ void __fastcall AITHINK_Fn1_GreaterMummy(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // Strips the unit's targetable/attackable flags, removes both COLLIDE_UNIT_RELATED and COLLIDE_MONSTER collision entries from its room at the current position, sets path width to 5, clears the collision pattern on the dynamic path, then calls RestartAiThink with delay 0xC. Used to fully reset a monster's spatial presence before repositioning.
+// 1.14d mac: 00290fc8
 void __fastcall ClearCollisionAndResetPath(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     int32_t nPosY;
     int32_t nPosX;
@@ -16938,6 +17203,7 @@ void __fastcall ClearCollisionAndResetPath(::SGAMEDATA * pGame, D2UnitStrc * pUn
 }
 
 // Reduces a large monster's collision footprint to 1 tile after it finishes an entry/emergence sequence. Sets ISVALIDTARGET|CANBEATTACKED|TARGETABLE flags, then if the current width is already 1 returns early. Otherwise relocates the unit in-place via SUNIT_RelocateUnit with width=0, adds a SMALL_UNIT_PRESENCE collision cell at the new position, sets path unit-width to 1, and restarts AI think in 12 ticks.
+// 1.14d mac: 00291111
 BOOL __fastcall AI_Monster_ShrinkCollisionSize(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     uint32_t nPosY;
     uint32_t nPosX;
@@ -17001,6 +17267,7 @@ BOOL __fastcall AI_Monster_ShrinkCollisionSize(::SGAMEDATA * pGame, D2UnitStrc *
     return 0;
 }
 
+// 1.14d mac: 0029129b
 D2UnitStrc * __fastcall MONSTERAI_FindLowHpTarget(::SGAMEDATA * dwUnused, D2UnitStrc * pUnit, D2UnitStrc * pCandidate, D2AiLowLifeScanStrc * pScan) {
     int32_t nDist;
     int nCurrentHp;
@@ -17026,6 +17293,7 @@ D2UnitStrc * __fastcall MONSTERAI_FindLowHpTarget(::SGAMEDATA * dwUnused, D2Unit
 
 // AI Function1 handler for Vulture (Carrion Bird) monster type. Complex flying AI with landing, egg-laying, retreat, and multi-skill attack patterns.
 // Passes MONSTERAI_FindLowHpTarget by address.
+// 1.14d mac: 0029132f
 void __fastcall AITHINK_Fn1_Vulture(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     BOOL bShrinkOk;
     D2RoomStrc* pTargetRoom;
@@ -17288,6 +17556,7 @@ void __fastcall AITHINK_Fn1_Vulture(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
 }
 
 // Combat AI tick for the Mosquito-type monster (Act 3 swamp). Uses a 3-state machine in dwArg0/dwArg1: state 0=walk toward target; state 1=random wander with step counter; state 2=approach-offset walk that transitions back to state 1. When engaged in combat, rolls against Skill1 chance: on success casts Skill1 on target; otherwise calls CalledOnEndAiFunction1. Resets state machine if a 20% idle-retreat roll fires.
+// 1.14d mac: 00291b18
 void __fastcall AITHINK_Fn1_Mosquito(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2UnitStrc* pAttacker = pAiParam->pTarget;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
@@ -17352,6 +17621,7 @@ void __fastcall AITHINK_Fn1_Mosquito(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
     }
 }
 
+// 1.14d mac: 00291de9
 uint32_t __fastcall MONSTERAI_IsSpecificMonsterAlive(D2UnitStrc * pUnit, D2UnitFindArgStrc * pUnitFindArg) {
     int32_t nBaseId;
     if ((GetTypeInline(pUnit)) == UNIT_MONSTER) {
@@ -17369,6 +17639,7 @@ uint32_t __fastcall MONSTERAI_IsSpecificMonsterAlive(D2UnitStrc * pUnit, D2UnitF
 }
 
 // Per-frame primary AI for the Will-o-Wisp / Burning Soul monster, driven by a state machine in pMonsterAiGeneral->dwArg0 plus a large hardcoded table of per-state X/Y move offsets (local_218). State 4: locates the group of 4-5 sibling wisps via FindAllMatchingUnitsInNeighboredRooms and synchronizes their AI args/timers so they teleport-strike in formation. Other states drive approach (CommandWalkToUnit), random offset moves, blink/skill casts at offset positions (CommandSkillAtPosition skill 7), and end-of-behavior transitions (CalledOnEndAiFunction1). On a successful melee window against a live player it attaches a timed mana-burn/magic stat (UNITSTAT_item_magicbonus) curse with a SetEvent timeout. Reschedules itself with PlanNextAiMove on a 0x151/0x43-frame cadence. Server-side AI think; no return.
+// 1.14d mac: 00291e67
 void __fastcall AITHINK_Fn1_WillOWisp(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     // The values VC8 kept in pMonStats's one frame slot, one member each: a frame object reaches the slot.
     union pMonStats_u {
@@ -17734,6 +18005,7 @@ void __fastcall AITHINK_Fn1_WillOWisp(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
 }
 
 // Server-side per-tick AI mode-1 (attack) routine for the Arach/spider monster. Reads distance, combat-engagement, target and MonStats from pAiParam; advances the monster's RNG seed and uses per-difficulty AI parameter columns (offsets into MonStats TreasureClass[diff]) as percentage chances. Drives a small state machine via pMonsterAiGeneral->dwArg0/1/2: at high HP retreats/charges, when engaged rolls to flee (MONSTERAI_CommandFleeFromUnit), cast its skill (e.g. spiderlay, gated by UNIT_GetUnitState), approach/walk toward target, or end via CalledOnEndAiFunction1. No return value; issues movement/skill commands as side effects.
+// 1.14d mac: 00292ba3
 void __fastcall AITHINK_Fn1_Arach(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t DVar1;
     uint32_t nRoll;
@@ -17843,6 +18115,7 @@ void __fastcall AITHINK_Fn1_Arach(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
 }
 
 // ThornHulk ranged-burst AI tick (Function1 slot). If not engaged or no target, resets dwArg0 and flees. When engaged: if dwArg0 >= 1, fires Skill1 (thorn volley) immediately and decrements burst counter; on last burst resets dwArg1=3. If dwArg0 < 1, rolls RNG: above flee-threshold flees or uses SetCombatStateAndApproachTarget; below threshold and dwArg1 > 0 walks toward target; otherwise fires Skill1 and sets dwArg0 to the per-difficulty burst count (MonStats offset -0x12). Schedules RestartAiThink after animation end timer.
+// 1.14d mac: 00292ffe
 void __fastcall AITHINK_Fn1_ThornHulk(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t nRoll;
     uint32_t newSeed;
@@ -17907,6 +18180,7 @@ void __fastcall AITHINK_Fn1_ThornHulk(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
 }
 
 // Vampire-type monster AI tick. Reads target/distance/engagement from pAiParam and a per-difficulty MonStats flag word (skill availability bits 1/2/4). Maintains a skill-cooldown counter (dwArg2) and a phase/state in dwArg0 (1=normal, 2=fleeing/low-life). Finds a nearby secondary target (FindTargetAndDistance) for the vampiric special. Branches on whether it's attacking and on life percentage: at low life enters flee state and walks away; when engaged it rolls the seed to decide between melee (CalledOnEndAiFunction1), retreat/approach (SetCombatStateAndApproachTarget / WalkTowardsUnitOffset / MONSTERAI_CommandWalkToUnit) and casting one of skills 1-4 (SERVER_UNIT_CastSkill, gated by RNG chances and ranges read from the MonStats AI-param shorts). Falls through to PlanNextAiMove when no action triggers.
+// 1.14d mac: 00293314
 void __fastcall AITHINK_Fn1_Vampire(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t uRandPct;
     bool bSignedLess;
@@ -18100,6 +18374,7 @@ void __fastcall AITHINK_Fn1_Vampire(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
     SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[3], (int)pMonStats->aSkill[3], pAttacker, 0, 0);
 }
 
+// 1.14d mac: 00293c41
 void __fastcall BatDemonAi_HandleThrowCompletion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2AiGeneralStrc* pMonsterAiGeneral = pAiParam->pMonsterAiGeneral;
     if (pUnit && pUnit->eAnimMode.ePlayerMode == Throw) {
@@ -18118,6 +18393,7 @@ void __fastcall BatDemonAi_HandleThrowCompletion(::SGAMEDATA * pGame, D2UnitStrc
 }
 
 // Per-tick AI controller for the BatDemon/Vampire-bat monster (AiType 1). Reads engagement, distance-to-target, target and MonStats from D2AiParamStrc; drives a phase state machine via pMonsterAiGeneral->dwArg0 (0/4=init, 1=feeding/leech, 2/3=approach, default=engage). On init it casts the leech buff and boosts hpregen scaled by MonStats per difficulty; engages by walking toward the target (WalkTowardsUnitOffset) and rolling MonStats-driven percentages to attack (CalledOnEndAiFunction1) or reposition (PlanNextAiMove/WalkRandomOffset). Server-side; mutates unit stats and AI scratch fields.
+// 1.14d mac: 00293cd7
 void __fastcall AITHINK_Fn1_BatDemon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     BOOL bEngagedInCombat;
     int nHpRegen;
@@ -18253,6 +18529,7 @@ void __fastcall AITHINK_Fn1_BatDemon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
 }
 
 // Server-side per-tick AI for the Fetish/Flayer monster (AI function index 1). Reads target/distance/MonStats/AiGeneral from pAiParam. First honors any pending AiCmd: cmd type 1 or 0xE makes it apply mode-0xD and walk to the commanded unit, then FreeAi. Otherwise runs a 3-state machine in pMonsterAiGeneral->dwArg0 (0=idle/decide, 1=cooldown-before-flee using MonStats melee/flee chances keyed by game difficulty, 2=fleeing): rolls the unit seed against TreasureClass-relative MonStats columns to decide between melee approach (mode 2 + WalkTowardsUnitOffset), fleeing (CalledOnEndAiFunction1), or planning the next move (PlanNextAiMove). Default action: mode 0xD and command-walk toward the target.
+// 1.14d mac: 0029423c
 void __fastcall AITHINK_Fn1_Fetish(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t nRoll;
     int nDifficulty;
@@ -18380,6 +18657,7 @@ void __fastcall AITHINK_Fn1_Fetish(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
 }
 
 // Hell Meteor (Infector of Souls variant) AI tick. If Skill1 is valid and passes a difficulty-scaled RNG check, computes a random offset from the unit's current X/Y position (using TreasureClass width field) and casts Skill1 at that displaced coordinate via SERVER_UNIT_CastSkill — effectively firing a meteor at a randomized nearby map location. Otherwise idles via PlanNextAiMove.
+// 1.14d mac: 00294674
 void __fastcall AITHINK_Fn1_HellMeteor(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     if (pMonStats->aSkill[0] >= 0 && (int)(D2_SeedRoll(&pUnit->sSeed) % 100) < (int)pMonStats->aip[0][pGame->nDifficulty]) {
@@ -18413,6 +18691,7 @@ void __fastcall AITHINK_Fn1_HellMeteor(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 }
 
 // Andariel AI skill-selection tick. If engaged in combat: RNG chance to fire Skill1 at target, otherwise triggers melee sequence (CalledOnEndAiFunction1 mode 4). If not engaged: first RNG threshold idles via PlanNextAiMove(5); second threshold tries Skill1 (with inner RNG) then Skill2; falls through to approach-walk. All thresholds are difficulty-scaled TreasureClass offsets.
+// 1.14d mac: 0029481a
 void __fastcall AndarielAi_DecideSkillCast(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc DVar1;
     D2UnitStrc* pAndarielTarget = pAiParam->pTarget;
@@ -18461,6 +18740,7 @@ void __fastcall AndarielAi_DecideSkillCast(::SGAMEDATA * pGame, D2UnitStrc * pUn
 }
 
 // Server-side AI tick for the Corrupt Archer monster family. Calls FindTargetAndDistance; if no target found, rolls RNG: 31% chance to idle (PlanNextAiMove), else approaches. If already attacking, calls CalledOnEndAiFunction1. Within melee range (&lt;6): rolls against Sk2 run-away threshold and commands MONSTERAI_CommandRunAwayFromUnit. Outside approach range: walks toward target (CommandWalkToUnitMinStep) or runs (CommandRunToUnitMinStep). In firing range: rolls against Sk2/Sk3/Sk1 cast thresholds in order to fire the archer's three skills at the target; falls through to a base attack. All range/chance thresholds are read from pMonStats->TreasureClass offsets scaled by difficulty.
+// 1.14d mac: 00294a60
 void __fastcall AITHINK_Fn1_CorruptArcher(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t DVar2;
     BOOL bEngagedInCombat;
@@ -18545,6 +18825,7 @@ void __fastcall AITHINK_Fn1_CorruptArcher(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // Server AI tick function for the Corrupt Lancer monster (Function1 slot). If target is out of melee range (TreasureClass-3 per difficulty), sets step speed to MeleeRng, applies combat state 0xd, and runs toward the target. If not yet engaged, rolls RNG against TreasureClass-6 to decide between idle planning, walking, or running. Once engaged, rolls RNG against TreasureClass-0x2a to plan next move or idle; otherwise probabilistically casts Skill1/Skill2/Skill3 in order, falling back to CalledOnEndAiFunction1 with melee mode 4.
+// 1.14d mac: 00294e79
 void __fastcall AITHINK_Fn1_CorruptLancer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t nRoll;
     uint32_t sNewSeed;
@@ -18615,6 +18896,7 @@ void __fastcall AITHINK_Fn1_CorruptLancer(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // Skeleton Archer AI decision tick. If mid-attack sequence, refreshes the nearest target; if found, continues with CalledOnEndAiFunction1(4). Otherwise finds nearest target: if none or target is beyond 19 tiles, RNG-decides between a ranged CastSkillWithDistanceOffset or idling. Within range: RNG to attack (mode 4), retreat (SetCombatStateAndApproachTarget mode 3 at 20% chance), or idle. Difficulty-scaled thresholds throughout.
+// 1.14d mac: 002951d1
 void __fastcall AITHINK_Fn1_SkeletonBow(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2UnitStrc* pNearestTarget;
     D2SeedStrc sNextSeed;
@@ -18660,6 +18942,7 @@ void __fastcall AITHINK_Fn1_SkeletonBow(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     PlanNextAiMove(pGame, pUnit, (int)pMonStatsTxt->aip[1][pGame->nDifficulty]);
 }
 
+// 1.14d mac: 00295383
 void __fastcall AITHINK_Fn1_MaggotLarva(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t seedNext;
     D2UnitStrc* pTarget = pAiParam->pTarget;
@@ -18692,6 +18975,7 @@ void __fastcall AITHINK_Fn1_MaggotLarva(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 }
 
 // Pin Head (Death Mauler) AI decision tick. Out of combat: resets dwArg0 flag, RNG decides between walking toward target or idling. In combat with dwArg0 already set: RNG to idle (PlanNextAiMove). Otherwise sets dwArg0=1 and RNG-selects between Skill1, Skill2, or melee (CalledOnEndAiFunction1 mode 4) using cascading difficulty-scaled thresholds. dwArg0 prevents immediate skill re-cast.
+// 1.14d mac: 002954b4
 void __fastcall AITHINK_Fn1_PinHead(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t sNewSeed;
     D2UnitStrc* pAttacker = pAiParam->pTarget;
@@ -18737,6 +19021,7 @@ void __fastcall AITHINK_Fn1_PinHead(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
     return;
 }
 
+// 1.14d mac: 002956be
 void __fastcall AITHINK_Fn1_MaggotEgg(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t newSeed;
     D2MonStatsTxt* pMonStats;
@@ -18767,6 +19052,7 @@ void __fastcall AITHINK_Fn1_MaggotEgg(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     PlanNextAiMove(pGame, pUnit, (int)pMonStats->aip[0][pGame->nDifficulty]);
 }
 
+// 1.14d mac: 002957e2
 void __fastcall AITHINK_Fn0_SpawnTimerInit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2AiGeneralStrc* pDVar1 = pAiParam->pMonsterAiGeneral;
     pDVar1->dwArg0 = pGame->dwGameFrame;
@@ -18774,6 +19060,7 @@ void __fastcall AITHINK_Fn0_SpawnTimerInit(::SGAMEDATA * pGame, D2UnitStrc * pUn
 }
 
 // Foul Crow Nest AI tick (stationary spawner). If target is beyond 20 tiles, idles. If spawn count (dwArg1) has hit the difficulty-scaled cap, sets UNITFLAG_NOTC and issues a null skill command. Otherwise, if Skill1 is valid and enough frames have elapsed since last spawn (dwArg0 tracks game frame), checks MONSTERAI_CanSpawnMonsterAt at the nest's position; if space is available, increments dwArg1 and casts Skill1 to spawn a Foul Crow. Falls through to randomized idle delay.
+// 1.14d mac: 002957ff
 void __fastcall AITHINK_Fn1_FoulCrowNest(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2UnitStrc* pAttacker = pAiParam->pTarget;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
@@ -18813,6 +19100,7 @@ void __fastcall AITHINK_Fn1_FoulCrowNest(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // Duriel AI decision tick. On first call with no right-skill equipped, sets Skill4 (Holy Freeze) as the passive right skill. If not engaged in combat: RNG chance to cast Skill1 (charge/sting), otherwise applies combat state 0xD and walks toward target. If engaged: cascading RNG selects Skill3, Skill2, or melee attack (CalledOnEndAiFunction1 mode 4 or 5). All thresholds difficulty-scaled.
+// 1.14d mac: 002959fe
 void __fastcall AITHINK_Fn1_Duriel(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t sNewSeed;
     int bEngagedInCombat = pAiParam->bEngagedInCombat;
@@ -18865,6 +19153,7 @@ void __fastcall AITHINK_Fn1_Duriel(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
 }
 
 // Sarcophagus AI tick (stationary mummy spawner). If target is beyond 25 tiles, idles. If spawn count (dwArg1) exceeds the difficulty-scaled cap, sets UNITFLAG_NOTC and issues null skill. Otherwise waits for spawn cooldown (dwArg0 = last frame), checks MONSTERAI_CanSpawnMonsterAt at its position; if valid, increments dwArg1, records current frame in dwArg0, and casts Skill1 to spawn a Mummy. Falls through to randomized idle delay. Nearly identical in structure to FoulCrowNest but with a larger spawn range check (0xE4 vs 0xCE).
+// 1.14d mac: 00295cc6
 void __fastcall AITHINK_Fn1_Sarcophagus(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2UnitStrc* pAttacker = pAiParam->pTarget;
     D2AiGeneralStrc* pMonsterAiGeneral = pAiParam->pMonsterAiGeneral;
@@ -18900,6 +19189,7 @@ void __fastcall AITHINK_Fn1_Sarcophagus(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     PlanNextAiMove(pGame, pUnit, newSeed + (2 - (int)(newSeed / 10)) * 10);
 }
 
+// 1.14d mac: 00295ec2
 void __fastcall AITHINK_Fn1_ElementalBeast(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     BOOL bWasAttacking;
     D2SeedStrc* pSeed = &pUnit->sSeed;
@@ -18940,6 +19230,7 @@ void __fastcall AITHINK_Fn1_ElementalBeast(::SGAMEDATA * pGame, D2UnitStrc * pUn
 }
 
 // AI Function1 handler for Flying Scimitar monster type. Floating weapon AI with charge attack, retreat, and proximity-based skill selection.
+// 1.14d mac: 0029604c
 void __fastcall AITHINK_Fn1_FlyingScimitar(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc sNewSeed;
     D2UnitStrc* pTarget = pAiParam->pTarget;
@@ -18996,6 +19287,7 @@ int __fastcall Unreferenced_005f6e20(uint8_t * pData) {
 }
 
 // Per-think server AI for the Zakarum Zealot/Fanatic melee monster (__fastcall: pGame, pUnit, pAiParam). Computes a run-speed pct from MonStats Run/Velocity and current life pct. If the target resolves to a player and the act is Act III with the Blackened Temple quest completed, the monster flees (MONSTERAI_CommandRunAwayFromUnit) or wanders. While attacking, if life dropped below a difficulty-scaled threshold it sets a brief flee flag and runs away; then checks line-of-sight to the target's path position (CheckCollision_BlockPlayerMissile) and approaches/walks toward it if blocked. Out of combat it rolls a chance to walk to vs run to the target. In combat it rolls flee vs SetCombatStateAndApproachTarget, ending the think with CalledOnEndAiFunction1 (engage) using difficulty-indexed MonStats chances. Uses per-unit seed RNG for all rolls and stores flee state in the AiGeneral struct.
+// 1.14d mac: 002961e7
 void __fastcall AITHINK_Fn1_ZakarumZealot(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     eCollisionFlags eCollision;
     uint32_t nRunSpeedRaw;
@@ -19142,6 +19434,7 @@ void __fastcall AITHINK_Fn1_ZakarumZealot(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // ForEach callback that searches for a wounded allied Hydra or Golem (classId 0xEB or 0xEE). Skips self, dead units, non-monsters, non-allies, and alignment==2 units. Accepts candidates within the search radius (ppSearchParams[3]) whose current HP percentage is below 61 (0x3D). Tracks the lowest-HP candidate in ppSearchParams[0] and increments a match counter in ppSearchParams[1]. Always returns 0.
+// 1.14d mac: 002966be
 D2UnitStrc * __fastcall AI_ZakarumPriest_FindWoundedAllyCallback(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pCandidate, D2AiWoundedAllyScanStrc * pScan) {
     int32_t nTmpVal;
     if (pUnit != pCandidate && (pCandidate ? pCandidate->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
@@ -19186,6 +19479,7 @@ D2UnitStrc * __fastcall AI_ZakarumPriest_FindWoundedAllyCallback(::SGAMEDATA * p
 
 // Per-think server AI for a Zakarum priest/caster monster (__fastcall: pGame, pUnit, pAiParam). When engaged or attacking and below ~33% life, casts Skill3 (a self-defense/blink skill) at a position reflected away from the target (doubling/quadrupling the target-to-self vector), gated by a difficulty-scaled cooldown in AiGeneral->dwArg0 and validated by AI_Monster_ValidateSkillAtPosition. In combat it may also roll to disengage (CalledOnEndAiFunction1). Scans for a wounded ally hydra/golem via ForEach+MONSTERAI_FindWoundedHydraGolem and casts Skill1 (heal/buff) on it by chance. Then, depending on whether a wall blocks line to the target (CollisionWithWall), rolls difficulty-indexed MonStats chances to cast Skill4 or Skill2 (each with its own AiGeneral cooldown dwArg1/dwArg2), else SetCombatStateAndApproachTarget or PlanNextAiMove. All probabilities use the per-unit seed LCG.
 // Takes the address of a function whose signature changed in the 1167 issue batch.
+// 1.14d mac: 002967ca
 void __fastcall AITHINK_Fn1_ZakarumPriest(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     BOOL bIsAttacking;
     uint32_t uRandResult;
@@ -19293,6 +19587,7 @@ void __fastcall AITHINK_Fn1_ZakarumPriest(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // ForEach callback used by Mephisto's AI to gather candidate target data into a pInfo array. For each valid, living, attackable unit within 1025 tiles: increments pInfo[7] (total count), increments pInfo[2] if within 226 tiles (melee range), tracks closest target in pInfo[0]/pInfo[1], tracks lowest-HP target in pInfo[3]/pInfo[4], and tracks closest player in pInfo[5]/pInfo[6]. Always returns 0.
+// 1.14d mac: 00296da8
 D2UnitStrc * __fastcall CollectMephistoTargetInfo(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2AiMephistoScanStrc * pScan) {
     uint32_t bCanAttack;
     int32_t nDistance;
@@ -19331,6 +19626,7 @@ D2UnitStrc * __fastcall CollectMephistoTargetInfo(::SGAMEDATA * pGame, D2UnitStr
     return 0;
 }
 
+// 1.14d mac: 00296e79
 D2UnitStrc * __fastcall DecideMephistoAlternateTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2MonStatsTxt * nMonStatsOffset, D2UnitStrc * fallback) {
     uint32_t DVar1;
     D2AiMephistoScanStrc searchParams;
@@ -19356,6 +19652,7 @@ D2UnitStrc * __fastcall DecideMephistoAlternateTarget(::SGAMEDATA * pGame, D2Uni
 }
 
 // Server-side primary AI think function for the Mephisto act boss. Reads its AI state (dwArg0/1/2 in the D2AiGeneralStrc passed via pAiParam) plus current life%, distance to target and difficulty to pick the next action: melee, teleport-on-collision/range, or weighted-random cast among MonStats Skill1..6 (Sk*mode). Uses the unit RNG seed for all rolls. Mutates dwArg0 (skill-rotation counter), dwArg1 (sub-phase) and dwArg2 (next skill-state); issues moves/casts and schedules the next think via PlanNextAiMove. No return value.
+// 1.14d mac: 00296f68
 void __fastcall AITHINK_Fn1_Mephisto(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t nSeedLowResult;
     uint32_t nRoll100;
@@ -19716,10 +20013,12 @@ D2UnitStrc * __fastcall AI_BAAL_FindRandomTargetPlayer(::SGAMEDATA * pGame, D2Un
     } while (true);
 }
 
+// 1.14d mac: 00297759
 void __fastcall AITHINK_Fn1_UberMephisto(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
 
 }
 
+// 1.14d mac: 0029775e
 void __fastcall AITHINK_Fn2_FrogDemon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2AiGeneralStrc* pMonsterAiGeneral = pAiParam->pMonsterAiGeneral;
     int nFunctionId = pMonsterAiGeneral->nFunctionId;
@@ -19745,6 +20044,7 @@ void __fastcall AITHINK_Fn2_FrogDemon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
 }
 
 // Per-tick AI #1 for the Frog Demon / Swamp Dweller monster family (server-side). Driven by D2AiParamStrc (target, distance, MonStatsTxt). Uses pMonsterAiGeneral->dwArg2 as a state machine: state 0 picks an opening attack (casts Skill1 spit at range >0xC, or attempts to shrink collision and reposition for Skill2/burrow), state 1 handles the burrow/Skill2 cast (re-checking distance and ShrinkCollisionSize), and the remaining branch runs the engaged-combat melee/leap decision tree, rolling UNIT_GetModuloFromSeed against MonStats.TreasureClass-relative AI parameter words to choose walk-to-target, approach (modes 3/4), or end the attack. Side effects: casts skills, schedules next think via RestartAiThink/PlanNextAiMove, mutates dwArg1/dwArg2. No return.
+// 1.14d mac: 0029782a
 void __fastcall AITHINK_Fn1_FrogDemon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     eCollisionFlags eCollision;
     int32_t nY;
@@ -19864,6 +20164,7 @@ void __fastcall AITHINK_Fn1_FrogDemon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
 }
 
 // Server-side per-tick AI mode-1 routine for the Summoner (A2Q6 boss). On first run invokes Q13_AICallback_Summoner (quest hook). Picks between cold/fire attack skills based on the target's cold vs fire resist, advances the monster RNG seed, resolves the target's X/Y (static or dynamic path), and via per-difficulty MonStats AI columns rolls to cast Skill1..Skill5 (SERVER_UNIT_CastSkill) with cooldown bookkeeping in pMonsterAiGeneral->dwArg1/dwArg2, optionally retargeting via FindTargetAndDistance; falls back to WalkRandomOffset. Side-effecting, no return.
+// 1.14d mac: 00297d81
 void __fastcall AI_Fn1_Summoner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     int nDifficulty;
     uint32_t nRandRollAndSeedHigh[2];
@@ -19977,6 +20278,7 @@ void __fastcall AI_Fn1_Summoner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPar
 }
 
 // AI combat tick (Function1) for Izual (Act 4 unique). On first call sets dwArg0=1 and broadcasts the Q26 Izual-killed notification to all players. Respects a queued next-move in dwArg1. In melee range: rolls RNG vs MonStats to cast Skill1 (SERVER_UNIT_CastSkill) with cooldown tracked in dwArg2, or falls back to melee attack (CalledOnEndAiFunction1 mode 4). Out of melee: rolls for a charge/walk-close move or random walk. dwArg2 throttles skill reuse.
+// 1.14d mac: 002981ac
 void __fastcall AI_Fn1_Izual(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t DVar1;
     uint32_t nRandRoll;
@@ -20071,6 +20373,7 @@ void __fastcall AI_Fn1_Izual(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamS
 }
 
 // AI Function1 handler for Uber Izual (Pandemonium Event). Enhanced Izual AI with additional skill rotations and aggression for the uber version.
+// 1.14d mac: 00298535
 void __fastcall AI_Fn1_UberIzual(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     BOOL bCollideWall;
     uint32_t nRandRoll;
@@ -20183,6 +20486,7 @@ void __fastcall AI_Fn1_UberIzual(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPa
 }
 
 // AI think phase-1 for the Tentacle monster (summoned appendage of Duriel-class bosses). Kills itself if its owner is gone. Has a 40% chance each tick to die when the owner is in Kick animation. Manages a two-state skill cycle (dwArg2 1/2): casts Skill1 when idle or when timer expires and range/combat/owner conditions require it; casts Skill2 (self-buff) when dwArg2==1 and the cooldown has elapsed. Falls back to PlanNextAiMove or CalledOnEndAiFunction1 if no skill fires.
+// 1.14d mac: 0029897b
 void __fastcall AI_Fn1_Tentacle(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t uRandResult;
     uint32_t newSeed;
@@ -20259,6 +20563,7 @@ void __fastcall AI_Fn1_Tentacle(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPar
 }
 
 // Combat AI tick for the Tentacle Head monster (Act 3). Manages a 3-phase attack cycle via dwArg1/dwArg2: phase 0 casts Skill1 (tentacle strike) immediately then enters cooldown; phase 1 waits for cooldown then casts Skill2 (self-buff/anchor) if target is in range or combat engaged; phase 2 re-casts Skill1 after a longer cooldown when target is out of range or a random retreat roll fires. Falls through to CalledOnEndAiFunction1/PlanNextAiMove when neither skill applies.
+// 1.14d mac: 00298ce0
 void __fastcall AI_Fn1_TentacleHead(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     int32_t nRestartDelay;
     int bInCombat;
@@ -20319,6 +20624,7 @@ void __fastcall AI_Fn1_TentacleHead(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
 }
 
 // Monster AI Function1 for a stationary gargoyle-trap monster. If a cooldown is pending (dwArg0>0) it just re-plans for that many frames and clears the cooldown. Otherwise it targets pAiParam->pTarget, computes target vs self tile coords, picks the dominant axis, and faces the target by mapping the direction through the gaGargoyleTrapDirToOctant/gaGargoyleTrapDirRemap lookup tables (SetDirectionAndNewDirection). If the target is within range (not both deltas >5) and within the MonStats range column, and an RNG roll passes, it casts Skill1 (Sk1mode) at the target and sets the next cooldown from the difficulty-indexed MonStats shorts; otherwise re-plans the next think.
+// 1.14d mac: 00298fa8
 void __fastcall AI_Fn1_GargoyleTrap(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     // Static local variables (originally global data)
     static uint8_t gaGargoyleTrapDirRemap[4] = { 0x1f, 0x31, 0x0, 0x11 }; D2_STATIC_GUARD(gaGargoyleTrapDirRemap, "D2Game::Monster::AI::AI_Fn1_GargoyleTrap::gaGargoyleTrapDirRemap");
@@ -20494,6 +20800,7 @@ void __fastcall AI_Fn1_GargoyleTrap(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
 }
 
 // Server AI tick for Skeleton Mage monsters. Finds the nearest enemy via FindTargetAndDistance. If the target is beyond MonStats range-param[0] and a random roll beats flee-chance, applies combat state 0xa and walks toward the target with minimum step. If within melee range and roll beats melee-chance, applies state 0x19 and calls WalkTowardsUnitOffset (offset 5); on failure falls back to CalledOnEndAiFunction1 with mode 4. If within cast range and roll beats cast-chance, calls CalledOnEndAiFunction1 (cast mode 4) on the found target. When no target found but out of range, repeats the walk-toward-fallback-target logic. Otherwise rolls idle vs approach via PlanNextAiMove or SetCombatStateAndApproachTarget.
+// 1.14d mac: 00299203
 void __fastcall AI_Fn1_SkeletonMage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t sNextSeed;
     int nAiParam = pAiParam->nDistanceToTarget;
@@ -20550,6 +20857,7 @@ void __fastcall AI_Fn1_SkeletonMage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
     return;
 }
 
+// 1.14d mac: 00299531
 void __fastcall FetishShamanAi_ClearInfernoState(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2AiGeneralStrc* pMonsterAiGeneral = pAiParam->pMonsterAiGeneral;
     BOOL currentInfernoState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
@@ -20562,6 +20870,7 @@ void __fastcall FetishShamanAi_ClearInfernoState(::SGAMEDATA * pGame, D2UnitStrc
 }
 
 // ForEach callback for the Necromancer AI to locate its own summons (Skeleton classId 0x8D or Revive 0x18C). Accepts only monsters that are summoned (flag bit 1 set), not in a passive state, owned by pUnit (or revive with special ownership), alignment==0, within the search radius (ppSearchCtx[2]), and not of type 0xC. Splits matches: idle summons increment ppSearchCtx[5] and track nearest in [3]/[4]; active (Kick mode) summons track nearest in [0]/[1]. Returns 0.
+// 1.14d mac: 002995a5
 D2UnitStrc * __fastcall AI_FetishShaman_FindFetishCallback(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pCandidateUnit, D2AiSummonScanStrc * pScan) {
     D2UnitStrc* pOwnerOrDist;
     uint32_t bIsMonsterType;
@@ -20610,6 +20919,7 @@ D2UnitStrc * __fastcall AI_FetishShaman_FindFetishCallback(::SGAMEDATA * pGame, 
 }
 
 // Server AI tick for the Fetish Shaman. If target is in Skill1 range and inferno state is inactive, spawns a minion command (CreateMinion cmd=1) and casts Skill1 toward the target. Otherwise, searches for owned summons via AI_Necromancer_FindOwnedSummonCallback; if one is found nearby, randomly decides to issue a heal/resurrect command (cmd=0xE) via Skill3 or walk to it. Falls back to approaching the combat target.
+// 1.14d mac: 002996e8
 void __fastcall AI_Fn1_FetishShaman(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SkillStrc* pSkill;
     int nSkillLevel;
@@ -20675,6 +20985,7 @@ void __fastcall AI_Fn1_FetishShaman(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
 }
 
 // Sand Maggot Queen AI tick. Periodically spawns larva minions (UNITFLAG_NOXP) near its own position via SpawnMonster using MonStats2 spawn parameters. Uses dwArg0/1/2 in AiGeneralStrc to track phase: arg1=0 burrow/wait, arg1=1 spawn, arg2=1 cooldown. Spawn count ceiling and cooldown duration are difficulty-scaled fields from MonStatsTxt.
+// 1.14d mac: 00299a23
 void __fastcall AI_Fn1_SandMaggotQueen(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t nClassId;
     eD2MonsterAnimMode eAnimMode;
@@ -20715,6 +21026,7 @@ void __fastcall AI_Fn1_SandMaggotQueen(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 }
 
 // Explicit GuardStack(1) on the successful-cast path, GuardStack(0) after exhausting all 8 directions.
+// 1.14d mac: 00299c9f
 BOOL __fastcall AI_Monster_CastDirectionalSkillAtTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit, D2MonStatsTxt * pMonStats) {
     int32_t nTargetYPos;
     int32_t nTargetXPos;
@@ -20800,6 +21112,7 @@ BOOL __fastcall AI_Monster_CastDirectionalSkillAtTarget(::SGAMEDATA * pGame, D2U
 }
 
 // Vile Mother (Act-5 demon) AI tick: if spawn count is below the per-difficulty cap and the monster is neutral-aligned, rolls RNG against a spawn-chance threshold; if within range of the max-minion count, casts a directional skill at target and increments dwArg0. If in combat, rolls against an attack-chance threshold to call CalledOnEndAiFunction1 (charge/melee), otherwise plans a delay. If neither condition applies and below spawn cap, rolls to either approach the target or idle for 15 frames.
+// 1.14d mac: 00299e79
 void __fastcall AI_Fn1_VileMother(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     int32_t nAlignment;
     D2AiClassCountScanStrc DStack_48;
@@ -20872,6 +21185,7 @@ void __fastcall AI_Fn1_VileMother(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
     MONSTERAI_CommandWalkToUnit(pGame, pUnit, pTarget, 7);
 }
 
+// 1.14d mac: 0029a16a
 void __fastcall AI_Fn1_VileDog(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t DVar1;
     int t2_c5 = pAiParam->bEngagedInCombat;
@@ -20905,6 +21219,7 @@ void __fastcall AI_Fn1_VileDog(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPara
 }
 
 // Server-side per-tick AI mode-1 routine for the Finger Mage / undead-mage monster. Computes a run-speed bonus from MonStats Run/Velocity. Tracks a hit-and-run state in pMonsterAiGeneral->dwArg0/dwArg1: when attacking it may retreat, when in retreat state it walks away from the target (with the run-speed bonus applied via ApplyCombatAndMonStats) for a limited number of ticks. Otherwise advances the RNG seed and uses per-difficulty MonStats AI % columns to decide between fleeing (CalledOnEndAiFunction1), approaching, planning a move, or casting Skill1 (e.g. fingermagecurse, gated by UNIT_GetUnitState) via SERVER_UNIT_CastSkill. No return; movement/skill side effects.
+// 1.14d mac: 0029a25a
 void __fastcall AI_Fn1_FingerMage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t uRandResult2;
     short int nSkill1Id;
@@ -21004,6 +21319,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_9(D2UnitStrc * p) {
     return p->eUnitFlags >> 9 & 1;
 }
 
+// 1.14d mac: 0029a66b
 D2UnitStrc * __fastcall MONSTERAI_FindCorpseForRaising(int pGame, D2UnitStrc * pUnit, D2UnitStrc * pCandidate, D2MonsterAiParameterStruct * ppSearchParams) {
     int32_t nAlignmentResult;
     BOOL bIsDead;
@@ -21033,6 +21349,7 @@ D2UnitStrc * __fastcall MONSTERAI_FindCorpseForRaising(int pGame, D2UnitStrc * p
 }
 
 // Per-think server AI for the Regurgitator/corpse-eater monster (__fastcall: pGame, pUnit, pAiParam). Drives a state machine in AiGeneral->dwArg0 with dwArg1=target-corpse GUID and dwArg2=approach-attempt counter. State 0/1: scans for a raisable corpse via ForEach+MONSTERAI_FindCorpseForRaising; if found, walks to it (min-step) -> state 2, or if already close schedules a think -> state 3. State 2: walks toward the swallowed/corpse unit (whose anim mode must be Kick), giving up after 5 attempts. State 3: casts Skill1 (devour/eat-corpse) on the corpse -> state 4. State 4: when out of combat ends the function (CalledOnEndAiFunction1) -> state 5, else closes distance. State 5: a final approach then resets to 0. Fallbacks roll difficulty-indexed MonStats chances to engage/walk/wander. Uses the per-unit seed RNG for rolls.
+// 1.14d mac: 0029a74e
 void __fastcall AI_Fn1_Regurgitator(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2UnitStrc* pSwallowedUnit;
     int32_t nDistance;
@@ -21183,6 +21500,7 @@ void __fastcall AI_Fn1_Regurgitator(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
     PlanNextAiMove(pGame, pUnit, 8);
 }
 
+// 1.14d mac: 0029ad04
 void __fastcall AI_Fn1_DoomKnight(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     uint32_t DVar1;
     D2UnitStrc* pTarget = pAiParam->pTarget;
@@ -21210,6 +21528,7 @@ void __fastcall AI_Fn1_DoomKnight(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
 }
 
 // Server AI tick function for the Abyss Knight monster (Function1 slot). If Skill2 has an aura state and HP% is below the difficulty threshold and the aura is not active, rolls RNG to cast the aura self-buff. If already engaged in combat, rolls to either commit a melee attack (CalledOnEndAiFunction1) or plan next move. Out of combat: arms a cooldown counter (dwArg0) when target enters range, then if Skill1 is available and cooldown is zero, casts Skill1 and resets the cooldown. Decrements dwArg0 each tick. Otherwise rolls RNG to walk/wander or approach the target for melee.
+// 1.14d mac: 0029adc9
 void __fastcall AI_Fn1_AbyssKnight(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc DVar1;
     BOOL eAuraState;
@@ -21282,6 +21601,7 @@ void __fastcall AI_Fn1_AbyssKnight(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
 }
 
 // Unit-search callback for Blood Lord (classId 0x136) target selection. Accepts a candidate unit only if it is an alive allied monster with UNITFLAG_NOXP set, neutral alignment, within the search radius, and itself a Blood Lord. Tracks the nearest candidate in ppSearchParams[0/3] and the lowest-HP candidate (below 40% life) in ppSearchParams[1/4] for priority healing/resurrection targeting.
+// 1.14d mac: 0029b0fb
 D2UnitStrc * __fastcall AI_OblivionKnight_ScanCallback(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pCandidate, D2AiBloodLordScanStrc * pScan) {
     if (!(pCandidate != pUnit && (pCandidate ? pCandidate->eUnitType : UNIT_COUNT) == UNIT_MONSTER)) {
       return 0;
@@ -21346,6 +21666,7 @@ D2UnitStrc * __fastcall AI_OblivionKnight_ScanCallback(::SGAMEDATA * pGame, D2Un
 
 // Server-side per-tick AI for the Oblivion Knight monster (AI function index 1). Scans nearby units via ForEach+MONSTERAI_FindBloodLordTarget to find a Blood Lord to buff. When the target is within melee range: re-applies its aura (Skill4) if the target lacks the aura state, else either walks toward a found Blood Lord or melees the player (mode 2 + WalkTowardsUnitOffset) and casts Skill3 (curse) when it arrives. At range, casts ranged skills against the best LOS target gated by seed rolls and MonStats chance columns: Skill6 on a per-cast cooldown stored in pAiGeneral->dwArg0 (gameframe-based), else Skill3 or Skill1 depending on rolls and the monster's component[10]. Falls back to WalkRandomOffsetAroundUnit or SetCombatStateAndApproachTarget / PlanNextAiMove.
 // Takes the address of a function whose signature changed in the 1167 issue batch.
+// 1.14d mac: 0029b1f4
 void __fastcall AI_Fn1_OblivionKnight(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     BOOL eAuraState;
     int32_t bWalkedToTarget;
@@ -21453,6 +21774,7 @@ void __fastcall AI_Fn1_OblivionKnight(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
 }
 
 // Quill Mother AI tick. If currently in an attack animation, issues a CreateMinion command targeting the current target, then either walks to target (out-of-combat) or calls CalledOnEndAiFunction1 with mode 4 (in-combat). If idle, rolls the unit RNG against difficulty-scaled MonStats thresholds: out-of-combat may walk to target or schedule a delay; in-combat may attack or schedule a delay.
+// 1.14d mac: 0029b6e5
 void __fastcall AI_Fn1_QuillMother(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2SeedStrc DVar1;
     uint32_t nSeedMulHi;
@@ -21511,6 +21833,7 @@ void __fastcall AI_Fn1_QuillMother(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
 }
 
 // AI tick function for Evil Hole / Uber-portal spawner monsters. In Neutral mode closes with the target or casts skill 10. In Cast mode casts skill 0xb. In Throw mode (the spawn phase): on each spawn interval reads D2MonStatsTxt timing fields (difficulty-scaled), calls MONSTER_GetSpawnParameters, finds a nearby room, spawns a monster flagged NOXP|NOTC, and for class 0x2c7 (Uber portal) additionally sets STATE_uberminion and overlay 0xca. dwArg0 = next spawn tick, dwArg1 = remaining spawn count.
+// 1.14d mac: 0029b81d
 void __fastcall AI_Fn1_EvilHole(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     eD2MonsterAnimMode eAnimMode;
     D2UnitStrc* pSpawnedUnit;
@@ -21575,6 +21898,7 @@ void __fastcall AI_Fn1_EvilHole(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPar
     RestartAiThink(pGame, pUnit, 0x14);
 }
 
+// 1.14d mac: 0029bafb
 void __fastcall AI_Fn1_TrapMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2MonStatsTxt* pDVar1 = pAiParam->pMonStats;
     D2AiGeneralStrc* pDVar2 = pAiParam->pMonsterAiGeneral;
@@ -21597,6 +21921,7 @@ void __fastcall AI_Fn1_TrapMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
     MONSTERAI_CommandSkillAtPosition(pGame, pUnit, 0, 0, 0);
 }
 
+// 1.14d mac: 0029bbec
 int32_t __fastcall AI_GetMonsterRegionBehaviorType(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
@@ -21613,6 +21938,7 @@ int32_t __fastcall AI_GetMonsterRegionBehaviorType(::SGAMEDATA * pGame, D2UnitSt
     return pDVar1->nBehaviorType;
 }
 
+// 1.14d mac: 0029bc73
 void __fastcall AI_Fn1_TrapRightArrow(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     POINT ptTarget;
     POINT ptSelf;
@@ -21657,6 +21983,7 @@ void __fastcall AI_Fn1_TrapRightArrow(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     PlanNextAiMove(pGame, pUnit, 0x1e);
 }
 
+// 1.14d mac: 0029bdbe
 void __fastcall AI_Fn1_TrapLeftArrow(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     POINT ptTarget;
     POINT ptSelf;
@@ -21701,6 +22028,7 @@ void __fastcall AI_Fn1_TrapLeftArrow(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
     PlanNextAiMove(pGame, pUnit, 0x1e);
 }
 
+// 1.14d mac: 0029bf09
 void __fastcall AI_Fn1_TrapPoison(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2AiGeneralStrc* pMonsterAiGeneral = pAiParam->pMonsterAiGeneral;
@@ -21723,6 +22051,7 @@ void __fastcall AI_Fn1_TrapPoison(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
     MONSTERAI_CommandSkillAtPosition(pGame, pUnit, 0, 0, 0);
 }
 
+// 1.14d mac: 0029bff5
 void __fastcall AI_Fn1_TrapNova(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2AiGeneralStrc* pMonsterAiGeneral = pAiParam->pMonsterAiGeneral;
@@ -21745,6 +22074,7 @@ void __fastcall AI_Fn1_TrapNova(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPar
     MONSTERAI_CommandSkillAtPosition(pGame, pUnit, 0, 0, 0);
 }
 
+// 1.14d mac: 0029c0e1
 void __fastcall AI_Fn1_TrapMelee(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2UnitStrc* pTarget = pAiParam->pTarget;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
@@ -21764,6 +22094,7 @@ void __fastcall AI_Fn1_TrapMelee(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPa
 }
 
 // Server-side: tests whether a monster of nMonsterClassId may be placed at (nX,nY) in pRoom, with size-specific offset/collision rules for a few large/special monsters. Resolves the class to its BaseId, then for known oversized types (e.g. 0xCE, 0xE4, 0x12A, 0x14E, 0x210) it nudges the test coords and finds a better nearby room (DRLGROOM_FindBetterNearbyRoom). Returns 1 (allowed) for ordinary monsters or when bAllowSpecialCase bypasses the 0x12A case; returns 0 if no room found or CheckCollision_BlockAll_Width reports any blocking collision. Pure placement validation, no spawn side effects.
+// 1.14d mac: 001e03a3
 BOOL __fastcall MONSTERAI_CanSpawnMonsterAt(int32_t nMonsterClassId, D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t bAllowSpecialCase) {
     eCollisionFlags eCollision;
     D2RoomStrc* pNearbyRoom;
@@ -21840,6 +22171,7 @@ BOOL __fastcall MONSTERAI_CanSpawnMonsterAt(int32_t nMonsterClassId, D2RoomStrc 
 }
 
 // Validation predicate used by monster AI before casting a positional/teleport skill. Given a skill id, target unit and target X/Y (nParam1/nParam2), returns nonzero if the skill may be cast at the chosen position. Rejects invalid/passive skills (and id 0xa7); special-cases by srvdofunc/skill id: leap-type (srvdofunc 0x4d/0x4e) mirrors the target position past the caster and requires free coords + non-town room + no blocking collision + line of sight; id 199 spawns a predefined unit at the target; teleport-type ids (0xb8/0xcb and srvdofunc 0x43) find a better nearby room and require non-town + clear collision + LOS to nParam1/nParam2. Read-only except for the id-199 spawn path.
+// 1.14d mac: 001e07b6
 uint32_t __fastcall AI_Monster_ValidateSkillAtPosition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nSkillId, D2UnitStrc * pTargetUnit, int32_t nCastX, int32_t nCastY) {
     int32_t nUnitY;
     D2RoomStrc* pRoom;
@@ -21972,6 +22304,7 @@ uint32_t __fastcall AI_Monster_ValidateSkillAtPosition(::SGAMEDATA * pGame, D2Un
 }
 
 // Sets a monster's current active skill to its MonStats2 ResurrectSkill if one is defined, then returns the monster's attack-speed modifier byte from MonStats2. Returns 1 if nParam==0 (skip) or if no valid MonStats2 entry exists. Used before special attack sequences to switch to the correct skill slot.
+// 1.14d mac: 001e0ed5
 uint32_t __fastcall MONSTERAI_GetResurrectMode(D2UnitStrc * pUnit, int32_t bUseResurrectConfig) {
     if (bUseResurrectConfig) {
       if (pUnit) {
@@ -21999,6 +22332,7 @@ uint32_t __fastcall MONSTERAI_GetResurrectMode(D2UnitStrc * pUnit, int32_t bUseR
 }
 
 // Picks a random walkable tile within ±20 units of the monster's current position. Iterates up to 10 times drawing from the unit's RNG seed; for each candidate (x,y) checks collision via CheckCollision_BlockAll_Type. On first clear tile writes it to DynamicPath SP1 (waypoint) and returns 1; returns 0 if no clear tile found or room is null.
+// 1.14d mac: 0025c5e8
 BOOL __fastcall MONSTERAI_FindRandomWalkPoint(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills nSkillId, int32_t nSubSkill) {
     eCollisionFlags eCollisionResult;
     int nUnitY;
@@ -22056,6 +22390,7 @@ BOOL __fastcall MONSTERAI_FindRandomWalkPoint(::SGAMEDATA * pGame, D2UnitStrc * 
     return 0;
 }
 
+// 1.14d mac: 0025c75e
 BOOL __fastcall AI_Monster_FindAndTargetCorpse(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nRange, int32_t nFlags, eD2UnitType * peUnitType, int * pTargetGUID) {
     D2UnitStrc* pCorpse = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     D2UnitStrc* pTargetUnit = SKILLS::SkillsServer::SKILLS_FindNearbyCorpse(pUnit, pCorpse, nRange, nFlags);
@@ -22072,6 +22407,7 @@ BOOL __fastcall AI_Monster_FindAndTargetCorpse(::SGAMEDATA * pGame, D2UnitStrc *
     return 1;
 }
 
+// 1.14d mac: 0025c7c7
 BOOL __fastcall AI_Monster_AcquireKillerAsTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nRange, uint32_t nFlags, eD2UnitType * peUnitType, int * pTargetGUID) {
     if (!UNIT::SUnit::GetTargetEx(pGame, pUnit)) {
       D2UnitStrc* pKiller = UNIT::SUnit::GetKillerUnit(pGame, pUnit);
@@ -22179,6 +22515,7 @@ int32_t __fastcall AI_Monster_CastItemEffectSkill(::SGAMEDATA * pGame, D2UnitStr
 // Return: BOOL in EAX (XOR EAX,EAX at 5fdd16 / MOV EAX,1 at 5fdd47); ITEM_CastFireballOnTarget
 // passes it through as its own result. p4 (pTarget, Stack[0x8]) is reused as the eD2UnitType
 // out-argument of AI_Monster_CastItemEffectSkill once its value is copied to EBX.
+// 1.14d mac: 0025caf0
 BOOL __fastcall SKILL_CastOnTargetUnit(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSubSkill, D2UnitStrc * pTarget, int32_t nParam) {
     BOOL eUnitState;
     int32_t pSpawnedMissile;
@@ -22225,6 +22562,7 @@ BOOL __fastcall SKILL_CastOnTargetUnit(D2UnitStrc * pUnit, eD2Skills eSkill, int
     return 0;
 }
 
+// 1.14d mac: 0025cc00
 BOOL __fastcall MONSTERAI_CastItemEffectSkill(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSubSkill, uint32_t nCoordX, uint32_t nCoordY, int32_t nParam2) {
     eD2UnitType eOutUnitType;
     int32_t nOutGUID;

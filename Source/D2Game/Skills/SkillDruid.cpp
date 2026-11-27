@@ -36,6 +36,7 @@ static inline int SKILLDRUID_IsValidPetType(int nPetType) {
 }
 
 // Server DoFunc for Druid skill 114 (Raven). Resolves the raven monster class ID and pet type, sets UNITFLAG_SKSRVDOFUNC, creates the summon via SKILL_CreateSummon, then clears UNITSTAT_hpregen and UNITFLAG_CANBEATTACKED on the raven. Applies SKILLNEC_ReviveCorpseAsMinion (level from calc[1]) and SKILLNEC_ApplySummonBuffs. Returns TRUE if the raven was created.
+// 1.14d mac: 00252c0f
 BOOL __fastcall Skills_SrvDoFunc_114_SummonRaven(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
@@ -83,6 +84,7 @@ BOOL __fastcall Skills_SrvDoFunc_114_SummonRaven(::SGAMEDATA * pGame, D2UnitStrc
 }
 
 // Server DoFunc for Druid skill 115 (Poison Creeper). Creates the vine summon via SKILL_CreateSummon, attaches it to the owner's node table, applies STATE_vine_beast, sets its level from calc[1], then calls SKILLNEC_ApplySummonBuffs. Differs from Raven: no UNITFLAG_CANBEATTACKED clear, no HP-regen zero, mode fixed to 8. Returns TRUE on success.
+// 1.14d mac: 00252e0d
 BOOL __fastcall Skills_SrvDoFunc_115_SummonPoisonCreeper(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
@@ -130,6 +132,7 @@ BOOL __fastcall Skills_SrvDoFunc_115_SummonPoisonCreeper(::SGAMEDATA * pGame, D2
 }
 
 // @sourcefile .\SKILLS\SkillDruid.cpp
+// 1.14d mac: 0025301b
 int32_t __fastcall SKILLDRUID_GetTransformGfx(D2UnitStrc * pUnit, int32_t nDefaultGfx) {
     int nUnitType;
     int nMonClassId;
@@ -151,6 +154,7 @@ int32_t __fastcall SKILLDRUID_GetTransformGfx(D2UnitStrc * pUnit, int32_t nDefau
     return nGfxId;
 }
 
+// 1.14d mac: 0025308a
 void __fastcall SKILLDRUID_OnShapeshiftExpire(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * pStatList) {
     SkillsServer::D2UpdateState(pUnit, eState, 1);
     if (!pStatList) {
@@ -169,6 +173,7 @@ void __fastcall SKILLDRUID_OnShapeshiftExpire(D2UnitStrc * pUnit, eD2States eSta
 }
 
 // @sourcefile .\SKILLS\SkillDruid.cpp
+// 1.14d mac: 00253116
 void __fastcall D2SetAurastatsFromSkills(D2UnitStrc * pUnit, D2StatListExStrc * pStatList, D2SkillsTxt * pSkillsTxt, eD2Skills eSkill, int32_t nSkillLvl) {
     if (!pUnit || !pStatList) {
       return;
@@ -201,6 +206,7 @@ void __fastcall D2SetAurastatsFromSkills(D2UnitStrc * pUnit, D2StatListExStrc * 
 }
 
 // @sourcefile .\SKILLS\SkillDruid.cpp
+// 1.14d mac: 0025324c
 void __fastcall D2SetPassiveStatsFromSkills(D2UnitStrc * pUnit, D2StatListExStrc * pStatList, D2SkillsTxt * pSkillsTxt, eD2Skills eSkill, int32_t nSkillLvl) {
     if (!pUnit || !pStatList) {
       return;
@@ -233,6 +239,7 @@ void __fastcall D2SetPassiveStatsFromSkills(D2UnitStrc * pUnit, D2StatListExStrc
 }
 
 // Server do-function for Druid shapeshift skill 116 (Werewolf). If the aura state is already active, applies the skill delay and returns 0. Otherwise allocates a new stat list for the shapeshift duration (auralencalc frames), attaches SKILLDRUID_OnShapeshiftExpire, applies aura stats via D2SetAurastatsFromSkills, records the skill/level modifier stats, sets the skill's mode to 10, and schedules a timer event. Returns 1 on successful activation.
+// 1.14d mac: 00253385
 BOOL __fastcall Skills_SrvDoFunc_116_Werewolf(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL _bStateActive;
     bool bStateActive;
@@ -278,6 +285,7 @@ BOOL __fastcall Skills_SrvDoFunc_116_Werewolf(::SGAMEDATA * pGame, D2UnitStrc * 
 }
 
 // Server helper that spawns nMissileCount missiles of type pMissileId from the caster toward the target/cursor position. If nParam2 is non-zero, fires one missile via SkillsServer::CreatingAMissile first and decrements the count. Remaining missiles are looped through D2Game::Missiles::CreatingMissile using SKILL_InitChargedBoltPath as the path function. Used by Druid multi-projectile skills (e.g. Twister/Tornado variants).
+// 1.14d mac: 002535e5
 BOOL __fastcall SKILLDRUID_CastMultiMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nMissileCount, eMissilesId pMissileId, eD2Skills eSkill, int32_t nSkillLvl, int32_t nParam2) {
     BOOL _bHasTarget;
     bool bHasTarget;
@@ -339,6 +347,7 @@ BOOL __fastcall SKILLDRUID_CastMultiMissile(::SGAMEDATA * pGame, D2UnitStrc * pU
 }
 
 // Server-side druid Firestorm do-func (srvdofunc 117). Fires a primary missile then spawns additional fire-streak missiles along a charged-bolt radiating path toward the target. Used by Druid Firestorm (Skills.txt srvdofunc==117).
+// 1.14d mac: 0025375a
 BOOL __fastcall Skills_SrvDoFunc_117_Firestorm(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL _bHasTarget;
     bool bHasTarget;
@@ -419,6 +428,7 @@ BOOL __fastcall Skills_SrvDoFunc_117_Firestorm(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // Server-side druid Twister/Tornado do-func (srvdofunc 118). Casts multiple missiles via SKILLDRUID_CastMultiMissile using the charge-up missile for the skill. Used by Druid Twister/Tornado family (Skills.txt srvdofunc==118).
+// 1.14d mac: 00253837
 BOOL __fastcall Skills_SrvDoFunc_118_Twister(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL _bResult;
     bool bResult;
@@ -445,6 +455,7 @@ BOOL __fastcall Skills_SrvDoFunc_118_Twister(::SGAMEDATA * pGame, D2UnitStrc * p
 }
 
 // Server skill-do function for Druid Summon Dire Wolf (skill 119). Looks up the monster class ID and pet mode via SKILLS_GetSummonMonsterClassId, validates the pettype field bounds, gets a target/cursor position, fills a D2MonsterCastPetStrc, and calls SKILL_CreateSummon. On success, registers the summon in the game's unit node table, derives its level from skill calc[1] (min 1), and applies revive-corpse minion buffs plus standard summon buffs. Returns 1 on success, 0 otherwise.
+// 1.14d mac: 00253914
 BOOL __fastcall Skills_SrvDoFunc_119_SummonDireWolf(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
@@ -543,6 +554,7 @@ BOOL __fastcall SKILLDRUID_CreateSummon(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 }
 
 // Server StFunc for Druid skill index 56: performs a melee to-hit check against the current target and, on hit, evaluates optional elemental conversion damage (EType/calc[3]) and enhanced damage percent (calc[0]). Applies damage via DAMAGE_CalculateAndApplyDamage. Stores 1 in Param1 if the hit landed, 0 otherwise. Likely used for a shapeshifter melee skill (Feral Rage / Rabies setup step).
+// 1.14d mac: 00253b31
 BOOL __fastcall SKILLDRUID_SrvStFn56_FeralRageMaul(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -590,6 +602,7 @@ BOOL __fastcall SKILLDRUID_SrvStFn56_FeralRageMaul(::SGAMEDATA * pGame, D2UnitSt
 
 // Server DoFunc for Druid skill Feral Rage (skill 120). Validates the skill is active as the unit's current skill, marks the unit UNITFLAG_SKSRVDOFUNC, and processes any pending combat queue entry against the current target. If a hit occurred (nParam1 != 0): computes or retrieves the aura state stat-list, extends its timeout, increments the frenzy stack counter (UNITSTAT_skill_frenzy) up to the calc[1] cap, writes modifierlist_skill/level stats, and applies aura stats via D2SetAurastatsFromSkills. Refreshes the aura GFX toggle. Returns 1 on success, 0 if preconditions fail.
 // @sourcefile .\SKILLS\SkillDruid.cpp
+// 1.14d mac: 00253d0e
 BOOL __fastcall Skills_SrvDoFunc_120_FeralRage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt || pSkillTxt->aurastate < 0 || pSkillTxt->aurastate >= D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
@@ -644,6 +657,7 @@ BOOL __fastcall Skills_SrvDoFunc_120_FeralRage(::SGAMEDATA * pGame, D2UnitStrc *
 
 // Server StFunc for Druid skill index 57: validates the active skill matches eSkill and that the skill's auratarget state is active on the caster. Performs a to-hit check; on hit, evaluates damage calcs (calc[0], optional elemental calc[3]) and sets Param1=1. Aborts early (returns 0) if the required aura state is not present. Likely the follow-up hit step for a shapeshifter skill gated on an active buff.
 // @sourcefile .\SKILLS\SkillDruid.cpp
+// 1.14d mac: 0025402e
 BOOL __fastcall SKILLDRUID_SrvStFn57_Rabies(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
@@ -769,6 +783,7 @@ static void __stdcall SKILLDRUID_CreateAuraMissile(::SGAMEDATA * pGame, D2UnitSt
     D2Common::Units::Missile::SetTargetY(pMissile, !pUnit ? -1 : pUnit->nUnitGUID);
 }
 
+// 1.14d mac: 00254226
 int __fastcall SKILLDRUID_ApplyAuraWithMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit, int32_t nDuration, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL _bApplied;
     bool bApplied;
@@ -784,6 +799,7 @@ int __fastcall SKILLDRUID_ApplyAuraWithMissile(::SGAMEDATA * pGame, D2UnitStrc *
     return 1;
 }
 
+// 1.14d mac: 0025491b
 BOOL __fastcall SKILLDRUID_SrvStFn58_FireClaws(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -816,6 +832,7 @@ BOOL __fastcall SKILLDRUID_SrvStFn58_FireClaws(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // Server DoFunc for Druid skill 122 (Maul, Werebear). Sets UNITFLAG_SKSRVDOFUNC, performs a standard to-hit/damage check via SKILLS_CalcToHitAndApply. On hit: applies HitFlags, ResultFlags, HitClass from txt, calculates offensive damage, then adds a percent bonus to physical damage (calc[0]), life leech (calc[1]), and mana leech (calc[2]) bonuses before final damage application and combat queue processing.
+// 1.14d mac: 00254ad0
 BOOL __fastcall Skills_SrvDoFunc_122_Hunger(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nManaLeechBonus;
     D2DamageStrc sDamage;
@@ -860,6 +877,7 @@ BOOL __fastcall Skills_SrvDoFunc_122_Hunger(::SGAMEDATA * pGame, D2UnitStrc * pU
 }
 
 // Server DoFunc, srvdofunc slot 123; skills.txt row 244 Volcano. Resolves the charge-up missile ID, gets the target/cursor position, checks missile collision clearance, then creates the skill's missile via CreatingMissile with UNITFLAG_SKSRVDOFUNC set. Seeds the missile's target X from the unit's RNG (mod 256) for random spin direction. Sends a unit message packet to clients with skill, level, target coords, and the random seed byte.
+// 1.14d mac: 00254dcf
 BOOL __fastcall Skills_SrvDoFunc_123_Volcano(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -905,6 +923,7 @@ BOOL __fastcall Skills_SrvDoFunc_123_Volcano(::SGAMEDATA * pGame, D2UnitStrc * p
 
 // Server-side skill handler for Armageddon (Druid, skill 124). Validates skill and aura state, allocates or refreshes a timed stat list on the caster for the aura state, sets aura stats from skill calc, records modifier_skill/level stats, schedules the meteor-drop timer event (type 5), and seeds the Armageddon random sequence via UNIT_GetModuloFromSeed. Returns 0 if skill/state validation fails.
 // @sourcefile .\SKILLS\SkillDruid.cpp
+// 1.14d mac: 00254f3e
 BOOL __fastcall Skills_SrvDoFunc_124_Armageddon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt || pSkillTxt->aurastate < 0 || (int)pSkillTxt->aurastate >= D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
@@ -957,6 +976,7 @@ BOOL __fastcall Skills_SrvDoFunc_124_Armageddon(::SGAMEDATA * pGame, D2UnitStrc 
 }
 
 // Server Do handler for Hurricane (Druid skill 145). Each tick: if the aura state is active, checks whether the unit entered town (removes the aura statlist and clears the state if so); otherwise computes the aura range calc, spawns the next timer event, applies area damage via SKILLS_ApplyAreaDamage using the skill's ResultFlags/HitFlags, and returns TRUE. Returns FALSE if the skill or aura state is invalid.
+// 1.14d mac: 00255244
 BOOL __fastcall Skills_SrvDoFunc_145_Hurricane(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -1007,6 +1027,7 @@ BOOL __fastcall Skills_SrvDoFunc_145_Hurricane(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // Server-side skill DoFunc 146 (Druid Cyclone Armor, a chargeup/active-state skill). Validates the skill, its aurastate, and that the state is currently active on the unit. If skill flags2 bit0 is clear and the unit is in town, it tears down the active aura (remove stat list, clear state). Otherwise it (re)schedules the active-state timer event (GetSkilParam3 frames), seeds the unit RNG from skill Param1, and — when not in town — repeatedly rolls a random offset within aurarangecalc range, checking line-of-sight and player-missile collision, up to 5 retries, to find a valid spot to spawn the chargeup missile (SKILLS_CreateMissileAtTarget) and broadcast a unit message. Returns TRUE on a successful cast, FALSE otherwise; always fires the ACTIVESTATE timer trigger.
+// 1.14d mac: 00255529
 BOOL __fastcall Skills_SrvDoFunc_146_ArmageddonTick(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt || nSkillLvl <= 0 || pSkillTxt->aurastate < 0 || (int)pSkillTxt->aurastate >= D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
@@ -1105,6 +1126,7 @@ static int32_t SKILLDRUID_GetSummonHealthBonus(int * pnAbsorb, int32_t nAbsorbDe
 }
 
 // Item-event / aura-tick callback for the Druid summon HP-sharing aura (Heart of Wolverine / Spirit of Barbs style). Reads the aura's stat list from the caster, sums health contributions from up to three summon slots in pParam via SKILLDRUID_GetSummonHealthBonus, converts the total to a percentage of the reference value (aurastat[1]), and compares against the previous cached percentage (UNITSTAT_unsentparam1). If the change exceeds 4 percentage points it refreshes the aura GFX and updates the cached value. If the computed absorption drops to zero, deactivates the state, removes and frees the stat list entirely. Returns 1 on any handled path, 0 on invalid inputs.
+// 1.14d mac: 00255a80
 BOOL __fastcall ITEMEVENT_CycloneArmorAbsorb(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
     if (!pUnit) {
       return 0;
@@ -1170,6 +1192,7 @@ BOOL __fastcall ITEMEVENT_CycloneArmorAbsorb(::SGAMEDATA * pGame, uint32_t nUnit
 }
 
 // Server-side Druid skill handler that accumulates to-hit from all active shape-shift/elemental states on pUnit (iterating sgptDataTable->pAllStatesDataTblFlag0x10) and applies a single combined physical hit to the target. For each state, retrieves the associated skill, sums SKILLS_CalcToHit values, resolves SrcDam from the skill TXT, then calls DAMAGE_CalculateAndApplyDamage on the target. Returns 1 on hit, 0 if no valid target.
+// 1.14d mac: 00254739
 BOOL __fastcall SKILLDRUID_ApplyAccumulatedStateDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nSkillLvl) {
     D2StatListExStrc* pStatList;
     eD2Skills eSkill;
@@ -1219,6 +1242,7 @@ BOOL __fastcall SKILLDRUID_ApplyAccumulatedStateDamage(::SGAMEDATA * pGame, D2Un
 
 // Server DoFunc for Druid Fury (skill 121). Validates eSkill bounds, retrieves current target and skill. If skill param1 is non-zero (hit accumulator), resets it, applies accumulated state damage via SKILLDRUID_ApplyAccumulatedStateDamage, processes the combat queue entry for the target, computes synergy bonus, applies aura+missile, and deals summon damage bonus. Returns 0 if no target or param1 is zero.
 // @sourcefile .\SKILLS\SkillDruid.cpp
+// 1.14d mac: 002544a5
 BOOL __fastcall Skills_SrvDoFunc_121_Rabies(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxtBase = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxtBase) {

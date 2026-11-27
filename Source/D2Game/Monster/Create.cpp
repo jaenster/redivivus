@@ -340,6 +340,7 @@ static void MONSTER_ApplySpecialUmods(D2UnitStrc * pUnit, D2UnknownCreateMonster
 }
 
 // Convenience wrapper that spawns a monster of nClassId at the position of an existing unit pUnit. Fills a D2UnknownCreateMonsterStrc (class, anim mode, flags nParam2, spawn radius nParam, owning room/game) and resolves pUnit's X/Y from its static path (objects/unit types 4-5) or dynamic path (otherwise 0 if none), then calls CreateMonster. Returns the newly created D2UnitStrc*.
+// 1.14d mac: 001e0f94
 D2UnitStrc * __fastcall SpawnMonsterAtUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nClassId, eD2MonsterAnimMode eMode, int32_t nSpawnRadius, int16_t nFlags) {
     D2UnknownCreateMonsterStrc sCreateParams;
     sCreateParams.nGUID = 0;
@@ -355,6 +356,7 @@ D2UnitStrc * __fastcall SpawnMonsterAtUnit(::SGAMEDATA * pGame, D2UnitStrc * pUn
     return CreateMonster(&sCreateParams);
 }
 
+// 1.14d mac: 001e2a05
 D2UnitStrc * __fastcall SpawnMonsterBase(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nMonsterId, eD2MonsterAnimMode eMode, int32_t nSpawnRadius, int16_t nFlags) {
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::GetLevelIdFromPopulatedRoom(pRoom);
@@ -368,6 +370,7 @@ D2UnitStrc * __fastcall SpawnMonsterBase(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // Spawns nMinionCount minions of nClassId near pUnit, assigning each as a minion owned by pUnit's GUID. Calls SpawnMonster for each slot, then AssignMinionOwner + AddMinionToList. Returns 1 (true) if at least one minion spawned successfully, 0 if pUnit is null or none spawned.
+// 1.14d mac: 001e2af7
 void __fastcall SpawnMinions_BySlot(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nClassId, eD2MonsterAnimMode eMode, int32_t nSpawnRadius, int32_t nMinionCount, int16_t wFlags) {
     BOOL bSpawnedAny;
     if (!pUnit) {
@@ -385,6 +388,7 @@ void __fastcall SpawnMinions_BySlot(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int
     }
 }
 
+// 1.14d mac: 001e3065
 BOOL __fastcall SpawnMinions_ByPattern(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nClassId, eD2MonsterAnimMode eMode, int32_t nMinionCount, int32_t nSpawnX, int16_t wFlags) {
     // Static local variables (originally global data)
     static POINT POINT_ARRAY_006e2cf0[12] = {
@@ -633,6 +637,7 @@ static void MONSTER_SpawnMinionGroup(D2UnknownCreateMonsterStrc * pGame, D2UnitS
 }
 
 // Server-side monster spawner. Validates classId against MonStats/MonStats2 tables, derives the spawn collision mask from MonStats2.spawnCol, and computes the legal spawn rectangle (from the supplied coord-list rect or the room's own coords, transformed room->world). Searches outward in a spiraling ring (radius step 3, up to nSpawnRadius*3), advancing a walk cursor via the room RNG, testing each candidate with PtInRect, optional grid-zone match, MONSTERAI_CanSpawnMonsterAt and a width collision check; certain class ranges use FindDiagonalNonCollisionCoords instead. On finding a free tile it creates the UNIT_MONSTER (unless flag bit0 set), bumps the region spawn count, assigns AI param, sets alignment from MonStats.Align, applies special umods (unless bit1), attaches quest hooks (MONSTER_OnCreateAttachQuests) and spawns the minion group (unless bit6). Returns the new unit, a sentinel (flag bit0), or NULL on failure.
+// 1.14d mac: 001e103f
 D2UnitStrc * __fastcall CreateMonster(D2UnknownCreateMonsterStrc * pMonsterSpawnData) {
     int _eCollisionMask;
     int iVar1;
@@ -927,6 +932,7 @@ D2UnitStrc * __fastcall CreateMonster(D2UnknownCreateMonsterStrc * pMonsterSpawn
     return (D2UnitStrc*)0x1;
 }
 
+// 1.14d mac: 001e2810
 D2UnitStrc * __fastcall SpawnMonsterAtRoomPos(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nX, int32_t nY, uint32_t nClassId, eD2MonsterAnimMode eMode, int32_t nSpawnRadius, int16_t nFlags) {
     D2UnknownCreateMonsterStrc sMonsterSpawnData;
     sMonsterSpawnData.nGUID = 0;
@@ -978,6 +984,7 @@ D2UnitStrc * __fastcall SpawnMonsterAtCoordList(::SGAMEDATA * pGame, D2RoomCoord
 }
 
 // Thin wrapper: builds a spawn-args struct and tail-calls CreateMonster (already fixed to return D2UnitStrc*), but drops the call's result as a bare statement. Passes it straight through.
+// 1.14d mac: 001e290d
 D2UnitStrc * __fastcall SpawnMonsterInRoomCoordList(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2RoomCoordListStrc * pCoordList, int32_t nX, int32_t nY, uint32_t nClassId, eD2MonsterAnimMode eMode, int32_t nSpawnRadius, int16_t nFlags) {
     D2UnknownCreateMonsterStrc sMonsterSpawnData;
     sMonsterSpawnData.nClassId = nClassId;
@@ -995,6 +1002,7 @@ D2UnitStrc * __fastcall SpawnMonsterInRoomCoordList(::SGAMEDATA * pGame, D2RoomS
 }
 
 // Thin wrapper: builds a spawn-args struct and tail-calls CreateMonster (already fixed to return D2UnitStrc*), but drops the call's result as a bare statement. Passes it straight through.
+// 1.14d mac: 001e295f
 D2UnitStrc * __fastcall SpawnMonsterAtRoomPosSimple(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nClassId, eD2MonsterAnimMode eMode, int16_t nFlags) {
     D2UnknownCreateMonsterStrc sMonsterSpawnData;
     sMonsterSpawnData.nGUID = 0;
@@ -1012,6 +1020,7 @@ D2UnitStrc * __fastcall SpawnMonsterAtRoomPosSimple(::SGAMEDATA * pGame, D2RoomS
 }
 
 // Thin wrapper: builds a spawn-args struct and tail-calls CreateMonster (already fixed to return D2UnitStrc*), but drops the call's result as a bare statement. Passes it straight through.
+// 1.14d mac: 001e29b3
 D2UnitStrc * __fastcall SpawnMonsterAtRoomPosGuid(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nClassId, eD2MonsterAnimMode eMode, int32_t nGUID, int32_t nSpawnRadius, int16_t nFlags) {
     D2UnknownCreateMonsterStrc sMonsterSpawnData;
     sMonsterSpawnData.nGUID = nGUID;
@@ -1036,6 +1045,7 @@ static inline int GetGUIDInline(D2UnitStrc * pUnit) {
     return (int)(-1);
 }
 
+// 1.14d mac: 001e2a6e
 D2UnitStrc * __fastcall SpawnMonsterSetOwnOwner(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nClassId, eD2MonsterAnimMode eMode, int32_t nSpawnRadius, BOOL bTransferBoss, int16_t wFlags) {
     D2UnknownCreateMonsterStrc sCreateParams;
     sCreateParams.pRoom = pRoom;
@@ -1056,6 +1066,7 @@ D2UnitStrc * __fastcall SpawnMonsterSetOwnOwner(::SGAMEDATA * pGame, D2RoomStrc 
     return pUnit;
 }
 
+// 1.14d mac: 001e2bbf
 BOOL __fastcall SpawnMinions_AtXY(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nX, int32_t nY, int32_t nClassId, eD2MonsterAnimMode eMode, int32_t nSpawnRadius, int32_t nMinionCount, int16_t nFlags) {
     D2UnknownCreateMonsterStrc sMonsterSpawnData;
     BOOL bAnySpawned = 0;
@@ -1092,6 +1103,7 @@ BOOL __fastcall SpawnMinions_AtXY(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32
     return bAnySpawned;
 }
 
+// 1.14d mac: 001e2cab
 BOOL __fastcall SpawnMonsterAtUnitOffset(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nOffsetX, int32_t nOffsetY, D2UnitStrc * pUnit, int32_t nClassId, eD2MonsterAnimMode eMode, int * pSpawnData, uint16_t wFlags) {
     uint32_t nSpawnType;
     D2UnitStrc* pSpawnedMonster;
@@ -1207,6 +1219,7 @@ BOOL __fastcall SpawnMonsterAtUnitOffset(::SGAMEDATA * pGame, D2RoomStrc * pRoom
     return nResult;
 }
 
+// 1.14d mac: 001e2f94
 BOOL __fastcall MONSTER_SpawnPredefinedAtUnit(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nUnused1, int32_t nUnused2, D2UnitStrc * pUnit, int32_t nClassId, uint16_t wFlags) {
     // Static local variables (originally global data)
     static int sPredefinedDataUnknown[16] = {
@@ -1261,6 +1274,7 @@ BOOL __fastcall MONSTER_SpawnPredefinedAtUnit(::SGAMEDATA * pGame, D2RoomStrc * 
 }
 
 // Spawns a random spawnable monster at (nX, nY) in pRoom. Reads the level's valid monster list from LevelsTxt; asserts nValidMonCount > 0. Picks a random starting index via the room seed, then walks the monster list cyclically until it finds an entry with isSpawn != 0 (up to nValidMonCount attempts). Fills D2UnknownCreateMonsterStrc (Neutral mode, radius 5) and calls CreateMonster. Returns TRUE if a unit was created, FALSE if no spawnable monster found or nValidMonCount==0. Halts on bad list state.
+// 1.14d mac: 001e3245
 BOOL __fastcall SpawnRandomMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nX, int32_t nY) {
     D2LevelsTxt* pLevelTxt = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetLine(D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom));
     if (!pLevelTxt->nValidMonCount) {

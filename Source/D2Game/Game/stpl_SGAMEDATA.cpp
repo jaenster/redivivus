@@ -21,6 +21,7 @@ template<> void TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, C
 }
 
 // Unlinks a SGAMEDATA from up to two intrusive hash-table chains (pHashLink1/pHashLink2 with their corresponding nHashLinkOffset fields). For each non-null link, computes the back-pointer using the stored offset, patches the predecessor's next pointer to skip this node, then zeroes the game's own link field and offset. Called during game teardown to remove the game from name/token lookup tables before freeing memory.
+// 1.14d mac: 001af0c4 TSHashTable<SGAMEDATA, HASHKEY_NONE>::Unlink
 template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>::Unlink(::SGAMEDATA * pNode) {
     if (pNode->m_linktoslot.m_next) {
       TSLink<::SGAMEDATA>* pLink = &pNode->m_linktoslot;
@@ -74,6 +75,7 @@ template<> void TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>::Delete(::SGAME
     this->pVtable->InternalDelete(this, pNode);
 }
 
+// 1.14d mac: 001af08a
 template<> void TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>::DeleteUnlock(::SGAMEDATA * pNode, int32_t nLockedHandle) {
     this->Unlink(pNode);
     this->pVtable->InternalDelete(this, pNode);
@@ -159,6 +161,7 @@ template<> ::SGAMEDATA * TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATAL
 
 // QServer game-token hash-table resize/rehash. Grows the game-token bucket array (pGameTokenHashBuckets) to 2*(old mask+1) entries via TSExplicitListArray_EnsureCount, detaching all existing intrusive list nodes into a temporary pending list, re-initializing every new bucket as an empty self-linked intrusive list, updating nGameTokenHashMask, then re-inserting each pending node into its new bucket by (token & newMask). Operates on the QServer (game-gateway) token->game lookup map using the engine's TSIntrusiveList helpers; the heavy negated-pointer arithmetic is the intrusive-list back-link idiom. Internal hash-map maintenance; no network I/O.
 // [override: patch]
+// 1.14d mac: 001af368
 template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>::GrowListArray() {
     TSHashTable<::SGAMEDATA, HASHKEY_NONE>* pThis = this;
     // The values VC8 kept in nBucketIdx's one frame slot, one member each: a frame object reaches the slot.
@@ -277,6 +280,7 @@ template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_
     pendingList.m_terminator.m_prevlink->m_next = pendingList.m_terminator.m_next;
 }
 
+// 1.14d mac: 001af294
 template<> __attribute__((noinline)) inline int32_t TSHashTable<SGAMEDATA, HASHKEY_NONE>::MonitorFullness(uint32_t nSlot) {
     TSLink<::SGAMEDATA>* ppBucket;
     /* Seems like 1024 is a hardcoded limit for sim games to be ran on the servers

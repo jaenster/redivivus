@@ -14,6 +14,7 @@
 namespace D2Game::Quests::QUESTS::Quest39 {
 
 // A3Q1 "Lam Esen's Tome" — NPC-dialog handler slot 0xb. On each NPC dialog event, checks whether the spoken message index matches that NPC's gossip line (two lines for Asheara, Alkor, Ormus and Meshif2; one for Cain3 0x1ca and Natalya 0x1c5). On a match it reaches mark_spoken, which calls PLAYER_SetSpokenWithNPC to record that the player has spoken with that NPC. Drives the "spoken with Act 3 NPCs" progress tracking for Q39.
+// 1.14d mac: 0022bbbf
 void __fastcall Q39_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     eD2MonsterClassId nMonStatsId = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
     uint16_t nMessageIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
@@ -52,6 +53,7 @@ void __fastcall Q39_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // A3Q1 "Lam Esen's Tome" — NPC-interact handler slot 0x0 (first-talk trigger). On player interaction with an Act 3 NPC (Asheara, Alkor, Ormus, Meshif2, Cain, Natalya), checks PLAYER_CheckIfSpokenWithNPC; if not yet spoken, calls AddGossipMessageOnMonster to queue a gossip message, using message variant 1 if the player class matches a class-specific Amazon index for that NPC, else variant 0. Records the first-talk gossip delivery for Q39 NPC introductions.
+// 1.14d mac: 0022bd0d
 void __fastcall Q39_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     eD2MonsterClassId nMonStatsId;
     int nPlayerClassId;
@@ -102,11 +104,13 @@ void __fastcall Q39_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nMonStatsId, 0);
 }
 
+// 1.14d mac: 0022be05
 bool __fastcall Q39_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode) {
     *pbyStatusCode = '\0';
     return false;
 }
 
+// 1.14d mac: 0022be12
 bool __fastcall Q39_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     if (nTargetClassId == 0xf5) {
       BOOL BVar1;
@@ -120,6 +124,7 @@ bool __fastcall Q39_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 }
 
 // InitData for quest slot 39, an act-intro "ActIntroduced" pseudo-quest (nQuestIdReal=QUEST_ActIntroduced). Zeroes the 0x3c state-handler table, installs state-0 handler Q39_Callback_00 (NPC gossip while pending) and state-0xb handler Q39_Callback_11 (dialog complete), points pNpcMessages at aNpcGossipData, marks the slot active, and wires Q39_StatusFilter/Q39_ActiveFilter. Not a journaled player quest.
+// 1.14d mac: 0022bb38
 void __fastcall Q39_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->sStateFunctions.fpQuestStateHandler[0] = Q39_Callback00_NpcActivate;

@@ -171,6 +171,7 @@ static void __stdcall SendRoomUnitUpdates(::SGAMEDATA * pGame, D2RoomStrc * pRoo
     }
 }
 
+// 1.14d mac: 001af790
 void __fastcall SendAdjacentRoomUpdates(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2ClientStrc * pClient) {
     uintptr_t nClient;
     D2ClientStrc* pRoomEnd = pClient;
@@ -241,6 +242,7 @@ void __fastcall GAME_SendRemoveObjectsForAdjacentRooms(D2RoomStrc * pRoom, D2Cli
 }
 
 // Reveals a room to a client and sends init-unit packets for all units in it. Sends SCMD 0x07 (MapReveal) with the room's level ID and tile coordinates, adds the client to the room's client count, and if this is the first or second client in the room triggers MONSTERAI_TriggerMageThink for all monsters. Then iterates the room's unit list and calls SERVER_SendInitUnitPacket for every unit except the client's own player. Halts fatally if pRoom is null.
+// 1.14d mac: 001afa95
 void __fastcall CLIENT_RevealRoomAndSendUnits(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2ClientStrc * pClient) {
     D2UnitStrc* pPlayerUnit_lcl;
     D2DrlgRoomCoordsStrc sRoomCoords;
@@ -383,6 +385,7 @@ static void InitDrlgAct(::SGAMEDATA * pGame, char nActNo) {
 }
 
 // Server-side act transition: warps a client's player unit to a destination act/level (e.g. waypoint/portal to another act). No-op in arena levels. Derives the target act from eLevel, lazily initializes the act's DRLG if absent, sets connection state, frees non-expansion pets, clears progressive states, spawns/finds a free room+coords (collision-checked with GetFreeCoordinates), then relinks the unit: clears old room, sends state command, sets client+unit act and pDrlgAct, tells the client to load the act, attaches the spawn room, sets the TELEPORTED flag, updates visibility, and re-manages pets at the new position. Halts via Fog::ErrorManager on failure paths.
+// 1.14d mac: 001afd5f
 void __fastcall CLIENT_WarpToAct(::SGAMEDATA * pGame, D2ClientStrc * pClient, eD2LevelId eLevel, int32_t nSpawnTypeOrMode) {
     D2UnitStrc* pUnit;
     D2RoomStrc* pSpawnRoom;
@@ -477,6 +480,7 @@ void __fastcall CLIENT_WarpToAct(::SGAMEDATA * pGame, D2ClientStrc * pClient, eD
 }
 
 // @sourcefile .\GAME\Level.cpp
+// 1.14d mac: 001b012f D2Game::GAME::Level::InitLevel
 void __fastcall InitLevel(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2LevelId eLevel, int32_t nMasks) {
     uint32_t nSpawnX;
     uint32_t nSpawnY;

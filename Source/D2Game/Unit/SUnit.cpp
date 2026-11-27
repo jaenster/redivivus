@@ -187,6 +187,7 @@ void __fastcall UNITS_SetNextUnit(D2UnitStrc * pUnit, D2UnitStrc * pNext) {
 }
 
 // 2022.01.09 - dzik
+// 1.14d mac: 00277d9a
 D2UnitStrc * __fastcall GetNextUnit(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xde);
@@ -196,6 +197,7 @@ D2UnitStrc * __fastcall GetNextUnit(D2UnitStrc * pUnit) {
     return pUnit->pListNext;
 }
 
+// 1.14d mac: 0027876f D2Game::UNIT::SUnit::SetSeed
 void __fastcall SetSeed(D2UnitStrc * pUnit, D2SeedStrc * pSeed) {
     uint32_t nRandomSeed;
     int nSeedLow;
@@ -219,6 +221,7 @@ void __fastcall SetSeed(D2UnitStrc * pUnit, D2SeedStrc * pSeed) {
     D2Common::Seed::InitSeed_Param_666(pSeed_00, nSeedLow);
 }
 
+// 1.14d mac: 00278800
 void __fastcall SetItemSeeds(D2UnitStrc * pUnit, D2SeedStrc * pSeed) {
     D2Common::ITEMS::Items::ResetItemSeed(pUnit);
     uint32_t DVar1 = D2_SeedRoll(pSeed);
@@ -262,6 +265,7 @@ static D2UnitStrc * * __stdcall UNITS_GetHashTableSlot(eD2UnitType eUnitType, ::
 }
 
 // Finds a unit by type and GUID in the game's unit hash tables. Walks the unit linked list (pNext at offset 0xE4) matching dwUnitId.
+// 1.14d mac: 0027905c
 D2UnitStrc * __fastcall FindUnitFromTable(::SGAMEDATA * pGame, eD2UnitType eUnitType, uint32_t nUnitGUID) {
     D2UnitStrc** ppHashSlot;
     if (!pGame) {
@@ -305,6 +309,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_10(D2UnitStrc * p
 }
 
 // Returns the owner unit (parent) of the given unit. Checks eUnitFlagsEx bit 10 (has owner flag), then looks up eOwnerType/nOwnerGUID via FindUnitFromTable.
+// 1.14d mac: 002790d0 D2Game::UNIT::SUnit::GetOwnerUnit
 D2UnitStrc * __fastcall GetOwnerUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     if (!pUnit) {
       return nullptr;
@@ -318,6 +323,7 @@ D2UnitStrc * __fastcall GetOwnerUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 }
 
 // 2022.01.09 - dzik
+// 1.14d mac: 0027910e
 D2UnitStrc * __fastcall GetKillerUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2UnitStrc* pKillerUnit;
     if (!pUnit) {
@@ -428,6 +434,7 @@ static int32_t IsRoomOccupied(D2UnitStrc * pUnit) {
 }
 
 // 2022.01.09 - dzik
+// 1.14d mac: 002796f8
 void __fastcall SetClient(D2UnitStrc * pUnit, D2ClientStrc * pClient) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4ba);
@@ -446,6 +453,7 @@ void __fastcall SetClient(D2UnitStrc * pUnit, D2ClientStrc * pClient) {
 }
 
 // @blizzard UnitGetClient
+// 1.14d mac: 00278748
 D2ClientStrc * __fastcall SUNIT_GetClient(D2UnitStrc * pUnit, char * szFile, int32_t nLine) {
     if (pUnit && pUnit->eUnitType == UNIT_PLAYER) {
       D2UnitDataPlayerStrc* pPlayerData;
@@ -543,6 +551,7 @@ void __fastcall UNITS_ClearUpdateData(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 0027976c
 void __fastcall SetupUpdateEvent_AttachEventSound(D2UnitStrc * pUnit, eD2TimerTypeDWORD nUpdateType, D2UnitStrc * pUpdateUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x557);
@@ -556,6 +565,7 @@ void __fastcall SetupUpdateEvent_AttachEventSound(D2UnitStrc * pUnit, eD2TimerTy
 }
 
 // @sourcefile .\UNIT\SUnit.cpp
+// 1.14d mac: 002797e3
 void __fastcall InitAnimFrame(D2UnitStrc * pUnit) {
     D2MonSeqTxt* pSeqTxt;
     if (!pUnit) {
@@ -589,6 +599,7 @@ void __fastcall InitAnimFrame(D2UnitStrc * pUnit) {
 }
 
 // Validates and refreshes the target unit cached in pUnit's dynamic path. Re-looks up the target by type+GUID in the hash table; if the fresh pointer differs from the cached one the target is cleared. Also clears the target if it is an item in Walk or Neutral anim mode (i.e. already picked up / gone). Halts if pUnit, pGame, or the dynamic path is null.
+// 1.14d mac: 00279c5c
 void __fastcall GetTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2DynamicPathStrc* pDynamicPath_00;
     D2UnitStrc* pLookedUpUnit;
@@ -631,12 +642,14 @@ void __fastcall GetTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 }
 
 // 2022.01.09 - dzik
+// 1.14d mac: 00279d5d
 D2UnitStrc * __stdcall GetTargetEx(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     GetTarget(pGame, pUnit);
     D2UnitStrc* pTargetUnit = D2Common::PATH::DynamicPath::GetTargetUnit(pUnit->pPath.pDynamicPath);
     return pTargetUnit != pUnit ? (D2UnitStrc*)pTargetUnit : nullptr;
 }
 
+// 1.14d mac: 00279e19
 void __fastcall FreeCombatAndChangeAnimMode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD dwMode) {
     SUnitDmg::FreeCombat(pGame, pUnit);
     D2Common::Units::ChangeAnimMode(pUnit, dwMode);
@@ -754,6 +767,7 @@ D2UnitStrc * __fastcall UNITS_FindPortalOwnerUnit(::SGAMEDATA * pGame, D2UnitStr
 }
 
 // Walks the game's player (eUnitType=0) or monster (eUnitType=1) hash table (128 slots), skipping dead/body units (STATE_playerbody check), and calls pfnCallback(pCallbackArg) for each live unit. Returns the first unit for which the callback returns 1, or NULL if none found or the unit type is unsupported. Validates pfnCallback with IsBadCodePtr before iterating.
+// 1.14d mac: 0027a083
 D2UnitStrc * __fastcall IteratePlayerOrMonsterUnits(::SGAMEDATA * pGame, int eUnitType, void * pCallbackArg, ::fpExecuteOnUnitFunction pfnCallback) {
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7b2);
@@ -794,6 +808,7 @@ D2UnitStrc * __fastcall IteratePlayerOrMonsterUnits(::SGAMEDATA * pGame, int eUn
 }
 
 // 2022.01.09 - dzik
+// 1.14d mac: 0027a18f
 void __fastcall IterateAllUnits(::SGAMEDATA * pGame, fpSUnitIterateCallback fpFunction, void * pArgs) {
     BOOL eUnitState;
     D2UnitStrc* pUnit;
@@ -824,6 +839,7 @@ void __fastcall IterateAllUnits(::SGAMEDATA * pGame, fpSUnitIterateCallback fpFu
     } while (true);
 }
 
+// 1.14d mac: 0027a22f
 void __fastcall SetTimerListIfUnitExists(D2UnitStrc * pUnit, D2TimerStrc * pTimer) {
     if (!pUnit) {
       return;
@@ -832,6 +848,7 @@ void __fastcall SetTimerListIfUnitExists(D2UnitStrc * pUnit, D2TimerStrc * pTime
     pUnit->pTimerList = pTimer;
 }
 
+// 1.14d mac: 0027a244
 D2TimerStrc * __fastcall GetTimerList(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return nullptr;
@@ -840,12 +857,14 @@ D2TimerStrc * __fastcall GetTimerList(D2UnitStrc * pUnit) {
     return pUnit->pTimerList;
 }
 
+// 1.14d mac: 0027a25a
 void __fastcall UNITS_ClearAnimTimerEvents(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
 }
 
 // Schedules animation-frame timer events for pUnit in pGame. Iterates over animation frames at the unit's current speed (or sequence speed if pAnimSeq is set), reads per-frame event types from the AnimData hash table (or via ANIM_GetEventFrame for sequences), and calls SetEvent for attack/sound/other (types 1/2/4/3). Sets nGfxCurrentFrame to the current game frame and always schedules a terminal event one frame past the last.
+// 1.14d mac: 0027a2a7
 void __fastcall UNITS_SetupAnimTimerEvents(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     uint32_t nEventType;
     int nTotalFrameCount;
@@ -908,6 +927,7 @@ void __fastcall UNITS_SetupAnimTimerEvents(::SGAMEDATA * pGame, D2UnitStrc * pUn
 }
 
 // Resets animation timer events for pUnit starting at nPercent% through the current animation cycle. Fires MODECHANGE and ENDANIM trigger callbacks first, resets nGfxCurrentFrame based on the percentage offset, then schedules per-frame anim events (attack/cast/special hits, type 1-4) into the game event queue for the remaining frames, and finally queues the ENDANIM event. Handles both normal and sequenced (merc) animations.
+// 1.14d mac: 0027a4a4
 void __fastcall UNITS_SetupAnimTimerEventsFromPercent(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nPercent) {
     int nAnimSpeedAccum;
     uint32_t nAnimSpeed;
@@ -961,6 +981,7 @@ void __fastcall UNITS_SetupAnimTimerEventsFromPercent(::SGAMEDATA * pGame, D2Uni
 }
 
 // Rebuilds animation timer events for pUnit starting nDelay frames in the past relative to the current game frame. Flushes existing MODECHANGE and ENDANIM triggers, resyncs nGfxCurrentFrame, then iterates the animation hash table (or sequence via ANIM_GetEventFrame) to re-schedule event types 1-4 at their correct future frames, and sets the end-of-anim event.
+// 1.14d mac: 0027a66b
 void __fastcall UNITS_SetupAnimTimerEventsWithDelay(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nDelay) {
     int nAnimSpeedAccum;
     uint32_t nAnimSpeed;
@@ -1020,6 +1041,7 @@ void __fastcall UNITS_SetupAnimTimerEventsWithDelay(::SGAMEDATA * pGame, D2UnitS
 }
 
 // Identical to UNITS_SetupAnimTimerEventsFromPercent but takes a raw frame index (nFrame) instead of a percentage. Resets nGfxCurrentFrame to (currentGameFrame - nFrame)*256, then schedules remaining per-frame anim events and the terminal ENDANIM event. Used when the exact starting frame is known rather than a proportional position.
+// 1.14d mac: 0027a821
 void __fastcall UNITS_SetupAnimTimerEventsFromFrame(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nFrame) {
     uint32_t nAnimSpeed;
     uint32_t nEventType;
@@ -1072,6 +1094,7 @@ void __fastcall UNITS_SetupAnimTimerEventsFromFrame(::SGAMEDATA * pGame, D2UnitS
     GAME::Event::SetEvent(pGame, pUnit, 1, nNextEventFrame + 1, 0, 0);
 }
 
+// 1.14d mac: 0027a9c1
 void __fastcall UNITS_ClearAnimAndTriggerEndAnim(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
     GAME::Event::EVENT_TriggerImmediate(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0, 0);
@@ -1135,6 +1158,7 @@ void __fastcall GetTypeAndMode(D2UnitStrc * pUnit, D2QServerUnitRecordStrc * pOu
     }
 }
 
+// 1.14d mac: 0027aca8
 ::SGAMEDATA * __fastcall GetGamePointer(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa29);
@@ -1145,6 +1169,7 @@ void __fastcall GetTypeAndMode(D2UnitStrc * pUnit, D2QServerUnitRecordStrc * pOu
 }
 
 // 2022.01.09 - dzik
+// 1.14d mac: 0027ace9
 void __fastcall SetNecroPet(D2UnitStrc * pUnit, uint32_t nNecroPetGUID) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa32);
@@ -1154,6 +1179,7 @@ void __fastcall SetNecroPet(D2UnitStrc * pUnit, uint32_t nNecroPetGUID) {
     pUnit->pUnitData.pUnitDataMonster->nNecroPetGUID = nNecroPetGUID;
 }
 
+// 1.14d mac: 0027ad2f
 int32_t __fastcall GetNecroPet(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa3c);
@@ -1164,6 +1190,7 @@ int32_t __fastcall GetNecroPet(D2UnitStrc * pUnit) {
 }
 
 // 2022.01.09 - dzik
+// 1.14d mac: 0027ad70
 void __fastcall SetSparklyChestFlag(D2UnitStrc * pUnit, uint8_t bIsSparklyChest) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa47);
@@ -1174,6 +1201,7 @@ void __fastcall SetSparklyChestFlag(D2UnitStrc * pUnit, uint8_t bIsSparklyChest)
 }
 
 // 2022.01.09 - dzik
+// 1.14d mac: 0027adb3
 uint8_t __fastcall GetSparklyChestFlag(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa50);
@@ -1185,6 +1213,7 @@ uint8_t __fastcall GetSparklyChestFlag(D2UnitStrc * pUnit) {
 
 // Reads pUnit's server-side interaction state: *pnUnitGUID = dwInteractGUID (+0x64), *peUnitType = dwInteractType (+0x68); returns the byte bInteracting (+0x6c).
 // Provenance: asm 00554100..0055411b (MOVZX byte [EAX+0x6c], RET 0xc).
+// 1.14d mac: 0027aa48
 BOOL __stdcall GetInteractInfo(D2UnitStrc * pUnit, eD2UnitType * peUnitType, uint32_t * pnUnitGUID) {
     *pnUnitGUID = pUnit->uSideData.pServerSide.dwInteractGUID;
     *peUnitType = pUnit->uSideData.pServerSide.dwInteractType;
@@ -1193,6 +1222,7 @@ BOOL __stdcall GetInteractInfo(D2UnitStrc * pUnit, eD2UnitType * peUnitType, uin
 
 // Marks a server-side unit as interacting: when pServerSide.bInteracting is clear, stores dwInteractGUID (+0x64), eInteractUnitType (+0x68) and sets bInteracting (+0x6c) = 1; a player already interacting only formats a "Player %s attempted to operate while busy" message.
 // Provenance: asm 0055416a..00554176 ([EBP+0x10] -> +0x64, [EBP+0xc] -> +0x68); was nParam / pLightMap. 2022.01.09 - dzik
+// 1.14d mac: 0027adf2
 void __stdcall SetInteractInfo(D2UnitStrc * pUnit, eD2UnitType eInteractUnitType, uint32_t dwInteractGUID) {
     D2UnitDataPlayerStrc* pPlayerData;
     char szMessage[80];
@@ -1213,12 +1243,14 @@ void __stdcall SetInteractInfo(D2UnitStrc * pUnit, eD2UnitType eInteractUnitType
 
 // Clears pUnit's server-side interaction state: dwInteractGUID (+0x64) = -1, dwInteractType (+0x68) = UNIT_COUNT (6), bInteracting (+0x6c) = 0.
 // Provenance: asm 00554190..005541a9 (RET 4).
+// 1.14d mac: 0027ae63
 void __stdcall ClearInteractInfo(D2UnitStrc * pUnit) {
     pUnit->uSideData.pServerSide.dwInteractGUID = -1;
     pUnit->uSideData.pServerSide.dwInteractType = UNIT_COUNT;
     pUnit->uSideData.pServerSide.bInteracting = 0;
 }
 
+// 1.14d mac: 0027ae7d
 BOOL __fastcall CheckForModeZeroDeath(D2UnitStrc * pUnit) {
     if (pUnit && !(pUnit->eUnitFlags & UNITFLAG_ISDEAD)) {
       bool bIsDeadMode;
@@ -1256,6 +1288,7 @@ BOOL __fastcall CheckForModeZeroDeath(D2UnitStrc * pUnit) {
 }
 
 // Determines whether pAttacker may attack pUnit, resolving owner chains for monsters and reflected missiles. If both resolved units are players, delegates to PLAYERLIST_GetFlagsMasked with the hostile flag (bit 3). Otherwise calls Path::IsAllyOf; returns 0 if allied, 1 if hostile. Returns 0 for self-attack.
+// 1.14d mac: 0027aebe
 uint32_t __fastcall UNITS_CheckIfCanAttackTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2UnitStrc* pOwnerUnit;
     if (pUnit) {
@@ -1313,6 +1346,7 @@ static inline int GetGUIDInline(D2UnitStrc * pUnit) {
     }
     return (int)(-1);
 }
+// 1.14d mac: 0027af78
 BOOL __fastcall UNITS_CheckSkillTargetAlignment(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, D2UnitStrc * pTarget, eD2Skills eSkill) {
     if (pUnit && pTarget && (GetTypeInline(pUnit) == UNIT_PLAYER || GetTypeInline(pTarget) == UNIT_MONSTER)) {
       D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? &D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkill] : nullptr;
@@ -1363,6 +1397,7 @@ static void __stdcall UNITS_OnAlignmentChanged(int32_t bDecreaseSpawnCount, int3
 }
 
 // Sets the alignment stat (good/neutral/evil, values 0-2) on a unit via the STATE_alignment stat list. Allocates and attaches the stat list if absent, stores the alignment value, toggles the alignment GFX state (0x69), and calls UNITS_OnAlignmentChanged with old and new values. Skips the change for revived units with alignment 0 (neutral). Certain monster class IDs (0x15F/0x160/0x161) always bypass the revive check. The alignment argument is a single byte: callers set only DL and the prologue does MOVZX EBX, DL, so the upper 24 bits of EDX are dead.
+// 1.14d mac: 0027b1f2
 void __fastcall SetAlignment(D2UnitStrc * pUnit, uint8_t nAlignment, int32_t nOldAlignment) {
     uint32_t _bIsRevive;
     bool bIsRevive;
@@ -1403,6 +1438,7 @@ void __fastcall SetAlignment(D2UnitStrc * pUnit, uint8_t nAlignment, int32_t nOl
 }
 
 // Applies or removes STATE_uninterruptable on pUnit (nParam=1 to set, 0 to clear). When clearing: if STATE_death_delay is active, it removes that state and immediately kills the unit (via SERVER_KillMonster if no killer, or SERVER_GetHitCalculation with the KILL result flag if a killer exists). Additionally triggers AITHINK for monster units to resume AI after the uninterruptable window closes.
+// 1.14d mac: 0027b3e3
 void __fastcall SetUninterruptableState(D2UnitStrc * pUnit, int32_t bSet) {
     BOOL eDeathDelayState;
     D2UnitStrc* pKillerUnit;
@@ -1438,6 +1474,7 @@ void __fastcall SetUninterruptableState(D2UnitStrc * pUnit, int32_t bSet) {
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
 }
 
+// 1.14d mac: 0027b4dd
 BOOL __fastcall PLAYER_CancelMapReveal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2TimerTypeDWORD eTimerType, int32_t dwUnused2, int32_t dwUnused3) {
     if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
       return 0;
@@ -1474,6 +1511,7 @@ D2RoomStrc * __fastcall UNITS_GetTargetRoom(::SGAMEDATA * pGame, D2UnitStrc * pU
 }
 
 // 2022.01.09 - dzik
+// 1.14d mac: 0027b111
 uint16_t __fastcall GetPartyId(D2UnitStrc * pUnit) {
     uint16_t nPartyId;
     if (pUnit) {
@@ -1499,6 +1537,7 @@ BOOL __fastcall SetDamageHitClass(D2DamageStrc * pEvent, uint32_t dwHitClass) {
 }
 
 // Server-side per-unit visibility reconciliation between two client sets (the unit's current room vs its target/destination room). Merge-walks both sorted client lists: clients only in the target room get SERVER_SendInitUnitPacket (unit becomes visible to them); clients only in the current room get SendRemoveObject (unit removed); the unit's own owning client is skipped. No-ops unless Units::NeedsRoomUpdate(pUnit). On completion clears the dynamic-path 0x02 (needs-update) flag. Halts on null client-list pointers.
+// 1.14d mac: 00277ddb
 void __fastcall UNITS_UpdateRoomClientVisibility(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2RoomStrc * pRoom) {
     uint32_t _bNeedsRoomUpdate;
     bool bNeedsRoomUpdate;
@@ -1714,6 +1753,7 @@ void __fastcall UNITS_PlaceUnitInRoom(D2UnitStrc * pUnit, int32_t nX, int32_t nY
 }
 
 // Teleports any unit type (player/monster/object/missile/item/warp) to position (nX,nY) in pRoom, updating nAct, pDrlgAct, and rebuilding path/collision state appropriate to the unit type. Players and monsters get a new dynamic path; dead units are set to COLLIDE_CORPSE width 5; items in Run mode get a despawn timer; objects/warps get a static path with collision block. Finalises by linking the unit to the room update list and calling ChangeAnimMode(1).
+// 1.14d mac: 00279340
 void __fastcall UNITS_RelocateUnitToRoom(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t nX, int32_t nY) {
     BOOL bIsMonsterDead;
     D2ObjectsTxt* pObjTxt;
@@ -1810,6 +1850,7 @@ void __fastcall UNITS_RelocateUnitToRoom(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     D2Common::Units::SetCurrentRoomInvalid(pUnit, 1);
 }
 
+// 1.14d mac: 00279d90
 int32_t __fastcall UNITS_ProcessUnitMovement(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x72e);
@@ -1825,6 +1866,7 @@ int32_t __fastcall UNITS_ProcessUnitMovement(::SGAMEDATA * pGame, D2UnitStrc * p
     return nResult;
 }
 
+// 1.14d mac: 0027aa17
 D2UnitStrc * __fastcall GetInteractedNpc(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     int nInteractGUID = pUnit->uSideData.pServerSide.dwInteractGUID;
     int nInteractType = pUnit->uSideData.pServerSide.dwInteractType;
@@ -1836,6 +1878,7 @@ D2UnitStrc * __fastcall GetInteractedNpc(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // Returns 1 if pUnit (must be a player) can use eSkill on the target described by peUnitType. Applies only to skills flagged with bit 2 of flags4 in Skills.txt (party-targeted skills). For monster targets, resolves the owner player. Returns 1 only if caster and target share the same non-(-1) party ID, i.e. are in the same party.
+// 1.14d mac: 0027b00c
 uint32_t __fastcall UNITS_CanUseSkillOnTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, eD2Skills eSkill) {
     D2UnitStrc* pTargetUnit = pTarget;
     if (!pUnit || !pTarget) {
@@ -1882,6 +1925,7 @@ uint32_t __fastcall UNITS_CanUseSkillOnTarget(::SGAMEDATA * pGame, D2UnitStrc * 
 }
 
 // Returns 1 if pUnit and pOther are allies (same unit = always ally). For monsters, resolves to owner player first. For two players, checks that both share the same party ID (via GetPartyIdFromUnit) and neither has party ID -1. Falls back to Path::IsAllyOf for non-player pairs. Used to gate friendly-fire vs. ally-targeted skill application.
+// 1.14d mac: 0027b14e
 BOOL __fastcall SKILL_CanUnitTargetAlly(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, D2UnitStrc * pOther) {
     BOOL _bIsAlly;
     int16_t nUnitPartyId;
@@ -1930,6 +1974,7 @@ BOOL __fastcall SKILL_CanUnitTargetAlly(::SGAMEDATA * pGameStrc, D2UnitStrc * pU
 
 // Server-side teleport/relocate of a unit to (nX,nY) in pRoom. Resolves a destination room (FindBetterNearbyRoom, or GetFreeCoordinates_WithNeighboorRooms when bFindFreeSpace==0), verifies the target tile is walkable via PATH_GetCollisionMaskAt, then re-links the unit to the room update list and sets UNITFLAGEX_TELEPORTED (nRelocMode==0) or flag 0x800. For players it also sends 0x07 MapReveal, records the reveal coords in player data (ring buffer of up to 0x14 entries), schedules a PLAYER_CancelMapReveal event (+0x32 frames) and updates pets. Returns 1 on success, 0 if no valid room/tile. Halts via ErrorManager on null pUnit/path.
 // @sourcefile .\UNIT\SUnit.cpp
+// 1.14d mac: 00278421
 BOOL __fastcall SUNIT_RelocateUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2RoomStrc * pRoom, uint32_t nX, uint32_t nY, int32_t bFindFreeSpace, int32_t nRelocMode) {
     BOOL nCollisionMask;
     D2ClientStrc* pPlayerClient;
@@ -2022,6 +2067,7 @@ BOOL __fastcall SUNIT_RelocateUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ro
 
 // Server-side handler that teleports a player unit through a staircase object. Looks up the matching destination staircase unit, finds a collision-free landing coordinate near it, checks quest gate conditions for special levels (Duriel, Worldstone, Ancients Way, Durance), then calls SUNIT_RelocateUnit and PLRMODES_MoveToLocation to complete the transition. Broadcasts NET_D2GS_SERVER_Send_0x0D_PlayerStop to clients with the new position.
 // @sourcefile .\UNIT\SUnit.cpp
+// 1.14d mac: 00278166 D2Game::UNIT::SUnit::TakeStairs
 void __fastcall TakeStairs(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pObject) {
     D2UnitStrc* pStaircaseUnit;
     D2RoomStrc* pDestRoom;
@@ -2098,6 +2144,7 @@ void __fastcall TakeStairs(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc *
 
 // Server-side unit factory. Position is WORLD SUBTILES; bPlaceInRoom=1 routes through UNITS_PlaceUnitInRoom + AllocObjectData.
 // Dispatches on eUnitType through the jump table at 005554e8 (label UNIT_FillFunctions) - a switch, not an array of callbacks. Its six branch labels (FillPlayer/FillMonster/FillObject/FillMissile/FillItem/FillWarp) and the shared tail UNITS_RestoreUnitInRoom are case blocks of this function, not callable functions.
+// 1.14d mac: 002788b4
 D2UnitStrc * __fastcall CreateUnit(eD2UnitType eUnitType, int32_t nClassId, int32_t nPosX, int32_t nPosY, ::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint8_t bPlaceInRoom, int32_t nInitialMode, uint32_t pMonsterData) {
     eAct eUnitAct;
     eD2LevelId nLevelId;
@@ -2297,6 +2344,7 @@ static void ClearInteractOnFreePlayer(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
     pUnit->uSideData.pServerSide.dwInteractGUID = -1;
 }
 
+// 1.14d mac: 00277c20
 void __fastcall UNITS_UnlinkUnitFromRoom(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, int32_t bDisallowNotify) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3ac);
@@ -2331,6 +2379,7 @@ void __fastcall UNITS_UnlinkUnitFromRoom(D2UnitStrc * pUnit, ::SGAMEDATA * pGame
 
 // Fully tears down a server-side unit: unlinks it from its room, frees quest-event data, then dispatches per-type cleanup (player: portals, party, resources, path; monster: target nodes, resources, path; object: object data, static path, unit data; missile: path, missile data; item: inventory+timers, item data; warp: static path). Finishes by freeing unit events, queued packets, and the unit itself. Asserts pGame/pUnit non-null and eUnitType < 6.
 // @sourcefile .\UNIT\SUnit.cpp
+// 1.14d mac: 00277a00
 void __fastcall FreeServerUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2UnitQuestDataListStrc* pQuestDataList;
     if (!pGame) {
@@ -2401,6 +2450,7 @@ void __fastcall FreeServerUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 }
 
 // 2022.01.09 - dzik
+// 1.14d mac: 002780ff
 void __fastcall FreeWarpUnits(::SGAMEDATA * pGame) {
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x12d);
@@ -2494,6 +2544,7 @@ void __fastcall SUNIT_SpawnPresetUnit(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D
 }
 
 // Iterates all preset units in a room and spawns them via SUNIT_SpawnPresetUnit, with special-case filtering for Uber areas. In LEVEL_UberTristram: skips object class IDs 0x10c, 0x1a, 0x10d (Uber boss triggers). In LEVEL_MatronsDen and LEVEL_FurnaceofPain: skips object 0x18d. In LEVEL_ForgottenSands: skips object 0x192 and uses the game seed to decide which of a random 3-slot uber-object set to spawn. Non-monster presets are processed first; monsters are spawned in a second pass (skipped for UberTristram).
+// 1.14d mac: 00279af9
 void __fastcall SUNIT_SpawnPresetUnitsForRoom(::SGAMEDATA * pGame, D2RoomStrc * pRoom) {
     bool bSkipUberPreset;
     eD2UnitType ePresetType;
@@ -2580,6 +2631,7 @@ void __fastcall SUNIT_SpawnPresetUnitsForRoom(::SGAMEDATA * pGame, D2RoomStrc * 
 
 // Server-side teardown of a unit's entire inventory when the unit is being freed. Walks each inventory node: for equipped items (grid type 3) removes equip stats and clears the body location; for active charms unequips stats and emits a debug record of their grid position/page; then detaches the item from the inventory and frees the underlying server unit (any unit type < 6). Finally frees any item held on the cursor. Halts via ErrorManager on null unit or inventory-consistency failures.
 // @sourcefile .\UNIT\SUnit.cpp
+// 1.14d mac: 0027aa64
 void __fastcall UNITS_FreeInventoryItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     eD2InventoryGridType eGridType;
     bool bIsActiveCharm;

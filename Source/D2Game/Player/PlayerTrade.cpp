@@ -54,6 +54,7 @@ namespace D2Game::PLAYER::PlayerTrade {
 
 // Object operate callback (fn index 32) for the player stash (class ID 0x10B). Validates that both the player and the stash object are in town, then sets the player's interact info to the stash GUID, sends trade-action packet 0x10 (open stash) to the client, and checks item levels. Returns 0 always.
 // @sourcefile .\PLAYER\PlrTrade.cpp
+// 1.14d mac: 0020db64
 BOOL __fastcall Objects_OperateFn32_OpenStash(D2ObjectOperateFnArg * pOperation) {
     BOOL bIsInTown;
     uint32_t nStashGUID;
@@ -702,6 +703,7 @@ static BOOL __stdcall CUBE_ValidateRecipeInputs(::SGAMEDATA * pGame, D2CubeSetup
 }
 
 // Two explicit GuardStack tails carrying a packed 16-bit item class id (aCandidateIds[nEndId]) on success, 0 on no-candidates-found. Own doc comment: "Returns class ID in EAX."
+// 1.14d mac: 0020e688
 uint16_t __fastcall ITEM_SelectRandomItemClassByType(::SGAMEDATA * pGame, int32_t nItemLevel, eD2ItemTypes eItemType) {
     BOOL bTypeMatch;
     uint16_t aCandidateIds[256];
@@ -749,22 +751,26 @@ uint16_t __fastcall ITEM_SelectRandomItemClassByType(::SGAMEDATA * pGame, int32_
 }
 
 // JMP thunk
+// 1.14d mac: 002131fe
 BOOL __fastcall CUBE_SpecialOutput_CowPortalRecipe(::SGAMEDATA * pGame, D2UnitStrc * pPlayer) {
     return ::D2Game::Quests::QUESTS::A1Q4::CUBE_SpecialOutput_CowPortal(pGame, pPlayer);
 }
 
 // JMP thunk
+// 1.14d mac: 00213207
 BOOL __fastcall CUBE_SpecialOutput_Unused2(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     return ::D2Game::Quests::QUESTS::A1Q4::CUBE_SpecialOutput_Quest_Unused2(pGame, pUnit);
 }
 
 // JMP thunk
+// 1.14d mac: 00213210
 BOOL __fastcall CUBE_SpecialOutput_Unused3(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     return ::D2Game::Quests::QUESTS::A1Q4::CUBE_SpecialOutput_Quest_Unused3(pGame, pUnit);
 }
 
 // Generates cube recipe outputs. For each of 3 output slots: computes item level from nLvl/nPLvl/nILvl, calls special output hooks (cow portal, token respec), spawns or transforms items based on output type (0xff=use-item, 0xfe=use-type with upgrade, 0xfc=fixed classID, 0xfd=random by type), applies quality/affixes/mods/sockets, removes cube items, transfers outputs to inventory, and triggers quest hooks (Staff of Kings, Khalim's Will). Handles ethereal item socketing, runeword property removal, and nested cube item extraction.
 // @sourcefile .\PLAYER\PlrTrade.cpp
+// 1.14d mac: 0020e812
 void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2CubeMainTxt * pRecipe, D2CubeSetupStrc * pMatchedItems, uint32_t nUnused) {
     // Static local variables (originally global data)
     static D2CubeSpecialOutput CUBESPECIALOUTPUT[4] = { nullptr, &D2Game::PLAYER::PlayerTrade::CUBE_SpecialOutput_CowPortalRecipe, &D2Game::PLAYER::PlayerTrade::CUBE_SpecialOutput_Unused2, &D2Game::PLAYER::PlayerTrade::CUBE_SpecialOutput_Unused3 }; D2_STATIC_GUARD(CUBESPECIALOUTPUT, "D2Game::PLAYER::PlayerTrade::CUBE_GenerateOutput::CUBESPECIALOUTPUT");
@@ -1574,6 +1580,7 @@ static void CUBE_HandleTransmuteButtonClick(D2UnitStrc * pPlayer, uint16_t nButt
 }
 
 // @sourcefile .\PLAYER\PlrTrade.cpp
+// 1.14d mac: 00211bdd
 static bool InitCopyInventoryForTrade(::SGAMEDATA * pGame, D2UnitStrc * pUnitStrc) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnitStrc);
     if (!pPlayerData->pTradeCopyInventory) {
@@ -1600,6 +1607,7 @@ static bool InitCopyInventoryForTrade(::SGAMEDATA * pGame, D2UnitStrc * pUnitStr
 }
 
 // @sourcefile .\PLAYER\PlrTrade.cpp
+// 1.14d mac: 0020f70d
 void __fastcall PLRTRADE_FreeTradeCopyInventory(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2TradeRecordStrc* pMemoryToFree;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
@@ -1623,6 +1631,7 @@ void __fastcall PLRTRADE_FreeTradeCopyInventory(::SGAMEDATA * pGame, D2UnitStrc 
 }
 
 // @sourcefile .\PLAYER\PlrTrade.cpp
+// 1.14d mac: 0020f927
 void __fastcall SendRemoveItemDisplayPacket0x92(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOtherUnit) {
     int32_t nOtherGUID;
     uint8_t byUnk;
@@ -1638,6 +1647,7 @@ void __fastcall SendRemoveItemDisplayPacket0x92(::SGAMEDATA * pGame, D2UnitStrc 
     GAME::SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrTrade.cpp", 0x83b), 0x92, 0, nOtherGUID);
 }
 
+// 1.14d mac: 0020f986
 void __fastcall TRADE_RestoreInventoryFromBackup(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     int i;
     short int* pSavePtr;
@@ -1675,6 +1685,7 @@ void __fastcall TRADE_RestoreInventoryFromBackup(::SGAMEDATA * pGame, D2UnitStrc
 }
 
 // @sourcefile .\PLAYER\PlrTrade.cpp
+// 1.14d mac: 0020fb90
 void __fastcall SendEventMsg(D2UnitStrc * pUnit, uint8_t nMessageType, char * szName) {
     int nReturnValue;
     D2Packet0x5aEventStructure sEventPacket;
@@ -1711,6 +1722,7 @@ static BOOL CUBE_HasAnyItemsInCube(D2UnitStrc * pPlayer) {
 
 // Server-side trade initiation check between two players. Verifies neither player is already trading, the classic game is not completed (A4Q3), and both are in town. Enforces a 5-second accept-trade cooldown and a 1-second throttle on repeated trade messages. On success, sets mutual interact info, sends 0x77 TradeAction packets to both clients (initiator=0, target=1), and sets dwTradeState to 1/2 respectively.
 // @sourcefile .\PLAYER\PlrTrade.cpp
+// 1.14d mac: 0020fc37
 void __fastcall CheckIfCanStartTradeWithPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOtherUnit) {
     if (Player::GetPlayerTradeTickOrBusy(pUnit)) {
       return;
@@ -1753,6 +1765,7 @@ void __fastcall CheckIfCanStartTradeWithPlayer(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // @sourcefile .\PLAYER\PlrTrade.cpp
+// 1.14d mac: 00211b64
 void __thiscall TRADE_SendTradeCompleteToPlayers(D2UnitStrc * pThis, D2UnitStrc * pUnit, D2UnitDataPlayerStrc * pData, D2UnitDataPlayerStrc * pDataOther) {
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pThis, ".\\PLAYER\\PlrTrade.cpp", 0x976);
     GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(pClient, 6);
@@ -1785,6 +1798,7 @@ static void __stdcall SetStatsOnEar(BOOL bHardcore, D2UnitStrc * pUnit, D2UnitSt
 
 // Trade/corpse-recovery helper: iterates all items in pUnit's inventory, clones each INVPAGE_MERC item via ITEM_CloneFromSerializedData, sets ear stats if applicable, marks it for update, moves it to INVPAGE_INVENTORY, and places it into pUnit2's inventory via SERVER_ItemToInventory. Also iterates INVPAGE_CORPSE items: strips them from pUnit's inventory (sends 0x9D remove packet) and deletes them. Sends trade-action packet 0x77 opcode 10 (fail) to both parties and returns 0 on any placement failure; returns 1 on full success.
 // @sourcefile .\PLAYER\PlrTrade.cpp
+// 1.14d mac: 00212e8f
 static uint8_t __stdcall LoopsOverAllItemsAndPutInInventory(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, ::SGAMEDATA * pGame) {
     bool bItemPlaced;
     bool bHardcore;
@@ -1875,6 +1889,7 @@ static uint8_t __stdcall LoopsOverAllItemsAndPutInInventory(D2UnitStrc * pUnit, 
     goto next_item_to_remove;
 }
 
+// 1.14d mac: 00212e29
 static BOOL __stdcall HasMercItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit2, D2UnitStrc * pUnit) {
     D2UnitStrc* pItemNode = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pUnit2->pInventory);
     while (pItemNode) {
@@ -1889,6 +1904,7 @@ static BOOL __stdcall HasMercItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit2, D2U
 }
 
 // Called when player ends interaction with the Horadric Cube item. Clears the interact info and performs item level check. Ensures proper cleanup when cube UI is closed.
+// 1.14d mac: 00211eb0
 void __fastcall CUBE_OnCubeInteractionEnd(::SGAMEDATA * pGame, D2UnitStrc * pPlayer) {
     UNIT::SUnit::ClearInteractInfo(pPlayer);
     ITEMS::ItemMode::ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pPlayer);
@@ -1932,6 +1948,7 @@ static bool __stdcall SetUidOther(int * pnUIDOther, int32_t szText, D2UnitStrc *
 
 // Server-side handler for a player picking up an item from the trade screen. Validates that the interact partner is a player; sends 0x77/0x0C error if not. Calls SERVER_TakeItemToCursor to move the item to the cursor slot. On success, resets the 10-second trade acceptance timer for both parties and sends 0x77/0x0E (unaccept) to both clients. If either party had committed gold (dwTradeState==4), zeroes out both gold totals via 0x79 packets and finalises the trade via TRADE_SendTradeCompleteToPlayers.
 // @sourcefile .\PLAYER\PlrTrade.cpp
+// 1.14d mac: 00212264
 void __fastcall SERVER_TradeTransferItemToCursor(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem) {
     D2TradeRecordStrc* pDVar2;
     bool bUidSet;
@@ -1998,6 +2015,7 @@ void __fastcall SERVER_TradeTransferItemToCursor(::SGAMEDATA * pGame, D2UnitStrc
     return;
 }
 
+// 1.14d mac: 00212508 D2Game::PLAYER::PlayerTrade::CopyInventory
 int32_t __fastcall CopyInventory(D2UnitStrc * pUnit, uint8_t * pBuffer, int32_t nBufSize) {
     D2TradeRecordStrc* pTradeCopy2;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
@@ -2021,6 +2039,7 @@ static inline int GetClassIdInline(D2UnitStrc * pUnit) {
 }
 // Server-side guard and initiator for a player-to-player trade session. Verifies both parties are alive (flag 0x800000 clear), Diablo has not been killed (classic trade restriction), the other player's trade inventory exists, and no prohibited item (monster-dropped or quest item with the "box" cube exception) is being offered. On success sets both players' dwTradeState to 7, fires event 0xD on the next frame for each, and sends NET packet 0x77 opcode 6 (TradeAccepted) to both clients. Returns 1 if the offered item needs re-validation, 0 if trade is blocked, or <5 trade-state guard on early-out paths.
 // @sourcefile .\PLAYER\PlrTrade.cpp
+// 1.14d mac: 0021254a
 uint32_t __fastcall PLRTRADE_ValidateAndInitiateTrade(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItemUnit) {
     BOOL _bInteractValid;
     bool bInteractValid;
@@ -2114,6 +2133,7 @@ uint32_t __fastcall PLRTRADE_ValidateAndInitiateTrade(::SGAMEDATA * pGame, D2Uni
     return (uint32_t)(pSelfData->dwTradeState <= 4);
 }
 
+// 1.14d mac: 00212834
 BOOL __fastcall PLAYERTRADE_CheckNoEquippedTradeItems(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit) {
     BOOL _bHasInteract;
     bool bHasInteract;
@@ -2136,6 +2156,7 @@ BOOL __fastcall PLAYERTRADE_CheckNoEquippedTradeItems(::SGAMEDATA * pGameStrc, D
     return 1;
 }
 
+// 1.14d mac: 00212898
 BOOL __fastcall IsInteractingWithPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused) {
     uint32_t nInteractGUID;
     eD2UnitType eInteractType;
@@ -2153,6 +2174,7 @@ BOOL __fastcall IsInteractingWithPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 
 // If the player has an active trade-copy inventory, aborts the trade display: broadcasts packet 0x92 to all players (remove trade items), marks cursor and carried items for deletion (ITEMCMD_DELETE), processes item drop logic, and restores the player's inventory from the trade backup. The "Mabye" (sic) in the name reflects it only acts when a trade copy exists.
 // @sourcefile .\PLAYER\PlrTrade.cpp
+// 1.14d mac: 0020f7d9
 void __fastcall RemoveTradeItemMabye(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused) {
     int32_t nSelfGUID;
     uint8_t byPacketArg;
@@ -2194,6 +2216,7 @@ void __fastcall RemoveTradeItemMabye(::SGAMEDATA * pGame, D2UnitStrc * pUnit, ui
 }
 
 // @sourcefile .\PLAYER\PlrTrade.cpp
+// 1.14d mac: 0020fe77
 void __fastcall PLRTRADE_CancelTradeAndCleanup(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2UnitDataPlayerStrc * pPlayerData, D2UnitDataPlayerStrc * pPlayerData2, uint32_t dwTradeStateForUnit) {
     D2Common::Units::RefreshInventory(pUnit, 1);
     D2Common::Units::RefreshInventory(pUnit2, 1);
@@ -2226,6 +2249,7 @@ void __fastcall PLRTRADE_CancelTradeAndCleanup(::SGAMEDATA * pGame, D2UnitStrc *
 
 // Cancels/resets an active trade between two players: refreshes both inventories, checks item levels, clears trade status to 0 on both sides, calls RemoveTradeItemMaybe for each, sends gold-in-trade packets zeroing both sides (side 0 and 1) for both clients, sends trade-action 6 (cancel) to both clients, sets dwTradeState=5 on both, and schedules an update event for the next game frame.
 // @sourcefile .\PLAYER\PlrTrade.cpp
+// 1.14d mac: 00212be5
 static void __stdcall PLRTRADE_ResetTradeState(D2UnitDataPlayerStrc * pPlayerData1, D2UnitDataPlayerStrc * pPlayerData2, D2UnitStrc * pUnit2, ::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     ITEMS::ItemMode::ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pUnit2);
     ITEMS::ItemMode::ITEMMODE_RebuildBookScrollSkillQuantities(pGame, pUnit);
@@ -2394,6 +2418,7 @@ static void __stdcall PLRTRADE_ExecuteTrade(::SGAMEDATA * pGame, D2UnitStrc * pU
 }
 
 // Several exits go through GuardStack tails with the status (0, 1 or 3) in AL.
+// 1.14d mac: 00210037
 eD2ServerIncomingStatus __fastcall ClickButton(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint16_t nButtonId, uint32_t nGoldAmount) {
     bool bHasInteract;
     bool bVar1;
@@ -2643,6 +2668,7 @@ eD2ServerIncomingStatus __fastcall ClickButton(::SGAMEDATA * pGame, D2UnitStrc *
 
 // Finalises a mutual player-to-player trade. Verifies pUnit is interacting with a player partner who is also interacting back with pUnit (mutual lock). If valid: sets dwTradeState=9 on pUnit, fires update event, calls RemoveTradeItemMaybe for both sides, frees both trade-copy inventories, sends trade-action 0xC (accept/complete) to the partner's client, and clears both interact infos.
 // @sourcefile .\PLAYER\PlrTrade.cpp
+// 1.14d mac: 00211d04
 void __fastcall PLRTRADE_AbortTrade(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     BOOL _bValid;
     bool bValid;
@@ -2689,12 +2715,14 @@ void __fastcall PLRTRADE_AbortTrade(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 }
 
 // JMP thunk
+// 1.14d mac: 00211ea7
 void __fastcall thunk_PLRTRADE_AbortTrade(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     ::D2Game::PLAYER::PlayerTrade::PLRTRADE_AbortTrade(pGame, pUnit);
 }
 
 // Server-side trade handler: places pItem (held by pUnit) into the trade partner's trade window. Validates pUnit is interacting with another player and resolves the partner unit by interact GUID; on failure sends trade-action error 0xc (NET_D2GS_SERVER_Send_0x77). Clones the item, copies its tile coords, marks the clone and sets its page to the corpse/trade page, then inserts it into the partner inventory via SERVER_ItemToInventory at the same coords. On success records the trade item link (CreateStructure0xc), and if either side had locked gold (dwTradeState==4) re-syncs both sides' gold and resends trade-complete; on placement failure deletes the clone and cancels the trade (PLRTRADE_CancelTradeAndCleanup reason 9).
 // @sourcefile .\PLAYER\PlrTrade.cpp
+// 1.14d mac: 00211eca
 void __fastcall PLRTRADE_AddItemToTrade(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem) {
     BOOL _bHasInteract;
     bool bHasInteract;
@@ -2787,6 +2815,7 @@ void __fastcall PLRTRADE_AddItemToTrade(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 }
 
 // @sourcefile .\PLAYER\PlrTrade.cpp
+// 1.14d mac: 002128ef
 void __fastcall PLRTRADE_ProcessTradeStateTick(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitDataPlayerStrc * pPlayerData1, D2UnitDataPlayerStrc * pPlayerData2) {
     DWORD dwTick;
     D2ClientStrc* pClient;

@@ -171,6 +171,7 @@ static BOOL PLRMODES_HasEndAnimEventAndSeqInput(::SGAMEDATA * pGame, D2UnitStrc 
 }
 
 // Checks if the player unit can interrupt its current animation mode to start the specified new mode. Returns TRUE if the new mode can interrupt.
+// 1.14d mac: 001fe57c
 static BOOL PLRMODES_CanInterruptCurrentMode(uint32_t nNewMode, ::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     if (pUnit->pInventory && D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pUnit->pInventory) && nNewMode && nNewMode != 0x11) {
       return 0;
@@ -232,6 +233,7 @@ static inline eD2PlayerAnimMode GetAnimModeInline(D2UnitStrc * pUnit) {
 
 // Attempts to cancel current player mode and initiate movement to a target location. Validates unit state, checks for blocking modes, and dispatches path-finding for the move.
 // @sourcefile .\PLAYER\PlrModes.cpp
+// 1.14d mac: 001fbae2
 int __fastcall PLRMODES_TryCancelModeAndMoveToLocation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int nModeIndex, int bCheckInterrupt, D2SkillStrc * pSkill) {
     if (D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable)) {
       return 0;
@@ -300,6 +302,7 @@ int __fastcall PLRMODES_TryCancelModeAndMoveToLocation(::SGAMEDATA * pGame, D2Un
     return 0;
 }
 
+// 1.14d mac: 001fc55e
 void __fastcall PLRMODES_SetIdleMode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nMode, int32_t nX, int32_t nY) {
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     if (pRoom) {
@@ -313,15 +316,18 @@ void __fastcall PLRMODES_SetIdleMode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DW
     D2Common::Units::SetCurrentSkill(pUnit, nullptr);
 }
 
+// 1.14d mac: 001fbe24
 int32_t __fastcall PLRMODES_ModeCallback_DeathDead(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
     return 1;
 }
 
+// 1.14d mac: 001fbe2e
 int32_t __fastcall PLRMODES_ModeCallback_Neutral(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
     return 1;
 }
 
 // Begins a player movement path and transitions animation mode. Restores velocity/path type, then normalises the requested mode: Run falls back to Walk if stamina is 0; Walk/TownWalk are promoted to TownWalk when in town; KnockBack sets path type 8 and distance 5. Calculates the path; if path has waypoints, calls FreeCombatAndChangeAnimMode + clears anim timers; otherwise falls back to idle mode.
+// 1.14d mac: 001fc293
 static void __stdcall PLRMODES_StartPathAndChangeMode(::SGAMEDATA * pGame, eD2PlayerAnimMode eAnimMode, D2UnitStrc * pUnit) {
     int nStamina;
     D2RoomStrc* pRoom;
@@ -367,6 +373,7 @@ static void __stdcall PLRMODES_StartPathAndChangeMode(::SGAMEDATA * pGame, eD2Pl
     return;
 }
 
+// 1.14d mac: 001fea1b
 void __fastcall PLRMODES_SetTargetAndStartPath(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nModeIndex, D2UnitStrc * pTargetUnit) {
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x16e);
@@ -382,6 +389,7 @@ void __fastcall PLRMODES_SetTargetAndStartPath(::SGAMEDATA * pGame, D2UnitStrc *
     PLRMODES_StartPathAndChangeMode(pGame, nModeIndex, pUnit);
 }
 
+// 1.14d mac: 001fe9b3
 void __fastcall PLRMODES_SetMoveTargetPosition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2PlayerAnimMode eMode, int32_t nPosX, int32_t nPosY) {
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x17c);
@@ -455,6 +463,7 @@ static BOOL PLRMODES_DrainStamina(D2UnitStrc * pUnit) {
 // filtered, the client's attached unit cleared, corpse collision set, unit timers of types 8 and 9 removed, then tail-jumps
 // to UNITS_ClearAnimTimerEvents. pGame in EDI, pUnit in ESI (custom storage). Called from PLRMODES_HandlePlayerDeath and PLRMODES_Death; not
 // inline, it is a real function with two call sites. Provenance: 1.14d 0057f330..0057f38e, .\PLAYER\PlrModes.cpp literal at 0057f34f.
+// 1.14d mac: 001fec98
 static void PLRMODES_ClearModeAndSetDead(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, 0, 0);
     D2Common::Stats::StatsEx::STATLIST_RecalcAfterRemove(pUnit);
@@ -467,6 +476,7 @@ static void PLRMODES_ClearModeAndSetDead(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     UNIT::SUnit::UNITS_ClearAnimTimerEvents(pGame, pUnit);
 }
 
+// 1.14d mac: 001fc5c9
 void __fastcall SERVERUNIT_GoldAmmountForDeadBody(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pDeadBody, uint32_t nGoldAmmount, uint32_t nGoldPileCount) {
     int32_t nErrorAddr;
     D2UnitStrc* apGoldItems[32];
@@ -499,6 +509,7 @@ void __fastcall SERVERUNIT_GoldAmmountForDeadBody(::SGAMEDATA * pGame, D2UnitStr
 }
 
 // Removes an equipped item (pUnit2) from the player's body at nBodyLoc and prepares it for dropping. Swaps primary weapon if needed, nulls the body-loc slot, handles belt removal for belt-type items, unequips item stats, marks item as REMOVED, issues ITEMCMD_DELETE and ITEMCMD_BODYLOC_TAKE_ITEM, refreshes inventory. Halts with error if item doesn't belong to the player's inventory.
+// 1.14d mac: 001fd0a9
 static void __stdcall PLRMODES_UnequipAndPrepareItemForDrop(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nBodyLoc) {
     D2InventoryStrc* pInventory = pUnit->pInventory;
     int32_t bShouldReturnItem = D2Common::ITEMS::Items::ReturnFalse(pUnit, pUnit2);
@@ -539,6 +550,7 @@ static void __stdcall PLRMODES_UnequipAndPrepareItemForDrop(::SGAMEDATA * pGame,
 }
 
 // @sourcefile .\PLAYER\PlrModes.cpp
+// 1.14d mac: 001fd021
 static void PLRMODES_ClearCursorAndDeleteItem(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     D2InventoryStrc* pInventory = pUnit->pInventory;
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrModes.cpp", 0x27d);
@@ -631,6 +643,7 @@ static int32_t __stdcall PLRMODES_CleanupInvalidCorpses(::SGAMEDATA * pGame, D2U
 }
 
 // @sourcefile .\PLAYER\PlrModes.cpp
+// 1.14d mac: 001fc6be
 D2UnitStrc * __fastcall PLRMODES_CreateDeadBody(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nX, int32_t nY, D2RoomStrc * pRoom) {
     D2RoomStrc* pSpawnRoom;
     D2UnitStrc* pUnit_00;
@@ -852,6 +865,7 @@ static uint32_t __stdcall PLRMODES_IsCorpseOwnedByPlayer(::SGAMEDATA * pGame, D2
 }
 
 // Processes a player picking up their own corpse. Validates the corpse has STATE_playerbody and is owned by the acting player. If the corpse holds pending experience (e.g. from Nightmare/Hell death penalty), awards it via DAMAGE_AwardKillExperience. Equips corpse items back onto the player; on success, removes the corpse from inventory, deletes the unit from the room, sends packet 0x8E (corpse assign=0) to clients, removes collision, and frees the unit.
+// 1.14d mac: 001fd242
 void __fastcall PLRMODES_PickupCorpse(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pCorpseUnit) {
     int nPendingExperience;
     int32_t nCorpseExp;
@@ -898,6 +912,7 @@ void __fastcall PLRMODES_PickupCorpse(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
 
 // Server-side handler executed when a player's death animation completes. Creates the dead-body unit at the player's current position, frees all pets, sets the client's dead flag (bit 3), and saves the game (ladder games only). Then: forces anim mode 0x11 (dead), resets HP to 0, recalculates stats, filters active states, detaches unit type from client, enables corpse collision, and cancels all periodic skill/stat timer events.
 // @sourcefile .\PLAYER\PlrModes.cpp
+// 1.14d mac: 001fe1b1
 void __fastcall PLRMODES_HandlePlayerDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nModeIndex, int32_t dwParam2, int32_t dwParam3) {
     int nDeathX;
     int32_t nDeathY;
@@ -945,6 +960,7 @@ void __fastcall PLRMODES_HandlePlayerDeath(::SGAMEDATA * pGame, D2UnitStrc * pUn
     UNIT::SUnit::UNITS_ClearAnimTimerEvents(pGame, pUnit);
 }
 
+// 1.14d mac: 001fec1d
 void __fastcall PLRMODES_StartModeWithTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nAnimMode, int32_t nPosX, int32_t nPosY) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x447);
@@ -958,10 +974,12 @@ void __fastcall PLRMODES_StartModeWithTarget(::SGAMEDATA * pGame, D2UnitStrc * p
     UNIT::SUnit::UNITS_SetupAnimTimerEvents(pGame, pUnit);
 }
 
+// 1.14d mac: 001fd489
 int32_t __fastcall PLRMODES_ModeCallback_GetHitCast(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
     return 1;
 }
 
+// 1.14d mac: 001fea8b
 void __fastcall PLRMODES_ChangeAnimModeAndResetSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nAnimMode, int32_t dwParam1, int32_t dwParam2) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x470);
@@ -975,6 +993,7 @@ void __fastcall PLRMODES_ChangeAnimModeAndResetSkill(::SGAMEDATA * pGame, D2Unit
     UNIT::SUnit::UNITS_SetupAnimTimerEvents(pGame, pUnit);
 }
 
+// 1.14d mac: 001feb06
 void __fastcall PLRMODES_StartCastAtPosition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nAnimMode, int32_t nPosX, int32_t nPosY) {
     D2Common::PATH::DynamicPath::SetSP1(pUnit->pPath.pDynamicPath, (int16_t)nPosX, (int16_t)nPosY);
     UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pUnit, nAnimMode);
@@ -986,6 +1005,7 @@ void __fastcall PLRMODES_StartCastAtPosition(::SGAMEDATA * pGame, D2UnitStrc * p
     SKILLS::SkillsServer::SKILLS_StartCurrentSkill(pGame, pUnit);
 }
 
+// 1.14d mac: 001feb86
 void __fastcall PLRMODES_StartCastAtEntity(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nAnimMode, D2UnitStrc * pTargetUnit) {
     UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pUnit, nAnimMode);
     if (!pTargetUnit) {
@@ -1040,6 +1060,7 @@ static void __stdcall PLRMODES_ReequipWeaponAfterThrow(::SGAMEDATA * pGame, uint
 
 // Called when a stackable ammo or throwable weapon reaches quantity 0. If the item is a throwable stat holder, zeroes the quantity stat and returns. Otherwise: unequips the item via EquipItem, marks it deleted, and searches the inventory for a reload-compatible replacement of the same type/classId to auto-reequip into the same body-loc slot. If the item has the reequip flag, calls PLRMODES_ReequipWeaponAfterThrow.
 // @sourcefile .\PLAYER\PlrModes.cpp
+// 1.14d mac: 001fd65e
 static void __stdcall PLRMODES_HandleDepletedAmmoOrThrowable(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pWeaponOwner) {
     bool bIsStackable;
     int32_t nThrowableStat;
@@ -1197,6 +1218,7 @@ static void PLRMODES_RestoreSwappedSkill(D2UnitStrc * pUnit, eD2Skills * peSkill
 }
 
 // End-of-attack maintenance check. Snapshots the current left/right skill assignments, then calls PLRMODES_HandleDepletedAmmoOrThrowable for both the right-arm and left-arm weapon slots to unequip exhausted quivers or thrown weapons. Finally calls PLRMODES_RestoreSwappedSkill with the saved skill snapshot to re-select the appropriate skills after any weapon removal.
+// 1.14d mac: 001fd493
 void __fastcall PLRMODES_CheckWeaponQuantityAndDurability(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     int aSwappedSkillState[4];
     if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
@@ -1224,6 +1246,7 @@ void __fastcall PLRMODES_CheckWeaponQuantityAndDurability(::SGAMEDATA * pGame, D
 
 // Iterates a player's inventory looking for equipped weapons (eInvGridType==3) with zero durability that are not already broken. For each such weapon, sets the ITEMFLAG_BROKEN flag via ITEMMODE_SendItemUpdate and broadcasts the item state change. Sets a unit update flag on the first break found. No-op if pUnit is null or not a player.
 // @sourcefile .\PLAYER\PlrModes.cpp
+// 1.14d mac: 001fd9ec
 void __fastcall PLRMODES_BreakZeroDurabilityWeapons(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     if (!pUnit || pUnit->eUnitType != UNIT_PLAYER) {
       return;
@@ -1253,6 +1276,7 @@ void __fastcall PLRMODES_BreakZeroDurabilityWeapons(::SGAMEDATA * pGame, D2UnitS
     }
 }
 
+// 1.14d mac: 001fdb0c
 int32_t __fastcall PLRMODES_ModeCallback_AttackSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nModeArg, int32_t nSeqFrame) {
     BOOL bIsDead;
     D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
@@ -1340,6 +1364,7 @@ static void PLRMODES_RecoverStamina(D2UnitStrc * pUnit) {
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_stamina, nCurrentStamina, 0);
 }
 
+// 1.14d mac: 001fdbcc
 uint8_t __fastcall PLRMODES_GetHpPercent128(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return 0x80;
@@ -1454,10 +1479,12 @@ static void PLRMODES_RegenMana(D2UnitStrc * pUnit) {
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_mana, nRegen, 0);
 }
 
+// 1.14d mac: 001fdc25
 void __fastcall PLRMODES_RemoveExpiredStatLists(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
     D2Common::Stats::StatsEx::RemoveStatListAfterTimeout(pUnit, pGame->dwGameFrame);
 }
 
+// 1.14d mac: 001fdc48
 void __fastcall PLRMODES_PeriodicStatRegen(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
     bool bHpRegenOk;
     GAME::Event::SetEvent(pGame, pUnit, 3, pGame->dwGameFrame + 1, nArg1, nArg2);
@@ -1582,6 +1609,7 @@ void __fastcall PacketUpdateForClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
 }
 
 // Server-side player movement dispatcher. Checks whether the player's current mode can be interrupted (PLRMODES_CanInterruptCurrentMode); if so, optionally cancels it (PLRMODES_TryCancelModeAndMoveToLocation), sets the active skill, then invokes the mode-specific move function from gaPlayerModeMoveFuncs[nIndex*2]. Halts on null game or invalid function pointer.
+// 1.14d mac: 001fbd2f
 void __fastcall PLRMODES_MoveToLocation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2SkillStrc * pSkill, int32_t nIndex, int32_t nX, int32_t nY, int32_t bSkipCancelAttempt) {
     BOOL _bCanInterrupt;
     bool bCanInterrupt;
@@ -1616,6 +1644,7 @@ void __fastcall PLRMODES_MoveToLocation(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 
 // Initiates a targeted player animation/action mode by mode index. Looks up the target unit by (eUnitType, nUid), checks PLRMODES_CanInterruptCurrentMode, cancels the current mode if interruptible or nParam!=0, clears queued skill and pending interact flags, then dispatches via gaPlayerModeMoveFuncs[nModeIndex*2+1]. Halts with an internal error if pGame is null or the mode function pointer is bad.
 // @sourcefile .\PLAYER\PlrModes.cpp
+// 1.14d mac: 001fc3e6
 void __fastcall PLRMODES_StartModeID(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2SkillStrc * pSkill, int32_t nModeIndex, eD2UnitType eUnitType, DWORD nUid, int32_t bSkipCancelAttempt) {
     BOOL _bCanInterrupt;
     bool bCanInterrupt;
@@ -1656,6 +1685,7 @@ void __fastcall PLRMODES_StartModeID(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
     gaPlayerModeMoveFuncs[nModeIndex].pfnStartMode(pGame, pUnit, nModeIndex, pTargetUnit);
 }
 
+// 1.14d mac: 001fe71b
 void __fastcall HoverTextEvent(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
     if (!pUnit) {
       return;
@@ -1678,6 +1708,7 @@ void __fastcall HoverTextEvent(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t 
     GAME::Event::SetEvent(pGame, pUnit, 6, nExpireFrame, 0, 0);
 }
 
+// 1.14d mac: 001fe7a2
 void __fastcall PLRMODES_BroadcastAllyAndPartyInfo(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
     UNIT::Party::BroadcastAutomapAllyPartyInfo(pGame, pUnit);
     PlayerPets::SendAllyInfo(pGame, pUnit);
@@ -1685,6 +1716,7 @@ void __fastcall PLRMODES_BroadcastAllyAndPartyInfo(::SGAMEDATA * pGame, D2UnitSt
 }
 
 // Per-frame server mode tick for a player in Walk/Run mode. Refreshes target, runs Blaze trail if STATE_blaze is set, drains stamina (downgrading Run->Walk on empty), and advances movement via UNITS_ProcessUnitMovement. Maintains the anti-teleport-hack trail: every ~25ms it records the player's path coords into a ring of 20 slots and, if movement exceeded a distance threshold, advances the slot. When movement completes (mode==2) it resolves any pending interact/queued skill: with no queued skill -> idle + SERVER_InteractOrPick on the target unit; with a queued skill -> GetSkill/GetSkillMode then PLRMODES_StartModeID to begin the skill. Clears bHasPendingInteract. Returns the resulting mode code.
+// 1.14d mac: 001fbe38
 int32_t __fastcall PLRMODES_ModeCallback_WalkRunBlock(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
     int nPosY;
     eD2UnitType eTargetUnitType;
@@ -1808,6 +1840,7 @@ int32_t __fastcall PLRMODES_ModeCallback_WalkRunBlock(::SGAMEDATA * pGame, D2Uni
 
 // Server-side player death handler. Removes all progressive states (e.g. Necromancer bone armor); if any were removed and unit is a Necromancer with no cursor item, transitions to idle mode instead of proceeding. Applies death penalties (PLAYER_HandleDeathPenalties), clears combat/animation, sets HP to 0, recalculates stats, filters states, attaches corpse collision, fires periodic skill/stat timer events, and re-arms animation timers. Handles PvP ear drop (ITEM_DropEarOnPvpDeath) and PvP kill tracking (ARENA_HandlePvpDeath/SERVER_ARENA_KillHandler). Ends player interaction.
 // @sourcefile .\PLAYER\PlrModes.cpp
+// 1.14d mac: 001fe800
 void __fastcall PLRMODES_Death(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nModeIndex, D2UnitStrc * pTargetUnit) {
     D2UnitStrc* pOwnerOrCursorItem;
     bool bIsNecro;
@@ -1878,6 +1911,7 @@ void __fastcall PLRMODES_Death(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nM
 
 // Server-side handler invoked when a player's current animation mode finishes its sequence. For attack/cast/throw/sequence/skill modes it first runs weapon upkeep (PLRMODES_CheckWeaponQuantityAndDurability, PLRMODES_BreakZeroDurabilityWeapons). Then branches on the completed mode: Death -> PLRMODES_HandlePlayerDeath; non-KnockBack -> drop back to idle (PLRMODES_SetIdleMode); KnockBack -> if no item is on the cursor, decide via per-mode rules (anim-event timing, class-specific Skill1/Skill3 checks, queued sequence input) whether to stay or cancel the mode and move (PLRMODES_TryCancelModeAndMoveToLocation), then reset the anim mode/skill. Halts via Fog error if pGame is null or the change-mode fn pointer is bad. Side effects: weapon durability/quantity changes, anim-mode transitions.
 // @sourcefile .\PLAYER\PlrModes.cpp
+// 1.14d mac: 001fe070
 void __fastcall PLRMODES_OnModeComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
     eD2Skills eSkillId;
     D2UnitStrc* pCursorItem_lcl;
@@ -1986,6 +2020,7 @@ void __fastcall PLRMODES_OnModeComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 }
 
 // Per-tick dispatcher for the player's current animation mode. Reads pUnit->eAnimMode, looks up the corresponding callback in gaPlayerModeCallbacks[], invokes it with (nArg1, nArg2), and calls PLRMODES_OnModeComplete if the callback returns 2 (mode finished).
+// 1.14d mac: 001fe314
 void __fastcall PLRMODES_ProcessPlayerMode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {
     // Static local variables (originally global data)
     static pfnPlrModeProcess gaPlayerModeCallbacks[20] = {
@@ -2025,6 +2060,7 @@ void __fastcall PLRMODES_ProcessPlayerMode(::SGAMEDATA * pGame, D2UnitStrc * pUn
     PLRMODES_OnModeComplete(pGame, pUnit, nArg1, nArg2);
 }
 
+// 1.14d mac: 001fe6d0
 void __fastcall PLAYEREVENT_DefaultCallback(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2TimerTypeDWORD eTimerType, int32_t nArg1, int32_t nArg2) {
     if (eTimerType <= UNITEVENTCALLBACK_REMOVESKILLCOOLDOWN && GAME::Event::Dispatch::Player::pTimerMethods.fpFunctionExByType[eTimerType]) {
       (*GAME::Event::Dispatch::Player::pTimerMethods.fpFunctionExByType[eTimerType])(pGame, pUnit, nArg1, nArg2);

@@ -43,12 +43,14 @@ BOOL __fastcall Q19_PlayerNotifyKhalimsWill(::SGAMEDATA * pGame, D2UnitStrc * pU
 }
 
 // Q19_Callback_10 (Khalim's Will). State-10 handler slot; empty no-op in 1.14d. No quest-state transitions.
+// 1.14d mac: 0022dc90
 void __fastcall Q19_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
 
 }
 
 // Q19_Callback_03 (Khalim's Will). State-3 handler: on NPC interaction index 0x4d, if quest is active (bIsNotIntroduction) and nStateFlag<3, advances the quest StateFlag to 1 (started/in-progress). Touches only the in-memory nStateFlag, not the QuestRecord bitfield.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q2.cpp
+// 1.14d mac: 0022dba8
 void __fastcall Q19_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     if (!(pQuestArgs->sQuestArgs.sLevelChange.nNewLevel == 0x4d && pQuestData->bIsNotIntroduction != '\0' && pQuestData->nStateFlag < 3)) {
       return;
@@ -58,6 +60,7 @@ void __fastcall Q19_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 }
 
 // Q19_Callback_02 (Khalim's Will). State-2 handler installed after the player commits to the quest (NPC 0xf5 dialog). When that NPC's relic-pedestal interaction fires and bQuestCompleted is set, flips quest to RewardAwaits via QUEST_SetStateAndBroadcast(state=1, Q19_PlayerNotifyKhalimsWill) and clears its own slot (one-shot). Drives the transition into the reward/turn-in phase.
+// 1.14d mac: 00234e5e
 void __fastcall Q19_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     if (!(pQuestArgs->pTarget && (short int)pQuestArgs->pTarget->nClassId == 0xf5 && pQuestData->pQuestSpecificData.pA3Q2->bQuestCompleted == '\x01')) {
       return;
@@ -70,6 +73,7 @@ void __fastcall Q19_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
 
 // Q19_Callback_11 (Khalim's Will). NPC-gossip handler for Ormus-style relic NPC (monstat 0xf5). Maps the chosen dialog stringIndex to a QuestRecord sub-step bit: 0x21f=Step0x02 (intro/started; also sets StateFlag=2, marks bQuestCompleted, installs Q19_Callback_02), 0x220=Step0x06, 0x221=Step0x03, 0x222=Step0x04, 0x223=Step0x05, 0x224=Step0x07. Each step tracks which Khalim relic has been discussed/turned in.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q2.cpp
+// 1.14d mac: 0022da8f
 void __fastcall Q19_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     uint16_t nMessageIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
     short int nNPCNo = pQuestArgs->sQuestArgs.sNpcMessage.nNPCNo;
@@ -112,6 +116,7 @@ void __fastcall Q19_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // Q19_SequenceFilter (Khalim's Will). Sequence-chain filter: if this quest not yet at StateFlag 5 and is active, bumps StateFlag 0->1 and returns. Otherwise chains to the next quest's (nSequenceQuestId=QUEST_AbleGoToAct3) sequence filter, halting on a bad fn ptr. Pure StateFlag gating; no QuestRecord writes.
+// 1.14d mac: 0022d67f
 bool __fastcall Q19_SequenceFilter(D2QuestDataStrc * pQuestData) {
     if (pQuestData->nStateFlag != 5 && pQuestData->bIsNotIntroduction != '\0') {
       if (!pQuestData->nStateFlag) {
@@ -138,6 +143,7 @@ bool __fastcall Q19_SequenceFilter(D2QuestDataStrc * pQuestData) {
 
 // Q19_SendQuestStatePacket (Khalim's Will). Builds and sends the 0x5D quest-state packet to the player's client conveying which Khalim's Will sub-stage/relic message to display. No QuestRecord transitions; pure client notification.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q2.cpp
+// 1.14d mac: 00234df0
 static void __fastcall Q19_SendQuestStatePacket(uint8_t bStateByte, D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2GSPacketSrv0x5D aPacketFrame;
     memset(&aPacketFrame, 0, sizeof(aPacketFrame));
@@ -150,6 +156,7 @@ static void __fastcall Q19_SendQuestStatePacket(uint8_t bStateByte, D2QuestDataS
 }
 
 // Q19_Callback_04 (Khalim's Will). Item-interaction handler fired when player handles a Khalim relic / assembled Khalim's Will. Gates on QUEST_AbleGoToAct3=Completed and quest not already Completed. Inspects which of the 4 relics (Flail 0x20316671, Eye 0x20796571, Brain 0x20726271, Heart 0x20726871) and the combined Khalim's Will (0x20326671) the player holds, plus sub-steps 0x02-0x07, then sends the appropriate Q19_SendQuestStatePacket message. Reads quest state only; no SetQuestState here.
+// 1.14d mac: 0022dc95
 void __fastcall Q19_Callback04_ItemPickedUp(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame;
     pGame = pQuestArgs->pGame;
@@ -279,6 +286,7 @@ void __fastcall Q19_Callback04_ItemPickedUp(D2QuestDataStrc * pQuestData, D2Ques
 }
 
 // Q19_Callback_13 (Khalim's Will). Quest-load/refresh handler. If not Completed: if Step0x07 not set but Step0x02 set, sets in-memory StateFlag=2/prev=7 (mid-quest resume). Also resumes StateFlag=2 when the quest GUID player-bitmask is non-empty. Reads QuestRecord; mutates only in-memory StateFlag.
+// 1.14d mac: 0022dbf5
 void __fastcall Q19_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
@@ -310,6 +318,7 @@ void __fastcall Q19_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 }
 
 // OBJOP_UseStairDirect (Khalim's Will object op). Stair/teleport object operate fn: if the operating unit is walking, delegates to A2Q7::TakeStairs. No quest-state logic.
+// 1.14d mac: 0022df5f
 BOOL __fastcall OBJOP_UseStairDirect(D2ObjectOperateFnArg * pOperation) {
     D2UnitStrc* pVictim = pOperation->sArg.pVictim;
     if (pVictim && pVictim->eAnimMode.ePlayerMode == Walk) {
@@ -331,6 +340,7 @@ BOOL __fastcall Q19_IsKhalimsWillNotComplete(::SGAMEDATA * pGame) {
 
 // A3Q2 Kurast sewer lever operate fn (OperateFn 45). When triggered and the quest event flag is set, finds the sewer stairs object (GUID stored by Objects_InitFn41_SewerStairs), schedules its operate and death events, sets the stairs update mode to 2 and calls NotifyPlayersAboutEvent(9).
 // Slot from objects.txt OperateFn 45.
+// 1.14d mac: 0022df85
 BOOL __fastcall OBJOP_A3Q2_PullSewerLever(D2ObjectOperateFnArg * pOperation) {
     D2ObjectsTxt* pKhalimsWillQuest;
     D2QuestDataA3Q2Strc* pQuestSpecific;
@@ -362,6 +372,7 @@ BOOL __fastcall OBJOP_A3Q2_PullSewerLever(D2ObjectOperateFnArg * pOperation) {
 
 // A3Q2 updater for the Kurast sewer stairs object. If the stairs event flag is set, finds the stairs unit (GUID stored by Objects_InitFn41_SewerStairs), syncs its update flag and schedules its operate event when it changed. Runs only from the sewer lever's timer event.
 // Registers: pQuestData in ECX; pMonster in EDX is passed by the caller but not read.
+// 1.14d mac: 0022e09f
 void __fastcall Q19_UpdateSewerStairsObject(D2QuestDataStrc * pQuestData, D2UnitStrc * pMonster) {
     D2QuestDataA3Q2Strc* pA1Q2Data = pQuestData->pQuestSpecificData.pA3Q2;
     if (pA1Q2Data->bSewerStairsInitialized != '\x01') {
@@ -387,6 +398,7 @@ void __fastcall Q19_UpdateSewerStairsObject(D2QuestDataStrc * pQuestData, D2Unit
 
 // Object init for the Kurast sewer stairs (InitFn 41): sets the stairs event flag, records the object's GUID and sets its update flag (2 during the intro, else the tracked GUID).
 // Slot from objects.txt InitFn 41.
+// 1.14d mac: 0022e149
 void __fastcall Objects_InitFn41_SewerStairs(D2ObjectInitFnArg * pInitArg) {
     int32_t nObjectGUID;
     D2QuestDataStrc* pDVar2 = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_KhalimsWill);
@@ -412,6 +424,7 @@ void __fastcall Objects_InitFn41_SewerStairs(D2ObjectInitFnArg * pInitArg) {
 }
 
 // Objects_InitFn42 (Khalim's Will, InitFn42). Object init for a related quest object: while quest is still in intro state, sets the object update flag to 2. No QuestRecord transitions.
+// 1.14d mac: 0022e1a9
 void __fastcall Objects_InitFn42_SewerLever(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_KhalimsWill);
     if (!(pQuestData && pQuestData->bIsNotIntroduction == '\0')) {
@@ -422,6 +435,7 @@ void __fastcall Objects_InitFn42_SewerLever(D2ObjectInitFnArg * pInitArg) {
 }
 
 // Q19_OnPlayerCubeKhalimsWill (Khalim's Will). Callback when a player has the assembled Khalim's Will (transmuting relics in the cube). Reads Completed (and RewardAwaits when not complete) and updates the quest GUID per-player counters tracking who has assembled the Will. State reads only; no SetQuestState.
+// 1.14d mac: 0022e1e8
 void __fastcall Q19_OnPlayerCubeKhalimsWill(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2UnitDataPlayerStrc* pDVar2 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar2->pQuestRecord[pGame->nDifficulty];
@@ -450,6 +464,7 @@ BOOL __fastcall Unreferenced_005b8750(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 }
 
 // Q19_CheckPlayerHasKhalimsEye (Khalim's Will). Per-player iterator predicate: if player lacks Khalim's Eye (0x20796571) and lacks the assembled Will (0x20326671), increments the quest GUID eye-needed counter. Used by the Eye relic portal drop to decide how many to spawn.
+// 1.14d mac: 0022e552
 BOOL __fastcall Q19_CheckPlayerHasKhalimsEye(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitStrc* pDVar1 = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20796571);
     if (!pDVar1) {
@@ -467,6 +482,7 @@ BOOL __fastcall Q19_CheckPlayerHasKhalimsEye(::SGAMEDATA * pGame, D2UnitStrc * p
 }
 
 // Q19_CheckPlayerHasKhalimsBrain (Khalim's Will). Per-player iterator predicate: if player lacks Khalim's Brain (0x20726271) and lacks the assembled Will (0x20326671), increments the quest GUID counter. Drives how many Brain relics the portal chest drops.
+// 1.14d mac: 0022e6f7
 BOOL __fastcall Q19_CheckPlayerHasKhalimsBrain(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitStrc* pDVar1 = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20726271);
     if (!pDVar1) {
@@ -484,6 +500,7 @@ BOOL __fastcall Q19_CheckPlayerHasKhalimsBrain(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // Q19_CheckPlayerHasKhalimsHeart (Khalim's Will). Per-player iterator predicate: if player lacks Khalim's Heart (0x20726871) and lacks the assembled Will (0x20326671), increments the quest GUID counter. Drives how many Heart relics the portal chest drops.
+// 1.14d mac: 0022e3ad
 BOOL __fastcall Q19_CheckPlayerHasKhalimsHeart(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitStrc* pDVar1 = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20726871);
     if (!pDVar1) {
@@ -501,6 +518,7 @@ BOOL __fastcall Q19_CheckPlayerHasKhalimsHeart(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // Operate handler (OperateFn57) for a Khalim's Will relic super-chest/portal. On activation: spawns 0–4 seeded gold piles, sets dwDropItemCode to Khalim's Heart (0x20726871), counts players still missing the Heart via Q19_CheckPlayerHasKhalimsHeart, drops that many reward items, then rolls normal chest drops. No QuestRecord state transitions.
+// 1.14d mac: 0022e269
 BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop1(D2ObjectOperateFnArg * pOperation) {
     D2UnitStrc* pDroppedUnit;
     int32_t nDropResult;
@@ -545,6 +563,7 @@ BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop1(D2ObjectOperateFnArg * pOpera
 }
 
 // Operate handler (OperateFn58) for a Khalim's Will relic super-chest/portal. Same flow as Drop1 but drops Khalim's Eye (0x20796571), counting eligible players via Q19_CheckPlayerHasKhalimsEye. No QuestRecord state transitions.
+// 1.14d mac: 0022e40e
 BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop2(D2ObjectOperateFnArg * pOperation) {
     D2UnitStrc* pDroppedUnit;
     int32_t nDropResult;
@@ -589,6 +608,7 @@ BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop2(D2ObjectOperateFnArg * pOpera
 }
 
 // Operate handler (OperateFn59) for a Khalim's Will relic super-chest/portal. Same flow as Drop1 but drops Khalim's Brain (0x20726271), counting eligible players via Q19_CheckPlayerHasKhalimsBrain. No QuestRecord state transitions.
+// 1.14d mac: 0022e5b3
 BOOL __fastcall OBJOP_A3Q2_KhalimsRelicPortalDrop3(D2ObjectOperateFnArg * pOperation) {
     D2UnitStrc* pDroppedUnit;
     int32_t nDropResult;
@@ -645,6 +665,7 @@ void __fastcall Q19_UpdateOrbCount(::SGAMEDATA * pGame, int nCountDelta) {
 }
 
 // A3Q2 (Khalim's Will) active-dialog filter for Meshif (NPC 0xf5). Returns true if Meshif should offer quest dialog: checks if any Khalim body-part item (eye/brain/heart/flail/assembled flail) is held and the corresponding step-flag has not yet been set, or if all 4 parts are held without Step0x05. Also returns true if quest is in progress (nStateFlag!=0) and Step0x02 is unset. Returns false for all other NPCs.
+// 1.14d mac: 0022d1c7
 bool __fastcall Q19_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     BOOL bQuestState;
     D2UnitStrc* pQuestItem;
@@ -724,6 +745,7 @@ static inline int GetClassIdInline(D2UnitStrc * pUnit) {
     return (int)(-1);
 }
 
+// 1.14d mac: 0022d70a
 void __fastcall Q19_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer)->pQuestRecord[pGame->nDifficulty];
@@ -818,6 +840,7 @@ void __fastcall Q19_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 }
 
 // A3Q2 (Khalim's Will) quest status-string selector. Writes a status code byte into *nUnknown based on which Khalim body-part items the player carries (eye/brain/heart/flail) and relevant quest-record step states; codes 1–7 map to UI status strings. Returns true once Act3 is reachable (AbleGoToAct3 Completed); always returns true thereafter.
+// 1.14d mac: 0022d4c6
 bool __fastcall Q19_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode) {
     *pbyStatusCode = '\0';
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_AbleGoToAct3, QUESTSTATE_Completed);
@@ -898,6 +921,7 @@ bool __fastcall Q19_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
 }
 
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q2.cpp
+// 1.14d mac: 0022d3a8
 void __fastcall Q19_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->bIsActive = '\x01';

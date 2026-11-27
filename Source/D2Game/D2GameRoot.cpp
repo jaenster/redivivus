@@ -18,6 +18,7 @@
 
 namespace D2Game {
 
+// 1.14d mac: 001ada89
 void __fastcall CLIENT_GetSaveCompleteClient(D2ClientStrc * pClient, D2ClientStrc * * ppClientOut) {
     uint32_t dwSaveComplete = GAME::Clients::CLIENT_GetSaveCompleteFlag(pClient);
     if (!dwSaveComplete) {
@@ -28,6 +29,7 @@ void __fastcall CLIENT_GetSaveCompleteClient(D2ClientStrc * pClient, D2ClientStr
 }
 
 // Callback for iterating active clients: if *pnParam is 0 (not yet assigned), writes nParam into *pnParam. Used as a visitor to capture the first active client slot index.
+// 1.14d mac: 001adaa8
 void __fastcall CLIENT_GetFirstActiveClient(int pClient, int * ppActiveClient) {
     if (*ppActiveClient) {
       return;
@@ -42,10 +44,12 @@ int __stdcall thunk_QSERVER_CountClientsWithStatusFlag0x20() {
 }
 
 // Sets the global DontNoSafeGameBool flag. When true, suppresses game-save on exit; used to mark games that should not persist (e.g. aborted/error states).
+// 1.14d mac: 00206a7c
 void __fastcall PLAYERSAVE_EnableSaveFileWriting(BOOL bEnable) {
     PLAYER::PlayerSave::gbSaveFileWritingEnabled = bEnable;
 }
 
+// 1.14d mac: 001a6f1d
 D2UnitStrc * __stdcall QSERVER_FindUnitInFirstActiveGame(eD2UnitType eUnitType, DWORD dwUnitId) {
     ::SGAMEDATA* pFirstGame = GAME::Server::QSERVER_GetFirstActiveGame();
     if (!pFirstGame) {
@@ -118,6 +122,7 @@ void __fastcall nullsub(::SGAMEDATA * pGame, D2UnitStrc * pAttacker, D2UnitStrc 
 // @wasnamed nullsub - one name on two different functions.
 // @evidence RET 0x10 (c2 10 00) - four dword arguments.
 // Registers: pGame (ECX) and pUnit (EDX) are passed by the callers but not read.
+// 1.14d mac: 001a6f5b
 void __fastcall SUNITDMG_DebugTraceAvoidRoll(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * dwParam1, uint32_t dwParam2, uint32_t dwParam3, char * dwParam4) {
 
 }
@@ -200,6 +205,7 @@ int __fastcall TASK_GetTimeUntilNextTask(uint32_t nQueueSlot) {
     return nTimeDelta;
 }
 
+// 1.14d mac: 0023cc89
 void __fastcall Q33_SetCompleteForPartyMember(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -232,6 +238,7 @@ void __fastcall Q33_SetCompleteForPartyMember(::SGAMEDATA * pGame, D2UnitStrc * 
     D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_PrisonOfIce, QUESTSTATE_RewardAwaits);
 }
 
+// 1.14d mac: 00218f12
 void __fastcall Q03_AutoCompleteIfHighLevel(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -257,6 +264,7 @@ void __fastcall Q03_AutoCompleteIfHighLevel(::SGAMEDATA * pGame, D2UnitStrc * pU
 // A2Q3 - per-party-member cb (Q11_SetTaintedSunRewardOnPartyMember; invoked by Q11_PropagateRewardToParty).
 // For each in-game party member not already Completed/RewardAwaits, mark their record JustCompleted + RewardAwaits
 // so partymates near the destroyed altar also get the Tainted-Sun reward credit.
+// 1.14d mac: 0022436f
 void __fastcall Q11_SetTaintedSunRewardOnPartyMember(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -291,6 +299,7 @@ void __fastcall Q11_SetTaintedSunRewardOnPartyMember(::SGAMEDATA * pGame, D2Unit
                           */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheTaintedSun, QUESTSTATE_RewardAwaits);
 }
 
+// 1.14d mac: 002257b6
 uint8_t __fastcall Q11_OnEndCallback(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
     D2QuestDataA2Q3Strc* pDVar1 = pQuestData->pQuestSpecificData.pA2Q3;
     if (pQuestData->nStateFlag == 4) {
@@ -302,6 +311,7 @@ uint8_t __fastcall Q11_OnEndCallback(::SGAMEDATA * pGame, D2QuestDataStrc * pQue
     return '\x01';
 }
 
+// 1.14d mac: 002259ac
 void __fastcall Q12_SetArcaneCompleteOnPartyMember(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -338,6 +348,7 @@ void __fastcall Q12_SetArcaneCompleteOnPartyMember(::SGAMEDATA * pGame, D2UnitSt
     D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Step0x07);
 }
 
+// 1.14d mac: 001e7c44
 void __fastcall MONSTER_ScheduleEventOnGetHitOrDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwParam1, int32_t nParam2) {
     if (!(!pUnit || pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Run || pUnit->eAnimMode.ePlayerMode == Death)) {
       return;
@@ -346,6 +357,7 @@ void __fastcall MONSTER_ScheduleEventOnGetHitOrDeath(::SGAMEDATA * pGame, D2Unit
     GAME::Event::SetEvent(pGame, pUnit, 7, pGame->dwGameFrame + 2, 0, 0);
 }
 
+// 1.14d mac: 00233ef2
 BOOL __fastcall Q24_PartyMember_SetAbleGoToAct4(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2RoomStrc* pRoom;
     eD2LevelId eLevel;
@@ -370,6 +382,7 @@ BOOL __fastcall Q24_PartyMember_SetAbleGoToAct4(::SGAMEDATA * pGame, D2UnitStrc 
     return 0;
 }
 
+// 1.14d mac: 0026f2a6
 void __fastcall SKILLSSOR_StatExpireCallback_ClearStateSetFlag(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * pStatList) {
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
     if (!pUnit) {
@@ -383,6 +396,7 @@ void __fastcall SKILLSASS_StatExpireCallback_ClearState2(D2UnitStrc * pUnit, eD2
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
 }
 
+// 1.14d mac: 002a30a6
 void __fastcall MONSTERAI_FlagIfDeadOrNull(D2UnitStrc * pUnit, uint32_t * pdwDeadFlag, uint32_t dwArg1) {
     if (pUnit) {
       BOOL BVar1;

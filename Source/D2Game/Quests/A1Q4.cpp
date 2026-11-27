@@ -40,6 +40,7 @@ namespace D2Game::Quests::QUESTS::A1Q4 {
 // Object/anim init helper for Deckard Cain's NPC unit: sets the active flag,
 // captures the target unit's GUID into the anim-state block, and pushes the
 // update flag so the client re-renders Cain. No quest-state transitions.
+// 1.14d mac: 0021a1e9
 void __fastcall Q04_UpdateCainNpcAnimState(D2QuestDataStrc * pCainUnit, D2UnitStrc * * pTargetUnit) {
     int32_t dwAnimFrame;
     if (!pCainUnit) {
@@ -90,6 +91,7 @@ BOOL __fastcall Q04_NotifyQuestStateToPlayer(::SGAMEDATA * pGame, D2UnitStrc * p
 // the journal shows the right sub-step. If quest not yet Completed/RewardAwaits:
 // nStateFlag==2 -> set Step0x02; nStateFlag in 3..5 -> set Step0x03.
 // Run via IteratePlayerOrMonsterUnits whenever the server step advances.
+// 1.14d mac: 00220ee6
 BOOL __fastcall Q04_SyncQuestStepToPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pQuestData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pQuestData->pQuestRecord[pGame->nDifficulty];
@@ -125,6 +127,7 @@ BOOL __fastcall Q04_SyncQuestStepToPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUni
 // If target is Cain (0x92) marks bAnyaMonsterAlive (Cain-in-town present flag).
 // NOTE: A1Q4Strc reused as A5Q3Strc by decompiler; sQuestGUID.aPlayerGUID[] indices
 // are sub-struct byte flags, not real GUIDs.
+// 1.14d mac: 0021cafe
 void __fastcall Q04_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int32_t nTargetClassId = !pQuestArgs->pTarget ? -1 : pQuestArgs->pTarget->nClassId;
     D2QuestDataA1Q4Strc* pA5Q3Data = pQuestData->pQuestSpecificData.pA1Q4;
@@ -158,6 +161,7 @@ void __fastcall Q04_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
 //  Cain(0x109): msg 0x7d adds player to participated list & removes from list1;
 //    msg 0x7e/0x7b adds player to list2; both send gossip.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q4.cpp
+// 1.14d mac: 0021c62c
 void __fastcall Q04_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int nPlayerGuid;
     int32_t iVar2;
@@ -325,6 +329,7 @@ void __fastcall Q04_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 // record bits (RewardAwaits, JustCompleted, Completed, CannotCompleteQuestInGame).
 // Falls back to a small lookup table indexed by nStateFlag (1..5) for the default
 // intro/progress lines. Pure read of quest state -> chooses a text line; no transitions.
+// 1.14d mac: 0021c241
 void __fastcall Q04_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     // Static local variables (originally global data)
     static int32_t gdwQuestCallbackAddressQ40[8] = { -0x1, 0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6 }; D2_STATIC_GUARD(gdwQuestCallbackAddressQ40, "D2Game::Quests::QUESTS::A1Q4::Q04_Callback00_NpcActivate::gdwQuestCallbackAddressQ40");
@@ -434,6 +439,7 @@ static void __stdcall QuestStartDebugNotify(D2QuestDataStrc * pQuestData) {
 // A1Q4 — Q04_SendQuestStatePacket: builds and sends the 0x5d quest-state packet
 // (opcode 0x5d, quest 4) to a single unit's client. Pure network notify, no state change.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q4.cpp
+// 1.14d mac: 0022121f
 void __fastcall Q04_SendQuestStatePacket(D2UnitStrc * pUnit) {
     D2GSPacketSrv0x5D abyPacketBuf;
     memset(&abyPacketBuf, 0, sizeof(abyPacketBuf));
@@ -457,6 +463,7 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
 // if it still has an AI sub, clear it (graceful); otherwise force a Death
 // lifecycle transition. On kill, marks the quest sub-flag 0x61 (guards cleared).
 // Driven by Q04_TimerDespawnRogueGuards.
+// 1.14d mac: 0022115b
 BOOL __fastcall Q04_RemoveCainFromTristram(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2MonsterAiStrc* pMonsterAi;
     D2ModeChangeStrc sKill;
@@ -495,6 +502,7 @@ static inline int GetGUIDInline(D2UnitStrc * pUnit) {
 // is inside the room, then retries FindSpawnableLocation + SpawnMonster up to ~0x14
 // nearby rooms until placement succeeds. On success flags Cain init/resurrect, records
 // his unit GUID into the quest sub-struct, and sets the "Cain spawned" flag (0x51).
+// 1.14d mac: 0021d2a9
 static void __stdcall Q04_SpawnDeckardCainNpc(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nX, int32_t nY) {
     D2DrlgRoomCoordsStrc sRoomCoords;
     POINT ptCainSpawnPos;
@@ -578,6 +586,7 @@ static void __stdcall Q04_SpawnDeckardCainNpc(::SGAMEDATA * pGame, D2RoomStrc * 
 // CannotCompleteQuestInGame (they were not present when the quest was force-progressed,
 // so they can't finish it this game) and add them to quest list1. Run when the quest
 // is advanced past the point a latecomer could legitimately complete it.
+// 1.14d mac: 0021d18c
 BOOL __fastcall Q04_MarkCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pGame, pUnit);
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_Completed);
@@ -601,6 +610,7 @@ BOOL __fastcall Q04_MarkCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 // On the relevant event, bumps the quest sub-struct's held-quest-item counter (field
 // 0x1f) for each of the deciphered scroll ('bkd ') and Scroll of Inifuss ('bks ')
 // the player currently carries. No quest-state transition.
+// 1.14d mac: 0021c080
 void __fastcall Q04_Callback14_PlayerJoinedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2QuestDataA1Q4Strc* pDVar1 = pQuestData->pQuestSpecificData.pA1Q4;
     D2UnitStrc* pDVar2 = ITEMS::Items::Drop::HasQuestItem(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20646b62);
@@ -621,6 +631,7 @@ void __fastcall Q04_Callback14_PlayerJoinedGame(D2QuestDataStrc * pQuestData, D2
 // broadcasts step 1 (Q04_NotifyQuestStateToPlayer), sets step flag 3, clears sub-flag
 // 0x58, and re-syncs all players. Called from Callback_06/Callback_09 on completion.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q4.cpp
+// 1.14d mac: 00220fe5
 static void __stdcall Q04_DeactivateCairnStones(D2QuestDataStrc * pQuestData) {
     D2QuestDataA1Q4Strc* pQuestSpecific = pQuestData->pQuestSpecificData.pA1Q4;
     if (pQuestSpecific->sSub.bTreeObjectSaved == '\x01') {
@@ -650,6 +661,7 @@ static void __stdcall Q04_DeactivateCairnStones(D2QuestDataStrc * pQuestData) {
 // before the puzzle is solved (stones-active flag 0x47 set, not yet solved), it tears
 // the puzzle back down via Q04_DeactivateCairnStones and resets step flag to 3.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q4.cpp
+// 1.14d mac: 0021b8e2
 void __fastcall Q04_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     if (!(pQuestData->bIsNotIntroduction != '\0' && pQuestData->nStateFlag != 6)) {
       return;
@@ -671,6 +683,7 @@ void __fastcall Q04_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc * pQue
 // A1Q4 — Q04_Callback_10 (quest event handler, slot 10/0xa): per-player cleanup.
 // Calls SetRewardAndFinishFlags then removes the player from quest lists 1 and 2.
 // Run as the quest wraps up so stale player references are purged.
+// 1.14d mac: 0021ca96
 void __fastcall Q04_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int32_t nPlayerGUID;
     SetRewardAndFinishFlags(pQuestData, pQuestArgs);
@@ -690,6 +703,7 @@ void __fastcall Q04_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2
 // LEVEL_Tristram (portal classId 0x3c) offset +4,+4 from the stones. On success sets
 // the "portal opened" flag (0x45) and clears the "spawn-pending" flag (0x44).
 // Scheduled as a quest timer from Objects_InitFn06.
+// 1.14d mac: 0021af4f
 uint8_t __fastcall Q04_SpawnTristramPortal(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
     int nStonesY;
     int nStonesX;
@@ -738,6 +752,7 @@ uint8_t __fastcall Q04_SpawnTristramPortal(::SGAMEDATA * pGame, D2QuestDataStrc 
 // Debug-logs "cairn stone item acquired" and, if the quest has truly begun
 // (bIsNotIntroduction), re-syncs every player's step via Q04_SyncQuestStepToPlayer.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q4.cpp
+// 1.14d mac: 0021bfc3
 void __fastcall Q04_Callback04_ItemPickedUp(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     QUEST_DebugPrint(pQuestData->pGame, "cairn stone item acquired", "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q4.cpp", 0x4c6);
     if (pQuestData->bIsNotIntroduction == '\0') {
@@ -751,6 +766,7 @@ void __fastcall Q04_Callback04_ItemPickedUp(D2QuestDataStrc * pQuestData, D2Ques
 // If the puzzle isn't already finalized (flag 0x4f clear) and step flag < 6, sets
 // step flag 3 and calls Q04_DeactivateCairnStones to dismantle the Cairn Stones.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q4.cpp
+// 1.14d mac: 0021c02d
 void __fastcall Q04_Callback06_Unused(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     if (!(pQuestData->pQuestSpecificData.pA1Q4->sSub.bStoneSequenceComplete != 1 && pQuestData->nStateFlag <= 5)) {
       return;
@@ -765,6 +781,7 @@ void __fastcall Q04_Callback06_Unused(D2QuestDataStrc * pQuestData, D2QuestArgSt
 // sub-struct aStones[5] with distinct stone classIds in random sequence and resets
 // nStoneIndex to 0. Called lazily the first time the puzzle is touched (bStonesRolled).
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q4.cpp
+// 1.14d mac: 0021a374
 void __fastcall RollStonesOrder(D2QuestDataA1Q4Strc * pQuestSpecificData) {
     int nRandomStoneSlot;
     int aStoneClassIds[5];
@@ -799,6 +816,7 @@ void __fastcall RollStonesOrder(D2QuestDataA1Q4Strc * pQuestSpecificData) {
 
 // A1Q4 — Q04_SetRescueTrigger: stores the rescued-Cain trigger unit GUID into the
 // quest sub-struct (or -1 if none) and sets the rescue-armed flag (0x31). Setter only.
+// 1.14d mac: 0021a482
 void __fastcall Q04_SetRescueTrigger(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit) {
     D2QuestDataA1Q4Strc* pA1Q4Data = pQuestData->pQuestSpecificData.pA1Q4;
     pA1Q4Data->sSub.bRescueArmed = true;
@@ -811,6 +829,7 @@ void __fastcall Q04_SetRescueTrigger(::SGAMEDATA * pGame, D2QuestDataStrc * pQue
 // OR quest given (step>0) & not done, OR Cain freed (step 6 & JustCompleted), OR
 // RewardAwaits. Cain(0x109): active if player is in his participated list, or has the
 // reward pending. Pure read of quest record + step flag; returns bool, no transitions.
+// 1.14d mac: 0021a4a3
 bool __fastcall Q04_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     bool bJustCompleted;
     bool bFoundInList;
@@ -878,6 +897,7 @@ bool __fastcall Q04_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 // currently somewhere in Act I, mark their quest record JustCompleted AND RewardAwaits
 // (credit the rescue to the whole party) and push the quest info to their client.
 // Driven by Q04_CompleteOnEnterTristram / OBJOP_A1Q4_ActivateInifussTree party loops.
+// 1.14d mac: 0021a5e2
 void __fastcall Q04_AutoCompleteForActIPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];
@@ -917,6 +937,7 @@ void __fastcall Q04_AutoCompleteForActIPlayer(::SGAMEDATA * pGame, D2UnitStrc * 
 // When a player enters LEVEL_Tristram and hasn't finished: mark JustCompleted AND
 // RewardAwaits, push quest info, then credit every party member via
 // Q04_AutoCompleteForActIPlayer. This is the "rescued Cain by reaching Tristram" path.
+// 1.14d mac: 0021aa35
 BOOL __fastcall Q04_CompleteOnEnterTristram(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2RoomStrc* pRoom;
     eD2LevelId eLevelId;
@@ -948,6 +969,7 @@ BOOL __fastcall Q04_CompleteOnEnterTristram(::SGAMEDATA * pGame, D2UnitStrc * pU
 // A1Q4 — Q04_SetQuestCannotComplete (per-player iterate callback).
 // For players not yet Completed/RewardAwaits, set CannotCompleteQuestInGame and send
 // the 0x5d quest-state packet. Used to lock out players who can no longer finish.
+// 1.14d mac: 0021ab30
 BOOL __fastcall Q04_SetQuestCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -967,6 +989,7 @@ BOOL __fastcall Q04_SetQuestCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUn
 // If the player is in LEVEL_Tristram, records them into the quest sub-struct
 // (aPlayerGUID[0x1d]) as the Tristram-present unit and returns 1 (stops iteration).
 // Used by MakeTownPortalFromScroolTree to find a witness to anchor the town portal.
+// 1.14d mac: 0021a9e4
 BOOL __fastcall Q04_RegisterTristramVisitor(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     if (!pRoom) {
@@ -990,6 +1013,7 @@ BOOL __fastcall Q04_RegisterTristramVisitor(::SGAMEDATA * pGame, D2UnitStrc * pU
 // A1Q4 — Q04_TimerDespawnRogueGuards: quest-timer entry that iterates all monsters
 // running Q04_DespawnRogueGuards (kills/clears the Rogue guards), then clears the
 // "despawn scheduled" flag (0x46).
+// 1.14d mac: 00221114
 uint8_t __fastcall Q04_TimerRemoveCainFromTristram(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 1, nullptr, (::fpExecuteOnUnitFunction)Q04_RemoveCainFromTristram);
     pQuestData->pQuestSpecificData.pA1Q4->sSub.bRogueGuardTimerArmed = false;
@@ -1004,6 +1028,7 @@ uint8_t __fastcall Q04_TimerRemoveCainFromTristram(::SGAMEDATA * pGame, D2QuestD
 // auto-complete (Q04_CompleteOnEnterTristram) and lock-out (Q04_SetQuestCannotComplete)
 // loops and broadcasts step 6 (Cain freed). Asserts/halts if quest data missing.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q4.cpp
+// 1.14d mac: 0021a6a0
 void __fastcall MakeTownPortalFromScroolTree(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSearchForCain);
     if (pQuestData) {
@@ -1061,6 +1086,7 @@ void __fastcall MakeTownPortalFromScroolTree(::SGAMEDATA * pGame, D2UnitStrc * p
 
 // A1Q4 Gibbet operate fn (OperateFn 10), the cage holding Deckard Cain in Tristram. If the quest is active and not done: plays the open animation, schedules its event frames, toggles the room's has-portal flag, marks JustCompleted and RewardAwaits, pushes quest info, credits the party via Q04_AutoCompleteForActIPlayer and records the attacker's GUID. Freeing Cain completes The Search for Cain.
 // Slot from objects.txt OperateFn 10.
+// 1.14d mac: 0021ac6e
 BOOL __fastcall OBJOP_A1Q4_OpenCainGibbet(D2ObjectOperateFnArg * pOperation) {
     BOOL _bQuestState;
     uint16_t nPartyId;
@@ -1116,6 +1142,7 @@ BOOL __fastcall OBJOP_A1Q4_OpenCainGibbet(D2ObjectOperateFnArg * pOperation) {
 }
 
 // A1Q4 (Search for Cain) object init/refresh callback for the Cairn-Stones portal object (classId 0x11). If the quest is active and the portal object has not yet been armed, stores the object GUID and schedules Q04_SpawnTristramPortal via AddQuestTimer. Calls SetupUpdateFlag on the object unit to trigger a rendering update. Guards against re-entry via flag bytes on the quest-specific data struct.
+// 1.14d mac: 0021ae79
 void __fastcall Objects_InitFn06_CairnStone(D2ObjectInitFnArg * pInitArg) {
     uint32_t nPortalSpawned;
     D2QuestDataA1Q4Strc* pObject;
@@ -1174,6 +1201,7 @@ void __fastcall Objects_InitFn06_CairnStone(D2ObjectInitFnArg * pInitArg) {
 // For each Act I party member not yet Completed/RewardAwaits, set their quest record
 // Step0x04 (the Cairn-stones-solved sub-step) so the journal reflects the puzzle
 // solution. Driven by the party loop in OBJOP_A1Q4_ActivateHoradricMalusSmith.
+// 1.14d mac: 0021b04a
 void __fastcall Q04_HandleNpcInteraction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -1208,6 +1236,7 @@ void __fastcall Q04_HandleNpcInteraction(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 // A1Q4 Cairn Stones operate fn (OperateFn 9): lazily rolls the stone order, requires the deciphered scroll ('bkd ') and accepts the stones only in the rolled order. When all five are touched it consumes the scroll, opens the red portal to Tristram and sets step 4.
 // Slot from objects.txt OperateFn 9.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q4.cpp
+// 1.14d mac: 0021b0e5
 BOOL __fastcall OBJOP_A1Q4_ActivateCairnStone(D2ObjectOperateFnArg * pOperation) {
     // Frame slots -16..-4 are ONE object: &ppRoomList is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -1431,6 +1460,7 @@ BOOL __fastcall OBJOP_A1Q4_ActivateCairnStone(D2ObjectOperateFnArg * pOperation)
 // A1Q4 Tree of Inifuss operate fn (OperateFn 12). If the quest is active, not done and the player holds no scroll: plays the use animation, drops the Bark Scroll ('bks '), hooks Callback_09 to watch it, broadcasts step 2 and arms the Cairn Stones sub-flags. The scroll is an item, deciphered at Akara.
 // Slot from objects.txt OperateFn 12.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q4.cpp
+// 1.14d mac: 0021b669
 BOOL __fastcall OBJOP_A1Q4_ActivateInifussTree(D2ObjectOperateFnArg * pOperation) {
     D2QuestDataA1Q4Strc* pDVar1;
     BOOL BVar2;
@@ -1513,6 +1543,7 @@ BOOL __fastcall OBJOP_A1Q4_ActivateInifussTree(D2ObjectOperateFnArg * pOperation
 // if not done, normalizes each stone classId to 0..4 (subtract 0x11), asserts in range,
 // and transmits. Lets the client highlight stones in the correct activation sequence.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q4.cpp
+// 1.14d mac: 0021b979
 void __fastcall Q04_SendStonesOrderToClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     int i;
     D2GSPacketSrv0x50 sPacket;
@@ -1551,6 +1582,7 @@ void __fastcall Q04_SendStonesOrderToClient(::SGAMEDATA * pGame, D2UnitStrc * pU
 // the next quest in the chain (nSequenceQuestId = QUEST_ToolsOfTheTrade) by invoking
 // its sequence filter. Asserts the next filter pointer is valid.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q4.cpp
+// 1.14d mac: 0021ce04
 bool __fastcall Q04_SequenceFilter(D2QuestDataStrc * pQuestData) {
     bool bResult;
     D2QuestDataStrc* pQuestData_00;
@@ -1594,6 +1626,7 @@ void __fastcall Q04_SetCainRescuedFlag(::SGAMEDATA * pGame) {
 // If the player is in LEVEL_MooMooFarm (the Secret Cow Level, which reuses A1Q4's
 // quest record), sets quest record Step0x10 to mark the cow level as discovered.
 // The Cow Level state piggybacks on the "Search for Cain" quest slot.
+// 1.14d mac: 00220f8d
 BOOL __fastcall Q04_SetSecretCowLevelDiscovered(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     if (pRoom) {
@@ -1615,6 +1648,7 @@ BOOL __fastcall Q04_SetSecretCowLevelDiscovered(::SGAMEDATA * pGame, D2UnitStrc 
 // beaten the final act (Diablo/Baal per expansion), set Step0x10 (cow level unlocked),
 // mark all players via Q04_SetSecretCowLevelDiscovered, and drop 8 reward items at the
 // target. Cow Level is bookkept inside A1Q4's quest record via Step0x10/Step0x11.
+// 1.14d mac: 0021c0dc
 void __fastcall Q04_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     if (pQuestArgs->pPlayer) {
       if (D2Common::QuestRecord::GetQuestState(GetQuestBitBufferInline(pQuestArgs->pGame, pQuestArgs->pPlayer), QUEST_TheSearchForCain, QUESTSTATE_Step0x10)) {
@@ -1669,6 +1703,7 @@ int __fastcall Q04_GetPortalCreatedFlag(::SGAMEDATA * pGame) {
 // A1Q4 — Objects_InitFn09: init callback for a quest object (the Cairn-stones /
 // Cain-gibbet area object). When quest active, sets its anim/active sub-flags and
 // pushes the update flag so the object renders in the correct state. No quest transition.
+// 1.14d mac: 0021ced6
 void __fastcall Objects_InitFn09_InifussTree(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pDVar2 = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TheSearchForCain);
     if (pDVar2) {
@@ -1694,6 +1729,7 @@ void __fastcall Objects_InitFn09_InifussTree(D2ObjectInitFnArg * pInitArg) {
 // A1Q4 — Objects_InitFn13: init callback that attaches the spawned object to the
 // A1Q4 quest (QUEST_AttachToUnitByQuestId) so its OperateFn/events route to this quest;
 // otherwise sets a default render flag. No quest-state transition.
+// 1.14d mac: 0021cf49
 void __fastcall Objects_InitFn13_InvisibleObject(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TheSearchForCain);
     if (pQuestData) {
@@ -1712,6 +1748,7 @@ void __fastcall Objects_InitFn13_InvisibleObject(D2ObjectInitFnArg * pInitArg) {
 // A1Q4 — Q04_InitializeCainGibbetObject: anim-init helper for the Cain cage/gibbet
 // object. Sets the active flag (0x48), captures the target unit GUID (or -1), and
 // pushes the cage's update flag. No quest-state transition.
+// 1.14d mac: 0021cfa8
 void __fastcall Q04_InitializeCainGibbetObject(D2QuestDataStrc * pQuestData, D2ObjectInitFnArg * pInitArg) {
     if (!pQuestData) {
       return;
@@ -1725,6 +1762,7 @@ void __fastcall Q04_InitializeCainGibbetObject(D2QuestDataStrc * pQuestData, D2O
 
 // A1Q4 — Q04_RemovePlayerFromList (per-player iterate callback): removes a player
 // (by GUID, or -1) from quest list1. Bookkeeping only.
+// 1.14d mac: 0021cfec
 void __fastcall Q04_RemovePlayerFromList(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSearchForCain);
     D2QuestDataA1Q4Strc* t2_c0 = pQuestData->pQuestSpecificData.pA1Q4;
@@ -1735,6 +1773,7 @@ void __fastcall Q04_RemovePlayerFromList(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 // and the saved spawn coords into the quest sub-struct, sets the cage-present flag
 // (0x17), and — if the rescue flag (0x3e) is set and Cain not yet spawned — spawns
 // Deckard Cain via Q04_SpawnDeckardCainNpc. The init path that physically places Cain.
+// 1.14d mac: 0021d235
 void __fastcall Objects_InitFn54_CainStartPosition(D2ObjectInitFnArg * pInitArg) {
     int nObjectGUID;
     D2QuestDataStrc* pA1Q3Data = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TheSearchForCain);
@@ -1766,6 +1805,7 @@ void __fastcall Objects_InitFn54_CainStartPosition(D2ObjectInitFnArg * pInitArg)
 // isn't dead. On a valid attempt in Rogue Encampment, spawns the portal to LEVEL_MooMooFarm
 // (portal 0x3c) and sets quest record Step0x11 (cow portal opened). Cow Level state is
 // stored in the "Search for Cain" quest slot (Step0x10/Step0x11).
+// 1.14d mac: 0021d5be
 BOOL __fastcall CUBE_SpecialOutput_CowPortal(::SGAMEDATA * pGame, D2UnitStrc * pPlayer) {
     D2RoomStrc* pRoom;
     eD2LevelId eLevelId;
@@ -1822,17 +1862,20 @@ BOOL __fastcall CUBE_SpecialOutput_CowPortal(::SGAMEDATA * pGame, D2UnitStrc * p
 
 // A1Q4 — CUBE_SpecialOutput_Quest_Unused2: unused cube-recipe stub, always returns 0.
 // Lives in the A1Q4 file alongside the cow-portal recipe; never wired up.
+// 1.14d mac: 0021d77e
 BOOL __fastcall CUBE_SpecialOutput_Quest_Unused2(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     return 0;
 }
 
 // A1Q4 — CUBE_SpecialOutput_Quest_Unused3: unused cube-recipe stub, always returns 0.
+// 1.14d mac: 0021d785
 BOOL __fastcall CUBE_SpecialOutput_Quest_Unused3(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     return 0;
 }
 
 // A1Q4 — Objects_InitFn61: trivial object-init that schedules event 7 (anim/update)
 // shortly in the future for the object. No quest-state logic.
+// 1.14d mac: 0021d78c
 void __fastcall Objects_InitFn61_CainPortal(D2ObjectInitFnArg * pInitArg) {
     D2Common::Units::ChangeAnimMode(pInitArg->pObject, 1);
     GAME::Event::SetEvent(pInitArg->pGame, pInitArg->pObject, 7, pInitArg->pGame->dwGameFrame + 0x19, 0, 0);
@@ -1908,6 +1951,7 @@ void __fastcall Q04_UpdateCainPortalInTown(D2QuestDataStrc * pQuestData, D2UnitS
 // A1Q4 — Q04_GetCainPortalCoordinates: outputs the saved Cain-area portal coords
 // (field 0xA8/0xAC) into pOutCoords if the quest is active, the portal-placed flag is
 // set, and not suppressed. Returns 1 on success, 0 otherwise. Getter.
+// 1.14d mac: 0021d8bb
 BOOL __thiscall Q04_GetCainPortalCoordinates(::SGAMEDATA * pThis, int32_t * pOutCoords) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pThis, QUESTINT_TheSearchForCain);
     if (pQuestData && pQuestData->bIsNotIntroduction != '\0') {
@@ -1927,6 +1971,7 @@ BOOL __thiscall Q04_GetCainPortalCoordinates(::SGAMEDATA * pThis, int32_t * pOut
 // at the saved coords the first time (guarded by a one-shot flag), retrying nearby rooms
 // and nudging the spawn position if no room is found. Records the cage GUID. No quest
 // record transition.
+// 1.14d mac: 0021d91e
 BOOL __fastcall Q04_SpawnCainCage(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2QuestDataA1Q4Strc* pA1Q3Data;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSearchForCain);
@@ -1957,6 +2002,7 @@ BOOL __fastcall Q04_SpawnCainCage(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 
 // A1Q4 — Q04_GetCainPosition: outputs Cain's tile into pPoint — either the live unit
 // coords, or the saved fixed coords once Cain has been placed. Getter, returns 1.
+// 1.14d mac: 0021da81
 BOOL __fastcall Q04_GetCainPosition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, POINT * pPoint) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSearchForCain);
     if (!pQuestData) {
@@ -1976,6 +2022,7 @@ BOOL __fastcall Q04_GetCainPosition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, POI
 
 // A1Q4 — Q04_StoreCairnStonesPosition: records the Cairn Stones tile (first time only,
 // one-shot flag) into the quest sub-struct for later portal placement. Returns 1 if stored.
+// 1.14d mac: 0021dae6
 BOOL __fastcall Q04_StoreCairnStonesPosition(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSearchForCain);
     if (!pQuestData) {
@@ -1996,6 +2043,7 @@ BOOL __fastcall Q04_StoreCairnStonesPosition(::SGAMEDATA * pGame, D2UnitStrc * p
 // persistent objects. Marks Tristram active, re-runs Objects_InitFn54 for the saved
 // Cain unit, and (if the Cairn-stones unit is saved) re-creates the cage object (0xbd)
 // near the stones, recording its GUID. Restores quest object state after zoning.
+// 1.14d mac: 0021db35
 void __fastcall Q04_InitializeTristramObjects(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2ObjectInitFnArg sInitArgGame;
     POINT sCairnPos;
@@ -2049,6 +2097,7 @@ void __fastcall Q04_InitializeTristramObjects(::SGAMEDATA * pGame, D2UnitStrc * 
 
 // A1Q4 — Q04_SetTristramActiveFlag: sets the quest sub-struct "Tristram active"
 // byte (field_0x92) to 1. Setter only.
+// 1.14d mac: 0021dd53
 void __fastcall Q04_SetTristramActiveFlag(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSearchForCain);
     if (!pQuestData) {
@@ -2060,6 +2109,7 @@ void __fastcall Q04_SetTristramActiveFlag(::SGAMEDATA * pGame) {
 
 // A1Q4 — Q04_IsTristramActive: returns the quest sub-struct bAnyaMonsterAlive/Tristram
 // flag (whether the Tristram area is currently live). Getter only.
+// 1.14d mac: 0021dd7f
 uint32_t __fastcall Q04_IsTristramActive(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSearchForCain);
     if (!pQuestData) {
@@ -2073,6 +2123,7 @@ uint32_t __fastcall Q04_IsTristramActive(::SGAMEDATA * pGame) {
 // First call rolls a random count (10..20) via the quest control seed and arms the
 // drop; subsequent calls drop one shield-type item per scheduled event until the
 // counter is exhausted. No quest record transition.
+// 1.14d mac: 0021ddaf
 void __fastcall Q04_DropShieldRewards(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit) {
     int32_t pDroppedItemOut;
     D2QuestDataA1Q4Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA1Q4;
@@ -2119,6 +2170,7 @@ void __thiscall Q04_SetCainUnitGUID(::SGAMEDATA * pThis, int32_t nCainGUID) {
 // schedules the Rogue-guard despawn timer (Q04_TimerDespawnRogueGuards) or immediately
 // despawns guards (Q04_DespawnRogueGuards), and removes the inactive Cain placeholder.
 // Called from the force-start / debug-progress paths and Callback_03. No quest record bits.
+// 1.14d mac: 0021a245
 static void __stdcall Q04_ActivateCairnStonesAndTree(char bDeferGuardDespawn, char bStartQuest, D2QuestDataStrc * pQuestData) {
     D2UnitStrc* pTreeUnit;
     D2QuestDataA1Q4Strc* pA1Q4Sub = pQuestData->pQuestSpecificData.pA1Q4;
@@ -2199,6 +2251,7 @@ void __fastcall Q04_ForceStartQuestProgression(::SGAMEDATA * pGame) {
 // re-spawns Cain if the saved spawn flags say he should be present. Central NPC-driven
 // state machine for the quest.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q4.cpp
+// 1.14d mac: 0021bbfb
 void __fastcall Q04_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     BOOL bQuestState;
     int32_t nY;
@@ -2275,6 +2328,7 @@ void __fastcall Q04_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 //  Step0x04 -> step 5 (stones solved); Step0x03 -> step 3; Step0x02 -> step 2;
 //  none set -> infer from held scrolls ('bkd '=step5, 'bks '=step4). Also re-counts held
 // quest scrolls. The "resume an in-progress quest" reconstructor.
+// 1.14d mac: 0021cc09
 void __fastcall Q04_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2QuestDataStrc* pCainQuestData2;
     D2UnitStrc* pScrollBkd;
@@ -2378,6 +2432,7 @@ void __fastcall Q04_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 //  nSequenceQuestId=QUEST_ToolsOfTheTrade, nQuestIdReal=QUEST_TheSearchForCain.
 // Installs the Akara NPC gossip table and zero-inits all sub-flags/lists.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q4.cpp
+// 1.14d mac: 0021ba3c
 void __fastcall Q04_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGame = pQuestData->pGame;
@@ -2438,6 +2493,7 @@ void __fastcall Q04_InitData(D2QuestDataStrc * pQuestData) {
 // step flag 7, broadcasts step 5, marks the quest record JustCompleted, and locks out
 // non-present players via Q04_MarkCannotComplete. The scripted/forced-completion entry.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q4.cpp
+// 1.14d mac: 0021d02d
 void __fastcall ForceStartQuest(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];

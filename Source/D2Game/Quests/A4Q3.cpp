@@ -29,6 +29,7 @@ typedef BOOL (__fastcall *fpExecuteOnUnitFunction)(::SGAMEDATA * pGame, D2UnitSt
 namespace D2Game::Quests::QUESTS::A4Q3 {
 
 // A4Q3 / TerrorsEnd — spawns the Chaos Sanctuary seal boss for whichever of the three seals (Infector of Souls 0x24, Lord De Seis 0x25, Grand Vizier of Chaos 0x26) the triggering unit is standing on, matching the unit's coordinates against the three cached seal-boss spawn points in the TerrorsEnd quest-specific data. On spawn failure schedules a retry event 10 frames later. No quest-state writes.
+// 1.14d mac: 00237909
 void __fastcall Q27_SpawnSealBoss(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     uint32_t nSuperUnique;
     POINT sUnitCoords;
@@ -68,6 +69,7 @@ void __fastcall Q27_SpawnSealBoss(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 }
 
 // A4Q3 Hell's Forge — Q27_IsClassicGameCompleted: returns 1 only in a CLASSIC (non-expansion) game once Terror's End (Diablo killed) is done, i.e. the game's victory condition for classic D2. Reads TerrorsEnd quest data field_0x14 (Diablo-killed flag). No quest-state writes; pure predicate.
+// 1.14d mac: 00237a05
 BOOL __fastcall Q27_IsClassicGameCompleted(::SGAMEDATA * pGame) {
     if (pGame->bExpansion) {
       return 0;
@@ -82,6 +84,7 @@ BOOL __fastcall Q27_IsClassicGameCompleted(::SGAMEDATA * pGame) {
 }
 
 // A4Q3 Hell's Forge — Objects_InitFn78: object init for an Act4 quest object keyed off TerrorsEnd (Diablo) quest data. First touch sets the object's per-quest marker to 2 and update-flag 1 (un-touched/active visual); subsequent touches set update-flag 2 (completed/depleted visual). State stored in pA4Q3 quest-specific GUID scratch, not in the QuestRecord bitfield.
+// 1.14d mac: 00237a41
 void __fastcall Objects_InitFn78_LastLastPortal(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TerrorsEnd);
     if (!pQuestData) {
@@ -120,6 +123,7 @@ BOOL __fastcall Q28_PlayerNotifyCompletedForge(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // A4Q3 Hell's Forge — Objects_InitFn48: init for the Hellforge object. No quest data / not yet introduced -> update-flag 3 (default/unstarted visual). Otherwise sets update-flag from cached pA4Q3 state word; if the prior state flag is not one of {0xd,2,3} (i.e. not already in/after the smash sequence) it resets eFlags and broadcasts state 2 (forge-active) via QUEST_SetStateAndBroadcast + Q28_PlayerNotifyCompletedForge.
+// 1.14d mac: 00237c9f
 void __fastcall Objects_InitFn48_HellForge(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_HellsForge);
     if (!pQuestData || pQuestData->bIsNotIntroduction == '\0') {
@@ -138,6 +142,7 @@ void __fastcall Objects_InitFn48_HellForge(D2ObjectInitFnArg * pInitArg) {
 
 // A4Q3 Hell's Forge — Q28_Callback_04 (state-handler slot 4): when the quest is neither Completed, JustCompleted nor RewardAwaits, and the quest is introduced, prior-state != 0xd, and current stateFlag == 0, bump the internal stateFlag to 1 (Hellforge-introduced/started). Drives the early "go smash the soulstone" progression. No QuestRecord writes (internal flag only).
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q3.cpp
+// 1.14d mac: 00238e03
 void __fastcall Q28_Callback04_ItemPickedUp(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame = pQuestData->pGame;
     D2UnitStrc* pPlayer = pQuestArgs->pPlayer;
@@ -162,6 +167,7 @@ void __fastcall Q28_Callback04_ItemPickedUp(D2QuestDataStrc * pQuestData, D2Ques
 }
 
 // A4Q3 Hell's Forge — Q28_PlayerCompleteForgeInAct4: per-party-member completion applied to each member in Act IV (called via ExecuteFunctionForEveryPartyMember from the smash handler). If member hasn't already Completed/RewardAwaits Hell's Forge and is in Act IV: removes both quest items (Hellforge Hammer 'hfh ' and Mephisto's Soulstone 'mss '), sets JustCompleted+RewardAwaits, clears step-states, and increments a counter in the forge quest-specific data.
+// 1.14d mac: 00237def
 void __fastcall Q28_PlayerCompleteForgeInAct4(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -207,6 +213,7 @@ void __fastcall Q28_PlayerCompleteForgeInAct4(::SGAMEDATA * pGame, D2UnitStrc * 
     pHellsForgeQuest->pQuestSpecificData.pA4Q3->nItemsToDrop++;
 }
 
+// 1.14d mac: 0023832e
 BOOL __fastcall Q28_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];
@@ -226,6 +233,7 @@ BOOL __fastcall Q28_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStr
 
 // A4Q3 Hell's Forge — OBJOP_A4Q3_HellforgeSmash (Objects_OperateFn49): the Hellforge operate handler — the core quest action. Bails if Hell's Forge already Completed/RewardAwaits. Branches on the forge object's anim mode: Death(idle) — if player carries Mephisto's Soulstone 'mss ', plays anim, broadcasts internal state 3, consumes the soulstone (this places the stone on the anvil); else plays "can't" sound and bumps stateFlag to 1. Walk(active) — if player has the Hellforge Hammer 'hfh ' equipped as weapon and has struck 3x, this is the SMASH: removes the hammer, sets JustCompleted+RewardAwaits, clears step-states, runs Q28_PlayerCompleteForgeInAct4 for the whole party, sets stateFlag 4 then broadcasts state 0xd, schedules the rune-drop event, marks other party members CannotComplete, and fires NotifyPlayersAboutEvent(0xe). Item codes: 'mss '=0x2073736d (Mephisto's Soulstone), 'hfh '=0x20686668 (Hellforge Hammer).
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q3.cpp
+// 1.14d mac: 00237f0a
 BOOL __fastcall OBJOP_A4Q3_HellforgeSmash(D2ObjectOperateFnArg * pOperation) {
     int32_t nForgeObjClassId;
     D2ObjectsTxt* pObjectsTxt;
@@ -349,6 +357,7 @@ BOOL __fastcall OBJOP_A4Q3_HellforgeSmash(D2ObjectOperateFnArg * pOperation) {
 }
 
 // A4Q3 Hell's Forge — Q28_ActiveFilter (fpActiveFilter): predicate deciding if the quest is "active" for a target. True only for Deckard Cain (monstats 0xf6) when Hell's Forge is not Completed/RewardAwaits, the quest is introduced, the internal stateFlag is set, and the player hasn't yet received the hammer (bGotHammer==0). Gates Cain's give-the-hammer gossip. No state writes.
+// 1.14d mac: 002383bf
 bool __fastcall Q28_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     if (nTargetClassId == 0xf6) {
       BOOL bQuestState;
@@ -366,6 +375,7 @@ bool __fastcall Q28_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 
 // A4Q3 Hell's Forge — Q28_SequenceFilter (fpSequenceFilter): quest-chain sequencer. If not yet started but introduced, sets internal stateFlag 1. If finished (stateFlag==5) or not introduced, looks up the next quest in the chain (nSequenceQuestId = QUEST_AbleGoToAct4) and invokes ITS sequence filter (with an IsBadCodePtr guard). Propagates quest unlocks down the Act4 chain. No QuestRecord writes.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q3.cpp
+// 1.14d mac: 0023856e
 bool __fastcall Q28_SequenceFilter(D2QuestDataStrc * pQuestData) {
     bool byTmp;
     D2QuestDataStrc* pSeqQuestData;
@@ -394,6 +404,7 @@ bool __fastcall Q28_SequenceFilter(D2QuestDataStrc * pQuestData) {
 }
 
 // A4Q3 Hell's Forge — Q28_PlayerUpdateForgeState: per-player QuestRecord sync from the internal stateFlag (called via IteratePlayerOrMonsterUnits when the forge progresses). If not already Completed/RewardAwaits: stateFlag 2 -> set Step0x05 (if bGotHammer, i.e. hammer received) else Step0x02; stateFlag 3 -> set Step0x03. Translates the shared internal forge progression into each player's quest-step bits.
+// 1.14d mac: 0023939a
 BOOL __fastcall Q28_PlayerUpdateForgeState(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -432,12 +443,14 @@ BOOL __fastcall Q28_PlayerUpdateForgeState(::SGAMEDATA * pGame, D2UnitStrc * pUn
 }
 
 // A4Q3 Hell's Forge — Q28_Callback_10 (state-handler slot 10/0xa): on player-leave bookkeeping. Removes the player (by nUnitGUID, or -1 for "all") from the quest's participant GUID list. No QuestRecord writes.
+// 1.14d mac: 0023861c
 void __fastcall Q28_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     QUESTGUID_RemovePlayerFromList(&pQuestData->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
 }
 
 // A4Q3 Hell's Forge — Q28_Callback_03 (state-handler slot 3): handles the gossip event id 0x67. Removes player from participant list, then if internal stateFlag==2 and the player has not Completed/RewardAwaits Hell's Forge, advances internal stateFlag to 3 (soulstone-on-anvil acknowledged) and re-syncs all players via IteratePlayerOrMonsterUnits(Q28_PlayerUpdateForgeState).
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q3.cpp
+// 1.14d mac: 0023864b
 void __fastcall Q28_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     if (pQuestArgs->sQuestArgs.sLevelChange.nOldLevel != 0x67) {
       return;
@@ -468,6 +481,7 @@ void __fastcall Q28_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 
 // A4Q3 Hell's Forge — Q28_Callback_11 (state-handler slot 0xb): Deckard Cain (monstats 0xf6) gossip handler. msg 0x2a6 -> accept quest (bForgeQuestAccepted=1, stateFlag 2). msg 0x2a7 -> if Cain can give Mephisto's Soulstone reward ('mss ' shield) from inventory: accept + bGotHammer=1, stateFlag>=2. msg 0x2a8 -> turn-in: only if RewardAwaits set; if also JustCompleted and not yet finalized, broadcast state 0xd, set stateFlag 5, run the sequence filter; then set Hell's Forge Completed, clear RewardAwaits, add player to participant list, send gossip packet.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q3.cpp
+// 1.14d mac: 002389cc
 void __fastcall Q28_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     BOOL bQuestState;
     int32_t nLine;
@@ -535,6 +549,7 @@ void __fastcall Q28_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // A4Q3 Hell's Forge — Q28_Callback_00 (state-handler slot 0, gossip-select filter): decides which Cain gossip line (0..3) to attach on the NPC. RewardAwaits -> line 2 (turn-in). Already participated -> line 3 (post-completion). Otherwise based on stateFlag / has-soulstone / bGotHammer / not-Completed / introduced: line 0 (have soulstone, ready to forge) or line 1 (need to go to forge). Reads many GetQuestState bits; no writes.
+// 1.14d mac: 00238724
 void __fastcall Q28_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int32_t nGossipMsgIdx;
     int32_t nTargetClassId;
@@ -617,6 +632,7 @@ void __fastcall Q28_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 }
 
 // A4Q3 Hell's Forge — Q28_Callback_02 (state-handler slot 2): on Cain (monstats 0xf6) interaction, if the quest was accepted (bForgeQuestAccepted): broadcast internal state 4 if hammer already obtained else 1, clear bForgeQuestAccepted+eFlags, null out the slot-2 handler (one-shot), and re-sync all players via Q28_PlayerUpdateForgeState.
+// 1.14d mac: 002388fb
 void __fastcall Q28_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     if (!(pQuestArgs->pTarget && (short int)pQuestArgs->pTarget->nClassId == 0xf6)) {
       return;
@@ -639,6 +655,7 @@ void __fastcall Q28_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // A4Q3 Hell's Forge — Q28_DecrementHellforgeWeaponCount (state-handler slot 9, item-removed): when the removed item is the Hellforge Hammer ('hfh '=0x20686668), decrement the cached hammer/weapon counter in the quest-specific data. No QuestRecord writes.
+// 1.14d mac: 00238d75
 void __fastcall Q28_DecrementHellforgeWeaponCount(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2QuestDataA4Q3Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA4Q3;
     uint32_t nItemCode = D2Common::ITEMS::Items::ITEM_GetItemsTxt_szCode(pQuestArgs->pTarget);
@@ -650,6 +667,7 @@ void __fastcall Q28_DecrementHellforgeWeaponCount(D2QuestDataStrc * pQuestData, 
 }
 
 // A4Q3 Hell's Forge — Q28_Callback_14_CheckIfGotHammer (state-handler slot 0xe, item-added): if the player now holds the Hellforge Hammer ('hfh '=0x20686668), increment the cached hammer counter in quest-specific data. No QuestRecord writes.
+// 1.14d mac: 00238d3f
 void __fastcall Q28_Callback_14_CheckIfGotHammer(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2QuestDataA4Q3Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA4Q3;
     D2UnitStrc* pHammerItem = ITEMS::Items::Drop::HasQuestItem(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20686668);
@@ -661,6 +679,7 @@ void __fastcall Q28_Callback_14_CheckIfGotHammer(D2QuestDataStrc * pQuestData, D
 }
 
 // A4Q3 Hell's Forge — load/join handler (state slot 0xd): reconstructs in-memory stateFlag from the player's persisted QuestRecord on game load or rejoin. Counts Hellforge Hammer in inventory. If quest not Completed/FinishedInPreviousGame and soulstone absent sets stateFlag=1; otherwise maps Step0x05 -> bGotHammer+prev=4+flag=2, Step0x03 -> prev=1+flag=3, Step0x02 -> prev=1+flag=2. No new quest-record writes.
+// 1.14d mac: 00238c2c
 void __fastcall Q28_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
@@ -715,6 +734,7 @@ void __fastcall Q28_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 }
 
 // A4Q3 Hell's Forge — Q28_Callback_08 (state-handler slot 8): if the quest is introduced, force the target's drop to the Hellforge Hammer ('hfh '=0x20686668) and drop it as a PlayerBodyPart-type reward; on success increment the cached hammer counter. This is how the hammer is dropped to the player. No QuestRecord writes.
+// 1.14d mac: 00238d9e
 void __fastcall Q28_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int nQuestDataPtr;
     D2QuestDataA4Q3Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA4Q3;
@@ -733,6 +753,7 @@ void __fastcall Q28_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 
 // A4Q3 Hell's Forge — Q28_InitData: quest constructor. Wires up the state-function table (slots 0,2,3,4,8,9,0xa,0xb,0xd,0xe -> the Q28 callbacks above), fpActiveFilter=Q28_ActiveFilter, fpSequenceFilter=Q28_SequenceFilter, nSequenceQuestId=QUEST_AbleGoToAct4, nQuestIdReal=QUEST_HellsForge, nInitNo=4, the single Cain (0xf6) gossip entry (string 0x2a6), then allocates and zero-inits the 0x20-byte D2QuestDataA4Q3Strc (forge flags: bForgeQuestAccepted, bGotHammer, drop counters, gem quality, etc).
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q3.cpp
+// 1.14d mac: 0023842f
 void __fastcall Q28_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGame = pQuestData->pGame;
@@ -763,6 +784,7 @@ void __fastcall Q28_InitData(D2QuestDataStrc * pQuestData) {
 }
 
 // A4Q3 Hell's Forge — Q28_TimerCallback_DropForgeRunes: the forge reward drop, fired by a scheduled event after the smash. Drops nItemsToDrop gems each pass — gem code chosen per difficulty (Act3/Act2/Act1 gem-code tables = hell/nm/normal) from the quest control seed — decrementing the gem-quality counter each pass and re-scheduling itself until exhausted; on the final pass (expansion only) also drops one rune from the per-difficulty rune table (normal r01-r11, nightmare r12-r22, hell r15-r25). This is the classic Hell's Forge gem+rune reward. No QuestRecord writes (drops only).
+// 1.14d mac: 00238ebe
 void __fastcall Q28_TimerCallback_DropForgeRunes(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
     static uint32_t aRunesListNomal[11] = {
@@ -905,6 +927,7 @@ void __fastcall Q28_TimerCallback_DropForgeRunes(D2QuestDataStrc * pQuestData, D
 }
 
 // A4Q3 Hell's Forge — Q28_EmptyCallback: no-op state-handler stub (placeholder for an unused quest state-function slot).
+// 1.14d mac: 0023915f
 void __stdcall Q28_EmptyCallback() {
 
 }

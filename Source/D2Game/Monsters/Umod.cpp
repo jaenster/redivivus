@@ -26,6 +26,7 @@
 
 namespace D2Game::Monsters::Umod {
 
+// 1.14d mac: 001e51aa
 void __fastcall MONUMOD_RollNameSeed(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
     if (!(pUnit && bUnique)) {
       return;
@@ -39,6 +40,7 @@ void __fastcall MONUMOD_RollNameSeed(D2UnitStrc * pUnit, int32_t nIndex, BOOL bU
     pUnit->pUnitData.pUnitDataMonster->nNameSeed = (uint16_t)sSeedNext;
 }
 
+// 1.14d mac: 001e69da
 static void UMOD_IncreaseMonsterHp(D2UnitStrc * pUnit, uint32_t nUmodConstant) {
     int nHpBonus;
     int nBaseHp = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
@@ -62,6 +64,7 @@ static void UMOD_IncreaseMonsterHp(D2UnitStrc * pUnit, uint32_t nUmodConstant) {
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nBaseHp + nHpBonus, 0);
 }
 
+// 1.14d mac: 001e51e3
 void __fastcall MONUMOD_ApplyHpBonus(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
     uint32_t nUmodConst;
     int32_t nUmodConstIdx;
@@ -96,6 +99,7 @@ void __fastcall MONUMOD_ApplyHpBonus(D2UnitStrc * pUnit, int32_t nIndex, BOOL bU
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hpregen, 0, 0);
 }
 
+// 1.14d mac: 001e52c1
 void __fastcall MONUMOD_ApplyChampionLevelBonus(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
       return;
@@ -109,6 +113,7 @@ void __fastcall MONUMOD_ApplyChampionLevelBonus(D2UnitStrc * pUnit, int32_t nInd
 }
 
 // Applies champion-tier stat bonuses to a monster unit. Decrements level by 1, reduces XP by 40%, then adds difficulty-scaled damage percent (MonUmod[11].constants) and to-hit percent (MonUmod[10].constants) bonuses. Also adds a velocity bonus based on nIndex: 0x24 subtracts speed, 0x25 computes a formula from base Velocity, other values add a flat +20%. Skips Griswold (classId 0x76) with halved damage bonus.
+// 1.14d mac: 001e5b45
 void __fastcall MONUMOD_ApplyChampionStats(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
     int32_t nBaseMonId;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
@@ -189,6 +194,7 @@ void __fastcall MONUMOD_ApplyChampionStats(D2UnitStrc * pUnit, int32_t nIndex, B
 }
 
 // Applies the Cold Enchanted monster modifier (umod) to pUnit. Validates the unit is a live UNIT_MONSTER with a game pointer and that bUnknown (apply flag) is set, then ORs 0x40 into the monster-data type flags, sets a 80% (0x50) damage-resist stat, applies champion stats, and adds cold min/max damage scaled from monlvl.txt DM[] by difficulty (clamped 0-2) using GetUmodConstant(diff+0x16/+0x19) percentages, plus a fixed 150-frame (0x96) cold length. No-op if unit/game null or apply flag clear. Server-side monster spawn modifier.
+// 1.14d mac: 001e65e0
 void __fastcall MONUMOD_ApplyGhostly(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown) {
     int nLvlDmgBase;
     if (!pUnit) {
@@ -260,6 +266,7 @@ void __fastcall MONUMOD_ApplyGhostly(D2UnitStrc * pUnit, int32_t nIndex, BOOL bU
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_coldlength, 0x96, 0);
 }
 
+// 1.14d mac: 001e67d2
 void __fastcall MONUMOD_ApplyFanatic(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && bUnique)) {
       return;
@@ -271,6 +278,7 @@ void __fastcall MONUMOD_ApplyFanatic(D2UnitStrc * pUnit, int32_t nIndex, BOOL bU
 
 static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit);
 
+// 1.14d mac: 001e6819
 void __fastcall MONUMOD_ApplyPossessed(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
     if (!(GetTypeInline(pUnit) == UNIT_MONSTER && bUnique)) {
       return;
@@ -284,6 +292,7 @@ void __fastcall MONUMOD_ApplyPossessed(D2UnitStrc * pUnit, int32_t nIndex, BOOL 
     MONUMOD_ApplyChampionStats(pUnit, nIndex, bUnique);
 }
 
+// 1.14d mac: 001e6855
 void __fastcall MONUMOD_ApplyBerserk(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
       return;
@@ -311,6 +320,7 @@ void __fastcall MONUMOD_ApplyBerserk(D2UnitStrc * pUnit, int32_t nIndex, BOOL bU
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_item_tohit_percent, nHitBonus, 0);
 }
 
+// 1.14d mac: 001e6984
 void __fastcall MONUMOD_SetEventTimer(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnused) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
       return;
@@ -325,6 +335,7 @@ void __fastcall MONUMOD_SetEventTimer(D2UnitStrc * pUnit, int32_t nIndex, BOOL b
 }
 
 // Monster unique-modifier handler that grants resistances. For a monster unit (when bUnknown is set), dispatched by nIndex (modifier id): index 0x1c doubles armorclass and adds 0x32 to damageresist; 8 ("Stone Skin") and 0x1b raise cold/fire/light resist (+0x28 / +0x14) but bail once two or more resists are already capped (>99); single-element mods 9/0x12/0x11/0x17 add +0x4b to fire/cold/light/poison resist, 0x19 adds +0x14 magicresist. Modifies the unit's resist stats in place via STATLIST_SetUnitStat.
+// 1.14d mac: 001e558b
 void __fastcall MagicResist(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown) {
     int nFireRes;
     if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && bUnknown)) {
@@ -432,6 +443,7 @@ void __fastcall MagicResist(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown) {
     }
 }
 
+// 1.14d mac: 001e6570
 void __fastcall TeleHeal(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
     if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && bUnique)) {
       return;
@@ -443,6 +455,7 @@ void __fastcall TeleHeal(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
 }
 
 // Applies the Aura Enchanted monster modifier to pUnit (must be UNIT_MONSTER with bUnknown!=0). Determines an aura tier index (0–8) by comparing the unit's level against eight global threshold globals, then picks a specific aura entry using the monster's name seed as an RNG. Computes skill level from the entry's formula. Special-cases nBossNo==0x25 (Diablo clone) forcing roll=5, and nClassId==0x2c0 (Infector of Souls) hardcoding Conviction at level 20. Sets the chosen aura skill and selects it on the right-hand slot.
+// 1.14d mac: 001e4943
 void __fastcall AuraEnchanted(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown) {
     // Static local variables (originally global data)
     static D2AuraEnchantedStrc gaAuraEnchantedTable[8] = {
@@ -552,6 +565,7 @@ void __fastcall AuraEnchanted(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown)
 }
 
 // Applies the ExtraStrong unique-mod stat bonuses to a monster unit. Reads champion/unique damage-percent and to-hit-percent constants from MonUMod.txt rows 0xC/0xD (normal) or 0xD/0xE (bUnknown=true), scales them by the current difficulty's ChampionDamageBonus, halves damage for Viper class (nClassId==0x76), then calls STATLIST_AddUnitStat for UNITSTAT_damagepercent and UNITSTAT_item_tohit_percent.
+// 1.14d mac: 001e5348
 void __fastcall ExtraStrong(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
     D2MonUModTxt* pUmodEntry;
     int nDamageBonus;
@@ -624,6 +638,7 @@ void __fastcall ExtraStrong(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_item_tohit_percent, nToHitBonus, 0);
 }
 
+// 1.14d mac: 001e54fc
 void __fastcall ExtraFast(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
       return;
@@ -646,6 +661,7 @@ void __fastcall ExtraFast(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown) {
 }
 
 // Applies the Fire Enchanted monster modifier (umod) to pUnit. Requires a live UNIT_MONSTER with a game pointer. Derives difficulty (0-2) and a single/multiplayer flag (BNET_HOST + SINGLEPLAYER => 0 else 1), reads the unit level, and indexes monlvl.txt DM[mp*3+diff] for a base damage. Computes fire min/max damage from GetUmodConstant: index diff+0x10/+0x13 when bUnknown==0 else diff+0x1c/+0x1f (min uses a /100 reciprocal-multiply, max uses *base/100), adds UNITSTAT_firemindam/firemaxdam, then chains MagicResist. No-op if unit/game null or monlvl row out of range.
+// 1.14d mac: 001e5984
 void __fastcall FireEnchanted(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
     uint32_t nDifficulty;
     int bIsMultiplayer;
@@ -691,6 +707,7 @@ void __fastcall FireEnchanted(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) 
 }
 
 // Applies the Lightning Enchanted monster modifier (umod) to pUnit. Identical structure to FireEnchanted: requires a live UNIT_MONSTER + game pointer, derives difficulty (0-2) and single/multiplayer flag, reads unit level, indexes monlvl.txt DM[mp*3+diff], and computes light min/max damage from GetUmodConstant (diff+0x10/+0x13, or +0x1c/+0x1f when bUnknown set), adding UNITSTAT_lightmindam/lightmaxdam and chaining MagicResist. No-op on null unit/game or out-of-range monlvl row.
+// 1.14d mac: 001e5df2
 void __fastcall LightningEnchanted(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
     uint32_t nDifficulty;
     int bIsMultiplayer;
@@ -743,6 +760,7 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
 }
 
 // Monster modifier (umod) application for the Cold Enchanted boss affix. For a UNIT_MONSTER, derives difficulty index (0/1/2) and a single-vs-multiplayer index, reads the level-scaled damage base from MonLvl.txt DM[], and using GetUmodConstant scalars computes and adds cold min/max damage (UNITSTAT_coldmindam/coldmaxdam) and a cold-length stat. Picks the normal vs alternate (bUnknown) constant set. Then chains into MagicResist for the affix's resistance component. No return value.
+// 1.14d mac: 001e5fb3
 void __fastcall ColdEnchanted(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
     uint32_t nDifficulty;
     int bIsMultiplayer;
@@ -789,6 +807,7 @@ void __fastcall ColdEnchanted(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) 
 }
 
 // Monster modifier (umod) application for the Poison Enchanted boss affix. Same shape as ColdEnchanted: for a UNIT_MONSTER derives difficulty (0/1/2) and SP/MP index, reads level-scaled base damage from MonLvl.txt DM[], and via GetUmodConstant scalars adds poison min/max damage (UNITSTAT_poisonmindam/poisonmaxdam) and poison length (note length uses (idx*5+0x96)*2). Selects normal vs alternate (bUnknown) constant set, then chains into MagicResist. No return value.
+// 1.14d mac: 001e61ad
 void __fastcall PoisonEnchanted(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
     uint32_t nDifficulty;
     int bIsMultiplayer;
@@ -835,6 +854,7 @@ void __fastcall PoisonEnchanted(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique
 }
 
 // Applies the Mana Burn monster modifier (umod) to pUnit. Same structure as Fire/LightningEnchanted: requires a live UNIT_MONSTER + game pointer, derives difficulty (0-2) and single/multiplayer flag, reads unit level, and indexes monlvl.txt DM[mp*3+diff]. Computes the drain amounts from GetUmodConstant (diff+0x10/+0x13 or +0x1c/+0x1f when bUnknown set) and adds UNITSTAT_manadrainmindam/manadrainmaxdam, each scaled by 0x100 (256, mana fixed-point) before chaining MagicResist. No-op on null unit/game or out-of-range monlvl row.
+// 1.14d mac: 001e63a9
 void __fastcall ManaBurn(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
     uint32_t nDifficulty;
     int bIsMultiplayer;
