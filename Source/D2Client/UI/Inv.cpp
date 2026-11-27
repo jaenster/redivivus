@@ -2138,65 +2138,49 @@ static void __stdcall INV_FormatBlockChanceText(uint16_t * wszText, D2ItemsTxt *
 
 // Formats defense range text for shields and boots, displaying min-max defense values. For shields, checks if Holy Shield skill is active and adds its defense bonus to both min and max values before formatting the output string.
 static void __stdcall INV_FormatDefenseRangeText(D2UnitStrc * pUnit, D2ItemsTxt * pStatRecord, uint16_t * wszText) {
-    D2SkillStrc* pSkill;
-    BOOL iStateCheck;
-    int nSkillLevel;
-    int32_t nSkillDmgCalc;
-    uint16_t wszTempConversionBuffer[10];
-    char szPrintfBuffer[12];
-    wszTempConversionBuffer[0] = L'\0';
-    wszTempConversionBuffer[1] = 0;
-    wszTempConversionBuffer[2] = 0;
-    wszTempConversionBuffer[3] = 0;
-    wszTempConversionBuffer[4] = 0;
-    wszTempConversionBuffer[5] = 0;
-    wszTempConversionBuffer[6] = 0;
-    wszTempConversionBuffer[7] = 0;
-    wszTempConversionBuffer[8] = 0;
-    wszTempConversionBuffer[9] = 0;
+    uint16_t wszNumber[10];
+    char szNumber[12];
+    wszNumber[0] = L'\0';
+    wszNumber[1] = 0;
+    wszNumber[2] = 0;
+    wszNumber[3] = 0;
+    wszNumber[4] = 0;
+    wszNumber[5] = 0;
+    wszNumber[6] = 0;
+    wszNumber[7] = 0;
+    wszNumber[8] = 0;
+    wszNumber[9] = 0;
     uint16_t* pwSeparator = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
     uint16_t* pwColorSuffix = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
-    int nMinDefense = (int)pStatRecord->nMinDam;
-    uint32_t nMaxDefense = (uint32_t)pStatRecord->nMaxDam;
-    uint32_t nTypeCheck = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_AnyShield);
-    int nStatRecord = nMinDefense;
-    if (nTypeCheck) {
-      D2UnitStrc* pPlayerUnit_lcl;
-      *(uint16_t*)(char*)&pUnit = 0xd8c;
-      pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_Net();
-      pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pPlayerUnit_lcl, SKILL_HolyShield);
-      if (pSkill) {
-        iStateCheck = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pPlayerUnit_lcl, STATE_holyshield);
-        if (iStateCheck) {
-          nSkillLevel = D2Common::Skills::GetSkillLevel(pPlayerUnit_lcl, pSkill, 1);
-          nSkillDmgCalc = D2Common::Skills::SKILL_CalcMinDamage(pPlayerUnit_lcl, 0x75, nSkillLevel, 1);
-          nStatRecord = (int)(nMinDefense + (nSkillDmgCalc >> 8));
-          nSkillDmgCalc = D2Common::Skills::SKILL_CalcMaxDamage(pPlayerUnit_lcl, 0x75, nSkillLevel, 1);
-          nMaxDefense += nSkillDmgCalc >> 8;
-        }
+    int nMinDefense = pStatRecord->nMinDam;
+    int nMaxDefense = pStatRecord->nMaxDam;
+    int nStringId;
+    if (D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_AnyShield)) {
+      nStringId = 0xd8c;
+      D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_Net();
+      D2SkillStrc* pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pPlayer, SKILL_HolyShield);
+      if (pSkill && D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pPlayer, STATE_holyshield)) {
+        int nSkillLevel = D2Common::Skills::GetSkillLevel(pPlayer, pSkill, 1);
+        nMinDefense += D2Common::Skills::SKILL_CalcMinDamage(pPlayer, 0x75, nSkillLevel, 1) >> 8;
+        nMaxDefense += D2Common::Skills::SKILL_CalcMaxDamage(pPlayer, 0x75, nSkillLevel, 1) >> 8;
       }
+    } else if (D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Boots)) {
+      nStringId = 0x5516;
     } else {
-      nTypeCheck = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Boots);
-      if (!nTypeCheck) {
-        return;
-      }
-
-      *(uint16_t*)(char*)&pUnit = 0x5516;
+      return;
     }
 
-    uint16_t* pwString = D2Lang::StrTable::strtable::GetLocaleString((uint16_t)(uintptr_t)pUnit);
-    D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, pwString);
-    Storm::Source::SSTR::SStrPrintf(szPrintfBuffer, 10, "%i", nStatRecord);
-    D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszTempConversionBuffer, szPrintfBuffer, 9);
+    D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, D2Lang::StrTable::strtable::GetLocaleString(nStringId));
+    Storm::Source::SSTR::SStrPrintf(szNumber, 10, "%i", nMinDefense);
+    D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszNumber, szNumber, 9);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwSeparator);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszTempConversionBuffer);
+    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszNumber);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwSeparator);
-    pwString = D2Lang::StrTable::strtable::GetLocaleString(0xd88);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwString);
-    Storm::Source::SSTR::SStrPrintf(szPrintfBuffer, 10, "%i", nMaxDefense);
-    D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszTempConversionBuffer, szPrintfBuffer, 9);
+    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, D2Lang::StrTable::strtable::GetLocaleString(0xd88));
+    Storm::Source::SSTR::SStrPrintf(szNumber, 10, "%i", nMaxDefense);
+    D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszNumber, szNumber, 9);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwSeparator);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszTempConversionBuffer);
+    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszNumber);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwColorSuffix);
 }
 
