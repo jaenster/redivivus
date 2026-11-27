@@ -24,6 +24,16 @@ void __fastcall SetupGamma(DWORD dwGamma) {
     D2gfx::D2GFX::D2GFX_SetGamma(dwGamma);
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 0005e6ac
+// Takes the renderer id and the engine index; SetCurrentEngineToOne and the RENDERER_Set* stubs
+// fix them to constants.
+void CLIENT_SetRendererMode(int nRenderer, int nEngineIndex) {
+    CurrentRendingEngine = nRenderer;
+    gnCurrentEngineIndex = nEngineIndex;
+}
+
+#endif
 // 1.14d mac: 0005e6c9
 void __stdcall SetCurrentEngineToOne() {
     CurrentRendingEngine = 1;
