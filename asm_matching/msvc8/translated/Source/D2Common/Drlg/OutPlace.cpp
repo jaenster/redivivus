@@ -1706,37 +1706,31 @@ static void DRLGActMisc_InitAct2(D2DrlgStrc * pDrlg) {
 
 // Calculates placement coordinates for a sub-level within the outdoor grid, writing results to pOutCoords.
 static void __stdcall DRLGOUTPLACE_CalcSubLevelPlacement(int nHeight, int nWidth, D2DrlgSubLevelPlaceStrc * pOutCoords, D2DrlgSubLevelPlaceStrc * pBasePlace, int32_t nDirection) {
-    int nOffsetX;
-    nOffsetX = 0;
-    int nOffsetY;
-    nOffsetY = 0;
+    int nOffsetX = 0;
+    int nOffsetY = 0;
     switch (nDirection) {
       case 0:
         nOffsetX = 0;
-      nOffsetY = -nHeight;
-      goto store_placement;
+        nOffsetY = -nHeight;
+        break;
       case 1:
-        nOffsetY = (int)((uint64_t)((int64_t)nHeight * 0x55555555) >> 0x20) - nHeight >> 1;
-      nOffsetX = -nWidth;
-      break;
+        nOffsetX = -nWidth;
+        nOffsetY = nHeight / -3;
+        break;
       case 2:
-        nOffsetY = (int)((uint64_t)((int64_t)nHeight * 0x55555555) >> 0x20) - nHeight >> 1;
-      nOffsetX = nWidth;
-      break;
+        nOffsetX = nWidth;
+        nOffsetY = nHeight / -3;
+        break;
       case 3:
-        nOffsetY = nHeight * -2 / 3 + (nHeight * -2 >> 0x1f);
-      nOffsetX = -nWidth;
-      break;
+        nOffsetX = -nWidth;
+        nOffsetY = nHeight * -2 / 3;
+        break;
       case 4:
-        nOffsetY = nHeight * -2 / 3 + (nHeight * -2 >> 0x1f);
-      nOffsetX = nWidth;
-      break;
-      default:
-        goto store_placement;
+        nOffsetX = nWidth;
+        nOffsetY = nHeight * -2 / 3;
+        break;
     }
 
-    nOffsetY -= nOffsetY >> 0x1f;
-    store_placement:
     pOutCoords->sCoords.WorldPosition.x = pBasePlace->sCoords.WorldPosition.x + nOffsetX;
     pOutCoords->sCoords.WorldPosition.y = pBasePlace->sCoords.WorldPosition.y + nOffsetY;
     pOutCoords->sCoords.WorldSize.x = nWidth;

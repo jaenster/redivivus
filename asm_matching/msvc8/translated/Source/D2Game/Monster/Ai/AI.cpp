@@ -16016,45 +16016,31 @@ void __fastcall AITHINK_Fn1_Goatman(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
     }
 }
 
+// GetAnimMode as its callers inlined it: two returns, the value in a register of its own.
+static inline eD2PlayerAnimMode GetAnimModeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eAnimMode.ePlayerMode;
+    }
+    return (eD2PlayerAnimMode)0;
+}
+
 // Unit-iteration callback used to locate a dead Fallen corpse eligible for revival by a Fallen Shaman. Accepts pCandidate if: it is a different monster unit; its base MonStats ID is 0x13 (Fallen) or 0x3A (Carver); alignment is neutral (0) and the corpse-dead flag (eUnitFlags bit 1) is set; has no passive or light state active; is in death animation mode (Kick); and is within the search radius stored in pOutResult[3]. On match, stores candidate in pOutResult[0], distance in pOutResult[2], and increments count at pOutResult[1].
 D2UnitStrc * __fastcall MONSTERAI_FindFallenForRevival(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pCandidate, D2AiCorpseScanStrc * pScan) {
-    if (!(pUnit != pCandidate && (GetTypeInline(pCandidate)) == UNIT_MONSTER)) {
-      return 0;
+    if (pUnit != pCandidate && GetTypeInline(pCandidate) == UNIT_MONSTER) {
+      int32_t nBaseId = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pCandidate);
+      if (nBaseId >= 0 && nBaseId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && (nBaseId == 0x13 || nBaseId == 0x3a)
+        && !D2Common::Stats::StatsEx::STATSEX_GetAlignment(pCandidate) && FlagBit_D2UnitStrc_eUnitFlags_1(pCandidate)
+        && !D2Common::DATATBLS::ItemStats::STATES_HasUdeadFlagState(pCandidate) && GetAnimModeInline(pCandidate) == Kick
+        && !D2Common::DATATBLS::ItemStats::STATES_HasHideFlagState(pCandidate)) {
+        int32_t nDistToUnit = GetDistanceBetween(pUnit, pCandidate);
+        if (nDistToUnit <= pScan->nMaxScanRadius && !Monsters::CheckMonsterType(pCandidate, 0xc)) {
+          pScan->nCorpseCount++;
+          pScan->pCorpse = pCandidate;
+          pScan->nCorpseDistance = nDistToUnit;
+        }
+      }
     }
 
-    int32_t nDistToUnit = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pCandidate);
-    if (!(nDistToUnit >= 0 && nDistToUnit < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && (nDistToUnit == 0x13 || nDistToUnit == 0x3a))) {
-      return 0;
-    }
-
-    nDistToUnit = D2Common::Stats::StatsEx::STATSEX_GetAlignment(pCandidate);
-    if (!(!nDistToUnit && FlagBit_D2UnitStrc_eUnitFlags_1(pCandidate))) {
-      return 0;
-    }
-
-    int bHasState = D2Common::DATATBLS::ItemStats::STATES_HasUdeadFlagState(pCandidate);
-    if (!(!bHasState && pCandidate->eAnimMode.ePlayerMode == Kick)) {
-      return 0;
-    }
-
-    bHasState = D2Common::DATATBLS::ItemStats::STATES_HasHideFlagState(pCandidate);
-    if (bHasState) {
-      return 0;
-    }
-
-    nDistToUnit = GetDistanceBetween(pUnit, pCandidate);
-    if (nDistToUnit > pScan->nMaxScanRadius) {
-      return 0;
-    }
-
-    uint32_t bIsUndead = Monsters::CheckMonsterType(pCandidate, 0xc);
-    if (bIsUndead) {
-      return 0;
-    }
-
-    pScan->nCorpseCount++;
-    pScan->pCorpse = pCandidate;
-    pScan->nCorpseDistance = nDistToUnit;
     return 0;
 }
 
