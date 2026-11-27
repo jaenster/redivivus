@@ -56,6 +56,7 @@ void __stdcall UpdateGlobalAlwaysRun() {
     Storm::Source::SReg::SRegSaveValue("Diablo II", "Always Run", 0, nValue);
 }
 
+// 1.14d mac: 000dae51
 static void MINIPANEL_DrawBackground(int32_t nPanelSection) {
     int nXOffset;
     D2GfxDataStrc sGfxData;
@@ -104,6 +105,7 @@ void __stdcall MINIPANEL_DrawButton(int32_t nFrameNumber, int32_t nPositionX, in
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nPositionX, nPositionY, -1, DRAW_SOLID, nullptr);
 }
 
+// 1.14d mac: 000daf53
 static void MINIPANEL_CalculateButtonPositions(int32_t bIsExpansion) {
     int bSinglePlayer = gbMiniPanelSinglePlayer;
     int nButtonCount = 8;
@@ -158,6 +160,7 @@ static void MINIPANEL_CalculateButtonPositions(int32_t bIsExpansion) {
     }
 }
 
+// 1.14d mac: 000db05c
 void __stdcall MINIPANEL_DrawAllButtons(int32_t bVisible) {
     D2GfxDataStrc sGfxData2;
     D2GfxDataStrc sGfxData;
@@ -786,6 +789,7 @@ static void __stdcall MINIPANEL_ShowTooltip(int32_t nX, int32_t nY, int32_t nBut
     D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(wszTooltip, nX - 3, nY - 0x1a, 0, 1);
 }
 
+// 1.14d mac: 000db141
 static void MINIPANEL_HandleMouseHover(int32_t nLayout) {
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
@@ -816,6 +820,7 @@ static void MINIPANEL_HandleMouseHover(int32_t nLayout) {
     }
 }
 
+// 1.14d mac: 000dab1f
 void __stdcall DRAW_UI_MiniPanel() {
     D2GfxDataStrc sGfxData;
     int nButtonX;

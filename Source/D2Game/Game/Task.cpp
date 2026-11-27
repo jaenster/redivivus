@@ -90,6 +90,7 @@ void __fastcall TASK_LinkTaskToList(D2LinkNodeStrc * pList, D2LinkNodeStrc * pLi
 
 // Inserts pNode in front of the head *ppList, which makes it the tail of the circular list (inline LINKLIST_InsertBefore). Halts (Linklist.h lines 127/128) on NULL and (line 108) on an empty list.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
+// 1.14d mac: 001b4ea1
 void __fastcall LINKLIST_AppendToList(D2LinkNodeStrc * * ppList, D2LinkNodeStrc * pNode) {
     D2LinkNodeStrc* pDVar1;
     D2LinkNodeStrc* pDVar2;

@@ -139,6 +139,7 @@ void __stdcall SOUND_StopMusic() {
     }
 }
 
+// 1.14d mac: 00096685
 void __fastcall SOUND_SetLeftVolume(int32_t nKeepGroup1, int32_t nKeepGroup2) {
     D2SoundChannelNodeStrc* pDVar1;
     D2SoundsTxt* pSoundsTxtLine;
@@ -166,6 +167,7 @@ void __fastcall SOUND_SetLeftVolume(int32_t nKeepGroup1, int32_t nKeepGroup2) {
     }
 }
 
+// 1.14d mac: 000966e3
 void __fastcall SOUND_SetRightVolume(int32_t nKeepGroup1, int32_t nKeepGroup2) {
     D2SoundChannelNodeStrc* pDVar1;
     D2SoundsTxt* pSoundsTxtLine;
@@ -193,6 +195,7 @@ void __fastcall SOUND_SetRightVolume(int32_t nKeepGroup1, int32_t nKeepGroup2) {
     }
 }
 
+// 1.14d mac: 00096743
 void __stdcall SOUND_DebugPrintChannels() {
     D2SoundChannelNodeStrc* pDVar1;
     D2SoundsTxt* pSoundsTxtLine;
@@ -209,6 +212,7 @@ void __stdcall SOUND_DebugPrintChannels() {
     }
 }
 
+// 1.14d mac: 0009677b
 void __stdcall SOUND_ShutdownSystem() {
     D2SoundsTxt* pSoundsTxtLine;
     D2SoundChannelNodeStrc* pInnerChanNode;
@@ -288,6 +292,7 @@ void __stdcall SOUND_ShutdownSystem() {
     }
 }
 
+// 1.14d mac: 00097310
 void __stdcall SoundChaosDebug() {
     gbSoundChaosEnabled = (uint32_t)!gbSoundChaosEnabled;
     if (gbSoundChaosEnabled) {
@@ -382,6 +387,7 @@ int Unreferenced_004e41e0() {
     return (uint32_t)(iVar1 < 1 || iVar1 > 3);
 }
 
+// 1.14d mac: 00094c52
 float __stdcall Unreferenced_004e4200() {
     uint32_t uVar1 = Draw::Weather::WEATHER_CanHaveRain();
     if (!uVar1) {

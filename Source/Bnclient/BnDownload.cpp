@@ -120,6 +120,7 @@ uint32_t __stdcall BNDOWNLOAD_HasActiveDownloads() {
     return (uint32_t)((intptr_t)lpAddend_00881d5c > 0);
 }
 
+// 1.14d mac: 00054809
 static BOOL __stdcall NET_RecvExact(SOCKET hSocket, char * pBuffer, uint32_t nLen) {
     int nRecvResult;
     uint32_t nBytesReceived;

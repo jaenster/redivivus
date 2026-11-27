@@ -124,6 +124,7 @@ void __stdcall VIEW_Init() {
     }
 }
 
+// 1.14d mac: 0007c521
 uint8_t * __stdcall VIEW_AllocByteTable(uint32_t nDim, int32_t nSteps) {
     uint8_t* pTable = (uint8_t*)D2Hell::D2MEM_VirtualAlloc(nDim * nDim * nSteps + 3);
     uint8_t* pWrite = pTable;
@@ -246,6 +247,7 @@ void __fastcall Unreferenced_00475de0(LPVOID pMemory) {
     D2Hell::D2MEM_VirtualFree(pMemory);
 }
 
+// 1.14d mac: 0007c2b1
 void __stdcall VIEW_InitLookupTables() {
     if (gpViewPalPointerTable32x8) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xca);
@@ -428,6 +430,7 @@ void __fastcall GAMEVIEW_PrepareScene(D2GameViewStrc * pGameView, uint32_t nFlag
     pGameView->nFlags &= -2;
 }
 
+// 1.14d mac: 0007db33
 void __stdcall VIEW_GenerateRandomViewParams(int32_t nStarIndex, int32_t bRespawn) {
     int32_t* const pStarX = &gaArcaneStarXPos[nStarIndex];
     D2SeedStrc* pStarSeed = gpArcaneStarsSeed;

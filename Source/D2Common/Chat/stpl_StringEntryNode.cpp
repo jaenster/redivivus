@@ -13,6 +13,7 @@ template<> TSExplicitList<::StringEntryNode, -572662307>* TSGrowableArray<TSExpl
     return this->m_data + nIndex;
 }
 
+// 1.14d mac: 0019983a TSLink<StringEntryNode>::NextLink
 template<> TSLink<::StringEntryNode>* TSLink<StringEntryNode>::NextLink(intptr_t nLinkOffset) {
     intptr_t nNextOffset = this->m_next;
     if (nNextOffset < 0) {

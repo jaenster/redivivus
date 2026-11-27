@@ -5606,6 +5606,7 @@ int32_t __stdcall ITEM_LoadFromSaveData(D2UnitStrc * pUnit, uint8_t * pSaveData,
 }
 
 // Returns 1 if pUnit (item) is replenishable (throwable, stackable, non-ethereal, and its ItemTypesTxt entry has the repair flag set). Returns 0 for non-item units or items that fail any condition. Halts on null pUnit.
+// 1.14d mac: 0016ffad
 static BOOL ITEM_IsReplenishable(D2UnitStrc * pUnit) {
     eD2ItemTypes eItemType;
     int32_t nErrLine;

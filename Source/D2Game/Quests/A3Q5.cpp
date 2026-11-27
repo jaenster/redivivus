@@ -226,6 +226,7 @@ BOOL __fastcall Q22_PlayerCheckNearTravincal(::SGAMEDATA * pGame, D2UnitStrc * p
 }
 
 // Q22_PlayerNotifyCompleted (BLACKENED TEMPLE) — completion-notify callback passed to QUEST_SetStateAndBroadcast. Sends quest-update packet 0x13 to the player only when the quest record shows it is (Completed OR FinishedInPreviousGame) AND has a pending JustCompleted or CannotCompleteQuestInGame flag set; otherwise returns without notifying. Read-only quest-record probe.
+// 1.14d mac: 00231324
 BOOL __fastcall Q22_PlayerNotifyCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];

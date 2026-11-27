@@ -195,6 +195,7 @@ void __fastcall Q18_InitObjectMode(D2QuestDataStrc * pQuestData, D2ObjectInitFnA
 }
 
 // Q18_PlayerNotifyCompleted — Lam Esen's Tome. Broadcast callback (passed to QUEST_SetStateAndBroadcast). For the given player, if the quest is Completed/FinishedInPreviousGame AND it has the JustCompleted or CannotCompleteQuestInGame transient flag set, push a quest update (msg 0xf) to that player; otherwise no-op. Read-only on the record.
+// 1.14d mac: 0022c975
 BOOL __fastcall Q18_PlayerNotifyCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];

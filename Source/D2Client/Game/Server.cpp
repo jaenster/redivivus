@@ -14,6 +14,7 @@
 namespace D2Client::GAME::Server {
 
 // Main cooperative game loop thread for single-player/LAN/Open Battle.net. Checks EnteringGame/ExitingGame flags under lock, ticks all active games via QSERVER_TickAllGames at 25 FPS, dispatches incoming packets, and handles cleanup. When ExitingGame set, shuts down all games and deletes critical section. Sleeps 10ms between ticks if games active, 30ms if idle.
+// 1.14d mac: 0006fd13
 DWORD __stdcall QSERVER_CooperativeThreadMain(void * lpThreadParam) {
     // Static local variables (originally global data)
     static int _StaticFour = 0x4; D2_STATIC_GUARD(_StaticFour, "D2Client::GAME::Server::QSERVER_CooperativeThreadMain::_StaticFour");

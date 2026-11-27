@@ -700,6 +700,7 @@ uint32_t __fastcall DRLGPATH_UpdatePathVelocityAndDirection(uint32_t * pPathData
 // Repeatedly right-shifts both values until each fits within [-0x10000, 0x10000].
 // Used by DRLGPATH_StepPathWithCollisionCheck to keep velocity components in
 // a safe range for fixed-point iteration.
+// 1.14d mac: 0018258c
 void __fastcall DRLGPATH_NormalizeFixedPointPair(int * pnStepX, int * pnStepY) {
     if (*pnStepX >= 0) {
       while (*pnStepX > 0x10000) {
@@ -920,6 +921,7 @@ D2DrlgPathNodeStrc * __fastcall DRLGPATH_AllocPathNode(D2DrlgPathSearchCtxStrc *
 }
 
 // Attempts to expand a neighbor node in the A* search. Checks if the node exists in open or closed lists, creates new nodes as needed, and updates costs if a better path is found. Links the node as a child of the parent (up to 8 children).
+// 1.14d mac: 0017e166
 static BOOL __stdcall DRLGPATH_TryExpandNeighborNode(D2DrlgPathSearchCtxStrc * nOpenList, uint32_t nPackedNeighbor, uint32_t nPackedTarget, D2DrlgPathNodeStrc * pParentNode) {
     short int nEdgeCost;
     D2DrlgPathNodeStrc* pNewNode;

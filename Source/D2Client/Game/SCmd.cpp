@@ -1407,6 +1407,7 @@ int __stdcall CLIENT_GetCurrentRoomAct() {
 
 // Returns the act of the level containing pUnit's room; halts (line 1336) when the unit has no room.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
+// 1.14d mac: 00076e9e
 int __fastcall CLIENT_GetUnitAct(D2UnitStrc * pUnit) {
     eD2LevelId eLevel;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);

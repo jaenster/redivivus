@@ -135,6 +135,7 @@ int __thiscall OnMouseWheel(::ListBoxWrapper * pThis, D2UIMouseMsgStrc * pMsg) {
     return nResult;
 }
 
+// 1.14d mac: 000c1bae
 ::ListBoxWrapper * __thiscall Constructor(::ListBoxWrapper * pThis, int nPosX, int nPosY, int nWidth, int nHeight, int nItemSpacing, int nDefaultColor, int nDefaultFont, fpListBoxItemActivated pfnOnItemActivated, bool bTallRows) {
     pfnEHHandlerRoutine pSehHandler = SehHandler_6ca263; // steer-ok: generated form, kept as emitted
     void* pPrevSehFrame = ExceptionList;

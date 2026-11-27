@@ -391,6 +391,7 @@ int Unreferenced_00446ca0() {
 
 // Returns gszCurrentChannelName, the name of the chat channel last joined (copied there by the "You have joined channel: %s" handler COMCALLBACK_HandleChannelError).
 // Provenance: asm 00446cf0 (MOV EAX,0x798d30); its one caller prefills the Create/Join Channels name edit box with it.
+// 1.14d mac: 002d5842
 char * __stdcall COMCALLBACK_GetCurrentChannelName() {
     return gszCurrentChannelName;
 }
@@ -1052,6 +1053,7 @@ BOOL __stdcall CHATDLG_OpenChatCommandsDialogRestoreFocus2(D2ControlMsg * pContr
     return 1;
 }
 
+// 1.14d mac: 002d5d27
 static int __fastcall PrintChannelText(char * szText, int32_t nColor) {
     int i;
     uint16_t* pStr;
@@ -2223,6 +2225,7 @@ BOOL __fastcall COMCALLBACK_OnChannelUserJoinedCallback(uint32_t dwStatusFlags, 
 }
 
 // Removes user from Battle.net channel list. Searches linked list for username match (strips clan tag *prefix for comparison), unlinks from list, displays "username has left the channel" message if gnNotifyEnabled flag set, clears channel view if was selected user, destroys character composite sprite, frees D2ChannelUserStrc memory, decrements global channel user count, formats updated channel title "Channel Name (N)" as Unicode, and refreshes UI. Returns after first match found.
+// 1.14d mac: 002d5a7a
 void __stdcall COMCALLBACK_RemoveChannelUser(char * szUsername) {
     char* pStar;
     char* pszNameScan;
@@ -2384,6 +2387,7 @@ BOOL __fastcall COMCALLBACK_HandleJoinedChannel(uint32_t dwCbArg1, uint32_t dwCb
     return 1;
 }
 
+// 1.14d mac: 002dca5f
 void __fastcall COMCALLBACK_RemoveUserFromList(char * nStrBase, uint32_t * pnCarryMask) {
     uint32_t nBitMask = 1;
     *pnCarryMask = 0;
@@ -2476,57 +2480,6 @@ int __fastcall COMCALLBACK_CompareUserNames(char * szName1, char * szName2) {
     char* pszNameB = pszStarB ? pszStarB + 1 : szName2;
     char* pszNameA = pszStarA ? pszStarA + 1 : szName1;
     return strcmp(pszNameA, pszNameB);
-}
-
-// 1.14d mac: 002d5a7a
-BOOL __fastcall COMCALLBACK_RemoveUserFromChannelList(uint32_t dwCbArg1, uint32_t dwCbArg2, char * szUsername, char * szText) {
-    uint16_t wszTitle[578];
-    char szTitle[256];
-    char szLeftText[500];
-    D2ChannelUserStrc* pPreviousUser = 0;
-    D2ChannelUserStrc** ppLink = &gpChannelUserListHead;
-    D2ChannelUserStrc* pMemoryToFree;
-    while ((pMemoryToFree = *ppLink) != 0) {
-      if (COMCALLBACK_CompareUserNames(pMemoryToFree->szUsername, szUsername) == 0) {
-        if (gnNotifyEnabled) {
-          char* szName = pMemoryToFree->szUsername;
-          if (pMemoryToFree->szFormattedName[0]) {
-            szName = pMemoryToFree->szFormattedName;
-          }
-
-          sprintf(szLeftText, "%s has left the channel.", szName);
-          PrintChannelText(szLeftText, 5);
-        }
-
-        D2ChannelUserStrc* pNext = *(&pMemoryToFree->pNext);
-        if (pPreviousUser) {
-          pPreviousUser->pNext = pNext;
-          pNext = gpChannelUserListHead;
-        }
-
-        gpChannelUserListHead = pNext;
-        if (gpCurrentChatRoomContext == pMemoryToFree) {
-          COMCALLBACK_ClearChannelListView();
-        }
-
-        D2Win::Src::D2Comp::D2COMP_DestroyCompositeUnit(pMemoryToFree->pComposite, 1);
-        pMemoryToFree->pComposite = 0;
-        D2_FREE_AT(pMemoryToFree, ".\\Src\\ComCallback.cpp", 0x7fe);
-        break;
-      }
-
-      pPreviousUser = pMemoryToFree;
-      ppLink = &pMemoryToFree->pNext;
-    }
-
-    gnChannelUserCount--;
-    sprintf(szTitle, "%s (%d)", gszCurrentChannelName, gnChannelUserCount);
-    memset(wszTitle, 0, sizeof(wszTitle));
-    D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszTitle, szTitle, 0x240);
-    ChatDlg::FORMS_DisplayBattleNetNews(wszTitle);
-    COMCALLBACK_ScrollChannelUserList(0);
-    COMCALLBACK_UpdateChannelUserList();
-    return 1;
 }
 #endif
 

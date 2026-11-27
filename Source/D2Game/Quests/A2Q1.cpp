@@ -31,6 +31,7 @@ typedef BOOL (__fastcall *fpExecuteOnUnitFunction)(::SGAMEDATA * pGame, D2UnitSt
 namespace D2Game::Quests::QUESTS::A2Q1 {
 
 // A2Q1: send the act-2 "quest update" UI/log notification (event 8) to a player, but only when the quest is in a finished-ish state that hasn't yet been surfaced. Fires only if (Completed OR FinishedInPreviousGame) AND NOT JustCompleted AND NOT CannotCompleteQuestInGame. Otherwise returns without notifying. Used as the broadcast callback when transitioning to Completed/RewardAwaits.
+// 1.14d mac: 00222db2
 BOOL __fastcall Q09_NotifyRadamentComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];

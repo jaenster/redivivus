@@ -581,6 +581,7 @@ static uint32_t __stdcall CUNIT_CalculateSpriteBounds(uint32_t nFrame, uint32_t 
 namespace D2Client {
 
 // SelectProc=2 handler: target must be a consumable corpse (basic check). Forwards to D2CheckIfCorpseIsConsumable(pTargetUnit, bCheckDead=0). pUnit (ECX) is the caster and is not read; pTargetUnit (EDX) is the unit under the cursor, which SKILL_CheckActiveSkillSelectProc puts in EDX (00464335) and SKILL_ExecuteSelectProc passes through to the CALL at 004642f1.
+// 1.14d mac: 000fe8a4
 int __fastcall SKILL_SelectProc_IsCorpseConsumableBasic(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
     uint32_t bConsumable = D2Common::Skills::D2CheckIfCorpseIsConsumable(pTargetUnit, 0);
     return bConsumable;
@@ -627,6 +628,7 @@ int __fastcall SKILL_SelectProc_IsConvertibleCorpse(D2UnitStrc * pUnit, D2UnitSt
 namespace D2Client::UNIT::CUnit {
 
 // Calls the skill's SelectProc handler with ECX = pUnit (the caster, loaded at 004642e7) and EDX = pTargetUnit, which is never written here and reaches the handler unchanged (1.14d asm).
+// 1.14d mac: 00100691
 static uint32_t __stdcall SKILL_ExecuteSelectProc(D2UnitStrc * pUnit, eD2Skills eSkill, D2UnitStrc * pTargetUnit) {
     // Static local variables (originally global data)
     static SkillSelectProcFn g_aSkillSelectProcHandlers[7] = { nullptr, &D2Client::SKILL_SelectProc_IsSelectableCorpse2, &D2Client::SKILL_SelectProc_IsCorpseConsumableBasic, &D2Client::SKILL_SelectProc_IsConvertibleCorpse, &D2Client::SKILL_SelectProc_IsCorpseValidForRevive, &D2Client::SKILL_SelectProc_IsSelectableCorpse, &D2Client::SKILL_SelectProc_CanReviveMonster }; D2_STATIC_GUARD(g_aSkillSelectProcHandlers, "D2Client::UNIT::CUnit::SKILL_ExecuteSelectProc::g_aSkillSelectProcHandlers");
@@ -782,6 +784,7 @@ static uint32_t __stdcall SKILL_IsSequenceInputReady(D2UnitStrc * pUnit, D2Skill
 }
 
 // Returns TRUE if the player unit's current animation mode allows an incoming skill-interrupt. Returns FALSE immediately if the player is holding a cursor item. Blocks interrupts during Death, GetHit, Attack, Block, Cast, Throw, Kick, Dead, KnockBack, and class-specific Skill modes (Paladin Skill1, Assassin Skill2, Barb/Assassin/Druid Skill3-4). For Sequence mode, delegates to SKILL_IsSequenceInputReady.
+// 1.14d mac: 000ffac9
 BOOL __fastcall PlayerCanBeInterrupted(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
     if (D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pUnit->pInventory)) {
       return 0;
@@ -2342,6 +2345,7 @@ D2UnitStrc * __fastcall UNIT_CreateWarp(int32_t nUnitGUID, int32_t nClassId, int
 
 // Allocates and fully initialises a new player unit: sets class/GUID/expansion flag, finds the room at (nX,nY), seeds the unit RNG from the room seed, calls JoinRoomSetup + WALL2_InitUnitGfx + UpdateAnimSpeed, finalises insertion into the hash table, then sets the player name. Returns the new unit or null on failure.
 // @sourcefile .\UNIT\CUnit.cpp
+// 1.14d mac: 000fd004
 D2UnitStrc * __fastcall UNIT_CreatePlayer(int32_t nUnitGuid, int32_t nClassId, int32_t nX, int32_t nY, char * szName) {
     eD2LevelId eLevel;
     uint32_t nNewSeed;

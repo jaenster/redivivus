@@ -556,6 +556,7 @@ BOOL __fastcall Q27_PropagateCompletionToParty(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // [A4Q3 Terror's End] Per-player notify: send quest-update packet (quest 0x17) only when the quest is Completed/FinishedInPreviousGame AND freshly transitioned (JustCompleted or CannotCompleteQuestInGame); otherwise no-op. Used as the broadcast callback for QUEST_SetStateAndBroadcast.
+// 1.14d mac: 002396e4
 BOOL __fastcall Q27_PlayerNotifyCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];

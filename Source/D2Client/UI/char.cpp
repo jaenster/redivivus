@@ -906,6 +906,7 @@ static void __stdcall DRAW_UI_StatWindow_II(int32_t bUpperEnabled, int32_t bLowe
     return;
 }
 
+// 1.14d mac: 0009ca3d
 void __stdcall DRAW_UI_StatWindow_I() {
     // Static local variables (originally global data)
     static D2StatPanelRowStrc gaStatPanelRows[18] = {

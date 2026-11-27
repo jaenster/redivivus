@@ -2748,6 +2748,7 @@ void __fastcall UNITSND_ResolveSoundFromFlags(D2UnitStrc * pUnit, uint32_t nAnim
     }
 }
 
+// 1.14d mac: 00128d8f
 int __fastcall UNITSND_GetHitSound(D2UnitStrc * pSoundTable, uint32_t nAnimMode) {
     if (!pSoundTable) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc08);
@@ -2788,6 +2789,7 @@ int __fastcall UNITSND_GetHitSound(D2UnitStrc * pSoundTable, uint32_t nAnimMode)
 
 // Returns the address of pUnit's client-side pUnitSfxData list head (+0x78); halts (UnitSnd.cpp line 3116, ptUnit) on NULL.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
+// 1.14d mac: 00128e04
 static inline void * * __stdcall UNITSND_GetSfxDataListHead(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc2c);
@@ -2901,6 +2903,7 @@ void __fastcall UNITSND_UpdatePositionalAudio(D2UnitStrc * pUnit) {
 
 // Returns pUnit's client-side bUnitSfx byte (+0x70); halts (UnitSnd.cpp line 3215, ptUnit) on NULL.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
+// 1.14d mac: 00129bff
 static inline int __stdcall UNITSND_GetUnitSfxFlag(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc8f);
@@ -2921,6 +2924,7 @@ static void __stdcall UNITSND_Unused_Placeholder_3(uint8_t bParam, D2UnitStrc * 
 
 // Returns pUnit's client-side nSfxMode (+0x74); halts (UnitSnd.cpp line 3237) on NULL.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
+// 1.14d mac: 00129c3d
 static uint32_t __stdcall UNITSND_GetSfxMode(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xca5);

@@ -135,6 +135,7 @@ static void AnimateTile(D2RoomExStrc * pRoomEx) {
     }
 }
 
+// 1.14d mac: 0014d937 D2Common::Drlg::DrlgAnim::AnimateTiles
 void __fastcall AnimateTiles(D2RoomExStrc * pRoomEx) {
     int nIndex;
     for (nIndex = 0; nIndex < pRoomEx->nDrlgRoomsExNearCount; nIndex++) {

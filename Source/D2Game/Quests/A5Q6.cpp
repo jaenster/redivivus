@@ -42,6 +42,7 @@ namespace D2Game::Quests::QUESTS::A5Q6 {
 
 // A5Q6 Eve of Destruction (final quest: kill Baal in the Worldstone Chamber). [orig: BaalsDeathNotificator]
 // Per-player iterate callback: pushes the quest UI/journal update (quest id 0x24) to a player IF their record is in a "Baal dealt with" state. Sends update only when quest is Completed OR FinishedInPreviousGame, but NOT yet flagged JustCompleted and NOT CannotCompleteQuestInGame; otherwise returns without sending. Used to sync Baal-death quest bits to clients.
+// 1.14d mac: 00243b98
 BOOL __fastcall SendQuestBitsIfNeeded(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     BOOL _bQuestState;
     bool bQuestState;

@@ -42,6 +42,7 @@ BOOL __stdcall DRAW_ShouldDrawEdges(int32_t nParam) {
 
 // TRUE when left <= nX < right and top <= nY < bottom; halts (dFloor.cpp line 118, ptRect) on a NULL rect.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
+// 1.14d mac: 0005fdfe
 static BOOL __stdcall DFLOOR_IsPointInRect(RECT * pRect, int nX, int nY) {
     if (!pRect) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x76);

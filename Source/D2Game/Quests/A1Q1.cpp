@@ -26,6 +26,7 @@ namespace D2Game::Quests::QUESTS::A1Q1 {
 
 // A1Q1 (Den of Evil) -- "should I push the quest log/journal update to this player?" predicate, run via QUEST_SetStateAndBroadcast.
 // Reads the player's QUEST_DenOfEvil record. Returns 0 (suppress the per-player journal/state broadcast) when the quest is already fully resolved for that player: i.e. when (Completed OR FinishedInPreviousGame) AND NOT JustCompleted AND NOT CannotCompleteQuestInGame. Otherwise it calls QUEST_SendQuestUpdateToPlayer to refresh that client's quest log. This is the broadcast-filter handed to every QUEST_SetStateAndBroadcast call in this file.
+// 1.14d mac: 002217dc
 BOOL __fastcall MarkCompleteQuest(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];

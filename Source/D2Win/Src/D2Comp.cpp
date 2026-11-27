@@ -1828,6 +1828,7 @@ static D2CompCofListNodeStrc * D2COMP_FindCOFEntryByModeAndWeapon(D2CompCofListN
     return pCOFEntry;
 }
 
+// 1.14d mac: 0003ec2a
 static uint8_t * __stdcall D2COMP_GetOrLoadCOF(D2CompCofListNodeStrc * * ppCOFList, int32_t nPlayerClassId, int32_t nAnimMode, uint32_t dwWeaponClassToken) {
     if (!ppCOFList) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4ca);

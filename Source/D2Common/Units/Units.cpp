@@ -1572,6 +1572,7 @@ void __stdcall GetFrameMetrics(D2UnitStrc * pUnit, int * pCurrentFrame, int * pF
     *pFrameCount = pUnit->nFrameCount;
 }
 
+// 1.14d mac: 001904df
 void __stdcall SetAnimActionFrame(D2UnitStrc * pUnit, int32_t nFrame) {
     if (!pUnit) {
       return;

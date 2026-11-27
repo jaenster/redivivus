@@ -3811,6 +3811,7 @@ uint16_t __fastcall NPCMENU_FindNextUnhandledMessage(int16_t nMsgTypeToFind) {
     } while (true);
 }
 
+// 1.14d mac: 000cb42d
 int __fastcall NPCMENU_ScrollCompleteShowNextMessage(void * pUserParam, uint32_t nReason, int bDismissed) {
     D2UnitStrc* pDVar1;
     if (gnNpcMenuActiveMode == '\x01') {
@@ -3884,6 +3885,7 @@ static bool inline_NPC_IsInteractableSideNpc(int32_t nNpcClassId) {
     return true;
 }
 
+// 1.14d mac: 000cb17c
 int __stdcall NPCMENU_ShowSelectedDialogOption() {
     D2GSPacketSrv0x27_TextStrc* pOverheadText;
     int32_t nSelectedIndex = Dialog::DIALOG_GetSelectedIndex(Dialog::gpNpcGossipDialog);
@@ -4670,6 +4672,7 @@ void __fastcall NPCMENU_OnItemPutInContainer(int32_t nUnitGUID) {
     NPCMENU_HandleTransactionComplete();
 }
 
+// 1.14d mac: 000c872d
 void __fastcall NPCMENU_OnItemPutInBelt(int32_t nUnitGUID) {
     if (!(gnNpcMenuActiveContainer && !D2GSPacketSrv0x2A_007c0d87.nResult && nUnitGUID == D2GSPacketSrv0x2A_007c0d87.nUnitGUID)) {
       return;
@@ -5137,6 +5140,7 @@ int __stdcall NPCMENU_IsAnyNpcDialogOpen() {
 }
 
 // Returns gnNpcMenuShopMode.
+// 1.14d mac: 000c9031
 int __stdcall NPCMENU_GetCurrentShopMode() {
     return gnNpcMenuShopMode;
 }
@@ -5185,6 +5189,7 @@ int __stdcall NPCMENU_ItemServiceOptionCallback() {
 
 // Charsi (monstats 154) menu row 3: adds option string 4017 (Upgrade, "Imbue") with the item-service callback 004b35b0.
 // NPC quest table entry 3: quest 3, state flag 1 (Tools of the Trade).
+// 1.14d mac: 000cba08
 int __stdcall NPCMENU_EnableCharsiImbueOption() {
     NPC::D2NpcMenuOptions[3].nOptionsCount = 4;
     NPC::D2NpcMenuOptions[3].nOptionCallback[2] = NPCMENU_ItemServiceOptionCallback;
@@ -5194,6 +5199,7 @@ int __stdcall NPCMENU_EnableCharsiImbueOption() {
 
 // Larzuk (monstats 511) menu row 39: adds option string 22748 (Addsocketsui) with the item-service callback 004b35b0.
 // NPC quest table entry 5: quest 35, state flag 1 (Siege on Harrogath).
+// 1.14d mac: 000cba66
 int __stdcall NPCMENU_EnableLarzukSocketOption() {
     NPC::D2NpcMenuOptions[0x27].nOptionsCount = 4;
     NPC::D2NpcMenuOptions[0x27].nOptionCallback[2] = NPCMENU_ItemServiceOptionCallback;
@@ -5203,6 +5209,7 @@ int __stdcall NPCMENU_EnableLarzukSocketOption() {
 
 // Anya (monstats 512) menu row 41: adds option string 22749 (Personalizeui) with the item-service callback 004b35b0.
 // NPC quest table entry 6: quest 38, state flag 1 (Betrayal of Harrogath).
+// 1.14d mac: 000cba95
 int __stdcall NPCMENU_EnableAnyaPersonalizeOption() {
     NPC::D2NpcMenuOptions[0x29].nOptionsCount = 5;
     NPC::D2NpcMenuOptions[0x29].nOptionCallback[3] = NPCMENU_ItemServiceOptionCallback;
@@ -5622,6 +5629,7 @@ void __stdcall NPCMENU_CloseStashUI() {
     ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
 }
 
+// 1.14d mac: 000cb060
 int __stdcall NPCMENU_CloseGossipDialog() {
     if (gnNpcMenuActiveMode != '\0') {
       return 0;
@@ -5639,6 +5647,7 @@ int __stdcall NPCMENU_CloseGossipDialog() {
 }
 
 // Returns 0 while gnNpcMenuActiveMode is set. Otherwise frees gpNpcActionConfirmDialog, sets the NPC UI state to none, resets inventory hover, closes the NPC interaction and resets UI_NPCMENU; returns 1. fpDialogFunc2 of the action-confirm dialog, also called by its OK handler.
+// 1.14d mac: 000cbe7a
 int __stdcall NPCMENU_CloseConfirmDialogAndInteraction() {
     if (gnNpcMenuActiveMode != '\0') {
       return 0;
@@ -5655,6 +5664,7 @@ int __stdcall NPCMENU_CloseConfirmDialogAndInteraction() {
     return 1;
 }
 
+// 1.14d mac: 000cb509
 static void __stdcall NPCMENU_SendCainIdentifyItems(char bUseGossip, int32_t nSpeechIndex) {
     D2UnitStrc* pNpcUnit;
     pNpcUnit = _Interaction::bInteractingWithNpc ? UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER) : 0;
@@ -5701,6 +5711,7 @@ BOOL __stdcall NPCMENU_ShowCurrentGossipCallback() {
     return 1;
 }
 
+// 1.14d mac: 000cb0a8
 int __stdcall NPCMENU_CainIdentifyCallback() {
     int nPlayerClass;
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
@@ -5745,6 +5756,7 @@ int __stdcall NPCMENU_CainIdentifyCallback() {
 
 // OK handler of the NPC action confirm dialog (NPCMENU_ShowNpcActionConfirmDialog).
 // Closes the dialog and the NPC interaction (NPCMENU_EmptyDrawCallback2), then sends C->S 0x38 (action 0, NPC GUID, 0). For Akara this performs the respec. Returns 1.
+// 1.14d mac: 000cbec2
 BOOL __stdcall NPCMENU_ConfirmDialogOkCallback() {
     NPCMENU_CloseConfirmDialogAndInteraction();
     GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT(0x38, 0, _Interaction::nCurrentInteractedNpcGUID, 0);
@@ -5887,6 +5899,7 @@ void DRAW_UI_NPC_INTERACTION() {
     return;
 }
 
+// 1.14d mac: 000c9ae0
 int __stdcall NPCMENU_GambleDrawCallback() {
     if (Dialog::gpNpcInteractionDialog) {
       Dialog::FreeDialogStrc(Dialog::gpNpcInteractionDialog);
@@ -5900,6 +5913,7 @@ int __stdcall NPCMENU_GambleDrawCallback() {
     return 1;
 }
 
+// 1.14d mac: 000c9b17
 int __stdcall NPCMENU_GambleMouseCallback() {
     if (Dialog::gpNpcInteractionDialog) {
       Dialog::FreeDialogStrc(Dialog::gpNpcInteractionDialog);
@@ -5913,6 +5927,7 @@ int __stdcall NPCMENU_GambleMouseCallback() {
     return 1;
 }
 
+// 1.14d mac: 000cc282
 int __stdcall NPCMENU_RepairDrawCallback() {
     if (Dialog::gpNpcMainMenuDialog) {
       Dialog::FreeDialogStrc(Dialog::gpNpcMainMenuDialog);
@@ -5927,6 +5942,7 @@ int __stdcall NPCMENU_RepairDrawCallback() {
     return 1;
 }
 
+// 1.14d mac: 000cc2dc
 int __stdcall NPCMENU_RepairMouseCallback() {
     if (Dialog::gpNpcMainMenuDialog) {
       Dialog::FreeDialogStrc(Dialog::gpNpcMainMenuDialog);
@@ -6356,6 +6372,7 @@ void __stdcall NPCMENU_OpenInteraction(D2UnitStrc * pUnit) {
 
 // Warriv's "Go East" menu option (string 3382 WarrivMenu1b): frees the NPC dialog, resets hover state, closes the NPC interaction, closes UI_NPCMENU, and sends C->S 0x38 (action 0, npc GUID, level 40 Lut Gholein). Returns 1.
 // Evidence: stored into D2NpcMenuOptions row 13 (npc 155 Warriv) slot 1 by NPCMENU_EnableWarrivGoEastOption; PUSH 0x28 = level 40; same shape as 004b52c0 (Warriv act 2, string 3383 WarrivMenu1c, level 1).
+// 1.14d mac: 000cbf48
 int __stdcall NPCMENU_WarrivGoEastOptionCallback() {
     if (Dialog::gpNpcInteractionDialog) {
       Dialog::FreeDialogStrc(Dialog::gpNpcInteractionDialog);
@@ -6372,6 +6389,7 @@ int __stdcall NPCMENU_WarrivGoEastOptionCallback() {
 
 // Meshif's "Sail East" menu option (string 3384 MeshifMenuEast): frees the NPC dialog, resets hover state, closes the NPC interaction, closes UI_NPCMENU, and sends C->S 0x38 (action 0, npc GUID, level 75 Kurast Docks). Returns 1.
 // Evidence: stored into D2NpcMenuOptions row 15 (npc 210 Meshif) slot 1 by NPCMENU_EnableMeshifSailEastOption; PUSH 0x4b = level 75; same shape as 004b5260 (Meshif act 3, string 3385 MeshifMenuWest, level 40).
+// 1.14d mac: 000cbf05
 int __stdcall NPCMENU_MeshifSailEastOptionCallback() {
     if (Dialog::gpNpcInteractionDialog) {
       Dialog::FreeDialogStrc(Dialog::gpNpcInteractionDialog);
@@ -6388,6 +6406,7 @@ int __stdcall NPCMENU_MeshifSailEastOptionCallback() {
 
 // Tyrael's "Travel to Harrogath" menu option (string 22738 Travel_To_Harrogath): frees the NPC dialog, resets hover state, closes the NPC interaction, closes UI_NPCMENU, and sends C->S 0x38 (action 0, npc GUID, level 109 Harrogath). Returns 1.
 // Evidence: stored into D2NpcMenuOptions row 21 (npc 367 Tyrael) slot 1 by NPCMENU_EnableTyraelTravelToHarrogathOption; PUSH 0x6d = level 109.
+// 1.14d mac: 000cbb31
 int __stdcall NPCMENU_TyraelTravelToHarrogathOptionCallback() {
     if (Dialog::gpNpcInteractionDialog) {
       Dialog::FreeDialogStrc(Dialog::gpNpcInteractionDialog);
@@ -6405,6 +6424,7 @@ int __stdcall NPCMENU_TyraelTravelToHarrogathOptionCallback() {
 // Meshif's (Act 3, monstats 264 meshif2) "sail west" (3385 MeshifMenuWest) option callback: D2NpcMenuOptions row 30, slot 1.
 // Frees the NPC interaction dialog, resets the NPC UI state, closes the NPC interaction and the NPC menu UI flag, then sends C->S 0x38 (action 0, NPC GUID, level 40 = Lut Gholein) to travel. Returns 1.
 // Same body as the other travel option callbacks; only the level id differs.
+// 1.14d mac: 000ca8ea
 int __stdcall NPCMENU_MeshifSailWestOptionCallback() {
     if (Dialog::gpNpcInteractionDialog) {
       Dialog::FreeDialogStrc(Dialog::gpNpcInteractionDialog);
@@ -6421,6 +6441,7 @@ int __stdcall NPCMENU_MeshifSailWestOptionCallback() {
 
 // Warriv's (Act 2, monstats 175 warriv2) "go west" (3383 WarrivMenu1c) option callback: D2NpcMenuOptions row 14, slot 1.
 // Frees the NPC interaction dialog, resets the NPC UI state, closes the NPC interaction and the NPC menu UI flag, then sends C->S 0x38 (action 0, NPC GUID, level 1 = Rogue Encampment) to travel. Returns 1.
+// 1.14d mac: 000ca70e
 int __stdcall NPCMENU_WarrivGoWestOptionCallback() {
     if (Dialog::gpNpcInteractionDialog) {
       Dialog::FreeDialogStrc(Dialog::gpNpcInteractionDialog);
@@ -6754,6 +6775,7 @@ int __stdcall NPCMENU_ConfirmDialogCancelCallback() {
 // Builds the NPC talk dialog (gpNpcGossipDialog) titled with the localized string nTitleStringId, for D2NPCSpeech[nSpeechIdx]: "introduction" (3399, unless the entry has bNoIntro), "gossip" (3395), the overhead message log, "about the merchants" (3392) for NPC 201, "Horadric Cube" (2231) for the Cain classes, and "cancel" (3400).
 // Halts if the talk dialog is already open. Sends no packet.
 // void __stdcall, two stack arguments (RET 8). Callers: NPCMENU_TalkOptionCallback and NPCMENU_RequestGamble, both with 3381 "talk".
+// 1.14d mac: 000cabce
 void __stdcall NPCMENU_ShowTalkDialog(uint16_t nTitleStringId, int32_t nSpeechIdx) {
     D2UnitStrc* pPlayerUnit_lcl;
     D2UnitStrc* pSocketedItem;
@@ -6901,6 +6923,7 @@ int __stdcall NPCMENU_MercListDrawCallback() {
     return 1;
 }
 
+// 1.14d mac: 000c9d69
 int __stdcall NPCMENU_BuildMercHireMenu() {
     uint8_t bVar1;
     BOOL bIsExpansion;
@@ -7163,6 +7186,7 @@ void __fastcall NPCMENU_HandleTradePacket(D2GSPacketSrv0x2A * pPacket) {
 
 // Kashya (monstats 150) menu row 11: adds option string 3397 (NPCMenuHire, "Hire") with callback NPCMENU_BuildMercHireMenu (count 2->3). Returns 1.
 // Called from the NPC quest table (entry 2: quest 2, state flag 0, Sisters' Burial Grounds) and from NPCMENU_HandleMenuSelection when the player level is 8 or more.
+// 1.14d mac: 000cb97b
 int __stdcall NPCMENU_EnableKashyaHireOption() {
     NPC::D2NpcMenuOptions[0xb].nOptionsCount = 3;
     NPC::D2NpcMenuOptions[0xb].nOptionCallback[1] = NPCMENU_BuildMercHireMenu;
@@ -7282,6 +7306,7 @@ static BOOL __stdcall NPCMENU_ConfigureMenuOption(BOOL bAddTradeOption, int32_t 
 
 // Warriv (monstats 155) menu row 13: adds option string 3382 (WarrivMenu1b, "Go East") with callback 004b5140.
 // NPC quest table entry 0: quest 6, state flag 0 (Sisters to the Slaughter).
+// 1.14d mac: 000cb9aa
 int __stdcall NPCMENU_EnableWarrivGoEastOption() {
     NPC::D2NpcMenuOptions[0xd].nOptionsCount = 3;
     NPC::D2NpcMenuOptions[0xd].nOptionCallback[1] = NPCMENU_WarrivGoEastOptionCallback;
@@ -7291,6 +7316,7 @@ int __stdcall NPCMENU_EnableWarrivGoEastOption() {
 
 // Meshif (monstats 210) menu row 15: adds option string 3384 (MeshifMenuEast) with callback 004b51a0.
 // NPC quest table entry 1: quest 14, state flag 0 (The Seven Tombs).
+// 1.14d mac: 000cb9d9
 int __stdcall NPCMENU_EnableMeshifSailEastOption() {
     NPC::D2NpcMenuOptions[0xf].nOptionsCount = 3;
     NPC::D2NpcMenuOptions[0xf].nOptionCallback[1] = NPCMENU_MeshifSailEastOptionCallback;
@@ -7300,6 +7326,7 @@ int __stdcall NPCMENU_EnableMeshifSailEastOption() {
 
 // Qual-Kehk (monstats 515) menu row 43: adds option string 3397 (NPCMenuHire) with callback NPCMENU_BuildMercHireMenu.
 // NPC quest table entry 7: quest 36, state flag 0 (Rescue on Mount Arreat).
+// 1.14d mac: 000cbac4
 int __stdcall NPCMENU_EnableQualKehkHireOption() {
     NPC::D2NpcMenuOptions[0x2b].nOptionsCount = 3;
     NPC::D2NpcMenuOptions[0x2b].nOptionCallback[1] = NPCMENU_BuildMercHireMenu;
@@ -7309,6 +7336,7 @@ int __stdcall NPCMENU_EnableQualKehkHireOption() {
 
 // Tyrael (monstats 367) menu row 21: if CLIENT_CheckExpansion, adds option string 22738 (Travel_To_Harrogath) with callback 004b5200. Always returns 1.
 // NPC quest table entry 8: quest 28, state flag 0.
+// 1.14d mac: 000cbaf3
 int __stdcall NPCMENU_EnableTyraelTravelToHarrogathOption() {
     BOOL BVar1 = GAME::Game::CLIENT_CheckExpansion();
     if (BVar1) {
@@ -7551,6 +7579,7 @@ void __fastcall SetPlayersMercInfo(uint16_t wMercNameId, int32_t nReviveCost) {
     NPCMENU_ConfigureMenuOption(0, 0x2b);
 }
 
+// 1.14d mac: 000c924e
 void __stdcall NPCMENU_RefreshMenuDialog() {
     if (!gpNpcMenuMercListBox) {
       return;
@@ -7651,6 +7680,7 @@ int __fastcall NPCMENU_OnScrollComplete(void * pUserParam, int32_t nReason, int3
 // "talk" (3381 TalkMenu) option callback: slot 0 of every NPC menu row that has a talk option; also used by NPCMENU_OpenInteractionDialog.
 // If the player is interacting with an NPC that still exists: frees the interaction dialog, sets the NPC UI state to 1, picks the NPC's D2NPCSpeech entry (CheckSpeachVersusInteractedUnit), stores it in g_nNpcTradeMenuState and opens the talk dialog (NPCMENU_ShowTalkDialog(3381, speech index)). Returns 1.
 // Otherwise closes the interaction and returns 0. Sends no packet.
+// 1.14d mac: 000c9b4e
 int __stdcall NPCMENU_TalkOptionCallback() {
     int nNpcSpeechIdx;
     D2UnitStrc* pNpcUnit;
@@ -7700,6 +7730,7 @@ int __stdcall NPCMENU_AkaraRespecOptionCallback() {
 
 // Akara (monstats 148) menu row 0: adds option string 11168 (respec) with callback NPCMENU_AkaraRespecOptionCallback.
 // NPC quest table entry 4: quest 1, state flag 0 (Den of Evil).
+// 1.14d mac: 000cba37
 int __stdcall NPCMENU_EnableAkaraRespecOption() {
     NPC::D2NpcMenuOptions[0].nOptionsCount = 4;
     NPC::D2NpcMenuOptions[0].nOptionCallback[2] = NPCMENU_AkaraRespecOptionCallback;

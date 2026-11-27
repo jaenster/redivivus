@@ -53,6 +53,7 @@ BOOL __stdcall CreateWindowWithChecks(BOOL bWindowed, int32_t nResolutionMode) {
     return 1;
 }
 
+// 1.14d mac: 0004a28c
 int __stdcall INIT_SetWndProcBGlobalPointer(::WndProcB pWndProcB) {
     D2GFX::pWndProcB = pWndProcB;
     return 1;

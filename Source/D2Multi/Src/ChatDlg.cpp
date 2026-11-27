@@ -2424,6 +2424,7 @@ void __stdcall CHATDLG_DeleteCriticalSection() {
 }
 
 // @sourcefile .\Src\ChatDlg.cpp
+// 1.14d mac: 002d4627
 static D2ChatDlgUnknown_0x10 * __stdcall StoreChatMsg(int32_t nColor, int32_t nLength, char * pString) {
     D2ChatDlgUnknown_0x10* pNode = D2_NEW_AT(D2ChatDlgUnknown_0x10, ".\\Src\\ChatDlg.cpp", 0xc1d);
     memset(pNode, 0, sizeof(*pNode));
@@ -2577,6 +2578,7 @@ int __fastcall CHATDLG_DisplayTimestampedMessage(uint32_t nUnixTime, char * pszM
 }
 
 // @sourcefile .\Src\ChatDlg.cpp
+// 1.14d mac: 002cfbd1
 int __stdcall CHATDLG_EnqueueClearMessage() {
     D2ChatDlgUnknown_0x10* pNode = D2_NEW_AT(D2ChatDlgUnknown_0x10, ".\\Src\\ChatDlg.cpp", 0xc1d);
     memset(pNode, 0, sizeof(*pNode));
@@ -2644,6 +2646,7 @@ void __stdcall CHATDLG_UpdateChannelOkButtonState() {
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpCtlChannelOkButton, bHasText);
 }
 
+// 1.14d mac: 002d4558
 static int32_t __stdcall someStrCompare(char * szText1, char * szText2) {
     int nUpper1;
     int nUpper2;
@@ -3350,6 +3353,7 @@ int __stdcall CHATDLG_CancelGameCreate() {
     return 1;
 }
 
+// 1.14d mac: 002d45de
 static void __stdcall CHATDLG_ParseCommandArgument(int32_t nMaxLen, char * szSource, char * szDest) {
     char* pszSpace = Storm::Source::SSTR::SStrChr(szSource, ' ');
     if (pszSpace) {
@@ -3645,6 +3649,7 @@ void __fastcall OOGMENU_JoinGame(int16_t nJoinId, char * szGameName, char * szPa
 
 // Change callback of gpCtlChannelNameEditBox: calls CHATDLG_UpdateChannelOkButtonState and returns 1.
 // Provenance: asm 00440110..0044011a (RET 4); installed at 00441097 in OOGUTIL_OpenChannelDialog.
+// 1.14d mac: 002d474b
 int __stdcall EDITBOX_Cb_CHATDLG_UpdateChannelOkButtonState(void * pUnknown) {
     CHATDLG_UpdateChannelOkButtonState();
     return 1;
@@ -4366,6 +4371,7 @@ int __fastcall CHATDLG_RunChatLobbyScreen(D2IniConfigStrc * pD2IniConfig) {
 }
 
 // Handles the /reply command for out-of-game chat. Parses the reply target from gszOogReplyCommandBuffer, validates token count is exactly 2 (command + message), and formats a whisper message ("/w *target message") to send via the network interface. Shows error messages if no reply target exists or if command syntax is incorrect.
+// 1.14d mac: 002d42cf
 static uint32_t OOGUTIL_HandleReplyCommand(char * szText1, char * szText2) {
     BOOL BVar1;
     int nTokenCount;
@@ -4444,6 +4450,7 @@ BOOL __stdcall CHATDLG_OnPressLadderClassicHardcore(D2ControlMsg * pControlMsg) 
     return 1;
 }
 
+// The Mac build inlines this into CHAT_SendOutOfGameMessage (1.14d mac: 002d269b).
 void __fastcall OOGUTIL_HandleChatCommands(char * szText) {
     bool bCmdResult;
     ::IgnoreList* ppIgnoreListThis;
@@ -4570,6 +4577,9 @@ void __fastcall OOGUTIL_HandleChatCommands(char * szText) {
               return;
             }
 
+#if !defined(_WIN32) && D2_OS_MAC
+            pNetworkUnknown->pfnSendJoinChannel(szChannelName, 0, 0);
+#endif
             OOGUtilities::OOGUTIL_JoinChannelAndDestroyForms(szChannelName);
             return;
           }
@@ -4670,251 +4680,5 @@ void StaticInit_gbChatLobbyInitialize() {
 
 static void * keep_0043e2e0 = (0 ? (CHATDLG_FreeChatMsgNode(*(void * * *)0), (void *)0) : (void *)0);
 static void * keep_0043f8a0 = (0 ? (SafeDefaultChannel(*(char * *)0), (void *)0) : (void *)0);
-
-#if !defined(_WIN32) && D2_OS_MAC
-// 1.14d mac: 002d4558
-static int __fastcall CHATDLG_CompareInputPrefix(char * szPrefix) {
-    char* pInput = OOGUtilities::gszOogChatInputBuffer;
-    size_t nInputLen = strlen(pInput);
-    size_t nPrefixLen = strlen(szPrefix);
-    int nResult = -1;
-    if (nPrefixLen <= nInputLen) {
-      nResult = 0;
-      if (nPrefixLen != 0) {
-        do {
-          int nUpperInput = toupper((int)*pInput);
-          int nUpperPrefix = toupper((int)*szPrefix);
-          if (nUpperInput != nUpperPrefix) {
-            if (nUpperInput == nUpperPrefix || nUpperInput - nUpperPrefix < 0) {
-              return -1;
-            }
-
-            return 1;
-          }
-
-          nPrefixLen--;
-          szPrefix++;
-          pInput++;
-        } while (nPrefixLen != 0);
-        nResult = 0;
-      }
-    }
-
-    return nResult;
-}
-
-// 1.14d mac: 002d45de
-static void __fastcall CHATDLG_GetInputArgument(char * szOut, int32_t nMaxLen) {
-    char* pszSpace = Storm::Source::SSTR::SStrChr(OOGUtilities::gszOogChatInputBuffer, ' ');
-    if (!pszSpace) {
-      *szOut = '\0';
-      return;
-    }
-
-    Storm::Source::SSTR::SStrCopy(szOut, pszSpace + 1, nMaxLen);
-}
-
-// 1.14d mac: 002d42cf
-static BOOL __fastcall CHATDLG_HandleReplyCommand(char * szCommand) {
-    uint16_t wszNobody[256];
-    uint16_t wszUsage[259];
-    char szDelimiter[4];
-    char szNobody[256];
-    char szWhisper[256];
-    char szUsage[256];
-    char szInputCopy[256];
-    char szCommandPrefix[256];
-    size_t nCommandLen = strlen(szCommand);
-    if (CHATDLG_CompareInputPrefix(szCommand) != 0) {
-      return 0;
-    }
-    if ((OOGUtilities::gszOogChatInputBuffer[nCommandLen] | 0x20) != 0x20) {
-      return 0;
-    }
-
-    uint16_t* pwszText;
-    if (!gszOogReplyCommandBuffer[0]) {
-      memset(wszNobody, 0, sizeof(wszNobody));
-      strcpy(szNobody, "Nobody to reply to!");
-      D2Lang::UTF8_ConvertToWideChar(wszNobody, szNobody, _countof(wszNobody));
-      pwszText = wszNobody;
-    } else {
-      sprintf(szCommandPrefix, "%s ", szCommand);
-      strcpy(szInputCopy, OOGUtilities::gszOogChatInputBuffer);
-      szDelimiter[0] = ' ';
-      szDelimiter[1] = '\0';
-      char* pToken = strtok(szInputCopy, szDelimiter);
-      int nTokenCount = 0;
-      while (pToken) {
-        nTokenCount++;
-        if (nTokenCount == 2) {
-          if (!pNetworkUnknown->pfnIsSocketConnected()) {
-            uint16_t* pwszError = D2Lang::StrTable::strtable::GetLocaleString(0x14e7);
-            UIMENU_DrawTitleOnCenterSmaller(pwszError, OOG::OOGUTIL_DrawCallback_SetModeAndClearMsgLoop);
-          } else {
-            sprintf(szWhisper, "/w *%s %s", gszOogReplyCommandBuffer, OOGUtilities::gszOogChatInputBuffer + (pToken - szInputCopy));
-            pNetworkUnknown->pfnSendChatCommand((uint8_t*)szWhisper);
-          }
-
-          return 1;
-        }
-
-        pToken = strtok(nullptr, szDelimiter);
-      }
-
-      memset(wszUsage, 0, sizeof(wszNobody));
-      sprintf(szUsage, "Correct usage is: %s (message)", szCommand);
-      D2Lang::UTF8_ConvertToWideChar(wszUsage, szUsage, _countof(wszNobody));
-      pwszText = wszUsage;
-    }
-
-    if (gpChatMessagesTextBox) {
-      D2Win::Src::D2WinTextBox::SetText(gpChatMessagesTextBox, pwszText, 1, false, 1);
-    }
-
-    return 1;
-}
-
-// 1.14d mac: 002d269b
-void CHATDLG_ProcessChatInput() {
-    uint16_t wszIgnoreResult[520];
-    uint16_t wszIgnoreFormat[520];
-    uint16_t wszNotify[256];
-    uint16_t wszName[34];
-    char szNotify[256];
-    char szName[17];
-    char szChannelName[32];
-    uint32_t aszAccountName[65];
-    uint16_t* pwszText;
-    char* szInput = OOGUtilities::gszOogChatInputBuffer;
-
-    if (szInput[0] != '/') {
-      if (!pNetworkUnknown->pfnIsSocketConnected()) {
-        uint16_t* pwszError = D2Lang::StrTable::strtable::GetLocaleString(0x14e7);
-        UIMENU_DrawTitleOnCenterSmaller(pwszError, OOG::OOGUTIL_DrawCallback_SetModeAndClearMsgLoop);
-        return;
-      }
-
-      pNetworkUnknown->pfnSendChatCommand((uint8_t*)szInput);
-      ComCallback::COMCALLBACK_BroadcastChatMessage(szInput);
-    } else {
-      memmove(gaChatDlgHistoryBuffer + 1, gaChatDlgHistoryBuffer, sizeof(gaChatDlgHistoryBuffer) - sizeof(gaChatDlgHistoryBuffer[0]));
-      strcpy((char*)gaChatDlgHistoryBuffer, szInput);
-      gnChatHistoryEntryCount++;
-      if (gnChatHistoryEntryCount > (int)_countof(gaChatDlgHistoryBuffer)) {
-        gnChatHistoryEntryCount = _countof(gaChatDlgHistoryBuffer);
-      }
-
-      if (!CHATDLG_HandleReplyCommand("/r") && !CHATDLG_HandleReplyCommand("/reply")) {
-        if (CHATDLG_CompareInputPrefix("/d2notify") == 0 && (szInput[9] | 0x20) == 0x20) {
-          if (CHATDLG_CompareInputPrefix("/d2notify") != 0) {
-            goto scroll_to_end;
-          }
-
-          uint32_t bWasEnabled = gnNotifyEnabled;
-          gnNotifyEnabled = gnNotifyEnabled == 0;
-          memset(wszNotify, 0, sizeof(wszNotify));
-          if (bWasEnabled == 0) {
-            strcpy(szNotify, "Player entering/leaving notifications are enabled.");
-          } else {
-            strcpy(szNotify, "Player entering/leaving notifications are disabled.");
-          }
-
-          D2Lang::UTF8_ConvertToWideChar(wszNotify, szNotify, sizeof(szNotify) + sizeof(szNotify));
-          pwszText = wszNotify;
-        } else if (CHATDLG_CompareInputPrefix("/ignorepersist") == 0) {
-          ::IgnoreList* pIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
-          IgnoreListVtable* pIgnoreVtbl = pIgnoreList->_vfptr;
-          ::IgnoreList* pIgnoreListThis = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
-          int32_t nPersistent = pIgnoreListThis->_vfptr->GetPersistentSetting(pIgnoreListThis);
-          pIgnoreVtbl->SavePersistentSetting(pIgnoreList, (uint32_t)(nPersistent == 0));
-          pIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
-          nPersistent = pIgnoreList->_vfptr->GetPersistentSetting(pIgnoreList);
-          pwszText = D2Lang::StrTable::strtable::GetLocaleString(nPersistent == 0 ? 0x2ba2 : 0x2ba1);
-        } else if (CHATDLG_CompareInputPrefix("/ignore ") == 0 || CHATDLG_CompareInputPrefix("/squelch ") == 0) {
-          memset(wszIgnoreFormat, 0, sizeof(wszIgnoreFormat));
-          memset(wszIgnoreResult, 0, sizeof(wszIgnoreResult));
-          memset(wszName, 0, sizeof(wszName));
-          CHATDLG_GetInputArgument(szName, sizeof(szName));
-          if (Storm::Source::SSTR::SStrCmpI(szName, OOGUtilities::D2IniData_multiplayer->szLastBnetAccount, 0x7fffffff) == 0) {
-            goto scroll_to_end;
-          }
-
-          D2Lang::UTF8_ConvertToWideChar(wszName, szName, _countof(wszName));
-          ::IgnoreList* pIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
-          int32_t nAdded = pIgnoreList->_vfptr->AddByPattern(pIgnoreList, szName);
-          uint16_t* pwszFormat = D2Lang::StrTable::strtable::GetLocaleString(nAdded == 0 ? 0x2ba4 : 0x2ba3);
-          D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(_countof(wszIgnoreFormat), wszIgnoreFormat, pwszFormat, wszName);
-          D2Lang::Unicode::UNISYS::AppendToBuffer(wszIgnoreResult, wszIgnoreFormat);
-          pwszText = wszIgnoreResult;
-        } else if (CHATDLG_CompareInputPrefix("/unignore ") == 0 || CHATDLG_CompareInputPrefix("/unsquelch ") == 0) {
-          memset(wszIgnoreFormat, 0, sizeof(wszIgnoreFormat));
-          memset(wszIgnoreResult, 0, sizeof(wszIgnoreResult));
-          memset(wszName, 0, sizeof(wszName));
-          CHATDLG_GetInputArgument(szName, sizeof(szName));
-          D2Lang::UTF8_ConvertToWideChar(wszName, szName, _countof(wszName));
-          ::IgnoreList* pIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
-          int32_t nRemoved = pIgnoreList->_vfptr->RemoveByPattern(pIgnoreList, szName);
-          uint16_t* pwszFormat = D2Lang::StrTable::strtable::GetLocaleString(nRemoved == 0 ? 0x2ba6 : 0x2ba5);
-          D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(_countof(wszIgnoreFormat), wszIgnoreFormat, pwszFormat, wszName);
-          D2Lang::Unicode::UNISYS::AppendToBuffer(wszIgnoreResult, wszIgnoreFormat);
-          pwszText = wszIgnoreResult;
-        } else if (CHATDLG_CompareInputPrefix("/filtermsg ") == 0) {
-          CHATDLG_GetInputArgument((char*)aszAccountName, sizeof(aszAccountName));
-          ::IgnoreList* pIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
-          int32_t nAdded = pIgnoreList->_vfptr->AddByAccountName(pIgnoreList, (char*)aszAccountName);
-          pwszText = D2Lang::StrTable::strtable::GetLocaleString(nAdded == 0 ? 0x2ba8 : 0x2ba7);
-        } else if (CHATDLG_CompareInputPrefix("/unfiltermsg ") == 0) {
-          CHATDLG_GetInputArgument((char*)aszAccountName, sizeof(aszAccountName));
-          ::IgnoreList* pIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
-          int32_t nRemoved = pIgnoreList->_vfptr->RemoveByAccountName(pIgnoreList, (char*)aszAccountName);
-          pwszText = D2Lang::StrTable::strtable::GetLocaleString(nRemoved == 0 ? 0x2baa : 0x2ba9);
-        } else {
-          if (CHATDLG_CompareInputPrefix("/homechannel ") == 0 || CHATDLG_CompareInputPrefix("/defaultchannel ") == 0 || CHATDLG_CompareInputPrefix("/home ") == 0) {
-            CHATDLG_GetInputArgument(szChannelName, sizeof(szChannelName));
-            Storm::Source::SReg::SRegSaveString("Diablo II", "Default Channel", 0, szChannelName);
-          } else if (CHATDLG_CompareInputPrefix("/home") == 0) {
-            if (Storm::Source::SReg::SRegLoadString("Diablo II", "Default Channel", 0, szChannelName, sizeof(szChannelName))) {
-              pNetworkUnknown->pfnSendJoinChannel(szChannelName, 0, 0);
-              OOGUtilities::OOGUTIL_JoinChannelAndDestroyForms(szChannelName);
-            }
-          } else if (!pNetworkUnknown->pfnIsSocketConnected()) {
-            uint16_t* pwszError = D2Lang::StrTable::strtable::GetLocaleString(0x14e7);
-            UIMENU_DrawTitleOnCenterSmaller(pwszError, OOG::OOGUTIL_DrawCallback_SetModeAndClearMsgLoop);
-          } else {
-            pNetworkUnknown->pfnSendChatCommand((uint8_t*)szInput);
-          }
-
-          goto scroll_to_end;
-        }
-
-        if (gpChatMessagesTextBox) {
-          D2Win::Src::D2WinTextBox::SetText(gpChatMessagesTextBox, pwszText, 3, false, 1);
-        }
-      }
-    }
-
-scroll_to_end:
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextWide(gpChatDlgInputEditBox, nullptr);
-    int32_t nVisibleLines = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetVisibleLineCount(gpChatMessagesTextBox);
-    int32_t nLineCount = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetLineCount(gpChatMessagesTextBox);
-    if (nVisibleLines < nLineCount) {
-      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ScrollToLine(gpChatMessagesTextBox, nLineCount - nVisibleLines);
-    }
-}
-
-// 1.14d mac: 002d098a
-int CHATDLG_PollMCPCharLogonPump() {
-    D2MCPClient::McpConnect::NET_MCP_CLIENT_ReadAndParsePacket();
-    BOOL bCharLogonSuccess = D2MCPClient::McpConnect::MCPSTATE_GetCharLogonSuccess();
-    if (!bCharLogonSuccess && D2MCPClient::McpConnect::HasPeerName() && !(gnMCPConnectionRestoreResult & 1)) {
-      return 1;
-    }
-
-    D2MCPClient::McpConnect::MCPSTATE_SetCharLogonSuccess(0);
-    D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
-    return 1;
-}
-#endif
 
 } // namespace D2Multi::ChatDlg

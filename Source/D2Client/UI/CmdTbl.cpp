@@ -1164,6 +1164,7 @@ uint16_t __fastcall CMD_GetKeyForCommand(int32_t nCmdIndex, int32_t nSlot) {
     return g_KeyBindingsTable[nIndex].wKeyCode;
 }
 
+// 1.14d mac: 000a199c
 BOOL __fastcall CMD_IsBindableKey(uint16_t wKeyCode) {
     uint32_t nKeyCode = (uint32_t)wKeyCode;
     {
@@ -1371,6 +1372,7 @@ BOOL __fastcall CMD_IsBindableKey(uint16_t wKeyCode) {
     return 0;
 }
 
+// 1.14d mac: 000a1da8
 BOOL __fastcall CMD_SetKeyBinding(int32_t nCmdIndex, int32_t nSlot, uint32_t nKeyCode, uint16_t * pErrorCode) {
     PD2KeyBindSlot pBinding2;
     int nIndex;
@@ -1452,6 +1454,7 @@ void __stdcall CMD_RevertKeyBindings() {
     CMD_RebuildDerivedBindings();
 }
 
+// 1.14d mac: 000a2198
 void __fastcall CMD_UnbindCommand(int32_t nCmdIndex, int32_t nSlot) {
     PD2KeyBindSlot pBinding = &g_KeyBindingsTable[0].nSlot;
     do {
@@ -1930,6 +1933,7 @@ uint16_t * __fastcall CMD_GetKeyDescForCommand(int32_t nCmdIndex, int32_t nSlot)
     goto describe_key;
 }
 
+// 1.14d mac: 000a2d94
 void __stdcall WindowsKeyPressedEvent(D2UIMouseMsgStrc * pMsg) {
     SHORT sKeyState;
     int nCmdIndex;
@@ -1965,6 +1969,7 @@ void __stdcall WindowsKeyPressedEvent(D2UIMouseMsgStrc * pMsg) {
 }
 
 // Dispatches key command by scanning g_KeyBindingsTable for matching target and valid command index (0-56). Validates function pointer via IsBadCodePtr, invokes handler from gCmdHandlerTable, then queues the command and clears skill selection. Skips execution if gKeyBindingTable._1156_4_ is 2 and command has no parameter.
+// 1.14d mac: 000a2e86
 void __stdcall INPUT_DispatchKeyCommand(D2UIMouseMsgStrc * pMsg) {
     int nCmdIndex;
     int nBindingIndex = 0;

@@ -460,6 +460,13 @@ void __fastcall TXT_AllocTxt_monstats(D2PoolManagerStrc * pMemory) {
     };
     sgtDataTable.pTxtMonStatsLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\MonsterTbls.cpp", 0x209);
     sgtDataTable.pTxtMonStats = (D2MonStatsTxt*)DataTbls::CompileTxt(pMemory, "monstats", monstats, &sgtDataTable.nTxtMonStatsSize, 0x1a8);
+#if !defined(_WIN32) && D2_OS_MAC
+    {
+      // The 16-bit fields of the record, as offset pairs the Mac build byte-swaps in place.
+      int aSwapFields[] = {2, 0x188, 2, 0x18a, 2, 0x18c, 2, 0x18e, 2, 0x190, 2, 0x192, 2, 0x194, 2, 0x196, 0, 0};
+      DataTbls::DATATBLS_SwapTableRecords(aSwapFields, sgtDataTable.nTxtMonStatsSize, sgtDataTable.pTxtMonStats, 0x1a8);
+    }
+#endif
     if (sgtDataTable.nTxtMonStatsSize >= 0x7fff) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x21c);
       exit(-1);
@@ -606,6 +613,7 @@ BOOL __stdcall MONSTER_CalculateLevelScaledStats(int32_t nMonStatsId, int32_t bI
     return 1;
 }
 
+// 1.14d mac: 0014809e
 void Unreferenced_00653d30() {
     if (sgtDataTable.pTxtMonStats) {
       DataTbls::UnloadBin(sgtDataTable.pTxtMonStats);
@@ -747,6 +755,7 @@ uint16_t * __fastcall MONSTER_GetRandomUniqueAppelation(D2UnitStrc * pUnit) {
     return pLocaleStr;
 }
 
+// 1.14d mac: 001481fd
 D2ParsedTreasureClassStrc * __fastcall TC_ExtendTreasureClassSize(char * szText) {
     Fog::Src::Excel::FOG_ParseStringField(sgtDataTable.pTxtMonsterTblsLink, szText);
     uint32_t nAllocMask = sgtDataTable.nParsedTreasureClassSize % 16;
@@ -777,6 +786,7 @@ D2ParsedTreasureClassEntriesStrc * __fastcall AddOneParsedTCEntry(D2ParsedTreasu
 }
 
 // Fixes up the cumulative weight arrays in a parsed TreasureClass after a single entry's rarity changes. Updates the expansion cumulative weights for all subsequent entries and the total, and (when bIsNotVersion100==0) does the same for classic cumulative weights. In: pParsedTC, pParsedTCEntry, new nRarity value, bIsNotVersion100 flag.
+// 1.14d mac: 0014831b
 void __fastcall AdjustRarities(D2ParsedTreasureClassStrc * pParsedTC, D2ParsedTreasureClassEntriesStrc * pParsedTCEntry, int32_t nRarity, BOOL bIsNotVersion100) {
     intptr_t nClassicCumul;
     int32_t iVar1;
@@ -937,6 +947,7 @@ static char * __stdcall Unreferenced_006543c0(char * szText) {
     return szText;
 }
 
+// 1.14d mac: 0014ab27
 static int32_t TC_ExtractNextIntModifier(char cSeparator, uint32_t * * ppCursor) {
     uint32_t* pCurrent = *ppCursor;
     char* pSeparator = strchr((char*)pCurrent, (int)cSeparator);
@@ -1368,6 +1379,7 @@ void __fastcall TXT_AllocTxt_monumod(D2PoolManagerStrc * pMemory) {
     sgtDataTable.nTxtMonUmodSize = 0x100;
 }
 
+// 1.14d mac: 001492bf
 void Unreferenced_006552a0() {
     if (sgtDataTable.pTxtMonUmodLink) {
       Fog::Src::Excel::STRUCT_FreeTxtLink(sgtDataTable.pTxtMonUmodLink);
@@ -1432,6 +1444,7 @@ void __fastcall TXT_AllocTxt_superuniques(D2PoolManagerStrc * pMemory) {
     }
 }
 
+// 1.14d mac: 001494bf
 void Unreferenced_006556a0() {
     if (sgtDataTable.pTxtSuperUniquesLink) {
       Fog::Src::Excel::STRUCT_FreeTxtLink(sgtDataTable.pTxtSuperUniquesLink);
@@ -1762,6 +1775,7 @@ void __stdcall DATATBLS_UnloadNpcTxt() {
     DataTbls::UnloadBin(sgtDataTable.pTxtNpc);
 }
 
+// 1.14d mac: 00149afd
 D2NpcTxt * __stdcall TXT_npc_GetLine(int32_t nNpc) {
     for (int nIndex = 0; nIndex < sgtDataTable.nTxtNpcSize; nIndex++) {
       D2NpcTxt* pNpcTxt = &sgtDataTable.pTxtNpc[nIndex];
@@ -1821,6 +1835,7 @@ void __fastcall TXT_AllocTxt_monsounds(D2PoolManagerStrc * pMemory) {
     sgtDataTable.pTxtMonSounds = (D2MonSoundsTxt*)DataTbls::CompileTxt(pMemory, "monsounds", monsounds, &sgtDataTable.nTxtMonSoundsSize, 0x94);
 }
 
+// 1.14d mac: 00149b3a
 void __stdcall DATATBLS_UnloadMonSoundsTxt() {
     if (!sgtDataTable.pTxtMonSounds) {
       return;
@@ -2112,6 +2127,7 @@ void __fastcall TXT_AllocTxt_monstats2(D2PoolManagerStrc * pMemory) {
     sgtDataTable.pTxtMonStatsEx = (D2MonStats2Txt*)DataTbls::CompileTxt(pMemory, "monstats2", monstats2, &sgtDataTable.nTxtMonStatsExSize, 0x134);
 }
 
+// 1.14d mac: 00149db7
 void Unreferenced_00658440() {
     if (!sgtDataTable.pTxtMonStatsEx) {
       return;
@@ -2301,6 +2317,7 @@ void __fastcall TXT_AllocTxt_monprop(D2PoolManagerStrc * pMemory) {
     sgtDataTable.pTxtMonProp = (D2MonPropTxt*)DataTbls::CompileTxt(pMemory, "monprop", monprop, &sgtDataTable.nTxtMonPropSize, 0x138);
 }
 
+// 1.14d mac: 0014a086
 void Unreferenced_006594d0() {
     if (sgtDataTable.pTxtMonProp) {
       DataTbls::UnloadBin(sgtDataTable.pTxtMonProp);
@@ -2402,6 +2419,12 @@ void __fastcall TXT_AllocTxt_monpreset(D2PoolManagerStrc * pMemory) {
     };
     int nMonPresetSize = 0;
     D2MonPresetTxt* pTxtMonPreset = (D2MonPresetTxt*)DataTbls::CompileTxt(pMemory, "monpreset", monpreset, &nMonPresetSize, 4);
+#if !defined(_WIN32) && D2_OS_MAC
+    {
+      int aSwapFields[] = {2, 2, 0, 0};
+      DataTbls::DATATBLS_SwapTableRecords(aSwapFields, nMonPresetSize, pTxtMonPreset, 4);
+    }
+#endif
     sgtDataTable.pTxtMonPresetPlace = (D2MonPresetTxtPlace*)pTxtMonPreset;
     D2MonPresetTxt* pPreset = pTxtMonPreset;
     sgtDataTable.pTxtMonPresetPerAct[0] = pTxtMonPreset;

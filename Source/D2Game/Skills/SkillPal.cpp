@@ -1518,6 +1518,7 @@ BOOL __fastcall SKILLPAL_ApplyRedemptionEffect(::SGAMEDATA * pGame, D2UnitStrc *
 
 // Redemption skill unit-iterator callback. For each pUnit corpse: checks it is a selectable corpse, rolls a chance against calc[0] using the caster's seed; on success heals the caster by calc[1] life and calc[2] mana (capped to txt max), sets STATE_redeemed on the corpse, clears its CANBEATTACKED/TARGETABLE flags, and increments the redemption counter in the callback args. Returns 1 if redeemed.
 // Only reference: pushed in Skills_SrvDoFunc_082_Redemption (0x005d100e).
+// 1.14d mac: 00276341
 uint32_t __fastcall SKILLPAL_AuraCallback_Redemption(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pUnit) {
     eD2Skills* pSkillCallbackArgs = (eD2Skills*)pContext->pCallbackArg;
     eD2Skills eSkill = *pSkillCallbackArgs;

@@ -926,6 +926,7 @@ void __stdcall TABLES_GetLangAbbreviation(char * szOutAbbrev, int32_t nFormat) {
     }
 }
 
+// 1.14d mac: 002b9add
 void __stdcall STRTABLE_FormatNumber(uint16_t * wszText, uint32_t nValue, int32_t nMaxLen) {
     uint16_t wszFallback[2];
     char szDigits[64];

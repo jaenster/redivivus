@@ -655,6 +655,7 @@ static int32_t __stdcall SPELLSEL_RegisterSkillSlot(int32_t nSlotIndex, int32_t 
     return nSlotX;
 }
 
+// 1.14d mac: 000edca2
 int __fastcall SPELLSEL_FindChargedSkill1(D2UnitStrc * pUnit, int32_t nTargetSkillId) {
     D2SkillsTxt* pSkillsTxt;
     int32_t nQuantity;
@@ -670,6 +671,7 @@ int __fastcall SPELLSEL_FindChargedSkill1(D2UnitStrc * pUnit, int32_t nTargetSki
     return 0;
 }
 
+// 1.14d mac: 000edcfc
 int __fastcall SPELLSEL_FindChargedSkill2(D2UnitStrc * pUnit, int32_t nTargetSkillId) {
     D2SkillsTxt* pSkillsTxt;
     int32_t nQuantity;
@@ -685,6 +687,7 @@ int __fastcall SPELLSEL_FindChargedSkill2(D2UnitStrc * pUnit, int32_t nTargetSki
     return 0;
 }
 
+// 1.14d mac: 000edd56
 int __fastcall SPELLSEL_FindChargedSkill3(D2UnitStrc * pUnit, int32_t nTargetSkillId) {
     D2SkillsTxt* pSkillsTxt;
     int32_t nQuantity;
@@ -700,6 +703,7 @@ int __fastcall SPELLSEL_FindChargedSkill3(D2UnitStrc * pUnit, int32_t nTargetSki
     return 0;
 }
 
+// 1.14d mac: 000eddb0
 int __fastcall SPELLSEL_FindChargedSkill4(D2UnitStrc * pUnit, int32_t nTargetSkillId) {
     D2SkillsTxt* pSkillsTxt;
     int32_t nQuantity;
@@ -1155,6 +1159,7 @@ void __fastcall SPELLSEL_DrawSkillGrid(D2UnitStrc * pUnit, int32_t nGridStartX, 
     } while (true);
 }
 
+// 1.14d mac: 000ed6c7
 void Unreferenced_004aa680() {
     if (!gbSpellSelMouseHandFlag) {
       return;
@@ -1167,6 +1172,7 @@ void Unreferenced_004aa680() {
     SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), 0x50, bWeaponSwap, bShowTooltips, bChargedOnly);
 }
 
+// 1.14d mac: 000ed718
 void __fastcall Unreferenced_004aa6b0(BOOL bChargedOnly) {
     if (gbSpellSelMouseHandFlag) {
       return;
@@ -1178,6 +1184,7 @@ void __fastcall Unreferenced_004aa6b0(BOOL bChargedOnly) {
     SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), ui::ScreenSizeX - 0x80, bWeaponSwap, bShowTooltips, bChargedOnly);
 }
 
+// 1.14d mac: 000ed773
 void __stdcall Unreferenced_004aa6e0() {
     if (!gbSpellSelMouseHandFlag) {
       return;
@@ -1186,6 +1193,7 @@ void __stdcall Unreferenced_004aa6e0() {
     SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), 0x50, 1, 1, 0);
 }
 
+// 1.14d mac: 000ed7bd
 void __stdcall Unreferenced_004aa710() {
     if (gbSpellSelMouseHandFlag) {
       return;

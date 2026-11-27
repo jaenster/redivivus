@@ -70,6 +70,7 @@ D2MonPropTxt * __fastcall MONSTER_GetMonPropTxtRecord(int32_t nClassId) {
     return nullptr;
 }
 
+// 1.14d mac: 001d6e83
 void __fastcall SetAiState(D2UnitStrc * pMonster, int nAiState) {
     if (!(pMonster && pMonster->eUnitType == UNIT_MONSTER && pMonster->pUnitData.pUnitDataMonster)) {
       return;

@@ -60,6 +60,7 @@ static void * __stdcall TXT_UniqueItems_GetModEntry(void * pTxtLine, uint32_t nM
     exit(-1);
 }
 
+// 1.14d mac: 0016d98d
 static D2MagixAffixModStrc * ITEMMOD_GetMaxLevelAtIndex(D2GemsTxt * pMagixAffixLine, uint32_t nIndex, uint32_t nModIndex) {
     D2MagixAffixModStrc* pModPtrTable[3];
     pModPtrTable[0] = pMagixAffixLine->aWeaponMods;
@@ -110,11 +111,13 @@ static intptr_t ITEMMOD_GetPropertyFromAffix(D2MagicAffixTxt * pMagicAffixLine, 
     }
 }
 
+// 1.14d mac: 0016ab58
 void __stdcall ITEMMODS_UnpackSkillAndLevel(uint32_t nPackedValue, uint32_t * pnSkillId, uint32_t * pnSkillLevel) {
     *pnSkillId = nPackedValue & 0x1ff;
     *pnSkillLevel = (int)nPackedValue >> 9 & 0x1f;
 }
 
+// 1.14d mac: 0016ab78
 void __stdcall ITEMMODS_UnpackChargedSkill(uint32_t nPackedValue, uint32_t * pnSkillId, uint32_t * pnSkillLevel, uint32_t * pnCharges, uint32_t * pnMaxCharges) {
     *pnSkillId = nPackedValue & 0x1ff;
     *pnSkillLevel = (int)nPackedValue >> 9 & 0x1f;
@@ -1793,6 +1796,7 @@ void __stdcall ITEMMOD_RollGemRuneType(D2UnitStrc * pUnit) {
     Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_value, nValue, 0);
 }
 
+// 1.14d mac: 0016be52
 D2ItemsTxt * __fastcall Unreferenced_0065e9b0(D2UnitStrc * pUnit, D2UnitStrc * pFallback) {
     if (pUnit && pUnit->eUnitType == UNIT_ITEM) {
       int nClassId = pUnit->nClassId;

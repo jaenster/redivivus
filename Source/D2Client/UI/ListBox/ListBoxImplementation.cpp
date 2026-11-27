@@ -311,6 +311,7 @@ BOOL __thiscall IsMouseOnScrollTrack(::ListBoxImplementation * pThis, D2UIMouseM
     return 0;
 }
 
+// 1.14d mac: 000c1484
 BOOL __thiscall IsMouseInBounds(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
     uint32_t nMouseX = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
     uint32_t nMouseY = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
@@ -321,6 +322,7 @@ BOOL __thiscall IsMouseInBounds(::ListBoxImplementation * pThis, D2UIMouseMsgStr
     return 0;
 }
 
+// 1.14d mac: 000c14ca
 int __thiscall OnMouseWheel(::ListBoxImplementation * pThis, D2UIMouseMsgStrc * pMsg) {
     short int nWheelDelta = *(short int*)((intptr_t)&pMsg->nWParam + 2);
     if (nWheelDelta > 0) {

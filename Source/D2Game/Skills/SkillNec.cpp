@@ -874,6 +874,7 @@ static inline void SKILLNEC_SetMonsterComponent(D2UnitStrc * pUnit, int nCompone
 }
 
 // Initialises a raised skeleton's visual component bytes from a mastery-level lookup table (0x741940, stride 9, level capped at 10). Writes the component bytes into the monster's unit data. If bRollComponents, advances the room RNG to randomise components [0xb]/[0xc] and refreshes the monster AI args.
+// 1.14d mac: 00267b1c
 static void __stdcall SKILLNEC_SetSkeletonComponentsByMasteryLvl(int32_t bHasShield, int32_t bRollComponents, D2UnitStrc * pSeedUnit, D2UnitStrc * pSkeletonUnit, int32_t nMasteryLvl) {
     if (nMasteryLvl > 10) {
       nMasteryLvl = 10;

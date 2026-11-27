@@ -1712,6 +1712,7 @@ void __fastcall QUESTLOG_AcknowledgeNewQuests(int32_t nAct) {
     } while (nIndex < gQuestLog.nQuestLogQuestCount);
 }
 
+// 1.14d mac: 000d8f07
 int __fastcall QUESTLOG_ScrollCompleteCallback_ClearButton(void * pUserParam, uint32_t nReason, int bDismissed) {
     gQuestLog.bQuestLogButtonDown = 0;
     Text::TEXT_SetScrollCompleteCallback(nullptr, pUserParam);
@@ -1953,6 +1954,7 @@ void __fastcall QUESTLOG_SelectQuestByIndex(int32_t nQuestId) {
     gQuestLogSelectedQuestByAct[gaQuestInfoTable[nActIndex].nAct] = gaQuestInfoTable[nActIndex].nQuestIndexInAct;
 }
 
+// 1.14d mac: 000d8b98
 void __fastcall QUESTLOG_ClearMissileFlagCb_Missile146(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->nClassId == 0x92)) {
       return;
@@ -1961,6 +1963,7 @@ void __fastcall QUESTLOG_ClearMissileFlagCb_Missile146(D2UnitStrc * pUnit) {
     pUnit->eUnitFlags &= ~UNITFLAG_TARGETABLE;
 }
 
+// 1.14d mac: 000d8bb4
 void __fastcall QUESTLOG_ClearMissileFlagCb_Missile527(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->nClassId == 0x20f)) {
       return;

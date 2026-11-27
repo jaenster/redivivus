@@ -527,6 +527,7 @@ void __stdcall LIGHTMAP_InitFromPlayerAndRooms(uint32_t bForceBlack) {
     }
 }
 
+// 1.14d mac: 00060d35
 void __stdcall LIGHTMAP_ClearToBlack() {
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
     if (pUnit) {
@@ -536,6 +537,7 @@ void __stdcall LIGHTMAP_ClearToBlack() {
     LIGHTMAP_FillGridRect(0, 0, 0, 0x2f, 0x2f);
 }
 
+// 1.14d mac: 000625ad
 static void __stdcall LIGHTMAP_AddLightToCell(int nIntensity, uint8_t nRed, uint8_t nGreen, uint8_t nBlue, int nY, int nX) {
     const int nGridX = (nX >> 3) - gnLightmapWorldRefreshFlag;
     if ((uint32_t)nGridX > 0x2f) {
@@ -710,6 +712,7 @@ static void __fastcall LIGHTMAP_SampleGridToBuffer(D2LightMapStrc * pLightMap) {
     }
 }
 
+// 1.14d mac: 000626ca
 static void __stdcall LIGHTMAP_ComputeInterpolationDir(int nSrcX, int nSrcY, D2LightMapStrc * pLightMap) {
     int nDeltaX;
     nDeltaX = pLightMap->nGridX - nSrcX;
@@ -752,6 +755,7 @@ static void __stdcall LIGHTMAP_ComputeInterpolationDir(int nSrcX, int nSrcY, D2L
     gnLightmapInterpSubdivRatio = (nDeltaX << 8) / (int)nDeltaY;
 }
 
+// 1.14d mac: 0006278b
 static void LIGHTMAP_InterpolateCell(int nBufferX, int nBufferY) {
     int nRowOffset;
     int nNeighborIdx;
@@ -958,6 +962,7 @@ static void LIGHTMAP_ApplyStaticLightWithShadow(D2LightMapStrc * pLightMap) {
     } while (nRowCounter);
 }
 
+// 1.14d mac: 000624b1
 static void LIGHTMAP_ApplyCollisionOccludedLight(D2LightMapStrc * pLightMap) {
     D2UnitStrc* pUnit;
     int32_t nUnitY;

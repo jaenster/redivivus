@@ -351,6 +351,7 @@ BOOL __fastcall HandleMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Server
 }
 
 // Returns true if pUnit (the target) is within action range for pUnit2 performing nActionType. For action types 6/0xd (left/right skill use), checks SKILL_CheckAuraRange if the equipped skill is an aura (srvdofunc==0x13). For objects, uses IsObjectInInteractRange + collision test. For all others, checks melee range accounting for pUnit's current movement mode.
+// 1.14d mac: 0012876a
 static BOOL UNITMODE_IsTargetInActionRange(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nActionType) {
     D2SkillStrc* pSkill;
     uint32_t bInAuraRange;
@@ -478,6 +479,7 @@ static BOOL __stdcall UNITMODE_SetModeAndLoadCof(int32_t nAnimMode, D2UnitStrc *
     return 0;
 }
 
+// 1.14d mac: 001286ca
 void __fastcall UNITMODE_SetAnimMode(D2UnitStrc * pUnit, eD2PlayerAnimMode nAnimMode) {
     _Utils::UTILS_OnUnitModeChange_NoOp(pUnit);
     if (pUnit) {
@@ -494,6 +496,7 @@ void __fastcall UNITMODE_SetAnimMode(D2UnitStrc * pUnit, eD2PlayerAnimMode nAnim
     UnitSnd::UNITSND_DispatchModeChangeSound(pUnit, nAnimMode, 0);
 }
 
+// 1.14d mac: 0012875b
 void __fastcall UNITMODE_SetAnimModeSilent(D2UnitStrc * pUnit, int32_t nAnimMode) {
     _Utils::UTILS_OnUnitModeChange_NoOp(pUnit);
     if (pUnit) {
@@ -918,8 +921,137 @@ static BOOL __stdcall UNITMODE_TryInteractWithObject(D2UnitStrc * pUnit, eD2Unit
     return 0;
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+// Mac only: attacks with the click's modifier choosing attack or alternate attack, then queues
+// the skill and target on a player as the pending interaction. The unit and the queued skill arrive
+// in ecx and edx: the compiler gives a unit-local function that
+// calling convention itself.
+// 1.14d mac: 00128831
+static void UNITMODE_ExecuteAttackAndQueueSkill(D2UnitStrc * pUnit, int32_t eQueuedSkill, int32_t eTargetType, int32_t nTargetGUID) {
+    uint32_t dwClickFlags = GAME::Game::GetMouseClickFlags();
+    if (dwClickFlags & 8) {
+      UNITMODE_ExecuteSkillAction(UNITMODEACTION_ATTACK_ALT, pUnit, eTargetType, nTargetGUID, 0);
+    } else {
+      UNITMODE_ExecuteSkillAction(UNITMODEACTION_ATTACK, pUnit, eTargetType, nTargetGUID, 0);
+    }
+    if (pUnit && pUnit->eUnitType == UNIT_PLAYER && pUnit->pUnitData.pUnitDataPlayer) {
+      D2UnitDataPlayerStrc* pPlayerData = pUnit->pUnitData.pUnitDataPlayer;
+      pPlayerData->bHasPendingInteract = 1;
+      pPlayerData->eQueuedSkillId = eQueuedSkill;
+      pPlayerData->eTargetUnitType = eTargetType;
+      pPlayerData->nTargetUnitGUID = nTargetGUID;
+    }
+}
+#endif
+
 // 1.14d mac: 00128364
 void __fastcall UNITMODE_ExecuteDeferredAction(D2UnitStrc * pUnit) {
+#if !defined(_WIN32) && D2_OS_MAC
+    // The Mac build takes the same pending interaction apart in one body: a target in range of the
+    // action is attacked and the interaction queued again (UNITMODE_ExecuteAttackAndQueueSkill), where
+    // the shared flow walks towards it.
+    if (!pUnit) {
+      return;
+    }
+    if (pUnit->eUnitType != UNIT_PLAYER) {
+      return;
+    }
+
+    D2UnitDataPlayerStrc* pPlayerData = pUnit->pUnitData.pUnitDataPlayer;
+    if (!pPlayerData) {
+      return;
+    }
+    if (!pPlayerData->bHasPendingInteract) {
+      return;
+    }
+
+    int32_t nUnitGUID = pPlayerData->nTargetUnitGUID;
+    eD2UnitModeAction nActionType = pPlayerData->eQueuedSkillId;
+    eD2UnitType eTargetType = pPlayerData->eTargetUnitType;
+    D2UnitStrc* pTargetUnit = CUnit::UNITS_FindClientSideUnit(nUnitGUID, eTargetType);
+    if (pUnit->eUnitType == UNIT_PLAYER && pUnit->pUnitData.pUnitDataPlayer) {
+      D2UnitDataPlayerStrc* pClearData = pUnit->pUnitData.pUnitDataPlayer;
+      pClearData->eQueuedSkillId = 0;
+      pClearData->bHasPendingInteract = 0;
+      pClearData->nTargetUnitGUID = 0;
+      pClearData->eTargetUnitType = UNIT_PLAYER;
+    }
+    if (nActionType == UNITMODEACTION_ITEM_INTERACT && eTargetType == UNIT_WARP) {
+      uint32_t nTickCount = GAME::Game::GAMEDATA_GetGlobalTickCount();
+      GAME::Game::GAME_SetSyncTickCount(nTickCount + 500);
+    }
+    if (!pTargetUnit) {
+      return;
+    }
+    if (!nActionType) {
+      return;
+    }
+
+    if (eTargetType == UNIT_OBJECT) {
+      if (!(pTargetUnit->eUnitFlags & UNITFLAG_TARGETABLE)) {
+        goto clear_selection;
+      }
+      if (!UNITMODE_IsTargetInActionRange(pTargetUnit, pUnit, nActionType)) {
+        goto execute_action;
+      }
+      UNITMODE_ExecuteAttackAndQueueSkill(pUnit, nActionType, UNIT_OBJECT, nUnitGUID);
+      return;
+    } else {
+      if (eTargetType != UNIT_MONSTER) {
+        if (eTargetType == UNIT_PLAYER) {
+          if (CUnit::IsActive(pTargetUnit)) {
+            if (!GAME::Roster::ROSTER_CheckPlayerCanLoot(pUnit->nUnitGUID, nUnitGUID)) {
+              goto clear_selection;
+            }
+            eTargetType = UNIT_PLAYER;
+            goto execute_action;
+          }
+          if (pTargetUnit->eUnitFlags & UNITFLAG_TARGETABLE) {
+            if (!UNITMODE_IsTargetInActionRange(pTargetUnit, pUnit, nActionType)) {
+              goto execute_action;
+            }
+            UNITMODE_ExecuteAttackAndQueueSkill(pUnit, nActionType, UNIT_PLAYER, nUnitGUID);
+            return;
+          }
+        } else if (pTargetUnit->eUnitFlags & UNITFLAG_TARGETABLE) {
+          goto execute_action;
+        }
+        goto clear_selection;
+      }
+      if (!CUnit::IsActive(pTargetUnit)) {
+        if (!(pTargetUnit->eUnitFlags & UNITFLAG_TARGETABLE)) {
+          goto clear_selection;
+        }
+      } else {
+        D2SkillStrc* pSkill;
+        if ((uint32_t)(nActionType - UNITMODEACTION_RIGHTSKILL_COORD) < 7) {
+          pSkill = D2Common::Units::GetRightSkill(pUnit);
+        } else {
+          if ((uint32_t)(nActionType - UNITMODEACTION_LEFTSKILL_COORD) >= 7) {
+            goto clear_selection;
+          }
+          pSkill = D2Common::Units::GetLeftSkill(pUnit);
+        }
+        eD2Skills eSkillId;
+        D2SkillsTxt* pSkillsTxt;
+        if (!pSkill || (eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UNIT\\UnitMode.cpp", 0x44f), (int)eSkillId < 0) || (int)eSkillId >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(pSkillsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId) || !(pSkillsTxt->aFlagBytes[3] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0])) {
+          goto clear_selection;
+        }
+      }
+      if (!UNITMODE_IsTargetInActionRange(pTargetUnit, pUnit, nActionType)) {
+        goto execute_action;
+      }
+      UNITMODE_ExecuteAttackAndQueueSkill(pUnit, nActionType, UNIT_MONSTER, nUnitGUID);
+      return;
+    }
+
+    clear_selection:
+    GAME::Select::SELECT_UpdateUnitSelection(nullptr);
+    return;
+
+    execute_action:
+    UNITMODE_ExecuteSkillAction(nActionType, pUnit, eTargetType, nUnitGUID, 0);
+#else
     uint32_t bTargetable;
     int fInteractResult;
     int32_t nUnitGUID;
@@ -993,26 +1125,9 @@ void __fastcall UNITMODE_ExecuteDeferredAction(D2UnitStrc * pUnit) {
 
     execute_action:
     UNITMODE_ExecuteSkillAction(nActionType, pUnit, eTargetType, nUnitGUID, 0);
+#endif
 }
 
 static void * keep_00480e30 = (0 ? (UNITMODE_SetModeAndLoadCof(*(int32_t *)0, *(D2UnitStrc * *)0), (void *)0) : (void *)0);
-
-#if !defined(_WIN32) && D2_OS_MAC
-// Mac only: attacks with the click's modifier choosing attack or alternate attack, then queues
-// the skill and target on a player as the pending interaction.
-// 1.14d mac: 00128831
-void UNITMODE_ExecuteAttackAndQueueSkill(D2UnitStrc * pUnit, int32_t eQueuedSkill, int32_t eTargetType, int32_t nTargetGUID) {
-    uint32_t dwClickFlags = GAME::Game::GetMouseClickFlags();
-    eD2UnitModeAction nActionType = (dwClickFlags & 8) ? UNITMODEACTION_ATTACK_ALT : UNITMODEACTION_ATTACK;
-    UNITMODE_ExecuteSkillAction(nActionType, pUnit, eTargetType, nTargetGUID, 0);
-    if (pUnit && pUnit->eUnitType == UNIT_PLAYER && pUnit->pUnitData.pUnitDataPlayer) {
-      D2UnitDataPlayerStrc* pPlayerData = pUnit->pUnitData.pUnitDataPlayer;
-      pPlayerData->bHasPendingInteract = 1;
-      pPlayerData->eQueuedSkillId = eQueuedSkill;
-      pPlayerData->eTargetUnitType = eTargetType;
-      pPlayerData->nTargetUnitGUID = nTargetGUID;
-    }
-}
-#endif
 
 } // namespace D2Client::UNIT::UnitMode

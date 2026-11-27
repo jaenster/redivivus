@@ -179,6 +179,7 @@ uint32_t __stdcall IsSingleplayer(D2QServerStrc * pQServer) {
     return 1;
 }
 
+// 1.14d mac: 002f3d19
 void __stdcall SetPerIpConnectionLimit(D2QServerStrc * pQServer, int nPerIpConnectionLimit) {
     if (!pQServer) {
       return;
@@ -286,6 +287,7 @@ void __stdcall LogHackList(int nHacklistSize) {
     gdwHacklistLastLogTime = DVar1;
 }
 
+// 1.14d mac: 002f4400
 void __fastcall SweepExpiredHackEntries(D2QServerStrc * pQServer) {
     D2QServerHacklistEntryStrc* pNextEntry;
     int nNewPrimaryTtl;
@@ -449,6 +451,7 @@ int __thiscall HACKL_CheckAndResetHacklistEntry(D2QServerStrc * pQServer, uint32
 }
 
 // Checks whether the given IP currently has at least the configured per-IP connection limit.
+// 1.14d mac: 002f47d4
 BOOL __fastcall IsPerIpLimitReached(D2QServerStrc * pQServer, in_addr * pClientIp) {
     if (pQServer->nPerIpConnectionLimit < 0) {
       return 0;
@@ -933,6 +936,7 @@ int __stdcall QSERVER_EnqueueClientPacket(D2QServerStrc * pQServer, char * pByte
     return 1;
 }
 
+// 1.14d mac: 002f5529
 void __stdcall SetHackMode(D2QServerStrc * pQServer, BOOL bUseQServerHack) {
     pQServer->bUseQServerHack = bUseQServerHack;
 }
@@ -1221,6 +1225,7 @@ int __stdcall BroadcastToAllClients(D2QServerStrc * pQServer, char * pBytes, int
 }
 
 // @sourcefile .\Src\QServer\QServer.cpp
+// 1.14d mac: 002f3daa
 D2QServerClientContainerStrc * __fastcall AddClient(D2QServerStrc * pQServer, SOCKET pSock, uint32_t nIp) {
     D2QServerClientContainerStrc* client = D2_NEW_AT(D2QServerClientContainerStrc, ".\\Src\\QServer\\QServer.cpp", 0x23b);
     memset(client, 0, sizeof(*client));

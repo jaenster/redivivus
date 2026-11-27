@@ -100,6 +100,7 @@ void __fastcall LOADER_SetScreenResolutionMode(BOOL bConnectionLost) {
     gaScreenResolutionModeArray = bConnectionLost;
 }
 
+// 1.14d mac: 000aac00
 static BOOL __stdcall UI_IsMouseInRect(int32_t nRectLeftX, int32_t nRectBottomY, int32_t nRectWidth, int32_t nRectHeight) {
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
@@ -527,6 +528,7 @@ BOOL __fastcall ENGINE_RunDrawModeGameLoop(int32_t nDrawMode) {
 }
 
 // Alternate draw mode game loop with different event handler table and loop function
+// 1.14d mac: 000aaffc
 static uint32_t ENGINE_RunDrawModeGameLoopAlt(int32_t nDrawMode, uint32_t dwRetVal) {
     GAME::Game::GAMEDATA_SetDrawFunction(nDrawMode);
     _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIEngineFlagInit2, 4);

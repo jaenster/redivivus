@@ -166,6 +166,7 @@ void __stdcall WEATHER_ResetEnvironmentParticles() {
     exit(-1);
 }
 
+// 1.14d mac: 0006e4c4
 static void __stdcall WEATHER_SetEnabledState(int bForceReset, int bNewState) {
     if (gnWeatherTransitionProgress && bNewState) {
       gnWeatherTransitionProgress = 0;
@@ -1013,6 +1014,7 @@ static void WEATHER_UpdateParticleCount(D2SeedStrc * pSeed) {
     gbWeatherTransitionTriggered = 1;
 }
 
+// 1.14d mac: 0006d8f8
 void __stdcall DRAW_Overlay_Weather() {
     uint32_t eBorderType;
     D2RoomStrc* pRoom;
@@ -1344,6 +1346,7 @@ void __stdcall WEATHER_UpdateTransition(D2SeedStrc * pSeed) {
     }
 }
 
+// 1.14d mac: 0006d387
 void __stdcall WeatherEffects() {
     // Static local variables (originally global data)
     static BOOL WEATHER_bCanMud; D2_STATIC_GUARD_BSS(WEATHER_bCanMud, "D2Client::Draw::Weather::WeatherEffects::WEATHER_bCanMud");

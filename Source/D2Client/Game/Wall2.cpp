@@ -515,6 +515,7 @@ void __stdcall WALL2_ResetAmbientSound() {
 }
 
 // Per-frame ambient/level music driver (called with the current GetTickCount). Resolves the current level's SoundEnviron line (via SoundHdr GetSoundEnv) to a Song id, gated by the global song-id range; tracks level changes (gdwAmbientMusicLevelChangeTick / geAmbientMusicLevelId). Honors master+music volume (stops music when either is 0), and after a debounce delay switches/starts the ambient track (SOUND_PlaySound/StopMusic/FadeOutMusic). Also services the scripted sound-sequence state machine (gbSoundSequenceActive: pending sequence sound, delayed player sound keyed off the client recording index, and end-of-sequence fade-out) and stores the resumed music position back into the SoundHdr global-2 table. Client-side audio; no game-state mutation.
+// 1.14d mac: 0009660b
 void __fastcall WALL2_UpdateAmbientMusic(uint32_t nTickCount) {
     int nTmpResult;
     D2UnitStrc* pUnit;

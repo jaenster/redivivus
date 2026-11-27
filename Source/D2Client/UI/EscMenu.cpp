@@ -59360,6 +59360,7 @@ void __stdcall ESCMENU_Initialize() {
 }
 
 // Frees all DC6 images loaded for an escape menu table. Iterates through menu items and calls DC6_FreeAndDelete on main image and all sub-images, zeroing the pointers after freeing.
+// 1.14d mac: 000da00c
 void __fastcall ESCMENU_FreeLoadedImages(int * pnItemCount, D2EscMenuItemStrc * pMenuTable) {
     if (!pnItemCount) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x558);
@@ -59709,6 +59710,7 @@ void __stdcall DRAW_EscMenu() {
     }
 }
 
+// 1.14d mac: 000dbe5b
 void __fastcall ESCMENU_SwitchToMainMenu(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     ui::SetUIFlag(UI_ESCMENU, UI_SET, 0);
     gpEscMenuItemCount = &gaEscMenuHeaderOptions;
@@ -59727,6 +59729,7 @@ void __fastcall ESCMENU_BackToGame(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc *
     ESCMENU_RestoreUIState(1);
 }
 
+// 1.14d mac: 000dcc0f
 void __fastcall ESCMENU_SwitchToSaveExitMenu(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     ui::SetUIFlag(UI_ESCMENU, UI_SET, 0);
     gpEscMenuItemCount = &gaEscMenuHeaderSaveExit;
@@ -59760,6 +59763,7 @@ void __fastcall ESCMENU_SwitchToExpansionSaveExitMenu(D2EscMenuItemStrc * pItem,
     gnEscMenuSelectedIndex = gpEscMenuItemCount->nItemCount - 1;
 }
 
+// 1.14d mac: 000dbdd4
 void __fastcall ESCMENU_ShowControlConfig(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     BOOL BVar1 = ui::GetUIFlag(UI_ESCMENU);
     if (BVar1) {
@@ -59769,6 +59773,7 @@ void __fastcall ESCMENU_ShowControlConfig(D2EscMenuItemStrc * pItem, D2UIMouseMs
     ui::SetUIFlag(UI_CONFIG, UI_SET, 0);
 }
 
+// 1.14d mac: 000dcca1
 void __fastcall ESCMENU_SwitchToMainMenu_alt(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     ui::SetUIFlag(UI_ESCMENU, UI_SET, 0);
     gpEscMenuItemCount = &gEscMenuHeaderInitData;

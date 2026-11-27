@@ -110,6 +110,7 @@ static BOOL CHARSEL_FindRealmByName(char * szText) {
 
 // Looks up SStrHash(szName, 0, 0) in the gpRealmCharListCache list (entry +0 hash, +4 value, +8 expiry tick, +0xc next) and returns the cached data copy (entry +4, as stored by CHARSEL_CacheRealmData) of the first entry whose hash matches and whose expiry tick is >= GetTickCount(); 0 if none.
 // Provenance: asm 00437a70..00437aa8; unreferenced in 1.14d.
+// 1.14d mac: 002bc7d4
 void * __fastcall CHARSEL_GetCachedRealmData(char * szName) {
     uint32_t nHash = Storm::Source::SSTR::SStrHash(szName, 0, 0);
     DWORD dwNowTick = GetTickCount();
@@ -976,6 +977,7 @@ void __stdcall CHARSEL_DestroyAllCharEntries() {
     gpCharSelPendingEntry = 0;
 }
 
+// 1.14d mac: 002bd1c3
 int __fastcall Unreferenced_00438f40(char * szName) {
     int nLen = (int)strlen(szName);
     if (nLen >= 2 && nLen <= 15 && szName[nLen - 1] != '-' && *szName != '_') {

@@ -700,6 +700,7 @@ void __stdcall ActualLevelGeneration(D2DrlgLevelStrc * pLevel) {
 
 // Iterates all rooms in pLevel and attempts to expand each non-skipped room in all 8 directions. For each successful expansion, allocates a new room with pDrlgLevelData dimensions, links it via DRLGROOMEX_AllocNodesForBothRoomEx, and marks its preset data with the 'has preset' flag. Frees the temp room pointer array after processing. Source: .\DRLG\Maze.cpp line 0x288.
 // @sourcefile .\DRLG\Maze.cpp
+// 1.14d mac: 0015348b
 static void __stdcall DRLGMAZE_ExpandRoomsWithPresets(D2DrlgLevelStrc * pLevel, uint32_t argDefaultPresetId, D2RoomExStrc * argSkipRoom) {
     int bReplaced;
     int nDir;
@@ -947,6 +948,7 @@ void __thiscall DRLGMAZE_ExpandCatacombsLevel(D2DrlgLevelStrc * pLevel, int32_t 
 }
 
 // Generates the Worldstone Keep or Tal Rasha's Tombs special rooms within a maze-type DRLG level. Iterates 3 times, allocating a new RoomEx per iteration and attempting to splice it into the level via ReplaceRoomWithNewRoom at a seed-derived roll position (0-3). Successful placements get nodes allocated and presets picked; failed allocations are freed. For level types 0x11 and 0x22, additionally patches the first room's data fields to mark a specific room variant and clear its predecessor link.
+// 1.14d mac: 0015323e
 void __stdcall GenerateWolrdstoneAndTombs(D2DrlgLevelStrc * pLevel) {
     // Static local variables (originally global data)
     static D2CoordStrc gnMazeRoomCountX[4] = {
@@ -1450,6 +1452,7 @@ D2RoomExStrc * __fastcall DRLGMAZE_FindBottomMostRoom(D2DrlgLevelStrc * pLevel) 
 }
 
 // Finds the room in pLevel whose pRoomExData preset ID matches pDrlgReplaceRoom->nSourceLevelPrestId and replaces it in-place with the destination preset/file IDs from pDrlgReplaceRoom. If no matching room exists, falls back to ReplaceRoomWith to allocate a new adjacent room. Increments *pRoll (wrapping at 4) after any successful replacement.
+// 1.14d mac: 001533f9
 static void __stdcall ReplaceRoom(D2DrlgLevelStrc * pLevel, D2DrlgReplaceRoomStrc * pDrlgReplaceRoom, uint32_t * pRoll) {
     D2RoomExStrc* pRoomEx = pLevel->pRoomExFirst;
     int32_t nDestPickedFile = pDrlgReplaceRoom->nDestPickedFile;

@@ -750,6 +750,7 @@ void __fastcall GFX_DrawOverlayOnUnit(D2UnitStrc * pUnit, int32_t nOverlayId, in
     }
 }
 
+// 1.14d mac: 00066730
 void __stdcall DRAW_UNIT_States(D2UnitStrc * pUnit, int32_t nBlendMode, int32_t bSecondPass, int32_t nScreenX, int32_t nScreenY, int32_t bRaiseY) {
     D2GfxDataStrc sGfxData;
     D2GfxInfoStrc* pGfxInfo = UNIT::CUnit::GetGfxInfo(pUnit);
@@ -1821,6 +1822,7 @@ int __stdcall GFX_GetGfxMemory() {
     return gnGfxMemory;
 }
 
+// 1.14d mac: 00068c4a
 int __stdcall GFX_GetCofCacheMemUsage() {
     return gnCofCacheMemUsage;
 }
@@ -1830,6 +1832,7 @@ int __stdcall GFX_GetCofCacheMemLimit() {
     return gnCofCacheMemLimit;
 }
 
+// 1.14d mac: 00068c6e
 D2MonsterCofStatusEntryStrc * __fastcall GFX_GetModeStatusEntry(int32_t nClassId) {
     return g_pMonsterSpriteCofStatusTable + nClassId;
 }
@@ -2137,6 +2140,7 @@ static void __stdcall GFX_AsyncLoadPlayerSprites(int32_t nAsyncBlockId, int32_t 
 
 // Iterate units in adjacent rooms; update gfx/anim state, may show loading UI while streaming.
 // @sourcefile .\ENGINE\Gfx.cpp
+// 1.14d mac: 000678dd
 static void Gfx_UpdateNearbyUnitGfx(int32_t bShowLoadingUi) {
     // Static local variables (originally global data)
     static uint32_t gaNearbyPlayerCofUpdateQueue[8] = { 0x5, 0x6, 0x1, 0x2, 0x3, 0x7, 0xa, 0x4 }; D2_STATIC_GUARD(gaNearbyPlayerCofUpdateQueue, "D2Client::Engine::Gfx::Gfx_UpdateNearbyUnitGfx::gaNearbyPlayerCofUpdateQueue");

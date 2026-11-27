@@ -564,6 +564,7 @@ void __stdcall SetEachPlayerRosterGlobalPartyId() {
     } while ((intptr_t)pPartyId < (intptr_t)&gaEachplayerRosterPartyId + 28);
 }
 
+// 1.14d mac: 000d4d2c
 BOOL __stdcall UI_CheckMouseInRectangle(int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight) {
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
@@ -574,6 +575,7 @@ BOOL __stdcall UI_CheckMouseInRectangle(int32_t nX, int32_t nY, int32_t nWidth, 
     return 0;
 }
 
+// 1.14d mac: 000d334b
 int32_t __fastcall UI_CalculateCenteredTextXPosition(uint16_t nLocaleId, int32_t nCenterX) {
     int i;
     uint16_t wszText[100];
@@ -587,6 +589,7 @@ int32_t __fastcall UI_CalculateCenteredTextXPosition(uint16_t nLocaleId, int32_t
     return nCenterX - nTextWidth;
 }
 
+// 1.14d mac: 000d5605
 static void __stdcall ShowToolTipOnPartyButtons(int16_t nLocaleIdLine1, int16_t nLocaleIdLine2, int32_t nOffsetX, int32_t bIsTwoLiner) {
     int nBoxY;
     uint16_t wszLine1[100];
@@ -723,6 +726,7 @@ void __stdcall DRAW_UI_PartyWindow_II() {
     }
 }
 
+// 1.14d mac: 000d54df
 static void __stdcall UI_DrawPartyButtonTextWithTooltip(uint16_t nLocaleId1, uint16_t nLocaleId2, uint32_t dwUnused, int32_t nLine2Y, int32_t nColor, int32_t nOffsetX, int32_t nLine1Y) {
     if (!nLocaleId2) {
       ShowToolTipOnPartyButtons(nLocaleId1, 0, nOffsetX, 0);
@@ -1283,6 +1287,7 @@ void __stdcall INPUT_PartyScreenLeftClick(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000d4f4c
 void __stdcall INPUT_PartyScreenMouseUp(D2UIMouseMsgStrc * pMsg) {
     int nMouseX2;
     int nMouseY2;
@@ -1521,6 +1526,7 @@ void __stdcall UI_DrawPartyMembers() {
     }
 }
 
+// 1.14d mac: 000d3404
 void __stdcall DRAW_UI_PartyWindow() {
     UI_DrawPartyPanelBackground();
     UI_DrawPlayerNameInParty();

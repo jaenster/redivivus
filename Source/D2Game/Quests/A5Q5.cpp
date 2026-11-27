@@ -79,6 +79,7 @@ uint8_t __fastcall Q35_ResetAncientsStatues(::SGAMEDATA * pGame, D2QuestDataStrc
 }
 
 // [A5Q5 = Rite of Passage] Q35_NotifyQuestState: per-player quest-update notifier (packet 0x23). Sends only if RiteOfPassage is in a finished/locked state: (Completed OR FinishedInPreviousGame) AND NOT JustCompleted AND NOT CannotCompleteQuestInGame. Otherwise no-op.
+// 1.14d mac: 00242547
 BOOL __fastcall Q35_NotifyQuestState(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];

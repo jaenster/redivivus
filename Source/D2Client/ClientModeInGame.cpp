@@ -78,6 +78,7 @@ fnAppModeRun * (__fastcall AppModeClientInit)(HMODULE hModule) {
 }
 
 // Client app mode shutdown: close server/profiler logging.
+// 1.14d mac: 0005d157
 void __stdcall AppModeClientShutdown() {
     D2Game::GAME::Server::ServerClose_nullsub();
     D2Common::Logging::ProfCore::CloseProfCore();

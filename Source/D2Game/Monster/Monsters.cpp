@@ -1264,6 +1264,7 @@ static void __stdcall MONSTER_SpawnMinionsForBoss(D2RoomCoordListStrc * pCoordLi
     }
 }
 
+// 1.14d mac: 001e6d3d
 void __fastcall UMOD_DispatchInitFunction(D2UnitStrc * pUnit, int32_t nUModId, BOOL bApply) {
     if (!Umod::aUmodInitTable[nUModId]) {
       return;

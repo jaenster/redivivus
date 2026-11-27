@@ -2772,6 +2772,7 @@ static int SKILLDESC_FormatIntOrDecimal(uint16_t * wszText, int32_t bPrefixSign,
     return SKILLDESC_FormatIntValue(wszText, bPrefixSign, nValue);
 }
 
+// 1.14d mac: 000e1040
 static void __stdcall SKILLDESC_FormatDamageRange(int32_t bPrefixSign, uint16_t * wszText, int32_t bUseFormat, int32_t nMinDamage, int32_t nMaxDamage) {
     char szBuf[32];
     if (bUseFormat && (nMinDamage >= 10000 || nMaxDamage >= 10000)) {
@@ -2789,6 +2790,7 @@ static void __stdcall SKILLDESC_FormatDamageRange(int32_t bPrefixSign, uint16_t 
     D2Lang::UTF8_ConvertToWideChar(wszText, szBuf, 0x20);
 }
 
+// 1.14d mac: 000e7a2e
 static uint32_t SKILLDESC_FormatDamageRangeWithCalc(int32_t bPrefixSign, int32_t nMinVal, int32_t nMaxVal, uint16_t * wszText) {
     if (nMinVal == nMaxVal) {
       char szBuf[32];
@@ -2861,6 +2863,7 @@ static BOOL __stdcall SKILLDESC_FormatRangeWithStrings(int32_t nBonusRatio, uint
     return 1;
 }
 
+// 1.14d mac: 000e1174
 static int __stdcall SKILLDESC_FormatRangeDivided(uint16_t * wszText, uint16_t nMinLabel, uint16_t nMaxLabel, uint32_t nMinValue, uint32_t nMaxValue, int32_t nDivisor) {
     uint16_t* pWszLabel;
     uint16_t wszNumBuf[32];
@@ -2927,6 +2930,7 @@ static int __stdcall SKILLDESC_FormatStringWithCalc(uint32_t dwSkillCalcCtx, uin
     return 1;
 }
 
+// 1.14d mac: 000e0721
 static BOOL __stdcall SKILLDESC_FormatSignedValue(int32_t nSignedValue, uint16_t nStatLabelId, int32_t nValue, uint16_t * wszText) {
     uint16_t wszNumBuf[32];
     char szBuf[32];
@@ -2952,6 +2956,7 @@ static BOOL __stdcall SKILLDESC_FormatSignedValue(int32_t nSignedValue, uint16_t
     return 1;
 }
 
+// 1.14d mac: 000e1749
 static BOOL __stdcall SKILLDESC_FormatDecimalWithStrings(uint16_t nPrefixLabelId, uint16_t nSuffixLabelId, int32_t nDivisor, uint32_t nRawValue, uint16_t * wszText, int32_t bPrefixSign) {
     uint16_t* pWszLabel;
     uint16_t wszNumBuf[32];
@@ -3011,6 +3016,7 @@ static BOOL __stdcall SKILLDESC_FormatDecimalWithLabel(int32_t nDecimalPart, uin
     return 1;
 }
 
+// 1.14d mac: 000e07c5
 static int __stdcall SKILLDESC_FormatValuePercentage(int32_t nValue, uint16_t nSuffixLabelId, int32_t bPrefixSign, uint16_t * wszText) {
     uint16_t wszNumBuf[32];
     char szBuf[32];
@@ -3183,6 +3189,7 @@ static BOOL __stdcall SKILLDESC_FormatMinMaxRangeLabelsFirst(int32_t nMinVal, in
     return 1;
 }
 
+// 1.14d mac: 000e135a
 static int __stdcall SKILLDESC_FormatDamageMinMax(int32_t nMinDmg, int32_t nMaxDmg, uint16_t * wszText, int32_t bShowLabel, uint16_t nLabelId, int32_t bPrefixSign) {
     uint16_t wszMinMaxW[32];
     char szMinMaxA[32];
@@ -3216,6 +3223,7 @@ static int __stdcall SKILLDESC_FormatDamageMinMax(int32_t nMinDmg, int32_t nMaxD
     return 1;
 }
 
+// 1.14d mac: 000e0f66
 static BOOL __stdcall SKILLDESC_FormatThreeValues(int32_t pThis, uint16_t nLabel1Id, uint16_t nLabel2Id, uint16_t nLabel3Id, int32_t bPrefixSign, uint16_t * wszText) {
     uint16_t wszValueW[32];
     char szValueA[32];
@@ -3245,6 +3253,7 @@ static BOOL __stdcall SKILLDESC_FormatThreeValues(int32_t pThis, uint16_t nLabel
     return 1;
 }
 
+// 1.14d mac: 000e0e56
 static int __stdcall SKILLDESC_FormatDecimalSigned(int32_t nValue, uint16_t nLabelId, uint16_t * wszText) {
     uint16_t* pWszLabel;
     uint16_t wszDecW[32];
@@ -5629,6 +5638,7 @@ static void __stdcall SKILLDESC_DescLine1A_SkillDamage(uint16_t * wszText, D2Ski
     SKILLDESC_FormatMissileDamage(nMinDmgRaw, nMaxDmgRaw, wDmgTypeStringId, wszText);
 }
 
+// 1.14d mac: 000e1852
 static BOOL __stdcall SKILLDESC_DescLine3F_SignedPctRange(int32_t nValue, uint16_t wStatStringId, int32_t bPrefixSign, int32_t bAppendPercent, uint16_t wLabelStringId, uint16_t * wszText) {
     uint16_t wszValueStr[32];
     char szFormattedA[32];

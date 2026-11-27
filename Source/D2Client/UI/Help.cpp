@@ -424,6 +424,7 @@ void __stdcall INPUT_HelpScrollButtonUp(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000a5d2d
 int32_t __fastcall HELP_CenterTextAndGetX(uint16_t nStringId, int32_t nCenterX) {
     int i;
     uint16_t wszText[100];
@@ -940,6 +941,7 @@ void __stdcall HELP_OnEscapeOrSpace(D2UIMouseMsgStrc * pMsg) {
     gbMiniPanel = 0;
 }
 
+// 1.14d mac: 000a8680
 void __fastcall HELP_SetUIVarW(eD2UIvars eUIVar, eD2UIvarsSetType eUIVarSetType, uint32_t dwArg1) {
     DWORD dwUnused;
     ui::SetUIFlag(eUIVar, eUIVarSetType, dwUnused);

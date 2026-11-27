@@ -85,6 +85,7 @@ BOOL __fastcall Q20_PlayerUpdateBladeState(::SGAMEDATA * pGame, D2UnitStrc * pUn
 // If the quest is finished/finished-previously AND has the JustCompleted or CannotComplete flag,
 // sends quest-update packet 0x11 to the player (refresh quest UI / play completion). Used as the
 // broadcast callback passed to QUEST_SetStateAndBroadcast.
+// 1.14d mac: 00234c76
 BOOL __fastcall Q20_PlayerNotifyCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];

@@ -61,6 +61,7 @@ uint32_t __fastcall D2WINEDITBOX_GetTextLength(uint16_t * pwChar) {
     return 0;
 }
 
+// 1.14d mac: 00044dd6
 void __fastcall FORMS_DestroyD2WinEditBox(::D2WinEditBox * pWinEditBox) {
     if (!pWinEditBox) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6e);
@@ -847,6 +848,7 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg)
 }
 
 
+// 1.14d mac: 00047008
 int __stdcall D2WINEDITBOX_FilterDigitChar(::D2WinEditBox * pEditBox, int nTextLen, char * szText) {
     if (*szText >= '0' && *szText <= '9') {
       return 1;

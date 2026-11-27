@@ -93,6 +93,7 @@ bool __fastcall Q21_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 // Sends quest-update msg 0x12 to the player IFF the quest is truly finished and not in a
 // transient/blocked sub-state: requires (Completed OR FinishedInPreviousGame) AND NOT JustCompleted
 // AND NOT CannotCompleteQuestInGame. Used as the broadcast fn arg to QUEST_SetStateAndBroadcast.
+// 1.14d mac: 00234830
 BOOL __fastcall Q21_PlayerNotifyCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];

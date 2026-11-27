@@ -34,6 +34,7 @@ namespace D2Game::Quests::QUESTS::A5Q2 {
 // update packet to the player when the quest has reached a terminal-ish state -- i.e. is Completed(0)
 // OR FinishedInPreviousGame(0xf), AND is NOT in the transient JustCompleted(0xd)/CannotComplete(0xe)
 // states. Otherwise no-op. Reads QuestRecord bits for QUEST_RescueOnMountArreat.
+// 1.14d mac: 0023c144
 BOOL __fastcall Q32_NotifyQuestState(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];

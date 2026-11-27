@@ -36,6 +36,7 @@ namespace D2Game::Quests::QUESTS::A2Q3 {
 // Re-pushes quest-update msg 10 to a player if the quest is finished (Completed OR FinishedInPreviousGame)
 // but NOT yet flagged JustCompleted and NOT flagged CannotComplete. Used to keep clients' quest UI in sync.
 // No state transitions written here - read-only gate, then QUEST_SendQuestUpdateToPlayer(game,unit,10).
+// 1.14d mac: 0022463a
 BOOL __fastcall Q11_NotifyTaintedSunComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];

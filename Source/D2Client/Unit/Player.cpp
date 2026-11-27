@@ -1783,6 +1783,7 @@ static uint32_t SKILL_IsPassiveSkill(D2SkillStrc * pSkill) {
 
 // Client-side dispatcher for a left/right-click skill action gathered in pUnderMouse (player, target unit, selected skill, flags). After INPUT_ValidateSkillAction, resolves the right behavior for the target: interact with object/NPC/warp, talk in town, force-cast a skill at a unit/tile, attack a monster, or walk to the clicked position. Honors skill flags4 (force-hostile, usable-while-interact), weapon class, town rules, and shift/force modifiers; issues PLAYER_ExecuteSkillAtUnit / PLAYER_InteractWith* / PLAYER_ExecuteModeBasedAction / CLIENT_MovePlayerToPosition accordingly.
 // @sourcefile .\UNIT\Player.cpp
+// 1.14d mac: 00122ed9
 static void INPUT_ExecuteSkillCommand(D2UnderMouseStrc * pUnderMouse) {
     int iVar1;
     uint32_t bIsInteractable;
@@ -1971,6 +1972,7 @@ void __stdcall PLAYER_ClearRecursionClick() {
     bRecursionClick = 0;
 }
 
+// 1.14d mac: 00122e48
 BOOL __fastcall IsUnitNotMoving(D2UnderMouseStrc * pUnderMouse) {
     static uint32_t gnUnitClickState;
     D2_STATIC_GUARD_BSS(gnUnitClickState, "D2Client::UNIT::Player::IsUnitNotMoving::gnUnitClickState");

@@ -238,6 +238,7 @@ static int32_t __stdcall UTF8_GetNextCharWidth(uint8_t * pUtf8, int32_t nMaxByte
 }
 
 // Counts UTF-8 characters in string. Iterates via GetNextCharWidth, handles variable-width encoding. Returns character count (not byte count).
+// 1.14d mac: 002b8570
 int32_t __fastcall UTF8_GetStringLength(char * szUtf8, int32_t nMaxBytes) {
     int32_t nCharCount = 0;
     while (nMaxBytes > 0 && *szUtf8) {

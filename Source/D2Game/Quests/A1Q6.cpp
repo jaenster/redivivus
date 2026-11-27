@@ -75,6 +75,7 @@ void __fastcall Objects_InitFn47_CountessChest(D2ObjectInitFnArg * pInitArg) {
 }
 
 // A1Q6 per-player notifier (IteratePlayerOrMonsterUnits callback). Reads the player's quest record: if quest is Completed-or-FinishedInPreviousGame AND not JustCompleted AND not CannotComplete, sends quest-update packet (quest idx 6) to that player; otherwise no-op. Pure read of quest-state flags to gate the client update.
+// 1.14d mac: 0022058c
 BOOL __fastcall Q06_NotifyQuestStateToPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];

@@ -146,6 +146,7 @@ void __fastcall SOUND_StopAndDetach(D2ClientSoundChannelStrc * ppnParam) {
     ppnParam->pActiveSound = 0;
 }
 
+// 1.14d mac: 000942d4
 void __stdcall CleanUpGame() {
     uint32_t nStreamProgress;
     IDirectSound* bSpeakerEnabled = D2Sound::SOUND_GetDirectSoundDevice();
@@ -550,6 +551,7 @@ BOOL __fastcall SOUND_SetSoundMixer(int32_t nMixer) {
 }
 
 // Sets the global BackgroundSoundsActive flag then reinitializes the audio stream channels to apply the change. Queries the current mixer mode (DirectSound=1 or Sound3D=2), checks whether the corresponding subsystem is initialized, and calls SOUND_ShutdownAudio + SOUND_InitStreamChannels. Falls back to mixer mode 0 on init failure and adjusts the stored mixer setting accordingly.
+// 1.14d mac: 0009458b
 void __fastcall SOUND_SetBackgroundSoundsActive(BOOL bActive) {
     BackgroundSoundsActive = bActive;
     int32_t nMixerMode = D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer();

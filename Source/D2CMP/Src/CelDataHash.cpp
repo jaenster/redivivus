@@ -24,6 +24,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2CelDataHashEntryStrc) == 0x30, "D
 namespace D2CMP::SRC::CelDataHash {
 
 // @sourcefile .\SRC\CelDataHash.cpp
+// 1.14d mac: 0012c99d
 void __fastcall CELDATAHASH_UnlinkEntry(D2CelDataHashTableStrc * pHashTable, D2CelDataHashEntryStrc * pEntry, D2PoolManagerStrc * pMemory) {
     if (pHashTable->apBuckets[pEntry->nBucket] == pEntry) {
       pHashTable->apBuckets[pEntry->nBucket] = pEntry->pNext;
@@ -113,6 +114,7 @@ D2CelDataHashEntryStrc * __fastcall CELDATAHASH_AllocEntry(D2PoolManagerStrc * p
 }
 
 // @sourcefile .\SRC\CelDataHash.cpp
+// 1.14d mac: 0012cb1f
 void __fastcall GFX_RemoveCacheEntry(D2PoolManagerStrc * pMemory, D2CelDataHashTableStrc * pHashTable, D2CelDataHashEntryStrc * pEntry) {
     if (!pEntry) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb2);

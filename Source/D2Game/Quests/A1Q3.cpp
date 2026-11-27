@@ -30,6 +30,7 @@ typedef BOOL (__fastcall *fpExecuteOnUnitFunction)(::SGAMEDATA * pGame, D2UnitSt
 namespace D2Game::Quests::QUESTS::A1Q3 {
 
 // Q03_NpcGossipHandler (A1Q3 "Tools of the Trade") — gossip/announce callback bound via QUEST_SetStateAndBroadcast. Decides whether to push a quest-update (msg=3) to the player. Suppresses the update unless the quest is finishing right now: only sends if (Completed OR FinishedInPreviousGame) AND NOT JustCompleted AND NOT CannotCompleteQuestInGame. State transitions: none (read-only; emits QUEST_SendQuestUpdateToPlayer).
+// 1.14d mac: 00219349
 BOOL __fastcall Q03_NpcGossipHandler(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];

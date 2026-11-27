@@ -312,6 +312,7 @@ static BOOL AI_BAAL_IsSkillPowerful(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
 }
 
 // @sourcefile .\Ai\AiBaal.cpp
+// 1.14d mac: 001a1132
 static BOOL AI_BAAL_HasPowerfulSkill(D2UnitStrc * pUnit) {
     int nSkillLevel;
     D2SkillStrc* pSkill = D2Common::Units::GetRightSkill(pUnit);
@@ -337,6 +338,7 @@ static BOOL AI_BAAL_HasPowerfulSkill(D2UnitStrc * pUnit) {
 }
 
 // Weighted random action selector for Baal AI. Sums the nWeightCount weights in pnWeights, draws a random value from the unit's RNG seed (using bitmask fast-path when sum is a power of two), then walks the weight array to find which bucket the value falls in. Returns the index of the selected action (0-based); returns 1 as fallback if total weight is zero.
+// 1.14d mac: 001a116a
 static int32_t __stdcall AI_BAAL_SelectWeightedAction(int * pnWeights, int32_t nWeightCount, D2UnitStrc * pUnit) {
     uint32_t nRandResult = 0;
     int* pWeight = pnWeights;
@@ -735,6 +737,7 @@ static int32_t __stdcall AI_BaalEvaluateCombatAction(D2UnitStrc * pUnit, ::SGAME
     return nCombatAiState;
 }
 
+// 1.14d mac: 0019f900
 void __fastcall AI_BAAL_CountLivingMinions(D2UnitStrc * pMinion, D2UnitStrc * * ppSelf, int * pnCount) {
     if (!(pMinion != *ppSelf && pMinion && pMinion->eAnimMode.ePlayerMode != Death && pMinion->eAnimMode.ePlayerMode != Kick)) {
       return;

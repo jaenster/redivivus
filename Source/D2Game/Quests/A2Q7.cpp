@@ -66,6 +66,7 @@ bool __fastcall Q14_IsSevenTombsProgressed(::SGAMEDATA * pGame) {
 }
 
 // Q14 accessor: returns the "town/Duriel portal already created" flag from A2Q6 data (field_0x0B). Returns 1 (treat as created) if quest not introduced. Used to gate the stairs-to-tombs operate and portal creation.
+// 1.14d mac: 002299da
 uint8_t __fastcall Q14_GetPortalCreatedFlag(D2QuestArgStrc * pQuestArgs) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pQuestArgs->pGame, QUESTINT_TheSevenTombs);
     if (pQuestData && pQuestData->bIsNotIntroduction != '\0') {

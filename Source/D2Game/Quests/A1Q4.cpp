@@ -68,6 +68,7 @@ void __fastcall Q04_UpdateCainNpcAnimState(D2QuestDataStrc * pCainUnit, D2UnitSt
 // Sends quest-update packet 4 to a player ONLY if the quest is in a
 // terminal/about-to-change state: (Completed OR FinishedInPreviousGame) AND NOT
 // JustCompleted AND NOT CannotCompleteQuestInGame. Otherwise returns without sending.
+// 1.14d mac: 0021abc1
 BOOL __fastcall Q04_NotifyQuestStateToPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];

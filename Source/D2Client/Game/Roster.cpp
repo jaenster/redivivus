@@ -212,6 +212,7 @@ char * __fastcall GetRosterName(D2RosterStrc * pRoster) {
 }
 
 // Insertion-sorts a singly-linked D2RosterStrc list ascending by szRosterName (lexicographic). Builds a new sorted list by walking the original and inserting each node at its comparison position. Returns the sorted head, or NULL on NULL input.
+// 1.14d mac: 00075402
 D2RosterStrc * __stdcall ROSTER_SortByName(D2RosterStrc * pRoster) {
     D2RosterStrc* pCur;
     D2RosterStrc* pPrev;
@@ -246,6 +247,7 @@ D2RosterStrc * Unreferenced_004796b0() {
 }
 
 // Insertion-sorts a D2RosterStrc singly-linked list descending by nArenaScore (used as level proxy). Takes the head of an unsorted list via EAX, returns the head of the sorted list. Operates in-place by relinking pNext pointers; does not allocate.
+// 1.14d mac: 00075490
 static D2RosterStrc * ROSTER_SortByLevel(D2RosterStrc * pRoster) {
     D2RosterStrc* pSorted = 0;
     D2RosterStrc* pCurrent = pRoster;
@@ -673,6 +675,7 @@ uint32_t __fastcall ROSTER_GetMuteFlag(D2RosterStrc * pRoster) {
     return 0;
 }
 
+// 1.14d mac: 000756c2
 int __fastcall ROSTER_GetHostileFlag(D2RosterStrc * pRoster) {
     int nUnitGUID;
     uint32_t bFlag;
@@ -990,6 +993,7 @@ uint32_t __fastcall ROSTER_CheckPlayerNotHostile(int32_t nRosterGUID) {
     return 1;
 }
 
+// 1.14d mac: 00075c97
 void __fastcall GetRosterPosition(D2RosterStrc * pRoster, int * pX, int * pY) {
     if (pRoster) {
       *pX = pRoster->nX;
@@ -1277,6 +1281,7 @@ BOOL __stdcall ROSTER_CheckAnyPlayerHostileToMe() {
     return 1;
 }
 
+// 1.14d mac: 000761bc
 BOOL __fastcall ROSTER_HasIncomingHostile(D2RosterStrc * pRoster) {
     D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
     if (pRoster && pPlayerUnit_lcl) {
@@ -1291,6 +1296,7 @@ BOOL __fastcall ROSTER_HasIncomingHostile(D2RosterStrc * pRoster) {
     return 0;
 }
 
+// 1.14d mac: 000761fe
 BOOL __fastcall ROSTER_HasOutgoingHostile(D2RosterStrc * pRoster) {
     D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
     if (pRoster && pPlayerUnit_lcl) {
@@ -1305,6 +1311,7 @@ BOOL __fastcall ROSTER_HasOutgoingHostile(D2RosterStrc * pRoster) {
     return 0;
 }
 
+// 1.14d mac: 00076240
 BOOL __fastcall ROSTER_HasIncomingLoot(D2RosterStrc * pRoster) {
     D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
     if (pRoster && pPlayerUnit_lcl) {

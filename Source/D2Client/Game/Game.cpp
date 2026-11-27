@@ -390,6 +390,7 @@ void __stdcall UnderMouse_PrimaryClick(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 0006e5f8
 uint32_t __stdcall GAME_HasQueuedPrimaryClick() {
     return (uint32_t)(gnQueuedPrimaryClickX != 0);
 }
@@ -824,6 +825,7 @@ void __stdcall GAME_FreeClientSideStructures() {
     D2_FREE_AT(D2GameGame0x546, ".\\GAME\\Game.cpp", 0x599);
 }
 
+// 1.14d mac: 0006f127
 void __fastcall GAMEDATA_SetDrawFunction(int32_t nDrawMode) {
     // Static local variables (originally global data)
     static fnClientDrawProc gapfnClientDrawProcs[3] = { &D2Client::GAME::Game::InGameDraw, &D2Client::Engine::LOADER_DrawInsertDiscScreen, &D2Client::Engine::LOADER_DrawConnectionLostScreen }; D2_STATIC_GUARD(gapfnClientDrawProcs, "D2Client::GAME::Game::GAMEDATA_SetDrawFunction::gapfnClientDrawProcs");
@@ -1178,6 +1180,7 @@ eD2ClientAppMode __stdcall pfModes_Save() {
 }
 
 // Advance beta screen slideshow to next page.
+// 1.14d mac: 00071f3f
 void __stdcall BetaScreen_NextPage(D2UIMouseMsgStrc * pMsg) {
     gBetaScreenIndex++;
     pMsg->bHandled = 1;
@@ -1186,6 +1189,7 @@ void __stdcall BetaScreen_NextPage(D2UIMouseMsgStrc * pMsg) {
 }
 
 // Advance beta screen slideshow if not blocked by input flag.
+// 1.14d mac: 00071f65
 void __stdcall BetaScreen_NextPageIfVisible(D2UIMouseMsgStrc * pMsg) {
     if (!(pMsg->uLParam.nLParam & 0x40000000U)) {
       gBetaScreenIndex++;
@@ -1197,6 +1201,7 @@ void __stdcall BetaScreen_NextPageIfVisible(D2UIMouseMsgStrc * pMsg) {
 }
 
 // Draw beta screens; caches result in `gBetaScreenEntries[]` and uses `gD2QServer` congrats image/palette handles when the slideshow is active.
+// 1.14d mac: 0006ff06
 uint32_t __stdcall DrawBetaScreen(uint32_t dwUnused) {
     // Static local variables (originally global data)
     static int gnBetaScreenCount = 0xa; D2_STATIC_GUARD(gnBetaScreenCount, "D2Client::GAME::Game::DrawBetaScreen::gnBetaScreenCount");
@@ -1338,6 +1343,7 @@ uint32_t __stdcall DrawBetaScreen(uint32_t dwUnused) {
     return 1;
 }
 
+// 1.14d mac: 00071eff
 static BOOL __stdcall GAMEDATA_IsMouseInRect(int32_t bottomY, int32_t leftX, int32_t width, int32_t height) {
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
@@ -1349,6 +1355,7 @@ static BOOL __stdcall GAMEDATA_IsMouseInRect(int32_t bottomY, int32_t leftX, int
 }
 
 // Set gCongratzOkClicked when congratz screen is clicked.
+// 1.14d mac: 00071e51
 void __stdcall Congratz_SetOkClicked(D2UIMouseMsgStrc * pMsg) {
     if (!(pMsg->uLParam.nLParam & 0x40000000U)) {
       gEndGameUiState.congratzOkClicked = 1;
@@ -1359,6 +1366,7 @@ void __stdcall Congratz_SetOkClicked(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 0007021d
 int32_t __fastcall GAMEDATA_GetCenteredTextX(uint16_t nStringId, int32_t nCenterX) {
     int iClear;
     uint16_t wszText[100];
@@ -1783,6 +1791,7 @@ void __fastcall ClientInit_Noop16(D2IniConfigStrc * pIni) {
 }
 
 // Iterates ClientInitFunctions table (52 entries) and calls each non-null init callback; returns data_0070f414 success flag.
+// 1.14d mac: 000714ea
 BOOL __fastcall LoadDataForGame(D2IniConfigStrc * pIni) {
     // Static local variables (originally global data)
     static uint32_t gClientInitOk = 0x1; D2_STATIC_GUARD(gClientInitOk, "D2Client::GAME::Game::LoadDataForGame::gClientInitOk");
@@ -1908,6 +1917,7 @@ uint32_t __stdcall GAMEDATA_GetFpsDrawn() {
     return gClientGameData.fps_drawn;
 }
 
+// 1.14d mac: 00071604
 uint32_t __stdcall GetFPSSkip() {
     return gClientGameData.fps_skip;
 }
@@ -2346,6 +2356,7 @@ void __stdcall GAMEDATA_DrawCharacterPortrait() {
 }
 
 // End-game congrats screen; caches images in `gD2QServer.congratsBgImage`/`congratsOkButton` and uses `gD2QServer.frameSkipLevel` to decide whether to skip frames.
+// 1.14d mac: 000702d6
 uint32_t __stdcall DRAW_Congratz(uint32_t dwUnused) {
     // Static local variables (originally global data)
     static DC6 * gpCongratzOkButtonDC6; D2_STATIC_GUARD_BSS(gpCongratzOkButtonDC6, "D2Client::GAME::Game::DRAW_Congratz::gpCongratzOkButtonDC6");

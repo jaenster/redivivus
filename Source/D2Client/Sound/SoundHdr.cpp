@@ -588,6 +588,7 @@ BOOL __stdcall SOUNDHDR_EvictLeastRecentlyUsed(int32_t nBytesNeeded, int32_t bMu
     return TRUE;
 }
 
+// 1.14d mac: 00095c98
 float __fastcall SOUNDHDR_GetFalloffMin(int32_t nSoundId) {
     D2SoundsTxt* pSound = !pTxtSounds || nSoundId < 0 || nSoundId >= nTxtSoundsSize ? 0 : pTxtSounds + nSoundId; // steer-ok: row select before the field load, as the asm computes it
     switch (pSound->Falloff) {
@@ -604,6 +605,7 @@ float __fastcall SOUNDHDR_GetFalloffMin(int32_t nSoundId) {
     return 60.0;
 }
 
+// 1.14d mac: 00095cc8
 float __fastcall SOUNDHDR_GetFalloffMax(int32_t nSoundId) {
     D2SoundsTxt* pSound = !pTxtSounds || nSoundId < 0 || nSoundId >= nTxtSoundsSize ? 0 : pTxtSounds + nSoundId;
     switch (pSound->Falloff) {
@@ -956,6 +958,7 @@ void __fastcall SOUNDHDR_UpdateRegistryVersion(int32_t nSoundHeaderIndex) {
 
 namespace D2Client::Sound {
 
+// 1.14d mac: 0005da71
 BOOL __fastcall SOUND_FileExists(char * szFileName) {
     D2MPQFileStrc* pFile;
     int bOpened = Storm::Source::SFile::SFileOpenFileEx(nullptr, szFileName, 0, (void**)&pFile);

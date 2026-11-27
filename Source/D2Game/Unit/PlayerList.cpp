@@ -482,6 +482,7 @@ DWORD __fastcall GetHostileDelay(D2UnitStrc * pUnit, D2UnitStrc * pPlayer) {
     return 0;
 }
 
+// 1.14d mac: 002779c2
 void __fastcall PLAYERLIST_SetHostileDelay(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nDelayFrames) {
     int nUnit2GUID;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);

@@ -2490,6 +2490,7 @@ void __fastcall HandleItemSwapBodyItem(uint8_t * pBytes) {
 }
 
 // Client-side handler that equips an item into a weapon-switch (swapped arm) body slot from a packet (RELOAD flag required). Resolves the owner player and its inventory, removes any currently equipped item conflicting with the swap slot (both the packet's item id and the existing item at the target body loc), creates the new item from the body packet, sets its body location, and places it in the inventory (slot 3, or 4 for body-loc 0xb/0xc). For primary-weapon slots (body-loc 4/5) it updates the primary weapon, applies equip stats and recalcs. For other slots it runs the full equip-requirement recalc loop over the 11 body slots (disable failing items, re-equip qualifying up to 100 passes, re-apply set bonuses) and reloads the unit mode COF. Halts via Fog ErrorManager on missing inventory/item or non-reload packet. Register arguments: pnParam on the stack, nParam in EAX.
+// 1.14d mac: 00103137
 static void __stdcall ITEM_HandleWeaponSwitchItems(D2UnitDataItemDetailsStrc * pUnitDataItemDetails, uint8_t * pPacketData) {
     D2UnitStrc* pNewItem;
     int iBodyLocSaved;

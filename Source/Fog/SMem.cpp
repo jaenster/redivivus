@@ -555,6 +555,7 @@ int32_t __stdcall FOG_GetLowestSetBitIndex(uint32_t dwBits) {
     return -1;
 }
 
+// 1.14d mac: 002f3406
 void __stdcall SMemInitPerfCounters() {
     // Static local variables (originally global data)
     static uint32_t gnSMemPerfTicksPerMicrosecond; D2_STATIC_GUARD_BSS(gnSMemPerfTicksPerMicrosecond, "Fog::SMem::SMemInitPerfCounters::gnSMemPerfTicksPerMicrosecond");

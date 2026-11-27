@@ -1227,6 +1227,7 @@ void __fastcall DIALOG_RecalculateLayout(D2DialogStrc * pDialog) {
     }
 }
 
+// 1.14d mac: 000a410d
 int32_t __fastcall DIALOG_GetSelectedIndex(D2DialogStrc * pDialog) {
     if (pDialog) {
       return pDialog->nSelectedLine;

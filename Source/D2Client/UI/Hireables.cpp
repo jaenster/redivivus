@@ -132,6 +132,7 @@ void __stdcall UnsetHealthBarInitialize() {
     HealthBarColorsInitialized = false;
 }
 
+// 1.14d mac: 000aa589
 static void __stdcall DrawHirelingName(int32_t nX, int32_t nY, int32_t nColor, uint16_t * lwMessage) {
     int32_t nPrevFont = D2Win::Src::D2WinFont::SetAndReturnLastFont(6);
     uint16_t* pwszTrunc = lwMessage + 0x1f;
@@ -323,6 +324,7 @@ void __stdcall INPUT_HireableInteract(D2UIMouseMsgStrc * pMsg) {
     return;
 }
 
+// 1.14d mac: 000aa1f4
 D2UnitStrc * Unreferenced_004934b0() {
     D2UnitStrc* pDVar1 = UNIT::Player::GetPlayerUnit_UI();
     if (!pDVar1) {
@@ -592,6 +594,7 @@ void __stdcall UI_InitializeHirelingIconsUI() {
     gbHireIconsVisible = 1;
 }
 
+// 1.14d mac: 000aa3fb
 static void __stdcall DrawHealthBar(uint32_t nRosterGUID, uint32_t nPetType, int32_t nX) {
     int nHp = nPetType ? GAME::RosterPets::GetRosterPerHPPercent(nRosterGUID) : GAME::Roster::GetRosterHP(nRosterGUID);
     if (!nHp) {

@@ -2022,6 +2022,7 @@ HANDLE __fastcall ConnectingToBattleNet() {
     return (HANDLE)0x0;
 }
 
+// 1.14d mac: 0005c2ca
 int __fastcall NET_SID_CLIENT_Send_0x46_NewsInfo(pfnNewsEntryCallback pfnMotdCallback, pfnVoidNoArgCallback pfnNewsCallback) {
     g_pfnNewsChannelCallback = 1;
     g_pfnMotdCallback = pfnMotdCallback;

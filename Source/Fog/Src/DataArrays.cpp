@@ -101,6 +101,7 @@ uint32_t __fastcall FOG_GetMissileField(D2DataArrayStrc * pMissilesTxt) {
 
 // Returns the entry of pDataArray addressed by nHandle (high word = slot index, low word = the entry's 16-bit id; low word 0 matches any), or NULL for handle -1, an empty slot or an id mismatch. Halts (lines 219/222) on an index outside numObjects or an uninitialised array.
 // Provenance: asm 006bcc10..006bcc83 (+0x100 numObjects, +0x108 bInitialized, pData + index * nObjectSize); the argument is a D2DataArrayStrc.
+// 1.14d mac: 002ee03b
 short * __fastcall FOG_GetDataArrayEntry(D2DataArrayStrc * pDataArray, int nHandle) {
     short* pEntry = nullptr;
     if (nHandle != -1) {
@@ -125,6 +126,7 @@ short * __fastcall FOG_GetDataArrayEntry(D2DataArrayStrc * pDataArray, int nHand
 
 // Returns FOG_GetDataArrayEntry(pDataArray, nHandle); halts (line 253) when that returns NULL.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
+// 1.14d mac: 002edfed
 short * __fastcall FOG_GetDataArrayEntryOrHalt(D2DataArrayStrc * pDataArray, int nHandle) {
     short int* pEntry = FOG_GetDataArrayEntry(pDataArray, nHandle);
     if (!pEntry) {

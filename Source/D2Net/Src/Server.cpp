@@ -301,6 +301,7 @@ void __stdcall NET_Thunk_QServerAddGameTokenFilter(uint32_t nExpectedMaskedToken
     Fog::Src::AddGameTokenFilter(gpQServer, nMaskTableIndex, nExpectedMaskedToken);
 }
 
+// 1.14d mac: 002de00a
 void __stdcall NET_SetPlayersCount(int32_t nCount) {
     Fog::Src::SetPerIpConnectionLimit(gpQServer, nCount);
 }
@@ -309,6 +310,7 @@ void __stdcall QSERVER_GetConnectedClients() {
     Fog::Src::GetConnectedClients(gpQServer);
 }
 
+// 1.14d mac: 002de030
 void __stdcall NET_HACK_SetUseQServerHack(BOOL bResult) {
     Fog::Src::SetHackMode(gpQServer, bResult);
 }

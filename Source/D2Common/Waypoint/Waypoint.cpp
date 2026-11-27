@@ -237,6 +237,7 @@ D2WaypointStrc * __stdcall Alloc(D2PoolManagerStrc * pMemory) {
 
 // TRUE when the waypoint history already carries signature 0x102. Otherwise it requires 0 or 0x101 (halt, Waypoint.cpp line 275, pHistory[0] == 0 OR pHistory[0] == 0x101), then stores 0x102 and returns FALSE.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
+// 1.14d mac: 00193d4c
 BOOL __fastcall WAYPOINT_UpgradeSignature(D2WaypointStrc * pWaypoint) {
     uint16_t wSignature = pWaypoint->nSignature;
     if (wSignature != 0x102) {

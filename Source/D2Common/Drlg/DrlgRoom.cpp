@@ -963,6 +963,7 @@ int32_t __fastcall GetRoomsNearCount(D2RoomExStrc * pRoomEx) {
     return pRoomEx->nDrlgRoomsExNearCount;
 }
 
+// 1.14d mac: 00150025
 int32_t __fastcall GetRealRoomsNearCount(D2RoomExStrc * pRoomEx, D2RoomStrc * * ppRoomList) {
     int32_t iNullFill;
     int nIndex;
@@ -1178,6 +1179,7 @@ D2DrlgStrc * __fastcall GetDrlgFromRoomEx(D2RoomExStrc * pRoomEx) {
 
 // Fully tears down a D2RoomExStrc: frees tile data, nearby-room pointer array, outdoor or preset area data (by nPresetType), all preset units, all orth links (bidirectionally removing cross-references for type-1 orths), detaches the room from the level's linked list (decrementing nRoomExCount), frees room tiles and coord list, then frees the RoomEx struct itself from the pool.
 // @sourcefile .\DRLG\DrlgRoom.cpp
+// 1.14d mac: 0014f879
 void __fastcall DRLGROOMEX_FreeDrlgRoomEx(D2RoomExStrc * pRoomEx) {
     D2RoomExStrc* pRoomExNext;
     D2DrlgOrthStrc* pOrthCurrent;

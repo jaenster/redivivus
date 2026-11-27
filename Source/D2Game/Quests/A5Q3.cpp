@@ -43,6 +43,7 @@ namespace D2Game::Quests::QUESTS::A5Q3 {
 // Q33_NotifyQuestState: per-player completion broadcaster passed to QUEST_SetStateAndBroadcast.
 // Pushes log update (0x21) to a player ONLY when the quest is genuinely freshly done:
 // (Completed || FinishedInPreviousGame) && !JustCompleted && !CannotCompleteQuestInGame. Otherwise no-op.
+// 1.14d mac: 0023f111
 BOOL __fastcall Q33_NotifyQuestState(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];

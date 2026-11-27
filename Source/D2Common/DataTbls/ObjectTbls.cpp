@@ -236,6 +236,7 @@ void __stdcall OBJECTTBLS_FreeObjGroupTxt() {
 }
 
 // Builds the static D2BinFieldInputStrc field-descriptor table for objgroup.txt (8 object slots: ID0-7 INT, DENSITY0-7 CHAR, PROB0-7 CHAR, plus SHRINES and WELLS CHAR), each entry naming the column, its field type and byte offset within the record. Passes the table to DataTbls::CompileTxt(pMemory, "objgroup", ..., recordSize=0x34) to parse/compile objgroup.txt into the global pTxtObjGroup array (count in nTxtObjGroupSize). Called once during data-table load; pMemory is the pool allocator.
+// 1.14d mac: 0014ad55
 void __fastcall TXT_AllocTxt_objgroup(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc objgroup[27] = {
       {"ID0", FIELDTYPE_INT, 0, 0, 0},
@@ -280,6 +281,7 @@ D2ObjGroupTxt * __stdcall DATATBLS_GetObjGroupTxtRecord(int32_t nIndex) {
 }
 
 // Initialises and compiles the shrines.txt binary table into sgtDataTable. Declares an 11-entry D2BinFieldInputStrc descriptor array mapping shrines columns (Code, Arg0, Arg1, Duration in frames, reset time in minutes, rarity, view name, niftyphrase, effectclass, LevelMin) to their offsets within D2ShrinesTxt (row size 0xB8), then calls CompileTxt to parse and store the result in pTxtShrines/nTxtShrinesSize.
+// 1.14d mac: 0014adfd
 void __fastcall TXT_AllocTxt_shrines(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc shrines[11] = {
       {"Code", FIELDTYPE_CHAR, 0, 0, 0},
@@ -316,6 +318,7 @@ int32_t __stdcall GetShrinesSize() {
     return nTxtShrinesSize;
 }
 
+// 1.14d mac: 0014af01
 void __stdcall TXT_Shrines_Free() {
     DataTbls::UnloadBin(pTxtShrines);
     pTxtShrines = 0;

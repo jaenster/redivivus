@@ -625,6 +625,7 @@ void __fastcall NET_SID_CLIENT_InitSHAContext(int32_t nCtxIndex) {
     pCtx->nBitCountHigh = 0;
 }
 
+// 1.14d mac: 0005b525
 uint32_t __fastcall NET_SID_CLIENT_IDEAMultInverse(uint32_t x) {
     uint32_t t0, t1, q, y;
     if (x <= 1) {
@@ -673,6 +674,7 @@ void __fastcall NET_SID_CLIENT_IDEAExpandKey(uint16_t * pUserKey, uint16_t * pEx
     } while (--nRemaining);
 }
 
+// 1.14d mac: 0005b5ec
 void __fastcall NET_SID_CLIENT_IDEAInvertKey(uint16_t * pEncryptKey, uint16_t * pDecryptKey) {
     uint16_t* pReadKey;
     uint16_t* pTempWrite2;

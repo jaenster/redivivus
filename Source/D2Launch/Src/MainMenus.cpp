@@ -4267,6 +4267,7 @@ int __fastcall Unreferenced_0042e620(uint16_t * pChar) {
     return (uint32_t)(*pChar == 10);
 }
 
+// 1.14d mac: 002cb38e
 int __fastcall Unreferenced_0042e630(uint16_t * pChar) {
     if (*pChar < 0x80) {
       int iVar1;
@@ -4993,6 +4994,7 @@ void __stdcall UIMENU_MainScreenBeforeMenu() {
     D2Sound::Src::D2SoundFast::SOUND_SetMusicEnabled(1);
 }
 
+// 1.14d mac: 002cb34c
 BOOL __fastcall MAINMENU_CheckFileExists(char * szFileName) {
     D2MPQFileStrc* pFileHandle;
     if (!Storm::Source::SFile::SFileOpenFileEx(nullptr, szFileName, 0, (void**)&pFileHandle)) {
@@ -5600,6 +5602,7 @@ BOOL __stdcall MAINMENU_FreeRealmList() {
 
 // qsort comparator for the realm list (g_pBNetRealmList elements): strcmp of the two entries' szName.
 // Provenance: asm 00430b00 (loads [[arg]]), qsort callback pushed at 004341cc.
+// 1.14d mac: 002c7bf7
 int MAINMENU_CompareRealmNames(LPCVOID pRealmA, LPCVOID pRealmB) {
     bool bLess;
     uint8_t* pName2 = (uint8_t*)(*(D2BNetRealmEntryStrc* const*)pRealmB)->szName;
@@ -5636,6 +5639,7 @@ int __stdcall MAINMENU_GetRealmCount() {
     return gnRealmListCount;
 }
 
+// 1.14d mac: 002c7c2d
 char * __fastcall MAINMENU_GetRealmName(int32_t nIndex) {
     if (!g_pBNetRealmList[nIndex]) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x115c);
@@ -5823,6 +5827,7 @@ void Unreferenced_00431040() {
 
 // @sourcefile .\Src\MainMenus.cpp
 // Registers: nReserved (ECX) is 0 at the only call site and not read.
+// 1.14d mac: 002c96e5
 int __fastcall MAINMENU_DisplayCredits(int32_t nReserved) {
     uint16_t* bCopied1;
     int i;
@@ -6886,6 +6891,7 @@ int __stdcall MAINMENU_PollMCPConnectionPump(int nFrameIndex) {
     return 1;
 }
 
+// 1.14d mac: 002c4107
 int __stdcall MAINMENU_PollMCPCharLogonPump(int nFrameIndex) {
     D2MCPClient::McpConnect::NET_MCP_CLIENT_ReadAndParsePacket();
     BOOL bCharLogonSuccess = D2MCPClient::McpConnect::MCPSTATE_GetCharLogonSuccess();
@@ -7359,6 +7365,7 @@ int __stdcall EDITBOX_Cb_MAINMENU_ValidateCharacterNameCallback(void * pUnused) 
 }
 
 // Edit-box change callback installed via D2WINEDITBOX_SetInputMode @004fdb00 into D2WinEditBox+0x26c (fpChangeCallback). Signature proven by RET 0x4 (1 stack arg, callee cleans) and MOV EAX,1.
+// 1.14d mac: 002c5747
 int __stdcall EDITBOX_Cb_MAINMENU_ValidatePasswordChangeForm(void * pUnknown) {
     MAINMENU_ValidatePasswordChangeForm();
     return 1;
@@ -8560,6 +8567,7 @@ void __stdcall UIMENU_CreateHeroSinglePlayer() {
     MAINMENU_ValidateCharacterNameCallback();
 }
 
+// 1.14d mac: 002c7f07
 int32_t __fastcall fAPPMODE_launcher_ReturnAppMode_Caller(D2IniConfigStrc * pD2IniData) {
     D2IniData_launcher = pD2IniData;
     D2Win::D2GFX::UI_Init();
@@ -9294,6 +9302,7 @@ void __stdcall UIMENU_EnterEmailAddress() {
     MAINMENU_EnterEmailCleanup();
 }
 
+// 1.14d mac: 002bbb4d
 int __stdcall MAINMENU_ReturnOnePump(int nFrameIndex) {
     return 1;
 }
@@ -9747,6 +9756,7 @@ static char * __stdcall MAINMENU_GetRealmNameIfValid(int nIndex) {
     return nullptr;
 }
 
+// 1.14d mac: 002ba5e9
 int __stdcall LAUNCHER_PollBNConnectionPump(int nFrameIndex) {
     BOOL BVar1 = Launcher::gpBNetCallbacks->pfnWaitForLogonResponse();
     if (BVar1) {

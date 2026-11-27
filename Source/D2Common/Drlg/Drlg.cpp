@@ -602,6 +602,7 @@ void __stdcall InitLevel(D2DrlgLevelStrc * pLevel) {
 }
 
 // Gets the bounding rectangle (min/max X/Y) of all rooms in a level by iterating pRoomExFirst linked list and comparing each room's sCoords.
+// 1.14d mac: 0014d0dd
 void __fastcall GetMinAndMaxCoordinatesFromLevel(D2DrlgLevelStrc * pLevel, int * pOutMinX, int * pOutMinY, int * pOutMaxX, int * pOutMaxY) {
     D2RoomExStrc* pRoomEx = pLevel->pRoomExFirst;
     *pOutMinX = pRoomEx->sCoords.WorldPosition.x;
@@ -1638,6 +1639,7 @@ BOOL __fastcall fpLDE1(D2DrlgLevelPlacementStrc * pLevelUnknown) {
 }
 
 // Level-placement direction-enumeration callback (all 4 cardinal directions). On first call for a node, picks a random initial direction from the seeded RNG; on subsequent calls advances to the next direction (mod 4). Computes the candidate world-position of the current node relative to its predecessor's coords for each direction. Returns FALSE when all 4 directions have been exhausted.
+// 1.14d mac: 0015b186
 BOOL __fastcall fpLDE2(D2DrlgLevelPlacementStrc * pLevelUnknown) {
     int nPrevWorldPosY;
     int nPrevWorldSizeY;
@@ -1687,6 +1689,7 @@ BOOL __fastcall fpLDE2(D2DrlgLevelPlacementStrc * pLevelUnknown) {
 }
 
 // DRLG level-placement iterator: for the current node in pLevelUnknown, seeds or advances a directional-rotation state (8 compass directions, mod-8 wraparound) then computes the node's world-space position relative to its predecessor entry. Returns 0 when all 8 directions have been exhausted for this node (backtrack signal), 1 on a valid placement.
+// 1.14d mac: 0015b566
 BOOL __fastcall fpLevelDataEntry(D2DrlgLevelPlacementStrc * pLevelUnknown) {
     int nOffsetX;
     uint32_t sNextSeed;
@@ -1757,6 +1760,7 @@ BOOL __fastcall fpLevelDataEntry(D2DrlgLevelPlacementStrc * pLevelUnknown) {
 }
 
 // DRLG level placement direction/flip iterator. Given the current node in pLevelUnknown, advances to the next (direction, flip) combination using the level seed RNG. On the first call initialises the direction and flip state; on subsequent calls steps to the next combo, returning FALSE when all combos for this node are exhausted. Computes the world-space position of the node relative to its predecessor entry for each of the 4 compass directions and 2 flip states.
+// 1.14d mac: 0015bbea
 BOOL __fastcall fpLDE4(D2DrlgLevelPlacementStrc * pLevelUnknown) {
     uint32_t nFlipNext;
     LONG nOffsetX;
@@ -1836,6 +1840,7 @@ BOOL __fastcall fpLDE4(D2DrlgLevelPlacementStrc * pLevelUnknown) {
 }
 
 // DRLG level-placement step callback (LDE variant 3): computes the world position and size of the current maze/level node relative to its predecessor. On first visit for a node it seed-randomizes an initial direction (0..3) and flip bit; on later visits it advances the direction/step counter and returns FALSE when it cycles back to the initial state (no more placements). Sets the node's WorldSize (0x38x0x60 or rotated 0x60x0x38 by orientation) then, switching on direction and step parity, positions it adjacent to the previous node's coords (with 0x10 gap adjustments). Returns TRUE while a valid placement was produced, FALSE when exhausted.
+// 1.14d mac: 0015ba7c
 BOOL __fastcall fpLDE3(D2DrlgLevelPlacementStrc * pLevelUnknown) {
     uint32_t nNextFlip;
     uint32_t nNextDir;
@@ -1931,6 +1936,7 @@ BOOL __fastcall fpLDE3(D2DrlgLevelPlacementStrc * pLevelUnknown) {
     return 1;
 }
 
+// 1.14d mac: 0015ba0b
 BOOL __fastcall fpLDE5(D2DrlgLevelPlacementStrc * pLevelUnknown) {
     pLevelUnknown->aInitialDir[pLevelUnknown->nCurrentNode] = 0;
     pLevelUnknown->aCurrentDir[pLevelUnknown->nCurrentNode] = pLevelUnknown->aInitialDir[pLevelUnknown->nCurrentNode];
@@ -1958,6 +1964,7 @@ BOOL __fastcall fpLDE5(D2DrlgLevelPlacementStrc * pLevelUnknown) {
 }
 
 // Level-placement direction-enumeration callback restricted to 2 adjacent directions (dirs 1 and 2). On first call picks one of the two randomly from the seeded RNG; on the second call tries the other; returns FALSE when both are exhausted. Computes candidate world-position of the current node relative to its predecessor for each tried direction. Used by the placement backtracker for corridors/narrow-linkage nodes.
+// 1.14d mac: 0015b49c
 BOOL __fastcall DRLGPLACE_Adjacent2DirRandom(D2DrlgLevelPlacementStrc * pLevelUnknown) {
     uint32_t sNextSeed;
     int nNodeIdx = pLevelUnknown->nCurrentNode;
@@ -2005,6 +2012,7 @@ BOOL __fastcall DRLGPLACE_Adjacent2DirRandom(D2DrlgLevelPlacementStrc * pLevelUn
 }
 
 // For the current placement node, iterates through all 8 cardinal/diagonal directions (seeded randomly on first visit) and positions the node adjacent to its predecessor in the chosen direction. Returns FALSE when all 8 directions have been exhausted (backtrack signal).
+// 1.14d mac: 0015b622
 BOOL __fastcall DRLGPLACE_Adjacent8DirAligned(D2DrlgLevelPlacementStrc * pLevelUnknown) {
     uint32_t sNextSeed;
     int nNodeIdx = pLevelUnknown->nCurrentNode;
@@ -2054,6 +2062,7 @@ BOOL __fastcall DRLGPLACE_Adjacent8DirAligned(D2DrlgLevelPlacementStrc * pLevelU
 }
 
 // Places the current DRLG level node adjacent to its predecessor in one of 4 cardinal directions (dir 0-3), with random mirroring controlled by a single seed bit. Sets the node's WorldPosition relative to the previous node's WorldPosition+WorldSize; the mirrored path sets gdwDrlgLevelPlacementFlags=0x800000 (connector side flag) and the non-mirrored path sets 0x400000. Always returns TRUE.
+// 1.14d mac: 0015b0cd
 BOOL __fastcall DRLGPLACE_Adjacent4DirMirrored(D2DrlgLevelPlacementStrc * pLevelUnknown) {
     LONG nPosY;
     pLevelUnknown->aInitialDir[pLevelUnknown->nCurrentNode] = 3;
@@ -2264,6 +2273,7 @@ int __fastcall DRLGPLACE_ACT1_ValidatePlacementList2WithGap(D2DrlgLevelPlacement
     return nPrevId;
 }
 
+// 1.14d mac: 0015aff1
 int32_t __fastcall DRLGPLACE_ACT2_ValidatePlacementList1(D2DrlgLevelPlacementStrc * pLevelUnknown, int32_t nIndexMax) {
     int _bNoOverlap;
     bool bNoOverlap;
@@ -2287,6 +2297,7 @@ int32_t __fastcall DRLGPLACE_ACT2_ValidatePlacementList1(D2DrlgLevelPlacementStr
     return 1;
 }
 
+// 1.14d mac: 0015b05f
 int __fastcall DRLGPLACE_ACT2_ValidatePlacementList2(D2DrlgLevelPlacementStrc * pLevelUnknown, int32_t nIndexMax) {
     int _bNoOverlap;
     bool bNoOverlap;
@@ -2310,6 +2321,7 @@ int __fastcall DRLGPLACE_ACT2_ValidatePlacementList2(D2DrlgLevelPlacementStrc * 
     return 1;
 }
 
+// 1.14d mac: 0015af30
 int32_t __fastcall DRLGPLACE_ACT5_ValidatePlacementList3(D2DrlgLevelPlacementStrc * pLevelUnknown, int32_t nIndexMax) {
     int _bNoOverlap;
     bool bNoOverlap;
@@ -2333,6 +2345,7 @@ int32_t __fastcall DRLGPLACE_ACT5_ValidatePlacementList3(D2DrlgLevelPlacementStr
     return 1;
 }
 
+// 1.14d mac: 0015b3c0
 int32_t __fastcall DRLGPLACE_ACT4_ValidatePlacementList1(D2DrlgLevelPlacementStrc * pLevelUnknown, int32_t nIndexMax) {
     int _bNoOverlap;
     bool bNoOverlap;
@@ -2356,6 +2369,7 @@ int32_t __fastcall DRLGPLACE_ACT4_ValidatePlacementList1(D2DrlgLevelPlacementStr
     return 1;
 }
 
+// 1.14d mac: 0015b42e
 int __fastcall DRLGPLACE_ACT4_ValidatePlacementList2(D2DrlgLevelPlacementStrc * pLevelUnknown, int32_t nIndexMax) {
     int _bNoOverlap;
     bool bNoOverlap;
@@ -2706,6 +2720,7 @@ static void __stdcall DRLGOUTROOM_FindWarpExitInColumn(D2DrlgLevelStrc * pLevel,
 }
 
 // Finds an exit point at the half-width column of the outdoor level. Wrapper around FindExitPointOnColumn that passes X = (level width / 2) - 1. Called by DRLGOUTROOM_ComputeExitTargetPositions.
+// 1.14d mac: 0015d1d0
 void __fastcall DRLGOUTROOM_FindLeftExitPosition(D2DrlgLevelStrc * pLevel, int * pOutX, int * pOutY) {
     DRLGOUTROOM_FindWarpExitInColumn(pLevel, pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData->nGridCoordsWidth / 2 - 1, pOutX, pOutY);
 }
@@ -3292,6 +3307,7 @@ static BOOL __stdcall DRLGOUTROOM_ValidatePathStep(int * pTargetCoords, int nX, 
 }
 
 // Core A* loop: expands nodes, computes f=g+h, uses 900-node pool.
+// 1.14d mac: 0015834a
 D2DrlgOutRoomPathNodeStrc * __stdcall DRLGOUTROOM_PathSearchStep(D2DrlgOutRoomPathPoolStrc * ppNodeList, int32_t nMaxFCost, D2DrlgLevelStrc * pLevelCtx, int * pnTargetPos) {
     char cDirHalfStep;
     int nMoveCost;

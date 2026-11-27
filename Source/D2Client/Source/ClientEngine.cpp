@@ -1023,6 +1023,7 @@ void __fastcall DenOfEvilLight(D2RoomStrc * pRoom) {
 }
 
 // Ticks special light timers; triggers DenOfEvil lighting and clears related state when timers expire.
+// 1.14d mac: 0007fe34
 void __stdcall ClientLight_UpdateLightTimers() {
     if (gRoomLightPulse.bRoomLightPulseActive) {
       ClientLight_UpdateRoomLightPulse();
@@ -1403,6 +1404,7 @@ static D2UnitStrc * __stdcall CLIENT_FindClosestTrackedUnit(D2UnitStrc * pUnit, 
 }
 
 // Sends a monster message whose target is pTarget's unit type and GUID (6 / -1 when pTarget is NULL); asm 0046c77c..0046c795.
+// 1.14d mac: 00117d1a
 static void __stdcall CLIENT_SendMonsterMoveToUnitMessage(int32_t nSenderId, int32_t nSkillLvl, D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2ServerMessageHandleStrc sMsgTargetPos;
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
@@ -1428,6 +1430,7 @@ static void __stdcall CLIENT_SendMonsterMoveToUnitMessage(int32_t nSenderId, int
     UNIT::Monster::MonsterMessage(nSenderId, pUnit, &sMsgTargetPos);
 }
 
+// 1.14d mac: 00117921
 static uint32_t __stdcall MONSTER_TryMoveTowardTarget(D2UnitStrc * pUnit, uint8_t bMoveStep, int32_t nSenderId, int32_t dwAnimMode, D2UnitStrc * pTarget) {
     uint32_t nTargetX;
     uint32_t nTargetY;
@@ -1504,6 +1507,7 @@ static uint32_t __stdcall MONSTER_TryMoveTowardTarget(D2UnitStrc * pUnit, uint8_
     return 1;
 }
 
+// 1.14d mac: 00117ab8
 static void __stdcall CLIENT_SendMonsterMoveToRandomNearbyPosMessage(uint32_t nOffsetRange, int32_t nSenderId, int32_t nSkillLvl, D2UnitStrc * pUnit) {
     D2ServerMessageHandleStrc sMsg;
     int nMonsterY;
@@ -1639,6 +1643,7 @@ static void CLIENT_SetMonsterAiTimer(D2UnitStrc * pUnit, int32_t sMonsterAi) {
     *pnAiDelay = sMonsterAi;
 }
 
+// 1.14d mac: 00117bb9
 static uint32_t CLIENT_CheckIfUnitPositionsMatch(D2UnitStrc * pnUnit1, D2UnitStrc * pnUnit2) {
     int nUnit1Y;
     int nUnit2X;
@@ -2204,6 +2209,7 @@ void __stdcall CLIENT_ClearActiveUnitSlotArray() {
 // - Attack (if in range)
 // - Special cases: Corpse seekers, idle wanderers, basic chase
 // Called from CUNIT_UpdateClientFramesAndAI
+// 1.14d mac: 00116880
 void __fastcall CLIENT_DispatchMonsterAiBehavior(D2UnitStrc * pUnit) {
     int32_t nClosestDist;
     int32_t* pnAiDelay;

@@ -2387,6 +2387,7 @@ static void TEXT_FreeScreenMessage(ScreenMessage_t * pMessage) {
     D2_FREE_AT(pMessage, ".\\UI\\text.cpp", 0x6b6);
 }
 
+// 1.14d mac: 000ef1d3
 void __stdcall TEXT_FreeAllScreenMessages(D2ScreenMessageListStrc * pList) {
     int nCount = 0;
     ScreenMessage_t* pMessage = pList->pHead;
@@ -2668,11 +2669,12 @@ void __fastcall TEXT_SetNpcMenuSelection(D2UnitStrc * pUnit) {
     gbTextNpcMenuSelection = 0;
 }
 
-// 1.14d mac: 000ef691
+// 1.14d mac: 000ef807
 void __stdcall TEXT_ClearNpcMenuSelection() {
     gbTextNpcMenuSelection = 0;
 }
 
+// 1.14d mac: 000ef691
 void __fastcall Unreferenced_0049da60(int bRegister) {
     if (!bRegister) {
       int32_t iVar2;
@@ -3741,6 +3743,7 @@ void __fastcall TEXT_HandleEventMessagePacket(D2Packet0x5aEventStructure * pMess
     }
 }
 
+// 1.14d mac: 000f285b
 void __fastcall TEXT_FreeHoverText(D2HoverTextStrc * pHover) {
     D2TextLineStrc** pMemoryToFree = (D2TextLineStrc**)D2Common::Chat::HOVERTEXT_GetTextLineList(pHover);
     if (pMemoryToFree) {
@@ -3962,6 +3965,7 @@ D2GSPacketSrv0x27_TextStrc * __stdcall TEXT_GetOverheadGlobalPointer() {
     return gpOverHeadStrc;
 }
 
+// 1.14d mac: 000f2e34
 uint16_t * __fastcall TEXT_LookupSoundStringIndex(uint16_t nSoundId) {
     // Static local variables (originally global data)
     static D2SoundStringKeyStrc gaSoundStringKeys[527] = {
@@ -6103,6 +6107,7 @@ uint16_t * __fastcall TEXT_LookupSoundStringIndex(uint16_t nSoundId) {
     return pWVar1;
 }
 
+// 1.14d mac: 000ef610
 void __stdcall TEXT_CloseScrollingText() {
     int32_t nHandlerCount;
     GAME::Select::SELECT_SetExclusionRect(nullptr);
@@ -6521,6 +6526,7 @@ void __stdcall TEXT_CloseMessageUI() {
     ui::SetUIFlag(UI_MSGLOG, UI_SET, 0);
 }
 
+// 1.14d mac: 000f3a86
 D2TextLineStrc * __stdcall TEXT_ParseMultilineString(uint16_t * pwszInput, int * pnLineCount, uint16_t * pnScrollRate) {
     D2TextLineStrc* pNewNode;
     int32_t nLineWStrLen;
@@ -7248,6 +7254,7 @@ void __fastcall TEXT_ShowNpcDialog(D2UnitStrc * pUnit, uint16_t wDialogStringId,
     _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUITextFlagInit, 7);
 }
 
+// 1.14d mac: 000f1912
 void __fastcall TEXT_ShowScrollingText(uint16_t wDialogStringId, int32_t bAlignToPanel, int32_t bShowImage) {
     RECT nExclusionLeft;
     if (!bAlignToPanel) {
@@ -7319,6 +7326,7 @@ void __fastcall TEXT_ShowScrollingText(uint16_t wDialogStringId, int32_t bAlignT
     gpTextScrollBoxImage = 1;
 }
 
+// 1.14d mac: 000f1ada
 void __fastcall TEXT_ShowStaticTextPopup(uint16_t wStringId) {
     D2TextBoxStrc* ppTextBox;
     if (gpStaticTextPopup) {

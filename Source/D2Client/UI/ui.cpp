@@ -4033,6 +4033,7 @@ static void __stdcall UI_SetButtonKeyBinding(D2UIKeyBindingSetStrc * pButtonCont
     pButtonContainer->pHandlers[nButtonIndex].nMessageOrKeyCode = nKey;
 }
 
+// 1.14d mac: 000f875c
 static void UI_SetMultipleButtonKeyBindings(D2UIKeyBindingSetStrc * pnButtonIndices) {
     uint16_t wKeyCode;
     uint32_t nBoundKey;
@@ -6902,6 +6903,7 @@ uint32_t __stdcall UI_IsMouseInRightColumn(int32_t nMouseX) {
 // (nMouseX, nMouseY), or 3 when none does. ECX is the table offset, zeroed
 // at 004a47c2, not a parameter; ESI is compared with the x bounds and EDX
 // with the y bounds (1.14d asm 004a47c4-004a47dc).
+// 1.14d mac: 000ce7ff
 static int32_t UI_GetControlConfigTabIndex(int32_t nMouseX, int32_t nMouseY) {
     int nMatchedTabIndex = 0;
     uint32_t nTabByteOffset = 0;
@@ -7702,6 +7704,7 @@ void __stdcall INPUT_ConfigToggleRight(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000ce105
 void __stdcall INPUT_ConfigAcceptBinding(D2UIMouseMsgStrc * pMsg) {
     BOOL bExitFlag = GAME::Game::GAMEDATA_GetExitFlag3();
     if (bExitFlag) {
@@ -7722,6 +7725,7 @@ void __stdcall INPUT_ConfigAcceptBinding(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000ce1b5
 void __stdcall INPUT_ConfigCancel(D2UIMouseMsgStrc * pMsg) {
     BOOL bExitFlag = GAME::Game::GAMEDATA_GetExitFlag3();
     if (bExitFlag) {
@@ -7857,6 +7861,7 @@ void __stdcall INPUT_ConfigConfirmEntry(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000ce54a
 void __stdcall INPUT_ConfigScreenOpen(D2UIMouseMsgStrc * pMsg) {
     BOOL bExitFlag = GAME::Game::GAMEDATA_GetExitFlag3();
     if (bExitFlag) {
@@ -7949,6 +7954,7 @@ void __stdcall INPUT_ConfigKeyBindAlternate(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000ce3b5
 void __fastcall UI_ConfigSetKeyBinding(uint32_t nKeyCode) {
     int nPendingKeyStrId = 0;
     BOOL nBindResult = CmdTbl::CMD_SetKeyBinding(gpStatDescriptorTable[g_ControlConfigUIState].nCmdIndex, nConfigControlSelected, nKeyCode, (uint16_t*)&nPendingKeyStrId);
@@ -8955,6 +8961,7 @@ BOOL __stdcall thunk_NPCSHOP_IsRepairTabActive() {
     return ::D2Client::UI::ui::NPCSHOP_IsRepairTabActive();
 }
 
+// 1.14d mac: 000fa535
 static BOOL NPCSHOP_GetActiveTabIndex(int32_t nMouseX, int32_t nMouseY) {
     BOOL bHandled = 0;
     int nCount;

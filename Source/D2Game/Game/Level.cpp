@@ -334,6 +334,7 @@ void __fastcall RoomClearForClientAndHideMap(::SGAMEDATA * pGame, D2RoomStrc * p
     }
 }
 
+// 1.14d mac: 001afc48
 void __fastcall CLIENT_RemoveFromAdjacentRooms(D2RoomStrc * pRoom, D2ClientStrc * nClientId) {
     uint32_t nRoomIdx;
     D2RoomStrc** ppAdjacentRooms;

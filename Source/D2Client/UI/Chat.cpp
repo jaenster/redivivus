@@ -863,6 +863,7 @@ void __stdcall CHAT_CheckChatboxBounds(D2UIMouseMsgStrc * pMsg) {
     ui::SetUIFlag(UI_CHATBOX, UI_RESET, 0);
 }
 
+// 1.14d mac: 0009effb
 void __stdcall INPUT_HandleChatScroll(D2UIMouseMsgStrc * pMsg) {
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
@@ -1203,6 +1204,7 @@ static BOOL __stdcall CHAT_HandleWhisperCommand(int32_t bInGame, char * szComman
     return 1;
 }
 
+// 1.14d mac: 000a024d
 static void __stdcall CHAT_ExtractCommandParameter(int32_t nMaxLength, char * szInput, char * szOutParam) {
     char* pSpace = Storm::Source::SSTR::SStrChr(szInput, ' ');
     if (pSpace) {

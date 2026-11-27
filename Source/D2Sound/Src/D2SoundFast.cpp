@@ -188,6 +188,7 @@ void __fastcall SOUND_SetMusicEnabled(int32_t nEnabled) {
     gnMusicEnabled = nEnabled;
 }
 
+// 1.14d mac: 002e9cce
 BOOL __stdcall SOUND_GetMusicEnabled() {
     return gnMusicEnabled;
 }

@@ -705,6 +705,7 @@ namespace D2Client::UNIT::Monster {
 
 // Returns the address of the monster data's AI slot (+0x30). The client never allocates a server AI there; it uses the slot as an int think-delay in frames, decremented each update and reloaded with 5..0x20.
 // Provenance: 1.14d asm 004ae123 LEA EAX,[ECX+0x30]; all 13 callers store small integers through it.
+// 1.14d mac: 00117f15
 int32_t * __fastcall GetMonsterAi(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataMonster : 0)) {
       return nullptr;
@@ -730,6 +731,7 @@ void __fastcall SetOwnerGUID(D2UnitStrc * pUnit, int32_t nOwnerGUID) {
     pUnit->pUnitData.pUnitDataMonster->nOwnerGUID = nOwnerGUID;
 }
 
+// 1.14d mac: 00117f72
 int * __fastcall MONSTER_GetAiDataPtr(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataMonster : 0)) {
       return nullptr;
@@ -860,6 +862,7 @@ BOOL __fastcall IsMonsterSuperUnique(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 0011c72a
 void __fastcall MONSTER_ExplodeOwnerMissile(D2UnitStrc * pUnit) {
     D2UnitStrc* pOwnerUnit = CUnit::MISSILE_GetOwnerUnit(pUnit);
     if (!pOwnerUnit) {
@@ -2118,6 +2121,7 @@ static void MONSTER_PreloadSequenceAnimations(D2UnitStrc * pUnit) {
 
 // Returns nonzero when pModeEntry->bCheckMoveFlag is set, eMode < 0x10 and the monster's MonStats2 per-mode move bit (+0x104, bit eMode: A1mv/A2mv/SCmv/S1mv..S4mv) is set.
 // Called by MonsterMessage with a gaMonMsgAnimModeTable row; 1.14d asm 004afbc8..004afbf2.
+// 1.14d mac: 0011c3c6
 static uint32_t MONSTER_IsModeMoveFlagSet(D2UnitStrc * pUnit, D2MonMsgAnimModeStrc * pModeEntry) {
     int nMode;
     if (pUnit && pModeEntry) {

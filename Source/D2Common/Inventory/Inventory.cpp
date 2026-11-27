@@ -772,6 +772,7 @@ static uint32_t __stdcall INVENTORY_CheckItemFitsInGrid(uint32_t dwUnused, uint8
 }
 
 // Scores a candidate inventory grid placement for an item of dimensions (byItemWidth x byItemHeight) at grid position (nStartRow, nStartCol). Counts occupied neighbouring cells on all four sides (left column, right column, top row, bottom row) of the placement rectangle; adds byItemWidth or byItemHeight when the rectangle touches a grid boundary. Returns the score (lower = more isolated = better fit); returns 0xFF if the score equals or exceeds the item perimeter, indicating a fully surrounded or impossible placement. byItemHeight is a single byte: the prologue does MOVZX EDX, CL, so the upper 24 bits of ECX are dead and callers set only CL.
+// 1.14d mac: 0016aa22
 static uint32_t __stdcall INVENTORY_CalcGridPlacementScore(uint8_t byItemHeight, D2InventoryGridInfoStrc * pGridInfo, int32_t nStartCol, uint8_t byItemWidth, int32_t nStartRow) {
     D2UnitStrc** pScanCell;
     int iVar1;
@@ -910,6 +911,7 @@ static uint32_t __stdcall INVENTORY_FindBestPlacementWithScore(int * ppnOutX, in
 }
 
 // Scans the grid (pGridInfo) in reverse column order for the first empty cell where an item of size byItemWidth x byItemHeight fits, verified by INVENTORY_IsGridRectEmpty. Writes the column to *pnOutX and row to *pnOutY. Returns 1 on success, 0 if no slot found. Does not score placements — use INVENTORY_FindBestGridPosition for scored placement.
+// 1.14d mac: 0016a91a
 static BOOL __stdcall INVENTORY_FindFirstEmptySlot(int * pnOutX, int * pnOutY, uint8_t byItemWidth, uint8_t byItemHeight, D2InventoryGridInfoStrc * pGridInfo) {
     int32_t bFits;
 #if D2_ARCH_X86
@@ -971,6 +973,7 @@ static BOOL __stdcall INVENTORY_FindPlacementSlot(uint8_t byItemHeight, uint8_t 
 }
 
 // Scans the grid (pGridInfo) in row-major order for the highest-scoring empty placement that fits byItemWidth x byItemHeight, using INVENTORY_IsGridRectEmpty and INVENTORY_CalcGridPlacementScore. Writes best column to *ppnOutX and row to *pnOutY. Returns 1 if any valid placement found, 0 otherwise. Exits early on a perfect score (0xFF). Row-major counterpart to INVENTORY_FindBestPlacementWithScore.
+// 1.14d mac: 0016a831
 static uint32_t __stdcall INVENTORY_FindBestGridPosition(int * ppnOutX, int * pnOutY, uint8_t byItemWidth, uint8_t byItemHeight, D2InventoryGridInfoStrc * pGridInfo) {
     BOOL bRectEmpty;
     uint32_t nPlacementScore;
@@ -1793,6 +1796,7 @@ D2UnitStrc * __stdcall INVENTORY_FindEquippedItemForStack(D2InventoryStrc * pInv
 }
 
 // Searches the player inventory grid for a tome (ITEMTYPE_Book) that matches pScrollItem's magic suffix and is not yet full (quantity < max stack). Iterates the stash grid's item linked list starting from pStartAfterItem (or from the beginning if NULL). Returns the first matching non-full tome, or NULL if none found. Used when auto-stacking a scroll pickup into an existing tome.
+// 1.14d mac: 00168ad3
 D2UnitStrc * __stdcall INVENTORY_FindMatchingScrollBook(D2InventoryStrc * pInventory, D2UnitStrc * pScrollItem, D2UnitStrc * pStartAfterItem) {
     D2GridScreenCoordinates sGridDims;
     if (!pInventory) {
@@ -2151,6 +2155,7 @@ BOOL __stdcall INVENTORY_GetEquippedShield(D2InventoryStrc * pInventory, D2UnitS
 }
 
 // Returns the currently equipped weapon from the primary (body-loc 4) or secondary (body-loc 5) weapon slot. Checks each slot via ReinitializeInventoryGrid grid-cell [4]/[5], verifies the item is not broken/disabled and is of type ITEMTYPE_Weapon, writes it to *ppUnit and its body-loc index to *eBodyLoc. Sets *bResult=1 if the returned item matches the active weapon hand. Returns 0 if no valid weapon is equipped.
+// 1.14d mac: 00169121
 BOOL __stdcall INVENTORY_GetEquippedWeaponInfo(D2InventoryStrc * pInventory, D2UnitStrc * * ppUnit, int32_t * eBodyLoc, BOOL * bResult) {
     D2InventoryGridInfoStrc* pGridInfo;
     uint32_t bIsWeapon;
@@ -2228,6 +2233,7 @@ BOOL __stdcall INVENTORY_CheckHasArmorEquipped(D2InventoryStrc * pInventory) {
     return 0;
 }
 
+// 1.14d mac: 001691f0
 uint32_t __stdcall INVENTORY_CanMoveEquippedToPage(D2InventoryStrc * pInventory, D2UnitStrc * pPlayer, uint32_t nBodyLoc, int32_t ePage) {
     D2InventoryGridInfoStrc* pEquippedGrid;
     D2UnitStrc* pItem;
@@ -2865,6 +2871,7 @@ void __stdcall INVENTORY_SwapPrimaryWeaponOnRemoval(D2InventoryStrc * pInventory
 }
 
 // Determines the equipped-weapon handedness for a unit. Returns -1 (no weapon), 1 (dual-wield / Barbarian dual-handed), or 2 (two-handed weapon). Reads the left-arm (slot 5) and right-arm (slot 4) body-location cells from the equipment grid, checks IsTwoHanded and BARBARIAN_CheckItemData for each combination.
+// 1.14d mac: 0016852a
 int __stdcall INVENTORY_GetWeaponHandedness(D2UnitStrc * pUnit, D2InventoryStrc * pInventory) {
     D2InventoryGridInfoStrc* pGridInfo;
     D2UnitStrc* pLeftArmItem;

@@ -3710,6 +3710,7 @@ BOOL __stdcall INV_TrySetRepairMode() {
     return 1;
 }
 
+// 1.14d mac: 000b6705
 void __stdcall INV_SelectDefaultNpcButton() {
     gnInvShopButton = -1;
     for (int nButtonIdx = 0; nButtonIdx < gaNpcShopButtonTable[0]; nButtonIdx++) {
@@ -3729,10 +3730,12 @@ void __stdcall INV_SelectDefaultNpcButton() {
     Cursor::ITEM_SetItemOnHand(pCursorItem_lcl);
 }
 
+// 1.14d mac: 000b6744
 void __stdcall INV_SetIdentifyMode() {
     g_nCurrentInventoryPage = 7;
 }
 
+// 1.14d mac: 000b6759
 void __stdcall INV_ExitIdentifyMode() {
     if (g_nCurrentInventoryPage != 7) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1ed3);
@@ -4806,6 +4809,7 @@ void __fastcall INV_PlayTradeStatusSound(int32_t bLocalAcceptState, int32_t bPar
     gbInvTradeWindowOpen2 = bPartnerAcceptState;
 }
 
+// 1.14d mac: 000b86e5
 BOOL __stdcall INV_IsShopBuySellMode() {
     if (g_nCurrentInventoryPage != 1 && g_nCurrentInventoryPage != 2 && g_nCurrentInventoryPage != 3) {
       return 0;
@@ -6420,6 +6424,7 @@ static void INV_DrawHirelingEquippedItems(D2UnitStrc * pMercUnit) {
     }
 }
 
+// 1.14d mac: 000ba2b4
 D2UnitStrc * Unreferenced_0048b640() {
     int32_t iVar2 = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, 0);
     if (iVar2 != -1) {
@@ -9486,6 +9491,7 @@ static BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInven
     return 1;
 }
 
+// 1.14d mac: 000bc548
 uint32_t __fastcall EQUIP_ItemRight(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, uint32_t nBodySlot) {
     BOOL BVar1;
     eD2PlayerClassIDDWORD eVar2;
@@ -9735,6 +9741,7 @@ uint32_t __fastcall EQUIP_ItemRight(D2UnitStrc * pUnit, D2InventoryStrc * pInven
 }
 
 // Handles left-click equip action for inventory items. Checks equipment restrictions and sends network packets.
+// 1.14d mac: 000bca58
 uint32_t __fastcall EQUIP_ItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, uint32_t nBodySlot) {
     BOOL BVar1;
     eD2PlayerClassIDDWORD eVar2;
@@ -9983,6 +9990,7 @@ uint32_t __fastcall EQUIP_ItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInvent
     return bReturnValue;
 }
 
+// 1.14d mac: 000bc1d9
 uint32_t __fastcall EQUIP_ItemDefault(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, uint32_t bodyLocation) {
     int bResult;
     int32_t nEquipAction;

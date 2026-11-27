@@ -502,6 +502,7 @@ void __stdcall FreeDraw() {
 // All 38 UI panels: inventory, stats, skills, menus, tooltips, automap, chat.
 // GFX_bShowUIFlag controls visibility. UI drawn in screen space (not world).
 // EDI is not an argument: never read; the callee DRAW_UI_NPC_INTERACTION does not take it either.
+// 1.14d mac: 000f76ce
 void __fastcall DRAW_UI(D2GameViewStrc * pGameView) {
     uint32_t eBorderType;
     int bIsActive;
@@ -775,6 +776,7 @@ void __fastcall DRAW_NoOp(int32_t nScreenMode) {
 
 }
 
+// 1.14d mac: 000d2dda
 void __stdcall DRAW_PfHandlerCallback_CloseActivePanels(D2UIMouseMsgStrc * pMsg) {
     ui::UI_CloseActivePanels(1, 0);
 }

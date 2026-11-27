@@ -220,6 +220,7 @@ static void __stdcall CloseSocket(D2QSSocketStrc * pQServer) {
 }
 
 // Socket receive loop, passed as thread proc to Fog::Safesock::Create_Flag0
+// 1.14d mac: 002ed89d
 int __stdcall ReceiveLoopCallback(D2QSSocketStrc * pQSSocket) {
     uint32_t nBytesRecv;
     uint32_t nBufferSpace;

@@ -106,6 +106,7 @@ void TriggerEndGameCongratsExit() {
     D2CLIENT_ExitVar3 = 1;
 }
 
+// 1.14d mac: 000aa9df
 BOOL __stdcall LOADER_RunInsertDiscPopup() {
     Engine::gbCharScreenOkPressed = 0;
     D2Win::Src::D2WinPalette::D2WINPALETTE_SetPaletteIndex(0);
@@ -137,6 +138,7 @@ uint32_t __stdcall LOADER_PopupGameLoopCallback(uint32_t dwArg1) {
 }
 
 // SelectProc=1 handler: target must be a selectable corpse (type 2). Thunk that pushes pTargetUnit and calls SKILLS_IsSelectableCorpse2. pUnit (ECX) is the caster and is not read; pTargetUnit (EDX) is the unit under the cursor, which SKILL_CheckActiveSkillSelectProc puts in EDX (00464335) and SKILL_ExecuteSelectProc passes through to the CALL at 004642f1.
+// 1.14d mac: 000fe88e
 int __fastcall SKILL_SelectProc_IsSelectableCorpse2(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
     int bIsSelectableCorpse = D2Common::Skills::SKILLS_IsSelectableCorpse2(pTargetUnit);
     return bIsSelectableCorpse;
@@ -158,12 +160,14 @@ int __fastcall SKILL_SelectProc_IsCorpseValidForRevive(D2UnitStrc * pUnit, D2Uni
 }
 
 // SelectProc=6 handler: target must be a living monster that can be revived. Thunk forwarding to SKILL_CanReviveMonster. pUnit (ECX) is the caster and is not read; pTargetUnit (EDX) is the unit under the cursor, which SKILL_CheckActiveSkillSelectProc puts in EDX (00464335) and SKILL_ExecuteSelectProc passes through to the CALL at 004642f1.
+// 1.14d mac: 000fe97e
 int __fastcall SKILL_SelectProc_CanReviveMonster(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
     uint32_t bCanRevive = D2Common::Skills::SKILL_CanReviveMonster(pTargetUnit);
     return bCanRevive;
 }
 
 // SelectProc=5 handler: target must be a selectable corpse (primary type). Thunk forwarding to SKILLS_IsSelectableCorpse. pUnit (ECX) is the caster and is not read; pTargetUnit (EDX) is the unit under the cursor, which SKILL_CheckActiveSkillSelectProc puts in EDX (00464335) and SKILL_ExecuteSelectProc passes through to the CALL at 004642f1.
+// 1.14d mac: 000fe968
 int __fastcall SKILL_SelectProc_IsSelectableCorpse(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
     int bSelectable = D2Common::Skills::SKILLS_IsSelectableCorpse(pTargetUnit);
     return bSelectable;
@@ -290,6 +294,7 @@ void __stdcall CMD_ToggleSkillSelect() {
 
 // Skill hotkey slot nSlot (ESI): ignored while exiting or dead, and slots above 8 need the expansion. With the skill-select UI open it calls SPELLSEL_HandleSkillSelection, otherwise SPELLSEL_ActivateSkillSlot. The range assert (View.cpp line 252) tests nSlot < 0 && nSlot > 15 and can never fire.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
+// 1.14d mac: 000a3180
 static void __stdcall CMD_SelectSkillHotkeySlot(int nSlot) {
     BOOL BVar1 = GAME::Game::GAMEDATA_GetExitFlag3();
     if (BVar1) {
@@ -1192,6 +1197,7 @@ int __stdcall TEXT_EmptyCallback_Unref_004c2530() {
     return 0;
 }
 
+// 1.14d mac: 001288b4
 void __stdcall SOUND_ClearGlobalState() {
     UNIT::UnitSnd::gnSoundLastInitTick = 0;
     UNIT::UnitSnd::gdwSoundChannelIndex = 0;

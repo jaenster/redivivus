@@ -202,6 +202,7 @@ void __fastcall Q14_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 }
 
 // A2Q6 "The Seven Tombs" — per-player notify helper. If the player's TheSevenTombs record is Completed OR FinishedInPreviousGame, AND not JustCompleted AND not CannotComplete, returns early (nothing to announce); otherwise pushes a quest-update packet (state 0xd=JustCompleted) to that player so the journal/UI refreshes. Used as the broadcast callback by QUEST_SetStateAndBroadcast throughout this quest.
+// 1.14d mac: 0022ad49
 BOOL __fastcall Q14_NotifySevenTombsComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];

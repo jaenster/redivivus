@@ -97,5 +97,7 @@ BOOL PostMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 // ---- StormMac/SOURCE/SVID.cpp ----
 // Storm Mac's own: callers read LaunchURL's result, left in eax.
 int STORM_LaunchURL(char* szURL);
+// 1.14d mac: 0001e2e9
+void STORM_StoreValue(uint32_t dwValue);
 
 #endif  // D2_OS_MAC

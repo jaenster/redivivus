@@ -1808,6 +1808,7 @@ static D2RoomExStrc * __stdcall DRLGROOMEX_SetPriority3(D2RoomExStrc * pRoomExSt
 }
 
 // Alternate entry point to set RoomEx activation priority to 0 (highest). Uses fastcall convention. Wrapper for DRLGROOMEX_MoveToActivationList(pRoomEx, 0).
+// 1.14d mac: 0014c29f
 void __fastcall DUNGEON_ActivationHandler0_SetRoomExPriority0(D2RoomExStrc * pRoomEx) {
     DRLGROOMEX_MoveToActivationList(pRoomEx, 0);
 }
@@ -1983,6 +1984,7 @@ void __fastcall ClearRoomExIfFlag0x01(D2RoomExStrc * pRoomEx) {
 }
 
 // Recursively decrements reference counts on all near RoomEx nodes for a given priority level. Propagates to higher priority levels (nPriority+1) up to priority 3. Used during room deactivation.
+// 1.14d mac: 0014c008
 void __fastcall DRLGROOMEX_PropagateDecRefCount(D2RoomExStrc * pRoomEx, uint8_t nPriority) {
     int nIndex;
     for (nIndex = 0; nIndex < pRoomEx->nDrlgRoomsExNearCount; nIndex++) {
@@ -3541,6 +3543,7 @@ static void DRLGPATH_AdvanceNodeDirection(D2DrlgRoomAStarNodeStrc * pNode, D2Drl
 }
 
 // Advances through a chain of path nodes, incrementing their visit count and updating their direction. When a node reaches visit count 5, moves to its parent. Returns the current node or 0 when the root is reached.
+// 1.14d mac: 0017ef68
 static D2DrlgRoomAStarNodeStrc * __stdcall DRLGPATH_AdvancePathNodeChain(D2DrlgAStarContextStrc * pAStarCtx, D2DrlgRoomAStarNodeStrc * pNode) {
     if (pNode->nFlags < 4) {
       pNode->pSeedPtr++;

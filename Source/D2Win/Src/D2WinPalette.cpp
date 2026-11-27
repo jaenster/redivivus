@@ -127,6 +127,7 @@ void __stdcall Unreferenced_004fb1b0() {
     D2gfx::D2GFX::D2GFX_SetPalette(MostLikelyCurrentPalletePtr);
 }
 
+// 1.14d mac: 0004c43a
 void __fastcall D2WINPAL_CopyPalette(void * pDest) {
     memcpy(pDest, gPaletteDataBase, 0x3100);
 }

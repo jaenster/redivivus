@@ -274,6 +274,7 @@ BOOL __stdcall D2WINMAIN_SetCursorDC6(DC6 * pCursorDC6) {
 }
 
 // Sets gpfnExitCallback exit callback function pointer
+// 1.14d mac: 0004a5dd
 void __stdcall D2WINMAIN_SetExitCallback(pfnVoidNoArgCallback pfnExitCallback) {
     gpfnExitCallback = pfnExitCallback;
 }

@@ -1670,6 +1670,7 @@ D2RoomStrc * __stdcall GetFreeCoordinates_WithFieldCoords(D2RoomStrc * pRoom, PO
 }
 
 // COLLISION_FindFreeCoordSpiral - Spirals outward from a point to find a collision-free position within a room. Used by SERVER_RoomInitInternal and SERVER_SpawnMonsterInternal to place units at valid locations.
+// 1.14d mac: 00138aeb
 void __fastcall COLLISION_FindFreeCoordSpiral(D2RoomStrc * pRoom, POINT * pPoint, int32_t nUnitSize, int32_t eCollisionFlag, D2RoomStrc * * ppRoom) {
     eCollisionFlags eCollisionResult;
     D2RoomStrc* pRoomForX;

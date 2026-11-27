@@ -410,6 +410,7 @@ eD2LevelId * __fastcall GetPortalLevelArrayFromPortalFlags(uint32_t * pnPortalLe
 }
 
 // Loads and compiles the leveldefs.txt data table. Builds a stack array of D2BinFieldInputStrc field descriptors mapping each leveldefs column (QuestFlag, Layer, SizeX/Y per difficulty, Offset, Depend, DrlgType, LevelType, SubType/Theme/Waypoint/Shrine, Vis0-7, Warp0-7, light RGB/Intensity, Portal, Position, SaveMonsters, LOSDraw) to its struct offset and field type, then calls CompileTxt to parse the file into sgtDataTable.pTxtLevelDefs. Finally calls LVLTBLS_BuildPortalLevelArray to derive the portal-level lookup. Allocates from the supplied D2PoolManagerStrc; one-time table init at startup.
+// 1.14d mac: 001451a8
 void __fastcall TXT_AllocTxt_leveldefs(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc leveldefs[43] = {
       {"QuestFlag", FIELDTYPE_INT, 0, 0, 0},
@@ -595,6 +596,7 @@ BOOL __stdcall TXT_LvlTypes_CheckIfTypeIsAssignedToAct(int32_t nLvlTypeId, char 
     return 0;
 }
 
+// 1.14d mac: 001455f6
 void __stdcall LVLTBLS_GetLvlTypeFilename(int32_t nLvlType, int32_t nFileIndex, uint8_t * szFilename) {
     if (!pTxtLvlTypes) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x251);

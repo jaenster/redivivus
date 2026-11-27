@@ -379,6 +379,7 @@ int32_t __fastcall SOUNDSMP_IsPlaying(D2SoundSmpStrc * pSound) {
     exit(-1);
 }
 
+// 1.14d mac: 002e93bd
 uint32_t __fastcall SOUNDSMP_GetStatus(D2SoundSmpStrc * ppSoundSmp) {
     DWORD dwStatus;
     if (ppSoundSmp && ppSoundSmp->pDSBuffer) {
@@ -423,6 +424,7 @@ void __fastcall SOUNDSMP_SetVolume(D2SoundSmpStrc * ppSoundSmp, int nVolume) {
 
 // Returns pSoundSmp->nVolume, the value SOUNDSMP_SetVolume stores; halts (line 740) on NULL.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
+// 1.14d mac: 002e9432
 int __fastcall SOUNDSMP_GetVolume(D2SoundSmpStrc * pSoundSmp) {
     if (!pSoundSmp) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2e4);
@@ -432,6 +434,7 @@ int __fastcall SOUNDSMP_GetVolume(D2SoundSmpStrc * pSoundSmp) {
     return pSoundSmp->nVolume;
 }
 
+// 1.14d mac: 002e8f8c
 void __fastcall SOUNDSMP_SetPan(D2SoundSmpStrc * ppSoundSmp, int32_t nPan) {
     if (!ppSoundSmp) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2ef);
@@ -1060,6 +1063,7 @@ float SOUNDSMP_LinearToLogNoParam(float fValue, float fValue2) {
 }
 
 // No register arguments: EAX is first written by FNSTSW AX at 00516607 and only carries the x87 status word (1.14d asm).
+// 1.14d mac: 002e9cdf
 float __stdcall SOUNDSMP_ClampVolume(float fValue, float fMax, float fInput) {
     long double fVar1 = (long double)fInput;
     if (fVar1 <= (long double)fValue + (long double)9.999999747378752e-05) {
@@ -1164,6 +1168,7 @@ int * __fastcall SOUNDSMP_ParseWavHeader(int * pWavData, uint32_t * pDataSize, W
     return nullptr;
 }
 
+// 1.14d mac: 002e9ee5
 void __fastcall SOUNDSMP_CalculateVolumeAndPan(uint32_t * pnVolume, uint32_t * pnPan, float fDeltaX, float fDeltaY, float fDeltaZ) {
     int nLongResult;
     long double fVolumeDivisor = sqrt((double)(fDeltaZ * fDeltaZ + fDeltaY * fDeltaY + fDeltaX * fDeltaX));

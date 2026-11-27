@@ -1841,6 +1841,7 @@ void __stdcall AUTOMAP_RevealTownCallback(eD2LevelId eLevel, uint32_t nCellNo, i
 }
 
 // Recursively draws automap cell tree using AVL node traversal. Applies fade effects, draws tiles with alpha based on game state. Checks viewport clipping and player proximity for highlight.
+// 1.14d mac: 0009b92e
 void __fastcall AUTOMAP_DrawCellTree(D2AutomapCellStrc * pCell, D2AutomapDrawCtxStrc * apDC6Layers) {
     uint32_t eBorderType;
     int32_t eFade;
@@ -2522,6 +2523,7 @@ void __stdcall AUTOMAP_DrawDifficulty() {
     return;
 }
 
+// 1.14d mac: 0009b048
 void Unreferenced_0045a280() {
     DC6** ppDVar1 = pAutoMapDC6;
     do {
@@ -2821,6 +2823,7 @@ void __fastcall AUTOMAP_SetMiniMapType(int32_t nMiniMapType) {
     AUTOMAP_CenterOnPlayer(1);
 }
 
+// 1.14d mac: 0009b79e
 static void __stdcall AUTOMAP_DrawTextCentered(uint8_t byColor, char * szText, int32_t nCenterX, int32_t nBaseY) {
     uint16_t wTextWide[23];
     char cCurChar;
@@ -2840,6 +2843,7 @@ static void __stdcall AUTOMAP_DrawTextCentered(uint8_t byColor, char * szText, i
     D2Win::Src::D2WinFont::SetAndReturnLastFont(nPrevFont);
 }
 
+// 1.14d mac: 0009b88d
 static void __stdcall AUTOMAP_DrawXMarker(int32_t nX, DWORD nColor, int32_t nY) {
     if (MiniMapType == 1) {
       nX--;

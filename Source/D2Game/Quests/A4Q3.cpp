@@ -100,6 +100,7 @@ void __fastcall Objects_InitFn78_LastLastPortal(D2ObjectInitFnArg * pInitArg) {
 }
 
 // A4Q3 Hell's Forge — Q28_PlayerNotifyCompletedForge: per-player state-broadcast callback (passed to QUEST_SetStateAndBroadcast). Sends quest-update 0x18 to the player ONLY in the transition window: Hell's Forge is Completed-or-FinishedInPreviousGame AND NOT (JustCompleted or CannotCompleteQuestInGame). I.e. notifies players who finished it in a prior game when they re-enter, suppressing duplicate "just done" notifications.
+// 1.14d mac: 00237d42
 BOOL __fastcall Q28_PlayerNotifyCompletedForge(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];

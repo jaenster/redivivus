@@ -78,6 +78,7 @@ static void __stdcall SOUNDINST_StopChannel(D2SoundChannelStrc * pSoundInst) {
     exit(-1);
 }
 
+// 1.14d mac: 00097182
 static void SOUND_ReleaseChannel(D2SoundChannelStrc * pChannel) {
     D2SoundChannelStrc* pChanNode;
     D2SoundListNodeStrc* pSfxNode;
@@ -560,6 +561,7 @@ uint32_t __fastcall SOUND_GetCurrentMusic(int32_t nSoundId) {
     return 0;
 }
 
+// 1.14d mac: 00097070
 BOOL __fastcall SOUND_IsChannelAvailable(D2SoundChannelStrc * pChanA, D2SoundChannelStrc * pChanB, int32_t bComparePan, int32_t bCompareTime) {
     if (pChanA->nPriorityByte > pChanB->nPriorityByte) {
       return 1;
@@ -595,6 +597,7 @@ BOOL __fastcall SOUND_IsChannelAvailable(D2SoundChannelStrc * pChanA, D2SoundCha
 
 namespace D2Client::Units {
 
+// 1.14d mac: 000972a1
 BOOL __fastcall IsUnitDistanceLowerThan700(D2UnitStrc * pUnit) {
     POINT ptPlayer;
     POINT ptUnit;
@@ -620,6 +623,7 @@ uint32_t __fastcall SOUND_FindChannelForSound(D2UnitStrc * pUnit) {
     return (uint32_t)(pChannel != 0);
 }
 
+// 1.14d mac: 00097012
 void Unreferenced_004b9eb0() {
     if (SoundHdr::SOUNDHDR_GetGlobal3() % 3 == 0) {
       const eD2Sounds nSoundId = _Utils::RollRandomNumber(0xb76, 0x1230);

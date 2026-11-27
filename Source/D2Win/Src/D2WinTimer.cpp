@@ -31,6 +31,7 @@ typedef BOOL (__fastcall *DrawEx)(D2ControlStrc * pControl);
 
 namespace D2Win::Src::D2WinTimer {
 
+// 1.14d mac: 0004f947
 void __fastcall FORMS_DestroyD2WinTimer(::D2WinTimer * pTimer) {
     D2WinMain::FORMS_DestroyControl(&pTimer->sControl);
 }

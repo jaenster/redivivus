@@ -59,6 +59,7 @@ void __fastcall Q12_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2
 }
 
 // A2Q4 - NotifyArcaneComplete. Per-player journal-update callback used as the broadcast fn for QUEST_SetStateAndBroadcast. Sends a quest-update packet (subcmd 0xb) to the player ONLY when the Sanctuary record is in a "completed-ish" state: (Completed(0) OR FinishedInPreviousGame(0xf)) AND NOT JustCompleted(0xd) AND NOT CannotCompleteQuestInGame(0xe). Otherwise no-op.
+// 1.14d mac: 00225acb
 BOOL __fastcall Q12_NotifyArcaneComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];

@@ -96,6 +96,7 @@ BOOL __stdcall D2WINSMACK_LoadAndDecodeSmacker(::D2WinSmack * pSmack, char * szF
 }
 
 // Closes smacker context and optionally deletes temporary file. Checks form type is FORM_Smack (9), closes smacker context at pContext field, deletes file at field 0x40 if gbSmackerKeepTempFile is zero.
+// 1.14d mac: 0004d1cc
 BOOL __stdcall D2WINSMACK_CloseAndDeleteFile(::D2WinSmack * pSmack) {
     if (pSmack->sControl.neD2FormType != FORM_Smack) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x66);
@@ -124,6 +125,7 @@ BOOL __stdcall D2WINSMACK_SetPosition(::D2WinSmack * pSmack, int32_t nPosX, int3
     return 1;
 }
 
+// 1.14d mac: 0004d230
 void __fastcall FORMS_DestroyD2WinSmack(::D2WinSmack * pSmack) {
     if (pSmack->sControl.neD2FormType != FORM_Smack) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8c);

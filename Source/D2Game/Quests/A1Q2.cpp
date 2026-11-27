@@ -48,6 +48,7 @@ bool __fastcall QuestDataBool(D2QuestDataStrc * pQuestData) {
 // CannotCompleteQuestInGame -- i.e. push the "done" log entry exactly once.
 // QuestRecord state ids: 0=Completed, 0xf=FinishedInPreviousGame,
 // 0xd=JustCompleted, 0xe=CannotCompleteInGame.
+// 1.14d mac: 0022127a
 BOOL __fastcall Q02_NotifyQuestStateToPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];

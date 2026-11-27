@@ -306,6 +306,7 @@ void Unreferenced_0044b780() {
     D2gfx::D2GFX::D2GFX_ResetViewport();
 }
 
+// 1.14d mac: 0005db6b
 D2IniConfigStrc * __stdcall D2IniData_Getter() {
     return D2IniData_client;
 }
@@ -315,6 +316,7 @@ D2BNetClientCallbacksStrc * __stdcall CLIENT_GetBNetClientCallbacks() {
     return D2IniData_client->pBNetClientCallbacks;
 }
 
+// 1.14d mac: 0005db93
 char * __stdcall CLIENTMODE_GetGamePasswordPart1() {
     char cChar;
     if (D2IniData_client) {
@@ -327,6 +329,7 @@ char * __stdcall CLIENTMODE_GetGamePasswordPart1() {
     return nullptr;
 }
 
+// 1.14d mac: 0005dbb8
 char * __stdcall CLIENTMODE_GetGamePasswordPart2() {
     char cChar;
     if (D2IniData_client) {
@@ -339,6 +342,7 @@ char * __stdcall CLIENTMODE_GetGamePasswordPart2() {
     return nullptr;
 }
 
+// 1.14d mac: 0005dbe3
 char * __stdcall CLIENTMODE_GetGamePasswordPart3() {
     char ch;
     if (D2IniData_client) {
@@ -366,6 +370,7 @@ void __fastcall D2CLIENT_SetExitVar1(BOOL bResult) {
     gbQuitGame = bResult;
 }
 
+// 1.14d mac: 0005dc50
 BOOL __stdcall GAME_GetQuitGame() {
     return gbQuitGame;
 }

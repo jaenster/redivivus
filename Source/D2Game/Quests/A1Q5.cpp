@@ -83,6 +83,7 @@ static uint32_t __stdcall QUEST_IsPlayerGUIDInTrackingList(D2QuestDataA1Q5Strc *
     return 0;
 }
 
+// 1.14d mac: 0021dfad
 BOOL __fastcall Q05_NotifyQuestStateToPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];

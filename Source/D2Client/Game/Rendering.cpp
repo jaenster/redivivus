@@ -69,6 +69,7 @@ int __stdcall RENDERING_GetCurrentEngineIndex() {
     return gnCurrentEngineIndex;
 }
 
+// 1.14d mac: 0005e74e
 uint32_t __stdcall IsWindowMode() {
     return (uint32_t)(CurrentRendingEngine >= 4);
 }
@@ -225,6 +226,7 @@ void __stdcall DRAW_UI_FPSStats() {
     return;
 }
 
+// 1.14d mac: 0005f3c9
 void __stdcall ResetStats() {
     gbHideExtendedFPSStats = 0;
     gbFPSStatsEnabled = (uint32_t)!gbFPSStatsEnabled;
@@ -246,6 +248,7 @@ void __stdcall ResetStats() {
     D2CMP::SRC::SpriteCache::SPRITECACHE_Lock();
 }
 
+// 1.14d mac: 0005f478
 void __stdcall STATLIST_ResetIfNotUpdating() {
     if (gbHideExtendedFPSStats || !gbFPSStatsEnabled) {
       ResetStats();

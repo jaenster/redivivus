@@ -1696,6 +1696,7 @@ void __stdcall PANEL_ClearBeltSlotHover() {
 
 // Stores nState in gnBeltPanelState; halts (panel.cpp line 2823) when nState is negative.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
+// 1.14d mac: 000d2eeb
 void __fastcall PANEL_SetBeltPanelState(int nState) {
     if (nState >= 0) {
       gnBeltPanelState = nState;
@@ -1731,6 +1732,7 @@ void __stdcall PANEL_SetBottomPanelGlobals1() {
     gpPanelBeltLastHoverItem = 0;
 }
 
+// 1.14d mac: 000d2f4b
 void __stdcall PANEL_SetBottomPanelGlobals2() {
     gnPanelBeltRowsExpanded = 1;
 }

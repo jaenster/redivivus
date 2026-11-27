@@ -376,6 +376,7 @@ void __stdcall UI_AnimateCursorBackward() {
     gCursorAnimationFrame = 0;
 }
 
+// 1.14d mac: 00063674
 void __stdcall UI_UpdateCursorAnimation() {
     // Static local variables (originally global data)
     static uint32_t gdwCursorAnimLastTick; D2_STATIC_GUARD_BSS(gdwCursorAnimLastTick, "D2Client::Cursor::UI_UpdateCursorAnimation::gdwCursorAnimLastTick");
@@ -399,6 +400,7 @@ void __stdcall UI_UpdateCursorAnimation() {
     return;
 }
 
+// 1.14d mac: 00063c51
 void __stdcall MOUSE_DrawCursorSprite() {
     D2GfxDataStrc sGfxData;
     int nPositionX = MouseX + (int)gnCursorType;

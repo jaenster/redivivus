@@ -646,6 +646,7 @@ uint32_t __fastcall GetSequenceId(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
 }
 
 // Returns the item equipped in either the right arm (BODYLOC_R_ARM) or left arm (BODYLOC_L_ARM) slot from inventory, based on the hand parameter (5 = right, else left).
+// 1.14d mac: 0018a158
 static D2UnitStrc * __stdcall SKILLS_GetWeaponByHand(int32_t nBodyLoc, D2InventoryStrc * pInventory) {
     D2UnitStrc* pWeapon;
     if (nBodyLoc == 5) {
@@ -1973,6 +1974,7 @@ uint32_t __stdcall SKILL_CanReviveMonster(D2UnitStrc * pUnit) {
     return (uint32_t)(Units::IsSoftMonster(pUnit) != 0);
 }
 
+// 1.14d mac: 001890f5
 int __stdcall SKILLS_IsSelectableCorpse2(D2UnitStrc * pUnit) {
     BOOL bCorpseSelFlag;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->eAnimMode.ePlayerMode == Kick) {
@@ -3282,6 +3284,7 @@ void __stdcall AddSkill(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLeve
 
 // Adds or removes an item-granted skill on a player unit's skill list, keyed by (nOwnerGUID, skill record). bRemove!=0: deselects the skill if it is the current left/right/active skill, then unlinks and frees the matching D2SkillStrc node from the player's skill list. bRemove==0: if a matching item-skill node already exists it just updates its level/charges; otherwise allocates a new 0x40-byte D2SkillStrc, sets its anim-derived mode (defaults 10), level, charges, bItemSkill=1, owner GUID, and appends it to the list. No-op for non-player units, level<1, or out-of-range eSkill.
 // @sourcefile .\SKILLS\Skills.cpp
+// 1.14d mac: 0018702b
 void __stdcall SKILLS_AddOrRemoveItemSkill(D2UnitStrc * pUnit, int32_t nOwnerGUID, eD2Skills eSkill, int32_t nLevel, int32_t nCharges, int32_t bRemove) {
     D2SkillStrc* pCurSkill;
     D2SkillStrc* pNewSkill;

@@ -34,6 +34,7 @@ namespace D2CMP::SRC::GfxHash {
 // Unlinks hash entry pEntry from its bucket (pHashTable->apBuckets[pEntry->nHashKey] -> pEntry->pNext), frees the cache block's
 // async frame buffer (+0x20 -> tDecode) and the entry itself. The entry node struct (+0 hash, +0x20 cache block, +0x28/+0x2c links) is untyped.
 // @sourcefile .\SRC\GfxHash.cpp
+// 1.14d mac: 001318ac
 void __thiscall GFXHASH_UnlinkCacheEntry(D2GfxHashTableStrc * pHashTable, D2PoolManagerStrc * pMemory, D2GfxHashEntryStrc * pEntry) {
     pfnCelPixelDataFree pFreeCallback;
     uint8_t* pFrameData;

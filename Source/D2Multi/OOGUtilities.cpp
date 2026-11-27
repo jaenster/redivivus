@@ -232,6 +232,7 @@ int __stdcall OOG_DisableControlCallback(D2ControlMsg * pControlMsg) {
 }
 
 // Edit-box key filter installed via D2WINEDITBOX_SetMaxLength @004fdad0 (set site 00441087) into D2WinEditBox+0x268 (fpFilterCallback). Clears the TCP/IP game-list selection then returns 1. Signature proven by RET 0xc (3 stack args, callee cleans).
+// 1.14d mac: 002d471f
 int __stdcall EDITBOX_Cb_D2WINTEXTBOX_SetSelectedLine(::D2WinEditBox * pEditBox, int nTextLen, char * pKeyChar) {
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetSelectedLine(gpCtlChannelList, -1);
     return 1;
@@ -247,9 +248,16 @@ int __stdcall OOG_WaitMCPThreadDonePump(int nFrameIndex) {
     return 1;
 }
 
+// 1.14d mac: 002d098a
 int __stdcall OOG_PollMCPCharLogonPump(int nFrameIndex) {
     D2MCPClient::McpConnect::NET_MCP_CLIENT_ReadAndParsePacket();
     BOOL bCharLogonSuccess = D2MCPClient::McpConnect::MCPSTATE_GetCharLogonSuccess();
+#if !defined(_WIN32) && D2_OS_MAC
+    // The Mac build tests only bit 0 of the restore result.
+    if (!bCharLogonSuccess && D2MCPClient::McpConnect::HasPeerName() && !(gnMCPConnectionRestoreResult & 1)) {
+      return 1;
+    }
+#else
     if (!bCharLogonSuccess) {
       int32_t bHasPeerName;
       bHasPeerName = D2MCPClient::McpConnect::HasPeerName();
@@ -257,6 +265,7 @@ int __stdcall OOG_PollMCPCharLogonPump(int nFrameIndex) {
         return 1;
       }
     }
+#endif
 
     D2MCPClient::McpConnect::MCPSTATE_SetCharLogonSuccess(0);
     D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
@@ -840,6 +849,7 @@ int32_t __fastcall fAPPMODE_multiplayer_ReturnAppMode_Caller(D2IniConfigStrc * p
     return gnOpenBNetMode;
 }
 
+// 1.14d mac: 002d269b
 int __stdcall CHAT_SendOutOfGameMessage() {
     uint16_t* wszTitle;
     if (gszOogChatInputBuffer[0] == '/') {
@@ -1350,6 +1360,7 @@ BOOL __stdcall OOGUTIL_SendPasswordPacket(DWORD dwParam1, DWORD dwParam2, char *
     return 0;
 }
 
+// 1.14d mac: 002d8084
 BOOL __stdcall OOGUTIL_IsFirstCharPrintableAscii(DWORD dwParam1, DWORD dwParam2, char * szText) {
     if (*szText >= ' ' && *szText < 0x80) {
       return 1;
@@ -1358,6 +1369,7 @@ BOOL __stdcall OOGUTIL_IsFirstCharPrintableAscii(DWORD dwParam1, DWORD dwParam2,
     return 0;
 }
 
+// 1.14d mac: 002d9d8d
 BOOL __stdcall OOGUTIL_FilterPrintableAsciiChar(DWORD dwParam1, DWORD dwParam2, char * szText) {
     if (*szText >= ' ' && *szText < 0x80) {
       return 1;
@@ -2595,16 +2607,19 @@ BOOL __stdcall OOGUTIL_OnPressLevelRestrictionCheckbox(D2ControlMsg * pControlMs
     return 1;
 }
 
+// 1.14d mac: 002d9d78
 int __stdcall EDITBOX_Cb_OOGUTIL_RefreshGameList(void * pUnknown) {
     OOGUTIL_RefreshGameList();
     return 1;
 }
 
+// 1.14d mac: 002d9d9e
 int __stdcall OOGUTILITIES_EditBoxInput_RefreshGameList_ForMaxPlayers(void * pUnknown) {
     OOGUTIL_RefreshGameList();
     return 1;
 }
 
+// 1.14d mac: 002d9db3
 int __stdcall OOGUTILITIES_EditBoxInput_RefreshGameList_ForLevelRestriction(void * pUnknown) {
     OOGUTIL_RefreshGameList();
     return 1;

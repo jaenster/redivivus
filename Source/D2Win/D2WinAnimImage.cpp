@@ -42,6 +42,7 @@ typedef BOOL (__fastcall *Draw)(D2ControlStrc * pControl);
 
 namespace D2Win {
 
+// 1.14d mac: 0003e8d4
 void __fastcall FORMS_DestroyD2WinAnimImage(::D2WinAnimImage * pWinAnimImage) {
     Src::D2WinMain::FORMS_DestroyControl(&pWinAnimImage->sControl);
 }

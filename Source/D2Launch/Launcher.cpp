@@ -187,6 +187,7 @@ BOOL __stdcall LAUNCHER_StartGameWithSelectedCharacter(D2ControlMsg * pControlMs
     }
 }
 
+// 1.14d mac: 002ba4fc
 int __fastcall LAUNCHER_InitNetworkLobbyQueue(D2IniConfigStrc * pIniConfig) {
     if (!pIniConfig->pBNetClientCallbacks) {
       gpBNetCallbacks = Bnclient::BNCLIENT_GetCallbacks();
@@ -207,6 +208,7 @@ void __stdcall LAUNCHER_ClearBNetCallbacksAndShutdown() {
     Bnclient::thunk_BNMESSQUEUE_Shutdown();
 }
 
+// 1.14d mac: 002ba568
 void __stdcall LAUNCHER_SetBusyFlag() {
     gnBusyFlag = 1;
 }
@@ -241,6 +243,7 @@ int __stdcall LAUNCHER_CheckRevisionAndShowDialog(int nFrameIndex) {
     return 1;
 }
 
+// 1.14d mac: 002ba636
 int __stdcall LAUNCHER_HandleBnetConnect_1(int nFrameIndex) {
     uint32_t dwResponseCtx;
     BOOL bIsConnected = gpBNetCallbacks->pfnWaitForCreateAccountResponse(&dwResponseCtx);
@@ -262,6 +265,7 @@ int __stdcall LAUNCHER_HandleBnetConnect_1(int nFrameIndex) {
     return 1;
 }
 
+// 1.14d mac: 002ba694
 int __stdcall LAUNCHER_PumpChangePasswordResponse(int nFrameIndex) {
     uint32_t dwResponseCtx;
     BOOL bIsConnected = gpBNetCallbacks->pfnWaitForChangePasswordResponse(&dwResponseCtx);

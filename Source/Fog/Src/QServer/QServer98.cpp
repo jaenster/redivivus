@@ -24,6 +24,7 @@ void __fastcall QSERVER_CloseAllConnections(D2QServerStrc * pQServer) {
     /* DWORD dwMilliseconds for WaitForSingleObject */ /* HANDLE hHandle for WaitForSingleObject */ WaitForSingleObject(pQServer->aAcceptThreadHandles[0], 2000);
 }
 
+// 1.14d mac: 002f5f73
 BOOL __fastcall SendToClientOnline(D2QServerStrc * pQServer, D2QServerClientConnectionStrc * pQServerClient, char * pBytes, int nSize) {
     /* int flags for send */ /* int len for send */ /* char * buf for send */ /* SOCKET s for send */ SOCKET socket = pQServerClient->socket;
     int nBytesSent = send(socket, pBytes, nSize, 0);

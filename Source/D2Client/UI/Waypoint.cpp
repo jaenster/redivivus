@@ -196,6 +196,7 @@ void __stdcall InitializeWaypoints() {
     D2Client::Waypoint::bNeedAllocation = false;
 }
 
+// 1.14d mac: 000fbd68
 void __stdcall WAYPOINT_SendClosePacket() {
     if (D2Client::Waypoint::bNeedAllocation) {
       return;
@@ -216,6 +217,7 @@ void __stdcall WAYPOINT_SendClosePacket() {
     D2Client::Waypoint::bNeedAllocation = true;
 }
 
+// 1.14d mac: 000fb34a
 void __stdcall WAYPOINT_Shutdown() {
     D2RoomStrc* pRoom;
     if (!D2Client::Waypoint::bNeedAllocation) {
@@ -462,6 +464,7 @@ void __stdcall Unreferenced_0049c980() {
     WAYPOINT_PopulateList();
 }
 
+// 1.14d mac: 000fb436
 void __stdcall DRAW_UI_Waypoint() {
     BOOL _bIsExpansionCheck;
     bool bIsExpansionCheck;
@@ -654,6 +657,7 @@ void __stdcall DRAW_UI_Waypoint() {
     D2Win::Src::D2WinFont::DRAW_text(pwszText, Inv::gnPanelOffsetX - nMouseX / 2 + 0xa0, 0x30 - Inv::gnPanelOffsetY, 0, 0);
 }
 
+// 1.14d mac: 000fbd00
 void __stdcall INPUT_WaypointTravel(D2UIMouseMsgStrc * pMsg) {
     D2RoomStrc* pRoom;
     if (!((pMsg->uMsg != 0x102 || pMsg->nWParam != 9) && (pMsg->uMsg != 0x104 || pMsg->nWParam != 0x73))) {
@@ -785,6 +789,7 @@ void __stdcall INPUT_WaypointMouseUp(D2UIMouseMsgStrc * pMsg) {
     ClickingDownOnWaypointEntry = -1;
 }
 
+// 1.14d mac: 000fc1e0
 void __stdcall INPUT_WaypointMouseDown(D2UIMouseMsgStrc * pMsg) {
     int32_t nMouseX = pMsg->uLParam.sMousePos.nMouseX;
     int32_t nMouseY = pMsg->uLParam.sMousePos.nMouseY;

@@ -731,6 +731,7 @@ BOOL __fastcall Skills_SrvDoFunc_039_ChargeRelease_CircleSpawn(::SGAMEDATA * pGa
     return 1;
 }
 
+// 1.14d mac: 0024eba7
 void __fastcall SKILLASS_SetupMissilePath(D2UnitStrc * pUnit, intptr_t nInitSeed) {
     if (!pUnit) {
       return;

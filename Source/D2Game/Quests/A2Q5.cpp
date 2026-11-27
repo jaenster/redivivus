@@ -99,6 +99,7 @@ void __fastcall Q13_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 }
 
 // A2Q5 "The Summoner" - completion notifier. If the quest is in a "done"-ish state (Completed OR FinishedInPreviousGame) but NOT (JustCompleted OR CannotCompleteQuestInGame), it does nothing (return 0). Otherwise it sends quest-update packet 0xc to the player (QUEST_SendQuestUpdateToPlayer), pushing the current quest status/log to the client. Used as the post-state callback when the quest transitions to JustCompleted (0xd) / Cain step (4).
+// 1.14d mac: 00227f33
 BOOL __fastcall Q13_NotifySummonerComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];

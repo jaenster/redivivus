@@ -230,26 +230,32 @@ void __fastcall DRLGGRID_FloodFillGridCoords(D2DrlgCoordIndexCtxStrc * pFloodFil
     }
 }
 
+// 1.14d mac: 0014e712
 void __fastcall OverwriteFlag(int * pFlag, int32_t nFlag) {
     *pFlag = nFlag;
 }
 
+// 1.14d mac: 0014e6eb
 void __fastcall OrFlag(int * pFlag, int32_t nFlag) {
     *pFlag |= nFlag;
 }
 
+// 1.14d mac: 0014e6f8
 void __fastcall AndFlag(int * pFlag, int32_t nFlag) {
     *pFlag &= nFlag;
 }
 
+// 1.14d mac: 0014e705
 void __fastcall XorFlag(int * pFlag, int32_t nFlag) {
     *pFlag ^= nFlag;
 }
 
+// 1.14d mac: 0014e71f
 void __fastcall OverwriteFlagIfZero(int * pFlag, int32_t nFlag) {
     *pFlag = *pFlag ? *pFlag : nFlag;
 }
 
+// 1.14d mac: 0014e731
 void __fastcall AndNegatedFlag(int * pFlag, int32_t nFlag) {
     *pFlag &= ~nFlag;
 }

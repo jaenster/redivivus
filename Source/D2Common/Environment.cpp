@@ -600,6 +600,7 @@ void __stdcall DRLGENV_TaintedSunBegin(D2DrlgActStrc * pDrlgAct) {
     DRLGENV_UpdateLightColor(nActNo, pEnv);
 }
 
+// 1.14d mac: 0016706b
 void __stdcall DRLGENV_TaintedSunEnd(D2DrlgActStrc * pDrlgAct) {
     D2DrlgEnvironmentStrc* pEnv = DUNGEON::Dungeon::DRLGENV_GetEnvironmentFromAct(pDrlgAct);
     pEnv->nTimeRateIndex = 0;

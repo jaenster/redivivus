@@ -153,10 +153,12 @@ BOOL __stdcall NET_MCP_CLIENT_ReadAndParsePacket() {
     return 1;
 }
 
+// 1.14d mac: 002ccb4e
 char * __stdcall GetD2GSConnectIp() {
     return D2GSConnectIp;
 }
 
+// 1.14d mac: 002ccb5f
 int16_t __stdcall GetD2GSRequestId() {
     return D2GSRequestId;
 }
@@ -181,6 +183,7 @@ void __stdcall MCPSTATE_SetConnectionEstablished(BOOL bEstablished) {
     g_bMCPConnectionEstablished = bEstablished;
 }
 
+// 1.14d mac: 002ccbcc
 BOOL __stdcall MCPSTATE_GetCharLogonSuccess() {
     return g_bMCPCharLogonSuccess;
 }
@@ -256,10 +259,12 @@ void __stdcall MCPCONNECT_SetGameNameAndPassword(int32_t nDifficulty, char * szG
     g_nMCPGameDifficulty = nDifficulty;
 }
 
+// 1.14d mac: 002ccca9
 D2McpGameInfoStrc * __stdcall MCPCONNECT_GetCharSelectBuffer() {
     return &g_CharSelectBuffer;
 }
 
+// 1.14d mac: 002cccba
 void __stdcall MCPCONNECT_ClearCharSelectBuffer() {
     memset(&g_CharSelectBuffer, 0, sizeof(D2McpGameInfoStrc));
 }
@@ -290,6 +295,7 @@ void __stdcall MCPSTATE_SetD2GSConnectReady(BOOL bReady) {
     g_bMCPD2GSConnectReady = bReady;
 }
 
+// 1.14d mac: 002ccd1d
 uint32_t __stdcall MCPCONNECT_GetD2GSGameHash() {
     return D2GSGameHash;
 }
@@ -507,6 +513,7 @@ static char * __stdcall STRING_GetStringLength(char * szDest, char * szText, uin
     return szDest + (int)(nStrLen + 1);
 }
 
+// 1.14d mac: 002ccfd4
 int32_t __fastcall NET_MCP_CLIENT_Send_0x01_StartUp(int * pnStartupInfo) {
     MCPPacketClt0x01 mcp0x01;
     int32_t nLine;
@@ -818,6 +825,7 @@ BOOL __fastcall NET_MCP_CLIENT_IncomingReturn(char * pBytes, uint32_t nSize) {
     return 1;
 }
 
+// 1.14d mac: 002cc749
 BOOL __fastcall MCP_INCOMING_SetD2GSJoinResultAndSignal(char * pPacket) {
     SetD2GSJoinResult(*(int32_t*)(pPacket + 1));
     /* HANDLE hEvent for SetEvent */ SetEvent(pMCPEventHandle);

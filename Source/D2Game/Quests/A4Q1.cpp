@@ -109,6 +109,7 @@ bool __fastcall Q26_SequenceFilter(D2QuestDataStrc * pQuestData) {
 }
 
 // Q26_PlayerNotifyCompleted — completion-notify predicate+send (callback for QUEST_SetStateAndBroadcast). Sends quest-update packet 0x16 to a player only if the Fallen Angel quest is Completed-or-FinishedInPreviousGame AND not (JustCompleted) AND not (CannotCompleteQuestInGame); otherwise no-op. Pushes the finished UI update to relevant players.
+// 1.14d mac: 00236017
 BOOL __fastcall Q26_PlayerNotifyCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];

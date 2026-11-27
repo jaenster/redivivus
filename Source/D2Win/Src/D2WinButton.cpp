@@ -189,6 +189,7 @@ void __fastcall D2WINBUTTON_SetCustomData(::D2WinButton * pButton, int32_t nCust
 }
 
 // Hit test for button bounds accounting for vertical offset (field 0x18). Returns TRUE if (x,y) falls within button rectangle.
+// 1.14d mac: 0009c5fe
 static BOOL D2WINBUTTON_IsPointInside(::D2WinButton * pButton, int32_t nX, int32_t nY) {
     int nButtonX = pButton->sControl.dwPosX;
     int nButtonY = pButton->sControl.dwPosY;
@@ -490,6 +491,7 @@ BOOL __stdcall Mouse(D2ControlMsg * pControlMsg) {
 
 // fpKey handler of a button with a hotkey: for any key message except WM_CHAR (0x102) whose wParam equals nHotkeyVK, sets nClickAnimState to 1, runs fpPush and then fpMouse (a message holding only pControl), so the key acts as a click. Returns fpPush's result, else 0. Halts if the control is not FORM_Button.
 // Provenance: asm 005011f0..00501284 (RET 4); installed by D2WinButton at 005012f0 when nHotkeyVK != 0.
+// 1.14d mac: 0004374f
 BOOL __stdcall D2WINBUTTON_HandleHotkey(D2ControlMsg * pControlMsg) {
     ::D2WinButton* pButton = (::D2WinButton*)pControlMsg->pControl;
     if (pButton->sControl.neD2FormType != FORM_Button) {

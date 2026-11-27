@@ -886,6 +886,7 @@ FILE * __fastcall FindOrOpenLogFileSlot(uint8_t * szFileName, uint32_t * pnSlotI
 }
 
 #if !D2_OS_MAC
+// 1.14d mac: 002efde7
 void __fastcall FILETOOLS_GetUserMyDocumentsDiabloIIGameLogsFolder(char * szGameLogsPath, int32_t nGameLogsPathLength) {
     char szMyDocuments[260];
     *szGameLogsPath = '\0';
@@ -1346,6 +1347,7 @@ void __fastcall InitListHead(StormLinkedListStrc * pListHead) {
     pListHead->head.pNext = ~(uintptr_t)pSVar1;
 }
 
+// 1.14d mac: 002f0ff4
 void __thiscall InsertListNode(intptr_t * * ppListHead, intptr_t * * pNode, int32_t bInsertAtHead, intptr_t * * ppTarget) {
     intptr_t** pBackLink;
     intptr_t** ppCurNode = pNode;
@@ -1409,6 +1411,7 @@ void __fastcall ClearListNode(uint32_t * pNode) {
     pNode[1] = 0;
 }
 
+// 1.14d mac: 002f10de
 void __fastcall RemoveAllListNodes(StormLinkedListStrc * pListHead) {
     intptr_t* pPrevLink;
     intptr_t* pNode;
@@ -1439,6 +1442,7 @@ void __fastcall DestroyListWithHandler(intptr_t * pListHead) {
     ExceptionList = pPrevExceptionList;
 }
 
+// 1.14d mac: 002f0f4a
 void __fastcall TeardownListFull(StormLinkedListStrc * pListHead) {
     StormLinkStrc** pPrevLink;
     pfnEHHandlerRoutine pfnSEHHandler = __GSHandlerCheck_EH_6c9d3b;
@@ -1752,6 +1756,7 @@ void __fastcall EnqueueFormattedLogMessage(char * szText, int32_t nPriority, int
     ExceptionList = tSehFrame.Next;
 }
 
+// 1.14d mac: 002efad4
 void __stdcall StartLogWriterThread() {
     /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ gLogWriterThreadStopFlag = 0;
 #if !defined(_WIN32) && D2_OS_MAC
@@ -1943,6 +1948,7 @@ int __stdcall IsWindowsNT() {
 }
 #endif
 
+// 1.14d mac: 002f7257
 void InitHighResTimer() {
     /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ InitializeCriticalSection(&gHighResTimerCS);
     int64_t qwTestTarget = 0;

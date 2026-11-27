@@ -71,6 +71,7 @@ void __fastcall TypeOfUiOverlayOverWorld(uint32_t eBorderType) {
     }
 }
 
+// 1.14d mac: 0007ada4
 int __stdcall GetMouseXOffset() {
     return MouseXOffset;
 }

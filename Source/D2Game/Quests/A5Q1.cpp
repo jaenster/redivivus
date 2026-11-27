@@ -32,6 +32,7 @@ typedef BOOL (__fastcall *fpExecuteOnUnitFunction)(::SGAMEDATA * pGame, D2UnitSt
 namespace D2Game::Quests::QUESTS::A5Q1 {
 
 // A5Q1 (Siege on Harrogath) NPC-gossip refresh hook. Iterated per player after a state change; if the quest is Completed/FinishedInPreviousGame but NOT JustCompleted and NOT CannotComplete, pushes a fresh quest log update (id 0x1f=31) to that player so the journal/Larzuk dialog state stays in sync. Returns 0 to continue iteration.
+// 1.14d mac: 0023af8a
 BOOL __fastcall Q31_NpcGossipHandler(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];

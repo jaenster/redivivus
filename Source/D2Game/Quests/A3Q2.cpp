@@ -27,6 +27,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2QuestDataA3Q2Strc) == 0xb0, "D2_N
 namespace D2Game::Quests::QUESTS::A3Q2 {
 
 // Q19_PlayerNotifyKhalimsWill (Khalim's Will, QUEST_KhalimsWill=A3Q5; file mislabeled "a3q2"). Broadcast callback run per-player when quest enters RewardAwaits. If this player hasn't Completed it and didn't finish it in a previous game, pushes quest-update event 0x10 (Khalim's Will turn-in) to their client. Reads quest state only; no transitions.
+// 1.14d mac: 00234eca
 BOOL __fastcall Q19_PlayerNotifyKhalimsWill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];

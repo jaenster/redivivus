@@ -1165,6 +1165,7 @@ void __stdcall PATH_ChangeCollisionType(D2DynamicPathStrc * pDynamicPath, int32_
     Collision::AddCollision_Type(pRoom, (uint32_t)tCurrentPos.nX, (uint32_t)tCurrentPos.nY, pDynamicPath->nCollisionPattern, eCollisionFlag);
 }
 
+// 1.14d mac: 00180f5c
 int32_t __stdcall PATH_GetMoveTestCollisionMask(D2DynamicPathStrc * pDynamicPath) {
     return pDynamicPath->nMoveTestCollisionMask;
 }

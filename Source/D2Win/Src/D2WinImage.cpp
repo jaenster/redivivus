@@ -73,10 +73,12 @@ BOOL __stdcall D2WINIMAGE_SetPosition(::D2WinImage * pImage, int32_t nPosX, int3
     return 1;
 }
 
+// 1.14d mac: 000496df
 void __fastcall FORMS_DestroyD2WinImage(::D2WinImage * pWinImage) {
     D2WinMain::FORMS_DestroyControl(&pWinImage->sControl);
 }
 
+// 1.14d mac: 000496e8
 void __fastcall FORMS_DestroyD2WinImageEx(D2WinImageEx * pWinImageEx) {
     D2WinMain::FORMS_DestroyControl((D2ControlStrc*)pWinImageEx);
 }

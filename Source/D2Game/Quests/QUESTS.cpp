@@ -1064,6 +1064,7 @@ int __fastcall QUEST_GetQuestRecordState(::SGAMEDATA * pGame, eD2Quests eQuestId
     return bQuestState;
 }
 
+// 1.14d mac: 002151c9
 void __fastcall QUEST_DispatchMonsterCreateToA2Q4(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nMonsterClassId) {
     if (!(nMonsterClassId >= 0 && nMonsterClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
       return;
@@ -1468,6 +1469,7 @@ static void __stdcall QUEST_MarkNPCsAsIntroduced(::SGAMEDATA * pGame, int32_t * 
 }
 
 // Marks all NPCs in the destination act as already-introduced (spoken-with) for pUnit when an act transition occurs. Switches on eActNo (ACT_I through ACT_V; ACT_IV is a no-op) and iterates the corresponding NPCINTRO_ListActN table, calling INTRONPC_SetSpokenWithNPC_Intro2 for each entry. Ensures the player does not see first-meeting NPC intros upon entering the new act.
+// 1.14d mac: 002163d0
 static void QUEST_SetActNpcIntroFlags(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eAct eActNo) {
     D2UnitDataPlayerStrc* pPlayerData;
     int* pNpcListIter;

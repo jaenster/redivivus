@@ -2296,6 +2296,7 @@ static void __stdcall DRLGPRESET_BuildPresetArea(D2DrlgMapStrc * pDrlgMap, D2Drl
 // - Single-room: allocate one RoomEx covering the whole map with dt1 mask and room data.
 // - Multi-room: iterate in 8x8 chunks, compute grid flags and allocate preset RoomEx tiles.
 // Returns last allocated RoomEx (or NULL).
+// 1.14d mac: 0015fe70
 D2RoomExStrc * __fastcall BuildArea(D2DrlgLevelStrc * pLevel, D2DrlgMapStrc * pDrlgMap, int32_t nFlags, BOOL bSingleRoom) {
     D2DrlgPresetRoomStrc* pDVar1;
     int xRemaining;

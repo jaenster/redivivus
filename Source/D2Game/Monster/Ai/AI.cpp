@@ -289,6 +289,7 @@ D2UnitStrc * __fastcall AI_FindClosestAllyOfSameType(int nUnusedCtx, D2UnitStrc 
     return 0;
 }
 
+// 1.14d mac: 001a449c
 uint32_t __fastcall ReturnFirstArgument(uint32_t * pdwParam) {
     return *pdwParam;
 }

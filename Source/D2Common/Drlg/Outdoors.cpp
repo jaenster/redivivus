@@ -315,6 +315,7 @@ BOOL __stdcall DRLGOUTDOOR_PlaceRandomBorderSubTiles(D2UnkOutdoorStrc * pOutdoor
 }
 
 // Checks that applying the LvlSub patch doesn’t conflict with existing floor/wall/shadow cells; returns false if any flagged tiles overlap and existing grids already set the same flags.
+// 1.14d mac: 001646f1
 BOOL __stdcall DRLGOUTDOOR_CheckSubTileOverlap(int32_t nRoomX, int32_t nRoomY, D2DrlgWallLayerGridsStrc * pDrlgUnkn, int * pnGroupEntry, D2LvlSubTxt * pLvlSubTxt) {
     uint32_t uFlags;
     int nWallLayerIter;

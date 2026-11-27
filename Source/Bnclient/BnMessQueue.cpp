@@ -32,6 +32,7 @@ void __stdcall thunk_BNMESSQUEUE_Shutdown() {
 }
 
 // Initializes Battle.net message queue. Resets global queue pointers (nLobbyChatCurrentMessage, nLobbyChatQueueMessages), connection state flag, and critical section for thread-safe queue access.
+// 1.14d mac: 000557ec
 void __stdcall BNMESSQUEUE_Initialize() {
     /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ nLobbyChatCurrentMessage = 0;
     nLobbyChatQueueMessages = 0;

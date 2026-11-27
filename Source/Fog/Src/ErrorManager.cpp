@@ -438,6 +438,7 @@ void __fastcall LogStringConditional(int32_t nLogLevel, char * szText) {
     LogManager::LogWithCategoryVarArgs(szText, "%s");
 }
 
+// 1.14d mac: 002ef339
 uint32_t __stdcall GetErrorState() {
     return g_dwErrorState;
 }

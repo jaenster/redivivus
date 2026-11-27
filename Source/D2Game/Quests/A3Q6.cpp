@@ -193,6 +193,7 @@ BOOL __fastcall Q23_PlayerCheckDuranceLevel3Complete(::SGAMEDATA * pGame, D2Unit
 // (Completed OR FinishedInPreviousGame=0xf) AND a notify state is pending (JustCompleted=0xd OR
 // CannotCompleteQuestInGame=0xe), push quest-update packet 0x14 to the player's client so the journal
 // and "Act4 available" UI refresh. Otherwise no-op.
+// 1.14d mac: 00233838
 BOOL __fastcall Q23_PlayerNotifyCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];

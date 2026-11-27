@@ -2136,6 +2136,7 @@ int32_t __fastcall ITEMMODE_CheckItemRequirements(D2UnitStrc * pUnit, D2UnitStrc
     return bMeetsEquipReqs;
 }
 
+// 1.14d mac: 001b9abb
 D2ClientStrc * __fastcall Unreferenced_0055db80(D2UnitStrc * pUnit) {
     D2ClientStrc* pDVar1;
     if (pUnit && pUnit->eUnitType == UNIT_PLAYER) {

@@ -2289,6 +2289,7 @@ void __stdcall STATLIST_MarkUnitStatsChanged(D2UnitStrc * pUnit) {
 }
 
 // Iteratively removes all stats from pStatList whose value is non-zero (treating them as child-list references). For each iteration, binary-searches the base stat array for the first stat entry, removes it via STATLIST_RemoveStatFromArray, propagates the negated value through STATLIST_PropagateStatChange, and if the owner is a player notifies the stat tracking system. Loops until no stats remain. No-op on NULL input.
+// 1.14d mac: 001965de
 void __stdcall STATLIST_RemoveAllStats(D2StatListExStrc * pStatList) {
     int nMid;
     int nStatCount;

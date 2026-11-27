@@ -758,6 +758,7 @@ void * __fastcall GFXUTIL_Identity(void * pData) {
     return pData;
 }
 
+// 1.14d mac: 0006ae2e
 uint32_t __fastcall GFXUTIL_GetCofFrameCount(uint8_t * pbCof, uint32_t nComponent) {
     uint32_t nResult = 0;
     if (pbCof && (int)nComponent < 0x10) {
@@ -817,6 +818,7 @@ uint8_t * __fastcall GFXUTIL_GetCofLayerData(uint8_t * pbCof, int32_t nDirection
     return pbCof + ((uint32_t)pbCof[1] * nDirection + 9 + nLayerOffset) * (uint32_t)*pbCof + (uint32_t)pbCof[1] + 0x1c;
 }
 
+// 1.14d mac: 0006af14
 uint32_t __fastcall GFXUTIL_GetCofDrawOrder(uint8_t * pbCof, uint32_t nComponent) {
     if (!pbCof) {
       return 5;
@@ -855,6 +857,7 @@ uint8_t __fastcall GFXUTIL_GetGfxInfoComponent(D2UnitStrc * pUnit, int32_t nComp
     return pGfxInfo->nComponentFlags[nComponent * 2];
 }
 
+// 1.14d mac: 0006af92
 void __fastcall GFXUTIL_SetGfxInfoComponent(D2UnitStrc * pUnit, int32_t nComponentIndex, uint8_t byComponentVal) {
     D2GfxInfoStrc* pGfxInfo = UNIT::CUnit::GetGfxInfo(pUnit);
     if (!pGfxInfo) {

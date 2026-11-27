@@ -29,6 +29,7 @@ typedef BOOL (__fastcall *Draw)(D2ControlStrc * pControl);
 
 namespace D2Win::Src::D2WinProgressBar {
 
+// 1.14d mac: 0004c6e6
 void __fastcall FORMS_DestroyD2WinProgressBar(::D2WinProgressBar * pProgressBar) {
     D2WinMain::FORMS_DestroyControl(&pProgressBar->sControl);
 }
