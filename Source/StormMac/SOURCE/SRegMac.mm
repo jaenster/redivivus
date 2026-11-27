@@ -407,9 +407,10 @@ static void SREG_WriteEscapedData(FILE* pFile, const uint8_t* pData, int nCount)
 // 1.14d mac: 0003afe5
 void SREG_FlushPrefsFiles() {
     TSHashTable<WriteRegistryEntry, HASHKEY_STRI> tFiles;
-    char szFolder[SREG_PATH_MAX];
     char szFileKey[SREG_PATH_MAX];
-    for (RegistryEntry* pEntry = s_tRegistry.m_fulllist.Head(); pEntry; pEntry = s_tRegistry.m_fulllist.Next(pEntry)) {
+    char szFolder[SREG_PATH_MAX];
+    for (RegistryEntry* pEntry = s_tRegistry.m_fulllist.Head(); pEntry != NULL && ((intptr_t)pEntry & 1) == 0;
+         pEntry = s_tRegistry.m_fulllist.Next(pEntry)) {
         const char* szText = pEntry->m_key.m_str;
         char* pSeparator = SStrChr(szText, '\\');
         if (pSeparator == NULL) {
@@ -419,7 +420,7 @@ void SREG_FlushPrefsFiles() {
         if (pSeparator == NULL) {
             continue;
         }
-        SStrCopy(szFileKey, szText, (int)(pSeparator + 1 - szText));
+        SStrCopy(szFileKey, szText, (int)(1 - (intptr_t)szText + (intptr_t)pSeparator));
         WriteRegistryEntry* pFile = tFiles.Ptr(szFileKey);
         if (pFile == NULL) {
             const char* szBase;
@@ -471,6 +472,11 @@ void SREG_FlushPrefsFiles() {
     tFiles.InternalClear(0);
 }
 
+// A byte the data line escapes: a control character or a byte above 0x7F.
+static inline bool SREG_IsControlByte(uint8_t byChar) {
+    return byChar < ' ' || (char)byChar < 0;
+}
+
 // The bytes of a value on one line, a run of control characters and '%' inside %..% as hex.
 // 1.14d mac: 0003b786
 static void SREG_WriteEscapedData(FILE* pFile, const uint8_t* pData, int nCount) {
@@ -481,13 +487,13 @@ static void SREG_WriteEscapedData(FILE* pFile, const uint8_t* pData, int nCount)
             uint32_t nOut = byChar;
             if (nOut != '%' || bInEscape) {
                 if (bInEscape) {
-                    if (byChar == '%' || (char)byChar < ' ' ||
-                        (nCount != 1 && ((char)pData[1] < 0 || pData[1] < 0x20 || pData[1] == '%'))) {
+                    if (byChar == '%' || SREG_IsControlByte(byChar) ||
+                        (nCount != 1 && (SREG_IsControlByte(pData[1]) || pData[1] == '%'))) {
                         goto hex;
                     }
                     fputc('%', pFile);
                     bInEscape = false;
-                } else if (byChar == '%' || (char)byChar < ' ') {
+                } else if (byChar == '%' || SREG_IsControlByte(byChar)) {
                     fputc('%', pFile);
                     bInEscape = true;
                 hex:
