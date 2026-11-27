@@ -84,8 +84,9 @@ function cstringAt(buf: Buffer, secs: Section[], addr: number): string | null {
     const o = s.offset + addr - s.addr;
     const text = buf.toString("latin1", o, buf.indexOf(0, o));
     // a __FILE__ literal compares by its file name: the build machine's directory is not the source's
-    const file = /^[^\n]*\/([^/\n]+\.(?:cpp|c|h|hpp|mm))$/.exec(text);
-    return file ? `__FILE__ ${file[1]}` : JSON.stringify(text);
+    // and by name only up to case: the original's files are partly upper case (SSTR.CPP), ours not
+    const file = /^[^\n]*\/([^/\n]+\.(?:cpp|c|h|hpp|mm))$/i.exec(text);
+    return file ? `__FILE__ ${file[1].toLowerCase()}` : JSON.stringify(text);
 }
 // A Pascal string literal ("\\p...", -fpascal-strings) lands in __TEXT,__const: length byte, then text.
 function pascalAt(buf: Buffer, secs: Section[], addr: number): string | null {
@@ -180,7 +181,9 @@ for (const root of SOURCE_ROOTS) {
             }
             if (m) { pend = parseInt(m[1], 16); continue; }
             if (pend === null || /^\s*(\/\/|$)/.test(l)) continue;
-            const n = /([A-Za-z_]\w*)\s*(\(|\[|=|;|\{)/.exec(l.replace(/^\s*(static|extern|const|inline)\s+/g, ""));
+            // a function-pointer global, "void (*name)(...)", is named by its declarator
+            const n = /^[^(]*\(\s*\*\s*([A-Za-z_]\w*)\s*\)\s*\(/.exec(l) ??
+                /([A-Za-z_]\w*)\s*(\(|\[|=|;|\{)/.exec(l.replace(/^\s*(static|extern|const|inline)\s+/g, ""));
             if (n) {
                 // a definition reaches "{" (or "=" for data) before ";"; a declaration does not
                 const rest = lines.slice(li, li + 12).join("\n");
@@ -195,6 +198,19 @@ for (const root of SOURCE_ROOTS) {
 }
 const nameAddr = new Map(entries.map((e) => [e.name, e.addr]));
 
+// Whether a tag's definition has C linkage: its object defines "_name". A tag with no definition
+// here (a declaration only) or no object is taken as C, as before.
+const cDefs = new Map<string, Set<string> | null>();
+function cLinkageTag(name: string): boolean {
+    const defs = entries.filter((e) => e.name === name && e.defined);
+    if (!defs.length) return true;
+    return defs.some((e) => {
+        const o = join(buildDir, "CMakeFiles/d2_mac_objs.dir", e.file + ".o");
+        if (!cDefs.has(o)) cDefs.set(o, existsSync(o) ? new Set(run(NM, ["--defined-only", "-j", o]).split("\n")) : null);
+        const set = cDefs.get(o);
+        return set === null || set!.has("_" + name);
+    });
+}
 // ---- one object ----
 interface ObjInfo { funcs: Map<string, Insn[]>; syms: { addr: number; name: string }[]; buf: Buffer; secs: Section[]; indirect: Map<number, string>; relocs: number[] }
 const demangleCache = new Map<string, string>();
@@ -231,11 +247,14 @@ function qualKey(sym: string): string {
     return k;
 }
 // The name a symbol of ours is paired by: its qualified key when a source names that, else its plain name.
+// Our symbol's tag name, spelled as the original side spells that address: one address tagged
+// under two names (a declaration in a second file under another name) is the same function or global.
+const canonical = (n: string): string => addrName.get(nameAddr.get(n)!) ?? n;
 const known = (sym: string): string | null => {
     const q = qualKey(sym);
-    if (nameAddr.has(q)) return q;
+    if (nameAddr.has(q)) return canonical(q);
     const b = baseName(sym);
-    return nameAddr.has(b) ? b : null;
+    return nameAddr.has(b) ? canonical(b) : null;
 };
 function loadObject(path: string): ObjInfo {
     const insns = parseDisasm(run(OBJDUMP, [...DIS_ARGS, "-r", path]));
@@ -434,8 +453,10 @@ function compareOne(e: Entry, obj: ObjInfo) {
             const sym = x.reloc && !/^__(text|textcoal_nt|StaticInit)$/.test(x.reloc) ? x.reloc : obj.syms.find((s) => s.addr === target)?.name;
             if (!sym) return null;
             if (sym.startsWith("__Z") || !sym.startsWith("_")) return known(sym);
-            // an extern "C" symbol: the stub name is the symbol itself
-            return nameAddr.has(sym.slice(1)) ? sym.slice(1) : sym;
+            // an extern "C" symbol: the stub name is the symbol itself. It is our tag only when the
+            // tagged definition has C linkage too: Win32Mac's ShowWindow is C++, and "_ShowWindow"
+            // is Carbon's, an import.
+            return nameAddr.has(sym.slice(1)) && cLinkageTag(sym.slice(1)) ? canonical(sym.slice(1)) : sym;
         },
         (a) => readU32At(obj.buf, obj.secs, a),
         (at, next) => obj.relocs.some((r) => r > at && r < next));
