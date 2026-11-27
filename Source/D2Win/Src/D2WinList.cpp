@@ -217,72 +217,55 @@ void __stdcall D2WINLIST_FreePentSpinCursor() {
 
 // 1.14d mac: 00049a45 D2Win::Src::D2WinList::Draw
 BOOL __fastcall Draw(::D2WinList * pList) {
-    int nScrollOffset;
-    int pY;
-    D2WinListEntry* pCurrentEntry;
-    D2GfxDataStrc sGfxData;
-    int32_t pYBase;
-    int nPosX;
-    int nSizeX;
-    int nSkipCount;
     if (pList->sControl.neD2FormType != FORM_List) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x119);
       exit(-1);
     }
 
-    {
-      int nTextWidth;
-      D2WinFont::SetAndReturnLastFont(pList->sEntriesControl.nFontId);
-      pCurrentEntry = pList->sEntriesControl.pFirstEntry;
-      pY = pList->sEntriesControl.nRowPadding - pList->sControl.dwSizeY + pList->sEntriesControl.nFontHeight + pList->sControl.dwPosY;
-      if (pList->sEntriesControl.nTopIndex > 0) {
-        nTextWidth = pList->sEntriesControl.nTopIndex;
-        do {
-          if (pCurrentEntry) {
-            pCurrentEntry = pCurrentEntry->pNext;
-          }
-
-          nTextWidth--;
-        } while (nTextWidth);
+    D2WinFont::SetAndReturnLastFont(pList->sEntriesControl.nFontId);
+    int nY = pList->sEntriesControl.nRowPadding - pList->sControl.dwSizeY + pList->sEntriesControl.nFontHeight + pList->sControl.dwPosY;
+    D2WinListEntry* pEntry = pList->sEntriesControl.pFirstEntry;
+    for (int i = 0; i < pList->sEntriesControl.nTopIndex; i++) {
+      if (pEntry) {
+        pEntry = pEntry->pNext;
       }
+    }
 
-      memset(&sGfxData, 0, sizeof(sGfxData));
-      sGfxData.nFrameNumber = pList->sEntriesControl.nCursorFrame;
-      sGfxData.nDirection = 0;
-      sGfxData.pDC6 = gpPentSpinCursorDC6;
-      for (; pCurrentEntry && pY < pList->sControl.dwPosY; pY += pList->sEntriesControl.nFontHeight + pList->sEntriesControl.nRowPadding * 2) {
-        nTextWidth = pList->sControl.dwSizeX;
-        nPosX = pList->sControl.dwPosX;
-        nSizeX = pCurrentEntry->nTextWidth;
-        if (pCurrentEntry == pList->sEntriesControl.pSelectedEntry) {
-          pYBase = pY + 3;
-          if (pList->sEntriesControl.nFontId == 2) {
-            pYBase = pY + 9;
-          }
-
-          nSkipCount = pList->sControl.dwPosX;
-          nScrollOffset = nTextWidth - pList->sEntriesControl.nMaxTextWidth >> 2;
-          D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, pList->sControl.dwPosX - 0x19 + nScrollOffset, pYBase, -1, DRAW_SOLID, nullptr);
-          D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nSkipCount - nScrollOffset - 0x19 + nTextWidth, pYBase, -1, DRAW_SOLID, nullptr);
+    D2GfxDataStrc sGfxData;
+    memset(&sGfxData, 0, sizeof(sGfxData));
+    sGfxData.pDC6 = gpPentSpinCursorDC6;
+    sGfxData.nDirection = 0;
+    sGfxData.nFrameNumber = pList->sEntriesControl.nCursorFrame;
+    for (; pEntry && nY < pList->sControl.dwPosY; pEntry = pEntry->pNext) {
+      int nSizeX = pList->sControl.dwSizeX;
+      int nTextX = (nSizeX - pEntry->nTextWidth >> 1) + pList->sControl.dwPosX; // steer-ok: the original computes the text x before the selected-entry check
+      if (pEntry == pList->sEntriesControl.pSelectedEntry) {
+        int nCursorY = nY + 3;
+        if (pList->sEntriesControl.nFontId == 2) {
+          nCursorY += 6;
         }
 
-        D2WinFont::DRAW_text(pCurrentEntry->wszText, (nTextWidth - nSizeX >> 1) + nPosX, pY, 0, 0);
-        nTextWidth = pList->sControl.dwPosX;
-        pCurrentEntry->nLeft = nTextWidth;
-        pCurrentEntry->nRight = pList->sControl.dwSizeX + nTextWidth;
-        pCurrentEntry->nTop = pY - pList->sEntriesControl.nRowPadding - pList->sEntriesControl.nFontHeight;
-        pCurrentEntry->nBottom = pList->sEntriesControl.nRowPadding + pY;
-        pCurrentEntry = pCurrentEntry->pNext;
+        int nCursorInset = nSizeX - pList->sEntriesControl.nMaxTextWidth >> 2;
+        int nRightX = pList->sControl.dwPosX - nCursorInset + nSizeX - 0x19; // steer-ok: the original computes the right cursor x before drawing the left cursor
+        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, pList->sControl.dwPosX + nCursorInset - 0x19, nCursorY, -1, DRAW_SOLID, nullptr);
+        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nRightX, nCursorY, -1, DRAW_SOLID, nullptr);
       }
 
-      pList->sEntriesControl.nCursorFrame++;
-      if (pList->sEntriesControl.nCursorFrame >= 8) {
-        pList->sEntriesControl.nCursorFrame = 0;
-      }
-
-      D2WinFont::SetAndReturnLastFont(1);
-      return 1;
+      D2WinFont::DRAW_text(pEntry->wszText, nTextX, nY, 0, 0);
+      pEntry->nLeft = pList->sControl.dwPosX;
+      pEntry->nRight = pList->sControl.dwSizeX + pEntry->nLeft;
+      pEntry->nTop = nY - pList->sEntriesControl.nRowPadding - pList->sEntriesControl.nFontHeight;
+      pEntry->nBottom = pList->sEntriesControl.nRowPadding + nY;
+      nY += pList->sEntriesControl.nFontHeight + pList->sEntriesControl.nRowPadding * 2;
     }
+
+    pList->sEntriesControl.nCursorFrame++;
+    if (pList->sEntriesControl.nCursorFrame >= 8) {
+      pList->sEntriesControl.nCursorFrame = 0;
+    }
+
+    D2WinFont::SetAndReturnLastFont(1);
+    return 1;
 }
 
 // 1.14d mac: 00049c36 D2Win::Src::D2WinList::Push
