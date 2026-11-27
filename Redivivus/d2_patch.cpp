@@ -258,6 +258,33 @@ int D2PATCH_RedirectAllCalls(void* pOldCallee, void* pNewCallee, int nExpectedSi
 //
 // The destination buffers are 64 bytes (splash) and 100 (automap), and both
 // calls are length-bounded, so lengthening the rendered text cannot overrun.
+// What a 4-byte instruction operand at pOperand points at, and how to make it point at
+// pTarget instead.
+#if defined(_WIN64)
+static unsigned char* FormatOperandTarget(unsigned char* pOperand) {
+    int32_t nDisp;
+    memcpy(&nDisp, pOperand, sizeof(nDisp));
+    return pOperand + sizeof(nDisp) + nDisp;
+}
+
+static bool WriteFormatOperand(unsigned char* pOperand, const char* pTarget) {
+    const intptr_t nDisp = (const unsigned char*)pTarget - (pOperand + sizeof(int32_t));
+    if (nDisp != (int32_t)nDisp) return false;
+    const int32_t nDisp32 = (int32_t)nDisp;
+    return WriteBytes(pOperand, &nDisp32, sizeof(nDisp32));
+}
+#else
+static unsigned char* FormatOperandTarget(unsigned char* pOperand) {
+    unsigned char* pAbs;
+    memcpy(&pAbs, pOperand, sizeof(pAbs));
+    return pAbs;
+}
+
+static bool WriteFormatOperand(unsigned char* pOperand, const char* pTarget) {
+    return WriteBytes(pOperand, &pTarget, sizeof(pTarget));
+}
+#endif
+
 int D2PATCH_RedirectFormatString(const char* pszOld, const char* pszNew, int nExpectedSites) {
     if (!pszOld || !pszNew) return -1;
     unsigned char* pText = 0;
@@ -285,11 +312,13 @@ int D2PATCH_RedirectFormatString(const char* pszOld, const char* pszNew, int nEx
         return -1;
     }
 
-    // Pass two: count operands anywhere in .text whose value is one of those
-    // addresses, whatever instruction carries them.
+    // Pass two: count operands anywhere in .text that reach one of those addresses,
+    // whatever instruction carries them. 32-bit code carries the absolute address;
+    // 64-bit code reaches it RIP-relative, a 4-byte displacement from the end of the
+    // operand (lea reg, [rip+disp32]).
     int nSites = 0;
     for (size_t i = 0; i + 4 <= nText; i++) {
-        unsigned char* pImm = *(unsigned char**)(pText + i);
+        unsigned char* pImm = FormatOperandTarget(pText + i);
         for (int f = 0; f < nFound; f++) if (pImm == apFound[f]) { nSites++; break; }
     }
     if (nExpectedSites >= 0 && nSites != nExpectedSites) {
@@ -301,12 +330,11 @@ int D2PATCH_RedirectFormatString(const char* pszOld, const char* pszNew, int nEx
     // Pass three: apply.
     int nDone = 0;
     for (size_t i = 0; i + 4 <= nText; i++) {
-        unsigned char* pImm = *(unsigned char**)(pText + i);
+        unsigned char* pImm = FormatOperandTarget(pText + i);
         bool bHit = false;
         for (int f = 0; f < nFound; f++) if (pImm == apFound[f]) { bHit = true; break; }
         if (!bHit) continue;
-        const char* pRepl = pszNew;
-        if (WriteBytes(pText + i, &pRepl, sizeof(pRepl))) nDone++;
+        if (WriteFormatOperand(pText + i, pszNew)) nDone++;
     }
     D2TraceFmt("D2PATCH fmt '%s' -> '%s' copies=%d sites=%d", pszOld, pszNew, nFound, nDone);
     return nDone;
