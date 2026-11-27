@@ -571,6 +571,7 @@ endif()
 # so it leaves the default target here (it can still be built by name).
 #   cmake -S . -B build-server -DCMAKE_TOOLCHAIN_FILE=cmake/mingw-i686.cmake -DREDIVIVUS_SERVER=ON
 #   cmake --build build-server --target d2host
+# -DREDIVIVUS_SERVER_HOST=<file.cpp> links that host in place of Server/ServerHost.cpp.
 # The libraries link as an ordinary rescanned group, not whole: only what the server
 # reaches is pulled in, so client code the server never calls stays out.
 # ---------------------------------------------------------------------------
@@ -619,6 +620,14 @@ if(REDIVIVUS_SERVER)
     file(GLOB D2_SERVER_HOST_SOURCES CONFIGURE_DEPENDS LIST_DIRECTORIES false
         "${D2_SUPPORT}/Server/*.cpp")
     list(SORT D2_SERVER_HOST_SOURCES)
+    # A host kept outside the tree (a test host that serves players, say) takes the place
+    # of the default one; it implements ServerHost.h like ServerHost.cpp does.
+    set(REDIVIVUS_SERVER_HOST "" CACHE FILEPATH
+        "Host source linked into d2host in place of Redivivus/Server/ServerHost.cpp (empty: the default host)")
+    if(REDIVIVUS_SERVER_HOST)
+        list(FILTER D2_SERVER_HOST_SOURCES EXCLUDE REGEX "/Server/ServerHost\\.cpp$")
+        list(APPEND D2_SERVER_HOST_SOURCES "${REDIVIVUS_SERVER_HOST}")
+    endif()
 
     add_executable(d2host ${D2_SERVER_HOST_SOURCES} ${D2_SERVER_SUPPORT_SOURCES})
     if(D2_ARCH_X64)
