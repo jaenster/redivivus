@@ -97,7 +97,7 @@ It writes `coverage.tsv`, one row per function of the Mac-only regions:
 |`orig_file`|its original file below `Diablo2/Source`, with the Mac folder names' spaces; `?` where nothing names it; `A\|B` where it lies between functions of two files and the boundary is not known|
 |`file_evidence`|`__FILE__` (its own literal), `file-map` (`docs/data/mac-file-map.tsv`, for a paired function its Windows twin's file), `bracketed` (between two functions of one file), `between`, `unit` (the unit's file in `coverage/units.tsv`), `override`|
 |`redivivus`|where that file lives here: spaces dropped, `StormMac/Storm Mac/` is `Source/StormMac/`|
-|`class`|`blizzard-mac` (the goal), `third-party` (crashy, `mach_override`, MoreFiles, zlib, blast, RAD Bink, the CRT start), `shared` (paired with a Windows function, the shared source covers it), `shared-unpaired` (in a shared file, unpaired, but the pairer found a Windows body candidate)|
+|`class`|`blizzard-mac` (the goal), `third-party` (crashy, `mach_override`, MoreFiles, zlib, blast, RAD Bink, the CRT start), `shared` (paired with a Windows function, the shared source covers it), `shared-unpaired` (in a shared file, unpaired, but the pairer found a Windows body candidate, or `unpaired.tsv` says a Windows function does the same), `compiler` (`unpaired.tsv` only: thunks, stubs, static initialisers)|
 |`status`|`missing`; `body` (a definition tagged `// 1.14d mac: <addr>` exists); `match` / `nonmatch` (`cmp.ts` SAME / DIFF)|
 |`body_file`, `at_path`|where the tagged body is, and whether that is the mapped path|
 |`win_twin`|the paired `Game.exe` address|
@@ -118,8 +118,18 @@ runs. The inputs are checked in under `coverage/`:
   `node asm_matching/mac/coverage.ts --import <dump> --docs <workspace>/docs/data`.
 
 A shared file's `D2_OS_MAC` addition counts as `blizzard-mac` when the pairer found
-no Windows candidate for it. Unpaired shared code outside the Mac-only regions
-(about 785 functions, a pairing job) is not counted.
+no Windows candidate for it.
+
+`coverage/unpaired.tsv` (`addr`, `class`, `win_addr`, `evidence`) classifies the 762 functions that
+have no Windows twin and lie outside the Mac-only regions, inside shared modules (D2Client, D2Common,
+D2Game, D2CMP, Fog, D2Win, ...). `coverage.ts` joins it as extra rows: `mac-only` becomes class
+`blizzard-mac` (no Windows equivalent, status by the same body/match logic), `shared-unpaired` stays
+`shared-unpaired` (a Windows function does the same job, or VC inlined it; `win_twin` then holds that
+address when one was found), `compiler` (thunks, stubs, static initialisers) and `third-party` are not
+goal functions. The classes were assigned by cheap-model passes over the read-only Mac and Windows
+programs: `mac-only` means no Windows equivalent was found by body or name lookup, not a proof of absence,
+so the figure is an upper bound that review moves rows out of. Edit a row's class in `unpaired.tsv`
+when a Windows twin turns up; `coverage.ts` has no other input for these rows.
 
 ### Reasons for every non-identical function
 

@@ -3,7 +3,8 @@
 //   node asm_matching/mac/coverage.ts [--cmp <cmp.ts --tsv output, default build/cmp.tsv>] [--out <tsv>] [-v]
 //   node asm_matching/mac/coverage.ts --import <ghidra dump> --docs <docs/data dir>
 //
-// Every function of DiabloII_macho inside the Mac-only regions (coverage/units.tsv) gets one row: its
+// Every function of DiabloII_macho inside the Mac-only regions (coverage/units.tsv), and every unpaired
+// function outside them that coverage/unpaired.tsv classifies, gets one row: its
 // original source file, the path that file has here, a class (blizzard-mac, third-party, shared,
 // shared-unpaired) and a status: missing, body (a definition tagged "// 1.14d mac: <addr>" exists),
 // match or nonmatch (cmp.ts's SAME or DIFF, read from its --tsv output). The summary is the coverage,
@@ -20,6 +21,7 @@ const REPO = resolve(HERE, "../..");
 const FUNCTIONS = join(HERE, "coverage/functions.tsv");
 const UNITS = join(HERE, "coverage/units.tsv");
 const REASONS = join(HERE, "reasons.tsv");
+const UNPAIRED = join(HERE, "coverage/unpaired.tsv");
 // where a "// 1.14d mac:" tag may stand: the Mac trees and the shared code's D2_OS_MAC blocks
 const SOURCE_ROOTS = ["Source", "Redivivus"];
 
@@ -176,6 +178,34 @@ for (const u of units) {
         const atPath = !def ? "-" : red.split("|").includes(def.file) ? "yes" : "no";
         rows.push({ reason: reasons.get(f.addr) ?? "", fn: f, unit: u, file, fileEvidence: ev, cls, redivivus: red, status, bodyFile: def?.file ?? "", atPath });
     });
+}
+
+// ---- functions outside the Mac-only regions with no Windows twin (coverage/unpaired.tsv) ----
+// Each was classified by hand against the Mac and Windows programs: mac-only (no Windows equivalent,
+// counted as blizzard-mac), shared-unpaired (a Windows function does the same, or VC inlined it),
+// third-party, compiler (thunks, stubs, static initialisers). Anything not listed there is not a row.
+const unpairedClass: Record<string, string> = { "mac-only": "blizzard-mac", "shared-unpaired": "shared-unpaired", "third-party": "third-party", "compiler": "compiler" };
+const seen = new Set(rows.map((r) => r.fn.addr));
+const unpaired = new Map<number, { cls: string; win: string; evidence: string }>();
+if (existsSync(UNPAIRED)) for (const r of readTsv(UNPAIRED).slice(1)) {
+    if (!unpairedClass[r[1]]) { console.error(`unpaired.tsv: unknown class ${r[1]} for ${r[0]}`); process.exit(2); }
+    unpaired.set(parseInt(r[0], 16), { cls: unpairedClass[r[1]], win: r[2] ?? "", evidence: r[3] ?? "" });
+}
+for (const f of fns) {
+    const u = unpaired.get(f.addr);
+    if (!u || seen.has(f.addr) || f.twin) continue;
+    // the file: its own __FILE__ literal (not a header), else the file map, else unknown
+    const file = f.literals[0] ?? (f.fileMap && !/\.(h|hpp)$/i.test(f.fileMap) ? f.fileMap : "?");
+    const ev = f.literals.length ? "__FILE__" : file !== "?" ? "file-map" : "";
+    const red = u.cls === "third-party" || u.cls === "compiler" ? "-" : redivivusPath(file);
+    const def = (tags.get(f.addr) ?? []).find((t) => t.defined);
+    let status = def ? "body" : "missing";
+    const c = cmp.get(f.addr);
+    if (def && c === "SAME") status = "match";
+    else if (def && c === "DIFF") status = "nonmatch";
+    const atPath = !def ? "-" : red.split("|").includes(def.file) ? "yes" : "no";
+    const unit: Unit = { lo: f.addr, hi: f.addr + 1, kind: "unpaired", cls: u.cls, file, redivivus: red, evidence: u.evidence };
+    rows.push({ reason: reasons.get(f.addr) ?? "", fn: { ...f, twin: u.win }, unit, file, fileEvidence: ev || "unpaired", cls: u.cls, redivivus: red, status, bodyFile: def?.file ?? "", atPath });
 }
 rows.sort((a, b) => a.fn.addr - b.fn.addr);
 
