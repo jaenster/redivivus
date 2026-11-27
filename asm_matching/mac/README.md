@@ -244,3 +244,26 @@ bodies have no Mac object yet). Done: D2OpenGL, CD2Textures, `Win32_utils.cpp`,
 `Win32_TimeAndDate.cpp`. Largest gaps: the Win32 Mac files with no recorded name
 (281), the Storm `SOURCE` files (432 together, `SFILE.CPP` 82), `SRegMac.mm` and
 its templates (92), the Mac shell (77).
+
+## Link probe
+
+`link-probe.ts` asks how far the Mac build is from linking into an executable like the
+original. It links every object of `d2_mac_objs` and `d2_mac_shared_objs` with the Xcode 4.6.2
+`ld` (x86_64, runs under Rosetta; i386, 10.7 SDK, the frameworks `otool -L` shows on
+`DiabloII_macho`) and classifies what ld reports:
+
+```
+ninja -k 0 -C build-mac d2_mac_objs d2_mac_shared_objs
+node asm_matching/mac/link-probe.ts --build build-mac [--out build-mac/link-probe]
+```
+
+ld64 stops at its first failing phase, so the tool links twice: `-undefined error` for the
+undefined symbols, `-undefined dynamic_lookup` for the duplicate-symbol pass. It writes
+`link-probe.tsv` (class, symbol, demangled, refs, first referrer, detail), `duplicates.tsv` and
+the raw ld output. Classes: `a` third-party (Bink, crashy, blast, zlib, MoreFiles, Intel JPEG),
+`b` a function the Mac binary has (address from `coverage/functions.tsv` or the `FUN_` name) and
+the tree lacks, `b2` no Mac function of that name (Windows-only code a shared unit still calls),
+`c` data declared and never defined, `d` the function is defined under another mangling
+(namespace or parameter types: a bug on one side), `e` entry/runtime. `D2_MAC_PROBE`, `D2_MAC_LD`
+and `D2_MAC_SDK` override the payload locations. The first full run (437 undefined, 3 duplicate)
+is written up in `d2-surveys/mac-seam/link-probe.md`.
