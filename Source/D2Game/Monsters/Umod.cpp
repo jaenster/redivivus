@@ -188,13 +188,11 @@ void __fastcall MONUMOD_ApplyChampionStats(D2UnitStrc * pUnit, int32_t nIndex, B
     }
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit);
+
 // Applies the Cold Enchanted monster modifier (umod) to pUnit. Validates the unit is a live UNIT_MONSTER with a game pointer and that bUnknown (apply flag) is set, then ORs 0x40 into the monster-data type flags, sets a 80% (0x50) damage-resist stat, applies champion stats, and adds cold min/max damage scaled from monlvl.txt DM[] by difficulty (clamped 0-2) using GetUmodConstant(diff+0x16/+0x19) percentages, plus a fixed 150-frame (0x96) cold length. No-op if unit/game null or apply flag clear. Server-side monster spawn modifier.
 void __fastcall MONUMOD_ApplyGhostly(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown) {
-    int nLvlDmgBase;
-    if (!pUnit) {
-      return;
-    }
-    if (pUnit->eUnitType != UNIT_MONSTER) {
+    if (GetTypeInline(pUnit) != UNIT_MONSTER) {
       return;
     }
 
@@ -214,49 +212,24 @@ void __fastcall MONUMOD_ApplyGhostly(D2UnitStrc * pUnit, int32_t nIndex, BOOL bU
 
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_damageresist, 0x50, 0);
     MONUMOD_ApplyChampionStats(pUnit, nIndex, bUnknown);
-    uint32_t byDifficulty;
-    byDifficulty = pGame->nDifficulty;
-    if (byDifficulty > 0) {
-      if (1 < byDifficulty) {
-        bUnknown = 2;
-        goto add_cold_damage;
-      }
-      if (byDifficulty > 0) {
-        bUnknown = (BOOL)byDifficulty;
-        goto add_cold_damage;
-      }
-    }
-
-    bUnknown = 0;
-    add_cold_damage:
+    int nDifficulty = min(max(pGame->nDifficulty, 0), 2);
+    int nLvlDmgBase;
     if (pGame->nGameType == SGAMETYPE_BNET_HOST && pGame->eGameType == GAMETYPE_SINGLEPLAYER) {
       nLvlDmgBase = 0;
     } else {
       nLvlDmgBase = 1;
     }
+
     int nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
-    int nLevelIdx = nLevel;
-    if (nLevel <= 1) {
-      nLevelIdx = 1;
-    }
-
-    int nLvlTableIdx = D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize - 1;
-    if (nLevelIdx < nLvlTableIdx) {
-      nLvlTableIdx = nLevel;
-      if (nLevel <= 1) {
-        nLvlTableIdx = 1;
-      }
-    }
-
-    D2MonLvlTxt* pMonLvl = GetMonLvlTxt(nLvlTableIdx);
+    D2MonLvlTxt* pMonLvl = GetMonLvlTxt(min(max(nLevel, 1), D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize - 1));
     if (!pMonLvl) {
       return;
     }
 
-    nLvlDmgBase = pMonLvl->DM[nLvlDmgBase * 3 + bUnknown];
-    int32_t nMaxDamConst = GetUmodConstant(bUnknown + 0x19);
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_coldmindam, GetUmodConstant(bUnknown + 0x16) * nLvlDmgBase / 100, 0);
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_coldmaxdam, nMaxDamConst * nLvlDmgBase / 100, 0);
+    int nColdDamage = pMonLvl->DM[nLvlDmgBase * 3 + nDifficulty];
+    int nColdMaxDam = GetUmodConstant(nDifficulty + 0x19) * nColdDamage / 100; // steer-ok: the original computes the max cold damage before the min-damage GetUmodConstant call
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_coldmindam, GetUmodConstant(nDifficulty + 0x16) * nColdDamage / 100, 0);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_coldmaxdam, nColdMaxDam, 0);
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_coldlength, 0x96, 0);
 }
 
@@ -269,7 +242,6 @@ void __fastcall MONUMOD_ApplyFanatic(D2UnitStrc * pUnit, int32_t nIndex, BOOL bU
     MONUMOD_ApplyChampionStats(pUnit, nIndex, bUnique);
 }
 
-static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit);
 
 void __fastcall MONUMOD_ApplyPossessed(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
     if (!(GetTypeInline(pUnit) == UNIT_MONSTER && bUnique)) {
