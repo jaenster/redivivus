@@ -1321,39 +1321,31 @@ void __fastcall DRLGPRESET_InitGridsFromDS1File(D2RoomExStrc * pRoom) {
 // Allocates up to 6 navigation waypoints (POINT array, 0x30 bytes) for a preset room, scanning the wall grid for tiles with type==10 and subtype 0x17..0x1B (burial-ground passage markers). Converts matching grid coordinates to world space (+2 offset) and stores them in pRoomExData->pNavigationPoints; only runs if the array is not yet allocated.
 // @sourcefile .\DRLG\Preset.cpp
 static void DRLGROOMEX_AllocRoomExData_WorldPointsBurialGrounds(D2PoolManagerStrc * pMemory, D2RoomExStrc * pRoomEx) {
-    int nOffsetX;
-    int nX;
-    int nY;
     D2DrlgPresetRoomStrc* pRoomExData = pRoomEx->pRoomExData.pRoomExDataPreset;
     int nIndex = 0;
     if (pRoomExData->pNavigationPoints) {
       return;
     }
 
-    D2DrlgPresetRoomStrc* pRoomData = pRoomExData;
-    void* pNavPoints = D2_ALLOC_POOL_AT(pMemory, 0x30, ".\\DRLG\\Preset.cpp", 0x7ac);
-    pRoomExData->pNavigationPoints = (POINT*)pNavPoints;
-    int nOffsetY = 0;
-    if (pRoomEx->sCoords.WorldSize.y > 0) {
-      uint32_t dwGridFlags;
-      do {
-        for (nOffsetX = 0; nOffsetX < pRoomEx->sCoords.WorldSize.x; nOffsetX++) {
-          /* Is sub 0x10 is a POINT ? Maybe ? Seems like it is but i cant be sure so leave
-                         it for now. */ dwGridFlags = DrlgGrid::GetGridFlags(pRoomData->pWallGrid, nOffsetX, nOffsetY);
-          if (((uint8_t)(dwGridFlags >> 0x14) & 0x3f) == 10 && (uint8_t)((char)(dwGridFlags >> 8) - 0x17U) <= 4 && nIndex < 6) {
-            nY = pRoomEx->sCoords.WorldPosition.y + nOffsetY;
-            nX = pRoomEx->sCoords.WorldPosition.x + nOffsetX;
-            Transform::CoordsRoomToWorld(&nX, &nY);
-            nY += 2;
-            pRoomData->pNavigationPoints[nIndex].x = nX + 2;
-            pRoomData->pNavigationPoints[nIndex].y = nY;
-            nIndex++;
-          }
+    pRoomExData->pNavigationPoints = (POINT*)D2_ALLOC_POOL_AT(pMemory, 0x30, ".\\DRLG\\Preset.cpp", 0x7ac);
+    for (int nOffsetY = 0; nOffsetY < pRoomEx->sCoords.WorldSize.y; nOffsetY++) {
+      for (int nOffsetX = 0; nOffsetX < pRoomEx->sCoords.WorldSize.x; nOffsetX++) {
+        /* Is sub 0x10 is a POINT ? Maybe ? Seems like it is but i cant be sure so leave
+           it for now. */
+        uint32_t dwGridFlags = DrlgGrid::GetGridFlags(pRoomExData->pWallGrid, nOffsetX, nOffsetY);
+        uint8_t nTileType = (uint8_t)(dwGridFlags >> 0x14) & 0x3f;
+        uint8_t nTileStyle = (uint8_t)(dwGridFlags >> 8);
+        if (nTileType == 10 && nTileStyle >= 0x17 && nTileStyle <= 0x1b && nIndex < 6) {
+          int nX = pRoomEx->sCoords.WorldPosition.x + nOffsetX;
+          int nY = pRoomEx->sCoords.WorldPosition.y + nOffsetY;
+          Transform::CoordsRoomToWorld(&nX, &nY);
+          nX += 2;
+          nY += 2;
+          pRoomExData->pNavigationPoints[nIndex].x = nX;
+          pRoomExData->pNavigationPoints[nIndex].y = nY;
+          nIndex++;
         }
-
-        nOffsetY++;
-        pRoomExData = pRoomData;
-      } while (nOffsetY < pRoomEx->sCoords.WorldSize.y);
+      }
     }
 
     pRoomExData->nNavigationPointsCount = nIndex;
