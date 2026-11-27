@@ -1844,12 +1844,6 @@ void __fastcall Objects_InitFn61_CainPortal(D2ObjectInitFnArg * pInitArg) {
 // No A1Q4 quest-state transitions.
 void __fastcall Q04_UpdateCainPortalInTown(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit) {
     eD2MonsterAnimMode eUnitAnimMode;
-    D2RoomStrc* pRoom;
-    eD2LevelId eLevelId;
-    D2QuestDataA5Q3Strc* pA1Q4Specific;
-    int nPlayerArrivalCount;
-    int32_t nTargetAnimMode;
-    uint16_t* pnPlayerArrivalCount;
     if (!pUnit) {
       eUnitAnimMode = Death;
     } else {
@@ -1858,50 +1852,31 @@ void __fastcall Q04_UpdateCainPortalInTown(D2QuestDataStrc * pQuestData, D2UnitS
 
     switch (eUnitAnimMode) {
       case eD2MonsterAnimMode_ns::Neutral:
-        {
-          nTargetAnimMode = 2;
-          break;
-        }
+        D2Common::Units::ChangeAnimMode(pUnit, 2);
+        break;
       case Walk:
         {
-          pA1Q4Specific = pQuestData->pQuestSpecificData.pA5Q3;
-          pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-          eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-          if (eLevelId == LEVEL_RogueEncampment) {
-            pnPlayerArrivalCount = &pA1Q4Specific->sQuestGUID.nPlayerCount;
-            (*(int*)pnPlayerArrivalCount)++;
-            nPlayerArrivalCount = (int)((uint32_t)(uint16_t)pA1Q4Specific->sQuestGUID.nPlayerCount | (uint32_t)(uint16_t)pA1Q4Specific->sQuestGUID.field2_0x82 << 16);
-            if (nPlayerArrivalCount > 5) {
-              pA1Q4Specific->bNihlathakSpawned = 1;
+          D2QuestDataA5Q3Strc* pA5Q3Data = pQuestData->pQuestSpecificData.pA5Q3;
+          if (D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(D2Common::Units::UNITS_GetRoom(pUnit)) == LEVEL_RogueEncampment) {
+            int* pnPlayerArrivalCount = (int*)&pA5Q3Data->sQuestGUID.nPlayerCount;
+            (*pnPlayerArrivalCount)++;
+            if (*pnPlayerArrivalCount > 5) {
+              pA5Q3Data->bNihlathakSpawned = 1;
             }
-            if (!pA1Q4Specific->bNihlathakSpawned) {
-              goto schedule_next_update;
+            if (pA5Q3Data->bNihlathakSpawned) {
+              D2Common::Units::ChangeAnimMode(pUnit, 3);
             }
-
-            nTargetAnimMode = 3;
-          } else {
-            if (!pA1Q4Specific->bFrozenAnyaSpawned) {
-              goto schedule_next_update;
-            }
-
-            nTargetAnimMode = 3;
+          } else if (pA5Q3Data->bFrozenAnyaSpawned) {
+            D2Common::Units::ChangeAnimMode(pUnit, 3);
           }
 
           break;
         }
-      default:
-        {
-          goto schedule_next_update;
-        }
       case eD2MonsterAnimMode_ns::GetHit:
-        {
-          nTargetAnimMode = 4;
-          break;
-        }
+        D2Common::Units::ChangeAnimMode(pUnit, 4);
+        break;
     }
 
-    D2Common::Units::ChangeAnimMode(pUnit, nTargetAnimMode);
-    schedule_next_update:
     GAME::Event::SetEvent(pQuestData->pGame, pUnit, 7, pQuestData->pGame->dwGameFrame + 0x19, 0, 0);
 }
 
