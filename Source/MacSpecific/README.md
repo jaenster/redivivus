@@ -34,6 +34,7 @@ those names once a 1.14d unit is tied to one.
 |-|-|-|-|
 |`Source/MacShell/GameSetup.cpp`|0019c760..0019cc81, 0019cf50|11|1.14d `__FILE__` `.../Mac Shell/GameSetup.cpp` (0031a4da) in GAMESETUP_Alloc/Free (lines 463, 486); the globals 003b8d7c and 00536c50 are addressed directly, so they are defined in this unit, and 0019cf50 writes 00536c50|
 |`Source/MacShell/D2FlamingLogo.cpp`|0019f2b6..0019f900|3|1.14d `__FILE__` `.../Mac Shell/D2FlamingLogo.cpp` (0031a9d3) in FLAMINGLOGO_Init/Shutdown; the Baal AI starts at 0019f900|
+|`Source/MacShell/GameSetup.cpp` (rest)|0019a59a..0019c760, 0019cc81..0019f1c4|the about box, disc prompt, command line, mouse and key posting, system checks, display set-up, event loop, main, text services|`?|GameSetup.cpp` and `GameSetup.cpp|D2FlamingLogo.cpp` runs: the unit starts earlier than 0019c760 (the modal-dialog state 00536af4 and the input state 00536c28.. are addressed directly throughout), so 0019a59a on is GameSetup.cpp; the logo's `__FILE__` (0031a9d3) first appears at FLAMINGLOGO_Init (0019f2b6), and 0019f1c4 (the working-directory helper, no `__FILE__`) is the last function before it, so everything up to there is GameSetup.cpp|
 |`Source/MacShell/QuickDrawMac.h`|-|-|not original: the QuickDraw prototypes the 10.7 SDK headers dropped|
 
 The 1.14d `__mod_init_func` has no initialiser inside the Mac shell run

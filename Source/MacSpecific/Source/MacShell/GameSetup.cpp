@@ -88,6 +88,16 @@ struct MacAppProcs {
 };
 // 1.14d mac: 00397abc
 extern MacAppProcs* g_pMacAppProcs;
+// 1.14d mac: 0019784c
+void MISC_InitIgnorelist(void);
+// 1.14d mac: 002ef085
+void* FOG_GetFramePointer(void);
+// 1.14d mac: 0002c0ee
+uint32_t GetTickCount(void);
+// 1.14d mac: 0002c035
+void Sleep(uint32_t dwMilliseconds);
+// 1.14d mac: 0001e9fb
+void MAC_OutputDebugStringF(const char* szFormat, ...);
 // 1.14d mac: 00028d7f
 void SMemZero(void* pMem, uint32_t nBytes);
 // 1.14d mac: 002b98b1
@@ -202,7 +212,7 @@ BOOL InvalidateRect(void* hWnd, const void* pRect, BOOL bErase);
 // 1.14d mac: 0001ccd5
 int SStrPrintf(char* szDest, size_t nDestSize, const char* szFormat, ...);
 __attribute__((noinline)) void MAC_DSpShutdown(void);
-static char* FUN_0019b1ec(char* szCmdLine);
+static __attribute__((noinline)) char* FUN_0019b1ec(char* szCmdLine);
 static __attribute__((noinline)) Boolean FUN_0019bed3(void);
 static void FUN_0019b732(void);
 // 1.14d mac: 0003a8e2
@@ -2369,6 +2379,190 @@ void MAC_ConvertUnicodeToText(const char* wszSrc, char* szDest, int nSrcChars, i
     ByteCount nConverted = nOutLength;
     TECFlushText(s_hTECConverterToText, (TextPtr)szDest + nOutLength, (nDestSize - 1) - nOutLength, &nOutLength);
     szDest[nConverted + nOutLength] = 0;
+}
+
+// One command-line switch of the table below: its name, what it takes (0 a flag, 1 a number,
+// 2 a string) and where its value goes in the configuration.
+struct __attribute__((packed)) MacSwitchEntry {
+    char szName[0x1B];
+    uint8_t byType;
+    uint16_t unk1C;
+    int32_t nFieldOffset;
+    uint8_t unk22[0x3A];
+};
+// 1.14d mac: 003b8dc6
+extern MacSwitchEntry g_aMacSwitches[58];
+
+// 1.14d mac: 0019e8a1
+// The switches of a command line ("-name value") into the configuration: each is lowercased,
+// matched against the switch table (a prefix of it, shortest first), and its value stored.
+void MAC_ParseCommandLine(MacDisplayState* pConfig, const char* szCommandLine) {
+    char szValue[256];
+    char szSwitchName[256];
+    char szSwitch[256];
+    char szValueCopy[256];
+    MISC_InitIgnorelist();
+    int nLength = strlen(szCommandLine);
+    if (0 < nLength) {
+        int nPos = 0;
+        do {
+            int nNext = nPos;
+            if (szCommandLine[nPos] == '-' && (nNext = nPos + 1) < nLength) {
+                int nRemaining = strlen(szCommandLine + nNext);
+                int nCopied;
+                if (nRemaining < 0x100) {
+                    nCopied = 0;
+                    if (0 < nRemaining) {
+                        goto copy;
+                    }
+                } else {
+                    fp_fatal("Unrecoverable internal error %08x line %d", FOG_GetFramePointer(), 0x103);
+                copy:
+                    nCopied = 0;
+                    do {
+                        char cChar = szCommandLine[nCopied + nPos + 1];
+                        if (cChar == '\0' || cChar == '-') {
+                            break;
+                        }
+                        szSwitch[nCopied] = cChar;
+                        nCopied++;
+                    } while (nCopied < nRemaining);
+                }
+                szSwitch[nCopied] = '\0';
+                szSwitch[nCopied + 1] = '\0';
+                strcpy(szSwitchName, szSwitch);
+                size_t nNameLength = strlen(szSwitchName);
+                char* pChar = szSwitchName;
+                char cChar = szSwitchName[0];
+                while (pChar++, cChar != '\0') {
+                    if ((uint8_t)(cChar - 'A') < 26) {
+                        pChar[-1] = cChar + ' ';
+                    }
+                    cChar = *pChar;
+                }
+                bool bSearching = true;
+                uint32_t nSwitchIndex = 0xFFFFFFFF;
+                if (nNameLength != 0) {
+                    do {
+                        szSwitchName[nNameLength] = '\0';
+                        nSwitchIndex = 0xFFFFFFFF;
+                        const char* pszName = g_aMacSwitches[0].szName;
+                        int nCompare;
+                        do {
+                            nSwitchIndex++;
+                            if (0x39 < nSwitchIndex) {
+                                nSwitchIndex = 0xFFFFFFFF;
+                                break;
+                            }
+                            nCompare = strcmp(pszName, szSwitchName);
+                            pszName += 0x5C;
+                        } while (nCompare != 0);
+                        if (nSwitchIndex != 0xFFFFFFFF) {
+                            bSearching = false;
+                        }
+                        nNameLength--;
+                    } while (nNameLength != 0 && bSearching);
+                }
+                nNameLength = strlen(szSwitchName);
+                int nValuePos = 0;
+                int nValueLength = 0;
+                if (szSwitch[0] != '\0') {
+                    nValueLength = 0;
+                    do {
+                        szValue[nValueLength] = szSwitch[nValueLength + nNameLength];
+                        int nNextChar = nValueLength + 1;
+                        nValueLength++;
+                        if (szSwitch[nNextChar] == '\0') {
+                            break;
+                        }
+                    } while (true);
+                }
+                szValue[nValueLength] = '\0';
+                strcpy(szValueCopy, szValue);
+                size_t nTotal = strlen(szValue);
+                if (0 < (int)nTotal) {
+                    do {
+                        int nSep = 0;
+                        const char* pszSeparators = " \t\n:";
+                        do {
+                            if (3 < nSep) {
+                                goto trimmed;
+                            }
+                            nSep++;
+                            cChar = *pszSeparators++;
+                        } while (cChar != szValue[nValuePos]);
+                        nValuePos++;
+                    } while (nValuePos < (int)nTotal);
+                }
+            trimmed:
+                nValueLength = 0;
+                for (; nValuePos < (int)nTotal; nValuePos++) {
+                    int nSep = 0;
+                    const char* pszSeparators = " \t\n:";
+                    while (nSep < 4) {
+                        nSep++;
+                        cChar = *pszSeparators++;
+                        if (cChar == szValueCopy[nValuePos]) {
+                            goto end;
+                        }
+                    }
+                    szValue[nValueLength] = szValueCopy[nValuePos];
+                    nValueLength++;
+                }
+            end:
+                szValue[nValueLength] = '\0';
+                if (nSwitchIndex != 0xFFFFFFFF) {
+                    int* pField = (int*)((char*)pConfig + g_aMacSwitches[nSwitchIndex].nFieldOffset);
+                    uint8_t byType = g_aMacSwitches[nSwitchIndex].byType;
+                    if (byType == 2) {
+                        strcpy((char*)pField, szValue);
+                    } else if (byType == 1) {
+                        *pField = atoi(szValue);
+                    } else if (byType == 0) {
+                        *(uint8_t*)pField = 1;
+                    }
+                }
+            }
+            nPos = nNext + 1;
+        } while (nPos < nLength);
+    }
+}
+
+// 1.14d mac: 0019f18a
+// Sleeps in 10 ms steps, at least ten of them and at least a quarter of a second.
+void FUN_0019f18a(void) {
+    uint32_t dwStartTick = GetTickCount();
+    uint32_t nSleepCount = 0;
+    do {
+        if (9 < nSleepCount) {
+            uint32_t dwTick = GetTickCount();
+            if (-1 < (int)(dwTick + (-0xFA - dwStartTick))) {
+                return;
+            }
+        }
+        nSleepCount++;
+        Sleep(10);
+    } while (true);
+}
+
+// 1.14d mac: 0019f1c4
+// Makes the folder the application lives in the working directory.
+void MAC_SetWorkingDirectoryToAppFolder(void) {
+    struct {
+        short nVRefNum;
+        long nDirID;
+    } tFolder;
+    FSSpec tSpec;
+    FSRef tRef;
+    char szPath[1024];
+    GetApplicationInformation(NULL, &tFolder.nVRefNum, NULL, NULL);
+    FSMakeFSSpec(tFolder.nVRefNum, tFolder.nDirID, "\p", &tSpec);
+    FSpMakeFSRef(&tSpec, &tRef);
+    CFURLRef pUrl = CFURLCreateFromFSRef(NULL, &tRef);
+    CFURLGetFileSystemRepresentation(pUrl, true, (UInt8*)szPath, 0x400);
+    if (chdir(szPath) == -1) {
+        MAC_OutputDebugStringF("Couldn't set the working directory!");
+    }
 }
 
 #endif  // D2_OS_MAC
