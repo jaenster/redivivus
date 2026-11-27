@@ -15215,54 +15215,45 @@ void __fastcall AITHINK_Fn1_BaalToStairs(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 // Baal's taunt AI tick. If the target is in Neutral mode, increments dwArg0 and casts SKILL_BaalTaunt once the counter exceeds the MonStats TreasureClass threshold; then resets dwArg0. If the target is outside the outer range threshold, teleports Baal adjacent to the target via SUNIT_RelocateUnit. Falls back to ResetCombatTargetAndIdle if within a close band but no action triggered, otherwise calls PlanNextAiMove(0x19).
 // 1.14d mac: 002b050a
 void __fastcall AITHINK_Fn1_BaalTaunt(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
-    BOOL bTargetInNeutralMode;
-    BOOL bTargetWasNeutral;
-    D2UnitStrc* pTarget;
-    pTarget = pAiParam->pTarget;
-    D2MonStatsTxt* pMonStats;
-    pMonStats = pAiParam->pMonStats;
-    int nDistanceToTarget;
-    nDistanceToTarget = pAiParam->nDistanceToTarget;
+    D2UnitStrc* pTarget = pAiParam->pTarget;
+    int nDistanceToTarget = pAiParam->nDistanceToTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     if (pTarget) {
-      BOOL bRelocated;
-      bTargetInNeutralMode = FALSE;
+      BOOL bTargetNeutral = FALSE;
       switch (pTarget->eUnitType) {
         case UNIT_PLAYER:
-          case UNIT_MONSTER:
-            {
-              bTargetInNeutralMode = pTarget->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral;
-              break;
-            }
+          bTargetNeutral = pTarget->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral;
+          break;
+        case UNIT_MONSTER:
+          bTargetNeutral = pTarget->eAnimMode.eMonsterMode == eD2MonsterAnimMode_ns::Neutral;
+          break;
       }
 
-      bTargetWasNeutral = FALSE;
-      if (bTargetInNeutralMode) {
+      BOOL bTaunt = FALSE;
+      if (bTargetNeutral) {
         pAiParam->pMonsterAiGeneral->dwArg0++;
-        bTargetWasNeutral = TRUE;
-        if ((int)pMonStats->aip[1][pGame->nDifficulty] < pAiParam->pMonsterAiGeneral->dwArg0) {
-          goto taunt_or_reset;
-        }
-      } else {
-        taunt_or_reset:
+        bTaunt = pAiParam->pMonsterAiGeneral->dwArg0 > pMonStats->aip[1][pGame->nDifficulty];
+      }
+
+      if (!bTargetNeutral || bTaunt) {
         pAiParam->pMonsterAiGeneral->dwArg0 = 0;
-        if (bTargetWasNeutral) {
+        if (bTaunt) {
           SERVER_UNIT_CastSkill(pGame, pUnit, 4, SKILL_BaalTaunt, pTarget, 0, 0);
           return;
         }
       }
-      if (nDistanceToTarget > pMonStats->aip[2][pGame->nDifficulty]) {
-        bRelocated = UNIT::SUnit::SUNIT_RelocateUnit(pGame, pUnit, D2Common::Units::UNITS_GetRoom(pTarget), D2Common::Units::GetXPosFromDynamicPathUnit(pTarget), D2Common::Units::GetYPosFromDynamicPathUnit(pTarget), 0, 0);
-        if (bRelocated) {
-          goto idle;
-        }
+
+      if (nDistanceToTarget > pMonStats->aip[2][pGame->nDifficulty] && UNIT::SUnit::SUNIT_RelocateUnit(pGame, pUnit, D2Common::Units::UNITS_GetRoom(pTarget), D2Common::Units::GetXPosFromDynamicPathUnit(pTarget), D2Common::Units::GetYPosFromDynamicPathUnit(pTarget), 0, 0)) {
+        PlanNextAiMove(pGame, pUnit, 0x19);
+        return;
       }
+
       if (nDistanceToTarget > pMonStats->aip[0][pGame->nDifficulty]) {
         MONSTERAI_WalkToUnit(pGame, pUnit, pTarget);
         return;
       }
     }
 
-    idle:
     PlanNextAiMove(pGame, pUnit, 0x19);
 }
 
