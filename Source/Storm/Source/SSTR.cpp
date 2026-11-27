@@ -2568,9 +2568,6 @@ float __stdcall SStrToFloat(char * pStr) {
 
 int __stdcall UTF16_CalculateUTF8Length(uint16_t * pszUTF16, int nMaxChars, int * pnCharsRead) {
     int nUTF8Len;
-    uint16_t* pEnd;
-    uint16_t* pNext;
-    uint16_t* pCur;
     if (!nMaxChars || !pszUTF16) {
       if (pnCharsRead) {
         *pnCharsRead = 0;
@@ -2578,68 +2575,48 @@ int __stdcall UTF16_CalculateUTF8Length(uint16_t * pszUTF16, int nMaxChars, int 
 
       nUTF8Len = -1;
     } else {
-      uint32_t uCodepoint;
-      if (nMaxChars == 0x7fffffff) {
-        pNext = (uint16_t*)-1;
-      } else {
-        pNext = pszUTF16 + nMaxChars;
-      }
-
+      uint16_t* pStart = pszUTF16;
+      uint16_t* pLimit = nMaxChars == 0x7fffffff ? (uint16_t*)-1 : pszUTF16 + nMaxChars;
       nUTF8Len = 0;
-      pCur = pszUTF16;
       while (true) {
-        pEnd = pCur;
-        if (pCur >= pNext) {
+        if (pszUTF16 >= pLimit) {
           nUTF8Len = -1;
           break;
         }
 
-        uCodepoint = (uint32_t)*pCur;
-        pEnd = pCur + 1;
+        uint32_t uCodepoint = *pszUTF16++;
         if (uCodepoint >= 0xd800 && uCodepoint <= 0xdbff) {
-          if (pEnd >= pNext) {
+          if (pszUTF16 >= pLimit) {
             nUTF8Len = -1;
             break;
           }
-          if ((uint32_t)(*pEnd - 0xdc00) <= 0x3ff) {
-            uCodepoint = (uCodepoint - 0xd7f7 << 0xa) + (uint32_t)*pEnd;
-            pEnd = pCur + 2;
+          if ((uint32_t)(*pszUTF16 - 0xdc00) <= 0x3ff) {
+            uCodepoint = (uCodepoint - 0xd7f7 << 0xa) + *pszUTF16;
+            pszUTF16++;
           }
         }
-
-        pCur = pEnd;
-        if (uCodepoint >= 0x80) {
-          if (uCodepoint >= 0x800) {
-            if (uCodepoint < 0x10000) {
-              nUTF8Len += 3;
-              continue;
-            }
-            if (uCodepoint < 0x200000) {
-              nUTF8Len += 4;
-              continue;
-            }
-            if (uCodepoint < 0x4000000) {
-              nUTF8Len += 5;
-              continue;
-            }
-            if (uCodepoint <= 0x7fffffff) {
-              nUTF8Len += 6;
-              continue;
-            }
+        if (uCodepoint < 0x80) {
+          nUTF8Len++;
+          if (!uCodepoint) {
+            break;
           }
-
+        } else if (uCodepoint < 0x800) {
           nUTF8Len += 2;
-          continue;
-        }
-
-        nUTF8Len++;
-        if (!uCodepoint) {
-          break;
+        } else if (uCodepoint < 0x10000) {
+          nUTF8Len += 3;
+        } else if (uCodepoint < 0x200000) {
+          nUTF8Len += 4;
+        } else if (uCodepoint < 0x4000000) {
+          nUTF8Len += 5;
+        } else if (uCodepoint <= 0x7fffffff) {
+          nUTF8Len += 6;
+        } else {
+          nUTF8Len += 2;
         }
       }
 
       if (pnCharsRead) {
-        *pnCharsRead = (int)(pEnd - pszUTF16);
+        *pnCharsRead = (int)(pszUTF16 - pStart);
         return nUTF8Len;
       }
     }
