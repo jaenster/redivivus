@@ -538,11 +538,15 @@ static void __stdcall DecodeCpuModelName(uint32_t nModel, int32_t nBrandId, char
     }
 }
 
+// The CPU benchmark, special-folder, disk-space and OS-version queries are Windows-only (win32-on-mac.tsv). They are under `#if !D2_OS_MAC`.
+#if !D2_OS_MAC
 int64_t __stdcall GetTimestamp() {
     int64_t nTsc = __rdtsc();
     return nTsc;
 }
+#endif
 
+#if !D2_OS_MAC
 uint32_t __stdcall BenchmarkCpuSpeed() {
     LARGE_INTEGER qpcStart;
     LARGE_INTEGER qpcEnd;
@@ -583,6 +587,7 @@ uint32_t __stdcall BenchmarkCpuSpeed() {
     nMhz = nMhz / 1000000;
     return (uint32_t)nMhz;
 }
+#endif
 
 uint64_t __stdcall GetCpuVersionInfo() {
     uint32_t* pVersionInfo = D2_Cpuid(1);
@@ -875,6 +880,7 @@ FILE * __fastcall FindOrOpenLogFileSlot(uint8_t * szFileName, uint32_t * pnSlotI
     return pOpenedFile;
 }
 
+#if !D2_OS_MAC
 void __fastcall FILETOOLS_GetUserMyDocumentsDiabloIIGameLogsFolder(char * szGameLogsPath, int32_t nGameLogsPathLength) {
     char szMyDocuments[260];
     *szGameLogsPath = '\0';
@@ -886,6 +892,7 @@ void __fastcall FILETOOLS_GetUserMyDocumentsDiabloIIGameLogsFolder(char * szGame
       Source::SFile::SafeCreateDirectoryTree(szGameLogsPath);
     }
 }
+#endif
 
 // Writes a log record whose body is a hex dump to its log file, one formatted line at a time.
 void __fastcall WriteHexDumpLogEntry(D2LogRecordStrc * pLogRecord) {
@@ -1859,6 +1866,7 @@ void __fastcall Atomic64Load(int64_t * pllResult, int64_t * pllSource) {
     *(int64_t*)pllResult = llValue;                                  // 004107dc / 004107de
 }
 
+#if !D2_OS_MAC
 ULONGLONG __stdcall GetFreeDiskSpaceForSavePath() {
     char szSavePath[1024];
     Source::SFile::GetAndCreateSavePath(szSavePath, 0x400);
@@ -1889,13 +1897,17 @@ ULONGLONG __stdcall GetFreeDiskSpaceForSavePath() {
     GetDiskFreeSpaceA(szSavePath, &dwSectorsPerCluster, &dwBytesPerSector, &dwNumberOfFreeClusters, &dwTotalNumberOfClusters);
     return dwNumberOfFreeClusters * dwBytesPerSector * dwSectorsPerCluster;
 }
+#endif
 
+#if !D2_OS_MAC
 void GetGlobalMemoryStatus(LPMEMORYSTATUS pMemoryStatus) {
     memset(pMemoryStatus, 0, sizeof(*pMemoryStatus));
     /* LPMEMORYSTATUS lpBuffer for GlobalMemoryStatus */ pMemoryStatus->dwLength = 0x20;
     GlobalMemoryStatus(pMemoryStatus);
 }
+#endif
 
+#if !D2_OS_MAC
 int __stdcall IsWindowsNT() {
     _OSVERSIONINFOA sVersionInfo;
     memset(&sVersionInfo, 0, sizeof(sVersionInfo));
@@ -1907,6 +1919,7 @@ int __stdcall IsWindowsNT() {
 
     return (uint32_t)(sVersionInfo.dwPlatformId == 2);
 }
+#endif
 
 void InitHighResTimer() {
     /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ InitializeCriticalSection(&gHighResTimerCS);
@@ -1929,12 +1942,15 @@ void InitHighResTimer() {
 
 // Returns the current wall-clock second count in EAX (base seconds + elapsed ticks/1000). Takes no arguments: the former EBX parameter was a phantom propagated from AtomicExchange64's don't-care comparand.
 uint32_t LOGMGR_GetHighResolutionTime() {
+#if !D2_OS_MAC
     int nPriority;
+#endif
     D2HighResTimestampStrc tRefresh;
     D2HighResTimestampStrc tBase;
     DWORD dwNowTick = GetTickCount();
     Atomic64Load((int64_t*)&tBase, (int64_t*)&gHighResTimerInitTimestamp);
     if (dwNowTick - tBase.dwTick > 30000) {
+#if !D2_OS_MAC
       HANDLE hThread;
       hThread = GetCurrentThread();
       /* HANDLE hThread for GetThreadPriority */ nPriority = GetThreadPriority(hThread);
@@ -1942,6 +1958,7 @@ uint32_t LOGMGR_GetHighResolutionTime() {
         /* int nPriority for SetThreadPriority */ hThread = GetCurrentThread();
         /* HANDLE hThread for SetThreadPriority */ SetThreadPriority(hThread, nPriority);
       }
+#endif
 
       tRefresh.nSeconds = _time32(nullptr);
       tRefresh.dwTick = GetTickCount();

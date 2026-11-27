@@ -14,7 +14,12 @@
 #include "Source/Fog/Src/QServer/QServer.data.h"
 static_assert(sizeof(void*) != 4 || sizeof(D2QServerModePacketNodeStrc) == 0x5c0, "mode packet nodes are 0x5c0 bytes on 32-bit");
 static_assert(sizeof(void*) != 4 || sizeof(D2QServerWorkerTelemetryStrc) == 0xb0, "worker telemetry records are 0xb0 bytes on 32-bit");
+#if !defined(_WIN32) && D2_OS_MAC
+static_assert(sizeof(void*) != 4 || sizeof(D2QServerClientContainerStrc) == 0x678, "client containers are 0x678 bytes on 32-bit");
+#endif
+#if !D2_OS_MAC
 static_assert(sizeof(void*) != 4 || sizeof(D2QServerClientContainerStrc) == 0x664, "client containers are 0x664 bytes on 32-bit");
+#endif
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -34,9 +39,20 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2QServerIpConnCountEntryStrc) == 0
 
 static_assert(sizeof(void*) != 4 || sizeof(::D2QServerModePacketNodeStrc) == 0x5c0, "D2_NEW_AT(D2QServerModePacketNodeStrc): the 32-bit layout must be the 0x5c0 bytes 1.14d allocates");
 
+#if !defined(_WIN32) && D2_OS_MAC
+// The Mac layer's critical section is a pthread mutex (0x2c bytes, not 0x18).
+static_assert(sizeof(void*) != 4 || sizeof(::D2QServerStrc) == 0xc9c, "D2_NEW_AT(D2QServerStrc): the 32-bit layout must be the 0xc9c bytes 1.14d allocates");
+#endif
+#if !D2_OS_MAC
 static_assert(sizeof(void*) != 4 || sizeof(::D2QServerStrc) == 0xc4c, "D2_NEW_AT(D2QServerStrc): the 32-bit layout must be the 0xc4c bytes 1.14d allocates");
+#endif
 
+#if !defined(_WIN32) && D2_OS_MAC
+static_assert(sizeof(void*) != 4 || sizeof(::D2QServerClientContainerStrc) == 0x678, "D2_NEW_AT(D2QServerClientContainerStrc): the 32-bit layout must be the 0x678 bytes 1.14d allocates");
+#endif
+#if !D2_OS_MAC
 static_assert(sizeof(void*) != 4 || sizeof(::D2QServerClientContainerStrc) == 0x664, "D2_NEW_AT(D2QServerClientContainerStrc): the 32-bit layout must be the 0x664 bytes 1.14d allocates");
+#endif
 
 static_assert(sizeof(void*) != 4 || sizeof(::D2QServerHacklistEntryStrc) == 0x10, "D2_NEW_AT(D2QServerHacklistEntryStrc): the 32-bit layout must be the 0x10 bytes 1.14d allocates");
 

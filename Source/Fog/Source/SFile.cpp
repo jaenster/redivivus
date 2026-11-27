@@ -203,6 +203,8 @@ int __fastcall SFILE_GetInstallPath(LPSTR lpFilename, DWORD nSize) {
     return 1;
 }
 
+// The Blizzard application-data path, save-game path and directory move use Windows shell and file calls the Win32 layer does not implement. They are under `#if !D2_OS_MAC`.
+#if !D2_OS_MAC
 int __fastcall SFILE_GetBlizzardAppDataPath(char * szOutPath, uint32_t nMaxLen) {
     uint32_t nDstPathLen;
     char cAppDataPath[260];
@@ -237,11 +239,13 @@ int __fastcall SFILE_GetBlizzardAppDataPath(char * szOutPath, uint32_t nMaxLen) 
     nDstPathLen = Storm::Source::SSTR::SStrLen(cAppDataPath);
     return (uint32_t)(nSrcPathLen == nDstPathLen);
 }
+#endif
 
 BOOL __stdcall GetUseDirectCommand() {
     return D2Ini_bUseDirect;
 }
 
+#if !D2_OS_MAC
 static bool SFILE_GetSaveGamePath(LPSTR szOutPath, uint32_t nMaxLen) {
     int nResult;
     char szAppDataPath[260];
@@ -269,7 +273,9 @@ static bool SFILE_GetSaveGamePath(LPSTR szOutPath, uint32_t nMaxLen) {
 
     return true;
 }
+#endif
 
+#if !D2_OS_MAC
 int __fastcall SFILE_MoveDirectoryRecursive(LPCSTR szSrcRoot, LPCSTR szDstRoot) {
     size_t nSrcGlobLen;
     size_t nDstDirLen;
@@ -345,7 +351,9 @@ int __fastcall SFILE_MoveDirectoryRecursive(LPCSTR szSrcRoot, LPCSTR szDstRoot) 
 
     return 1;
 }
+#endif
 
+#if !D2_OS_MAC
 void __fastcall GetAndCreateSavePath(char * pBuffer, uint32_t nSize) {
     DWORD dwAttributes;
     char* pcLen;
@@ -426,6 +434,7 @@ void __fastcall GetAndCreateSavePath(char * pBuffer, uint32_t nSize) {
       return;
     }
 }
+#endif
 
 uint32_t * __fastcall Unreferenced_00407260(uint32_t * pData) {
     *pData = 0;

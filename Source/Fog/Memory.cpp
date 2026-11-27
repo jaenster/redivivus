@@ -9,7 +9,13 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/Memory.data.h"
 #include "Source/D2Headers/D2Arch.h"
+#if !defined(_WIN32) && D2_OS_MAC
+// The Mac layer's critical section is a pthread mutex (0x2c bytes, not 0x18).
+static_assert(sizeof(void*) != 4 || sizeof(D2MemoryManagerStrc) == 0xd858, "the pool system is cleared whole: 0xd858 bytes on 32-bit");
+#endif
+#if !D2_OS_MAC
 static_assert(sizeof(void*) != 4 || sizeof(D2MemoryManagerStrc) == 0xbea4, "the pool system is cleared whole: 0xbea4 bytes on 32-bit");
+#endif
 static_assert(sizeof(void*) != 4 || sizeof(D2PoolBlockStrc) == 0x18, "malloc(... + sizeof(D2PoolBlockStrc)): the 32-bit layout must be the 0x18 bytes 1.14d allocates");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -53,6 +59,8 @@ D2MemoryManagerStrc pGlobalPoolSystem = {}; D2_GLOBAL_GUARD(pGlobalPoolSystem, "
 
 namespace Fog::Memory {
 
+// The 1.14d Mac binary has no out-of-memory report: its memory status is the Gestalt value LOGFILE_StoreGameStartupInfo prints.
+#if !D2_OS_MAC
 void OutOfMemoryHandler(char * format, ...) {
     va_list __va;
     va_start(__va, format);
@@ -78,6 +86,7 @@ void OutOfMemoryHandler(char * format, ...) {
     Src::LogManager::LOGMANAGER_TraceToModuleLog("", "available virtual:  %s", szAvailVirtual);
     Src::LogManager::LOGMANAGER_TraceToModuleLog("", "");
 }
+#endif
 
 static int32_t ComputeSizeClassIndex(int32_t nSize) {
     if (nSize <= 0x10) {
@@ -694,7 +703,9 @@ void InitializePoolSystem(D2PoolManagerStrc * * pPoolManager, char * szName, int
       if ((int)pGlobalPoolSystem.nManagers >= 8) {
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pGlobalPoolSystem.pSync);
         OutOfMemoryHandler("Insufficient pre-allocated pool systems");
+#if !D2_OS_MAC
         /* ULONG_PTR * lpArguments for RaiseException */ /* DWORD nNumberOfArguments for RaiseException */ /* DWORD dwExceptionFlags for RaiseException */ /* DWORD dwExceptionCode for RaiseException */ RaiseException(0xe0000001, 0, 0, nullptr);
+#endif
         return;
       }
 

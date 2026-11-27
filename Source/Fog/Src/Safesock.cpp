@@ -6,7 +6,13 @@
 #include "Source/Fog/Src/ErrorManager.h"
 #include "Source/Fog/Src/LogManager.h"
 #include "Source/D2Headers/d2_platform.h"
+#if !defined(_WIN32) && D2_OS_MAC
+// The Mac layer's critical section is a pthread mutex (0x2c bytes, not 0x18).
+static_assert(sizeof(void*) != 4 || sizeof(D2NetDataStrc) == 0x8c, "D2NetDataStrc is 0x8c bytes on 32-bit");
+#endif
+#if !D2_OS_MAC
 static_assert(sizeof(void*) != 4 || sizeof(D2NetDataStrc) == 0x78, "D2NetDataStrc is 0x78 bytes on 32-bit");
+#endif
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -22,7 +28,13 @@ static_assert(sizeof(void*) != 4 || sizeof(D2NetDataStrc) == 0x78, "D2NetDataStr
 #define D2_NEW_AT(T, szFile, nLine) ((T*)D2_ALLOC_AT(sizeof(T), (szFile), (nLine)))
 #endif
 
+#if !defined(_WIN32) && D2_OS_MAC
+// The Mac layer's critical section is a pthread mutex (0x2c bytes, not 0x18).
+static_assert(sizeof(void*) != 4 || sizeof(::D2NetDataStrc) == 0x8c, "D2_NEW_AT(D2NetDataStrc): the 32-bit layout must be the 0x8c bytes 1.14d allocates");
+#endif
+#if !D2_OS_MAC
 static_assert(sizeof(void*) != 4 || sizeof(::D2NetDataStrc) == 0x78, "D2_NEW_AT(D2NetDataStrc): the 32-bit layout must be the 0x78 bytes 1.14d allocates");
+#endif
 
 
 static char cp_0075d040[256] = {}; D2_STATIC_GUARD(cp_0075d040, "cp_0075d040");

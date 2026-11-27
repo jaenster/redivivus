@@ -8,7 +8,13 @@
 #include "Source/Fog/Src/Safesock.h"
 #include "Source/Storm/Storm.h"
 #include "Source/D2Headers/d2_platform.h"
+#if !defined(_WIN32) && D2_OS_MAC
+// The Mac layer's critical section is a pthread mutex (0x2c bytes, not 0x18).
+static_assert(sizeof(void*) != 4 || sizeof(D2QSSocketStrc) == 0x1a8, "D2QSSocketStrc is 0x1a8 bytes on 32-bit");
+#endif
+#if !D2_OS_MAC
 static_assert(sizeof(void*) != 4 || sizeof(D2QSSocketStrc) == 0x194, "D2QSSocketStrc is 0x194 bytes on 32-bit");
+#endif
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -20,7 +26,13 @@ static_assert(sizeof(void*) != 4 || sizeof(D2QSSocketStrc) == 0x194, "D2QSSocket
 #define D2_NEW_AT(T, szFile, nLine) ((T*)D2_ALLOC_AT(sizeof(T), (szFile), (nLine)))
 #endif
 
+#if !defined(_WIN32) && D2_OS_MAC
+// The Mac layer's critical section is a pthread mutex (0x2c bytes, not 0x18).
+static_assert(sizeof(void*) != 4 || sizeof(::D2QSSocketStrc) == 0x1a8, "D2_NEW_AT(D2QSSocketStrc): the 32-bit layout must be the 0x1a8 bytes 1.14d allocates");
+#endif
+#if !D2_OS_MAC
 static_assert(sizeof(void*) != 4 || sizeof(::D2QSSocketStrc) == 0x194, "D2_NEW_AT(D2QSSocketStrc): the 32-bit layout must be the 0x194 bytes 1.14d allocates");
+#endif
 
 #ifndef D2_FREE_AT
 #define D2_FREE_AT(p, szFile, nLine) Fog::Memory::FreeClientMemory((p), (szFile), (nLine), 0)

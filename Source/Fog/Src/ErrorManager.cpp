@@ -45,6 +45,11 @@ static char * gaErrorTypeNames[12] = {
     (char*)"Deadlock",
     (char*)"\?\?\?"
 }; D2_STATIC_GUARD(gaErrorTypeNames, "gaErrorTypeNames");
+#if !defined(_WIN32) && D2_OS_MAC
+// The Mac's critical section is a pthread mutex, set up by InitializeCriticalSection.
+static _RTL_CRITICAL_SECTION lpCriticalSection_0074c830 = {}; D2_STATIC_GUARD(lpCriticalSection_0074c830, "lpCriticalSection_0074c830");
+#endif
+#if !D2_OS_MAC
 static _RTL_CRITICAL_SECTION lpCriticalSection_0074c830 = {
     /* .DebugInfo = */ nullptr,
     /* .LockCount = */ 0x0,
@@ -53,6 +58,7 @@ static _RTL_CRITICAL_SECTION lpCriticalSection_0074c830 = {
     /* .LockSemaphore = */ nullptr,
     /* .SpinCount = */ 0x0
 }; D2_STATIC_GUARD(lpCriticalSection_0074c830, "lpCriticalSection_0074c830");
+#endif
 static _RTL_CRITICAL_SECTION lpCriticalSection_0074d848 = {}; D2_STATIC_GUARD(lpCriticalSection_0074d848, "lpCriticalSection_0074d848");
 static uint32_t g_nProjectId = 0; D2_STATIC_GUARD(g_nProjectId, "g_nProjectId");
 static char * szProduct = 0; D2_STATIC_GUARD(szProduct, "szProduct");
@@ -119,6 +125,8 @@ void __fastcall FILETOOLS_WriteOneStringToFile(::Report * pReport, char * szStri
     _3rdparty::crashy::Printf(pReport, "%s", szString);
 }
 
+// Process, token, system-info and exception-pointer queries are Windows-only (the Mac bodies differ: WriteCrashReportProcessInfo, DumpLog and CRASH_FillupCrashTxt have their own Mac versions). They are under `#if !D2_OS_MAC`.
+#if !D2_OS_MAC
 DWORD __fastcall GetParentProcessId(int32_t nProcessId) {
     DWORD dwParentProcessId = 0;
     PROCESSENTRY32 procEntry;
@@ -140,7 +148,9 @@ DWORD __fastcall GetParentProcessId(int32_t nProcessId) {
     /* HANDLE hObject for CloseHandle */ CloseHandle(hSnapshot);
     return dwParentProcessId;
 }
+#endif
 
+#if !D2_OS_MAC
 uint8_t __fastcall GetModuleFileNameForProcess(DWORD nProcessId, LPSTR szText, DWORD nBufferSize) {
     uint8_t bResult;
     HANDLE hProcess = OpenProcess(0x410, 0, nProcessId);
@@ -153,7 +163,9 @@ uint8_t __fastcall GetModuleFileNameForProcess(DWORD nProcessId, LPSTR szText, D
     /* HANDLE hObject for CloseHandle */ CloseHandle(hProcess);
     return bResult;
 }
+#endif
 
+#if !D2_OS_MAC
 // Writes process metadata to crash report: application name, inspector tags, admin status via AllocateAndInitializeSid (SECURITY_BUILTIN_DOMAIN_RID + DOMAIN_ALIAS_RID_ADMINS), process/parent/grandparent paths, game/system locale from gaLocaleCodeStrings, and attaches log files (21 slots from InitLogFilePathPointers). Locale lookup uses MISC_GetLanguageCode and STRTABLE_GetRegistryLanguage.
 bool __fastcall WriteCrashReportProcessInfo(::Report * pReport) {
     // Static local variables (originally global data)
@@ -257,11 +269,13 @@ bool __fastcall WriteCrashReportProcessInfo(::Report * pReport) {
 
     return true;
 }
+#endif
 
 uint8_t Unreferenced_00407dd0() {
     return '\0';
 }
 
+#if !D2_OS_MAC
 void __stdcall InitializeSystemInfo() {
 #if D2_ARCH_X86
     _MEMORYSTATUS memoryStatus;
@@ -307,6 +321,7 @@ void __stdcall InitializeSystemInfo() {
     GetSystemInfo(&gSystemInfo.sWinSystemInfo);
     gSystemInfo.bInitialized = 1;
 }
+#endif
 
 // Registered with atexit. Tears down the Fog error/log subsystem and deletes the two critical sections at 0074c830 and 0074d848. Takes no arguments: the earlier EAX/ESI "parameters" were a callee-save PUSH ESI / POP ESI pair misread as inputs.
 void EXIT_AtExit() {
@@ -448,6 +463,7 @@ void OutputDebugStringSimple(char * szText, ...) {
     va_end(__va);
 }
 
+#if !D2_OS_MAC
 void OutputDebugStringIfCapsLock(char * szText, ...) {
     va_list __va;
     va_start(__va, szText);
@@ -462,6 +478,7 @@ void OutputDebugStringIfCapsLock(char * szText, ...) {
     }
     va_end(__va);
 }
+#endif
 
 void FormatDebugOutputVariadic(int bFlags, char * szText, ...) {
     va_list __va;
@@ -475,6 +492,7 @@ void FormatDebugOutputLogOnly(char * szText, ...) {
     FormatDebugOutput(1, szText, __va);
 }
 
+#if !D2_OS_MAC
 // The registered Fog exception filter. Its ABI is measured at the only dispatch,
 // 00403f21 'call dword ptr [gpCurrentExceptionFilter]' with NO pushes: ECX = &crashInfo
 // (00403efd 'lea ecx,[ebp-0x320]') and EDX = the stored context (00403ef5
@@ -583,7 +601,9 @@ int __fastcall DumpLog(D2CrashReportStrc * pCrashInfo, void * pUserContext) {
     ExceptionList = pPrevSehFrame;
     return 2;
 }
+#endif
 
+#if !D2_OS_MAC
 // Fog's implementation of Storm's Blizzard-error callback: writes Crash.txt (summary, line number,
 // thread context, registers, thread list, attachments) and hands it to ErrorReportingLaunch.
 // @abi __fastcall(char *szSummary @ECX, char *szReason @EDX, char **ppszAttachPaths @Stack[0x4],
@@ -690,6 +710,7 @@ void __fastcall CRASH_FillupCrashTxt(char * szSummary, char * szReason, char * *
     _3rdparty::crashy::Destructor(&crashFile);
     ExceptionList = __frame0.pPrevSehFrame;
 }
+#endif
 
 BOOL __fastcall CheckErrorDuringError(char * szText, int32_t nLine, char * szReason) {
     if (g_dwErrorState) {
