@@ -172,13 +172,42 @@ and `cmake/mac-cxx.ts` (the target's compiler launcher) rewrites the shared tree
 nested namespace definitions, which clang-425 cannot parse, for the units that reach them.
 
 The rest of the shared tree (D2Common, D2Game, D2Client, Fog, Storm ...) is in the Mac
-binary but not in `d2_mac_objs`. Through the launcher it stops on the Win32 surface, not
-on the language: the module headers' `#ifndef _WIN32` type stubs are Windows layouts
-declared after their first use (Fog.h needs `in_addr`, `_SYSTEM_INFO`, `__time32_t`
-before Safesock.h and SFile.h define them) and clash with the Mac C library (`timeval`,
-`fd_set`), and the bodies call Win32 API that neither `d2_platform.h`'s stub nor
-`Win32Mac.h` declares (registry, WinSock, SEH `CONTEXT`, IME). Measured 2026-11-27 over
-the 453 shared units: 1935 distinct error sites, 68 of them in headers.
+binary and builds as its own target, `d2_mac_shared_objs` (outside `all`; measure it with
+`ninja -k 0 d2_mac_shared_objs`). Its Win32 is the one the original compiled it against,
+Storm's Win32-on-Mac layer: on the Mac `d2_platform.h` includes `Win32Mac.h` (32-bit
+`DWORD`, `HANDLE` as a handle-table index, the pthread critical section, the layer's entry
+points) and BSD's socket types, and the generated Win32 stand-ins that clash are guarded
+`#if !defined(_WIN32) && !D2_OS_MAC`. `Win32Mac.h` carries the Win32 data types the shared
+code declares with (by value in the SDK's i386 layout, by pointer incomplete).
+
+Measured 2026-11-27 over its 448 units, distinct error sites and failing units:
+
+|module|before|now|units failing|
+|-|-|-|-|
+|headers|68|0|-|
+|D2Common|49|0|0|
+|D2CMP|18|0|0|
+|D2Lang|11|0|0|
+|D2MCPClient|2|0|0|
+|Bnclient|455|381|7|
+|Fog|446|364|12|
+|Storm|299|141|10|
+|D2Client|172|107|24|
+|D2gfx|34|30|1|
+|D2Hell|37|33|1|
+|D2Win|31|28|4|
+|D2Launch|32|16|3|
+|D2Multi|30|14|3|
+|D2Game|133|11|6|
+|D2Sound|71|11|3|
+|D2Net|46|9|3|
+|Game|1|1|1|
+|total|1935 (386 units)|1146 (78 units)|78|
+
+What is left is in the bodies: Win32 API the Mac reaches another way (registry through
+SReg, WinSock through BSD, SEH and the crash handler through Mach exceptions, IME,
+CryptoAPI through Security.framework). Each is guarded where the Mac binary shows its own
+path, with the Mac body's address.
 
 |class|functions|bytes|with a body|
 |-|-|-|-|
