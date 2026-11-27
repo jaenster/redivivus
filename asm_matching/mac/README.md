@@ -121,6 +121,46 @@ A shared file's `D2_OS_MAC` addition counts as `blizzard-mac` when the pairer fo
 no Windows candidate for it. Unpaired shared code outside the Mac-only regions
 (about 785 functions, a pairing job) is not counted.
 
+### Reasons for every non-identical function
+
+A function with a body that `cmp.ts` does not report as instruction-identical (DIFF, a
+tagged function absent from the object, no object at all, or SAME with unverified
+references) carries a stated reason in `reasons.tsv` (`addr`, `name`, `reason_class`,
+`detail`). `coverage.ts` joins it into the `reason` column of `coverage.tsv` and prints
+`== nonmatch N, M with a reason, K WITHOUT a reason`; `-v` lists the K. The goal is K = 0
+at all times: a function that newly stops matching must get a row.
+
+|class|meaning|
+|-|-|
+|`regalloc`|same instructions modulo register choice|
+|`sched`|same instructions, different order|
+|`stack-layout`|frame size or spill slots only|
+|`pic-ref`|same code, a data reference, vtable or call target resolves differently|
+|`inline`|callee inlined on one side only, or a static helper with no out-of-line copy|
+|`template-weak`|out-of-line weak/hidden instantiation the toolchain places differently|
+|`crt-idiom`|original uses a CRT-style idiom ours expresses differently|
+|`eh`|exception landing pads present on one side only|
+|`semantic-guess`|equivalent behaviour, not derived instruction by instruction: needs rework|
+|`wrong`|a real behavioural difference (constants, fields, callees, arguments): a bug|
+|`data-guess`|guessed table, global address or size|
+|`unverified-ref`|identical apart from references only one side can resolve|
+|`unpaired`|cmp.ts cannot pair the tag with an object function (name parsing)|
+|`noobj`|the file is not built by `d2_mac_objs`|
+|`unknown`|not decided|
+
+`classify.ts` drafts the mechanical classes from `cmp.ts --insns <jsonl>` (full normalised
+instruction streams of both sides): equal after normalising PIC references, frame offsets
+and registers gives `pic-ref`, `stack-layout`, `regalloc`; equal as a multiset gives `sched`;
+the rest is `unknown` until read. The 2026-11-27 reasons.tsv was drafted that way and the
+remainder classified from the instruction diffs by a cheap model pass, so `semantic-guess`
+and `wrong` rows are triage, to be confirmed by whoever reworks the function.
+
+```
+node asm_matching/mac/cmp.ts --build build-mac --tsv build/cmp.tsv --insns build/insns.jsonl
+node asm_matching/mac/classify.ts build/cmp.tsv build/insns.jsonl > build/draft.tsv
+node asm_matching/mac/coverage.ts
+```
+
 ### Baseline, 2026-11-27
 
 Program `DiabloII_macho` v218. `cmake --build build-mac --target d2_mac_objs`

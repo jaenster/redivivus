@@ -19,6 +19,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO = resolve(HERE, "../..");
 const FUNCTIONS = join(HERE, "coverage/functions.tsv");
 const UNITS = join(HERE, "coverage/units.tsv");
+const REASONS = join(HERE, "reasons.tsv");
 // where a "// 1.14d mac:" tag may stand: the Mac trees and the shared code's D2_OS_MAC blocks
 const SOURCE_ROOTS = ["Source", "Redivivus"];
 
@@ -121,8 +122,12 @@ for (const root of SOURCE_ROOTS) {
 
 // ---- cmp.ts results ----
 const cmp = new Map<number, string>();
+const unverified = new Set<number>();  // SAME, but with references only one side could resolve
+// reasons.tsv: why a function that has a body is not instruction-identical (addr, name, reason_class, detail)
+const reasons = new Map<number, string>();
+if (existsSync(REASONS)) for (const r of readTsv(REASONS).slice(1)) if (r[0]) reasons.set(parseInt(r[0], 16), r[2]);
 if (cmpTsv) {
-    for (const r of readTsv(cmpTsv).slice(1)) cmp.set(parseInt(r[1], 16), r[3]);
+    for (const r of readTsv(cmpTsv).slice(1)) { cmp.set(parseInt(r[1], 16), r[3]); if (r[3] === "SAME" && Number(r[5]) > 0) unverified.add(parseInt(r[1], 16)); }
 }
 
 // ---- the original path here: Source/ plus the original with its spaces dropped ----
@@ -132,7 +137,7 @@ function redivivusPath(orig: string): string {
 }
 
 // ---- one row per function in a unit ----
-interface Row { fn: Fn; unit: Unit; file: string; fileEvidence: string; cls: string; redivivus: string; status: string; bodyFile: string; atPath: string }
+interface Row { reason: string; fn: Fn; unit: Unit; file: string; fileEvidence: string; cls: string; redivivus: string; status: string; bodyFile: string; atPath: string }
 const rows: Row[] = [];
 for (const u of units) {
     const inUnit = fns.filter((f) => f.addr >= u.lo && f.addr < u.hi);
@@ -169,14 +174,14 @@ for (const u of units) {
         if (def && c === "SAME") status = "match";
         else if (def && c === "DIFF") status = "nonmatch";
         const atPath = !def ? "-" : red.split("|").includes(def.file) ? "yes" : "no";
-        rows.push({ fn: f, unit: u, file, fileEvidence: ev, cls, redivivus: red, status, bodyFile: def?.file ?? "", atPath });
+        rows.push({ reason: reasons.get(f.addr) ?? "", fn: f, unit: u, file, fileEvidence: ev, cls, redivivus: red, status, bodyFile: def?.file ?? "", atPath });
     });
 }
 rows.sort((a, b) => a.fn.addr - b.fn.addr);
 
-const header = ["addr", "name", "bytes", "orig_file", "file_evidence", "redivivus", "class", "status", "body_file", "at_path", "win_twin"];
+const header = ["addr", "name", "bytes", "orig_file", "file_evidence", "redivivus", "class", "status", "body_file", "at_path", "win_twin", "reason"];
 writeFileSync(out, [header.join("\t"), ...rows.map((r) => [hex(r.fn.addr), r.fn.name, r.fn.bytes, r.file, r.fileEvidence,
-    r.redivivus, r.cls, r.status, r.bodyFile, r.atPath, r.fn.twin].join("\t"))].join("\n") + "\n");
+    r.redivivus, r.cls, r.status, r.bodyFile, r.atPath, r.fn.twin, r.reason].join("\t"))].join("\n") + "\n");
 
 // ---- summary ----
 const pct = (n: number, d: number) => (d ? (100 * n / d).toFixed(1) : "0.0") + "%";
@@ -205,4 +210,12 @@ const matches = rows.filter((r) => r.status === "match").length;
 console.log(`== coverage ${bm.filter(has).length}/${bm.length} blizzard-mac functions with a body (${pct(bm.filter(has).length, bm.length)})` +
     (misplaced ? `, ${misplaced} of them outside the mapped path` : ""));
 console.log(`== match ${matches} (${cmpTsv ? "from " + relative(REPO, cmpTsv) : "no cmp.ts output: match and nonmatch read as body"})`);
+// a row that has a body but is not instruction-identical (nonmatch, not compared, or SAME with
+// unverified references) must carry a reason from reasons.tsv
+const nonIdentical = rows.filter((r) => r.status === "nonmatch" || r.status === "body" || (r.status === "match" && unverified.has(r.fn.addr)));
+const noReason = nonIdentical.filter((r) => !r.reason);
+console.log(`== nonmatch ${nonIdentical.length}, ${nonIdentical.length - noReason.length} with a reason, ${noReason.length} WITHOUT a reason`);
+if (verbose) for (const r of noReason) console.log(`   no reason: ${hex(r.fn.addr)} ${r.fn.name} (${r.status})`);
+const stale = [...reasons.keys()].filter((a) => !nonIdentical.some((r) => r.fn.addr === a));
+if (stale.length) console.log(`== ${stale.length} reasons.tsv rows name a function that is now identical or has no body: ${stale.slice(0, 5).map(hex).join(" ")}${stale.length > 5 ? " ..." : ""}`);
 console.log(`== wrote ${relative(process.cwd(), out)}: ${rows.length} rows`);

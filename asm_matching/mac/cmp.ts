@@ -27,6 +27,7 @@ const argv = process.argv.slice(2);
 let buildDir = "";
 let binary = process.env.D2_MAC_BINARY ?? "";
 let tsvOut = "";
+let insnsOut = "";
 let verbose = false;
 const filters: string[] = [];
 for (let i = 0; i < argv.length; i++) {
@@ -34,11 +35,12 @@ for (let i = 0; i < argv.length; i++) {
     if (a === "--build") buildDir = resolve(argv[++i]);
     else if (a === "--binary") binary = resolve(argv[++i]);
     else if (a === "--tsv") tsvOut = resolve(argv[++i]);
+    else if (a === "--insns") insnsOut = resolve(argv[++i]);
     else if (a === "-v") verbose = true;
     else filters.push(a);
 }
 if (!buildDir || !binary) {
-    console.error("usage: node asm_matching/mac/cmp.ts --build <dir> [--binary <DiabloII_macho>] [--tsv out] [-v] [filter...]");
+    console.error("usage: node asm_matching/mac/cmp.ts --build <dir> [--binary <DiabloII_macho>] [--tsv out] [--insns out.jsonl] [-v] [filter...]");
     console.error("       the binary may also come from D2_MAC_BINARY");
     process.exit(2);
 }
@@ -353,6 +355,7 @@ function normalise(insns: Insn[], inText: (a: number) => boolean, resolveCode: R
 }
 const stripTail = (a: string[]) => { while (a.length && /^(nop|int3|xchg ax, ax)/.test(a[a.length - 1])) a.pop(); return a; };
 
+const insnLog: string[] = [];
 function compareOne(e: Entry, obj: ObjInfo) {
     const ours = obj.funcs.get(e.name);
     if (!ours) return { status: "MISSING", detail: "not in the object (inlined or not compiled)", unverified: 0, n: 0 };
@@ -457,6 +460,7 @@ function compareOne(e: Entry, obj: ObjInfo) {
         detail += "\n" + Array.from({ length: hi - lo }, (_, j) => j + lo)
             .map((j) => `   ${j.toString().padStart(4)} ${(a[j] ?? "").padEnd(48)} ${b[j] ?? ""}${a[j] === b[j] ? "" : "   <"}`).join("\n");
     }
+    if (insnsOut) insnLog.push(JSON.stringify({ addr: e.addr.toString(16).padStart(8, "0"), name: e.name, orig: a, ours: b }));
     return { status: "DIFF", detail, unverified, n: b.length };
 }
 
@@ -496,3 +500,4 @@ for (const [file, es] of byFile) {
 if (noObject.length) console.log(`== ${noObject.length} tagged files have no Mac object (not built by d2_mac_objs; -v lists them)`);
 console.log(`== total ${same}/${total} instruction-identical (${pct(same, total)})`);
 if (tsvOut) writeFileSync(tsvOut, rows.join("\n") + "\n");
+if (insnsOut) writeFileSync(insnsOut, insnLog.join("\n") + "\n");
