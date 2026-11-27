@@ -224,6 +224,8 @@ Win32HandleObject* GetWin32HandlePtr(HANDLE hHandle);
 HANDLE HANDLE_FindThreadByPthread(pthread_t pThread);
 BOOL Event_SetSignaled(HANDLE hEvent, BOOL bSignaled);
 BOOL CloseHandle(HANDLE hHandle);
+// The File Manager refnum behind a file handle (Win32_Files.cpp).
+BOOL HANDLE_GetFileRefNum(HANDLE hFile, int16_t* pnRefNum);
 
 
 // ---- Win32_Region.cpp: strip regions (handles are 1-based indexes, 0 is none) ----
@@ -260,5 +262,89 @@ void Rgn_SubtractStripRgn(int hDest, int hSrc1, int hSrc2);
 // 1.14d mac: 000329b1
 void Rgn_DestroyAllRegions(void);
 // ---- end Win32_Region.cpp ----
+
+// ---- Win32 data types the shared game code declares with ----
+// The shared code (Fog, Storm, D2Net, D2Sound, D2Client ...) compiled against this layer
+// on the Mac. These are the Win32 names it declares with that the layer does not define
+// above: where the shared code holds one by value, the Win32 SDK's i386 layout; where it
+// only passes a pointer, an incomplete type.
+typedef CRITICAL_SECTION _RTL_CRITICAL_SECTION;
+typedef struct HACCEL__* HACCEL;
+
+// The x86 thread context and exception record: the Mac build has neither (its crash
+// handler is a Mach exception server), the shared code names them in prototypes only.
+struct _CONTEXT;
+typedef _CONTEXT CONTEXT;
+typedef CONTEXT* PCONTEXT;
+struct _EXCEPTION_RECORD;
+typedef _EXCEPTION_RECORD EXCEPTION_RECORD;
+typedef EXCEPTION_RECORD* PEXCEPTION_RECORD;
+struct _EXCEPTION_POINTERS;
+
+struct tagRGBQUAD {
+    BYTE rgbBlue;
+    BYTE rgbGreen;
+    BYTE rgbRed;
+    BYTE rgbReserved;
+};
+typedef tagRGBQUAD RGBQUAD;
+
+// The format Win32_DirectSound.cpp's buffers keep, wFormatTag through cbSize.
+#pragma pack(push, 1)
+struct WAVEFORMATEX {
+    WORD wFormatTag;              // 0x00
+    WORD nChannels;               // 0x02
+    DWORD nSamplesPerSec;         // 0x04
+    DWORD nAvgBytesPerSec;        // 0x08
+    WORD nBlockAlign;             // 0x0C
+    WORD wBitsPerSample;          // 0x0E
+    WORD cbSize;                  // 0x10
+};
+#pragma pack(pop)
+WIN32MAC_LAYOUT(WAVEFORMATEX_size, sizeof(WAVEFORMATEX) == 0x12);
+
+struct _SYSTEM_INFO {
+    DWORD dwOemId;                // 0x00
+    DWORD dwPageSize;             // 0x04
+    LPVOID lpMinimumApplicationAddress; // 0x08
+    LPVOID lpMaximumApplicationAddress; // 0x0C
+    DWORD dwActiveProcessorMask;  // 0x10
+    DWORD dwNumberOfProcessors;   // 0x14
+    DWORD dwProcessorType;        // 0x18
+    DWORD dwAllocationGranularity; // 0x1C
+    WORD wProcessorLevel;         // 0x20
+    WORD wProcessorRevision;      // 0x22
+};
+typedef _SYSTEM_INFO SYSTEM_INFO;
+WIN32MAC_LAYOUT(SYSTEM_INFO_size, sizeof(SYSTEM_INFO) == 0x24);
+
+// What FindFirstFile / FindNextFile fill, 0x140 bytes (Win32MacFindData in Win32_Files.cpp).
+struct _WIN32_FIND_DATAA {
+    DWORD dwFileAttributes;       // 0x000
+    FILETIME ftCreationTime;      // 0x004
+    FILETIME ftLastAccessTime;    // 0x00C
+    FILETIME ftLastWriteTime;     // 0x014
+    DWORD nFileSizeHigh;          // 0x01C
+    DWORD nFileSizeLow;           // 0x020
+    DWORD dwReserved0;            // 0x024
+    DWORD dwReserved1;            // 0x028
+    char cFileName[260];          // 0x02C
+    char cAlternateFileName[14];  // 0x130
+};
+WIN32MAC_LAYOUT(WIN32_FIND_DATAA_size, sizeof(_WIN32_FIND_DATAA) == 0x140);
+
+// What WSOCK_WSAStartup fills (Windows Sockets 1.1).
+struct WSAData {
+    WORD wVersion;                // 0x000
+    WORD wHighVersion;            // 0x002
+    char szDescription[257];      // 0x004
+    char szSystemStatus[129];     // 0x105
+    uint16_t iMaxSockets;         // 0x186
+    uint16_t iMaxUdpDg;           // 0x188
+    char* lpVendorInfo;           // 0x18C
+};
+typedef WSAData WSADATA;
+WIN32MAC_LAYOUT(WSADATA_size, sizeof(WSADATA) == 0x190);
+// ---- end of the shared code's Win32 data types ----
 
 #endif  // D2_OS_MAC

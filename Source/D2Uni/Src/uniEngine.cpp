@@ -431,7 +431,7 @@ void UniPlayBinkFile(char * szFile, int nResolution, BYTE * pDest, int nDestPitc
     FlushEvents(everyEvent, 0);
     BinkSetSoundSystem(BinkOpenSoundManager, 0);
     uint32_t dwOpenMode = Fog::GetUseDirectCommand() ? 5 : 4;
-    Storm::Source::SFile::SFileOpenFileEx(nullptr, szFile, dwOpenMode, &hFile);
+    Storm::Source::SFile::SFileOpenFileEx(nullptr, szFile, dwOpenMode, (void**)&hFile);  // a direct open: a Win32 file HANDLE
     if (!hFile) {
         LogPrintf("UniPlayBinkFile: *** Couldn't load Bink movie \"%s\".", szFile);
     } else {

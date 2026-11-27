@@ -19,7 +19,7 @@ struct D2MPQFileStrc;
 struct D2StormAsyncCompletionStrc;
 
 // Data types
-#ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
+#if !defined(_WIN32) && !D2_OS_MAC  // the Win32 SDK / CRT on Windows, Win32Mac.h on the Mac
 
 struct _SYSTEM_INFO {
     /* 0x00 */ uint32_t u;

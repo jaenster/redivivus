@@ -79,7 +79,6 @@ inline GLubyte *aglErrorString(GLenum nError)
 // Storm fp_fatal: every renderer halt is fp_fatal("... %08x line %d", address, line)
 void fp_fatal(char *szFormat, ...);
 void MAC_WarpMouseCursorPosition(uint32_t ptPosition);
-void HANDLE_GetFileRefNum(void *hFile, int16_t *pRefNum);
 int16_t FilepathToFSSpec(void *pSpec, const void *szPath, int nFlags);
 // BinkOpen on the file HANDLE_GetFileRefNum last saw; the Mac passes the HFS refnum
 void *BinkOpenRefNum(void *pRefNum, uint32_t dwFlags);
@@ -95,8 +94,8 @@ void MACDISPLAY_RestoreGammaRamp(CGDirectDisplayID nDisplay);
 void MAC_SettleWait(void);
 int MAC_GetBinkSurfaceType(CGDirectDisplayID nDisplay);
 void MAC_OnWindowZoom(void);
-// Storm's Win32 layer on the Mac: the Win32 calls, with its own handle types
-int CloseHandle(void *hObject);
+// Storm's Win32 layer on the Mac: the Win32 calls, with its own handle types (CloseHandle
+// and HANDLE_GetFileRefNum are Win32Mac.h's)
 intptr_t SendMessageA(void *hWnd, uint32_t nMsg, uintptr_t wParam, intptr_t lParam);
 int SetRect(void *pRect, int nLeft, int nTop, int nRight, int nBottom);
 // Mac 00134d0f: loads a tile's sprite into the cache.

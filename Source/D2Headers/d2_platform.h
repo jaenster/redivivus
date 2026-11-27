@@ -55,6 +55,7 @@ extern "C" void* _AddressOfReturnAddress(void);
 #    define _FILE_DEFINED 1
 #  endif
 typedef int errno_t;
+typedef long __time32_t;  // the Mac's time_t
 #endif
 // MSVC CRT stream layout (what Ghidra models and what D2 indexes into).
 // Claimed before <cstdio> so a UCRT toolchain cannot substitute its opaque
@@ -299,6 +300,17 @@ static inline int WideCharToMultiByte(UINT cp, DWORD flags, const uint16_t* src,
 #  define __stdcall
 #  define __fastcall
 #  define __thiscall
+// The shared code's Win32 on the Mac is Storm's Win32-on-Mac layer, as in the original
+// build: Win32Mac.h gives the scalar types (DWORD is 32 bits), HANDLE (an index into the
+// layer's handle table), the critical section (a pthread mutex) and the entry points the
+// layer implements, in place of the stand-ins below. Sockets are BSD's, as the Mac build
+// called them (Fog's Safesock and QServer): their types come from the system.
+#  include "Source/StormMac/Win32Mac/Source/Win32/Win32Mac.h"
+#  include <sys/types.h>
+#  include <sys/socket.h>
+#  include <sys/select.h>
+#  include <sys/time.h>
+#  include <netinet/in.h>
 #endif
 #ifndef _countof
 #  define _countof(a) (sizeof(a) / sizeof((a)[0]))
@@ -308,12 +320,16 @@ static inline int WideCharToMultiByte(UINT cp, DWORD flags, const uint16_t* src,
 typedef int BOOL;
 typedef unsigned char BYTE;
 typedef unsigned short WORD;
+#if !D2_OS_MAC
 typedef unsigned long DWORD;
+#endif
 typedef unsigned long long QWORD;
 typedef char CHAR;
 typedef uint16_t WCHAR;
 typedef char TCHAR;
+#if !D2_OS_MAC
 typedef long LONG;
+#endif
 typedef unsigned long ULONG;
 typedef short SHORT;
 typedef unsigned short USHORT;
@@ -333,7 +349,9 @@ typedef unsigned short ATOM;
 typedef void* LPVOID;
 typedef const void* LPCVOID;
 typedef void* PVOID;
+#if !D2_OS_MAC
 typedef void* HANDLE;
+#endif
 typedef void* HMODULE;
 typedef void* HINSTANCE;
 typedef void* HWND;
@@ -354,7 +372,9 @@ typedef intptr_t LRESULT;
 typedef uintptr_t WPARAM;
 typedef intptr_t LPARAM;
 typedef uint16_t LANGID;
+#if !D2_OS_MAC
 typedef intptr_t (__stdcall *FARPROC)();
+#endif
 
 // String pointer types
 typedef char* LPSTR;
@@ -372,13 +392,17 @@ typedef PTHREAD_START_ROUTINE LPTHREAD_START_ROUTINE;
 typedef void* LPSERVICE_STATUS;
 
 // Minimal struct definitions
+#if !D2_OS_MAC
 struct CRITICAL_SECTION { void* DebugInfo; long LockCount; long RecursionCount; void* OwningThread; void* LockSemaphore; unsigned long SpinCount; };
 typedef CRITICAL_SECTION* LPCRITICAL_SECTION;
+#endif
 struct POINT { long x; long y; };
 typedef POINT* LPPOINT;
 struct RECT { long left; long top; long right; long bottom; };
 typedef RECT* LPRECT;
+#if !D2_OS_MAC
 struct FILETIME { DWORD dwLowDateTime; DWORD dwHighDateTime; };
+#endif
 typedef FILETIME* LPFILETIME;
 struct GUID { DWORD Data1; WORD Data2; WORD Data3; BYTE Data4[8]; };
 struct OVERLAPPED { DWORD Internal; DWORD InternalHigh; DWORD Offset; DWORD OffsetHigh; HANDLE hEvent; };
@@ -387,7 +411,9 @@ typedef OVERLAPPED* LPOVERLAPPED;
 struct PALETTEENTRY { BYTE peRed; BYTE peGreen; BYTE peBlue; BYTE peFlags; };
 typedef PALETTEENTRY* LPPALETTEENTRY;
 
+#if !D2_OS_MAC
 typedef FILETIME _FILETIME;
+#endif
 typedef OVERLAPPED _OVERLAPPED;
 struct MEMORYSTATUS { DWORD dwLength; DWORD dwMemoryLoad; SIZE_T dwTotalPhys; SIZE_T dwAvailPhys; SIZE_T dwTotalPageFile; SIZE_T dwAvailPageFile; SIZE_T dwTotalVirtual; SIZE_T dwAvailVirtual; };
 typedef MEMORYSTATUS _MEMORYSTATUS;
@@ -399,8 +425,10 @@ typedef SECURITY_ATTRIBUTES* LPSECURITY_ATTRIBUTES;
 typedef MEMORYSTATUS* LPMEMORYSTATUS;
 typedef SYSTEMTIME* LPSYSTEMTIME;
 typedef LONG* PLONG;
+#if !D2_OS_MAC
 union _LARGE_INTEGER { struct { DWORD LowPart; long HighPart; } s; long long QuadPart; };
 typedef _LARGE_INTEGER LARGE_INTEGER;
+#endif
 typedef RECT tagRECT;
 
 // Network types
@@ -408,19 +436,25 @@ typedef int SOCKET;
 typedef unsigned long u_long;
 
 // Thread context (minimal stub)
+#if !D2_OS_MAC
 struct CONTEXT { DWORD ContextFlags; };
+#endif
 typedef CONTEXT* LPCONTEXT;
 
 // Common Win32 API function stubs
 extern "C" {
+#if !D2_OS_MAC
 DWORD GetTickCount();
+#endif
 void Sleep(DWORD dwMilliseconds);
 BOOL QueryPerformanceCounter(LARGE_INTEGER* lpPerformanceCount);
 BOOL QueryPerformanceFrequency(LARGE_INTEGER* lpFrequency);
 int wsprintfA(LPSTR lpOut, LPCSTR lpFmt, ...);
 int wsprintfW(LPWSTR lpOut, LPCWSTR lpFmt, ...);
 DWORD GetLastError();
+#if !D2_OS_MAC
 void SetLastError(DWORD dwErrCode);
+#endif
 DWORD GetCurrentThreadId();
 DWORD GetCurrentProcessId();
 void OutputDebugStringA(LPCSTR lpOutputString);
@@ -436,8 +470,10 @@ void EnterCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
 void LeaveCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
 void DeleteCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
 HANDLE CreateThread(LPSECURITY_ATTRIBUTES lpThreadAttributes, SIZE_T dwStackSize, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID lpParameter, DWORD dwCreationFlags, LPDWORD lpThreadId);
+#if !D2_OS_MAC
 DWORD WaitForSingleObject(HANDLE hHandle, DWORD dwMilliseconds);
 BOOL CloseHandle(HANDLE hObject);
+#endif
 void ExitProcess(UINT uExitCode);
 int MessageBoxA(HWND hWnd, LPCSTR lpText, LPCSTR lpCaption, UINT uType);
 LPVOID VirtualAlloc(LPVOID lpAddress, SIZE_T dwSize, DWORD flAllocationType, DWORD flProtect);
@@ -743,9 +779,11 @@ static inline LONG InterlockedIncrement(volatile LONG* p) { return ++(*p); }
 static inline LONG InterlockedDecrement(volatile LONG* p) { return --(*p); }
 static inline LONG InterlockedExchange(volatile LONG* p, LONG v) { LONG old = *p; *p = v; return old; }
 static inline LONG InterlockedCompareExchange(volatile LONG* p, LONG exchange, LONG comparand) { LONG old = *p; if (*p == comparand) *p = exchange; return old; }
-// Overloads for int32_t* (Ghidra decompiler uses int32_t instead of LONG)
+// Overloads for int32_t* (Ghidra decompiler uses int32_t instead of LONG; the Mac's LONG is int32_t)
+#if !D2_OS_MAC
 static inline int32_t InterlockedIncrement(volatile int32_t* p) { return ++(*p); }
 static inline int32_t InterlockedDecrement(volatile int32_t* p) { return --(*p); }
+#endif
 HANDLE CreateEventW(LPSECURITY_ATTRIBUTES lpEventAttributes, BOOL bManualReset, BOOL bInitialState, LPCWSTR lpName);
 DWORD WaitForMultipleObjects(DWORD nCount, const HANDLE* lpHandles, BOOL bWaitAll, DWORD dwMilliseconds);
 LRESULT SendMessageA(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
