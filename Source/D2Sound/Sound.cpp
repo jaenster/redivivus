@@ -15,6 +15,7 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Sound/Sound.data.h"
 #include "Source/D2Sound/Src/D2SoundSmp.data.h"
+#include "Redivivus/d2_trace.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -151,7 +152,7 @@ void __stdcall SOUND_InitDirectSound() {
 
     DSBUFFERDESC tPrimaryBufferDesc;
     memset(&tPrimaryBufferDesc, 0, sizeof(tPrimaryBufferDesc));
-    tPrimaryBufferDesc.dwSize = 0x14;
+    tPrimaryBufferDesc.dwSize = sizeof(tPrimaryBufferDesc);
     tPrimaryBufferDesc.dwFlags = 1;
     if (gbDSoundPrimaryBufferMode) {
       tPrimaryBufferDesc.dwFlags = 0x11;
@@ -163,6 +164,7 @@ void __stdcall SOUND_InitDirectSound() {
     if (hResultDSCall < 0) {
       szErrorMsg = SOUND_GetDirectSoundErrorString(hResultDSCall);
       Fog::Src::LogManager::LOGFILE_WriteStringToFile("........DirectSound progress: %s returned on failed CreateSoundBuffer", szErrorMsg);
+      D2TraceFmt("SOUND: primary CreateSoundBuffer failed hr=%08X (%s)", (unsigned)hResultDSCall, szErrorMsg);
       SOUND_ShutdownDirectSound();
       return;
     }
@@ -204,7 +206,7 @@ void __stdcall SOUND_InitDirectSound() {
       DSBUFFERDESC tEaxBufferDesc;
       memset(&tEaxBufferDesc, 0, sizeof(tEaxBufferDesc));
       tEaxBufferDesc.lpwfxFormat = &tSecondaryFormat;
-      tEaxBufferDesc.dwSize = 0x14;
+      tEaxBufferDesc.dwSize = sizeof(tEaxBufferDesc);
       tEaxBufferDesc.dwBufferBytes = 0x400;
       tEaxBufferDesc.dwFlags = 0x12;
       if (!gnSoundQualityMode) {
@@ -232,7 +234,7 @@ void __stdcall SOUND_InitDirectSound() {
 
     DSBCAPS sPrimaryBufferCaps;
     memset(&sPrimaryBufferCaps, 0, sizeof(sPrimaryBufferCaps));
-    sPrimaryBufferCaps.dwSize = 0x14;
+    sPrimaryBufferCaps.dwSize = sizeof(sPrimaryBufferCaps);
     gpDSoundPrimaryBuffer->lpVtbl->GetCaps(gpDSoundPrimaryBuffer, &sPrimaryBufferCaps);
     Src::D2SoundSmp::SOUNDSMP_ClearBuffer(gpDSoundPrimaryBuffer, 0, sPrimaryBufferCaps.dwBufferBytes);
     gpDSoundPrimaryBuffer->lpVtbl->Play(gpDSoundPrimaryBuffer, 0, 0, 1);
@@ -310,6 +312,7 @@ void __fastcall SOUND_Initialize(uint32_t dwLanguageCode, BOOL bSoundInBackgroun
     }
 
     Fog::Src::LogManager::LOGFILE_WriteStringToFile("\tCouldn\'t initialize DirectSound");
+    D2TraceFmt("SOUND: couldn't initialize DirectSound, the game runs silent");
 }
 
 void __fastcall SOUND_InitMusicBuffer(BOOL bSoundInBackground) {
