@@ -258,6 +258,7 @@ void __fastcall BNDOWNLOAD_ExtractFileFromArchive(char * szFileName, D2ArchiveSt
     Storm::Source::SFile::SFileCloseFile(pMpqFile);
 }
 
+#if defined(_WIN32) || !D2_OS_MAC
 static BOOL BNDOWNLOAD_LaunchVerifiedExecutables(LPCSTR szText1, LPCSTR szText2) {
     while (*szText2) {
       if (!D2Hell::D2FILE_VerifyFileSignature(szText2)) {
@@ -272,6 +273,7 @@ static BOOL BNDOWNLOAD_LaunchVerifiedExecutables(LPCSTR szText1, LPCSTR szText2)
 
     return 1;
 }
+#endif
 
 void __fastcall BNDOWNLOAD_UpdateProgressPercent(uint32_t dwUnused, int32_t nBytesDone, uint32_t nTotalSize) {
     gnNetworkSendState = (uint32_t)(nBytesDone * 100) / nTotalSize;
@@ -381,6 +383,7 @@ static int32_t __stdcall BNDOWNLOAD_RecvFileFromSocket(LPCSTR pThis, SOCKET hSoc
 }
 
 // Processes BNet prepatch.lst from downloaded MPQ archive - executes patches, extracts files, launches updates
+#if defined(_WIN32) || !D2_OS_MAC
 int __fastcall BNDOWNLOAD_ProcessPrepatchList(int * pResultOut) {
     // Frame slots -4020..-3996 are ONE object: &dwAuthResult is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -590,7 +593,9 @@ int __fastcall BNDOWNLOAD_ProcessPrepatchList(int * pResultOut) {
     *__frame0.pOpenFileOut = -1;
     return 0;
 }
+#endif
 
+#if defined(_WIN32) || !D2_OS_MAC
 int __fastcall BNDOWNLOAD_ApplyPrepatch(BOOL * pbPatcherLaunched) {
     int nResult;
     BNDOWNLOAD_ProcessPrepatchList(&nResult);
@@ -606,6 +611,7 @@ int __fastcall BNDOWNLOAD_ApplyPrepatch(BOOL * pbPatcherLaunched) {
 
     return 0;
 }
+#endif
 
 uint32_t __stdcall BnetDownloadFile_II(void * lpThreadParam) {
     u_short nPort;
@@ -897,7 +903,11 @@ void __fastcall BNDOWNLOAD_InitiateFileDownload(int32_t pDownloadCtx, uint32_t d
     Storm::Source::SSTR::SStrCopy(pThreadCtx->szFileName, szBufferInput, 0x104);
     Storm::Source::SSTR::SStrCopy(pThreadCtx->szOutputPath, szText2, 0x104);
     /* LONG * lpAddend for InterlockedIncrement */ InterlockedIncrement(&lpAddend_00881d5c);
+#if !defined(_WIN32) && D2_OS_MAC
+    HANDLE hObject = (HANDLE)_beginthreadex(nullptr, 0, BnetDownloadFile_II, pThreadCtx, 0, &nThreadId, "DownloadThreadProc");
+#else
     HANDLE hObject = (HANDLE)_beginthreadex(nullptr, 0, BnetDownloadFile_II, pThreadCtx, 0, &nThreadId);
+#endif
     if (!hObject) {
       return;
     }
@@ -1209,7 +1219,11 @@ uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pPatchList, uint32_
     Storm::Source::SSTR::SStrCopy(pThreadCtx->szFileName, (char*)pPatchList, 0x104);
     Storm::Source::SSTR::SStrCopy(pThreadCtx->szOutputPath, "", 0x104);
     /* LONG * lpAddend for InterlockedIncrement */ InterlockedIncrement(&lpAddend_00881d5c);
+#if !defined(_WIN32) && D2_OS_MAC
+    uintptr_t nThreadHandle = _beginthreadex(nullptr, 0, BnetDownloadFile_II, pThreadCtx, 0, &nThreadId, "DownloadThreadProc");
+#else
     uintptr_t nThreadHandle = _beginthreadex(nullptr, 0, BnetDownloadFile_II, pThreadCtx, 0, &nThreadId);
+#endif
     return nThreadHandle;
 }
 

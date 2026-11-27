@@ -264,7 +264,7 @@ void __fastcall BNSEND_StoreRealmQueryData(uint8_t * pbRealmData, uint32_t nSize
 void __fastcall BNSEND_StoreChannelListData(uint8_t * pbChannelData, uint32_t nSize);
 // @sourcefile .\BnSend.cpp
 void __fastcall BNSEND_StoreGameListData(uint8_t * pbGameData, uint32_t nSize);
-void BNCLIENT_InterlockedCompareExchange(long * pDestination, LONG nExchange, LONG nComperand);
+void BNCLIENT_InterlockedCompareExchange(LONG * pDestination, LONG nExchange, LONG nComperand);
 int Unreferenced_0051bea0();
 BOOL __stdcall D2CheckExpansionGame();
 void __fastcall Unreferenced_0051bed0(int nConnectionState);

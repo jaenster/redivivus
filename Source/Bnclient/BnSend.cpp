@@ -83,7 +83,7 @@ static D2NetDataStrc * g_pBNetSocketData = 0; D2_STATIC_GUARD(g_pBNetSocketData,
 // also labelled: lpAddend_00881bf4
 static LONG Destination_00881bf4 = 0; D2_STATIC_GUARD(Destination_00881bf4, "Destination_00881bf4");
 static uint32_t gbBNetSocketConnected = 0; D2_STATIC_GUARD(gbBNetSocketConnected, "gbBNetSocketConnected");
-static long Target_00881bfc = 0; D2_STATIC_GUARD(Target_00881bfc, "Target_00881bfc");
+static LONG Target_00881bfc = 0; D2_STATIC_GUARD(Target_00881bfc, "Target_00881bfc");
 // also labelled: lpAddend_00881c00
 static LONG Destination_00881c00 = 0; D2_STATIC_GUARD(Destination_00881c00, "Destination_00881c00");
 static uint32_t g_nBNetThreadInitFlag = 0; D2_STATIC_GUARD(g_nBNetThreadInitFlag, "g_nBNetThreadInitFlag");
@@ -672,6 +672,7 @@ void * __fastcall NET_SID_CLIENT_Send_0x3E_LogonRealmEx(char * szRealmName, char
     return pUserData;
 }
 
+#if defined(_WIN32) || !D2_OS_MAC
 void __stdcall NET_SID_CLIENT_Send_0x12_LocaleInfo() {
     _SYSTEMTIME stSystemTime;
     _SYSTEMTIME stLocalTime;
@@ -701,6 +702,7 @@ void __stdcall NET_SID_CLIENT_Send_0x12_LocaleInfo() {
     pszLocaleCursor = pszLocaleCursor + strlen(pszLocaleCursor) + 1;
     NET_SID_CLIENT_Send(0x12, (char*)&ftSystemTime, (uint32_t)(uintptr_t)(pszLocaleCursor + (0x20 - (intptr_t)ftSystemTime.szStrings)));
 }
+#endif
 
 int __fastcall NET_SID_CLIENT_Send_0x16_ClickAd(uint32_t dwAdId, int32_t bRequestType) {
     SID_C2S_ClickAd sPacket;
@@ -952,7 +954,7 @@ void __fastcall BNSEND_StoreGameListData(uint8_t * pbGameData, uint32_t nSize) {
     memcpy(g_pBNetGameListData, pbGameData, nSize);
 }
 
-void BNCLIENT_InterlockedCompareExchange(long * pDestination, LONG nExchange, LONG nComperand) {
+void BNCLIENT_InterlockedCompareExchange(LONG * pDestination, LONG nExchange, LONG nComperand) {
     /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ InterlockedCompareExchange(pDestination, nExchange, nComperand);
 }
 

@@ -482,6 +482,24 @@ static void CACHE_RemoveEntry(char * szText) {
     gpCacheBlockTable = pCacheBlockTable;
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+static void CACHE_BuildFilePath(LPSTR szText) {
+    HANDLE hModule = GetModuleHandle(nullptr);
+    GetModuleFileName(hModule, szText, 0x104);
+    char* pcSeparator = strchr(szText, 0x5c);
+    char* pcLast;
+    do {
+      pcLast = pcSeparator;
+      if (!pcLast) {
+        goto append_cache_dir;
+      }
+      pcSeparator = strchr(pcLast + 1, 0x5c);
+    } while (pcSeparator);
+    *pcLast = '\0';
+    append_cache_dir:
+    Storm::Source::SSTR::SStrPack(szText, "\\Battle.net Cache", 0x104);
+}
+#else
 static void CACHE_BuildFilePath(LPSTR szText) {
     int nHResult = SHGetFolderPathA(0, 0x23, 0, 0, szText);
     if (nHResult) {
@@ -495,6 +513,7 @@ static void CACHE_BuildFilePath(LPSTR szText) {
     /* LPSECURITY_ATTRIBUTES lpSecurityAttributes for CreateDirectoryA */ /* LPCSTR lpPathName for CreateDirectoryA */ CreateDirectoryA(szText, (LPSECURITY_ATTRIBUTES)0x0);
     Storm::Source::SSTR::SStrPack(szText, "\\bncache.dat", 0x104);
 }
+#endif
 
 // Closes and deletes the Fog cache file. Closes ghCacheFileHandle if open, builds cache file path to %APPDATA%\Blizzard Entertainment\Diablo II\bncache.dat, and deletes it via DeleteFileA.
 void __stdcall CACHE_DeleteFile() {

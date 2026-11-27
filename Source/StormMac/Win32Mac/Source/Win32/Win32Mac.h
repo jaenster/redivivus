@@ -226,6 +226,9 @@ void Event_Close(HANDLE hEvent);
 DWORD WaitForSingleObject(HANDLE hHandle, DWORD dwMilliseconds);
 
 LONG InterlockedDecrement(LPLONG pnValue);
+LONG InterlockedIncrement(LPLONG pnValue);
+LONG InterlockedExchange(LPLONG pnTarget, LONG nValue);
+LONG InterlockedCompareExchange(LPLONG pnDest, LONG nExchange, LONG nComparand);
 HANDLE AllocWin32Handle(DWORD dwType);
 void FreeWin32Handle(HANDLE hHandle);
 BOOL AddObjectToKernelPool(HANDLE hObject);

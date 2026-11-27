@@ -35,8 +35,10 @@ static char g_szStoredUsername[256] = {}; D2_STATIC_GUARD(g_szStoredUsername, "g
 static D2SrpSaltVerifierStrc g_srpSaltVerifier = {}; D2_STATIC_GUARD(g_srpSaltVerifier, "g_srpSaltVerifier");
 static D2SrpCredentialsStrc g_srpCredentials = {}; D2_STATIC_GUARD(g_srpCredentials, "g_srpCredentials");
 D2Srp * g_pSrpContext = 0; D2_GLOBAL_GUARD(g_pSrpContext, "g_pSrpContext");
+#if defined(_WIN32) || !D2_OS_MAC
 // kernel32!GetSystemDefaultUILanguage, looked up at run time (absent before Windows 2000).
 typedef LANGID (WINAPI *pfnGetSystemDefaultUILanguage)(void);
+#endif
 
 namespace Bnclient::_net_sid {
 char * KeyClassic = 0; D2_GLOBAL_GUARD(KeyClassic, "Bnclient::_net_sid::KeyClassic");
@@ -1283,6 +1285,7 @@ void __stdcall NET_SID_CLIENT_FreeSRP() {
     SRP::SRP_FreeParameters(&g_pSrpContext);
 }
 
+#if defined(_WIN32) || !D2_OS_MAC
 int Unreferenced_00521ba0() {
     uint16_t uVar3;
     HMODULE hModule = LoadLibraryA("kernel32.dll");
@@ -1301,6 +1304,7 @@ int Unreferenced_00521ba0() {
     LANGID LVar1 = GetSystemDefaultLangID();
     return (uint32_t)LVar1;
 }
+#endif
 
 // SID_AUTH_INFO (0x50) packet sender - Client authentication initialization request
 // Sends client platform and version information to Battle.net to initiate authentication:
@@ -1327,7 +1331,11 @@ int __stdcall NET_SID_CLIENT_Send_0x50_AuthInfo() {
     uint32_t szCountryAbbrevBuf[16];
     memset(&sAuthInfoPacket, 0, sizeof(SID_C2S_AuthInfo));
     sAuthInfoPacket.dwProtocolId = 0;
+#if !defined(_WIN32) && D2_OS_MAC
+    memcpy(sAuthInfoPacket.szPlatform, "CAMX", sizeof(sAuthInfoPacket.szPlatform));
+#else
     memcpy(sAuthInfoPacket.szPlatform, "68XI", sizeof(sAuthInfoPacket.szPlatform));
+#endif
     BOOL bIsExpansion;
     bIsExpansion = BnSend::D2CheckExpansionGame();
     sAuthInfoPacket.dwProductId = bIsExpansion ? 0x44325850 : 0x44324456;
@@ -1346,6 +1354,7 @@ int __stdcall NET_SID_CLIENT_Send_0x50_AuthInfo() {
     llTimeDiff = _alldiv(ftUtc.dwLowDateTime - ftLocal.dwLowDateTime, ftUtc.dwHighDateTime - ftLocal.dwHighDateTime - (uint32_t)(ftUtc.dwLowDateTime < ftLocal.dwLowDateTime), 600000000, 0);
     sAuthInfoPacket.nTzBias = (int)llTimeDiff;
     sAuthInfoPacket.dwLocaleId = GetUserDefaultLCID();
+#if defined(_WIN32) || !D2_OS_MAC
     HMODULE hKernel32;
     hKernel32 = LoadLibraryA("kernel32.dll");
     if (hKernel32) {
@@ -1360,6 +1369,7 @@ int __stdcall NET_SID_CLIENT_Send_0x50_AuthInfo() {
 
       /* HMODULE hLibModule for FreeLibrary */ FreeLibrary(hKernel32);
     }
+#endif
 
     LANGID wLangId;
     wLangId = GetSystemDefaultLangID();

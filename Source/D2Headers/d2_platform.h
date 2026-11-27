@@ -775,10 +775,27 @@ static inline uint64_t __aullrem(uint32_t lo1, uint32_t hi1, uint32_t lo2, uint3
 static inline uint64_t _aullshr(uint64_t a, unsigned int n) { return a >> n; }
 
 #ifndef _WIN32
+#if D2_OS_MAC
+// The layer's own Interlocked* (Win32_Process.cpp), taking the volatile pointers the shared
+// code passes.
+static inline LONG InterlockedIncrement(volatile LONG* p) { return InterlockedIncrement((LPLONG)p); }
+static inline LONG InterlockedDecrement(volatile LONG* p) { return InterlockedDecrement((LPLONG)p); }
+static inline LONG InterlockedExchange(volatile LONG* p, LONG v) { return InterlockedExchange((LPLONG)p, v); }
+static inline LONG InterlockedCompareExchange(volatile LONG* p, LONG exchange, LONG comparand) {
+  return InterlockedCompareExchange((LPLONG)p, exchange, comparand);
+}
+static inline PVOID InterlockedCompareExchangePointer(PVOID volatile* ppDestination, PVOID pExchange, PVOID pComparand) {
+  return (PVOID)InterlockedCompareExchange((LPLONG)ppDestination, (LONG)(intptr_t)pExchange, (LONG)(intptr_t)pComparand);
+}
+static inline LONG d2_InterlockedCompareExchange(LONG* pDestination, LONG nExchange, LONG nComperand) {
+  return InterlockedCompareExchange((LPLONG)pDestination, nExchange, nComperand);
+}
+#else
 static inline LONG InterlockedIncrement(volatile LONG* p) { return ++(*p); }
 static inline LONG InterlockedDecrement(volatile LONG* p) { return --(*p); }
 static inline LONG InterlockedExchange(volatile LONG* p, LONG v) { LONG old = *p; *p = v; return old; }
 static inline LONG InterlockedCompareExchange(volatile LONG* p, LONG exchange, LONG comparand) { LONG old = *p; if (*p == comparand) *p = exchange; return old; }
+#endif
 // Overloads for int32_t* (Ghidra decompiler uses int32_t instead of LONG; the Mac's LONG is int32_t)
 #if !D2_OS_MAC
 static inline int32_t InterlockedIncrement(volatile int32_t* p) { return ++(*p); }
@@ -851,6 +868,43 @@ void SetRect(LPRECT lprc, int left, int top, int right, int bottom);
 int WSAGetLastError();
 int WSACleanup();
 DWORD timeGetTime(void);
+#endif
+
+#if !defined(_WIN32) && D2_OS_MAC
+// The Win32 entry points Storm's Win32-on-Mac layer implements under its own names (no A
+// suffix, no extern "C"); the shared code's Windows spelling resolves to them. Where
+// the Mac binary has no such call, the code that makes it is not in the Mac build.
+struct _TIME_ZONE_INFORMATION;
+DWORD GetTimeZoneInformation(_TIME_ZONE_INFORMATION* lpTimeZoneInformation);
+void GetSystemTime(SYSTEMTIME* lpSystemTime);
+LONG CompareFileTime(const FILETIME* lpFileTime1, const FILETIME* lpFileTime2);
+BOOL GetFileTime(HANDLE hFile, FILETIME* lpCreationTime, FILETIME* lpLastAccessTime, FILETIME* lpLastWriteTime);
+BOOL SetFileTime(HANDLE hFile, const FILETIME* lpCreationTime, const FILETIME* lpLastAccessTime,
+                 const FILETIME* lpLastWriteTime);
+DWORD GetTempPath(DWORD nBufferLength, char* szBuffer);
+DWORD CharLowerBuff(char* lpsz, DWORD cchLength);
+int GetLocaleInfo(DWORD dwLocale, DWORD dwLCType, char* szData, size_t nDataSize);
+int32_t GetUserDefaultLangID(void);
+DWORD LOCALE_GetUserLocaleId(void);
+WORD LOCALE_GetDefaultLangId(void);
+HANDLE GetModuleHandle(LPCSTR szModuleName);
+DWORD GetModuleFileName(HANDLE hModule, char* szFileName, DWORD nSize);
+// The layer's CRT thread start: the Mac signature carries the thread's name.
+HANDLE _beginthreadex(LPVOID lpSecurity, size_t nStackSize, LPTHREAD_START_ROUTINE pfnStart, LPVOID pArgList,
+                      DWORD dwInitFlag, LPDWORD pThreadId, LPCSTR szName);
+typedef long long __int64;
+#  define GetTempPathA GetTempPath
+#  define CharLowerBuffA CharLowerBuff
+#  define GetLocaleInfoA GetLocaleInfo
+#  define GetUserDefaultLCID LOCALE_GetUserLocaleId
+#  define GetSystemDefaultLangID LOCALE_GetDefaultLangId
+#  define INVALID_HANDLE_VALUE ((HANDLE)-1)
+// The compiler's rotate: clang-425 folds this idiom to one ROL.
+#  ifndef _rotl
+static inline uint32_t _rotl(uint32_t dwValue, int nShift) {
+    return (dwValue << (nShift & 31)) | (dwValue >> ((32 - nShift) & 31));
+}
+#  endif
 #endif
 
 #ifndef _WIN32
