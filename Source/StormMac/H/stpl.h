@@ -456,8 +456,7 @@ public:
         m_fulllist.SetLinkOffset(offsetof(T, m_linktofull));
         m_slotmask = (uint32_t)-1;
     }
-    // Never inlined: the original keeps it a function of its own even where the table's type is known.
-    __attribute__((noinline)) virtual void InternalDelete(T* pNode);
+    virtual void InternalDelete(T* pNode);
     virtual T* InternalNew(List* pList, uint32_t nExtraBytes, uint32_t dwFlags);
     virtual ~TSHashTable();
     virtual void Destroy();

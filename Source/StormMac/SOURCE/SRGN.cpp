@@ -17,6 +17,9 @@
 #include <pthread.h>
 #include <stdint.h>
 
+// The original's TSList/TSFixedArray<RGN> template members, each called out of line in the binary.
+// Written as plain functions they are inlinable; without the attribute RgnLink_Unlink and
+// RgnBlockLink_Unlink take NextLink in and stop matching.
 #define RGN_NOINLINE __attribute__((noinline))
 
 // 1.14d mac: 00010b98
@@ -89,11 +92,17 @@ struct RgnArr {
     }
 };
 
+// The table's key type: no key, every comparison is equal.
+struct RgnHashKeyNone {
+    uint32_t m_unused;
+    bool operator==(const RgnHashKeyNone&) const { return true; }
+};
+
 struct RGN {
     uint32_t m_handle;     // 0x00: the table's key
     RgnLink m_linktoslot;  // 0x04
     RgnLink m_linktofull;  // 0x0C
-    uint32_t m_key;        // 0x14: HASHKEY_NONE
+    RgnHashKeyNone m_key;  // 0x14
     RgnArr<0x1C> m_a;      // 0x18: elements of 0x1C bytes
     RgnArr<0x10> m_b;      // 0x28: elements of 0x10 bytes
     RgnArr<8> m_c;         // 0x38: elements of 8 bytes
@@ -114,6 +123,9 @@ struct RgnBlock {
     RgnBlock() : m_alloc(0), m_count(0), m_data(NULL), m_chunk(0) {}
 };
 
+struct RgnElem8 {
+    uint32_t a, b;
+};
 struct RgnElem16 {
     uint64_t a, b;
 };
@@ -174,7 +186,7 @@ public:
 // TSExportTableSync<RGN,HSRGN,HLOCKEDRGN,CCritSect,1>
 class RgnExportTable : public RgnHashTableReuse {
 public:
-    uint32_t m_f44;
+    RgnHashKeyNone m_key;     // 0x44: the key Ptr takes
     uint32_t m_nextHandle;    // 0x48
     uint32_t m_f4C;
     pthread_mutex_t m_mutex;  // 0x50
@@ -316,12 +328,8 @@ RGN_NOINLINE void RgnArr8_ReallocData(RgnArr<8>* pArray, int nNewSize) {
 // 1.14d mac: 0001be5a
 RGN_NOINLINE void RgnArr8_Set(RgnArr<8>* pArray, int nCount, void* pSource) {
     RgnArr8_ReallocData(pArray, nCount);
-    uint64_t* pDest = (uint64_t*)pArray->m_data;
-    uint64_t* pSrc = (uint64_t*)pSource;
-    for (int i = 0; i != nCount; i++) {
-        if (pDest + i) {
-            pDest[i] = pSrc[i];
-        }
+    for (uint32_t i = 0; i < (uint32_t)nCount; i++) {
+        new (&((RgnElem8*)pArray->m_data)[i]) RgnElem8(((RgnElem8*)pSource)[i]);
     }
     pArray->m_count = nCount;
 }
@@ -337,12 +345,8 @@ RGN_NOINLINE void RgnArr16_ReallocData(RgnArr<0x10>* pArray, int nNewSize) {
 // 1.14d mac: 0001befa
 RGN_NOINLINE void RgnArr16_Set(RgnArr<0x10>* pArray, int nCount, void* pSource) {
     RgnArr16_ReallocData(pArray, nCount);
-    RgnElem16* pDest = (RgnElem16*)pArray->m_data;
-    RgnElem16* pSrc = (RgnElem16*)pSource;
-    for (int i = 0; i != nCount; i++) {
-        if (pDest + i) {
-            pDest[i] = pSrc[i];
-        }
+    for (uint32_t i = 0; i < (uint32_t)nCount; i++) {
+        new (&((RgnElem16*)pArray->m_data)[i]) RgnElem16(((RgnElem16*)pSource)[i]);
     }
     pArray->m_count = nCount;
 }
@@ -358,12 +362,8 @@ RGN_NOINLINE void RgnArr1C_ReallocData(RgnArr<0x1C>* pArray, int nNewSize) {
 // 1.14d mac: 0001bfa6
 RGN_NOINLINE void RgnArr1C_Set(RgnArr<0x1C>* pArray, int nCount, void* pSource) {
     RgnArr1C_ReallocData(pArray, nCount);
-    RgnElem1C* pDest = (RgnElem1C*)pArray->m_data;
-    RgnElem1C* pSrc = (RgnElem1C*)pSource;
-    for (int i = 0; i != nCount; i++) {
-        if (pDest + i) {
-            pDest[i] = pSrc[i];
-        }
+    for (uint32_t i = 0; i < (uint32_t)nCount; i++) {
+        new (&((RgnElem1C*)pArray->m_data)[i]) RgnElem1C(((RgnElem1C*)pSource)[i]);
     }
     pArray->m_count = nCount;
 }
@@ -427,7 +427,7 @@ RGN_NOINLINE void RgnArrRGN_ReallocData(RgnBlock* pArray, uint32_t nNewSize) {
 // 1.14d mac: 0001ba12
 RGN_NOINLINE void RgnArrRGN_Reserve(RgnBlock* pArray, int nCount, int bRound) {
     uint32_t nNewSize = pArray->m_count + nCount;
-    if (pArray->m_alloc < nNewSize) {
+    if (nNewSize > pArray->m_alloc) {
         if (bRound) {
             uint32_t nChunk = pArray->m_chunk;
             if (nChunk == 0) {
@@ -455,12 +455,8 @@ RGN_NOINLINE void RgnArrRGN_Reserve(RgnBlock* pArray, int nCount, int bRound) {
 // 1.14d mac: 0001c0e8
 RGN_NOINLINE RGN* RgnArrRGN_New(RgnBlock* pArray) {
     RgnArrRGN_Reserve(pArray, 1, 1);
-    RGN* pNode = &pArray->m_data[pArray->m_count];
-    if (pNode != NULL) {
-        new (pNode) RGN;
-    }
-    pArray->m_count++;
-    return pNode;
+    new (&pArray->m_data[pArray->m_count]) RGN;
+    return &pArray->m_data[pArray->m_count++];
 }
 
 // 1.14d mac: 0001b732
@@ -596,7 +592,7 @@ RGN_NOINLINE void RgnHashTable_Unlink(RgnHashTable* pTable, RGN* pEntry) {
 }
 
 // 1.14d mac: 0001b33c
-RGN_NOINLINE RGN* RgnHashTable_Ptr(RgnHashTable* pTable, uint32_t dwKey) {
+RGN_NOINLINE RGN* RgnHashTable_Ptr(RgnHashTable* pTable, uint32_t dwKey, const RgnHashKeyNone* pKey) {
     if (pTable->m_slotmask != 0xFFFFFFFF) {
         RgnList* pBuckets = pTable->m_buckets.m_data;
         RgnList* pBucket = &pBuckets[pTable->m_slotmask & dwKey];
@@ -605,7 +601,7 @@ RGN_NOINLINE RGN* RgnHashTable_Ptr(RgnHashTable* pTable, uint32_t dwKey) {
             pEntry = NULL;
         }
         while (pEntry != NULL && !((uint32_t)pEntry & 1)) {
-            if (pEntry->m_handle == dwKey) {
+            if (pEntry->m_handle == dwKey && pEntry->m_key == *pKey) {
                 return pEntry;
             }
             RgnLink* pLink;
@@ -689,7 +685,7 @@ RGN* RgnHashTableReuse::InternalNew(RgnList* pList, uint32_t nExtraBytes, uint32
             }
             RgnBlock* pBlock = RgnBlockList_NewNode(&m_blocks, 1, 0, 0);
             uint32_t nNewSize = m_blocksize + pBlock->m_count;
-            if (pBlock->m_alloc < nNewSize) {
+            if (nNewSize > pBlock->m_alloc) {
                 RgnArrRGN_ReallocData(pBlock, nNewSize);
             }
             m_blocksize *= 2;
@@ -737,8 +733,8 @@ RgnExportTable::~RgnExportTable() {
 // 1.14d mac: 0001b13a
 RGN_NOINLINE RGN* RgnExportTable_Lock(RgnExportTable* pTable, uint32_t hHandle, uint32_t* pdwLockState, int bForWrite) {
     pthread_mutex_lock(&pTable->m_mutex);
-    *pdwLockState = -(uint32_t)(bForWrite == 0) | 1;
-    RGN* pEntry = RgnHashTable_Ptr(pTable, hHandle);
+    *pdwLockState = bForWrite ? 1 : -1;
+    RGN* pEntry = RgnHashTable_Ptr(pTable, hHandle, &pTable->m_key);
     if (pEntry == NULL) {
         pthread_mutex_unlock(&pTable->m_mutex);
         *pdwLockState = 0;

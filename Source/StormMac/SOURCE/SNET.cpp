@@ -154,6 +154,16 @@ struct SNetAddress {
     uint8_t abData[0x10];
 };
 
+// The provider's send buffer (0x2000 bytes from VirtualAlloc): a pointer to the address
+// copy, the address, then the packet.
+struct SNetSendBuffer {
+    SNetAddress* pAddress;      // 0x000: &tAddress
+    uint8_t abUnknown04[0x3C];  // 0x004
+    SNetAddress tAddress;       // 0x040
+    uint8_t abUnknown50[0xF0];  // 0x050
+    uint8_t abData[0x1F00];     // 0x140
+};
+
 // A packet on the wire: the header, then the payload.
 struct SNetPacketHdr {
     uint16_t wChecksum;  // 0x00
@@ -280,13 +290,13 @@ TSList<SNetPendingNode> g_tPendingList;
 // 1.14d mac: 003f0bf4
 SNetSpi* g_pSpi;
 // 1.14d mac: 003f0bfc
-int g_nSNetState0;
+char g_szSNetState0[0x80];  // a string: the next global is 0x80 bytes on
 // 1.14d mac: 003f0bf8
 int g_nSNetState1;
 // 1.14d mac: 003f0c7c
-int g_nSNetState2;
+char g_szSNetState2[0x80];  // a string: the next global is 0x80 bytes on
 // 1.14d mac: 003f0cfc
-int g_nSNetState3;
+char g_szSNetState3[0x80];  // a string: the next global is 0x80 bytes on
 // 1.14d mac: 003f0d7c
 int g_nSNetState4;
 // 1.14d mac: 003f0d80
@@ -308,7 +318,7 @@ HANDLE g_hRecvEvent;
 // 1.14d mac: 003f0da0
 uint32_t g_dwNextSendTime;
 // 1.14d mac: 003f0da4
-int* g_pSendBuffer;
+SNetSendBuffer* g_pSendBuffer;
 // 1.14d mac: 003f0da8
 HANDLE g_hSpiLibrary;
 // 1.14d mac: 003f0dac
@@ -374,12 +384,17 @@ SNetLogInfo::~SNetLogInfo() {
     }
 }
 
-static void SLOG_CreateFromRegistry(SNetLogInfo* pLogInfo, const char* szKey, const char* szValue, int nFlags);
+void SLOG_CreateFromRegistry(SNetLogInfo* pLogInfo, const char* szKey, const char* szValue, int nFlags);
+// Kept out of line: the binary calls each of these, and the original keeps their arguments in
+// registers unfolded (dump_packet, SNET_ConnSendMessage, SNET_CreateConnection), which shows the
+// original file had further callers (SNet's send and receive API, dead-stripped at link) that
+// this file does not carry; with only the surviving callers the inliner would take them in.
 #define SNET_NOINLINE __attribute__((noinline))
 static SNetConn* SNET_CreateConnection(TSList<SNetConn>* pConnList, SNetAddress* pAddress);
 
 // 1.14d mac: 0001a9f8
-static void SLOG_EnsureLogCreated(SNetLogInfo* pLogInfo) {
+// External: Bnclient's log (0005ab50, 0005abdf) calls it, with its argument on the stack.
+void SLOG_EnsureLogCreated(SNetLogInfo* pLogInfo) {
     if (pLogInfo->bCreated == 0) {
         if (SLOG_AreCriticalSectionsInitialized() && pLogInfo->szName[0] != '\0') {
             pLogInfo->bCreated = 1;
@@ -393,7 +408,8 @@ static void SLOG_EnsureLogCreated(SNetLogInfo* pLogInfo) {
 }
 
 // 1.14d mac: 0001aa62
-SNET_NOINLINE static void SLOG_CreateFromRegistry(SNetLogInfo* pLogInfo, const char* szKey, const char* szValue, int nFlags) {
+// External as well: its four arguments come on the stack, not in the registers a file-local gets.
+void SLOG_CreateFromRegistry(SNetLogInfo* pLogInfo, const char* szKey, const char* szValue, int nFlags) {
     char szPath[260];
     szPath[0] = '\0';
     SRegLoadString(szKey, szValue, 0, szPath, sizeof(szPath));
@@ -448,21 +464,18 @@ static void dump_packet(const char* szLabel, int bReceive, SNetPacketHdr* pPacke
 // A Fletcher-style mod-255 checksum, computed backwards over the data.
 // 1.14d mac: 0001a27c
 SNET_NOINLINE static uint16_t SNET_ComputePacketChecksum(const uint8_t* pData, uint32_t nLength) {
-    uint32_t nSum1 = 0;
     uint32_t nSum2 = 0;
+    uint32_t nSum1 = 0;
     if (nLength != 0) {
-        uint32_t nRunning = 0;
         uint32_t nTotal = 0;
-        do {
-            uint32_t nByte = pData[nLength - 1];
-            uint32_t nReduced = (nByte - 0xFF) + nRunning;
-            nRunning = nByte + nRunning;
+        uint32_t nRunning = 0;
+        for (; nLength != 0; nLength--) {
+            nRunning += pData[nLength - 1];
             if (nRunning > 0xFE) {
-                nRunning = nReduced;
+                nRunning -= 0xFF;
             }
             nTotal += nRunning;
-            nLength--;
-        } while (nLength != 0);
+        }
         nSum2 = nTotal % 0xFF;
         nSum1 = nRunning << 8;
     }
@@ -518,10 +531,10 @@ static void SNET_ConnSendPacket(SNetConn* pConn, SNetPacketHdr* pPacket) {
             if (nSize > 0x1F00) {
                 goto done;
             }
-            *g_pSendBuffer = (int)(g_pSendBuffer + 0x10);
-            SMemCopy(g_pSendBuffer + 0x10, pAddress, sizeof(SNetAddress));
-            SMemCopy(g_pSendBuffer + 0x50, pPacket, nSize);
-            pSendData = (SNetPacketHdr*)(g_pSendBuffer + 0x50);
+            g_pSendBuffer->pAddress = &g_pSendBuffer->tAddress;
+            SMemCopy(&g_pSendBuffer->tAddress, pAddress, sizeof(SNetAddress));
+            SMemCopy(g_pSendBuffer->abData, pPacket, nSize);
+            pSendData = (SNetPacketHdr*)g_pSendBuffer->abData;
         }
         g_nBytesSent = g_nBytesSent + nSize;
         g_pSpi->pfnSend(1, &pAddress, pSendData, nSize);
@@ -660,8 +673,11 @@ SNET_NOINLINE static void SNET_DestroyConnection(SNetConn* pConn) {
         i++;
     } while (i != SNET_QUEUE_COUNT);
     SNET_ClearPacketQueue(&pConn->tOldTurns);
-    TSList<SNetConn>* pList = SNET_LOCALCONN() == pConn ? &g_tLocalConnList : &g_tConnList;
-    pList->DeleteNode(pConn);
+    if (SNET_LOCALCONN() == pConn) {
+        g_tLocalConnList.DeleteNode(pConn);
+    } else {
+        g_tConnList.DeleteNode(pConn);
+    }
 }
 
 // Frees every connection of both lists.
@@ -740,11 +756,11 @@ BOOL SNetLeaveGame(DWORD dwExitCode) {
                 }
             }
             for (SNetConn* pConn = g_tConnList.Head(); pConn != NULL; pConn = g_tConnList.Link(pConn)->Next()) {
-                if (pLocalConn->byPlayerId != SNET_NOPLAYER) {
+                if (pConn->byPlayerId != SNET_NOPLAYER) {
                     for (int i = 0; i != SNET_QUEUE_COUNT; i++) {
-                        SNetQueue* pQueue = &pLocalConn->aOutgoing[i];
+                        SNetQueue* pQueue = &pConn->aOutgoing[i];
                         for (SNetPacket* pNode = pQueue->Head(); pNode != NULL; pNode = pQueue->Link(pNode)->Next()) {
-                            SNET_ConnResendMessage(pLocalConn, pNode->pData, pNode->nBytes);
+                            SNET_ConnResendMessage(pConn, pNode->pData, pNode->nBytes);
                         }
                     }
                 }
@@ -754,9 +770,9 @@ BOOL SNetLeaveGame(DWORD dwExitCode) {
                 g_pGameData = NULL;
                 g_nGameDataSize = 0;
             }
-            g_nSNetState0 = 0;
-            g_nSNetState3 = 0;
-            g_nSNetState2 = 0;
+            g_szSNetState0[0] = '\0';
+            g_szSNetState3[0] = '\0';
+            g_szSNetState2[0] = '\0';
             g_nSNetState4 = 0;
             g_nSNetState5 = 0;
             g_byLocalPlayerId = SNET_NOPLAYER;
