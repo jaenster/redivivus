@@ -18,6 +18,8 @@
 #define SFILE_STATIC static __attribute__((noinline))
 
 // A critical section: a recursive pthread mutex.
+void CRITSECT_Init(pthread_mutex_t* pMutex) __attribute__((noinline));
+
 class SFileCritSect {
 public:
     pthread_mutex_t m_tMutex;
@@ -98,6 +100,21 @@ int SFileReadFileEx2(D2MPQFileStrc* pFile, void* pBuffer, uint32_t nBytes, size_
 int SFileCloseFile(D2MPQFileStrc* pFile);
 int SFileOpenFileEx(D2ArchiveStrc* pArchive, const char* szFileName, uint32_t dwSearchScope,
                     D2MPQFileStrc** ppFile);
+
+uint32_t SFileAuthenticateArchiveEx(D2ArchiveStrc* pArchive, uint32_t* pAuthResult, void* pModulusBytes,
+                                    uint32_t nModulusLen, void* pExponentBytes, uint32_t nExponentLen);
+
+// 1.14d mac: 00011fec
+int SFileAuthenticateArchive(D2ArchiveStrc* pArchive, uint32_t* pAuthResult) {
+    if (SFileAuthenticateArchiveEx(pArchive, pAuthResult, NULL, 0, NULL, 0)) {
+        return 1;
+    }
+    if (pAuthResult) {
+        *pAuthResult = 0;
+    }
+    SErrSetLastError(0x4dc);
+    return 0;
+}
 
 // 1.14d mac: 0001204e
 uint32_t SFileAuthenticateArchiveEx(D2ArchiveStrc* pArchive, uint32_t* pAuthResult, void* pModulusBytes,
@@ -282,8 +299,8 @@ static __attribute__((noinline, used)) uint32_t SFILE_FindChunk(D2MPQFileStrc* p
     return dwPos != 0xFFFFFFFF;
 }
 
-// 1.14d mac: 00013132
 static DWORD SFILE_CdThreadProc(LPVOID pParam);
+// 1.14d mac: 00013132
 SFILE_STATIC void SFILE_CreateCdThread(void) {
     if (s_hCdThread == 0) {
         s_hCdEvent = CreateEventA(0, 0, 0, NULL);
@@ -1325,10 +1342,15 @@ SFILE_STATIC int SFILE_s_OpenArchive(D2ArchiveStrc* pArchive, uint32_t nFlags, i
 }
 
 SFileCritSect::SFileCritSect() {
+    CRITSECT_Init(&m_tMutex);
+}
+
+// 1.14d mac: 000176a0
+void CRITSECT_Init(pthread_mutex_t* pMutex) {
     pthread_mutexattr_t tAttr;
     pthread_mutexattr_init(&tAttr);
     pthread_mutexattr_settype(&tAttr, PTHREAD_MUTEX_RECURSIVE);
-    pthread_mutex_init(&m_tMutex, &tAttr);
+    pthread_mutex_init(pMutex, &tAttr);
     pthread_mutexattr_destroy(&tAttr);
 }
 
@@ -2443,4 +2465,83 @@ SFILE_STATIC DWORD SFILE_CdThreadProc(LPVOID pParam) {
         }
     }
 }
+
+// The out-of-line instantiations of stpl.h's list templates this file's object holds, one
+// set per record type (archive, request, file, completion event, stream), by the qualified
+// name the compare tool pairs them with. The calls inside the file inline them; the originals
+// are weak copies the linker kept from here.
+
+template void TSLink<D2ArchiveStrc>::Unlink();
+template TSLink<D2ArchiveStrc>* TSLink<D2ArchiveStrc>::NextLink(int);
+template void TSExplicitList<D2ArchiveStrc,0>::UnlinkAll();
+template void TSExplicitList<D2ArchiveStrc,0>::LinkNode(D2ArchiveStrc*, uint32_t, D2ArchiveStrc*);
+template D2ArchiveStrc* TSExplicitList<D2ArchiveStrc,0>::NewNode(uint32_t, uint32_t, uint32_t);
+template D2ArchiveStrc* TSExplicitList<D2ArchiveStrc,0>::DeleteNode(D2ArchiveStrc*);
+template TSExplicitList<D2ArchiveStrc,0>::~TSExplicitList();
+
+template void TSLink<D2StormAsyncOpStrc>::Unlink();
+template TSLink<D2StormAsyncOpStrc>* TSLink<D2StormAsyncOpStrc>::NextLink(int);
+template void TSExplicitList<D2StormAsyncOpStrc,0>::UnlinkAll();
+template void TSExplicitList<D2StormAsyncOpStrc,0>::LinkNode(D2StormAsyncOpStrc*, uint32_t, D2StormAsyncOpStrc*);
+template D2StormAsyncOpStrc* TSExplicitList<D2StormAsyncOpStrc,0>::NewNode(uint32_t, uint32_t, uint32_t);
+template D2StormAsyncOpStrc* TSExplicitList<D2StormAsyncOpStrc,0>::DeleteNode(D2StormAsyncOpStrc*);
+template TSExplicitList<D2StormAsyncOpStrc,0>::~TSExplicitList();
+
+template void TSLink<D2MPQFileStrc>::Unlink();
+template TSLink<D2MPQFileStrc>* TSLink<D2MPQFileStrc>::NextLink(int);
+template void TSExplicitList<D2MPQFileStrc,0>::UnlinkAll();
+template void TSExplicitList<D2MPQFileStrc,0>::LinkNode(D2MPQFileStrc*, uint32_t, D2MPQFileStrc*);
+template D2MPQFileStrc* TSExplicitList<D2MPQFileStrc,0>::NewNode(uint32_t, uint32_t, uint32_t);
+template D2MPQFileStrc* TSExplicitList<D2MPQFileStrc,0>::DeleteNode(D2MPQFileStrc*);
+template TSExplicitList<D2MPQFileStrc,0>::~TSExplicitList();
+
+template void TSLink<SFileEventNode>::Unlink();
+template TSLink<SFileEventNode>* TSLink<SFileEventNode>::NextLink(int);
+template void TSExplicitList<SFileEventNode,0>::UnlinkAll();
+template void TSExplicitList<SFileEventNode,0>::LinkNode(SFileEventNode*, uint32_t, SFileEventNode*);
+template SFileEventNode* TSExplicitList<SFileEventNode,0>::NewNode(uint32_t, uint32_t, uint32_t);
+template SFileEventNode* TSExplicitList<SFileEventNode,0>::DeleteNode(SFileEventNode*);
+template TSExplicitList<SFileEventNode,0>::~TSExplicitList();
+
+template void TSLink<D2StormAudioStreamRec>::Unlink();
+template TSLink<D2StormAudioStreamRec>* TSLink<D2StormAudioStreamRec>::NextLink(int);
+template void TSExplicitList<D2StormAudioStreamRec,0>::UnlinkAll();
+template void TSExplicitList<D2StormAudioStreamRec,0>::LinkNode(D2StormAudioStreamRec*, uint32_t, D2StormAudioStreamRec*);
+template D2StormAudioStreamRec* TSExplicitList<D2StormAudioStreamRec,0>::NewNode(uint32_t, uint32_t, uint32_t);
+template D2StormAudioStreamRec* TSExplicitList<D2StormAudioStreamRec,0>::DeleteNode(D2StormAudioStreamRec*);
+template TSExplicitList<D2StormAudioStreamRec,0>::~TSExplicitList();
+
+// 1.14d mac: 00016a2e TSExplicitList<D2ArchiveStrc,0>::~TSExplicitList[D2]
+// 1.14d mac: 000170de TSExplicitList<D2ArchiveStrc,0>::UnlinkAll
+// 1.14d mac: 00016d72 TSLink<D2ArchiveStrc>::Unlink
+// 1.14d mac: 00016db2 TSLink<D2ArchiveStrc>::NextLink
+// 1.14d mac: 00016b6a TSExplicitList<D2ArchiveStrc,0>::LinkNode
+// 1.14d mac: 00016a50 TSExplicitList<D2StormAsyncOpStrc,0>::~TSExplicitList[D2]
+// 1.14d mac: 00017020 TSExplicitList<D2StormAsyncOpStrc,0>::UnlinkAll
+// 1.14d mac: 00017068 TSLink<D2StormAsyncOpStrc>::Unlink
+// 1.14d mac: 000170a8 TSLink<D2StormAsyncOpStrc>::NextLink
+// 1.14d mac: 0001719c TSExplicitList<D2StormAsyncOpStrc,0>::LinkNode
+// 1.14d mac: 00017126 TSExplicitList<D2StormAsyncOpStrc,0>::NewNode
+// 1.14d mac: 00017210 TSExplicitList<D2StormAsyncOpStrc,0>::DeleteNode
+// 1.14d mac: 00016a8e TSExplicitList<D2MPQFileStrc,0>::~TSExplicitList[D2]
+// 1.14d mac: 00016fd8 TSExplicitList<D2MPQFileStrc,0>::UnlinkAll
+// 1.14d mac: 00016cfc TSLink<D2MPQFileStrc>::Unlink
+// 1.14d mac: 00016d3c TSLink<D2MPQFileStrc>::NextLink
+// 1.14d mac: 00016c88 TSExplicitList<D2MPQFileStrc,0>::LinkNode
+// 1.14d mac: 00016bde TSExplicitList<D2MPQFileStrc,0>::NewNode
+// 1.14d mac: 00016ab0 TSExplicitList<SFileEventNode,0>::~TSExplicitList[D2]
+// 1.14d mac: 00016f1a TSExplicitList<SFileEventNode,0>::UnlinkAll
+// 1.14d mac: 00016f62 TSLink<SFileEventNode>::Unlink
+// 1.14d mac: 00016fa2 TSLink<SFileEventNode>::NextLink
+// 1.14d mac: 0001762c TSExplicitList<SFileEventNode,0>::LinkNode
+// 1.14d mac: 000175b6 TSExplicitList<SFileEventNode,0>::NewNode
+// 1.14d mac: 00017546 TSExplicitList<SFileEventNode,0>::DeleteNode
+// 1.14d mac: 00016ad2 TSExplicitList<D2StormAudioStreamRec,0>::~TSExplicitList[D2]
+// 1.14d mac: 00016ed2 TSExplicitList<D2StormAudioStreamRec,0>::UnlinkAll
+// 1.14d mac: 00016de8 TSLink<D2StormAudioStreamRec>::Unlink
+// 1.14d mac: 00016e28 TSLink<D2StormAudioStreamRec>::NextLink
+// 1.14d mac: 00016e5e TSExplicitList<D2StormAudioStreamRec,0>::LinkNode
+// 1.14d mac: 00016af4 TSExplicitList<D2StormAudioStreamRec,0>::NewNode
+// 1.14d mac: 00017700 _GLOBAL__I_a
+
 #endif  // D2_OS_MAC
