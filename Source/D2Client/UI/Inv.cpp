@@ -4890,18 +4890,16 @@ void Unreferenced_00489a10() {
 }
 
 void __stdcall INV_HandleStashMouseMove(D2UIMouseMsgStrc * pMsg) {
-    if (!(g_nCurrentInventoryPage == 0xc || g_nCurrentInventoryPage == 0xd)) {
+    if (g_nCurrentInventoryPage != 0xc && g_nCurrentInventoryPage != 0xd) {
       return;
     }
 
     gnInvMouseX = (int)pMsg->uLParam.sMousePos.nMouseX;
     gnInvMouseY = (int)pMsg->uLParam.sMousePos.nMouseY;
     if (gnInvMouseX < pInventoryScreenCoordinates.nLeft || gnInvMouseX >= pInventoryScreenCoordinates.nRight || gnInvMouseY < pInventoryScreenCoordinates.nTop || gnInvMouseY > pInventoryScreenCoordinates.nBottom) {
-      BOOL bInBankRange;
-      bInBankRange = IsInBankPageScreenRange(gnInvMouseX, gnInvMouseY);
-      if (!bInBankRange) {
-        gbInvItemUnderCursorExists = bInBankRange;
-        gbInvBodySlotUnderCursorExists = bInBankRange;
+      if (!IsInBankPageScreenRange(gnInvMouseX, gnInvMouseY)) {
+        gbInvItemUnderCursorExists = 0;
+        gbInvBodySlotUnderCursorExists = 0;
         pItemToDescribe = nullptr;
         gpInvHoveredItem = nullptr;
         D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(nullptr, -1, -1, 0, 0);
