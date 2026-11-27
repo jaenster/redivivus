@@ -161,7 +161,7 @@ function walk(d: string): string[] {
     return readdirSync(d).flatMap((f) => { const p = join(d, f); return statSync(p).isDirectory() ? walk(p) : [p]; });
 }
 for (const root of SOURCE_ROOTS) {
-    for (const file of walk(join(REPO, root)).filter((f) => /\.(cpp|c|h|hpp)$/.test(f)).sort()) {
+    for (const file of walk(join(REPO, root)).filter((f) => /\.(cpp|c|h|hpp)$/i.test(f)).sort()) {
         let pend: number | null = null;
         const text = readFileSync(file, "utf8");
         if (!text.includes("1.14d mac:")) continue;
@@ -463,7 +463,7 @@ function compareOne(e: Entry, obj: ObjInfo) {
 // ---- run ----
 const byFile = new Map<string, Entry[]>();
 for (const e of entries) {
-    if (!/\.(cpp|c)$/.test(e.file) || !e.defined) continue;
+    if (!/\.(cpp|c)$/i.test(e.file) || !e.defined) continue;
     if (filters.length && !filters.some((f) => e.file.includes(f) || e.name === f)) continue;
     if (!byFile.has(e.file)) byFile.set(e.file, []);
     byFile.get(e.file)!.push(e);

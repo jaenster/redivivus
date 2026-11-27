@@ -144,6 +144,14 @@ public:
     void UnlinkAll();
     void LinkNode(T* pNode, uint32_t nLinkType, T* pExisting);
     T* NewNode(uint32_t nLinkType, uint32_t nExtraBytes, uint32_t dwFlags);
+    // Unlinks the node, frees it, and returns the node after it.
+    T* DeleteNode(T* pNode) {
+        T* pNext = Next(pNode);
+        UnlinkNode(pNode);
+        pNode->~T();
+        SMemFree(pNode, "", -2, 0);
+        return pNext;
+    }
 };
 
 template<class T, int OFFSET>
