@@ -6256,66 +6256,58 @@ void __stdcall NPCMENU_ShowMainMenuDialog() {
 }
 
 void __stdcall NPCMENU_OpenInteraction(D2UnitStrc * pUnit) {
-    D2UnitStrc* pPlayerUnit_lcl;
     GAME::Game::UI_ResetInputState();
     if (!pUnit) {
-      close_interaction:
       _Interaction::geNpcUiState = NPCUI_NONE;
       Inv::INV_ResetHoverAndContextState();
       NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
       ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
       return;
     }
-    if (_Interaction::bInteractingWithNpc) {
-      pPlayerUnit_lcl = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
-      if (pPlayerUnit_lcl) {
-        goto close_interaction;
-      }
+    if (_Interaction::bInteractingWithNpc && UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER)) {
+      _Interaction::geNpcUiState = NPCUI_NONE;
+      Inv::INV_ResetHoverAndContextState();
+      NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
+      ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
+      return;
     }
 
-    uint16_t wStatLayer = 0;
-    eD2UnitStat eUnitStat = UNITSTAT_gold;
     _Interaction::geNpcUiState = NPCUI_MENU;
     gnNpcMenuTransactionType = 0;
-    PLAYER_CurrentGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), eUnitStat, wStatLayer);
+    PLAYER_CurrentGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), UNITSTAT_gold, 0);
     ui::UI_CloseActivePanels(0, 0);
     GAME::Game::UI_ResetInputState();
-    if (_Interaction::bInteractingWithNpc) {
-      pPlayerUnit_lcl = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
-      if (pPlayerUnit_lcl) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xdc9);
-        exit(-1);
-      }
+    if (_Interaction::bInteractingWithNpc && UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER)) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xdc9);
+      exit(-1);
     }
 
     SetInteractedUnitInfo(pUnit);
     if (_Interaction::bInteractingWithNpc) {
-      pPlayerUnit_lcl = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
-      if (pPlayerUnit_lcl) {
-        pPlayerUnit_lcl->eUnitFlags &= ~UNITFLAG_TARGETABLE;
+      D2UnitStrc* pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER);
+      if (pNpcUnit) {
+        pNpcUnit->eUnitFlags &= ~UNITFLAG_TARGETABLE;
       }
     }
 
-    DWORD bUiMenuOpened = ui::SetUIFlag(UI_NPCMENU, UI_TOGGLE, 0);
-    if (!bUiMenuOpened) {
+    if (!ui::SetUIFlag(UI_NPCMENU, UI_TOGGLE, 0)) {
       NPCMENU_CloseAndResetAll();
       return;
     }
 
     NPCMENU_ShowMainMenuDialog();
-    BOOL nSpeechEntryIdx = CheckSpeachVersusInteractedUnit();
-    if (D2NPCSpeech[nSpeechEntryIdx].bGreeting == '\0') {
+    int nSpeechIdx = CheckSpeachVersusInteractedUnit();
+    if (!D2NPCSpeech[nSpeechIdx].bGreeting) {
       return;
     }
 
-    pPlayerUnit_lcl = GetInteractedUnit();
-    eD2Sounds nSoundId = GAME::Sound::SOUND_SelectNpcGreetingSound(pPlayerUnit_lcl, 1);
+    eD2Sounds nSoundId = GAME::Sound::SOUND_SelectNpcGreetingSound(GetInteractedUnit(), 1);
     if (nSoundId != SOUND_NONE) {
       UNIT::UnitSnd::UNITSND_StopAllSkillSounds(pUnit);
       Sound::SOUND_PlaySound(nSoundId, UNIT::Player::GetPlayerUnit_UI(), 0, 1, 0);
     }
 
-    D2NPCSpeech[nSpeechEntryIdx].bGreeting = '\0';
+    D2NPCSpeech[nSpeechIdx].bGreeting = '\0';
 }
 
 // Warriv's "Go East" menu option (string 3382 WarrivMenu1b): frees the NPC dialog, resets hover state, closes the NPC interaction, closes UI_NPCMENU, and sends C->S 0x38 (action 0, npc GUID, level 40 Lut Gholein). Returns 1.

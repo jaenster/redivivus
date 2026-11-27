@@ -4475,101 +4475,53 @@ static void __stdcall MISSILE_CreateAtMonsterFacing(D2UnitStrc * pUnit, eMissile
 
 // Spawns a randomized debris missile around a source unit (pUnit2), used for the Nihlathak debris/swoosh effect. Advances pUnit2's RNG seed to pick one of four cardinal offset directions from the source position and a random depth offset, then selects one of MISSILE_Nehlithakdebris1..4 (or Nehlithakswoosh) via seed % 30. Builds a D2SkillArgStrc (owner=pUnit, skill/level taken from pUnit2) and calls MakeMissile; on success sets the new missile's shifted Z position and its target X/Y to the source unit's current position. No return value.
 static void __stdcall MISSILE_CreateRandomCardinal(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
-    int nTargetX;
-    D2SkillArgStrc sSkillArg;
-    int32_t aCardinalOffsetA[4];
-    int32_t aCardinalOffsetB[4];
+    int32_t aOffsetX[4] = { 1, 0, -1, 0 };
+    int32_t aOffsetY[4] = { 0, 1, 0, -1 };
+    int nDepth = D2_SeedRoll(&pUnit2->sSeed) % 0x7d;
+    int nDirection = D2_SeedRoll(&pUnit2->sSeed) & 3;
+    int nPosX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit2);
+    int nPosY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit2);
+    int nSpawnX = nPosX + aOffsetX[nDirection];
+    int nSpawnY = nPosY + aOffsetY[nDirection];
+    int nDeltaX = nSpawnX - nPosX;
+    int nDeltaY = nSpawnY - nPosY;
     eMissilesId eMissileType;
-    aCardinalOffsetB[2] = -1;
-    aCardinalOffsetA[3] = -1;
-    aCardinalOffsetB[0] = 1;
-    aCardinalOffsetA[1] = 1;
-    uint32_t DVar2 = D2_SeedRoll(&pUnit2->sSeed);
-    uint32_t DVar1 = D2_SeedRoll(&pUnit2->sSeed);
-    uint32_t nDirIndex = DVar1 & 3;
-    eD2UnitType eUnitType = pUnit2->eUnitType;
-    aCardinalOffsetB[1] = 0;
-    aCardinalOffsetB[3] = 0;
-    aCardinalOffsetA[0] = 0;
-    aCardinalOffsetA[2] = 0;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      eMissileType = pUnit2->pPath.pStaticPath->nPosX;
-    } else if (pUnit2->pPath.pDynamicPath) {
-      eMissileType = D2Common::PATH::DynamicPath::GetXPos(pUnit2->pPath.pDynamicPath);
-    } else {
-      eMissileType = 0;
-    }
-
-    eUnitType = pUnit2->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nTargetX = pUnit2->pPath.pStaticPath->nPosY;
-    } else if (pUnit2->pPath.pDynamicPath) {
-      nTargetX = D2Common::PATH::DynamicPath::GetYPos(pUnit2->pPath.pDynamicPath);
-    } else {
-      nTargetX = 0;
-    }
-
-    int nOffsetY = aCardinalOffsetA[nDirIndex];
-    int nSpawnX = aCardinalOffsetB[nDirIndex] + eMissileType;
-    int nDeltaX = nSpawnX - eMissileType;
-    DVar1 = D2_SeedRoll(&pUnit2->sSeed);
-    switch (DVar1 % 0x1e) {
+    switch (D2_SeedRoll(&pUnit2->sSeed) % 0x1e) {
       case 0:
         eMissileType = MISSILE_Nehlithakdebris1;
-      break;
+        break;
       case 1:
         eMissileType = MISSILE_Nehlithakdebris2;
-      break;
+        break;
       case 2:
         eMissileType = MISSILE_Nehlithakdebris3;
-      break;
+        break;
       case 3:
         eMissileType = MISSILE_Nehlithakdebris4;
-      break;
+        break;
       default:
         eMissileType = MISSILE_Nehlithakswoosh;
     }
 
+    D2SkillArgStrc sSkillArg;
     memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nFlags = 3;
     sSkillArg.pOwner = pUnit;
     sSkillArg.nMissileTxtNo = eMissileType;
     sSkillArg.nX = nSpawnX;
-    sSkillArg.nY = nOffsetY + nTargetX;
+    sSkillArg.nY = nSpawnY;
     sSkillArg.eSkillNo = D2Common::Units::Missile::GetSkillId(pUnit2);
     sSkillArg.nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit2);
-    sSkillArg.nUnitX = nOffsetY + nTargetX - nTargetX;
+    sSkillArg.nUnitX = nDeltaY;
     sSkillArg.nUnitY = -nDeltaX;
     D2UnitStrc* pNewMissile = Missile::MakeMissile(&sSkillArg);
     if (!pNewMissile) {
       return;
     }
 
-    Engine::Particle::SetPosVectorShifted(pNewMissile, 0, 0, DVar2 % 0x7d);
-    eUnitType = pUnit2->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nTargetX = pUnit2->pPath.pStaticPath->nPosX;
-    } else if (pUnit2->pPath.pDynamicPath) {
-      nTargetX = D2Common::PATH::DynamicPath::GetXPos(pUnit2->pPath.pDynamicPath);
-    } else {
-      nTargetX = 0;
-    }
-
-    D2Common::Units::Missile::SetTargetX(pNewMissile, nTargetX);
-    eUnitType = pUnit2->eUnitType;
-    if (eUnitType != UNIT_OBJECT && ((int)eUnitType <= 3 || (int)eUnitType > 5)) {
-      int32_t nTargetY;
-      if (pUnit2->pPath.pDynamicPath) {
-        nTargetY = D2Common::PATH::DynamicPath::GetYPos(pUnit2->pPath.pDynamicPath);
-        D2Common::Units::Missile::SetTargetY(pNewMissile, nTargetY);
-        return;
-      }
-
-      D2Common::Units::Missile::SetTargetY(pNewMissile, 0);
-      return;
-    }
-
-    D2Common::Units::Missile::SetTargetY(pNewMissile, pUnit2->pPath.pStaticPath->nPosY);
+    Engine::Particle::SetPosVectorShifted(pNewMissile, 0, 0, nDepth);
+    D2Common::Units::Missile::SetTargetX(pNewMissile, D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit2));
+    D2Common::Units::Missile::SetTargetY(pNewMissile, D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit2));
 }
 
 // Spawns a MISSILE_Brdeathlightningbolt (Baal death lightning) at a seeded-random offset target. Derives nTargetX/Y from pUnit2's RNG seed (range ±0x14 in both axes); falls back to a nonzero X if both are zero. Sets the new missile's target coords and applies a -10 Z shift (SetPosVectorShifted) for visual depth.
