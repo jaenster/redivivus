@@ -201,6 +201,7 @@ LONG ListBox_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         return DefWindowProc(hWnd, uMsg, wParam, lParam);
     }
     LONG nResult;
+    int nExact;
     switch (uMsg) {
     case WM_MOUSEMOVE: {
         pData = (ListBoxData*)GetProp(hWnd, s_szListBoxData);
@@ -375,13 +376,20 @@ LONG ListBox_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         }
         return 0;
     }
-    case WM_SETFOCUS:
+    case WM_SETFOCUS: {
+        GetProp(hWnd, s_szListBoxData);
+        HWND hParent = GetParent(hWnd);
+        UINT uID = GetWindowLong(hWnd, GWL_ID);
+        UINT uCommand = (uID & 0xFFFF) | (LBN_SETFOCUS << 16);
+        SendMessage(hParent, WM_COMMAND, uCommand, (LPARAM)hWnd);
+        return 0;
+    }
     case WM_KILLFOCUS: {
         GetProp(hWnd, s_szListBoxData);
         HWND hParent = GetParent(hWnd);
         UINT uID = GetWindowLong(hWnd, GWL_ID);
-        UINT uNotify = uMsg == WM_SETFOCUS ? LBN_SETFOCUS : LBN_KILLFOCUS;
-        SendMessage(hParent, WM_COMMAND, (uID & 0xFFFF) | (uNotify << 16), (LPARAM)hWnd);
+        UINT uCommand = (uID & 0xFFFF) | (LBN_KILLFOCUS << 16);
+        SendMessage(hParent, WM_COMMAND, uCommand, (LPARAM)hWnd);
         return 0;
     }
     case WM_ENABLE:
@@ -597,12 +605,8 @@ LONG ListBox_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         }
         return pData->nTopIndex;
     case LB_FINDSTRING:
-        // Falls into the default: the result of the search is dropped.
-        ListBox_FindString(hWnd, wParam, (const char*)lParam, 0);
-        return DefWindowProc(hWnd, uMsg, wParam, lParam);
-    case LB_FINDSTRINGEXACT:
-        ListBox_FindString(hWnd, wParam, (const char*)lParam, 1);
-        return DefWindowProc(hWnd, uMsg, wParam, lParam);
+        nExact = 0;
+        goto find_string;
     case LB_SETTABSTOPS:
         pData = (ListBoxData*)GetProp(hWnd, s_szListBoxData);
         nResult = LB_ERR;
@@ -651,6 +655,11 @@ LONG ListBox_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     case LB_GETITEMHEIGHT:
         pData = (ListBoxData*)GetProp(hWnd, s_szListBoxData);
         return pData->nItemHeight;
+    case LB_FINDSTRINGEXACT:
+        nExact = 1;
+    find_string:
+        // The result of the search is dropped; the message then goes to the default procedure.
+        ListBox_FindString(hWnd, wParam, (const char*)lParam, nExact);
     default:
         return DefWindowProc(hWnd, uMsg, wParam, lParam);
     }
@@ -877,9 +886,10 @@ static void LISTBOX_InvalidateItem(HWND hWnd, ListBoxData* pData, LONG nIndex) {
 // Unlinks the item and fixes the count, the selection and the top index; the remaining
 // count, or -1.
 static int LISTBOX_DeleteString(HWND hWnd, ListBoxData* pData, LONG nIndex) {
+    LONG nCount;
     int nResult = -1;
     if (pData != NULL && nIndex > -1 && nIndex < pData->nCount) {
-        LONG nCount = pData->nCount;
+        nCount = pData->nCount;
         ListBoxItem* pItem = ListBox_GetItemByIndex(pData, nIndex);
         if (pItem != NULL) {
             if (pItem == pData->pFirst) {
