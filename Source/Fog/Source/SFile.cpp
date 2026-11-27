@@ -436,6 +436,19 @@ void __fastcall GetAndCreateSavePath(char * pBuffer, uint32_t nSize) {
 }
 #endif
 
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 002ef76c
+int FOG_GetSavePath(char * szPath, size_t nSize) {
+    if (FOG_GetInstallPath(szPath, nSize)) {
+        Storm::Source::SSTR::SStrPack(szPath, "Save\\", nSize);
+        if (FOG_AppendBackslash(szPath, nSize)) {
+            return SafeCreateDirectoryTree(szPath);
+        }
+    }
+    return 0;
+}
+#endif
+
 uint32_t * __fastcall Unreferenced_00407260(uint32_t * pData) {
     *pData = 0;
     pData[1] = 0;

@@ -756,7 +756,17 @@ int __fastcall SFILE_GetExecutableDirectory(char * szText, DWORD nSize);
 int __fastcall SFILE_GetInstallPath(LPSTR lpFilename, DWORD nSize);
 int __fastcall SFILE_GetBlizzardAppDataPath(char * szOutPath, uint32_t nMaxLen);
 BOOL __stdcall GetUseDirectCommand();
+#if !(!defined(_WIN32) && D2_OS_MAC)
 void __fastcall GetAndCreateSavePath(char * pBuffer, uint32_t nSize);
+#else
+// The Mac binary has no GetAndCreateSavePath (it reads the Windows registry and shell folders): its
+// callers call FOG_GetSavePath (1.14d mac 002ef76c), which builds the install path + "Save/" itself.
+// FOG_GetInstallPath (002ef740) and FOG_AppendBackslash (002ef69a) are its helpers.
+BOOL FOG_GetInstallPath(char * szPath, size_t nSize);
+BOOL FOG_AppendBackslash(char * szPath, size_t nSize);
+int FOG_GetSavePath(char * szPath, size_t nSize);
+#define GetAndCreateSavePath FOG_GetSavePath
+#endif
 struct D2SystemInfoStrc * __stdcall SFILE_GetGlobalPointer();
 void __fastcall FILETOOLS_SetLogFilePathWithoutDateAndExtension2(char * szSuffix);
 } // namespace Fog::Source::SFile
