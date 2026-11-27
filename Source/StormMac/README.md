@@ -90,8 +90,7 @@ decides, the boundary is chosen as follows.
 |`unknown_allocators.cpp`|0001e2fd|`Mem_SetDefaultAllocators`, no file name recorded|
 |`SDRAW_VidDriver.cpp`|00036035|`SDrawDestroy`|
 
-Extensions are lowercase `.cpp` because the compare and coverage tools scan only that.
-||||||| parent of 5099e7ad (feat(mac): SCOMP, SERR and SEVT sources of the Mac Storm project)
+Files keep the case of their `__FILE__` literal where one exists (STORM.CPP, SBLT.CPP); the compare and coverage tools and `cmake/mac.cmake` accept both `.cpp` and `.CPP`. The names above are lowercase `.cpp` where no literal fixes the case.
 
 ## Storm SOURCE, STORM.CPP through SEVT.CPP (1.14d 000095fc..00011fdb)
 
