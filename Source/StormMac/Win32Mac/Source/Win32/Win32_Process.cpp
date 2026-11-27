@@ -52,7 +52,7 @@ int MessageBox(void* hWnd, LPCSTR szText, LPCSTR szCaption, UINT uType);
 int FPMessageBox(char* szText, char* szCaption, DWORD dwFlags);
 int32_t GetLanguage(void);
 int32_t GetUserDefaultLangID(void);
-WORD LOCALE_BuildLangIdFromMac(void);
+DWORD LOCALE_BuildLangIdFromMac(void);
 // Defined below (0002a41f).
 void ExitProcess(UINT uExitCode);
 // 1.14d mac: 00033a24
@@ -882,7 +882,7 @@ haveRegion:
 // 1.14d mac: 0002b05d
 // Win32 LANGID (sublanguage << 10 | primary language) of the Mac language and region;
 // US English when either is out of range.
-WORD LOCALE_BuildLangIdFromMac(void) {
+DWORD LOCALE_BuildLangIdFromMac(void) {
     DWORD nMacLanguage = GetLanguage();
     DWORD nMacRegion = GetUserDefaultLangID();
     DWORD wLangId = 0x409;
@@ -933,7 +933,7 @@ int32_t GetUserDefaultLangID(void) {
 }
 
 // 1.14d mac: 0002b177
-WORD LOCALE_GetUserLocaleId(void) {
+DWORD LOCALE_GetUserLocaleId(void) {
     return LOCALE_BuildLangIdFromMac();
 }
 

@@ -594,9 +594,9 @@ HANDLE FindFirstFile(char* szPattern, Win32MacFindData* pFindData) {
             }
             bzero(pFindData, sizeof(Win32MacFindData));
             pFindData->dwFileAttributes = 0x10;
+            pFindData->cFileName[2] = '\0';
             pFindData->cFileName[0] = '.';
             pFindData->cFileName[1] = '.';
-            pFindData->cFileName[2] = '\0';
         }
     }
     return hFind;
@@ -612,7 +612,7 @@ BOOL FindNextFile(HANDLE hFind, Win32MacFindData* pFindData) {
     do {
         pList = (Win32MacFindList*)pHandle->pType5Data;
         int nIndex = pList->nNext;
-        if (pList->nCount <= nIndex) {
+        if (nIndex >= pList->nCount) {
             return 0;
         }
         pList->nNext = nIndex + 1;

@@ -140,10 +140,10 @@ void IDirectSound_Construct(IDirectSound* pDirectSound);
 void IDirectSound_Destroy(IDirectSound* pDirectSound);
 static void IDirectSound_SndChannelCallback(SndChannelPtr pChannel, SndCommand* pCommand);
 SndChannelPtr IDirectSound_AcquireSoundChannel(IDirectSound* pDirectSound, IDirectSoundBuffer* pBuffer);
-static int IDirectSound_GetFreeChannelFromPool(IDirectSound* pDirectSound, SoundChannelSlot* pPool, int nCount);
-static void IDirectSound_ReleaseSoundChannel(IDirectSound* pDirectSound, SndChannelPtr pChannel);
+int IDirectSound_GetFreeChannelFromPool(IDirectSound* pDirectSound, SoundChannelSlot* pPool, int nCount);
+void IDirectSound_ReleaseSoundChannel(IDirectSound* pDirectSound, SndChannelPtr pChannel);
 int32_t IDirectSoundBuffer_Stop(IDirectSoundBuffer* pBuffer);
-static short IDirectSoundBuffer_UpdatePanAndVolume(IDirectSoundBuffer* pBuffer);
+short IDirectSoundBuffer_UpdatePanAndVolume(IDirectSoundBuffer* pBuffer);
 
 // 1.14d mac: 00032b50
 // The DirectDraw object is a token: nothing draws through it.
@@ -643,7 +643,7 @@ SndChannelPtr IDirectSound_AcquireSoundChannel(IDirectSound* pDirectSound, IDire
 // 1.14d mac: 000336ae
 // Turns volume and pan (hundredths of a decibel) into left and right levels (256 at full)
 // scaled by the buffer's gain, and sends them to the channel.
-static short IDirectSoundBuffer_UpdatePanAndVolume(IDirectSoundBuffer* pBuffer) {
+short IDirectSoundBuffer_UpdatePanAndVolume(IDirectSoundBuffer* pBuffer) {
     SndChannelPtr pChannel = pBuffer->pChannel;
     short nErr = 0;
     if (pChannel != 0) {
@@ -656,7 +656,7 @@ static short IDirectSoundBuffer_UpdatePanAndVolume(IDirectSoundBuffer* pBuffer) 
         double fLeft = pow(10.0, (double)(nVolume - nPanRight) / 2000.0);
         pBuffer->nLevelLeft = (int)(fLeft * 256.0);
         float fGain = pBuffer->fGain;
-        uint32_t nLeft = (uint32_t)((float)(int)(fLeft * 256.0) * fGain);
+        int nLeft = (int)((float)(int)(fLeft * 256.0) * fGain);
         pBuffer->nLevelLeft = nLeft;
         double fRight = pow(10.0, (double)((nPan & (nPan >> 31)) + nVolume) / 2000.0);
         int nRight = (int)((float)(int)(fRight * 256.0) * fGain);
@@ -680,7 +680,7 @@ int32_t IDirectSoundBuffer_Restore(void* pBuffer) {
 // 1.14d mac: 000337e4
 // The first pool entry with a channel and no owner; else a new channel made in the first
 // empty entry. -1 when there is neither.
-static int IDirectSound_GetFreeChannelFromPool(IDirectSound* pDirectSound, SoundChannelSlot* pPool, int nCount) {
+int IDirectSound_GetFreeChannelFromPool(IDirectSound* pDirectSound, SoundChannelSlot* pPool, int nCount) {
     if (nCount > 0) {
         for (int i = 0; i < nCount; i++) {
             if (pPool[i].pChannel != 0 && pPool[i].pOwner == 0) {
@@ -700,7 +700,7 @@ static int IDirectSound_GetFreeChannelFromPool(IDirectSound* pDirectSound, Sound
 // 1.14d mac: 00033862
 // Clears the owner of the pool entry that holds the channel; the small pool's owner also
 // goes back to full gain.
-static void IDirectSound_ReleaseSoundChannel(IDirectSound* pDirectSound, SndChannelPtr pChannel) {
+void IDirectSound_ReleaseSoundChannel(IDirectSound* pDirectSound, SndChannelPtr pChannel) {
     for (int i = 0; i < 12; i++) {
         if (pDirectSound->aPool[i].pChannel == pChannel) {
             pDirectSound->aPool[i].pOwner = 0;

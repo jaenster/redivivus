@@ -180,9 +180,9 @@ DWORD Mem_HandleType(HandleHeader** hHandle);
 // The Mac shell's table of cursor hooks, pointed to by the global at 00397abc.
 struct Win32MacHostHooks {
     void* apSlot00[19];           // 0x00
-    BOOL (*pfnGetCursorPos)(LONG* pnX, LONG* pnY);   // 0x4C
+    bool (*pfnGetCursorPos)(LONG* pnX, LONG* pnY);   // 0x4C
     void* apSlot50[3];            // 0x50
-    BOOL (*pfnSetCursorPos)(LONG* pnX, LONG* pnY);   // 0x5C
+    bool (*pfnSetCursorPos)(LONG* pnX, LONG* pnY);   // 0x5C
     void (*pfnHideCursor)(void);  // 0x60
     void (*pfnShowCursor)(void);  // 0x64
 };

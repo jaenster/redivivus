@@ -710,47 +710,56 @@ int CombineRgn(HRGN hrgnDest, HRGN hrgnSrc1, HRGN hrgnSrc2, int nMode) {
     if (nMode != 2 || hrgnSrc2 != NULL) {
         nCombineMode = nMode;
     }
-    bool bEmpty;
-    HRGN hLast;
+    int* ppDest;
+    int* ppSrc1;
+    int* ppSrc2;
     switch (nCombineMode) {
     case 1:
-    case 2:
-    case 4: {
         if (hrgnDest == NULL || hrgnSrc1 == NULL || hrgnSrc2 == NULL) {
             return 0;
         }
-        int* ppDest = LockRgn(hrgnDest);
-        int* ppSrc1 = LockRgn(hrgnSrc1);
-        int* ppSrc2 = LockRgn(hrgnSrc2);
-        if (nCombineMode == 1) {
-            Rgn_IntersectStripRgn(*ppDest, *ppSrc1, *ppSrc2);
-        } else if (nCombineMode == 2) {
-            Rgn_UnionStripRgn(*ppDest, *ppSrc1, *ppSrc2);
-        } else {
-            Rgn_SubtractStripRgn(*ppDest, *ppSrc1, *ppSrc2);
-        }
-        bEmpty = IsStripRgnEmpty(*ppDest);
-        UnlockRgn(hrgnDest);
-        UnlockRgn(hrgnSrc1);
-        hLast = hrgnSrc2;
+        ppDest = LockRgn(hrgnDest);
+        ppSrc1 = LockRgn(hrgnSrc1);
+        ppSrc2 = LockRgn(hrgnSrc2);
+        Rgn_IntersectStripRgn(*ppDest, *ppSrc1, *ppSrc2);
         break;
-    }
+    case 2:
+        if (hrgnDest == NULL || hrgnSrc1 == NULL || hrgnSrc2 == NULL) {
+            return 0;
+        }
+        ppDest = LockRgn(hrgnDest);
+        ppSrc1 = LockRgn(hrgnSrc1);
+        ppSrc2 = LockRgn(hrgnSrc2);
+        Rgn_UnionStripRgn(*ppDest, *ppSrc1, *ppSrc2);
+        break;
+    case 4:
+        if (hrgnDest == NULL || hrgnSrc1 == NULL || hrgnSrc2 == NULL) {
+            return 0;
+        }
+        ppDest = LockRgn(hrgnDest);
+        ppSrc1 = LockRgn(hrgnSrc1);
+        ppSrc2 = LockRgn(hrgnSrc2);
+        Rgn_SubtractStripRgn(*ppDest, *ppSrc1, *ppSrc2);
+        break;
     case 5: {
         if (hrgnDest == NULL || hrgnSrc1 == NULL || hrgnDest == hrgnSrc1) {
             return 0;
         }
-        int* ppDest = LockRgn(hrgnDest);
-        int* ppSrc1 = LockRgn(hrgnSrc1);
+        ppDest = LockRgn(hrgnDest);
+        ppSrc1 = LockRgn(hrgnSrc1);
         CopyStripRgn(*ppDest, *ppSrc1);
-        bEmpty = IsStripRgnEmpty(*ppDest);
+        bool bEmpty = IsStripRgnEmpty(*ppDest);
         UnlockRgn(hrgnSrc1);
-        hLast = hrgnDest;
-        break;
+        UnlockRgn(hrgnDest);
+        return (!bEmpty) + 1;
     }
     default:
         return 0;
     }
-    UnlockRgn(hLast);
+    bool bEmpty = IsStripRgnEmpty(*ppDest);
+    UnlockRgn(hrgnDest);
+    UnlockRgn(hrgnSrc1);
+    UnlockRgn(hrgnSrc2);
     return (!bEmpty) + 1;
 }
 
@@ -899,25 +908,25 @@ HGDIOBJ SelectObject(HDC hDC, HGDIOBJ hObject) {
 static UINT GDI_GetObjectType(HGDIOBJ hObject) {
     UINT nType = 0;
     if (hObject != NULL) {
-        DWORD dwHandleType = Mem_HandleType(hObject);
-        if (dwHandleType < GDI_TYPE_RGN) {
-            if (dwHandleType < GDI_TYPE_BRUSH) {
-                if (dwHandleType == GDI_TYPE_BITMAP) {
-                    nType = OBJ_BITMAP;
-                }
-            } else if (dwHandleType < GDI_TYPE_FONT) {
-                if (dwHandleType == GDI_TYPE_BRUSH) {
-                    nType = OBJ_BRUSH;
-                }
-            } else if (dwHandleType == GDI_TYPE_FONT) {
-                nType = OBJ_FONT;
-            } else if (dwHandleType == GDI_TYPE_PALETTE) {
-                nType = OBJ_PAL;
-            } else if (dwHandleType == GDI_TYPE_PEN) {
-                nType = OBJ_PEN;
-            }
-        } else if (dwHandleType == GDI_TYPE_RGN) {
+        switch (Mem_HandleType(hObject)) {
+        case GDI_TYPE_BITMAP:
+            nType = OBJ_BITMAP;
+            break;
+        case GDI_TYPE_BRUSH:
+            nType = OBJ_BRUSH;
+            break;
+        case GDI_TYPE_FONT:
+            nType = OBJ_FONT;
+            break;
+        case GDI_TYPE_PALETTE:
+            nType = OBJ_PAL;
+            break;
+        case GDI_TYPE_PEN:
+            nType = OBJ_PEN;
+            break;
+        case GDI_TYPE_RGN:
             nType = OBJ_REGION;
+            break;
         }
     }
     return nType;
@@ -964,8 +973,9 @@ BOOL ReleaseDC(void* hWnd, HDC hDC) {
     if (hDC != NULL) {
         g_nOutstandingDCs--;
         GDI_DeleteHDC(hDC);
+        return 1;
     }
-    return hDC != NULL;
+    return 0;
 }
 
 // 1.14d mac: 00024694
@@ -1223,7 +1233,7 @@ void GDI_RestoreMacPort(Win32MacSavedPort* pSaved) {
 // The font's height: ascent plus descent.
 void GDI_GetFontHeight(HFONT hFont, int* pnHeight) {
     Win32MacFont* pFont = (Win32MacFont*)Mem_HandleLock(GDI_TYPE_FONT, hFont);
-    *pnHeight = pFont->nDescent + pFont->nAscent;
+    *pnHeight = pFont->nAscent + pFont->nDescent;
     Mem_HandleUnLock(GDI_TYPE_FONT, hFont);
 }
 
@@ -1235,12 +1245,12 @@ BOOL GetTextMetrics(HDC hDC, Win32MacTextMetrics* pMetrics) {
     Win32MacFont* pFont = (Win32MacFont*)Mem_HandleLock(GDI_TYPE_FONT, pDC->hFont);
     LONG* pnMetrics = (LONG*)pMetrics;
     memset(pnMetrics, 0, sizeof(*pMetrics));
-    pnMetrics[0] = pFont->nDescent + pFont->nAscent;
+    pnMetrics[0] = pFont->nAscent + pFont->nDescent;
     pnMetrics[1] = pFont->nAscent;
     pnMetrics[2] = pFont->nDescent;
     pnMetrics[3] = 0;
     pnMetrics[4] = pFont->nAveWidth;
-    pnMetrics[7] = (pFont->nStyle & 1) ? 700 : 400;
+    pnMetrics[7] = (pFont->nStyle & 1) == 0 ? 400 : 700;
     pMetrics->tmItalic = (pFont->nStyle >> 1) & 1;
     pMetrics->tmUnderlined = (pFont->nStyle >> 2) & 1;
     pMetrics->tmPitchAndFamily = 4;
