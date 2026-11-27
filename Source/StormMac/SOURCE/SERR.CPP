@@ -441,8 +441,8 @@ uint32_t SErrGetErrorStr(uint32_t dwErrCode, char* szBuffer, size_t nBufferSize)
 // A formatted line and CRLF to the log file.
 void SERR_WriteLogLineF(HANDLE hFile, const char* szFormat, ...) {
     char szBuffer[2048];
-    int nWritten;
     va_list tArgs;
+    int nWritten;
     va_start(tArgs, szFormat);
     const char* szUsed = "";
     if (szFormat != NULL) {
@@ -450,7 +450,7 @@ void SERR_WriteLogLineF(HANDLE hFile, const char* szFormat, ...) {
     }
     vsnprintf(szBuffer, 0x7fd, szUsed, tArgs);
     va_end(tArgs);
-    szBuffer[0x7fe] = 0;
+    szBuffer[0x7fd] = 0;
     SStrPack(szBuffer, "\r\n", 0x800);
     WriteFile(hFile, szBuffer, strlen(szBuffer), &nWritten, 0);
 }
@@ -459,7 +459,7 @@ void SERR_WriteLogLineF(HANDLE hFile, const char* szFormat, ...) {
 // CRLF, then the text with every bare LF made a CRLF.
 static void SERR_WriteLogTextCRLF(HANDLE hFile, const char* szText) {
     size_t nSize = strlen(szText);
-    char* szBuffer = (char*)__builtin_alloca(nSize * 2 + 3);
+    char szBuffer[nSize * 2 + 2];
     int nWritten;
     int nLength = 2;
     szBuffer[0] = '\r';
