@@ -355,7 +355,7 @@ struct D2BattleNetEventCallbackTable {
     /* 0x08 */ void (__fastcall *fpGetDatabaseCharacter)(struct D2ClientStrc *, LPCSTR, DWORD, LPCSTR);
     /* 0x0C */ void (__fastcall *fpSaveDatabaseCharacter)(uint32_t *, char *, char *, void *, int, uint32_t); // offset 0x0C - saves character data to BNet database with account ID, save buffer, size, token
     /* 0x10 */ uint8_t * fpServerLogMessage;
-    /* 0x14 */ void (__fastcall *fpEnterGame)(uint16_t, char *, uint16_t, uint32_t, uint32_t);
+    /* 0x14 */ void (__fastcall *fpEnterGame)(uint32_t, char *, uint16_t, uint32_t, uint32_t);
     /* 0x18 */ int (*fpFindPlayerToken)(int, void *, void *, void *, void *, void *, void *);
     /* 0x1C */ uint8_t * fpSaveDatabaseGuild;
     /* 0x20 */ void (__fastcall *fpUnlockDatabaseCharacter)(uint32_t *, char *, char *);
@@ -450,8 +450,8 @@ struct D2BNetClientCallbacksStrc {
     /* 0xC0 */ BOOL (__fastcall *pfnSendChangeEmail)(char *, char *, char *);
     /* 0xC4 */ int (__stdcall *pfnSendLeaveGame)();
     /* 0xC8 */ int (__fastcall *pfnCacheFreeMem)(void *, uint32_t);
-    /* 0xCC */ BOOL (__fastcall *pfnCacheReadData)(char *, int *, void *, int *);
-    /* 0xD0 */ BOOL (__fastcall *pfnCacheWriteData)(char *, void *, uint32_t, int *, uint32_t, int);
+    /* 0xCC */ BOOL (__fastcall *pfnCacheReadData)(char *, FILETIME *, uint32_t * *, LPDWORD);
+    /* 0xD0 */ BOOL (__fastcall *pfnCacheWriteData)(char *, void *, uint32_t, FILETIME *, uint32_t, int);
     /* 0xD4 */ void * pfnReserved;
 };
 #endif // D2_DEFINED_D2BNetClientCallbacksStrc

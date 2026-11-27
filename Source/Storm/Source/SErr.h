@@ -49,8 +49,8 @@ D2_PACKED_BEGIN struct __attribute__((packed)) HANDLER {
 #ifndef D2_DEFINED_SErrAppFatalContextStrc
 #define D2_DEFINED_SErrAppFatalContextStrc
 struct SErrAppFatalContextStrc {
-    /* 0x00 */ void * pfnCallback; // SErrPrepareAppFatal arg 1
-    /* 0x04 */ uint32_t nParam; // SErrPrepareAppFatal arg 2
+    /* 0x00 */ char * pszContext; // SErrPrepareAppFatal arg 1
+    /* 0x04 */ int32_t nTraceFlags; // SErrPrepareAppFatal arg 2
     /* 0x08 */ DWORD dwThreadId; // GetCurrentThreadId of the preparer
 };
 
@@ -129,7 +129,7 @@ void __stdcall SERR_InternalLeaveCriticalSection();
 // @was SSYSTEM_SetThreadContext (pass 6, 2026.08.28) - the old name also collided with the Win32 API SetThreadContext, which this is not.
 // @oracle Storm 1.10b PPC export SErrPrepareAppFatal, code vector 10015af0 (TVector 100cbe9c).
 // @oracle-basis Callee set {EnterCriticalSection, GetCurrentThreadId, LeaveCriticalSection} is exactly the oracle's and is unique among all 19 SErr exports and all 82 functions of this namespace - the only other GetCurrentThreadId user, SErrDisplayAppFatal 0041d160, additionally calls memset/vsprintf/DisplayError/ExitProcess. Arity 2 = 2 (PPC prologue saves r3 and r4 only).
-void __stdcall SErrPrepareAppFatal(void * pfnCallback, uint32_t nCallbackParam);
+void __stdcall SErrPrepareAppFatal(char * pszContext, int32_t nTraceFlags);
 uintptr_t __thiscall SSYSTEM_ListOffsetToPointer(struct StormLinkStrc * pNode, intptr_t pBase);
 void __fastcall Unreferenced_0041c410(struct StormLinkedListStrc * pList);
 int32_t __thiscall SSYSTEM_ListGetPointer(int32_t pList, int32_t pNode);
@@ -161,11 +161,11 @@ void __fastcall TSList_HANDLER_Clear(struct StormLinkedListStrc * pList);
 // @was SSYSTEM_DisplayErrorDialog (pass 6, 2026.08.28)
 // @oracle Storm 1.10b PPC export SErrDisplayError, code vector 10015f80 (from the TVector export block at 100cbe6c).
 // @oracle-basis Callee set, near-identical across the two builds and unique in both: GetModuleFileName, memset, FindFirstFile, FindClose, SStrCopy, SStrChrR, LoadString, SStrLen, OutputDebugString, SStrPrintf/wsprintf, IsWindow, IsWindowVisible, MessageBox, the error critical-section pair, SErrGetErrorStr, and the process-exit tail (ExitProcess on PPC / TerminateProcess here). Arity 6 = 6. It is the largest function of the module in both builds (2384 B PPC / 1198 B here). Nine callers spanning SMem, SFile and SSystem, which is the profile of Storm's central error reporter.
-int __stdcall SErrDisplayError(uint32_t nErrorCode, uint32_t * pStackTrace, int32_t nTraceFlags, uint8_t * pCustomMsg, int32_t nMessageFlags, UINT nExitCode);
+int __stdcall SErrDisplayError(uint32_t nErrorCode, char * pStackTrace, int32_t nTraceFlags, char * pCustomMsg, int32_t nMessageFlags, UINT nExitCode);
 // @was SSYSTEM_DisplayErrorDialogFormatted (pass 6, 2026.08.28)
 // @oracle Storm 1.10b PPC export SErrDisplayErrorFmt, code vector 10015ed0 (TVector 100cbe74).
 // @oracle-basis Callee set is exactly {vsprintf-family, SErrDisplayError} in both builds and nothing else - the PPC body is 176 B calling ._vsnprintf then .SErrDisplayError, this one is 90 B calling _vsprintf then SErrDisplayError. __cdecl with varargs in both. It is the vararg wrapper of 0041caf0.
-void SErrDisplayErrorFmt(uint32_t nErrorCode, uint32_t * pStackTrace, int32_t nTraceFlags, int32_t nMessageFlags, UINT nExitCode, char * szFormat, ...);
+void SErrDisplayErrorFmt(uint32_t nErrorCode, char * pStackTrace, int32_t nTraceFlags, int32_t nMessageFlags, UINT nExitCode, char * szFormat, ...);
 // Reports a leaked resource. Formats "%s (%s)" from the description and the optional name, then either raises it through SErrDisplayError or, when the registry option is set, writes "Storm Error : handle never released -- %s" to the debugger.
 // @was SSYSTEM_DebugMemoryHandleError (pass 6, 2026.08.28)
 // @oracle Storm 1.10b PPC export SErrReportNamedResourceLeak, code vector 100156d0 (TVector 100cbebc).

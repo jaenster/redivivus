@@ -412,7 +412,7 @@ start	end	name	tu	symbol	method	detail
 004113e0	00411535	Fog::Src::String::FogString::SMemEscapeString	Source/Fog/Src/String/FogString	?SMemEscapeString@FogString@String@Src@Fog@@YIPAEPAE0IE@Z	sourcemap	sourcemap FogString.cpp.map
 00411540	0041161d	Fog::Src::String::FogString::SMemFormat64BitWithSeparators	Source/Fog/Src/String/FogString	?SMemFormat64BitWithSeparators@FogString@String@Src@Fog@@YIPADPADIII@Z	sourcemap	sourcemap FogString.cpp.map
 00411620	00411637	Storm::Source::SMem::SMEM_FatalError	Source/Storm/Source/SMem	?SMEM_FatalError@SMem@Source@Storm@@YAXIPAIH@Z	sourcemap	sourcemap SMem.cpp.map
-00411670	004116db	Storm::Source::SMem::SMEM_GetHandleByCaller	Source/Storm/Source/SMem	?SMEM_GetHandleByCaller@SMem@Source@Storm@@YAIPAHI@Z	sourcemap	sourcemap SMem.cpp.map
+00411670	004116db	Storm::Source::SMem::SMEM_GetHandleByCaller	Source/Storm/Source/SMem	?SMEM_GetHandleByCaller@SMem@Source@Storm@@YAIPADI@Z	sourcemap	sourcemap SMem.cpp.map
 004116e0	004116f3	Storm::Source::SMem::Unreferenced_004116e0	Source/Storm/Source/SMem	?Unreferenced_004116e0@SMem@Source@Storm@@YIPAXPAUD2FogHeapBlockHdrStrc@@@Z	sourcemap	sourcemap SMem.cpp.map
 00411700	0041170b	Storm::Source::SMem::SMemExtractBucketIndex	Source/Storm/Source/SMem	?SMemExtractBucketIndex@SMem@Source@Storm@@YGII@Z	sourcemap	sourcemap SMem.cpp.map
 00411710	0041173e	Storm::Source::SMem::SMEM_LockHeapByBlockPtr	Source/Storm/Source/SMem	?SMEM_LockHeapByBlockPtr@SMem@Source@Storm@@YGPAUD2FogHeapDescStrc@@PAIPAUD2FogHeapBlockHdrStrc@@@Z	sourcemap	sourcemap SMem.cpp.map
@@ -747,8 +747,8 @@ start	end	name	tu	symbol	method	detail
 0041c1a0	0041c1dd	Storm::Source::SErr::SERR_InternalEnterCriticalSection	Source/Storm/Source/SErr	?SERR_InternalEnterCriticalSection@SErr@Source@Storm@@YGXXZ	sourcemap	sourcemap SErr.cpp.map
 0041c1e0	0041c1ec	Storm::Source::SErr::SERR_InternalLeaveCriticalSection	Source/Storm/Source/SErr	?SERR_InternalLeaveCriticalSection@SErr@Source@Storm@@YGXXZ	sourcemap	sourcemap SErr.cpp.map
 0041c1f0	0041c293	Storm::Source::SErr::SERR_UndecorateObjectName	Source/Storm/Source/SErr	?SERR_UndecorateObjectName@SErr@Source@Storm@@YGHPADH0@Z	sourcemap	sourcemap SErr.cpp.map
-0041c2a0	0041c2a6	Storm::WindowHandle::WND_GetActiveWindow_Unref_0041c2a0	Source/Storm/WindowHandle	?WND_GetActiveWindow_Unref_0041c2a0@WindowHandle@Storm@@YGKXZ	sourcemap	sourcemap WindowHandle.cpp.map
-0041c2b0	0041c2b6	Storm::WindowHandle::WND_GetActiveWindow_Unref_0041c2b0	Source/Storm/WindowHandle	?WND_GetActiveWindow_Unref_0041c2b0@WindowHandle@Storm@@YGIXZ	sourcemap	sourcemap WindowHandle.cpp.map
+0041c2a0	0041c2a6	Storm::WindowHandle::SERR_GetLastError	Source/Storm/WindowHandle	?SERR_GetLastError@WindowHandle@Storm@@YGKXZ	sourcemap	sourcemap WindowHandle.cpp.map
+0041c2b0	0041c2b6	Storm::WindowHandle::SERR_IsErrorDialogActive	Source/Storm/WindowHandle	?SERR_IsErrorDialogActive@WindowHandle@Storm@@YGIXZ	sourcemap	sourcemap WindowHandle.cpp.map
 0041c2c0	0041c2ed	Storm::Source::SErr::SErrPrepareAppFatal	Source/Storm/Source/SErr	?SErrPrepareAppFatal@SErr@Source@Storm@@YGXPAXI@Z	sourcemap	sourcemap SErr.cpp.map
 0041c2f0	0041c332	Storm::Source::SErr::SErrRegisterMessageSource	Source/Storm/Source/SErr	?SErrRegisterMessageSource@SErr@Source@Storm@@YGHGPAUHINSTANCE__@@I@Z	sourcemap	sourcemap SErr.cpp.map
 0041c340	0041c356	Storm::Source::SErr::SErrSetLastError	Source/Storm/Source/SErr	?SErrSetLastError@SErr@Source@Storm@@YGXK@Z	sourcemap	sourcemap SErr.cpp.map
@@ -6565,8 +6565,8 @@ start	end	name	tu	symbol	method	detail
 00518ba0	00518bb6	Bnclient::Debug::DEBUG_LogFormattedMessage	Source/Bnclient/Debug	?DEBUG_LogFormattedMessage@Debug@Bnclient@@YIXPAXHPAD@Z	sourcemap	sourcemap Debug.cpp.map
 00518bc0	00518bc7	Bnclient::Debug::DEBUG_SetLoggingFlag	Source/Bnclient/Debug	?DEBUG_SetLoggingFlag@Debug@Bnclient@@YIXPAUD2IniConfigStrc@@@Z	sourcemap	sourcemap Debug.cpp.map
 00518bd0	00518bfa	Bnclient::BNCLIENT_DestroyCompressor	Source/Bnclient/BNetGW	?BNCLIENT_DestroyCompressor@Bnclient@@YIPAXPAXHE@Z	sourcemap	sourcemap BNetGW.cpp.map
-00518c00	00518c0b	Bnclient::NET_InitAndGetLobbyChatQueue	Source/Bnclient/BNetGW	?NET_InitAndGetLobbyChatQueue@Bnclient@@YIPAUD2BNetClientCallbacksStrc@@XZ	sourcemap	sourcemap BNetGW.cpp.map
-00518c10	00518c16	Bnclient::NET_GetLobbyChatQueue	Source/Bnclient/BNetGW	?NET_GetLobbyChatQueue@Bnclient@@YGPAUD2BNetClientCallbacksStrc@@XZ	sourcemap	sourcemap BNetGW.cpp.map
+00518c00	00518c0b	Bnclient::BNCLIENT_GetCallbacks	Source/Bnclient/BNetGW	?BNCLIENT_GetCallbacks@Bnclient@@YIPAUD2BNetClientCallbacksStrc@@XZ	sourcemap	sourcemap BNetGW.cpp.map
+00518c10	00518c16	Bnclient::BNCLIENT_GetCallbackTable	Source/Bnclient/BNetGW	?BNCLIENT_GetCallbackTable@Bnclient@@YGPAUD2BNetClientCallbacksStrc@@XZ	sourcemap	sourcemap BNetGW.cpp.map
 00518c20	00518c25	Bnclient::thunk_BNMESSQUEUE_Shutdown	Source/Bnclient/BnMessQueue	?thunk_BNMESSQUEUE_Shutdown@Bnclient@@YGXXZ	sourcemap	sourcemap BnMessQueue.cpp.map (bare name)
 00518c30	00518c67	Bnclient::BNCLIENT_GetBnetLogFilestream	Source/Bnclient/BNetGW	?BNCLIENT_GetBnetLogFilestream@Bnclient@@YGPAXXZ	sourcemap	sourcemap BNetGW.cpp.map
 00518c70	00518d3f	Bnclient::Bnet::BNET_LogIndent	Source/Bnclient/Bnet	?BNET_LogIndent@Bnet@Bnclient@@YAHHH@Z	sourcemap	sourcemap Bnet.cpp.map

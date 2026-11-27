@@ -279,7 +279,7 @@ static void SFILE_InitializeHashSource(uint32_t nSeed) {
 }
 
 // @blizzard ReadFileChecked (SFILE.CPP)
-static int __stdcall SFILE_ReadFileChecked(int32_t * pMPQFile, void * pOutputBuf, uint32_t nBytesToRead, uint32_t * pnBytesRead, HANDLE hFile, LPDWORD pdwBytesRead, int32_t nFileOffset) {
+static int __stdcall SFILE_ReadFileChecked(int32_t * pMPQFile, void * pOutputBuf, uint32_t nBytesToRead, char * pszFileName, HANDLE hFile, LPDWORD pdwBytesRead, int32_t nFileOffset) {
     int nRetryCount = 0;
     while (true) {
       if (nFileOffset != -1) {
@@ -305,12 +305,12 @@ static int __stdcall SFILE_ReadFileChecked(int32_t * pMPQFile, void * pOutputBuf
           if (!pfnSFileReadErrorHandler) {
             return 0;
           }
-          if (!(*pfnSFileReadErrorHandler)(pnBytesRead, dwLastError, nRetryCount++)) {
+          if (!(*pfnSFileReadErrorHandler)(pszFileName, dwLastError, nRetryCount++)) {
             return 0;
           }
           break;
         case 2:
-          SErr::SErrDisplayError(dwLastError, pnBytesRead, -4, nullptr, 0, 1);
+          SErr::SErrDisplayError(dwLastError, pszFileName, -4, nullptr, 0, 1);
           break;
       }
     }
@@ -318,7 +318,7 @@ static int __stdcall SFILE_ReadFileChecked(int32_t * pMPQFile, void * pOutputBuf
 
 static int __stdcall SFILE_SyncReadFile(void * pOutputBuf, uint32_t nBytesToRead, uint32_t * pnBytesRead, int32_t nFileOffset, D2MPQFileStrc * pFileHandle) {
     DWORD nBytesRead = 0;
-    SFILE_ReadFileChecked((int32_t*)&pOutputBuf, pOutputBuf, nBytesToRead, (uint32_t*)pFileHandle->szFileName, pFileHandle->hFile, &nBytesRead, nFileOffset);
+    SFILE_ReadFileChecked((int32_t*)&pOutputBuf, pOutputBuf, nBytesToRead, pFileHandle->szFileName, pFileHandle->hFile, &nBytesRead, nFileOffset);
     if (pnBytesRead) {
       *pnBytesRead = nBytesRead;
     }
@@ -1676,7 +1676,7 @@ uint32_t __stdcall SFILE_InternalReadAligned(D2MPQFileStrc * pArchive, uint32_t 
       if (nReadLen) {
         if (pArchive->pBlockEntry->dwFlags & 0xff00 && !pArchive->bSectorsLoaded) {
           __frame0.nReadCount = 0;
-          pBlockTable = SFILE_ReadFileChecked((int32_t*)&pMpqArchive->nHashTableSize, pArchive->pSectorTable, pArchive->nSectorCount * 4 + 4, (uint32_t*)pMpqArchive->szArchivePath, pMpqArchive->hFile, (LPDWORD)&__frame0.nReadCount, pArchive->pBlockEntry->dwFilePos);
+          pBlockTable = SFILE_ReadFileChecked((int32_t*)&pMpqArchive->nHashTableSize, pArchive->pSectorTable, pArchive->nSectorCount * 4 + 4, pMpqArchive->szArchivePath, pMpqArchive->hFile, (LPDWORD)&__frame0.nReadCount, pArchive->pBlockEntry->dwFilePos);
           if (!pBlockTable) {
             return 0;
           }
@@ -1717,7 +1717,7 @@ uint32_t __stdcall SFILE_InternalReadAligned(D2MPQFileStrc * pArchive, uint32_t 
 
         pMpqArchive = pArchive->pArchive;
         __frame0.nBytesRead = 0;
-        SFILE_ReadFileChecked((int32_t*)&pMpqArchive->nHashTableSize, __frame0.pReadBuffer, nBytesToRead, (uint32_t*)pMpqArchive->szArchivePath, pMpqArchive->hFile, (LPDWORD)&__frame0.nBytesRead, pArchive->pBlockEntry->dwFilePos + __frame0.nBaseOffset);
+        SFILE_ReadFileChecked((int32_t*)&pMpqArchive->nHashTableSize, __frame0.pReadBuffer, nBytesToRead, pMpqArchive->szArchivePath, pMpqArchive->hFile, (LPDWORD)&__frame0.nBytesRead, pArchive->pBlockEntry->dwFilePos + __frame0.nBaseOffset);
         if (__frame0.nBytesRead < __frame0.nReadCount) {
           if (pArchive->pBlockEntry->dwFlags & 0xff00) {
             nSectorSize = pArchive->pArchive->nSectorSize;
@@ -1853,7 +1853,7 @@ uint32_t __stdcall SFILE_InternalReadAligned(D2MPQFileStrc * pArchive, uint32_t 
                          sectors; SFILE_ReadSectors cannot itself walk pDstBuf out of the caller's
                          buffer. */ BVar1 = SComp::SCompDecompress((uint32_t*)(__frame0.nBaseOffset + (char*)pDstBuf), &nDestSize, (uint32_t*)((char*)__frame0.pReadBuffer + nArchive + 8 - 8), nSectorSize, pMpqArchive->szArchivePath);
                     if (!BVar1) {
-                      SErr::SErrDisplayError(0x85100083, (uint32_t*)pMPQFileSaved->pArchive->szArchivePath, -4, nullptr, 0, 1);
+                      SErr::SErrDisplayError(0x85100083, pMPQFileSaved->pArchive->szArchivePath, -4, nullptr, 0, 1);
                     }
 
                     break;
@@ -4768,7 +4768,7 @@ DWORD __stdcall SFILE_CdThreadProc(void * lpThreadParam) {
           if (pDVar2->pCompletion && pDVar2->pCompletion->pfnComplete) {
             pDVar1 = pDVar2->pFile;
             if (pDVar1->bChecksumEnabled && pDVar1->nChecksumState == 4 && pDVar1->dwComputedCRC != pDVar1->pBlockEntry->dwCRC32) {
-              SErr::SErrDisplayError(0x85100083, (uint32_t*)pDVar1->szFileName, -4, nullptr, 0, 1);
+              SErr::SErrDisplayError(0x85100083, pDVar1->szFileName, -4, nullptr, 0, 1);
               pDVar2 = gpCurrentAsyncIORequest;
             }
 
@@ -5123,7 +5123,7 @@ int __stdcall SFileReadFileEx2(D2MPQFileStrc * pFileHandle, void * pOutputBuffer
       bChecksumMatch = pValidatedFile->dwComputedCRC == pValidatedFile->pBlockEntry->dwCRC32;
     }
     if (!bChecksumMatch) {
-      SErr::SErrDisplayError(0x85100083, (uint32_t*)pValidatedFile->szFileName, -4, nullptr, 0, 1);
+      SErr::SErrDisplayError(0x85100083, pValidatedFile->szFileName, -4, nullptr, 0, 1);
     }
 
     unlock_and_succeed:
@@ -5554,13 +5554,13 @@ int __fastcall SFILE_s_OpenArchive(D2ArchiveStrc * ppArchive, uint32_t nFlags, i
     __frame0.uSlotC.pszArchivePath = ppArchive->szArchivePath;
     ppArchive->pHashTable = pOutputBuf;
     __frame0.uSlot8.pnHashTableSize = (int32_t*)&ppArchive->nHashTableSize;
-    SFILE_ReadFileChecked(__frame0.uSlot8.pnHashTableSize, pOutputBuf, ppArchive->pMpqHeader->dwHashTableSize * sizeof(D2MPQHashEntryStrc), (uint32_t*)__frame0.uSlotC.pszArchivePath, ppArchive->hFile, &__frame0.nBytesRead, ppArchive->pMpqHeader->dwHashTablePos + ppArchive->nArchiveOffset);
+    SFILE_ReadFileChecked(__frame0.uSlot8.pnHashTableSize, pOutputBuf, ppArchive->pMpqHeader->dwHashTableSize * sizeof(D2MPQHashEntryStrc), __frame0.uSlotC.pszArchivePath, ppArchive->hFile, &__frame0.nBytesRead, ppArchive->pMpqHeader->dwHashTablePos + ppArchive->nArchiveOffset);
     nHashKey = SFILE_Hash(3, "(hash table)");
     D2ArchiveStrc* pListNode = __frame0.pSavedArchive;
     SFILE_Decrypt(&__frame0.pSavedArchive->pHashTable->dwHashA, __frame0.pSavedArchive->pMpqHeader->dwHashTableSize * sizeof(D2MPQHashEntryStrc), nHashKey);
     D2MPQBlockEntryStrc* pOutputBuf_00 = (D2MPQBlockEntryStrc*)SMem::SMemAlloc(pListNode->pMpqHeader->dwBlockTableSize * sizeof(D2MPQBlockEntryStrc), ".\\SOURCE\\SFILE.CPP", 0x1133, 0);
     pListNode->pBlockTable = pOutputBuf_00;
-    SFILE_ReadFileChecked(__frame0.uSlot8.pnHashTableSize, pOutputBuf_00, pListNode->pMpqHeader->dwBlockTableSize << 4, (uint32_t*)__frame0.uSlotC.pszArchivePath, pListNode->hFile, &__frame0.nBytesRead, pListNode->pMpqHeader->dwBlockTablePos + pListNode->nArchiveOffset);
+    SFILE_ReadFileChecked(__frame0.uSlot8.pnHashTableSize, pOutputBuf_00, pListNode->pMpqHeader->dwBlockTableSize << 4, __frame0.uSlotC.pszArchivePath, pListNode->hFile, &__frame0.nBytesRead, pListNode->pMpqHeader->dwBlockTablePos + pListNode->nArchiveOffset);
     nHashKey = SFILE_Hash(3, "(block table)");
     pListNode = __frame0.pSavedArchive;
     SFILE_Decrypt(&__frame0.pSavedArchive->pBlockTable->dwFilePos, __frame0.pSavedArchive->pMpqHeader->dwBlockTableSize << 4, nHashKey);

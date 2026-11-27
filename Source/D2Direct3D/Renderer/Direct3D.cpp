@@ -2065,7 +2065,7 @@ BOOL __fastcall Initialize(HINSTANCE hInstance) {
         if (nResult) {
           if (!(gnD3DTextureCapFlags & Fog::BitBuffer::gadwBitMasks[0])) {
             pnGuidSize = (uint32_t*)0x10;
-            nLoadResult = Storm::Source::SReg::SRegLoadData((uint32_t*)szRegPath, "GUID", 0, (LPBYTE)&gsD3DAdapterGuid, 0x10, &pnGuidSize);
+            nLoadResult = Storm::Source::SReg::SRegLoadData(szRegPath, "GUID", 0, (LPBYTE)&gsD3DAdapterGuid, 0x10, (LPDWORD)&pnGuidSize);
             if (!nLoadResult) {
               return 0;
             }

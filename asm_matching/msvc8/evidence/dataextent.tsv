@@ -2519,7 +2519,7 @@ address	size	extent	name	aliases	scope	namespace	owner	type	kind	referencing
 0070811c	8	8	RTTI_Type_Descriptor		global	Fog::Logging::Message		TypeDescriptor	compiler	
 00708124	28	28	s_.?AUMessage@LogManager@@_00708124		global			char[28]	data	Fog::Src::LogManager::DestroyAllListNodes,Fog::Src::LogManager::AllocateAndInsertMessageNode
 00708140	512	512	gwSMemAllocDebugFlags		static-local		HashForName	ushort[256]	data	Fog::SMem::HashForName
-00708340	4	4	gdwSMemLastHashedHeapKey		static-local		SMEM_GetHandleByCaller	undefined4	data	Storm::Source::SMem::SMEM_GetHandleByCaller
+00708340	4	4	gbSMemReuseCachedHeapNameHash		static-local		SMEM_GetHandleByCaller	undefined4	data	Storm::Source::SMem::SMEM_GetHandleByCaller
 00708344	4	4	gnSMemHeapIdCounter		static-local		SMemHeapCreate	undefined4	data	Storm::Source::SMem::SMemHeapCreate
 00708348	4	4	gnSFileDataChunkSize		global	Storm::Source::SFile		undefined4	data	Storm::Source::SFile::SFileReadFileEx2,Storm::Source::SFile::SFileSetDataChunkSize,Storm::Source::SFile::SFILE_CdThreadProc
 0070834c	4	4	gnSFileReadErrorMode		global	Storm::Source::SFile		undefined4	data	Storm::Source::SFile::SFILE_ReadFileChecked,Storm::Source::SFile::SFileSetIoErrorMode
@@ -3817,7 +3817,7 @@ address	size	extent	name	aliases	scope	namespace	owner	type	kind	referencing
 0072fa18	12	8	gFaultHandlerList_head_pPrevLink		global			StormLinkedListStrc	interior	D2Hell::StaticFini_gFaultHandlerList,D2Hell::StaticInit_gFaultHandlerList
 0072fa1c	12	4	gFaultHandlerList_head_pNext		global			StormLinkedListStrc	interior	D2Hell::FAULT_LookupErrorString,D2Hell::StaticInit_gFaultHandlerList
 0072fa20	128	128	gaszLanguageNames		global			char *[32]	data	
-0072faa0	216	216	sgBNetClientCallbacks		global			D2BNetClientCallbacksStrc	data	Bnclient::NET_InitAndGetLobbyChatQueue,Bnclient::NET_GetLobbyChatQueue
+0072faa0	216	216	sgBNetClientCallbacks		global			D2BNetClientCallbacksStrc	data	Bnclient::BNCLIENT_GetCallbacks,Bnclient::BNCLIENT_GetCallbackTable
 0072fb78	4	4	ghCacheFileHandle		global			HANDLE	data	Bnclient::Cache::CACHE_DeleteFile,Bnclient::Cache::CACHE_Open,Bnclient::Cache::CACHE_FreeAll,Bnclient::Cache::CACHE_ReadData,Bnclient::Cache::CACHE_WriteData
 0072fb80	1024	1024	gaBnCacheCrc32Table	gdwFogCacheMax	global			uint[256]	data	Bnclient::Cache::CACHE_ReadData,Bnclient::Cache::CACHE_WriteData,Bnclient::Cache::CACHE_Open,Bnclient::Cache::CACHE_ComputeCRC32
 0072ff80	4	4	szBnNewsChannelName		global			char *32	data	Bnclient::BnSend::BNNEWS_SetNewsChannel,Bnclient::BnSend::BNNEWS_SaveToCache,Bnclient::BnSend::BNNEWS_LoadCachedNews
@@ -4835,8 +4835,8 @@ address	size	extent	name	aliases	scope	namespace	owner	type	kind	referencing
 007768a0	4	4	g_SMemLastTickCount		global			int	data	Fog::SMem::SMemInitPerfCounters,Fog::SMem::SMemResetHeapStats
 007768a4	4	4	g_SMemHeapStatsCount		static-local		SMemResetHeapStats	undefined4	data	Fog::SMem::SMemResetHeapStats
 007768a8	4	4	g_SMemCachedHeapNameHash		static-local		SMEM_GetHandleByCaller	undefined4	data	Storm::Source::SMem::SMEM_GetHandleByCaller
-007768ac	4	4	g_SMemCachedHeapNameVersion		static-local		SMEM_GetHandleByCaller	undefined4	data	Storm::Source::SMem::SMEM_GetHandleByCaller
-007768b0	4	4	g_SMemCachedHeapNameLength		static-local		SMEM_GetHandleByCaller	undefined4	data	Storm::Source::SMem::SMEM_GetHandleByCaller
+007768ac	4	4	gdwSMemCachedHeapNamePrefix		static-local		SMEM_GetHandleByCaller	undefined4	data	Storm::Source::SMem::SMEM_GetHandleByCaller
+007768b0	4	4	gdwSMemCachedHeapNameSeed		static-local		SMEM_GetHandleByCaller	undefined4	data	Storm::Source::SMem::SMEM_GetHandleByCaller
 007768b4	4	4	g_SMemCachedHeapNamePtr		static-local		SMEM_GetHandleByCaller	void *	data	Storm::Source::SMem::SMEM_GetHandleByCaller
 007768b8	1024	1024	g_SMemHeapBuckets		global			void *[256]	data	Storm::Source::SMem::SMemAlloc,Storm::Source::SMem::SMemHeapAlloc,Storm::Source::SMem::SMemHeapCreate,Storm::Source::SMem::SMemHeapDestroy,Storm::Source::SMem::SMEM_FreeEmptyHeaps,Storm::Source::SMem::SMemDestroy,Storm::Source::SMem::SMemFindNextBlock,Storm::Source::SMem::SMemFindNextHeap,Storm::Source::SMem::SMemFindHeapByHash,Storm::Source::SMem::SMEM_AllocateHeap
 00776ca8	1024	16	g_SMemHeapBuckets_252_		static-local		SMEM_SatisfyAllocRequest	void *[256]	interior	Storm::Source::SMem::SMEM_SatisfyAllocRequest
@@ -4888,11 +4888,11 @@ address	size	extent	name	aliases	scope	namespace	owner	type	kind	referencing
 007790c4	12	8	gpSSystemThreadContextCallback_nParam		global			SErrAppFatalContextStrc	interior	Storm::Source::SErr::SErrPrepareAppFatal,Storm::Source::SErr::SErrDisplayAppFatal
 007790c8	12	4	gpSSystemThreadContextCallback_dwThreadId		global			SErrAppFatalContextStrc	interior	Storm::Source::SErr::SErrPrepareAppFatal,Storm::Source::SErr::SErrDisplayAppFatal
 007790cc	24	24	lpCriticalSection_007790cc		global			_RTL_CRITICAL_SECTION	data	Storm::Source::SErr::SERR_InternalLeaveCriticalSection,Storm::Source::SErr::SERR_InternalEnterCriticalSection
-007790e4	4	4	gbSSystemErrorDialogActive		global			undefined4	data	Storm::Source::SErr::SErrDisplayError,Storm::WindowHandle::WND_GetActiveWindow_Unref_0041c2b0
+007790e4	4	4	gbSSystemErrorDialogActive		global			undefined4	data	Storm::Source::SErr::SErrDisplayError,Storm::WindowHandle::SERR_IsErrorDialogActive
 007790e8	4	4	gpErrorModuleList		global			D2SErrMessageSourceStrc *	data	Storm::Source::SErr::SErrGetErrorStr,Storm::Source::SErr::SERR_AddStormFacility,Storm::Source::SErr::SErrRegisterMessageSource
 007790ec	4	4	gbFormatErrorModulesInitialized		static-local		SErrGetErrorStr	undefined4	data	Storm::Source::SErr::SErrGetErrorStr
 007790f0	4	4	gbSSystemShutdownInProgress		global			undefined4	data	Storm::Source::SErr::SErrDisplayError,Storm::Source::SSystem::SSYSTEM_SetShutdownFlag
-007790f4	4	4	dwLastErrorCode		global			undefined4	data	Storm::Source::SErr::SErrSetLastError,Storm::WindowHandle::WND_GetActiveWindow_Unref_0041c2a0
+007790f4	4	4	dwLastErrorCode		global			undefined4	data	Storm::Source::SErr::SErrSetLastError,Storm::WindowHandle::SERR_GetLastError
 007790f8	4	4	pfnBlizzardErrorCallback		global			pfnBlizzardError *	data	Storm::Source::SErr::SErrDisplayError,Storm::Source::SErr::SErrSetBlizzardErrorFunction
 00779100	256	256	gszErrorStringBuffer		static-local		SERR_GetString	char[256]	data	Storm::Source::SErr::SERR_GetString
 00779200	4	4	gnDebugMemoryInitFlag		static-local		SErrReportNamedResourceLeak	int	data	Storm::Source::SErr::SErrReportNamedResourceLeak

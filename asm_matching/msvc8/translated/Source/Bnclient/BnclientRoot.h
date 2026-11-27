@@ -22,9 +22,9 @@ namespace Bnclient {
 
 // Function declarations
 // Initializes the BNet lobby chat message queue via BNMESSQUEUE_Initialize, then returns a pointer to the global sgBNetClientCallbacks structure used for lobby chat callbacks.
-struct D2BNetClientCallbacksStrc * __fastcall NET_InitAndGetLobbyChatQueue();
-// Returns a pointer to the global sgBNetClientCallbacks structure (lobby chat message queue) without initialization; use NET_InitAndGetLobbyChatQueue on first access.
-struct D2BNetClientCallbacksStrc * __stdcall NET_GetLobbyChatQueue();
+struct D2BNetClientCallbacksStrc * __fastcall BNCLIENT_GetCallbacks();
+// Returns a pointer to the global sgBNetClientCallbacks structure (lobby chat message queue) without initialization; use BNCLIENT_GetCallbacks on first access.
+struct D2BNetClientCallbacksStrc * __stdcall BNCLIENT_GetCallbackTable();
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
 int * __fastcall BNCLIENT_InitFilestream(int * pStream, int, char * szFilePath);

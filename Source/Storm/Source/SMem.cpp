@@ -22,52 +22,52 @@ static_assert(sizeof(void*) != 4 || offsetof(SMemHeapDetailsStrc, hHeap) == 4, "
 typedef void (__stdcall *pfnSMemDumpCallback)(uint32_t dwUserArg, char * szLine);
 #endif
 
-static void * g_SMemHeapBuckets[256] = {}; D2_STATIC_GUARD(g_SMemHeapBuckets, "g_SMemHeapBuckets");
+static D2FogHeapDescStrc * g_SMemHeapBuckets[256] = {}; D2_STATIC_GUARD(g_SMemHeapBuckets, "g_SMemHeapBuckets");
 static uint32_t g_SMemPageSize = 0; D2_STATIC_GUARD(g_SMemPageSize, "g_SMemPageSize");
-static uint32_t ProtectMemory = 0; D2_STATIC_GUARD(ProtectMemory, "ProtectMemory");
+static int32_t ProtectMemory = 0; D2_STATIC_GUARD(ProtectMemory, "ProtectMemory");
 static CRITICAL_SECTION DebugMemoryCriticalSection[256] = {}; D2_STATIC_GUARD(DebugMemoryCriticalSection, "DebugMemoryCriticalSection");
 CRITICAL_SECTION gUICtrlSkillColumnState[256] = {}; D2_GLOBAL_GUARD(gUICtrlSkillColumnState, "gUICtrlSkillColumnState");
 CRITICAL_SECTION gUICtrlPanelArrowState[256] = {}; D2_GLOBAL_GUARD(gUICtrlPanelArrowState, "gUICtrlPanelArrowState");
 static uint32_t g_SMemUnknownFlag = 0; D2_STATIC_GUARD(g_SMemUnknownFlag, "g_SMemUnknownFlag");
-static uint32_t DebugMemory = 0; D2_STATIC_GUARD(DebugMemory, "DebugMemory");
-static int g_SMemHeapCleanupFlags[256] = {}; D2_STATIC_GUARD(g_SMemHeapCleanupFlags, "g_SMemHeapCleanupFlags");
-static void * g_SMemPendingCleanupHeap = 0; D2_STATIC_GUARD(g_SMemPendingCleanupHeap, "g_SMemPendingCleanupHeap");
+static int32_t DebugMemory = 0; D2_STATIC_GUARD(DebugMemory, "DebugMemory");
+static BOOL g_SMemHeapCleanupFlags[256] = {}; D2_STATIC_GUARD(g_SMemHeapCleanupFlags, "g_SMemHeapCleanupFlags");
+static D2FogHeapDescStrc * g_SMemPendingCleanupHeap = 0; D2_STATIC_GUARD(g_SMemPendingCleanupHeap, "g_SMemPendingCleanupHeap");
 static uint32_t g_SMemDebugFillEnabled = 0; D2_STATIC_GUARD(g_SMemDebugFillEnabled, "g_SMemDebugFillEnabled");
-static uint32_t g_SMemInitialized = 0; D2_STATIC_GUARD(g_SMemInitialized, "g_SMemInitialized");
+static BOOL g_SMemInitialized = 0; D2_STATIC_GUARD(g_SMemInitialized, "g_SMemInitialized");
 
 namespace Storm::Source::SMem {
 
 // @blizzard FatalError (SMEM.CPP)
 static void SMEM_FatalError(uint32_t nErrorCode, uint32_t * pnName, int32_t nSourceLine) {
-    SErr::SErrDisplayError(nErrorCode, pnName, nSourceLine, nullptr, 0, 1);
+    SErr::SErrDisplayError(nErrorCode, (char*)pnName, nSourceLine, nullptr, 0, 1);
     /* UINT uExitCode for ExitProcess */ ExitProcess(1);
 }
 
 // @blizzard GetHandleByCaller (SMEM.CPP)
-static uint32_t SMEM_GetHandleByCaller(int * pnName, uint32_t nNameLen) {
+static uint32_t SMEM_GetHandleByCaller(char * pszName, uint32_t dwHashSeed) {
     // Static local variables (originally global data)
-    static uint32_t gdwSMemLastHashedHeapKey = 0x1; D2_STATIC_GUARD(gdwSMemLastHashedHeapKey, "Storm::Source::SMem::SMEM_GetHandleByCaller::gdwSMemLastHashedHeapKey");
+    static BOOL gbSMemReuseCachedHeapNameHash = 0x1; D2_STATIC_GUARD(gbSMemReuseCachedHeapNameHash, "Storm::Source::SMem::SMEM_GetHandleByCaller::gbSMemReuseCachedHeapNameHash");
     static uint32_t g_SMemCachedHeapNameHash; D2_STATIC_GUARD_BSS(g_SMemCachedHeapNameHash, "Storm::Source::SMem::SMEM_GetHandleByCaller::g_SMemCachedHeapNameHash");
-    static uint32_t g_SMemCachedHeapNameVersion; D2_STATIC_GUARD_BSS(g_SMemCachedHeapNameVersion, "Storm::Source::SMem::SMEM_GetHandleByCaller::g_SMemCachedHeapNameVersion");
-    static uint32_t g_SMemCachedHeapNameLength; D2_STATIC_GUARD_BSS(g_SMemCachedHeapNameLength, "Storm::Source::SMem::SMEM_GetHandleByCaller::g_SMemCachedHeapNameLength");
-    static void * g_SMemCachedHeapNamePtr; D2_STATIC_GUARD_BSS(g_SMemCachedHeapNamePtr, "Storm::Source::SMem::SMEM_GetHandleByCaller::g_SMemCachedHeapNamePtr");
+    static uint32_t gdwSMemCachedHeapNamePrefix; D2_STATIC_GUARD_BSS(gdwSMemCachedHeapNamePrefix, "Storm::Source::SMem::SMEM_GetHandleByCaller::gdwSMemCachedHeapNamePrefix");
+    static uint32_t gdwSMemCachedHeapNameSeed; D2_STATIC_GUARD_BSS(gdwSMemCachedHeapNameSeed, "Storm::Source::SMem::SMEM_GetHandleByCaller::gdwSMemCachedHeapNameSeed");
+    static char * g_SMemCachedHeapNamePtr; D2_STATIC_GUARD_BSS(g_SMemCachedHeapNamePtr, "Storm::Source::SMem::SMEM_GetHandleByCaller::g_SMemCachedHeapNamePtr");
 
-    int nNameVersion;
+    uint32_t dwNamePrefix;
     uint32_t uHash = 0;
-    if (pnName) {
-      nNameVersion = *pnName;
+    if (pszName) {
+      dwNamePrefix = *(uint32_t*)pszName;
     } else {
-      nNameVersion = 0;
+      dwNamePrefix = 0;
     }
-    if (gdwSMemLastHashedHeapKey && pnName == (int*)g_SMemCachedHeapNamePtr && nNameLen == g_SMemCachedHeapNameLength) {
-      if (nNameVersion != g_SMemCachedHeapNameVersion) {
-        gdwSMemLastHashedHeapKey = 0;
+    if (gbSMemReuseCachedHeapNameHash && pszName == g_SMemCachedHeapNamePtr && dwHashSeed == gdwSMemCachedHeapNameSeed) {
+      if (dwNamePrefix != gdwSMemCachedHeapNamePrefix) {
+        gbSMemReuseCachedHeapNameHash = 0;
       } else {
         return g_SMemCachedHeapNameHash;
       }
     }
-    if (pnName) {
-      uHash = SSTR::SStrHash((char*)pnName, 1, nNameLen);
+    if (pszName) {
+      uHash = SSTR::SStrHash(pszName, 1, dwHashSeed);
     }
 
     uHash &= 0x7fffffff;
@@ -75,9 +75,9 @@ static uint32_t SMEM_GetHandleByCaller(int * pnName, uint32_t nNameLen) {
       uHash = 1;
     }
 
-    g_SMemCachedHeapNameVersion = nNameVersion;
-    g_SMemCachedHeapNamePtr = pnName;
-    g_SMemCachedHeapNameLength = nNameLen;
+    gdwSMemCachedHeapNamePrefix = dwNamePrefix;
+    g_SMemCachedHeapNamePtr = pszName;
+    gdwSMemCachedHeapNameSeed = dwHashSeed;
     g_SMemCachedHeapNameHash = uHash;
     return uHash;
 }
@@ -111,7 +111,7 @@ static uint32_t * __stdcall SMemFindHeapByHash(uint32_t * pnOutBucket, int32_t n
     uint32_t uBucketIndex = (uint8_t)nHash;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(DebugMemoryCriticalSection + uBucketIndex);
     *pnOutBucket = uBucketIndex;
-    D2FogHeapDescStrc* pHeapNode = (D2FogHeapDescStrc*)g_SMemHeapBuckets[uBucketIndex];
+    D2FogHeapDescStrc* pHeapNode = g_SMemHeapBuckets[uBucketIndex];
     while (true) {
       if (!pHeapNode) {
         if (nFlags) {
@@ -125,7 +125,7 @@ static uint32_t * __stdcall SMemFindHeapByHash(uint32_t * pnOutBucket, int32_t n
         break;
       }
 
-      pHeapNode = (D2FogHeapDescStrc*)pHeapNode->pNext;
+      pHeapNode = pHeapNode->pNext;
     }
 
     return (uint32_t*)&pHeapNode->pNext;
@@ -138,7 +138,7 @@ static void __stdcall SMEM_Warning(uint32_t * pnName, int32_t nSourceLine, DWORD
       return;
     }
 
-    SErr::SErrDisplayError(dwErrorCode, pnName, nSourceLine, nullptr, 1, 1);
+    SErr::SErrDisplayError(dwErrorCode, (char*)pnName, nSourceLine, nullptr, 1, 1);
 }
 
 // @blizzard UnlockHeap (SMEM.CPP)
@@ -217,7 +217,7 @@ static D2FogHeapDescStrc * __stdcall SMEM_AllocateHeap(int32_t nSourceLine, uint
     }
 
     pHeapBlock->nHash = dwHash;
-    pHeapBlock->pNext = (uint8_t*)g_SMemHeapBuckets[nBucketIndex];
+    pHeapBlock->pNext = g_SMemHeapBuckets[nBucketIndex];
     void* pDataStart = (void*)((char*)pHeapBlock->aFreeBins + (nAlignedHdrSize - (int)offsetof(D2FogHeapDescStrc, aFreeBins)));
     pHeapBlock->pDataStart = pDataStart;
     pHeapBlock->pWriteCursor = pDataStart;
@@ -241,31 +241,31 @@ static D2FogHeapDescStrc * __stdcall SMEM_AllocateHeap(int32_t nSourceLine, uint
 }
 
 // @blizzard CheckValidBlock (SMEM.CPP)
-static BOOL SMEM_CheckValidBlock(D2FogHeapBlockHdrStrc * pBlock, int32_t bReportError, uint32_t * pnName, int32_t nSourceLine) {
-    if (!pBlock) {
+static BOOL SMEM_CheckValidBlock(void * pObject, int32_t bReportError, char * szSourceName, int32_t nSourceLine) {
+    if (!pObject) {
       if (bReportError) {
-        SMEM_Warning(pnName, nSourceLine, 0x85100081);
+        SMEM_Warning((uint32_t*)szSourceName, nSourceLine, 0x85100081);
       }
 
       return 0;
     }
-    D2FogHeapBlockHdrStrc* pHdr = pBlock - 1;
+    D2FogHeapBlockHdrStrc* pHdr = (D2FogHeapBlockHdrStrc*)pObject - 1;
     if (*(short int*)((intptr_t)&pHdr->uLink + 2) != 0x6f6d) {
       if (bReportError) {
-        SMEM_Warning(pnName, nSourceLine, 0x8510007c);
+        SMEM_Warning((uint32_t*)szSourceName, nSourceLine, 0x8510007c);
       }
 
       return 0;
     }
     if (pHdr->byFlags & 2) {
       if (bReportError) {
-        SMEM_Warning(pnName, nSourceLine, 0x8510007a);
+        SMEM_Warning((uint32_t*)szSourceName, nSourceLine, 0x8510007a);
       }
 
       return 0;
     }
     if (pHdr->byFlags & 1 && *(short int*)((char*)pHdr + pHdr->wBlockSize - pHdr->byPadding - 2) != 0x12b1 && bReportError) {
-      SMEM_Warning(pnName, nSourceLine, 0x8510007b);
+      SMEM_Warning((uint32_t*)szSourceName, nSourceLine, 0x8510007b);
     }
 
     return 1;
@@ -303,9 +303,9 @@ static void __stdcall SMemWriteBlockHeader(uint8_t byFlags, int32_t nExtraBytes,
 }
 
 // @blizzard FreeHeap (SMEM.CPP)
-void __fastcall SMEM_FreeHeap(LPVOID * ppListHead) {
-    LPVOID* pRegion = (LPVOID*)*ppListHead;
-    /* DWORD dwFreeType for VirtualFree */ /* SIZE_T dwSize for VirtualFree */ /* LPVOID lpAddress for VirtualFree */ *ppListHead = *pRegion;
+void __fastcall SMEM_FreeHeap(D2FogHeapDescStrc * * ppListHead) {
+    D2FogHeapDescStrc* pRegion = *ppListHead;
+    /* DWORD dwFreeType for VirtualFree */ /* SIZE_T dwSize for VirtualFree */ /* LPVOID lpAddress for VirtualFree */ *ppListHead = pRegion->pNext;
     VirtualFree(pRegion, 0, 0x8000);
 }
 
@@ -478,7 +478,7 @@ void __stdcall SMemSetDebugFlags(uint32_t dwFlags, uint8_t byMask) {
     g_SMemUnknownFlag = dwFlags >> 1 & 1;
 }
 
-int Unreferenced_00411da0() {
+BOOL Unreferenced_00411da0() {
     if (!g_SMemInitialized) {
       SMemInitialize();
     }
@@ -556,9 +556,9 @@ static void SMEM_CombineFreeBlocks(D2FogHeapDescStrc * pHeap) {
 }
 
 // @blizzard DestroyHeap (SMEM.CPP)
-LPVOID * __fastcall SMEM_DestroyHeap(LPVOID * ppHeap) {
+D2FogHeapDescStrc * * __fastcall SMEM_DestroyHeap(D2FogHeapDescStrc * * ppHeap) {
     char szErrorMsg[200];
-    D2FogHeapDescStrc* pHeap = (D2FogHeapDescStrc*)*ppHeap;
+    D2FogHeapDescStrc* pHeap = *ppHeap;
     uint32_t nLeakFlags = 0;
     D2FogHeapBlockHdrStrc* pBlock = (D2FogHeapBlockHdrStrc*)pHeap->pDataStart;
     while ((void*)pBlock < pHeap->pWriteCursor) {
@@ -588,7 +588,7 @@ LPVOID * __fastcall SMEM_DestroyHeap(LPVOID * ppHeap) {
       return ppHeap;
     }
 
-    return (LPVOID*)&pHeap->pNext;
+    return &pHeap->pNext;
 }
 
 // @blizzard FreeEmptyHeaps (SMEM.CPP)
@@ -600,13 +600,13 @@ void __stdcall SMEM_FreeEmptyHeaps() {
       if (g_SMemHeapCleanupFlags[nBucket]) {
         EnterCriticalSection(pLock);
         g_SMemHeapCleanupFlags[nBucket] = 0;
-        LPVOID* ppLink = &g_SMemHeapBuckets[nBucket];
+        D2FogHeapDescStrc** ppLink = &g_SMemHeapBuckets[nBucket];
         while (*ppLink) {
-          D2FogHeapDescStrc* pHeap = (D2FogHeapDescStrc*)*ppLink;
+          D2FogHeapDescStrc* pHeap = *ppLink;
           if (!pHeap->nAllocCount && pHeap->nHash < 0x80000000) {
             SMEM_FreeHeap(ppLink);
           } else {
-            ppLink = (LPVOID*)&pHeap->pNext;
+            ppLink = &pHeap->pNext;
           }
         }
 
@@ -721,7 +721,7 @@ static void __stdcall SMemShrinkBlock(D2FogHeapBlockHdrStrc * pBlock, int32_t nO
 }
 
 // @blizzard SMemDestroy (SMEM.CPP)
-uint32_t __stdcall SMemDestroy() {
+BOOL __stdcall SMemDestroy() {
     if (!g_SMemInitialized) {
       return 1;
     }
@@ -731,10 +731,10 @@ uint32_t __stdcall SMemDestroy() {
     CRITICAL_SECTION* pLock = DebugMemoryCriticalSection;
     for (int nCount = 0x100; nCount; nCount--) {
       EnterCriticalSection(pLock);
-      LPVOID* ppLink = &g_SMemHeapBuckets[nBucket];
+      D2FogHeapDescStrc** ppLink = &g_SMemHeapBuckets[nBucket];
       g_SMemHeapCleanupFlags[nBucket] = 0;
       while (*ppLink) {
-        D2FogHeapDescStrc* pHeap = (D2FogHeapDescStrc*)*ppLink;
+        D2FogHeapDescStrc* pHeap = *ppLink;
         if (pHeap->nAllocCount) {
           ppLink = SMEM_DestroyHeap(ppLink);
         } else {
@@ -755,8 +755,8 @@ uint32_t __stdcall SMemDestroy() {
     return 1;
 }
 
-int32_t __stdcall SMemFindNextBlock(HSHEAP nHeapId, uint8_t * pPrevBlock, uint16_t * * ppOutBlock, int * pnInfo) {
-    uint8_t** ppuVar2;
+int32_t __stdcall SMemFindNextBlock(HSHEAP nHeapId, uint8_t * pPrevBlock, uint8_t * * ppOutBlock, int * pnInfo) {
+    D2FogHeapDescStrc** ppuVar2;
     D2FogHeapDescStrc* pCurHeap;
     D2FogHeapBlockHdrStrc* pStopBlock;
     D2FogHeapDescStrc* pPrevHeap;
@@ -800,7 +800,7 @@ int32_t __stdcall SMemFindNextBlock(HSHEAP nHeapId, uint8_t * pPrevBlock, uint16
     }
 
     D2FogHeapDescStrc* pDVar1;
-    pDVar1 = (D2FogHeapDescStrc*)g_SMemHeapBuckets[(uint8_t)nHeapId];
+    pDVar1 = g_SMemHeapBuckets[(uint8_t)nHeapId];
     D2FogHeapBlockHdrStrc* pFoundBlock;
     pFoundBlock = 0;
     BOOL bFound;
@@ -814,8 +814,8 @@ int32_t __stdcall SMemFindNextBlock(HSHEAP nHeapId, uint8_t * pPrevBlock, uint16
 
       ppuVar2 = &pDVar3->pNext;
       pPrevHeap = pDVar3;
-      pDVar3 = (D2FogHeapDescStrc*)*ppuVar2;
-    } while ((D2FogHeapDescStrc*)*ppuVar2);
+      pDVar3 = *ppuVar2;
+    } while (*ppuVar2);
 
     do {
       pCurHeap = pPrevHeap;
@@ -856,17 +856,17 @@ int32_t __stdcall SMemFindNextBlock(HSHEAP nHeapId, uint8_t * pPrevBlock, uint16
       pBlockData = *(uint8_t**)(pFoundBlock + 1);
     }
 
-    *ppOutBlock = (uint16_t*)pBlockData;
+    *ppOutBlock = pBlockData;
 #if D2_ARCH_X86
     pnInfo[1] = (int)pBlockData;
     pnInfo[2] = ~(uint32_t)(pFoundBlock->byFlags >> 1) & 1;
-    BOOL nValid = SMEM_CheckValidBlock((D2FogHeapBlockHdrStrc*)pBlockData, 0, nullptr, 0);
+    BOOL nValid = SMEM_CheckValidBlock(pBlockData, 0, nullptr, 0);
     pnInfo[3] = nValid;
     SMemGetBlockDataAndSize(pBlockData, pnInfo + 4, pnInfo + 5, pFoundBlock);
 #elif D2_ARCH_X64
     pInfo->pBlock = pBlockData;
     pInfo->bAllocated = ~(uint32_t)(pFoundBlock->byFlags >> 1) & 1;
-    pInfo->bValid = SMEM_CheckValidBlock((D2FogHeapBlockHdrStrc*)pBlockData, 0, nullptr, 0);
+    pInfo->bValid = SMEM_CheckValidBlock(pBlockData, 0, nullptr, 0);
     SMemGetBlockDataAndSize(pBlockData, (int*)&pInfo->nBlockSize, (int*)&pInfo->nOverhead, pFoundBlock);
 #endif
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
@@ -902,7 +902,7 @@ int32_t __stdcall SMemFindNextHeap(HSHEAP nCurHeapId, HSHEAP * pnNextHeapId, SMe
       pHeapDetails = (SMemHeapDetailsStrc*)(DebugMemoryCriticalSection + nBucketIndex);
       do {
         /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection((LPCRITICAL_SECTION)pHeapDetails);
-        for (pHeap = (D2FogHeapDescStrc*)g_SMemHeapBuckets[nBucketIndex]; pHeap; pHeap = (D2FogHeapDescStrc*)pHeap->pNext) {
+        for (pHeap = g_SMemHeapBuckets[nBucketIndex]; pHeap; pHeap = pHeap->pNext) {
           if (pHeap->bActive) {
             if (nPrevHeapId == nCurHeapId && pHeap->nHash != nCurHeapId) {
               goto found_next_heap;
@@ -932,7 +932,7 @@ int32_t __stdcall SMemFindNextHeap(HSHEAP nCurHeapId, HSHEAP * pnNextHeapId, SMe
             pOutInfo->dwAllocatedBytes += pHeap->nBytesInUse;
           }
 
-          pHeap = (D2FogHeapDescStrc*)pHeap->pNext;
+          pHeap = pHeap->pNext;
         } while (pHeap);
 
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(DebugMemoryCriticalSection + nBucketIndex);
@@ -944,7 +944,7 @@ int32_t __stdcall SMemFindNextHeap(HSHEAP nCurHeapId, HSHEAP * pnNextHeapId, SMe
     return 0;
 }
 
-int32_t __stdcall SMemFree(void * pObject, char * szFile, int32_t nLine, DWORD dwFlags) {
+BOOL __stdcall SMemFree(void * pObject, char * szFile, int32_t nLine, DWORD dwFlags) {
     D2FogHeapBlockHdrStrc* pBlock;
     if (!g_SMemInitialized) {
       SMemInitialize();
@@ -954,8 +954,8 @@ int32_t __stdcall SMemFree(void * pObject, char * szFile, int32_t nLine, DWORD d
       }
     }
 
-    BOOL nHeapId = SMEM_CheckValidBlock((D2FogHeapBlockHdrStrc*)pObject, 1, (uint32_t*)szFile, nLine);
-    if (!nHeapId) {
+    BOOL bBlockValid = SMEM_CheckValidBlock(pObject, 1, szFile, nLine);
+    if (!bBlockValid) {
       return 0;
     }
     if (!pObject) {
@@ -967,10 +967,10 @@ int32_t __stdcall SMemFree(void * pObject, char * szFile, int32_t nLine, DWORD d
       }
     }
 
-    D2FogHeapDescStrc* nHeapBase = (D2FogHeapDescStrc*)((uintptr_t)*(uint16_t*)&pBlock->uLink << 0x10);
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(DebugMemoryCriticalSection + nHeapBase->nBucketIndex);
-    int nBucketIndex = nHeapBase->nBucketIndex;
-    SMEM_SatisfyFreeRequest(pObject, nHeapBase, pBlock);
+    D2FogHeapDescStrc* pHeap = (D2FogHeapDescStrc*)((uintptr_t)*(uint16_t*)&pBlock->uLink << 0x10);
+    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(DebugMemoryCriticalSection + pHeap->nBucketIndex);
+    int nBucketIndex = pHeap->nBucketIndex;
+    SMEM_SatisfyFreeRequest(pObject, pHeap, pBlock);
     if (nBucketIndex != -1) {
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(DebugMemoryCriticalSection + nBucketIndex);
     }
@@ -978,7 +978,7 @@ int32_t __stdcall SMemFree(void * pObject, char * szFile, int32_t nLine, DWORD d
     return 1;
 }
 
-HSHEAP __stdcall SMemGetHeapByCaller(int * pszName, uint32_t nFlags) {
+HSHEAP __stdcall SMemGetHeapByCaller(char * pszName, uint32_t dwHashSeed) {
     if (!g_SMemInitialized) {
       SMemInitialize();
       if (!g_SMemInitialized) {
@@ -987,7 +987,7 @@ HSHEAP __stdcall SMemGetHeapByCaller(int * pszName, uint32_t nFlags) {
       }
     }
 
-    uint32_t nHeapId = SMEM_GetHandleByCaller(pszName, nFlags);
+    uint32_t nHeapId = SMEM_GetHandleByCaller(pszName, dwHashSeed);
     return nHeapId;
 }
 
@@ -1000,7 +1000,7 @@ HSHEAP __stdcall SMemGetHeapByPtr(uint8_t * pObject) {
       }
     }
 
-    if (!SMEM_CheckValidBlock((D2FogHeapBlockHdrStrc*)pObject, 0, nullptr, 0)) {
+    if (!SMEM_CheckValidBlock(pObject, 0, nullptr, 0)) {
       return 0;
     }
 
@@ -1017,7 +1017,7 @@ HSHEAP __stdcall SMemGetHeapByPtr(uint8_t * pObject) {
     return ((D2FogHeapDescStrc*)((uintptr_t)*(uint16_t*)&pBlock->uLink << 0x10))->nHash;
 }
 
-int32_t __stdcall SMemGetSize(void * pObject, uint32_t * pnFile, int32_t nSize) {
+int32_t __stdcall SMemGetSize(void * pObject, char * szSourceFile, int32_t nSourceLine) {
     D2FogHeapBlockHdrStrc* pBlock;
     if (!g_SMemInitialized) {
       SMemInitialize();
@@ -1027,7 +1027,7 @@ int32_t __stdcall SMemGetSize(void * pObject, uint32_t * pnFile, int32_t nSize) 
       }
     }
 
-    BOOL nValid = SMEM_CheckValidBlock((D2FogHeapBlockHdrStrc*)pObject, 1, pnFile, nSize);
+    BOOL nValid = SMEM_CheckValidBlock(pObject, 1, szSourceFile, nSourceLine);
     if (!nValid) {
       return -1;
     }
@@ -1040,8 +1040,8 @@ int32_t __stdcall SMemGetSize(void * pObject, uint32_t * pnFile, int32_t nSize) 
       }
     }
 
-    SMemGetBlockDataAndSize((uint8_t*)pObject, &nSize, (int*)&pnFile, pBlock);
-    return nSize;
+    SMemGetBlockDataAndSize((uint8_t*)pObject, &nSourceLine, (int*)&szSourceFile, pBlock);
+    return nSourceLine;
 }
 
 HSHEAP __stdcall SMemHeapCreate(int32_t nReserved, uint32_t nMaxSize, uint32_t dwParam) {
@@ -1078,7 +1078,7 @@ HSHEAP __stdcall SMemHeapCreate(int32_t nReserved, uint32_t nMaxSize, uint32_t d
       nHeapId = gnSMemHeapIdCounter;
       nBucketIndex = (uint8_t)gnSMemHeapIdCounter;
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(DebugMemoryCriticalSection + nBucketIndex);
-      pHeap = (D2FogHeapDescStrc*)g_SMemHeapBuckets[nBucketIndex];
+      pHeap = g_SMemHeapBuckets[nBucketIndex];
       while (true) {
         if (!pHeap) {
           /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(DebugMemoryCriticalSection + nBucketIndex);
@@ -1096,7 +1096,7 @@ HSHEAP __stdcall SMemHeapCreate(int32_t nReserved, uint32_t nMaxSize, uint32_t d
           break;
         }
 
-        pHeap = (D2FogHeapDescStrc*)pHeap->pNext;
+        pHeap = pHeap->pNext;
       }
 
       if (nBucketIndex != -1) {
@@ -1117,18 +1117,18 @@ int32_t __stdcall SMemHeapDestroy(HSHEAP nHeapId) {
     uint32_t nBucketIndex = nHeapId & 0xff;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(DebugMemoryCriticalSection + nBucketIndex);
     int32_t nDestroyed = 0;
-    D2FogHeapDescStrc* pHeap = (D2FogHeapDescStrc*)g_SMemHeapBuckets[nBucketIndex];
+    D2FogHeapDescStrc* pHeap = g_SMemHeapBuckets[nBucketIndex];
     if (pHeap) {
-      LPVOID* ppHeapLink = &g_SMemHeapBuckets[nBucketIndex];
+      D2FogHeapDescStrc** ppHeapLink = &g_SMemHeapBuckets[nBucketIndex];
       do {
         if (pHeap->nHash == nHeapId) {
           nDestroyed = 1;
           ppHeapLink = SMEM_DestroyHeap(ppHeapLink);
         } else {
-          ppHeapLink = (LPVOID*)&pHeap->pNext;
+          ppHeapLink = &pHeap->pNext;
         }
 
-        pHeap = (D2FogHeapDescStrc*)*ppHeapLink;
+        pHeap = *ppHeapLink;
       } while (pHeap);
     }
 
@@ -1136,7 +1136,7 @@ int32_t __stdcall SMemHeapDestroy(HSHEAP nHeapId) {
     return nDestroyed;
 }
 
-uint32_t __stdcall SMemHeapFree(HSHEAP nHeapId, uint32_t dwFlags, void * pObject) {
+BOOL __stdcall SMemHeapFree(HSHEAP nHeapId, uint32_t dwFlags, void * pObject) {
     int nObject;
     if (!g_SMemInitialized) {
       SMemInitialize();
@@ -1146,7 +1146,7 @@ uint32_t __stdcall SMemHeapFree(HSHEAP nHeapId, uint32_t dwFlags, void * pObject
       }
     }
 
-    if (!SMEM_CheckValidBlock((D2FogHeapBlockHdrStrc*)pObject, 1, nullptr, 0)) {
+    if (!SMEM_CheckValidBlock(pObject, 1, nullptr, 0)) {
       return 0;
     }
 
@@ -1170,7 +1170,7 @@ uint32_t __stdcall SMemHeapFree(HSHEAP nHeapId, uint32_t dwFlags, void * pObject
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(DebugMemoryCriticalSection + nObject);
     }
 
-    return (uint32_t)(pHeap != 0);
+    return (BOOL)(pHeap != 0);
 }
 
 int32_t __stdcall SMemHeapSize(HSHEAP nHeapId, uint32_t dwFlags, void * pObject) {
@@ -1186,7 +1186,7 @@ int32_t __stdcall SMemHeapSize(HSHEAP nHeapId, uint32_t dwFlags, void * pObject)
     }
 
     void* nBlockAddr = pObject;
-    BOOL nValid = SMEM_CheckValidBlock((D2FogHeapBlockHdrStrc*)pObject, 1, nullptr, 0);
+    BOOL nValid = SMEM_CheckValidBlock(pObject, 1, nullptr, 0);
     if (!nValid) {
       return -1;
     }
@@ -1395,18 +1395,18 @@ static uint32_t * __stdcall SMEM_SatisfyAllocRequest(D2FogHeapDescStrc * pHeap, 
     SMEM_FatalError(8, (uint32_t*)pHeap->szName, pHeap->nSourceLine);
 }
 
-static uint32_t * __stdcall SMemReallocCore(int * pnLockIndex, uint32_t * pHeap, uint32_t * pOldObject, uint16_t * pBlock, uint8_t byFlags, uint32_t nNewSize) {
-    uint32_t* pNewObject;
+static uint32_t * __stdcall SMemReallocCore(int * pnLockIndex, D2FogHeapDescStrc * pHeap, void * pOldObject, D2FogHeapBlockHdrStrc * pBlock, uint8_t byFlags, uint32_t nNewSize) {
+    void* pNewObject;
     int nHeaderOffset;
     uint32_t nOldSize;
-    SMemGetBlockDataAndSize((uint8_t*)pOldObject, (int*)&nOldSize, &nHeaderOffset, (D2FogHeapBlockHdrStrc*)pBlock);
+    SMemGetBlockDataAndSize((uint8_t*)pOldObject, (int*)&nOldSize, &nHeaderOffset, pBlock);
     uint32_t nCopySize;
     nCopySize = nOldSize;
-    if (!(((D2FogHeapBlockHdrStrc*)pBlock)->byFlags & 4)) {
+    if (!(pBlock->byFlags & 4)) {
       int32_t nInPlaceOk;
       if (nNewSize < nOldSize) {
-        SMemShrinkBlock((D2FogHeapBlockHdrStrc*)pBlock, nOldSize, nNewSize, (D2FogHeapDescStrc*)pHeap);
-      } else if (nNewSize <= nOldSize || (nInPlaceOk = SMemReallocInPlace((D2FogHeapBlockHdrStrc*)pBlock, nOldSize, nNewSize, (D2FogHeapDescStrc*)pHeap) , !nInPlaceOk)) {
+        SMemShrinkBlock(pBlock, nOldSize, nNewSize, pHeap);
+      } else if (nNewSize <= nOldSize || (nInPlaceOk = SMemReallocInPlace(pBlock, nOldSize, nNewSize, pHeap) , !nInPlaceOk)) {
         goto realloc_by_copy;
       }
 
@@ -1418,7 +1418,7 @@ static uint32_t * __stdcall SMemReallocCore(int * pnLockIndex, uint32_t * pHeap,
 
     realloc_by_copy:
     if (!(byFlags & 0x10)) {
-      pNewObject = SMEM_SatisfyAllocRequest((D2FogHeapDescStrc*)pHeap, 0, nNewSize, pnLockIndex);
+      pNewObject = SMEM_SatisfyAllocRequest(pHeap, 0, nNewSize, pnLockIndex);
       if (pNewObject && nCopySize && nNewSize) {
         if (nCopySize >= nNewSize) {
           nCopySize = nNewSize;
@@ -1427,20 +1427,20 @@ static uint32_t * __stdcall SMemReallocCore(int * pnLockIndex, uint32_t * pHeap,
         SMemCopy(pNewObject, pOldObject, nCopySize);
       }
 
-      SMEM_SatisfyFreeRequest(pOldObject, (D2FogHeapDescStrc*)pHeap, (D2FogHeapBlockHdrStrc*)pBlock);
+      SMEM_SatisfyFreeRequest(pOldObject, pHeap, pBlock);
       nCopySize = nOldSize;
       if (pNewObject) {
         fill_grown_tail:
         if (nNewSize > nCopySize) {
           if (byFlags & 8) {
             SMemZero((void*)((char*)pNewObject + nCopySize), nNewSize - nCopySize);
-            return pNewObject;
+            return (uint32_t*)pNewObject;
           }
           if (g_SMemDebugFillEnabled) {
             SMemFill((void*)((char*)pNewObject + nCopySize), nNewSize - nCopySize, 0xee);
           }
         }
-        return pNewObject;
+        return (uint32_t*)pNewObject;
       }
     }
     return nullptr;
@@ -1460,11 +1460,11 @@ void * __stdcall SMemAlloc(uint32_t nSize, char * szFile, uint32_t nLine, uint32
     uint32_t nLineSaved;
     nLineSaved = nLine; // steer-ok: nLine's slot is reused for the bucket index below, so the line is copied first
     uint32_t nHeapId;
-    nHeapId = SMEM_GetHandleByCaller((int*)szFile, nLine);
+    nHeapId = SMEM_GetHandleByCaller(szFile, nLine);
     uint32_t nBucketIndex;
     nBucketIndex = nHeapId & 0xff;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(DebugMemoryCriticalSection + nBucketIndex);
-    for (pHeap = (D2FogHeapDescStrc*)g_SMemHeapBuckets[nBucketIndex]; nLine = nBucketIndex , pHeap != 0; pHeap = (D2FogHeapDescStrc*)pHeap->pNext) {
+    for (pHeap = g_SMemHeapBuckets[nBucketIndex]; nLine = nBucketIndex , pHeap != 0; pHeap = pHeap->pNext) {
       if (pHeap->nHash == nHeapId) {
         goto alloc_from_heap;
       }
@@ -1498,19 +1498,19 @@ BOOL __stdcall SMemDumpState(pfnSMemDumpCallback pfnCallback, uint32_t dwCallbac
     D2_CHECK(pfnCallback);
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     heapStats.dwSize = 0x128;
-    HSHEAP nHeapIndex = 0;
-    int bHasNextHeap = SMemFindNextHeap(0, &nHeapIndex, &heapStats);
+    uint32_t nHeapId = 0;
+    int bHasNextHeap = SMemFindNextHeap(0, &nHeapId, &heapStats);
     while (bHasNextHeap) {
       /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szLineBuffer, "%s:%d  blocks=%u  %uk/%uk/%uk", heapStats.szFilename, heapStats.nLineNumber, heapStats.nAllocatedBlocks, heapStats.dwAllocatedBytes + 0x200 >> 10, heapStats.dwCommittedBytes + 0x200 >> 10, heapStats.dwReservedBytes + 0x200 >> 10);
       (*pfnCallback)(dwCallbackArg, szLineBuffer);
-      bHasNextHeap = SMemFindNextHeap(nHeapIndex, &nHeapIndex, &heapStats);
+      bHasNextHeap = SMemFindNextHeap(nHeapId, &nHeapId, &heapStats);
     }
 
     return 1;
 }
 
 // @blizzard SMemHeapAlloc (SMEM.CPP)
-uint32_t * __stdcall SMemHeapAlloc(HSHEAP nHeapId, uint32_t nSize, uint32_t dwFlags) {
+uint32_t * __stdcall SMemHeapAlloc(HSHEAP nHeapId, uint32_t dwAllocFlags, uint32_t nAllocSize) {
     if (!g_SMemInitialized) {
       SMemInitialize();
       if (!g_SMemInitialized) {
@@ -1524,9 +1524,9 @@ uint32_t * __stdcall SMemHeapAlloc(HSHEAP nHeapId, uint32_t nSize, uint32_t dwFl
       uint32_t nSlot = (uint8_t)nHeapId;
       EnterCriticalSection(&DebugMemoryCriticalSection[nSlot]);
       nLockedSlot = nSlot;
-      pHeap = (D2FogHeapDescStrc*)g_SMemHeapBuckets[nSlot];
+      pHeap = g_SMemHeapBuckets[nSlot];
       while (pHeap && pHeap->nHash != nHeapId) {
-        pHeap = (D2FogHeapDescStrc*)pHeap->pNext;
+        pHeap = pHeap->pNext;
       }
       if (!pHeap) {
         LeaveCriticalSection(&DebugMemoryCriticalSection[nSlot]);
@@ -1534,7 +1534,7 @@ uint32_t * __stdcall SMemHeapAlloc(HSHEAP nHeapId, uint32_t nSize, uint32_t dwFl
       }
     }
 
-    uint32_t* pAllocated = SMEM_SatisfyAllocRequest(pHeap, nSize, dwFlags, &nLockedSlot);
+    uint32_t* pAllocated = SMEM_SatisfyAllocRequest(pHeap, dwAllocFlags, nAllocSize, &nLockedSlot);
     if (nLockedSlot != -1) {
       LeaveCriticalSection(&DebugMemoryCriticalSection[nLockedSlot]);
     }
@@ -1546,7 +1546,7 @@ uint32_t * __stdcall SMemHeapAlloc(HSHEAP nHeapId, uint32_t nSize, uint32_t dwFl
 }
 
 // @blizzard SMemHeapReAlloc (Storm assert string)
-uint32_t * __stdcall SMemHeapReAlloc(uint32_t nHeapId, uint32_t nSize, uint32_t * pBlock, uint32_t dwFlags) {
+uint32_t * __stdcall SMemHeapReAlloc(uint32_t nHeapId, uint32_t dwAllocFlags, uint32_t * pBlock, uint32_t nAllocSize) {
     D2FogHeapDescStrc* pHeap;
     D2FogHeapBlockHdrStrc* pBlockHeader;
     if (!g_SMemInitialized) {
@@ -1559,7 +1559,7 @@ uint32_t * __stdcall SMemHeapReAlloc(uint32_t nHeapId, uint32_t nSize, uint32_t 
     uint32_t* pResult = pBlock;
     if (pBlock) {
       BOOL bIsValid;
-      bIsValid = SMEM_CheckValidBlock((D2FogHeapBlockHdrStrc*)pBlock, 1, nullptr, 0);
+      bIsValid = SMEM_CheckValidBlock(pBlock, 1, nullptr, 0);
       if (bIsValid) {
         pBlockHeader = (D2FogHeapBlockHdrStrc*)(pResult - 2);
         if (pBlockHeader->byFlags & 8) {
@@ -1570,18 +1570,18 @@ uint32_t * __stdcall SMemHeapReAlloc(uint32_t nHeapId, uint32_t nSize, uint32_t 
         }
 
         pHeap = SMEM_LockHeapByBlockPtr(&nHeapId, pBlockHeader);
-        pResult = SMemReallocCore((int*)&nHeapId, (uint32_t*)pHeap, pResult, &pBlockHeader->wBlockSize, (uint8_t)nSize, dwFlags);
+        pResult = SMemReallocCore((int*)&nHeapId, pHeap, pResult, pBlockHeader, (uint8_t)dwAllocFlags, nAllocSize);
         SMEM_UnlockHeap((int*)&nHeapId);
         return pResult;
       }
     }
 
-    pResult = SMemHeapAlloc(nHeapId, nSize, dwFlags);
+    pResult = SMemHeapAlloc(nHeapId, dwAllocFlags, nAllocSize);
     return pResult;
 }
 
 // @blizzard SMemReAlloc (Storm assert string)
-uint32_t * __stdcall SMemReAlloc(uint32_t * pBlock, uint32_t nSize, char * szSourceFile, int32_t nSourceLine, uint32_t dwFlags) {
+void * __stdcall SMemReAlloc(void * pBlock, uint32_t nSize, char * szSourceFile, int32_t nSourceLine, uint32_t dwFlags) {
     D2FogHeapDescStrc* pHeap;
     uint32_t* pResult;
     D2FogHeapBlockHdrStrc* pBlockHdr;
@@ -1595,15 +1595,15 @@ uint32_t * __stdcall SMemReAlloc(uint32_t * pBlock, uint32_t nSize, char * szSou
 
     if (pBlock) {
       BOOL bIsValid;
-      bIsValid = SMEM_CheckValidBlock((D2FogHeapBlockHdrStrc*)pBlock, 1, (uint32_t*)szSourceFile, nSourceLine);
+      bIsValid = SMEM_CheckValidBlock(pBlock, 1, szSourceFile, nSourceLine);
       if (bIsValid) {
-        pBlockHdr = (D2FogHeapBlockHdrStrc*)(pBlock - 2);
+        pBlockHdr = (D2FogHeapBlockHdrStrc*)pBlock - 1;
         if (pBlockHdr->byFlags & 8) {
           pBlockHdr = ((D2FogHeapBlockHdrStrc**)pBlockHdr)[-1];
         }
 
         pHeap = SMEM_LockHeapByBlockPtr((uint32_t*)&nSourceFile, pBlockHdr);
-        pResult = SMemReallocCore((int*)&nSourceFile, (uint32_t*)pHeap, pBlock, &pBlockHdr->wBlockSize, (uint8_t)dwFlags, nSize);
+        pResult = SMemReallocCore((int*)&nSourceFile, pHeap, pBlock, pBlockHdr, (uint8_t)dwFlags, nSize);
         if (nSourceFile != -1) {
           /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(DebugMemoryCriticalSection + nSourceFile);
         }

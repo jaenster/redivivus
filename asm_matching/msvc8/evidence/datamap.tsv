@@ -548,10 +548,10 @@ symbol	address	uses	other_addresses
 ?g_CharSelectBuffer@@3UD2McpGameInfoStrc@@A	00799108	2	
 ?g_IDEAKeySchedules@Bnclient@@3PAEA	00882878	4	
 ?g_OriginalGammaRamp@@3PAY0BAA@GA	0096fcb8	1	
-?g_SMemCachedHeapNameHash@?1??SMEM_GetHandleByCaller@SMem@Source@Storm@@YAIPAHI@Z@4IA	007768a8	2	
-?g_SMemCachedHeapNameLength@?1??SMEM_GetHandleByCaller@SMem@Source@Storm@@YAIPAHI@Z@4IA	007768b0	2	
-?g_SMemCachedHeapNamePtr@?1??SMEM_GetHandleByCaller@SMem@Source@Storm@@YAIPAHI@Z@4PAXA	007768b4	2	
-?g_SMemCachedHeapNameVersion@?1??SMEM_GetHandleByCaller@SMem@Source@Storm@@YAIPAHI@Z@4IA	007768ac	2	
+?g_SMemCachedHeapNameHash@?1??SMEM_GetHandleByCaller@SMem@Source@Storm@@YAIPADI@Z@4IA	007768a8	2	
+?gdwSMemCachedHeapNameSeed@?1??SMEM_GetHandleByCaller@SMem@Source@Storm@@YAIPADI@Z@4IA	007768b0	2	
+?g_SMemCachedHeapNamePtr@?1??SMEM_GetHandleByCaller@SMem@Source@Storm@@YAIPADI@Z@4PADA	007768b4	2	
+?gdwSMemCachedHeapNamePrefix@?1??SMEM_GetHandleByCaller@SMem@Source@Storm@@YAIPADI@Z@4IA	007768ac	2	
 ?g_SMemHeapStatsCount@?1??SMemResetHeapStats@SMem@Fog@@YGXXZ@4IA	007768a4	1	
 ?g_UIFlagInitDrawMouseDown@Draw@UI@D2Client@@3PAUD2UIFlagInitStrc@@A	006d5f28	3	
 ?g_UIFlagInitDrawPanel1@@3PAUD2UIFlagInitStrc@@A	0070fa84	2	
@@ -962,7 +962,7 @@ symbol	address	uses	other_addresses
 ?gdwQuestDataIntialMask@?1??Q05_Callback00_NpcActivate@A1Q5@QUESTS@Quests@D2Game@@YIXPAUD2QuestDataStrc@@PAUD2QuestArgStrc@@@Z@4PAHA	007382ac	1	
 ?gdwSFileCompressionMethod@?1??CrcBuffer@SFile@Source@Storm@@YIXPAEHPAIE@Z@4PAIA	00708448	1	
 ?gdwSLogLastTime@?1??SLOG_OutputTime@SLog@Source@Storm@@YGXHPAUD2SLogStrc@@@Z@4IA	007792f0	2	
-?gdwSMemLastHashedHeapKey@?1??SMEM_GetHandleByCaller@SMem@Source@Storm@@YAIPAHI@Z@4IA	00708340	2	
+?gbSMemReuseCachedHeapNameHash@?1??SMEM_GetHandleByCaller@SMem@Source@Storm@@YAIPADI@Z@4HA	00708340	2	
 ?gdwSoundChannelIndex@UnitSnd@UNIT@D2Client@@3IA	007c88bc	6	
 ?gdwSoundHeaderCacheIndex@@3PAUD2CutsceneDescStrc@@A	00721d98	1	
 ?gdwSpellSelThrottleTick@?1??Unreferenced_004ab7b0@SpellSel@UI@D2Client@@YAHXZ@4IA	007c0c54	2	

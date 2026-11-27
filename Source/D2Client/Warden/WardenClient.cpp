@@ -780,7 +780,7 @@ static BOOL __stdcall WARDEN_ResolveAndLoadModule(void * pRc4Key, uint8_t * pMod
     } while (nHashByteIndex < 0x10);
 
     Storm::Source::SSTR::SStrCopy(__frame0.szExt, ".mod", 5);
-    bCacheReadSuccess = sgpUnknownSequence ? sgpUnknownSequence->pfnCacheReadData(szModuleHashHex, __frame0.aiStack_14, &pFileData, (int*)&nFileSize) : 0;
+    bCacheReadSuccess = sgpUnknownSequence ? sgpUnknownSequence->pfnCacheReadData(szModuleHashHex, (FILETIME*)__frame0.aiStack_14, (uint32_t**)&pFileData, (LPDWORD)&nFileSize) : 0;
     if (!bCacheReadSuccess) {
       return 0;
     }
@@ -797,7 +797,7 @@ BOOL __stdcall WARDEN_DownloadModule(char * szKey, void * pData, uint32_t nSize)
     }
 
     /* LPFILETIME lpSystemTimeAsFileTime for GetSystemTimeAsFileTime */ GetSystemTimeAsFileTime(&fileTime);
-    BOOL bResult = sgpUnknownSequence->pfnCacheWriteData(szKey, pData, nSize, (int*)&fileTime, -1, -1);
+    BOOL bResult = sgpUnknownSequence->pfnCacheWriteData(szKey, pData, nSize, &fileTime, -1, -1);
     return bResult;
 }
 
@@ -827,7 +827,7 @@ void __thiscall LoadModule(::WardenClient * pThis, uint8_t * pModuleHash, void *
     }
 
     /* LPFILETIME lpSystemTimeAsFileTime for GetSystemTimeAsFileTime */ GetSystemTimeAsFileTime(&fileTime);
-    sgpUnknownSequence->pfnCacheWriteData(szModuleFile, pData, nSize, (int*)&fileTime, -1, -1);
+    sgpUnknownSequence->pfnCacheWriteData(szModuleFile, pData, nSize, &fileTime, -1, -1);
 }
 
 // @sourcefile .\WARDEN\WardenClient.cpp
@@ -979,7 +979,7 @@ void __stdcall WARDEN_Cleanup() {
 BOOL __fastcall WARDEN_Initialize(uint32_t dwModuleParam) {
     WARDEN_Cleanup();
     gpWardenModuleParam = dwModuleParam;
-    sgpUnknownSequence = Bnclient::NET_GetLobbyChatQueue();
+    sgpUnknownSequence = Bnclient::BNCLIENT_GetCallbackTable();
     if (!sgpUnknownSequence) {
       return FALSE;
     }

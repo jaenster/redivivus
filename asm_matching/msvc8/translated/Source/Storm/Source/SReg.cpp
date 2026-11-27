@@ -16,7 +16,7 @@ namespace Storm { namespace Source { namespace SReg {
 // @namespace-fix moved from Storm::Source::SSTR to Storm::Source::SReg. SReg is a separate
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
-int32_t __stdcall SRegGetBaseKey(uint8_t byFlags, char * szText, int32_t nBufSize) {
+BOOL __stdcall SRegGetBaseKey(uint8_t byFlags, char * szText, int32_t nBufSize) {
     D2_CHECKS_BEGIN;
     D2_CHECK(szText);
     D2_CHECKS_ASSUME_(szText);
@@ -39,13 +39,13 @@ int32_t __stdcall SRegGetBaseKey(uint8_t byFlags, char * szText, int32_t nBufSiz
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
 // Worker for SRegDeleteValue: deletes one registry value.
 // Name from the PowerPC 1.13c Storm traceback table (static InternalDeleteEntry @10037640).
-int __fastcall SREG_InternalDeleteEntry(DWORD byFlags, char * pszSubKey, LPCSTR szValueName) {
+BOOL __fastcall SREG_InternalDeleteEntry(DWORD byFlags, char * pszSubKey, LPCSTR szValueName) {
     DWORD lResult;
     DWORD lResult2;
     HKEY hKey;
     char szKeyPath[260];
-    DWORD lErr = 0;
-    int bSuccess = 0;
+    LSTATUS lErr = 0;
+    BOOL bSuccess = 0;
     szKeyPath[0] = '\0';
     if (!(byFlags & 0x10)) {
       SRegGetBaseKey((uint8_t)byFlags, szKeyPath, 0x104);
@@ -111,7 +111,7 @@ static BOOL __stdcall SREG_InternalLoadEntry(LPDWORD pdwType, LPBYTE pbData, cha
     *pdwDataLen = 0;
     HKEY hKey;
     hKey = (HKEY)0x0;
-    DWORD dwErrCode;
+    LSTATUS dwErrCode;
     dwErrCode = 0x3f3;
     szKeyPath[0] = '\0';
     if (!(byFlags & 0x10)) {
@@ -199,7 +199,7 @@ static int __stdcall SREG_InternalSaveEntry(char * pszSubKey, LPCSTR szValueName
 // @namespace-fix moved from Storm::Source::SSTR to Storm::Source::SReg. SReg is a separate
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
-int32_t __stdcall SRegDeleteValue(char * pszSubKey, LPCSTR szValueName, DWORD byFlags) {
+BOOL __stdcall SRegDeleteValue(char * pszSubKey, LPCSTR szValueName, DWORD byFlags) {
     D2_CHECKS_BEGIN;
     D2_CHECK(pszSubKey);
     D2_CHECKS_ASSUME_(pszSubKey);
@@ -220,23 +220,23 @@ int32_t __stdcall SRegDeleteValue(char * pszSubKey, LPCSTR szValueName, DWORD by
 // @namespace-fix moved from Storm::Source::SSTR to Storm::Source::SReg. SReg is a separate
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
-int32_t __stdcall SRegLoadData(uint32_t * pszSubKey, char * szValueName, int32_t nFlags, LPBYTE pbData, DWORD dwBufSize, uint32_t * * ppdwDataLen) {
+int32_t __stdcall SRegLoadData(char * pszSubKey, char * szValueName, int32_t nFlags, LPBYTE pbData, DWORD dwBufSize, LPDWORD pdwDataLen) {
     D2_CHECKS_BEGIN;
     D2_CHECK(pszSubKey);
     D2_CHECKS_ASSUME_(pszSubKey);
-    D2_CHECK((char)*pszSubKey != '\0');
-    D2_CHECKS_ASSUME_((char)*pszSubKey != '\0');
+    D2_CHECK(*pszSubKey != '\0');
+    D2_CHECKS_ASSUME_(*pszSubKey != '\0');
     D2_CHECK(szValueName);
     D2_CHECKS_ASSUME_(szValueName);
     D2_CHECK(*szValueName != '\0');
     D2_CHECKS_ASSUME_(*szValueName != '\0');
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
-    uint32_t** ppdwDataLenActual = ppdwDataLen;
-    if (!ppdwDataLen) {
-      ppdwDataLenActual = &pszSubKey;
+    LPDWORD pdwDataLenActual = pdwDataLen;
+    if (!pdwDataLen) {
+      pdwDataLenActual = (LPDWORD)&pszSubKey;
     }
 
-    BOOL nResult = SREG_InternalLoadEntry((LPDWORD)&szValueName, pbData, (char*)pszSubKey, (uint8_t)nFlags, dwBufSize, szValueName, (LPDWORD)ppdwDataLenActual);
+    BOOL nResult = SREG_InternalLoadEntry((LPDWORD)&szValueName, pbData, pszSubKey, (uint8_t)nFlags, dwBufSize, szValueName, pdwDataLenActual);
     return nResult;
 }
 
@@ -246,8 +246,8 @@ int32_t __stdcall SRegLoadData(uint32_t * pszSubKey, char * szValueName, int32_t
 // @namespace-fix moved from Storm::Source::SSTR to Storm::Source::SReg. SReg is a separate
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
-int32_t __stdcall SRegLoadString(char * szSubKey, char * szValueName, int32_t nFlags, LPSTR szOutBuf, DWORD dwOutBufSize) {
-    DWORD pTermPos;
+BOOL __stdcall SRegLoadString(char * szSubKey, char * szValueName, int32_t nFlags, LPSTR szOutBuf, DWORD dwOutBufSize) {
+    DWORD dwTermOffset;
     DWORD dwType;
     DWORD dwDataLen;
     D2_CHECKS_BEGIN;
@@ -273,12 +273,12 @@ int32_t __stdcall SRegLoadString(char * szSubKey, char * szValueName, int32_t nF
           return 1;
         }
       } else {
-        pTermPos = dwOutBufSize - 1;
-        if (pTermPos >= dwDataLen) {
-          pTermPos = dwDataLen;
+        dwTermOffset = dwOutBufSize - 1;
+        if (dwTermOffset >= dwDataLen) {
+          dwTermOffset = dwDataLen;
         }
 
-        szOutBuf[pTermPos] = '\0';
+        szOutBuf[dwTermOffset] = '\0';
       }
 
       return 1;
@@ -293,19 +293,19 @@ int32_t __stdcall SRegLoadString(char * szSubKey, char * szValueName, int32_t nF
 // @namespace-fix moved from Storm::Source::SSTR to Storm::Source::SReg. SReg is a separate
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
-int __stdcall SRegLoadValue(char * pTree, char * pKey, uint8_t byFlags, int32_t * pnOut) {
+BOOL __stdcall SRegLoadValue(char * pTree, char * pKey, uint8_t byFlags, int32_t * pnOut) {
     // Frame slots -276..-8 are ONE object: &dwDataLen is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
       DWORD dwDataLen;
       DWORD dwType;
-      uint32_t* pnOutVal;
+      int32_t* pnOutVal;
       char valueBuf[256];
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 268, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
     uint32_t nParsed;
-    __frame0.pnOutVal = (uint32_t*)pnOut;
+    __frame0.pnOutVal = pnOut;
     D2_CHECKS_BEGIN;
     D2_CHECK(pTree);
     D2_CHECKS_ASSUME_(pTree);
@@ -348,7 +348,7 @@ int __stdcall SRegLoadValue(char * pTree, char * pKey, uint8_t byFlags, int32_t 
 // @namespace-fix moved from Storm::Source::SSTR to Storm::Source::SReg. SReg is a separate
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
-int32_t __stdcall SRegSaveData(char * pszSubKey, LPCSTR szValueName, uint32_t nFlags, BYTE * pbData, DWORD dwDataLen) {
+BOOL __stdcall SRegSaveData(char * pszSubKey, LPCSTR szValueName, uint32_t nFlags, BYTE * pbData, DWORD dwDataLen) {
     D2_CHECKS_BEGIN;
     D2_CHECK(pszSubKey);
     D2_CHECKS_ASSUME_(pszSubKey);
@@ -373,7 +373,7 @@ int32_t __stdcall SRegSaveData(char * pszSubKey, LPCSTR szValueName, uint32_t nF
 // @namespace-fix moved from Storm::Source::SSTR to Storm::Source::SReg. SReg is a separate
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
-int32_t __stdcall SRegSaveString(char * pszSubKey, LPCSTR szValueName, int32_t nFlags, char * pszValue) {
+BOOL __stdcall SRegSaveString(char * pszSubKey, LPCSTR szValueName, int32_t nFlags, char * pszValue) {
     D2_CHECKS_BEGIN;
     D2_CHECK(pszSubKey);
     D2_CHECKS_ASSUME_(pszSubKey);
@@ -386,9 +386,9 @@ int32_t __stdcall SRegSaveString(char * pszSubKey, LPCSTR szValueName, int32_t n
     D2_CHECK(pszValue);
     D2_CHECKS_ASSUME_(pszValue);
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
-    uint32_t pStrEnd = SSTR::SStrLen(pszValue);
-    pStrEnd += 1;
-    int nResult = SREG_InternalSaveEntry(pszSubKey, szValueName, 1, (uint8_t*)pszValue, pStrEnd, nFlags);
+    uint32_t nValueLength = SSTR::SStrLen(pszValue);
+    nValueLength += 1;
+    int nResult = SREG_InternalSaveEntry(pszSubKey, szValueName, 1, (uint8_t*)pszValue, nValueLength, nFlags);
     return nResult;
 }
 

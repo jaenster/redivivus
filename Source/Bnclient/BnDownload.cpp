@@ -326,7 +326,7 @@ static BOOL __stdcall BnetDownloadFile(SOCKET hSocket, char * szText, FILETIME *
       } while (nBytesReceived < nFileSize);
     }
     if (bWriteFlags & 1) {
-      Cache::CACHE_WriteData(szText, (LPCVOID)*ppOutBuffer, nFileSize, (uint32_t*)&pTimestamp->dwLowDateTime, 0x13c680, 0x278d00);
+      Cache::CACHE_WriteData(szText, (LPCVOID)*ppOutBuffer, nFileSize, pTimestamp, 0x13c680, 0x278d00);
     }
     if (bWriteFlags & 2) {
       BNDOWNLOAD_WriteFileWithTimestamp(szText, (LPCVOID)*ppOutBuffer, nFileSize, pTimestamp);
@@ -434,7 +434,7 @@ int __fastcall BNDOWNLOAD_ProcessPrepatchList(int * pResultOut) {
 
     *lpFileName = '\0';
     char cRegistryValue[1024] = "";
-    nErrorLine = Storm::Source::SReg::SRegLoadData((uint32_t*)"Patch", "Patches", 2, (LPBYTE)cRegistryValue, 0x3fe, nullptr);
+    nErrorLine = Storm::Source::SReg::SRegLoadData("Patch", "Patches", 2, (LPBYTE)cRegistryValue, 0x3fe, nullptr);
     if (!nErrorLine || cRegistryValue[0] == '\0') {
       *pResultOut = 0;
       return 0;
@@ -859,7 +859,7 @@ void __fastcall BNDOWNLOAD_InitiateFileDownload(int32_t pDownloadCtx, uint32_t d
       szText2 = "";
     }
 
-    BOOL bCacheHit = Cache::CACHE_ReadData(szText1, (uint32_t*)&ftCacheTime.dwLowDateTime, &pCachedBuf, &nCachedSize);
+    BOOL bCacheHit = Cache::CACHE_ReadData(szText1, &ftCacheTime, &pCachedBuf, &nCachedSize);
     if (bCacheHit) {
       LONG nTimeCmp;
       /* FILETIME * lpFileTime2 for CompareFileTime */ /* FILETIME * lpFileTime1 for CompareFileTime */ nTimeCmp = CompareFileTime(pFileTime, &ftCacheTime);
@@ -1172,7 +1172,7 @@ uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pPatchList, uint32_
       return 0;
     }
 
-    bCacheHit = Cache::CACHE_ReadData((char*)pPatchList, (uint32_t*)&ftCacheTime.dwLowDateTime, &pCacheData, &dwCachedSize);
+    bCacheHit = Cache::CACHE_ReadData((char*)pPatchList, &ftCacheTime, &pCacheData, &dwCachedSize);
     if (bCacheHit) {
       LONG nTimeCmp;
       /* FILETIME * lpFileTime2 for CompareFileTime */ /* FILETIME * lpFileTime1 for CompareFileTime */ nTimeCmp = CompareFileTime(&ftZero, &ftCacheTime);

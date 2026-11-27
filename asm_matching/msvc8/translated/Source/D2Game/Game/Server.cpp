@@ -74,7 +74,7 @@ typedef void (__fastcall *fnUpdateCharacterLadder)(char * lpCharName, uint16_t w
 #endif
 #ifndef RECON_FPTD_fnEnterGame
 #define RECON_FPTD_fnEnterGame
-typedef void (__fastcall *fnEnterGame)(uint16_t wGameId, char * lpCharName, uint16_t wCharClass, uint32_t dwCharLevel, uint32_t dwReserved);
+typedef void (__fastcall *fnEnterGame)(uint32_t dwGameId, char * lpCharName, uint16_t wCharClass, uint32_t dwCharLevel, uint32_t dwReserved);
 #endif
 #ifndef RECON_FPTD_fpForEachClientFn
 #define RECON_FPTD_fpForEachClientFn

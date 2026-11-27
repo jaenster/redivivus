@@ -119,7 +119,7 @@ BOOL __fastcall Initialize(HINSTANCE hInstance) {
         }
 
         pGuidSize = (uint32_t*)0x10;
-        nLine = Storm::Source::SReg::SRegLoadData((uint32_t*)szRegKey, "GUID", 0, (LPBYTE)&gGlideOpenWindowConfig, 0x10, &pGuidSize);
+        nLine = Storm::Source::SReg::SRegLoadData(szRegKey, "GUID", 0, (LPBYTE)&gGlideOpenWindowConfig, 0x10, (LPDWORD)&pGuidSize);
         if (nLine && pGuidSize == (uint32_t*)0x10) {
           return 1;
         }

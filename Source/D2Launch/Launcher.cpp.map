@@ -149,7 +149,7 @@
       "namespace": "D2Launch::Launcher",
       "calledFunctions": [
         "LAUNCHER_InitNetworkLobbyQueue",
-        "NET_InitAndGetLobbyChatQueue",
+        "BNCLIENT_GetCallbacks",
         "GetInstructionPointer",
         "ERROR_UnrecoverableInternalError_Halt",
         "exit"

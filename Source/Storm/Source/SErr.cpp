@@ -29,11 +29,11 @@ typedef BOOL (__stdcall *pfnSErrDisplayCallback)(uint32_t dwErrorCode, char * sz
 
 static SErrAppFatalContextStrc gpSSystemThreadContextCallback = {}; D2_STATIC_GUARD(gpSSystemThreadContextCallback, "gpSSystemThreadContextCallback");
 static _RTL_CRITICAL_SECTION lpCriticalSection_007790cc = {}; D2_STATIC_GUARD(lpCriticalSection_007790cc, "lpCriticalSection_007790cc");
-uint32_t gbSSystemErrorDialogActive = 0; D2_GLOBAL_GUARD(gbSSystemErrorDialogActive, "gbSSystemErrorDialogActive");
+BOOL gbSSystemErrorDialogActive = 0; D2_GLOBAL_GUARD(gbSSystemErrorDialogActive, "gbSSystemErrorDialogActive");
 static D2SErrMessageSourceStrc * gpErrorModuleList = 0; D2_STATIC_GUARD(gpErrorModuleList, "gpErrorModuleList");
 static uint32_t gbFormatErrorModulesInitialized = 0; D2_STATIC_GUARD(gbFormatErrorModulesInitialized, "gbFormatErrorModulesInitialized");
-uint32_t gbSSystemShutdownInProgress = 0; D2_GLOBAL_GUARD(gbSSystemShutdownInProgress, "gbSSystemShutdownInProgress");
-uint32_t dwLastErrorCode = 0; D2_GLOBAL_GUARD(dwLastErrorCode, "dwLastErrorCode");
+BOOL gbSSystemShutdownInProgress = 0; D2_GLOBAL_GUARD(gbSSystemShutdownInProgress, "gbSSystemShutdownInProgress");
+DWORD dwLastErrorCode = 0; D2_GLOBAL_GUARD(dwLastErrorCode, "dwLastErrorCode");
 static pfnBlizzardError pfnBlizzardErrorCallback = (pfnBlizzardError)0; D2_STATIC_GUARD(pfnBlizzardErrorCallback, "pfnBlizzardErrorCallback");
 
 namespace Storm::Source::SErr {
@@ -193,10 +193,10 @@ static BOOL __stdcall SERR_UndecorateObjectName(char * szMangled, int32_t nMaxLe
 // @was SSYSTEM_SetThreadContext (pass 6, 2026.08.28) - the old name also collided with the Win32 API SetThreadContext, which this is not.
 // @oracle Storm 1.10b PPC export SErrPrepareAppFatal, code vector 10015af0 (TVector 100cbe9c).
 // @oracle-basis Callee set {EnterCriticalSection, GetCurrentThreadId, LeaveCriticalSection} is exactly the oracle's and is unique among all 19 SErr exports and all 82 functions of this namespace - the only other GetCurrentThreadId user, SErrDisplayAppFatal 0041d160, additionally calls memset/vsprintf/DisplayError/ExitProcess. Arity 2 = 2 (PPC prologue saves r3 and r4 only).
-void __stdcall SErrPrepareAppFatal(void * pfnCallback, uint32_t nCallbackParam) {
+void __stdcall SErrPrepareAppFatal(char * pszContext, int32_t nTraceFlags) {
     SERR_InternalEnterCriticalSection();
-    gpSSystemThreadContextCallback.pfnCallback = pfnCallback;
-    gpSSystemThreadContextCallback.nParam = nCallbackParam;
+    gpSSystemThreadContextCallback.pszContext = pszContext;
+    gpSSystemThreadContextCallback.nTraceFlags = nTraceFlags;
     gpSSystemThreadContextCallback.dwThreadId = GetCurrentThreadId();
     SERR_InternalLeaveCriticalSection();
 }
@@ -605,15 +605,15 @@ void __fastcall TSList_HANDLER_Clear(StormLinkedListStrc * pList) {
 // @was SSYSTEM_DisplayErrorDialog (pass 6, 2026.08.28)
 // @oracle Storm 1.10b PPC export SErrDisplayError, code vector 10015f80 (from the TVector export block at 100cbe6c).
 // @oracle-basis Callee set, near-identical across the two builds and unique in both: GetModuleFileName, memset, FindFirstFile, FindClose, SStrCopy, SStrChrR, LoadString, SStrLen, OutputDebugString, SStrPrintf/wsprintf, IsWindow, IsWindowVisible, MessageBox, the error critical-section pair, SErrGetErrorStr, and the process-exit tail (ExitProcess on PPC / TerminateProcess here). Arity 6 = 6. It is the largest function of the module in both builds (2384 B PPC / 1198 B here). Nine callers spanning SMem, SFile and SSystem, which is the profile of Storm's central error reporter.
-int __stdcall SErrDisplayError(uint32_t nErrorCode, uint32_t * pStackTrace, int32_t nTraceFlags, uint8_t * pCustomMsg, int32_t nMessageFlags, UINT nExitCode) {
+int __stdcall SErrDisplayError(uint32_t nErrorCode, char * pStackTrace, int32_t nTraceFlags, char * pCustomMsg, int32_t nMessageFlags, UINT nExitCode) {
     // Frame slots -2396..-8 are ONE object: &nMsgBoxFlags is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
       uint32_t nMsgBoxFlags;
       char* pCustomMsgPtr;
-      uint32_t* pStackTracePtr;
+      char* pStackTracePtr;
       _WIN32_FIND_DATAA findData;
-      uint32_t aDemangledSymbol[64];
+      char aDemangledSymbol[256];
       char szFullMessage[1024];
       char szModuleFile[260];
       char szModuleName[260];
@@ -633,9 +633,9 @@ int __stdcall SErrDisplayError(uint32_t nErrorCode, uint32_t * pStackTrace, int3
     LPDWORD lpExitCode;
     uint32_t nErrorCodeArg;
     int32_t nMaxCopyLen;
-    uint32_t* pStackTraceArg;
+    char* pStackTraceArg;
     __frame0.pStackTracePtr = pStackTrace;
-    __frame0.pCustomMsgPtr = (char*)pCustomMsg;
+    __frame0.pCustomMsgPtr = pCustomMsg;
     if (gbSSystemShutdownInProgress || gbSSystemErrorDialogActive) {
       return 0;
     }
@@ -673,9 +673,9 @@ int __stdcall SErrDisplayError(uint32_t nErrorCode, uint32_t * pStackTrace, int3
     __frame0.pStackTracePtr = pStackTrace;
     if (pStackTrace) {
       __frame0.pStackTracePtr = pStackTrace;
-      if ((char)*pStackTrace != '\0' && (nTraceFlags == -2 || (__frame0.pStackTracePtr = pStackTrace , nTraceFlags == -3))) {
+      if (*pStackTrace != '\0' && (nTraceFlags == -2 || (__frame0.pStackTracePtr = pStackTrace , nTraceFlags == -3))) {
         __frame0.pStackTracePtr = pStackTrace;
-        bIsWindow = SERR_UndecorateObjectName((char*)pStackTrace, 0x100, (char*)__frame0.aDemangledSymbol);
+        bIsWindow = SERR_UndecorateObjectName(pStackTrace, 0x100, __frame0.aDemangledSymbol);
         if (bIsWindow) {
           __frame0.pStackTracePtr = __frame0.aDemangledSymbol;
         }
@@ -684,7 +684,7 @@ int __stdcall SErrDisplayError(uint32_t nErrorCode, uint32_t * pStackTrace, int3
 
     pCustomMsgArg = __frame0.szFullMessage;
     if (__frame0.pStackTracePtr) {
-      nErrorCodeArg = SSTR::SStrCopy(pCustomMsgArg, (char*)__frame0.pStackTracePtr, 0x7fffffff);
+      nErrorCodeArg = SSTR::SStrCopy(pCustomMsgArg, __frame0.pStackTracePtr, 0x7fffffff);
       pCustomMsgArg = __frame0.szFullMessage + nErrorCodeArg;
     }
     if (nTraceFlags > 0) {
@@ -709,7 +709,7 @@ int __stdcall SErrDisplayError(uint32_t nErrorCode, uint32_t * pStackTrace, int3
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(pWriteMsg, (LPCSTR)ppFormat, pStringArg);
     nErrorCodeArg = SSTR::SStrLen(pWriteMsg);
     pWriteMsg += nErrorCodeArg;
-    if (__frame0.pStackTracePtr && (char)*__frame0.pStackTracePtr != '\0') {
+    if (__frame0.pStackTracePtr && *__frame0.pStackTracePtr != '\0') {
       switch (nTraceFlags) {
         case -1:
           pStackTraceArg = __frame0.pStackTracePtr;
@@ -764,7 +764,7 @@ int __stdcall SErrDisplayError(uint32_t nErrorCode, uint32_t * pStackTrace, int3
     ppFormat = SERR_GetString(nMessageFlags ? 10 : 9);
     SSTR::SStrCopy(pWriteMsg + nErrorCodeArg, (char*)ppFormat, nMaxCopyLen);
     if (pfnBlizzardErrorCallback) {
-      pCustomMsgArg = (char*)__frame0.pStackTracePtr;
+      pCustomMsgArg = __frame0.pStackTracePtr;
       if (!__frame0.pStackTracePtr) {
         pCustomMsgArg = "";
       }
@@ -831,12 +831,12 @@ int __stdcall SErrDisplayError(uint32_t nErrorCode, uint32_t * pStackTrace, int3
 // @was SSYSTEM_DisplayErrorDialogFormatted (pass 6, 2026.08.28)
 // @oracle Storm 1.10b PPC export SErrDisplayErrorFmt, code vector 10015ed0 (TVector 100cbe74).
 // @oracle-basis Callee set is exactly {vsprintf-family, SErrDisplayError} in both builds and nothing else - the PPC body is 176 B calling ._vsnprintf then .SErrDisplayError, this one is 90 B calling _vsprintf then SErrDisplayError. __cdecl with varargs in both. It is the vararg wrapper of 0041caf0.
-void SErrDisplayErrorFmt(uint32_t nErrorCode, uint32_t * pStackTrace, int32_t nTraceFlags, int32_t nMessageFlags, UINT nExitCode, char * szFormat, ...) {
+void SErrDisplayErrorFmt(uint32_t nErrorCode, char * pStackTrace, int32_t nTraceFlags, int32_t nMessageFlags, UINT nExitCode, char * szFormat, ...) {
     va_list __va;
     va_start(__va, szFormat);
     char szFormatted[1024];
     vsprintf(szFormatted, szFormat, __va);
-    SErrDisplayError(nErrorCode, pStackTrace, nTraceFlags, (uint8_t*)szFormatted, nMessageFlags, nExitCode);
+    SErrDisplayError(nErrorCode, pStackTrace, nTraceFlags, szFormatted, nMessageFlags, nExitCode);
 }
 
 // Reports a leaked resource. Formats "%s (%s)" from the description and the optional name, then either raises it through SErrDisplayError or, when the registry option is set, writes "Storm Error : handle never released -- %s" to the debugger.
@@ -861,7 +861,7 @@ void __stdcall SErrReportNamedResourceLeak(char * szMessage, char * szText) {
         SSTR::SStrPrintf(szFormatted, 0x100, "%s (%s)", szMessage, szText);
       }
       if (!gnSSystemOption1) {
-        SErrDisplayError(0x8510007f, (uint32_t*)szFormatted, -3, nullptr, 1, 1);
+        SErrDisplayError(0x8510007f, szFormatted, -3, nullptr, 1, 1);
         return;
       }
 
@@ -902,8 +902,8 @@ void __stdcall SErrDisplayAppFatal(char * szText, ...) {
     char szFormatted[1024];
     SERR_InternalEnterCriticalSection();
     DWORD dwCurrentThreadId_lcl = GetCurrentThreadId();
-    uint32_t nSavedContextParam = gpSSystemThreadContextCallback.nParam;
-    void* pSavedCallback = gpSSystemThreadContextCallback.pfnCallback;
+    uint32_t nSavedContextParam = gpSSystemThreadContextCallback.nTraceFlags;
+    void* pSavedCallback = gpSSystemThreadContextCallback.pszContext;
     uint32_t* pContextCallback = 0;
     uint32_t nContextParam = 0;
     if (gpSSystemThreadContextCallback.dwThreadId == dwCurrentThreadId_lcl) {
@@ -914,7 +914,7 @@ void __stdcall SErrDisplayAppFatal(char * szText, ...) {
 
     SERR_InternalLeaveCriticalSection();
     vsprintf(szFormatted, szText, __va);
-    SErrDisplayError(0x85100084, pContextCallback, nContextParam, (uint8_t*)szFormatted, 0, 1);
+    SErrDisplayError(0x85100084, (char*)pContextCallback, nContextParam, szFormatted, 0, 1);
     /* UINT uExitCode for ExitProcess */ ExitProcess(1);
 }
 

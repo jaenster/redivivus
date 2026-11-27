@@ -176,7 +176,7 @@ void __stdcall BNNEWS_SaveToCache() {
     uint32_t* pCacheBlock = pMemoryToFree; // steer-ok: generated form, kept as emitted
     /* LPSYSTEMTIME lpSystemTime for GetSystemTime */ GetSystemTime(&stSystemTime);
     /* LPFILETIME lpFileTime for SystemTimeToFileTime */ /* SYSTEMTIME * lpSystemTime for SystemTimeToFileTime */ SystemTimeToFileTime(&stSystemTime, &ftWriteTime);
-    Cache::CACHE_WriteData(szBnNewsChannelName, (LPCVOID)pMemoryToFree, nTotalSize, (uint32_t*)&ftWriteTime.dwLowDateTime, -1, -1);
+    Cache::CACHE_WriteData(szBnNewsChannelName, (LPCVOID)pMemoryToFree, nTotalSize, &ftWriteTime, -1, -1);
     D2_FREE_AT(pMemoryToFree, ".\\BNNews.cpp", 0x17b);
 }
 
@@ -517,7 +517,7 @@ BOOL __stdcall BNNEWS_LoadCachedNews() {
     __frame0.bLoadSuccess = 0;
     __frame0.pCacheData = 0;
     BOOL bCacheReadOk;
-    bCacheReadOk = Cache::CACHE_ReadData(szBnNewsChannelName, adwCacheHeader, &__frame0.pCacheData, &__frame0.dwCacheDataSize);
+    bCacheReadOk = Cache::CACHE_ReadData(szBnNewsChannelName, (FILETIME*)adwCacheHeader, &__frame0.pCacheData, &__frame0.dwCacheDataSize);
     if (bCacheReadOk) {
       uint32_t uVar1;
       g_dwNewsTimestamp = *__frame0.pCacheData;

@@ -13,6 +13,6 @@
 
 #include "Source/D2Headers/d2_platform.h"
 
-extern uint32_t gbSSystemErrorDialogActive;
-extern uint32_t gbSSystemShutdownInProgress;
-extern uint32_t dwLastErrorCode;
+extern BOOL gbSSystemErrorDialogActive;
+extern BOOL gbSSystemShutdownInProgress;
+extern DWORD dwLastErrorCode;

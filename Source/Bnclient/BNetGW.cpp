@@ -223,7 +223,7 @@ void __thiscall GetGatewayList(D2BNetGatewayAccessStr * pThis, char * szText) {
 
     pDataCursor = szText;
     dwRegDataSize = 0;
-    nLine = Storm::Source::SReg::SRegLoadData((uint32_t*)"Configuration", szText, 0x82, (LPBYTE)0x0, 0, (uint32_t**)&dwRegDataSize);
+    nLine = Storm::Source::SReg::SRegLoadData("Configuration", szText, 0x82, (LPBYTE)0x0, 0, &dwRegDataSize);
     if (!(nLine && dwRegDataSize)) {
       return;
     }
@@ -231,7 +231,7 @@ void __thiscall GetGatewayList(D2BNetGatewayAccessStr * pThis, char * szText) {
     pThis->nGatewayDataSize = dwRegDataSize;
     LPBYTE pGatewayBuf = (LPBYTE)Storm::Source::SMem::SMemAlloc(dwRegDataSize, ".\\BNetGW.cpp", 0x156, 0);
     pThis->pGatewayData = (char*)pGatewayBuf;
-    nLine = Storm::Source::SReg::SRegLoadData((uint32_t*)"Configuration", pDataCursor, 0x82, pGatewayBuf, pThis->nGatewayDataSize, nullptr);
+    nLine = Storm::Source::SReg::SRegLoadData("Configuration", pDataCursor, 0x82, pGatewayBuf, pThis->nGatewayDataSize, nullptr);
     if (!nLine) {
       Storm::Source::SMem::SMemFree(pThis->pGatewayData, ".\\BNetGW.cpp", 0x15e, 0);
       pThis->pGatewayData = nullptr;
@@ -680,13 +680,13 @@ void * __thiscall BNCLIENT_DestroyCompressor(void * pCompressor, uint8_t bFreeMe
 }
 
 // Initializes the BNet lobby chat message queue via BNMESSQUEUE_Initialize, then returns a pointer to the global sgBNetClientCallbacks structure used for lobby chat callbacks.
-D2BNetClientCallbacksStrc * __fastcall NET_InitAndGetLobbyChatQueue() {
+D2BNetClientCallbacksStrc * __fastcall BNCLIENT_GetCallbacks() {
     BNMESSQUEUE_Initialize();
     return &sgBNetClientCallbacks;
 }
 
-// Returns a pointer to the global sgBNetClientCallbacks structure (lobby chat message queue) without initialization; use NET_InitAndGetLobbyChatQueue on first access.
-D2BNetClientCallbacksStrc * __stdcall NET_GetLobbyChatQueue() {
+// Returns a pointer to the global sgBNetClientCallbacks structure (lobby chat message queue) without initialization; use BNCLIENT_GetCallbacks on first access.
+D2BNetClientCallbacksStrc * __stdcall BNCLIENT_GetCallbackTable() {
     return &sgBNetClientCallbacks;
 }
 

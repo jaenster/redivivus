@@ -713,7 +713,7 @@
       ]
     },
     {
-      "name": "NET_InitAndGetLobbyChatQueue",
+      "name": "BNCLIENT_GetCallbacks",
       "address": "00518c00",
       "lines": [
         {
@@ -723,7 +723,7 @@
       ],
       "namespace": "Bnclient",
       "calledFunctions": [
-        "NET_InitAndGetLobbyChatQueue",
+        "BNCLIENT_GetCallbacks",
         "BNMESSQUEUE_Initialize"
       ],
       "usedTypes": [
@@ -732,7 +732,7 @@
       "dh": "c74b1799"
     },
     {
-      "name": "NET_GetLobbyChatQueue",
+      "name": "BNCLIENT_GetCallbackTable",
       "address": "00518c10",
       "lines": [
         {
@@ -742,7 +742,7 @@
       ],
       "namespace": "Bnclient",
       "calledFunctions": [
-        "NET_GetLobbyChatQueue"
+        "BNCLIENT_GetCallbackTable"
       ],
       "usedTypes": [
         "D2BNetClientCallbacksStrc"

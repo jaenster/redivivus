@@ -403,10 +403,10 @@ void ARCHIVE_WriteMemoryCheckReport() {
     ARCHIVE_WriteFormattedText(hFileTmp, "TOTAL MAX:       %10d\n", nTotalRegions);
     ARCHIVE_WriteFormattedText(hFileTmp, "TOTAL REGIONS:   %10d\n\n\n\n\n", nTotalReserved);
     ARCHIVE_WriteFormattedText(hFileTmp, "================================================\n\n");
-    nHeapId = Storm::Source::SMem::SMemGetHeapByCaller((int*)"SOURCE\\D2HELL\\Src\\Archive.cpp", 0xf5);
+    nHeapId = Storm::Source::SMem::SMemGetHeapByCaller("SOURCE\\D2HELL\\Src\\Archive.cpp", 0xf5);
     nResult = 0;
     sBlockInfo.dwSize = sizeof(SMemBlockDetailsStrc);
-    uint16_t* pBlock = 0;
+    uint8_t* pBlock = 0;
     nTotalReserved = 0;
     nTotalBytes = 0;
     int bFoundNextBlock = Storm::Source::SMem::SMemFindNextBlock(nHeapId, nullptr, &pBlock, (int*)&sBlockInfo);
@@ -431,7 +431,7 @@ void ARCHIVE_WriteMemoryCheckReport() {
         return;
       }
       if (sBlockInfo.nBlockSize > 0x220 && sBlockInfo.bValid && sBlockInfo.bAllocated) {
-        for (pScan = pBlock; hFileTmp = hFile , pScan < (uint16_t*)(sBlockInfo.nBlockSize + (char*)pBlock); pScan += 2) {
+        for (pScan = (uint16_t*)pBlock; hFileTmp = hFile , pScan < (uint16_t*)(sBlockInfo.nBlockSize + (char*)pBlock); pScan += 2) {
           if (*(int*)pScan == 0x4c4f4144 && *(int*)(pScan + 2) == 0x4655434b && *(int*)(pScan + 4) == 0x54484953 && *(int*)(pScan + 6) == 0x4e4f5720) {
             ARCHIVE_WriteFormattedText(hFile, "%8d\t%50s\t(%s:%d)\n", *(int*)(pScan + 10), pScan + 0x8e, pScan + 0xc, *(int*)(pScan + 8));
             nResult += *(int*)(pScan + 10);
@@ -443,7 +443,7 @@ void ARCHIVE_WriteMemoryCheckReport() {
         }
       }
 
-      bFoundNextBlock = Storm::Source::SMem::SMemFindNextBlock(nHeapId, (uint8_t*)pBlock, &pBlock, (int*)&sBlockInfo);
+      bFoundNextBlock = Storm::Source::SMem::SMemFindNextBlock(nHeapId, pBlock, &pBlock, (int*)&sBlockInfo);
     } while (true);
 }
 

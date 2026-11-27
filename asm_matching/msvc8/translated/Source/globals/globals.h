@@ -376,8 +376,8 @@ typedef BOOL (__fastcall *D2ObjectOperateFnFunc)(D2ObjectOperateFnArg * pOperati
 typedef BOOL (__fastcall *D2SkillCltDoFunc)(D2UnitStrc * pUnit, eD2Skills eD2Skill, int nSkillLvl);
 typedef BOOL (__fastcall *D2SkillCltStFunc)(D2UnitStrc * pUnit, eD2Skills eD2Skill, int nSkillLvl);
 typedef BOOL (__fastcall *D2SkillSrvStFunc)(::SGAMEDATA * pGame, D2UnitStrc * pAttacker, eD2Skills eD2Skill, int nSkillLvl);
-typedef BOOL (__fastcall *fnCacheReadData)(char * szKey, int * pCrc, void * ppBuf, int * pSize);
-typedef BOOL (__fastcall *fnCacheWriteData)(char * szKey, void * pData, uint32_t nSize, int * pTime, uint32_t nExp, int nCacheExp);
+typedef BOOL (__fastcall *fnCacheReadData)(char * szKey, FILETIME * pFileTimeOut, uint32_t * * ppBuf, LPDWORD pSize);
+typedef BOOL (__fastcall *fnCacheWriteData)(char * szKey, void * pData, uint32_t nSize, FILETIME * pTime, uint32_t nExp, int nCacheExp);
 typedef BOOL (__fastcall *fnD2MonModeStart)(::SGAMEDATA * pGame, D2ModeChangeStrc * pModeChange);
 typedef BOOL (__fastcall *fnD2MonModeUpdate)(::SGAMEDATA * pGame, D2UnitStrc * pUnit);
 typedef BOOL (__fastcall *fnGetEnterChatFlags)(uint32_t * pFlags);

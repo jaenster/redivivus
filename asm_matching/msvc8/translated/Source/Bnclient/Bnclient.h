@@ -127,9 +127,9 @@ struct TSGrowableArray_Uc {
 // Functions
 namespace Bnclient {
 // Initializes the BNet lobby chat message queue via BNMESSQUEUE_Initialize, then returns a pointer to the global sgBNetClientCallbacks structure used for lobby chat callbacks.
-struct D2BNetClientCallbacksStrc * __fastcall NET_InitAndGetLobbyChatQueue();
-// Returns a pointer to the global sgBNetClientCallbacks structure (lobby chat message queue) without initialization; use NET_InitAndGetLobbyChatQueue on first access.
-struct D2BNetClientCallbacksStrc * __stdcall NET_GetLobbyChatQueue();
+struct D2BNetClientCallbacksStrc * __fastcall BNCLIENT_GetCallbacks();
+// Returns a pointer to the global sgBNetClientCallbacks structure (lobby chat message queue) without initialization; use BNCLIENT_GetCallbacks on first access.
+struct D2BNetClientCallbacksStrc * __stdcall BNCLIENT_GetCallbackTable();
 void __stdcall thunk_BNMESSQUEUE_Shutdown();
 } // namespace Bnclient
 namespace Bnclient { namespace _net_sid {

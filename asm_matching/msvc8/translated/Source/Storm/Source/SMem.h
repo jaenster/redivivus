@@ -53,7 +53,7 @@ union D2FogHeapBlockLinkUnion {
 #endif // D2_DEFINED_D2FogHeapBlockLinkUnion
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 struct D2FogHeapDescStrc {
-    /* 0x00 */ uint8_t * pNext; // next heap in bucket chain
+    /* 0x00 */ struct D2FogHeapDescStrc * pNext; // next heap in bucket chain
     /* 0x04 */ uint32_t nHash; // heap name hash (SMemHashHeapName)
     /* 0x08 */ int nBucketIndex; // index into DebugMemoryCriticalSection / g_SMemHeapBuckets
     /* 0x0C */ uint32_t dwSignature; // lo16=upper16(this),hi16=0x6f6d — embedded in block headers
@@ -130,13 +130,13 @@ namespace Storm { namespace Source { namespace SMem {
 // Global operator delete: frees p through Storm SMemFree with the delete source tag, and ignores null. Counterpart of MISC_OperatorNewShim.
 // The CRT and std scalar deleting destructors call it, so it is the linked global operator delete.
 __declspec(noinline) inline void MISC_OperatorDeleteShim(void * p);
-int32_t __stdcall SMemFindNextBlock(HSHEAP nHeapId, uint8_t * pPrevBlock, uint16_t * * ppOutBlock, int * pnInfo);
+int32_t __stdcall SMemFindNextBlock(HSHEAP nHeapId, uint8_t * pPrevBlock, uint8_t * * ppOutBlock, int * pnInfo);
 int32_t __stdcall SMemFindNextHeap(HSHEAP nCurHeapId, HSHEAP * pnNextHeapId, struct SMemHeapDetailsStrc * pHeapDetails);
-int32_t __stdcall SMemFree(void * pObject, char * szFile, int32_t nLine, DWORD dwFlags);
-HSHEAP __stdcall SMemGetHeapByCaller(int * pszName, uint32_t nFlags);
+BOOL __stdcall SMemFree(void * pObject, char * szFile, int32_t nLine, DWORD dwFlags);
+HSHEAP __stdcall SMemGetHeapByCaller(char * pszName, uint32_t dwHashSeed);
 void * __stdcall SMemAlloc(uint32_t nSize, char * szFile, uint32_t nLine, uint32_t nFlags);
 // @blizzard SMemReAlloc (Storm assert string)
-uint32_t * __stdcall SMemReAlloc(uint32_t * pBlock, uint32_t nSize, char * szSourceFile, int32_t nSourceLine, uint32_t dwFlags);
+void * __stdcall SMemReAlloc(void * pBlock, uint32_t nSize, char * szSourceFile, int32_t nSourceLine, uint32_t dwFlags);
 // Compares two memory blocks (Storm's memcmp).
 // Name from the PowerPC 1.13c Storm traceback table (exported SMemCmp @10025840, one run with SMemZero/Move/Fill/Copy).
 int __stdcall SMemCmp(uint8_t * pLeft, uint8_t * pRight, uint32_t nLength);
@@ -153,28 +153,28 @@ uint32_t __stdcall SMemExtractBucketIndex(uint32_t nHeapId);
 // @blizzard ComputePageSize (SMEM.CPP)
 void __stdcall SMEM_ComputePageSize();
 // @blizzard FreeHeap (SMEM.CPP)
-void __fastcall SMEM_FreeHeap(LPVOID * ppListHead);
+void __fastcall SMEM_FreeHeap(struct D2FogHeapDescStrc * * ppListHead);
 // @blizzard SMemInitialize (SMEM.CPP)
 void __stdcall SMemInitialize();
 void __stdcall SMemSetDebugFlags(uint32_t dwFlags, uint8_t byMask);
-int Unreferenced_00411da0();
+BOOL Unreferenced_00411da0();
 // @blizzard DestroyHeap (SMEM.CPP)
-LPVOID * __fastcall SMEM_DestroyHeap(LPVOID * ppHeap);
+struct D2FogHeapDescStrc * * __fastcall SMEM_DestroyHeap(struct D2FogHeapDescStrc * * ppHeap);
 // @blizzard FreeEmptyHeaps (SMEM.CPP)
 void __stdcall SMEM_FreeEmptyHeaps();
 // @blizzard SMemDestroy (SMEM.CPP)
-uint32_t __stdcall SMemDestroy();
+BOOL __stdcall SMemDestroy();
 HSHEAP __stdcall SMemGetHeapByPtr(uint8_t * pObject);
-int32_t __stdcall SMemGetSize(void * pObject, uint32_t * pnFile, int32_t nSize);
+int32_t __stdcall SMemGetSize(void * pObject, char * szSourceFile, int32_t nSourceLine);
 HSHEAP __stdcall SMemHeapCreate(int32_t nReserved, uint32_t nMaxSize, uint32_t dwParam);
 int32_t __stdcall SMemHeapDestroy(HSHEAP nHeapId);
-uint32_t __stdcall SMemHeapFree(HSHEAP nHeapId, uint32_t dwFlags, void * pObject);
+BOOL __stdcall SMemHeapFree(HSHEAP nHeapId, uint32_t dwFlags, void * pObject);
 int32_t __stdcall SMemHeapSize(HSHEAP nHeapId, uint32_t dwFlags, void * pObject);
 BOOL __stdcall SMemDumpState(pfnSMemDumpCallback pfnCallback, uint32_t dwCallbackArg);
 // @blizzard SMemHeapAlloc (SMEM.CPP)
-uint32_t * __stdcall SMemHeapAlloc(HSHEAP nHeapId, uint32_t nSize, uint32_t dwFlags);
+uint32_t * __stdcall SMemHeapAlloc(HSHEAP nHeapId, uint32_t dwAllocFlags, uint32_t nAllocSize);
 // @blizzard SMemHeapReAlloc (Storm assert string)
-uint32_t * __stdcall SMemHeapReAlloc(uint32_t nHeapId, uint32_t nSize, uint32_t * pBlock, uint32_t dwFlags);
+uint32_t * __stdcall SMemHeapReAlloc(uint32_t nHeapId, uint32_t dwAllocFlags, uint32_t * pBlock, uint32_t nAllocSize);
 // @blizzard SMemMove (Storm ordinal 493)
 void __stdcall SMemMove(void * pDest, void * pSrc, size_t nSize);
 #endif // D2_MODULE_Storm

@@ -767,7 +767,7 @@ void __stdcall CACHE_Rebuild() {
 
 // Reads cached data from bncache.dat using key lookup, validates CRC32, and returns decrypted data buffer
 // @sourcefile .\CACHE.CPP
-BOOL __fastcall CACHE_ReadData(char * szKey, uint32_t * pCrc32Out, uint32_t * * ppDataBuf, LPDWORD pDataSizeOut) {
+BOOL __fastcall CACHE_ReadData(char * szKey, FILETIME * pFileTimeOut, uint32_t * * ppDataBuf, LPDWORD pDataSizeOut) {
     D2BnCacheBlockEntryStrc* pDVar2;
     uint32_t nHashSlot;
     uint32_t nCrc32Computed;
@@ -784,9 +784,9 @@ BOOL __fastcall CACHE_ReadData(char * szKey, uint32_t * pCrc32Out, uint32_t * * 
     int nRebuildReason;
     D2BnCacheEntryHeaderStrc entryHeader;
     HANDLE hFile;
-    if (pCrc32Out) {
-      *pCrc32Out = 0;
-      pCrc32Out[1] = 0;
+    if (pFileTimeOut) {
+      pFileTimeOut->dwLowDateTime = 0;
+      pFileTimeOut->dwHighDateTime = 0;
     }
     if (ppDataBuf) {
       *ppDataBuf = 0;
@@ -795,7 +795,7 @@ BOOL __fastcall CACHE_ReadData(char * szKey, uint32_t * pCrc32Out, uint32_t * * 
       *pDataSizeOut = 0;
     }
 
-    uSlot160.pFileTimeOut = (DWORD*)pCrc32Out;
+    uSlot160.pFileTimeOut = (DWORD*)pFileTimeOut;
     char* szKeySaved;
     szKeySaved = szKey;
     if (!(!szKey || *szKey == '\0' || !ppDataBuf || !pDataSizeOut || !gbCacheIsOpen)) {
@@ -946,7 +946,7 @@ BOOL __fastcall CACHE_ReadData(char * szKey, uint32_t * pCrc32Out, uint32_t * * 
 
 // Writes data to Fog cache file. Encrypts data using CACHE_EncryptBlock, computes CRC32, seeks to entry offset in ghCacheFileHandle, writes encrypted data. Updates hash table entry with file time, size, and offset.
 // @sourcefile .\CACHE.CPP
-BOOL __fastcall CACHE_WriteData(char * szCacheKey, LPCVOID pDataToWrite, uint32_t nDataSize, uint32_t * pFileTime, uint32_t nExpiryTime, int32_t nCacheExpiry) {
+BOOL __fastcall CACHE_WriteData(char * szCacheKey, LPCVOID pDataToWrite, uint32_t nDataSize, FILETIME * pFileTime, uint32_t nExpiryTime, int32_t nCacheExpiry) {
     LPFILETIME pCurrentFileTime;
     uint32_t nHashKey;
     uint32_t nHash2;
@@ -1068,8 +1068,8 @@ BOOL __fastcall CACHE_WriteData(char * szCacheKey, LPCVOID pDataToWrite, uint32_
         pCurrentFileTime = CACHE_GetFileTime(0);
         abEntryHeader.ftNow.dwLowDateTime = pCurrentFileTime->dwLowDateTime;
         abEntryHeader.ftNow.dwHighDateTime = pCurrentFileTime->dwHighDateTime;
-        abEntryHeader.ftFileTime.dwLowDateTime = *pFileTime;
-        abEntryHeader.ftFileTime.dwHighDateTime = pFileTime[1];
+        abEntryHeader.ftFileTime.dwLowDateTime = pFileTime->dwLowDateTime;
+        abEntryHeader.ftFileTime.dwHighDateTime = pFileTime->dwHighDateTime;
         pCurrentFileTime = CACHE_GetFileTime(nExpiryTime);
         abEntryHeader.ftExpiry.dwLowDateTime = pCurrentFileTime->dwLowDateTime;
         abEntryHeader.ftExpiry.dwHighDateTime = pCurrentFileTime->dwHighDateTime;

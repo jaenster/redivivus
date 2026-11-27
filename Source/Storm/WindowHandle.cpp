@@ -52,11 +52,11 @@ static HWND gpActiveWindow = 0; D2_STATIC_GUARD(gpActiveWindow, "gpActiveWindow"
 
 namespace Storm::WindowHandle {
 
-DWORD __stdcall WND_GetActiveWindow_Unref_0041c2a0() {
+DWORD __stdcall SERR_GetLastError() {
     return dwLastErrorCode;
 }
 
-uint32_t __stdcall WND_GetActiveWindow_Unref_0041c2b0() {
+uint32_t __stdcall SERR_IsErrorDialogActive() {
     return gbSSystemErrorDialogActive;
 }
 

@@ -23,42 +23,42 @@ namespace Storm { namespace Source { namespace SReg {
 // @namespace-fix moved from Storm::Source::SSTR to Storm::Source::SReg. SReg is a separate
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
-int32_t __stdcall SRegDeleteValue(char * pszSubKey, LPCSTR szValueName, DWORD byFlags);
+BOOL __stdcall SRegDeleteValue(char * pszSubKey, LPCSTR szValueName, DWORD byFlags);
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SRegLoadData"
 // @wasnamed SSTR_RegistryReadValueEx
 // @basis behaviour-confirmed. 6 params (keyname, valuename, flags, void *buffer, DWORD datalen, DWORD *bytesread) - the only 6-param shape in the SReg family, and the only one that passes a raw byte buffer plus an out-length straight through to the RegQueryValueExA worker at 00414b00 with no type interpretation. SRegLoadValue and SRegLoadString both interpret the REG type; this does not.
 // @namespace-fix moved from Storm::Source::SSTR to Storm::Source::SReg. SReg is a separate
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
-int32_t __stdcall SRegLoadData(uint32_t * pszSubKey, char * szValueName, int32_t nFlags, LPBYTE pbData, DWORD dwBufSize, uint32_t * * ppdwDataLen);
+int32_t __stdcall SRegLoadData(char * pszSubKey, char * szValueName, int32_t nFlags, LPBYTE pbData, DWORD dwBufSize, LPDWORD pdwDataLen);
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SRegLoadString"
 // @wasnamed REGISTRY_ReadStringKeyToAndSeveItToPointer
 // @basis behaviour-confirmed. 5 params (keyname, valuename, flags, char *buffer, DWORD buffersize). After the worker read it branches on the returned REG type: type 1 (REG_SZ) NUL-terminates at min(len, size-1); type 4 (REG_DWORD) wsprintfA's the integer into the caller's char buffer. Producing a string from either stored type is the defining behaviour of SRegLoadString.
 // @namespace-fix moved from Storm::Source::SSTR to Storm::Source::SReg. SReg is a separate
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
-int32_t __stdcall SRegLoadString(char * szSubKey, char * szValueName, int32_t nFlags, LPSTR szOutBuf, DWORD dwOutBufSize);
+BOOL __stdcall SRegLoadString(char * szSubKey, char * szValueName, int32_t nFlags, LPSTR szOutBuf, DWORD dwOutBufSize);
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SRegLoadValue". Also one of the SReg names the PPC Diablo_II binary imports by name.
 // @wasnamed REGISTRY_ReadIntKeyToAndSaveItToPointer
 // @basis behaviour-confirmed. 4 params (keyname, valuename, flags, int *value). Reads into a local 0x100 buffer, then branches on REG type: type 1 (REG_SZ) strtoul into *value; type 4 (REG_DWORD) stores the dword. Producing an integer from either stored type is the defining behaviour of SRegLoadValue.
 // @namespace-fix moved from Storm::Source::SSTR to Storm::Source::SReg. SReg is a separate
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
-int __stdcall SRegLoadValue(char * pTree, char * pKey, uint8_t byFlags, int32_t * pnOut);
+BOOL __stdcall SRegLoadValue(char * pTree, char * pKey, uint8_t byFlags, int32_t * pnOut);
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SRegSaveData"
 // @wasnamed RegStoringKeysConfiguration
 // @basis behaviour-confirmed. 5 params (keyname, valuename, flags, void *data, DWORD datalen); passes the caller's raw buffer and length through to the RegSetValueExA worker at 00414c70, deriving the REG type from the flags word ((flags & 0x80 | 0x60) >> 5) rather than fixing it. The two fixed-type siblings are SRegSaveString (REG_SZ) and SRegSaveValue (REG_DWORD).
 // @namespace-fix moved from Storm::Source::SSTR to Storm::Source::SReg. SReg is a separate
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
-int32_t __stdcall SRegSaveData(char * pszSubKey, LPCSTR szValueName, uint32_t nFlags, BYTE * pbData, DWORD dwDataLen);
+BOOL __stdcall SRegSaveData(char * pszSubKey, LPCSTR szValueName, uint32_t nFlags, BYTE * pbData, DWORD dwDataLen);
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SRegSaveString"
 // @wasnamed REGISTRY_SaveStringKey
 // @basis behaviour-confirmed. 4 params (keyname, valuename, flags, const char *string); calls the RegSetValueExA worker at 00414c70 with a hardcoded REG type 1 (REG_SZ) and a length of strlen(string)+1.
 // @namespace-fix moved from Storm::Source::SSTR to Storm::Source::SReg. SReg is a separate
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
-int32_t __stdcall SRegSaveString(char * pszSubKey, LPCSTR szValueName, int32_t nFlags, char * pszValue);
+BOOL __stdcall SRegSaveString(char * pszSubKey, LPCSTR szValueName, int32_t nFlags, char * pszValue);
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SRegSaveValue"
 // @wasnamed REGISTRY_SaveIntKey
 // @basis behaviour-confirmed. 4 params (keyname, valuename, flags, DWORD value); calls the RegSetValueExA worker at 00414c70 with a hardcoded REG type 4 (REG_DWORD) and a length of 4, taking the address of its own by-value argument.
@@ -74,7 +74,7 @@ BOOL __stdcall SRegSaveValue(char * szRegistry, LPCSTR szRegistryKey, int32_t nF
 // @namespace-fix moved from Storm::Source::SSTR to Storm::Source::SReg. SReg is a separate
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
-int32_t __stdcall SRegGetBaseKey(uint8_t byFlags, char * szText, int32_t nBufSize);
+BOOL __stdcall SRegGetBaseKey(uint8_t byFlags, char * szText, int32_t nBufSize);
 // @wasnamed SSTR_RegistryDeleteValue
 // @basis internal. NOT an exported Storm symbol: no such name on the 337-entry Storm 1.10b export table. Renamed only to correct the module prefix - this is SReg code, not SStr code. Worker for SRegDeleteValue: builds the key path via SRegGetBaseKey, then RegDeleteValueA on HKCU (0x80000001) and/or HKLM (0x80000002) as the flag bits select.
 // @namespace-fix moved from Storm::Source::SSTR to Storm::Source::SReg. SReg is a separate
@@ -82,7 +82,7 @@ int32_t __stdcall SRegGetBaseKey(uint8_t byFlags, char * szText, int32_t nBufSiz
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
 // Worker for SRegDeleteValue: deletes one registry value.
 // Name from the PowerPC 1.13c Storm traceback table (static InternalDeleteEntry @10037640).
-int __fastcall SREG_InternalDeleteEntry(DWORD byFlags, char * pszSubKey, LPCSTR szValueName);
+BOOL __fastcall SREG_InternalDeleteEntry(DWORD byFlags, char * pszSubKey, LPCSTR szValueName);
 #endif // D2_MODULE_Storm
 // 2 internal functions (defined in .cpp)
 

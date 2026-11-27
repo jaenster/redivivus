@@ -192,7 +192,7 @@ void __thiscall SBIG_DynArray_Resize(TSGrowableArray_Ui * pArray, int32_t nNewCo
       return;
     }
 
-    uint32_t* pNewBuffer = SMem::SMemReAlloc(pArray->pData, nNewCount * sizeof(*pArray->pData), s__I_00708874, -2, 0);
+    uint32_t* pNewBuffer = (uint32_t*)SMem::SMemReAlloc(pArray->pData, nNewCount * sizeof(*pArray->pData), s__I_00708874, -2, 0);
     pArray->pData = pNewBuffer;
 }
 
@@ -526,7 +526,7 @@ void __thiscall TSBaseArray_Ui_Copy(TSGrowableArray_Ui * pArray, uint32_t nCount
     pArray->nCapacity = nCount;
     if (pArray->pData || nCount) {
       uint32_t* pNewBuffer;
-      pNewBuffer = SMem::SMemReAlloc(pArray->pData, nCount * sizeof(*pArray->pData), s__I_00708874, -2, 0);
+      pNewBuffer = (uint32_t*)SMem::SMemReAlloc(pArray->pData, nCount * sizeof(*pArray->pData), s__I_00708874, -2, 0);
       pArray->pData = pNewBuffer;
     }
 
@@ -584,7 +584,7 @@ void __thiscall SBIG_ArrayByteSetCapacity(TSGrowableArray_Uc * pArray, int32_t n
       return;
     }
 
-    uint32_t* pNewBuffer = SMem::SMemReAlloc((uint32_t*)pArray->pData, nCapacity, s__E_00708880, -2, 0);
+    uint32_t* pNewBuffer = (uint32_t*)SMem::SMemReAlloc((uint32_t*)pArray->pData, nCapacity, s__E_00708880, -2, 0);
     pArray->pData = (uint8_t*)pNewBuffer;
 }
 
@@ -597,7 +597,7 @@ void __thiscall SBIG_ArrayByteAltSetCapacity(TSGrowableArray_Uc * pArray, int32_
       return;
     }
 
-    uint32_t* pRealloced = SMem::SMemReAlloc((uint32_t*)pArray->pData, nCapacity, s__D_0070888c, -2, 0);
+    uint32_t* pRealloced = (uint32_t*)SMem::SMemReAlloc((uint32_t*)pArray->pData, nCapacity, s__D_0070888c, -2, 0);
     pArray->pData = (uint8_t*)pRealloced;
 }
 
@@ -608,7 +608,7 @@ void __thiscall SBIG_ArrayByteAltSetCapacity(TSGrowableArray_Uc * pArray, int32_
 void __thiscall TSFixedArray_Ui_ReallocData(BigBuffer * pArray, uint32_t nCapacity) {
     uint32_t* pOldBuffer = pArray->pData;
     pArray->nCapacity = nCapacity;
-    uint32_t* pNewBuffer = SMem::SMemReAlloc(pOldBuffer, nCapacity * sizeof(*pOldBuffer), s__I_00708874, -2, 0x10);
+    uint32_t* pNewBuffer = (uint32_t*)SMem::SMemReAlloc(pOldBuffer, nCapacity * sizeof(*pOldBuffer), s__I_00708874, -2, 0x10);
     pArray->pData = pNewBuffer;
     if (pNewBuffer) {
       return;
@@ -641,7 +641,7 @@ void __thiscall TSFixedArray_UcAlt_ReallocData(TSGrowableArray_Uc * pArray, uint
     uint32_t nIndex;
     uint8_t* pOldBuffer = pArray->pData;
     pArray->nCapacity = nCapacity;
-    uint32_t* pNewBuffer = SMem::SMemReAlloc((uint32_t*)pOldBuffer, nCapacity, s__D_0070888c, -2, 0x10);
+    uint32_t* pNewBuffer = (uint32_t*)SMem::SMemReAlloc((uint32_t*)pOldBuffer, nCapacity, s__D_0070888c, -2, 0x10);
     pArray->pData = (uint8_t*)pNewBuffer;
     if (pNewBuffer) {
       return;
@@ -819,7 +819,7 @@ void __thiscall TSBaseArray_Uc_Copy(TSGrowableArray_Uc * pArray, uint32_t nCount
     pArray->nCapacity = nCount;
     if (pArray->pData || nCount) {
       uint32_t* pNewBuffer;
-      pNewBuffer = SMem::SMemReAlloc((uint32_t*)pArray->pData, nCount, s__E_00708880, -2, 0);
+      pNewBuffer = (uint32_t*)SMem::SMemReAlloc((uint32_t*)pArray->pData, nCount, s__E_00708880, -2, 0);
       pArray->pData = (uint8_t*)pNewBuffer;
     }
 
@@ -840,7 +840,7 @@ void __thiscall TSBaseArray_UcAlt_Copy(TSGrowableArray_Uc * pArray, uint32_t nCo
     pArray->nCapacity = nCount;
     if (pArray->pData || nCount) {
       uint32_t* pNewBuffer;
-      pNewBuffer = SMem::SMemReAlloc((uint32_t*)pArray->pData, nCount, s__D_0070888c, -2, 0);
+      pNewBuffer = (uint32_t*)SMem::SMemReAlloc((uint32_t*)pArray->pData, nCount, s__D_0070888c, -2, 0);
       pArray->pData = (uint8_t*)pNewBuffer;
     }
 

@@ -74,7 +74,7 @@ uint32_t ReturnParam2_Stub(uint32_t dwParam1, uint32_t dwParam2);
 void __stdcall LOGMANAGER_UnwindDestructor_NoOp();
 int __fastcall Unreferenced_0040eb40(int param_1);
 void __fastcall InitLogFilePathPointers(uint8_t * * pPathPtrArray, uint32_t nCount);
-FILE * __fastcall OpenLogFileWithTimestamp(char * szFilePrefix, LPSYSTEMTIME pSystemTime, char * szOpenMode, uint32_t * pbIsNewFile, char * szOutPath, int32_t nOutPathLen);
+FILE * __fastcall OpenLogFileWithTimestamp(char * szFilePrefix, LPSYSTEMTIME pSystemTime, char * szOpenMode, int * pbIsNewFile, char * szOutPath, int32_t nOutPathLen);
 // Writes the header of a newly opened log file: a rule, the computer name and the date from pTime, and a closing rule.
 void __fastcall WriteLogFileHeader(FILE * pFile, SYSTEMTIME * pTime);
 // Writes the realm-startup banner to a log file: a rule, the computer name and the local time, and a closing rule.

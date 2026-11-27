@@ -25,10 +25,10 @@ struct StormLinkedListStrc;
 struct SMemBlockDetailsStrc {
     /* 0x00 */ DWORD dwSize; // set to sizeof by the caller (0x1c on x86), SMemFindNextBlock checks it
     /* 0x04 */ void * pBlock;
-    /* 0x08 */ uint32_t bAllocated;
-    /* 0x0C */ uint32_t bValid;
-    /* 0x10 */ uint32_t nBlockSize;
-    /* 0x14 */ uint32_t nOverhead;
+    /* 0x08 */ BOOL bAllocated;
+    /* 0x0C */ BOOL bValid;
+    /* 0x10 */ int nBlockSize;
+    /* 0x14 */ int nOverhead;
     /* 0x18 */ uint32_t dwField18;
 };
 

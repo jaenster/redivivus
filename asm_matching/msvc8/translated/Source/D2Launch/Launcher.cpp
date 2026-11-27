@@ -183,7 +183,7 @@ BOOL __stdcall LAUNCHER_StartGameWithSelectedCharacter(D2ControlMsg * pControlMs
 
 int __fastcall LAUNCHER_InitNetworkLobbyQueue(D2IniConfigStrc * pIniConfig) {
     if (!pIniConfig->pBNetClientCallbacks) {
-      gpBNetCallbacks = Bnclient::NET_InitAndGetLobbyChatQueue();
+      gpBNetCallbacks = Bnclient::BNCLIENT_GetCallbacks();
       if (!gpBNetCallbacks) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x94);
         exit(-1);

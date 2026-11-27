@@ -747,8 +747,8 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 0041c1a0	0041c1dd	Storm::Source::SErr::SERR_InternalEnterCriticalSection	Source/Storm/Source/SErr	sourcemap	14	14	0	1.000	MATCH	5 refs unverified	61	0
 0041c1e0	0041c1ec	Storm::Source::SErr::SERR_InternalLeaveCriticalSection	Source/Storm/Source/SErr	sourcemap	3	3	0	1.000	MATCH	1 refs unverified	12	0
 0041c1f0	0041c293	Storm::Source::SErr::SERR_UndecorateObjectName	Source/Storm/Source/SErr	sourcemap	61	61	0	1.000	MATCH		163	0
-0041c2a0	0041c2a6	Storm::WindowHandle::WND_GetActiveWindow_Unref_0041c2a0	Source/Storm/WindowHandle	sourcemap	2	2	0	1.000	MATCH	1 refs unverified	6	0
-0041c2b0	0041c2b6	Storm::WindowHandle::WND_GetActiveWindow_Unref_0041c2b0	Source/Storm/WindowHandle	sourcemap	2	2	0	1.000	MATCH	1 refs unverified	6	0
+0041c2a0	0041c2a6	Storm::WindowHandle::SERR_GetLastError	Source/Storm/WindowHandle	sourcemap	2	2	0	1.000	MATCH	1 refs unverified	6	0
+0041c2b0	0041c2b6	Storm::WindowHandle::SERR_IsErrorDialogActive	Source/Storm/WindowHandle	sourcemap	2	2	0	1.000	MATCH	1 refs unverified	6	0
 0041c2c0	0041c2ed	Storm::Source::SErr::SErrPrepareAppFatal	Source/Storm/Source/SErr	sourcemap	12	12	0	1.000	MATCH	3 refs unverified	45	0
 0041c2f0	0041c332	Storm::Source::SErr::SErrRegisterMessageSource	Source/Storm/Source/SErr	sourcemap	19	19	0	1.000	MATCH	2 refs unverified	66	0
 0041c340	0041c356	Storm::Source::SErr::SErrSetLastError	Source/Storm/Source/SErr	sourcemap	8	8	0	1.000	MATCH	1 refs unverified	22	0
@@ -6565,8 +6565,8 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00518ba0	00518bb6	Bnclient::Debug::DEBUG_LogFormattedMessage	Source/Bnclient/Debug	sourcemap	10	10	0	1.000	MATCH		22	0
 00518bc0	00518bc7	Bnclient::Debug::DEBUG_SetLoggingFlag	Source/Bnclient/Debug	sourcemap	2	2	0	1.000	MATCH	1 refs unverified	7	0
 00518bd0	00518bfa	Bnclient::BNCLIENT_DestroyCompressor	Source/Bnclient/BNetGW	sourcemap	18	18	0	1.000	MATCH		42	0
-00518c00	00518c0b	Bnclient::NET_InitAndGetLobbyChatQueue	Source/Bnclient/BNetGW	sourcemap	3	3	0	1.000	MATCH	1 refs unverified	11	0
-00518c10	00518c16	Bnclient::NET_GetLobbyChatQueue	Source/Bnclient/BNetGW	sourcemap	2	2	0	1.000	MATCH	1 refs unverified	6	0
+00518c00	00518c0b	Bnclient::BNCLIENT_GetCallbacks	Source/Bnclient/BNetGW	sourcemap	3	3	0	1.000	MATCH	1 refs unverified	11	0
+00518c10	00518c16	Bnclient::BNCLIENT_GetCallbackTable	Source/Bnclient/BNetGW	sourcemap	2	2	0	1.000	MATCH	1 refs unverified	6	0
 00518c20	00518c25	Bnclient::thunk_BNMESSQUEUE_Shutdown	Source/Bnclient/BnMessQueue	sourcemap	1	1	0	1.000	MATCH		5	0
 00518c30	00518c67	Bnclient::BNCLIENT_GetBnetLogFilestream	Source/Bnclient/BNetGW	sourcemap	13	13	0	0.923	MATCH	5 refs unverified	55	0
 00518c70	00518d3f	Bnclient::Bnet::BNET_LogIndent	Source/Bnclient/Bnet	sourcemap	61	61	0	1.000	MATCH	11 refs unverified	207	0

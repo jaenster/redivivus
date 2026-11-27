@@ -6300,7 +6300,7 @@ address	size	ours_size	section	module	name	symbol	tu	kind	method	type	status	fla
 00708018	260	260	.data	Fog	gszLogFilePath	_gszLogFilePath	Source/Fog/Src/LogManager	data	name	char[260]	MATCH		-1	0	260	
 00708124	28	28	.data	Fog	s_.?AUMessage@LogManager@@_00708124	_s___AUMessage_LogManager___00708124	Source/Fog/Src/LogManager	data	name-address	char[28]	MATCH		-1	0	28	
 00708140	512	512	.data	Fog	gwSMemAllocDebugFlags	?gwSMemAllocDebugFlags@?1??HashForName@SMem@Fog@@YGGPAD@Z@4PAGA	Source/Fog/SMem	data	name	ushort[256]	MATCH		-1	0	512	
-00708340	4	4	.data	Storm	gdwSMemLastHashedHeapKey	?gdwSMemLastHashedHeapKey@?1??SMEM_GetHandleByCaller@SMem@Source@Storm@@YAIPAHI@Z@4IA	Source/Storm/Source/SMem	data	name	undefined4	MATCH		-1	0	4	
+00708340	4	4	.data	Storm	gbSMemReuseCachedHeapNameHash	?gbSMemReuseCachedHeapNameHash@?1??SMEM_GetHandleByCaller@SMem@Source@Storm@@YAIPADI@Z@4HA	Source/Storm/Source/SMem	data	name	undefined4	MATCH		-1	0	4	
 00708344	4	4	.data	Storm	gnSMemHeapIdCounter	?gnSMemHeapIdCounter@?1??SMemHeapCreate@SMem@Source@Storm@@YGIHII@Z@4IA	Source/Storm/Source/SMem	data	name	undefined4	MATCH		-1	0	4	
 00708348	4	4	.data	Storm	gnSFileDataChunkSize	?gnSFileDataChunkSize@SFile@Source@Storm@@3IA	Source/globals/Storm	data	name	undefined4	MATCH		-1	0	4	
 0070834c	4	4	.data	Storm	gnSFileReadErrorMode	?gnSFileReadErrorMode@SFile@Source@Storm@@3IA	Source/globals/Storm	data	name	undefined4	MATCH		-1	0	4	
@@ -7515,10 +7515,10 @@ address	size	ours_size	section	module	name	symbol	tu	kind	method	type	status	fla
 0075e8a0	98304	98304	.bss	Fog	gaSMemHeapStats	?gaSMemHeapStats@@3PAUSMemHeapStatsStrc@@A	Source/Fog/SMem	data	name	SMemHeapStatsStrc[4096]	MATCH		-1	0	98304	
 007768a0	4	4	.bss	Fog	g_SMemLastTickCount	_g_SMemLastTickCount	Source/Fog/SMem	data	name	int	MATCH		-1	0	4	
 007768a4	4	4	.bss	Fog	g_SMemHeapStatsCount	?g_SMemHeapStatsCount@?1??SMemResetHeapStats@SMem@Fog@@YGXXZ@4IA	Source/Fog/SMem	data	name	undefined4	MATCH		-1	0	4	
-007768a8	4	4	.bss	Storm	g_SMemCachedHeapNameHash	?g_SMemCachedHeapNameHash@?1??SMEM_GetHandleByCaller@SMem@Source@Storm@@YAIPAHI@Z@4IA	Source/Storm/Source/SMem	data	name	undefined4	MATCH		-1	0	4	
-007768ac	4	4	.bss	Storm	g_SMemCachedHeapNameVersion	?g_SMemCachedHeapNameVersion@?1??SMEM_GetHandleByCaller@SMem@Source@Storm@@YAIPAHI@Z@4IA	Source/Storm/Source/SMem	data	name	undefined4	MATCH		-1	0	4	
-007768b0	4	4	.bss	Storm	g_SMemCachedHeapNameLength	?g_SMemCachedHeapNameLength@?1??SMEM_GetHandleByCaller@SMem@Source@Storm@@YAIPAHI@Z@4IA	Source/Storm/Source/SMem	data	name	undefined4	MATCH		-1	0	4	
-007768b4	4	4	.bss	Storm	g_SMemCachedHeapNamePtr	?g_SMemCachedHeapNamePtr@?1??SMEM_GetHandleByCaller@SMem@Source@Storm@@YAIPAHI@Z@4PAXA	Source/Storm/Source/SMem	data	name	void *	MATCH		-1	0	4	
+007768a8	4	4	.bss	Storm	g_SMemCachedHeapNameHash	?g_SMemCachedHeapNameHash@?1??SMEM_GetHandleByCaller@SMem@Source@Storm@@YAIPADI@Z@4IA	Source/Storm/Source/SMem	data	name	undefined4	MATCH		-1	0	4	
+007768ac	4	4	.bss	Storm	gdwSMemCachedHeapNamePrefix	?gdwSMemCachedHeapNamePrefix@?1??SMEM_GetHandleByCaller@SMem@Source@Storm@@YAIPADI@Z@4IA	Source/Storm/Source/SMem	data	name	undefined4	MATCH		-1	0	4	
+007768b0	4	4	.bss	Storm	gdwSMemCachedHeapNameSeed	?gdwSMemCachedHeapNameSeed@?1??SMEM_GetHandleByCaller@SMem@Source@Storm@@YAIPADI@Z@4IA	Source/Storm/Source/SMem	data	name	undefined4	MATCH		-1	0	4	
+007768b4	4	4	.bss	Storm	g_SMemCachedHeapNamePtr	?g_SMemCachedHeapNamePtr@?1??SMEM_GetHandleByCaller@SMem@Source@Storm@@YAIPADI@Z@4PADA	Source/Storm/Source/SMem	data	name	void *	MATCH		-1	0	4	
 007768b8	1024	1024	.bss	Storm	g_SMemHeapBuckets	_g_SMemHeapBuckets	Source/Storm/Source/SMem	data	name	void *[256]	MATCH		-1	0	1024	
 00776cb8	4	4	.bss	Storm	g_SMemPageSize	_g_SMemPageSize	Source/Storm/Source/SMem	data	name	undefined4	MATCH		-1	0	4	
 00776cbc	4	4	.bss	Storm	ProtectMemory	_ProtectMemory	Source/Storm/Source/SMem	data	name	undefined4	MATCH		-1	0	4	

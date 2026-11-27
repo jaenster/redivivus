@@ -35,7 +35,7 @@ typedef _EXCEPTION_DISPOSITION (*pfnEHHandlerRoutine)(EHExceptionRecord * pExcep
 #endif
 #ifndef RECON_FPTD_pfnGetDiskFreeSpaceEx
 #define RECON_FPTD_pfnGetDiskFreeSpaceEx
-typedef BOOL (__stdcall *pfnGetDiskFreeSpaceEx)(LPCSTR lpDirectoryName, void * lpFreeBytesAvailableToCaller, void * lpTotalNumberOfBytes, void * lpTotalNumberOfFreeBytes);
+typedef BOOL (__stdcall *pfnGetDiskFreeSpaceEx)(LPCSTR lpDirectoryName, ULONGLONG * lpFreeBytesAvailableToCaller, ULONGLONG * lpTotalNumberOfBytes, ULONGLONG * lpTotalNumberOfFreeBytes);
 #endif
 
 static char gszLogFilePath[260] = {
@@ -696,7 +696,7 @@ void __fastcall InitLogFilePathPointers(uint8_t * * pPathPtrArray, uint32_t nCou
     } while (nIndex < nCount);
 }
 
-FILE * __fastcall OpenLogFileWithTimestamp(char * szFilePrefix, LPSYSTEMTIME pSystemTime, char * szOpenMode, uint32_t * pbIsNewFile, char * szOutPath, int32_t nOutPathLen) {
+FILE * __fastcall OpenLogFileWithTimestamp(char * szFilePrefix, LPSYSTEMTIME pSystemTime, char * szOpenMode, int * pbIsNewFile, char * szOutPath, int32_t nOutPathLen) {
     FILE* pFile;
     char szLogFilePath[260];
     /* LPSYSTEMTIME lpSystemTime for GetLocalTime */ GetLocalTime(pSystemTime);
@@ -851,7 +851,7 @@ FILE * __fastcall FindOrOpenLogFileSlot(uint8_t * szFileName, uint32_t * pnSlotI
       pSearchName++;
     } while (byChar);
 
-    pOpenedFile = OpenLogFileWithTimestamp((char*)szFileName, &localTime, "a", (uint32_t*)&nIsNewFile, gLogFilePathArray[nSlot], 0x104);
+    pOpenedFile = OpenLogFileWithTimestamp((char*)szFileName, &localTime, "a", &nIsNewFile, gLogFilePathArray[nSlot], 0x104);
     globalOpenFileHandleArray[nSlot] = pOpenedFile;
     gLogFileLastWriteTimeArray[nSlot] = dwNow;
     gLogFileLastAccessTimeArray[nSlot] = dwNow;

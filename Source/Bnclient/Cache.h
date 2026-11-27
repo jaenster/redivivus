@@ -88,10 +88,10 @@ int32_t __stdcall CACHE_Open();
 void __stdcall CACHE_Rebuild();
 // Reads cached data from bncache.dat using key lookup, validates CRC32, and returns decrypted data buffer
 // @sourcefile .\CACHE.CPP
-BOOL __fastcall CACHE_ReadData(char * szKey, uint32_t * pCrc32Out, uint32_t * * ppDataBuf, LPDWORD pDataSizeOut);
+BOOL __fastcall CACHE_ReadData(char * szKey, FILETIME * pFileTimeOut, uint32_t * * ppDataBuf, LPDWORD pDataSizeOut);
 // Writes data to Fog cache file. Encrypts data using CACHE_EncryptBlock, computes CRC32, seeks to entry offset in ghCacheFileHandle, writes encrypted data. Updates hash table entry with file time, size, and offset.
 // @sourcefile .\CACHE.CPP
-BOOL __fastcall CACHE_WriteData(char * szCacheKey, LPCVOID pDataToWrite, uint32_t nDataSize, uint32_t * pFileTime, uint32_t nExpiryTime, int32_t nCacheExpiry);
+BOOL __fastcall CACHE_WriteData(char * szCacheKey, LPCVOID pDataToWrite, uint32_t nDataSize, FILETIME * pFileTime, uint32_t nExpiryTime, int32_t nCacheExpiry);
 void StaticInit_CriticalSection_00881894();
 void StaticFini_CriticalSection_00881894();
 #endif // D2_MODULE_Bnclient

@@ -60,8 +60,8 @@ void __stdcall SMsgUnregisterKeyUp(HWND hWnd, uint32_t dwKey, pfnSEvtHandler pfn
 void __stdcall SMsgUnregisterMessage(HWND hWnd, uint32_t dwKey, pfnSEvtHandler pfnHandler);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
-DWORD __stdcall WND_GetActiveWindow_Unref_0041c2a0();
-uint32_t __stdcall WND_GetActiveWindow_Unref_0041c2b0();
+DWORD __stdcall SERR_GetLastError();
+uint32_t __stdcall SERR_IsErrorDialogActive();
 // @blizzard SMsgDoMessageLoop (SMSG.CPP)
 WPARAM __stdcall SMsgDoMessageLoop(pfnStormMsgIdleCallback pfnIdleCallback, uint32_t dwUnused);
 HWND __stdcall WND_GetActiveWindow();

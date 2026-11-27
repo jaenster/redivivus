@@ -801,7 +801,7 @@
       "calledFunctions": [
         "WARDEN_Initialize",
         "WARDEN_Cleanup",
-        "NET_GetLobbyChatQueue",
+        "BNCLIENT_GetCallbackTable",
         "WARDEN_ResolveAndLoadModule",
         "WARDEN_ActivatePendingModule"
       ],
