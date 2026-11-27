@@ -84,7 +84,7 @@ void Keys_PrepareKeyMsg(MSG* pMsg, BOOL bUpdateState, BOOL bKeyDown, BYTE byMacK
 }
 
 // 1.14d mac: 00026f58
-short GetKeyState(int nVirtKey) {
+int GetKeyState(int nVirtKey) {
     if (s_awKeyState[nVirtKey] != 0) {
         return (nVirtKey == VK_CAPITAL) | -0x80;
     }
