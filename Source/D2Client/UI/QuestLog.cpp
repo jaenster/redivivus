@@ -3057,4 +3057,13 @@ void StaticInit_gQuestLog() {
     SkillDesc::SKILLDESC_InitMissileBuffers(&gQuestLog);
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 000d8bd0
+void __stdcall QUESTLOG_ClearOpenState1() {
+    if (gQuestLog.bQuestLogOpen == 1) {
+      gQuestLog.bQuestLogOpen = 0;
+    }
+}
+#endif
+
 } // namespace D2Client::UI::QuestLog

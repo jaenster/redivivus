@@ -163,6 +163,11 @@ void __fastcall ESCMENU_SwitchToExpansionSaveExitMenu(struct D2EscMenuItemStrc *
 void __fastcall ESCMENU_ShowControlConfig(struct D2EscMenuItemStrc * pItem, struct D2UIMouseMsgStrc * pMsg);
 void __fastcall ESCMENU_SwitchToMainMenu_alt(struct D2EscMenuItemStrc * pItem, struct D2UIMouseMsgStrc * pMsg);
 void __fastcall ESCMENU_SwitchToOptionsMenu(struct D2EscMenuItemStrc * pItem, struct D2UIMouseMsgStrc * pMsg);
+#if !defined(_WIN32) && D2_OS_MAC
+void __stdcall ESCMENU_ShowConfirmMenuSave();
+BOOL __stdcall ESCMENU_IsQuitRequested();
+void __stdcall ESCMENU_ShowConfirmMenuQuit();
+#endif
 #endif // D2_MODULE_D2Client
 // 6 internal functions (defined in .cpp)
 

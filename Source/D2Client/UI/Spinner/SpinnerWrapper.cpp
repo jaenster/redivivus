@@ -256,4 +256,11 @@ int __thiscall GetRepeatDelta(::SpinnerWrapper * pThis, int nUnused) {
     return pThis;
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 000eea0e
+void SPINNER_ConstructWrapper(::SpinnerWrapper * pSpinner, int nPosX, int nPosY, BOOL bHorizontal, fpSpinnerRepeatAction pfnRepeatAction) {
+    Constructor(pSpinner, nPosX, nPosY, bHorizontal, pfnRepeatAction);
+}
+#endif
+
 } // namespace D2Client::UI::Spinner::SpinnerWrapper

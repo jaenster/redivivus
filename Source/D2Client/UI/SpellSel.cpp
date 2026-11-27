@@ -2360,4 +2360,18 @@ void __stdcall DRAW_UI_SkillWindow() {
 
 static void * keep_004a8cf0 = (0 ? (SPELLSEL_IsMouseInRect(*(int32_t *)0, *(int32_t *)0, *(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
 
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 000ed666
+// The same grid reset SPELLSEL_Initialize does, followed by the four grid layouts, each of which
+// the Windows build only has as an unreferenced function (004aa680, 004aa6b0, 004aa6e0, 004aa710).
+void __stdcall SPELLSEL_ResetAndLayoutGrids() {
+    memset(&gSpellSelGridRegion, 0, 0x3c5);
+    memset(gSpellSelGridRegion.aRightHandSlots, 0xff, sizeof(gSpellSelGridRegion.aRightHandSlots));
+    Unreferenced_004aa680();
+    Unreferenced_004aa6b0(0);
+    Unreferenced_004aa6e0();
+    Unreferenced_004aa710();
+}
+#endif
+
 } // namespace D2Client::UI::SpellSel

@@ -59786,4 +59786,63 @@ void __fastcall ESCMENU_SwitchToOptionsMenu(D2EscMenuItemStrc * pItem, D2UIMouse
 
 static void * keep_0047d5b0 = (0 ? (Unreferenced_0047d5b0(*(int32_t *)0), (void *)0) : (void *)0);
 
+#if !defined(_WIN32) && D2_OS_MAC
+// 00450410: set by the quit-to-desktop item, cleared by its cancel item, read by SendExitGameRequest.
+static uint8_t gbEscMenuQuitRequested = 0;
+
+// 1.14d mac: 0019b2d1 (outside the reconstructed code: applies the mouse sensitivity, empty on this build)
+void MouseSensitivityApply(int32_t nSensitivity);
+
+// 1.14d mac: 000d9060
+void __stdcall ESCMENU_ShowConfirmMenuSave() {
+    ui::UI_CloseActivePanels(0, 0);
+    ui::UI_ClearCursorAnimationState();
+    ESCMENU_ShowMenu(1, 5);
+    ui::UI_SetCursorAnimationFlag();
+    ui::UI_UpdateCursorAnimationTimer();
+}
+
+// 1.14d mac: 000d9288
+BOOL __stdcall ESCMENU_IsQuitRequested() {
+    return gbEscMenuQuitRequested;
+}
+
+// 1.14d mac: 000d929a
+void __stdcall ESCMENU_ShowConfirmMenuQuit() {
+    ui::UI_CloseActivePanels(0, 0);
+    ui::UI_ClearCursorAnimationState();
+    ESCMENU_ShowMenu(1, 6);
+    ui::UI_SetCursorAnimationFlag();
+    ui::UI_UpdateCursorAnimationTimer();
+}
+
+// 1.14d mac: 000dbce7
+void __fastcall ESCMENU_SaveMouseSensitivity(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
+    Storm::Source::SReg::SRegSaveValue("Diablo II Mac", "Mouse Sensitivity", 0, pItem->nImageIndex);
+    MouseSensitivityApply(pItem->nImageIndex);
+}
+
+// 1.14d mac: 000dbd35
+void __fastcall ESCMENU_LoadMouseSensitivity(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
+    int32_t nSensitivity = 0x80;
+    Storm::Source::SReg::SRegLoadValue("Diablo II Mac", "Mouse Sensitivity", 0, &nSensitivity);
+    pItem->nImageIndex = nSensitivity;
+}
+
+// 1.14d mac: 000dbf1a
+void __fastcall ESCMENU_QuitToDesktop(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
+    gbEscMenuQuitRequested = 1;
+    ClientModeInGame::D2CLIENT_SetExitVar1(1);
+    SendMessageA(pMsg->hWnd, 0x10, 0, 0);
+    GAME::Game::D2CLIENT_SetExitVar2(1);
+    ESCMENU_RestoreUIState(1);
+}
+
+// 1.14d mac: 000dbf7b
+void __fastcall ESCMENU_CancelQuitToDesktop(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
+    gbEscMenuQuitRequested = 0;
+    ESCMENU_RestoreUIState(1);
+}
+#endif
+
 } // namespace D2Client::UI::EscMenu
