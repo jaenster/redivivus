@@ -33,6 +33,9 @@
 #ifndef D2_SELECTANY
 #if defined(_MSC_VER)
 #define D2_SELECTANY __declspec(selectany)
+#elif defined(__APPLE__)
+// Mach-O has no selectany; a weak definition is coalesced the same way.
+#define D2_SELECTANY __attribute__((weak))
 #else
 #define D2_SELECTANY __attribute__((selectany))
 #endif
