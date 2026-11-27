@@ -1,0 +1,9 @@
+# Negative controls: each line runs the ORIGINAL of the first function against OUR
+# build of the second. The pairs share a signature and do different things, so
+# every one must come out different. If one comes out equivalent the harness is
+# not comparing what it claims to.
+00410b10 vs 00410b50  SetBitAtOffset vs UnsetBitAtOffset
+00410b50 vs 00410b70  UnsetBitAtOffset vs XorBitAtOffset
+00410c40 vs 00410d90  BITBUF_OrBuffers vs BITBUF_XorBuffers
+00526540 vs 00526610  CompareWideStringsN vs CompareWideStringsNNoCase
+00643400 vs 00643340  OrthToIsoCoordsDiv32 vs OrthToIsoCoordsDiv160
