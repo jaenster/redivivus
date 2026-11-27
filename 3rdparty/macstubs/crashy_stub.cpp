@@ -19,6 +19,7 @@ extern "C" void D2CRASH_ReportHalt(int nLine, unsigned nAddress) {
 }
 
 namespace Fog { namespace Src { namespace ErrorManager {
+void CRASH_InitCrashReporter() {}
 void CRASHY_Exit(int nExitCode) { (void)nExitCode; }
 void CRASHY_WriteModules(CrashyWriteLine pfnWrite, Report* pReport) { (void)pfnWrite; (void)pReport; }
 unsigned CRASHY_GetCurrentThread() { return 0; }

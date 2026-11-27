@@ -3127,7 +3127,7 @@ D2ClientGameDataStrc gClientGameData = {}; D2_GLOBAL_GUARD(gClientGameData, "D2C
 } // namespace D2Client::GAME::Game
 
 #if !defined(_WIN32) && D2_OS_MAC
-namespace D2Client { void __stdcall FUN_000d929a(); }
+namespace D2Client::UI::EscMenu { void __stdcall ESCMENU_ShowConfirmMenuQuit(); }
 
 namespace D2Client::GAME::Game {
 
@@ -3141,7 +3141,7 @@ void __stdcall GAME_SetInteractionPending() {
 
 // 1.14d mac: 000723b4
 void __stdcall GAME_ShowExitConfirmMenu() {
-    D2Client::FUN_000d929a();
+    D2Client::UI::EscMenu::ESCMENU_ShowConfirmMenuQuit();
 }
 
 } // namespace D2Client::GAME::Game

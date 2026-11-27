@@ -54,7 +54,8 @@ int SFileCloseArchive(void* hArchive);
 // 1.14d mac: 0001e564
 int FPMessageBox(const char* szText, const char* szCaption, uint32_t dwType);
 // 1.14d mac: 00304096
-void BINK_SetMemory(void* (*pfnAlloc)(size_t), void (*pfnFree)(void*));
+// Bink's BinkSetMemory (third party)
+void BINK_SetMemory(void* (*pfnAlloc)(size_t), void (*pfnFree)(void*)) __asm__("_BinkSetMemory");
 // 1.14d mac: 0005ad4d
 void BNMESSQUEUE_Shutdown(void);
 // The Battle.net client's callback table; only the two slots GAMESETUP calls are laid out.

@@ -15,6 +15,18 @@ void D2GFX_DrawLine(int nXStart, int nYStart, int nXEnd, int nYEnd, uint32_t nCo
     RENDERER_CurrentRenderedFunctions->pfnDrawLine(nXStart, nYStart, nXEnd, nYEnd, nColor, nAlpha);
 }
 
+// 1.14d mac: 002b5c1c
+// A renderer is installed and the display is windowed: the state's fullscreen flag
+// (005cbb90) is the dword at 0xC from 005cbb84, the cell the binary addresses it by (the state
+// starts with the init option, g_nRendererInitOption).
+int FUN_002b5c1c(void) {
+    int bResult = 0;
+    if (RENDERER_CurrentRenderedFunctions != 0) {
+        bResult = (&g_nRendererInitOption)[3] == 0;
+    }
+    return bResult;
+}
+
 // 1.14d mac: 002b5d9a
 int FUN_002b5d9a(void) {
     return 1;

@@ -247,9 +247,9 @@ BOOL VirtualUnlock(LPVOID lpAddress, size_t dwSize) {
 }
 
 // 1.14d mac: 00028d71
-// Returns 0. 112 call sites across the game; the Win32 entry it stands in for is
-// not recovered (Ghidra: FUN_00028d71).
-int FUN_00028d71(void) {
+// Returns 0. 112 call sites across the game: IsBadCodePtr, whose argument the Mac layer never reads
+// (the shared code calls it as IsBadCodePtr(FARPROC)).
+BOOL IsBadCodePtr(FARPROC lpfn) {
     return 0;
 }
 

@@ -44,19 +44,20 @@ void SLogWrite(uint32_t hLog, const char* szFormat, ...);
 void SLogDump(uint32_t nHandle, const void* pData, uint32_t nLength);
 // The log's indent: set to a column, or moved by a delta (named for what dump_packet does with them).
 // 1.14d mac: 00018872
-uint32_t SLogSetIndent(uint32_t nHandle, uint32_t nIndent);
+uint32_t SLogSetAbsIndent(uint32_t nHandle, uint32_t nIndent);
 // 1.14d mac: 000188c7
-uint32_t SLogAddIndent(uint32_t nHandle, int32_t nDelta);
+uint32_t SLogSetIndent(uint32_t nHandle, int32_t nDelta);
 // 1.14d mac: 0001891e
-void SLogSetOption(uint32_t nHandle, uint32_t nValue);
+void SLogSetTimestamp(uint32_t nHandle, uint32_t nValue);
 // 1.14d mac: 000176a0
 void CRITSECT_Init(pthread_mutex_t* pMutex);
 // 1.14d mac: 00016a72
-void CRITSECT_Destroy(pthread_mutex_t* pMutex) __attribute__((visibility("hidden")));
+// The destructor SFileCritSect::~SFileCritSect[D2] (SFILE.CPP, 00016a72), which the statics register with __cxa_atexit.
+void CRITSECT_Destroy(pthread_mutex_t* pMutex) __attribute__((visibility("hidden"))) __asm__("__ZN13SFileCritSectD2Ev");
 // 1.14d mac: 0003a8e2
 BOOL SRegLoadString(const char* szSubKey, const char* szValueName, int32_t nFlags, char* szOutBuf, DWORD dwOutBufSize);
 // 1.14d mac: 00018860
-BOOL SLOG_AreCriticalSectionsInitialized(void);
+BOOL SLogIsInitialized(void);
 
 #define SNET_FILE "/Users/bclemetson/dev/diablo2/Diablo2/Source/DiabloAll/../../../StormMac/Storm Mac/SOURCE/SNET.CPP"
 
@@ -396,7 +397,7 @@ static SNetConn* SNET_CreateConnection(TSList<SNetConn>* pConnList, SNetAddress*
 // External: Bnclient's log (0005ab50, 0005abdf) calls it, with its argument on the stack.
 void SLOG_EnsureLogCreated(SNetLogInfo* pLogInfo) {
     if (pLogInfo->bCreated == 0) {
-        if (SLOG_AreCriticalSectionsInitialized() && pLogInfo->szName[0] != '\0') {
+        if (SLogIsInitialized() && pLogInfo->szName[0] != '\0') {
             pLogInfo->bCreated = 1;
             if (pLogInfo->bFromRegistry == 0) {
                 SLogCreate(pLogInfo->szName, 0, &pLogInfo->hLog);
@@ -416,7 +417,7 @@ void SLOG_CreateFromRegistry(SNetLogInfo* pLogInfo, const char* szKey, const cha
     if (szPath[0] != '\0') {
         SLogCreate(szPath, 0, &pLogInfo->hLog);
         if (nFlags == 0) {
-            SLogSetOption(pLogInfo->hLog, 0);
+            SLogSetTimestamp(pLogInfo->hLog, 0);
         }
     }
 }
@@ -435,9 +436,9 @@ static void dump_packet(const char* szLabel, int bReceive, SNetPacketHdr* pPacke
             uint16_t wAck = pPacket->wAck;
             uint16_t wChecksum = pPacket->wChecksum;
             uint16_t wSize = pPacket->wSize;
-            SLogSetIndent(hLog, (bReceive != 0) << 4);
+            SLogSetAbsIndent(hLog, (bReceive != 0) << 4);
             SLogWrite(hLog, "%s: (%d bytes)", szLabel, (uint32_t)wSize);
-            SLogAddIndent(hLog, 2);
+            SLogSetIndent(hLog, 2);
             SLogWrite(hLog, "Checksum: 0x%04X", (uint32_t)wChecksum);
             SLogWrite(hLog, "Seq/Ack : %d, %d", (uint32_t)wSeq, (uint32_t)wAck);
             uint32_t nType = pPacket->byType;
@@ -454,7 +455,7 @@ static void dump_packet(const char* szLabel, int bReceive, SNetPacketHdr* pPacke
                       (byFlags & 4) ? " MF_FORWARDED" : szNone, (byFlags & 4) ? " PF_JOINING" : szNone,
                       (byFlags & 8) ? " PF_LEAVING" : szNone);
             SLogDump(hLog, pPacket, wSize);
-            SLogSetIndent(hLog, 0);
+            SLogSetAbsIndent(hLog, 0);
         }
     }
 }

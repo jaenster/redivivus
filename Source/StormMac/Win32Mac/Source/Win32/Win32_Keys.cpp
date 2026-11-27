@@ -17,7 +17,7 @@ static BYTE s_abKeyMap[16];
 static WORD s_awKeyState[256];
 // 1.14d mac: 0039729c
 // Nonzero: Command-key chords are not turned into WM_SYS* messages, except for ':', '=' and 'v'.
-extern DWORD g_dwSysKeyFilter;
+DWORD g_dwSysKeyFilter = 1;
 
 // 1.14d mac: 00026d14
 // Turns a Mac key event into the Win32 key message, in place.

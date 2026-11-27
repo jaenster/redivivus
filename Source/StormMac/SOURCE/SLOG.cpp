@@ -128,7 +128,7 @@ uint32_t g_dwLogSetting2;
 
 // 1.14d mac: 00554e08
 // Nonzero: log text also goes to OutputDebugString.
-extern uint32_t g_bLogDebugOutput;
+extern uint32_t gbCompressionDebugOutput;
 
 void SLogFlushAll(void);
 static SLogRecord* LockLog(uint32_t nHandle, uint32_t* pnSlotOut, int32_t bAllocate);
@@ -393,7 +393,7 @@ void SLogDump(uint32_t nHandle, const uint8_t* pData, uint32_t nLength) {
             pLog->acBuffer[pLog->nUsed + 1] = '\n';
             pLog->nUsed += 2;
         }
-        if (g_bLogDebugOutput) {
+        if (gbCompressionDebugOutput) {
             OutputDebugString(pLog->acBuffer + pLog->nLineStart);
         }
         pLog->nLineStart = pLog->nUsed;
@@ -522,7 +522,7 @@ void SLogPend(uint32_t nHandle, const char* szFormat, va_list pArgList) {
         pLog->acBuffer[pLog->nUsed] = '\r';
         pLog->acBuffer[pLog->nUsed + 1] = '\n';
         pLog->nUsed += 2;
-        if (g_bLogDebugOutput) {
+        if (gbCompressionDebugOutput) {
             OutputDebugString(pLog->acBuffer + pLog->nLineStart);
         }
         pLog->nLineStart = pLog->nUsed;

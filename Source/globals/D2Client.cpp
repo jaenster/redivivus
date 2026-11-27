@@ -137,6 +137,7 @@ uint32_t nScreenMode = 0; D2_GLOBAL_GUARD(nScreenMode, "D2Client::UI::Inv::nScre
 
 } // namespace D2Client::UI::Inv
 
+#if !D2_OS_MAC
 namespace D2Client::Warden::NWardenClient {
 
 // =============================================================================
@@ -156,6 +157,7 @@ namespace D2Client::Warden {
 void * vftable[7] = { (void*)&D2Client::Warden::SendPacket, (void*)&D2Client::Warden::CheckModule, (void*)&D2Client::Warden::LoadModule, (void*)&D2Client::Warden::AllocateMemory, (void*)&D2Client::Warden::FreeMemory, (void*)&D2Client::Warden::SetRC4Data, (void*)&D2Client::Warden::GetRC4Data }; D2_GLOBAL_GUARD(vftable, "D2Client::Warden::vftable");
 
 } // namespace D2Client::Warden
+#endif
 
 namespace D2Client::UI {
 

@@ -136,6 +136,7 @@ void __fastcall FORMS_DestroyD2WinSmack(::D2WinSmack * pSmack) {
     D2WinMain::FORMS_DestroyControl(&pSmack->sControl);
 }
 
+// 1.14d mac: 0004d278
 void __stdcall D2WINSMACK_SetKeepTempFile() {
     gbSmackerKeepTempFile = 1;
 }

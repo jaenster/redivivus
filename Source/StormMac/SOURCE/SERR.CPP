@@ -60,25 +60,40 @@ void GetLocalTime(void* pSystemTime);
 void LogComputerInfoHeader(uint32_t dwFlags, void (*pfnLog)(HANDLE, const char*, ...), void* pLogContext,
                            const char* szHeader, const uint16_t* pTime);
 void STORM_Nop(void);
-void DebugStr(const unsigned char* pMessage);
+extern "C" void DebugStr(const unsigned char* pMessage);
 // Out of line in SFILE.CPP's neighbourhood.
 void CRITSECT_Init(pthread_mutex_t* pMutex);
-void CRITSECT_Destroy(pthread_mutex_t* pMutex) __attribute__((visibility("hidden")));
+// The destructor SFileCritSect::~SFileCritSect[D2] (SFILE.CPP, 00016a72), which the statics register with __cxa_atexit.
+void CRITSECT_Destroy(pthread_mutex_t* pMutex) __attribute__((visibility("hidden"))) __asm__("__ZN13SFileCritSectD2Ev");
 
 extern "C" int __cxa_atexit(void (*pfnDestructor)(void*), void* pObject, void* pDso);
 extern "C" void* __dso_handle;
 
 // STORM.CPP's option words: [1] non-zero when the debugger-only leak output is on,
 // [5] non-zero when no error log is written.
-extern uint32_t g_adwSystemOptions[6];
+extern uint32_t gnSSystemOption1;
+extern BOOL gbSSystemShutdownInProgress;
 
 // 1.14d mac: 003dfb14
 // The application's extra-information writer for the error log, or null.
-extern void (*g_pfnErrorLogExtraInfo)(char* szBuffer, uint32_t nBufferSize);
+void (*g_pfnErrorLogExtraInfo)(char* szBuffer, uint32_t nBufferSize);
 
-// 1.14d mac: 0030dc77 ...
+// 1.14d mac: 003cf71c
 // The message-string table the resource strings fall back to.
-extern const char* const gaSErrMessageStrings[];
+const char* const gaSErrMessageStrings[12] = {
+    "ERROR #%u (0x%08x)",
+    "This application has encountered a critical error:\n\n%s\n",
+    "Program:\t%s\n",
+    "File:\t%s\nLine:\t%d\n",
+    "Function:\t%s\n",
+    "Object:\t%s\n",
+    "Handle:\t%s\n",
+    "Expr:\t%s\n\n",
+    "\n%s\n\n",
+    "Press OK to terminate the application.",
+    "Do you wish to keep running anyway?\n\tOK:\tKeep running\n\tCancel:\tTerminate application",
+    "File:\t%s\n",
+};
 
 typedef void (*pfnBlizzardError)(const char* szTitle, const char* szText, char** ppExtra, int nUnused, int nFlags,
                                  bool bFatal);
@@ -369,7 +384,7 @@ int SErrDisplayError(uint32_t nErrorCode, const char* pStackTrace, int32_t nTrac
         nMsgResult = MessageBox(hWnd, szFullMessage, szModuleName, nStyle | nIcon);
     }
     LeaveCriticalSection(&s_tCriticalSection);
-    if (g_adwSystemOptions[5] == 0) {
+    if (gbSSystemShutdownInProgress == 0) {
         pthread_mutex_lock(&s_tLogMutex);
         pthread_mutex_unlock(&s_tLogMutex);
         *pCursor = '\0';
@@ -567,7 +582,7 @@ void SErrReportNamedResourceLeak(const char* szMessage, const char* szText) {
         } else {
             SStrPrintf(szDescription, 0x100, "%s (%s)", szMessage, szText);
         }
-        if (g_adwSystemOptions[1] == 0) {
+        if (gnSSystemOption1 == 0) {
             SErrDisplayError(0x8510007f, szDescription, -3, NULL, 1, 1);
         } else {
             SStrPrintf(szLine, 200, "Storm Error : handle never released -- %s\n", szDescription);

@@ -267,3 +267,25 @@ the tree lacks, `b2` no Mac function of that name (Windows-only code a shared un
 (namespace or parameter types: a bug on one side), `e` entry/runtime. `D2_MAC_PROBE`, `D2_MAC_LD`
 and `D2_MAC_SDK` override the payload locations. The first full run (437 undefined, 3 duplicate)
 is written up in `d2-surveys/mac-seam/link-probe.md`.
+
+After the link-gap round the classes `a`, `b`, `b2`, `c` and `e` are 0 (with the third-party stubs built:
+`ninja d2_mac_link_deps`); what is left is class `d`, the declaration and definition mismatches. The
+probe links `crt1.10.6.o`, whose `start` calls `main`, as the original's entry does: `main` is
+`MAC_Main` (0019d582). How the gap was closed:
+
+- A Blizzard function the binary has under another name was bound, not duplicated: the caller names
+  the function the tree already ports (`SLogSetIndent`, `Storm_ReturnTrue`, `MACCURSOR_CallGuardProc`,
+  `SOUNDSMP_GetStatus`, `ESCMENU_ShowConfirmMenuQuit`, `SFilePrioritizeRequest` ...), or, where the
+  caller passes fewer arguments than the port declares (the stubs that ignore them), the declaration
+  carries an `__asm__` label naming the port's symbol.
+- Data the tree declared and never defined is defined at its Mac address with the contents read from
+  the binary (`g_adwCrc32Table`, `gaSFileSignatureRsaModulus`, the SCOMP method table, the helper and
+  renderer tables, the OpenGL function table, ...). Where two ports named one address twice
+  (`g_pMacAppProcs`, `g_pHostHooks`, `PTR_DAT_00397abc` are `g_pDisplayDriver`; `g_pfnMacAbortHook` is
+  `g_pfnFatalExitHook`) the extra declarations carry an `__asm__` label.
+- Windows-only code a shared unit called is guarded `#if !D2_OS_MAC` at the call site (crash dump,
+  DbgHelp, Warden, registry, the LNG loader, SEH frames, the 64-bit atomic timestamp, SRP server side)
+  where the Mac twin does not make the call. The Mac binary has no Warden: `WardenClient.cpp` is not in
+  the Mac target and `Source/D2Client/Warden/WardenMac.cpp` carries the four empty hooks it calls
+  (0012b628..0012b640).
+

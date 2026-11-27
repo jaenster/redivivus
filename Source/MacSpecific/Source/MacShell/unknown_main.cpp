@@ -40,13 +40,20 @@ uint32_t SFileLoadFile(const char* szFileName, void** ppBuffer, uint32_t* pdwSiz
 // 1.14d mac: 002b8fba
 void TABLES_GetLangAbbreviation(char* szOut, int nLanguage);
 // 1.14d mac: 002ee3a4
-void FUN_002ee3a4(const char* szName);
+namespace Fog {
+namespace Source {
+namespace SFile {
+void FILETOOLS_SetLogFilePathWithoutDateAndExtension2(char* szSuffix);
+}
+}
+}
 // 1.14d mac: 0003e2ab
 void FUN_0003e2ab(void);
 // 1.14d mac: 00018c44
 int SMemFree(void* pMem, const char* szFile, int nLine, uint32_t dwFlags);
 // 1.14d mac: 00396200
-extern void (*g_pfnMacAbortHook)(void);
+// The cell is the exit hook fp_fatal calls (g_pfnFatalExitHook, unknown_appinfo.cpp, 00554e48).
+extern void (*g_pfnMacAbortHook)(void) __asm__("_g_pfnFatalExitHook");
 // 1.14d mac: 0019e669
 void MAC_DeactivateTSMDocument(void);
 // 1.14d mac: 0019e68c
@@ -407,7 +414,8 @@ static FSSpec s_tResFileSpec;
 // 1.14d mac: 0019d582
 // main: process set-up, the game archives, the resource file made from the MPQ's
 // D2Resources.rsrc, the menu bar and AppleEvent handlers, then the game itself and the tear-down.
-int MAC_Main(void) {
+// crt1's start calls it with argc, argv, envp and the apple vector, none of which it reads.
+int main(int argc, char** argv, char** envp, char** apple) {
     void* hGameData;
     void* hExpansion;
     void* hPatch;
@@ -495,7 +503,7 @@ int MAC_Main(void) {
                                         FUN_0019e432();
                                         char szVersion[260];
                                         SStrPrintf(szVersion, 0x104, "v%d.%02d", 1, 14);
-                                        FUN_002ee3a4("D2");
+                                        Fog::Source::SFile::FILETOOLS_SetLogFilePathWithoutDateAndExtension2((char*)"D2");
                                         FOG_InitErrorManager("Diablo II", szVersion, 1);
                                         g_pfnMacAbortHook = FUN_0019db13;
                                         SetEventMask(0xFFFF);

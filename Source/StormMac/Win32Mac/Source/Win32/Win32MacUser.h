@@ -67,8 +67,9 @@ HWND GetDesktopWindow(void);
 BOOL AdjustWindowRectEx(void* pRect, DWORD dwStyle, BOOL bMenu, DWORD dwExStyle);
 BOOL UpdateWindow(HWND hWnd);
 HWND SetFocus(HWND hWnd);
-// 00024c76: the layer's LoadCursor, a stub that returns 0.
-int LoadCursor(int hInstance, int nCursorId);
+// 00024c76: the layer's LoadCursor, a stub that returns 0 (GDI_ReturnZero, Win32_GDI.cpp). The callers pass
+// the instance and the cursor id the stub never reads, so the call binds to its symbol.
+int LoadCursor(int hInstance, int nCursorId) __asm__("__Z14GDI_ReturnZerov");
 // The layer's ShowCursor (00024c7e) leaves the host's display count in eax, which the shared
 // code's show/hide loops read.
 int ShowCursor(BOOL bShow);
@@ -90,6 +91,11 @@ BOOL GetMessage(tagMSG* pMsg, HWND hWnd, UINT nMsgFilterMin, UINT nMsgFilterMax)
 BOOL TranslateMessage(const tagMSG* pMsg);
 LONG DispatchMessage(const tagMSG* pMsg);
 BOOL PostMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+struct Win32MacWindow;
+LRESULT SendMessage(Win32MacWindow* hWnd, UINT uMsg, UINT wParam, int lParam);
+static inline LRESULT SendMessageA(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+    return SendMessage((Win32MacWindow*)hWnd, uMsg, (UINT)wParam, (int)lParam);
+}
 #define PeekMessageA PeekMessage
 #define GetMessageA GetMessage
 #define DispatchMessageA DispatchMessage

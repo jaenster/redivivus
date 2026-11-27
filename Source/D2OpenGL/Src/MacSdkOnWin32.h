@@ -81,7 +81,8 @@ void fp_fatal(char *szFormat, ...);
 void MAC_WarpMouseCursorPosition(uint32_t ptPosition);
 int16_t FilepathToFSSpec(void *pSpec, const void *szPath, int nFlags);
 // BinkOpen on the file HANDLE_GetFileRefNum last saw; the Mac passes the HFS refnum
-void *BinkOpenRefNum(void *pRefNum, uint32_t dwFlags);
+// Bink's BinkOpen (a third-party symbol): the renderer hands it the HFS refnum.
+void *BinkOpenRefNum(void *pRefNum, uint32_t dwFlags) __asm__("_BinkOpen");
 void MACCURSOR_InitCursor(void);
 void MACCURSOR_ShowDisplayCursor(void);
 void MACCURSOR_HideDisplayCursor(void);
@@ -91,15 +92,19 @@ CGDisplayModeRef MACDISPLAY_FindBestDisplayMode(CGDirectDisplayID nDisplay, uint
                                                 uint32_t nRefreshHz, uint8_t bStretched, uint8_t bAcceptClosest);
 void MACDISPLAY_SetGammaRamp(CGDirectDisplayID nDisplay, int nGamma, int nContrast);
 void MACDISPLAY_RestoreGammaRamp(CGDirectDisplayID nDisplay);
-void MAC_SettleWait(void);
-int MAC_GetBinkSurfaceType(CGDirectDisplayID nDisplay);
-void MAC_OnWindowZoom(void);
+void MAC_SettleWait(void) __asm__("__Z14MAC_SettleWaitv");  // MacShell/unknown_util.cpp, 0019f18a
+int MAC_GetBinkSurfaceType(CGDirectDisplayID nDisplay) __asm__("__Z22MAC_GetBinkSurfaceTypej");  // oglMac.cpp, 002ffe21
+void MAC_OnWindowZoom(void) __asm__("__Z12FUN_0019c953v");  // MacShell/unknown_display.cpp, 0019c953: the zoom event
 // Storm's Win32 layer on the Mac: the Win32 calls, with its own handle types (CloseHandle
-// and HANDLE_GetFileRefNum are Win32Mac.h's)
-intptr_t SendMessageA(void *hWnd, uint32_t nMsg, uintptr_t wParam, intptr_t lParam);
-int SetRect(void *pRect, int nLeft, int nTop, int nRight, int nBottom);
-// Mac 00134d0f: loads a tile's sprite into the cache.
-int SPRITECACHE_EnsureSpriteLoaded(::D2TileLibraryEntryStrc *pTile);
+// and HANDLE_GetFileRefNum are Win32Mac.h's). Bound to the layer's SendMessage and SetRect
+// (Win32_Messages.cpp, Win32_Rect.cpp), whose window and rectangle types this header lacks.
+intptr_t SendMessageA(void *hWnd, uint32_t nMsg, uintptr_t wParam, intptr_t lParam)
+    __asm__("__Z11SendMessageP14Win32MacWindowjji");
+int SetRect(void *pRect, int nLeft, int nTop, int nRight, int nBottom) __asm__("__Z7SetRectP4RECTiiii");
+// Mac 00134d0f: loads a tile's sprite into the cache. It is the shared SPRITECACHE_AllocEntry,
+// whose two further arguments the body never reads and the Mac callers do not pass.
+int SPRITECACHE_EnsureSpriteLoaded(::D2TileLibraryEntryStrc *pTile)
+    __asm__("__ZN5D2CMP3SRC11SpriteCache22SPRITECACHE_AllocEntryEP22D2TileLibraryEntryStrcjj");
 using ::BinkOpenDirectSound;
 using ::__stack_chk_guard;
 using ::__stack_chk_fail;
@@ -110,7 +115,7 @@ using ::__cxa_pure_virtual;
 using ::kCGColorBlack;
 using ::CGPointZero;
 // The Mac application's procedure table
-extern void *PTR_DAT_00397abc;
+extern void *PTR_DAT_00397abc __asm__("_g_pDisplayDriver");  // StormMac/MacDisplayDriver.cpp, 00397abc
 
 }  // namespace D2OpenGL
 

@@ -33,6 +33,7 @@ static char lpFileName_00881c58[260] = {}; D2_STATIC_GUARD(lpFileName_00881c58, 
 static LONG lpAddend_00881d5c = 0; D2_STATIC_GUARD(lpAddend_00881d5c, "lpAddend_00881d5c");
 
 #if !defined(_WIN32) && D2_OS_MAC
+#include <CoreServices/CoreServices.h>
 #include <sys/stat.h>
 #include <string.h>
 #include "Source/MacSpecific/Source/MacShell/MacShell.h"
@@ -43,12 +44,35 @@ int SaveFileFromMemCreateDirs(const unsigned char* pPath, const BYTE* pBuffer, i
 // 1.14d mac: 0002cd41
 int PATH_ToPosixPath(const char* szPath, char* szOut, int nOutSize);
 // 1.14d mac: 0001eafe
-unsigned char* c2pstr(char* szString);
+// The Mac Storm's c2pstr (Win32_MacMisc.cpp) has the C linkage Carbon's TextUtils.h gives the name; this unit does not include Carbon.
+unsigned char* c2pstr(char* szString) __asm__("_c2pstr");
 char* PATH_MakeFullPath(char* szFullPath, LPCSTR szPath, DWORD nBufferSize);
 // 1.14d mac: 0003afe5
 void SREG_FlushPrefsFiles();
 // 1.14d mac: 00036d5e
 bool MACCURSOR_CallGuardProc(bool bFlag);
+
+// The Mac side of the check BNDOWNLOAD_PerformCheckRevision makes of the library it unpacked (the
+// binary has it inline, 000536d0): the full path as a POSIX path, then Mac OS X 10.7 (Gestalt sys1 and
+// sys2: 10, 7) trusts the library and any other version needs Blizzard's code signature.
+static char BNDOWNLOAD_IsCheckRevisionLibraryTrusted(char* szDllPath) {
+    char szFullPath[260];
+    char szPosixPath[1024];
+    PATH_MakeFullPath(szFullPath, szDllPath, 0x104);
+    if (PATH_ToPosixPath(szFullPath, szPosixPath, sizeof(szPosixPath)) != 0) {
+        return 0;
+    }
+
+    SInt32 nSystemMajor = 0;
+    OSErr nMajorResult = Gestalt('sys1', &nSystemMajor);
+    SInt32 nSystemMinor = 0;
+    OSErr nMinorResult = Gestalt('sys2', &nSystemMinor);
+    if (nMinorResult == 0 && nMajorResult == 0 && nSystemMajor == 10 && nSystemMinor == 7) {
+        return 1;
+    }
+
+    return MACSEC_IsBlizzardSigned(szPosixPath);
+}
 #endif
 
 namespace Bnclient::BnDownload {
@@ -213,7 +237,11 @@ int32_t __fastcall BNDOWNLOAD_PerformCheckRevision(uint32_t * pdwVersionOut, uin
         if (!__frame0.dwAuthResult || __frame0.dwAuthResult >= 5) {
           BVar1 = NET_CopyDllFromArchive(__frame0.pArchive, __frame0.szDllPath, lpFileName_00881c58);
           if (BVar1) {
+#if D2_OS_MAC
+            bSigValid = BNDOWNLOAD_IsCheckRevisionLibraryTrusted(__frame0.szDllPath);
+#else
             bSigValid = D2Hell::D2FILE_VerifyFileSignature(__frame0.szDllPath);
+#endif
             if (bSigValid != '\0') {
               /* LPCSTR lpLibFileName for LoadLibraryA */ hCheckRevDll = LoadLibraryA(__frame0.szDllPath);
               if (hCheckRevDll) {

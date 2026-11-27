@@ -931,7 +931,9 @@ void __thiscall MISC_ParseCommandLineAndPutIntoD2IniData(char * szText, D2IniCon
 
 void __fastcall MISC_InitD2IniAndIgnorelist(D2IniConfigStrc * D2IniData, char * szCommandLine) {
     memset(D2IniData, 0, sizeof(*D2IniData));
+#if !D2_OS_MAC
     MISC_GetValueFromD2Ini(D2IniData);
+#endif
     D2Common::Chat::Ignorelist::MISC_InitIgnorelist();
     MISC_ParseCommandLineAndPutIntoD2IniData(szCommandLine, D2IniData);
 }

@@ -661,16 +661,23 @@ void __stdcall LOGFILE_StoreGameStartupInfo() {
     }
 
     Src::LogManager::LOGFILE_WriteStringToFile("%s running under %s (Version %.3f)", "Diablo II", szOsName, (double)gSystemInfo.fOSVersion);
+#if !D2_OS_MAC
     Src::LogManager::LogCpuInfo();
+#endif
     Src::LogManager::LOGFILE_WriteStringToFile("Total Physical Memory: %.2fMB", (float)gSystemInfo.dwTotalPhysicalMemory * 9.5367431640625e-7);
+#if !D2_OS_MAC
     BOOL bGotName = Debug::FILETOOLS_GetExecutableFolderPath(szAppPath, 0x1000);
     if (bGotName) {
       Src::LogManager::LOGFILE_WriteStringToFile("Application Path: %s", szAppPath);
     }
+#endif
 
     char* pszArg = Src::Safesock::NET_GetLocalIp();
     Src::LogManager::LOGFILE_WriteStringToFile("Local IP: %s", pszArg);
     DWORD nNameSize = 0x40;
+#if D2_OS_MAC
+    BOOL
+#endif
     bGotName = GetComputerNameA(szComputerName, &nNameSize);
     if (!bGotName) {
       szComputerName[0] = '\0';

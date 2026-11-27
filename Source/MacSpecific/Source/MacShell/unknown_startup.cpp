@@ -34,7 +34,7 @@ char* p2cstr(unsigned char* pszString);
 // 1.14d mac: 0001eafe
 unsigned char* c2pstr(char* pszString);
 // 1.14d mac: 00032bcd
-void FUN_00032bcd(uint32_t nMilliseconds);
+void DirectSound_SetMinVolumeDelay(uint32_t nMilliseconds);
 // 1.14d mac: 00034740
 void GetDialogItemRect(DialogRef pDialog, DialogItemIndex nItem, Rect* pRect);
 typedef Boolean (*MacDialogFilterProc)(DialogRef pDialog, EventRecord* pEvent, DialogItemIndex* pnItemHit);
@@ -74,7 +74,11 @@ void FLAMINGLOGO_DrawFrame(ControlRef pControl);
 // 1.14d mac: 0004b543
 void D2WINMAIN_SetCursorVisible(BOOL bVisible);
 // 1.14d mac: 0006328d
-void FUN_0006328d(BOOL bEnable);
+namespace D2Client {
+namespace Cursor {
+void CURSOR_SetOverrideValue(int nValue);
+}
+}
 // 1.14d mac: 00042c23
 BOOL MPQ_LoadAllMediaMpqFiles(void* pfnUserAction1, void* pfnUserAction2, int nFlags, void* pIni);
 // 1.14d mac: 00042ab4
@@ -82,14 +86,15 @@ void MPQ_UnloadAllMediaMpqFiles(void);
 // 1.14d mac: 002edc4a
 BOOL D2CheckExpansionGame(void);
 // 1.14d mac: 002b692a
-void FUN_002b692a(void);
+void ARCHIVE_UnmountCdVolumes(void);
 // The application's procedure table (the slots after the shell's own: 0x6c, 0x70 and 0x74 bracket
 // a dialog the way the shell wants the app told).
 struct MacAppProcs {
     void (*apfn[64])(void);
 };
 // 1.14d mac: 00397abc
-extern MacAppProcs* g_pMacAppProcs;
+// The pointer to the display driver table (g_pDisplayDriver, StormMac/MacDisplayDriver.cpp, 00397abc).
+extern MacAppProcs* g_pMacAppProcs __asm__("_g_pDisplayDriver");
 // ---- the SReg, Win32Mac and D2gfx entry points the shell calls ----
 
 // 1.14d mac: 0001ccd5
@@ -185,7 +190,7 @@ void MAC_ShowAboutDialog(void) {
     SetPortWindowPort(GetDialogWindow(pDialog));
     ShowWindow(GetDialogWindow(pDialog));
     D2WINMAIN_SetCursorVisible(0);
-    FUN_0006328d(0);
+    D2Client::Cursor::CURSOR_SetOverrideValue(0);
     MAC_BeginModalDialog(pDialog, 0);
     DialogItemIndex nItemHit;
     do {
@@ -207,7 +212,7 @@ void MAC_ShowAboutDialog(void) {
         SetResLoad(true);
     }
     D2WINMAIN_SetCursorVisible(1);
-    FUN_0006328d(1);
+    D2Client::Cursor::CURSOR_SetOverrideValue(1);
     g_pMacAppProcs->apfn[27]();
 }
 
@@ -219,7 +224,7 @@ Boolean FUN_0019a89c(DialogRef pDialog, EventRecord* pEvent, DialogItemIndex* pn
     ControlRef pControl = NULL;
     GetDialogItemAsControl(pDialog, 2, &pControl);
     FLAMINGLOGO_DrawFrame(pControl);
-    FUN_00032bcd(1000);
+    DirectSound_SetMinVolumeDelay(1000);
     return 0;
 }
 
@@ -343,7 +348,7 @@ Boolean MAC_GameDiscDialogFilterProc(DialogRef pDialog, EventRecord* pEvent, Dia
             }
             return 0;
         }
-        FUN_002b692a();
+        ARCHIVE_UnmountCdVolumes();
         return 0;
     }
     if (pEvent->what == updateEvt) {
@@ -384,7 +389,7 @@ static uint32_t s_nCmdLineLeft;
 // 1.14d mac: 00536b24
 static char s_szCmdLine[1024];
 // 1.14d mac: 003e0e9c
-extern const char* gApplicationModeCommandLineArgumentArray[6];
+const char* gApplicationModeCommandLineArgumentArray[6] = {"modstate0", "client", "server", "multiplayer", "launcher", "expand"};
 
 // 1.14d mac: 0019e8a1
 // Game/Main.cpp: clears the configuration, initialises the ignore list and parses the switches.

@@ -187,7 +187,8 @@ struct Win32MacHostHooks {
     void (*pfnShowCursor)(void);  // 0x64
 };
 // 1.14d mac: 00397abc
-extern Win32MacHostHooks* g_pHostHooks;
+// The display driver pointer (g_pDisplayDriver, StormMac/MacDisplayDriver.cpp): its table is the host hooks.
+extern Win32MacHostHooks* g_pHostHooks __asm__("_g_pDisplayDriver");
 
 // QuickDraw text state, 8 bytes (0003 52af / 00035310).
 // 1.14d mac: 000352af

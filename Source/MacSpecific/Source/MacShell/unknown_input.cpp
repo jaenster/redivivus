@@ -29,14 +29,15 @@
 
 typedef int BOOL;
 // 1.14d mac: 00032bcd
-void FUN_00032bcd(uint32_t nMilliseconds);
+void DirectSound_SetMinVolumeDelay(uint32_t nMilliseconds);
 // The application's procedure table (the slots after the shell's own: 0x6c, 0x70 and 0x74 bracket
 // a dialog the way the shell wants the app told).
 struct MacAppProcs {
     void (*apfn[64])(void);
 };
 // 1.14d mac: 00397abc
-extern MacAppProcs* g_pMacAppProcs;
+// The pointer to the display driver table (g_pDisplayDriver, StormMac/MacDisplayDriver.cpp, 00397abc).
+extern MacAppProcs* g_pMacAppProcs __asm__("_g_pDisplayDriver");
 void FUN_0019b290(void);
 void FUN_0019b2a2(void);
 void FUN_0019b2b4(int nExitCode);
@@ -117,7 +118,7 @@ void FUN_0019b2b4(int nExitCode) {
 }
 
 // 1.14d mac: 0019b2d1
-void FUN_0019b2d1(int nMouseSensitivity) {
+void MAC_ApplyMouseSensitivity(int nMouseSensitivity) {
 }
 
 static uint8_t MAC_PostMouseMessage(uint32_t nMessage, uint32_t nWParamHigh, uint16_t nModifiers, Point ptMouse);
@@ -284,7 +285,7 @@ uint8_t FUN_0019b74d(EventRecord* pEvent) {
 
 // 1.14d mac: 0019b795
 int FUN_0019b795(void) {
-    FUN_00032bcd(1500);
+    DirectSound_SetMinVolumeDelay(1500);
     return 0;
 }
 

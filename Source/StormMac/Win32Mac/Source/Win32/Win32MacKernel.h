@@ -29,6 +29,7 @@ typedef BOOL* LPBOOL;
 struct Win32MacFindData;
 
 BOOL DeleteFile(LPCSTR lpFileName);
+DWORD GetFileAttributes(LPCSTR lpFileName);
 BOOL CreateDirectory(char* szPathName, void* pSecurityAttributes);
 HANDLE FindFirstFile(char* szPattern, Win32MacFindData* pFindData);
 BOOL FindNextFile(HANDLE hFind, Win32MacFindData* pFindData);
@@ -49,6 +50,12 @@ static inline HANDLE FindFirstFileA(LPCSTR lpFileName, _WIN32_FIND_DATAA* pFindD
 }
 static inline BOOL FindNextFileA(HANDLE hFind, _WIN32_FIND_DATAA* pFindData) {
     return FindNextFile(hFind, reinterpret_cast<Win32MacFindData*>(pFindData));
+}
+static inline HANDLE CreateFileA(LPCSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode,
+                                 LPSECURITY_ATTRIBUTES lpSecurityAttributes, DWORD dwCreationDisposition,
+                                 DWORD dwFlagsAndAttributes, HANDLE hTemplateFile) {
+    return CreateFile(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition,
+                      dwFlagsAndAttributes, hTemplateFile);
 }
 static inline HANDLE CreateFileA(LPCSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode,
                                  LPSECURITY_ATTRIBUTES lpSecurityAttributes, DWORD dwCreationDisposition,
@@ -105,6 +112,51 @@ static inline LONG d2_InterlockedCompareExchange(LONG* pDestination, LONG nExcha
     return InterlockedCompareExchange((LPLONG)pDestination, nExchange, nComperand);
 }
 
+// ---- Win32_Process.cpp, Win32_Memory.cpp, Win32_Threads.cpp, Win32_TimeAndDate.cpp, Win32_utils.cpp ----
+BOOL QueryPerformanceCounter(LARGE_INTEGER* lpPerformanceCount);
+BOOL QueryPerformanceFrequency(LARGE_INTEGER* lpFrequency);
+DWORD GetLastError(void);
+DWORD GetCurrentThreadId(void);
+void OutputDebugString(LPCSTR szOutputString);
+FARPROC GetProcAddress(HANDLE hModule, LPCSTR szProcName);
+HANDLE LoadLibrary(LPCSTR szFileName);
+BOOL FreeLibrary(HANDLE hModule);
+void InitializeCriticalSection(LPCRITICAL_SECTION pCriticalSection);
+void EnterCriticalSection(LPCRITICAL_SECTION pCriticalSection);
+void LeaveCriticalSection(LPCRITICAL_SECTION pCriticalSection);
+void DeleteCriticalSection(LPCRITICAL_SECTION pCriticalSection);
+int MessageBox(void* hWnd, LPCSTR szText, LPCSTR szCaption, UINT uType);
+LPVOID VirtualAlloc(LPVOID lpAddress, size_t dwSize, DWORD flAllocationType, DWORD flProtect);
+BOOL VirtualFree(LPVOID lpAddress, size_t dwSize, DWORD dwFreeType);
+
+DWORD TIME_GetMilliseconds(void);
+DWORD MsgWaitForMultipleObjects(DWORD nCount, const HANDLE* pHandles, BOOL bWaitAll, DWORD dwMilliseconds,
+                                DWORD dwWakeMask);
+// Win32Mac has no timeGetTime of its own: the 1.14d Mac build reads the millisecond timer (0002c0f7).
+#define timeGetTime TIME_GetMilliseconds
+static inline DWORD WaitForMultipleObjects(DWORD nCount, const HANDLE* pHandles, BOOL bWaitAll,
+                                           DWORD dwMilliseconds) {
+    return MsgWaitForMultipleObjects(nCount, pHandles, bWaitAll, dwMilliseconds, 0);
+}
+#define GetFileAttributesA GetFileAttributes
+// The layer's module handles are handle-table indices (HANDLE, an int); the shared code holds
+// them as HMODULE pointers, the same value.
+static inline HMODULE GetModuleHandleA(LPCSTR szModuleName) { return (HMODULE)(intptr_t)GetModuleHandle(szModuleName); }
+static inline DWORD GetModuleFileNameA(HMODULE hModule, LPSTR szFileName, DWORD nSize) {
+    return GetModuleFileName((HANDLE)(intptr_t)hModule, szFileName, nSize);
+}
+static inline HMODULE LoadLibraryA(LPCSTR szFileName) { return (HMODULE)(intptr_t)LoadLibrary(szFileName); }
+static inline FARPROC GetProcAddress(HMODULE hModule, LPCSTR szProcName) {
+    return GetProcAddress((HANDLE)(intptr_t)hModule, szProcName);
+}
+static inline BOOL FreeLibrary(HMODULE hModule) { return FreeLibrary((HANDLE)(intptr_t)hModule); }
+#define OutputDebugStringA OutputDebugString
+// The Mac binary formats with libsystem's sprintf (SPRITECACHE_LoadDC6 0013333b), never wsprintf.
+#define wsprintfA sprintf
+static inline int MessageBoxA(HWND hWnd, LPCSTR szText, LPCSTR szCaption, UINT uType) {
+    return MessageBox((void*)hWnd, szText, szCaption, uType);
+}
+
 // ---- Win32_Threads.cpp ----
 // The Mac signatures carry the thread's name, for pthread_setname_np.
 HANDLE CreateThread(LPVOID lpThreadAttributes, size_t dwStackSize, LPTHREAD_START_ROUTINE pfnStart,
@@ -115,6 +167,7 @@ void ExitThread(DWORD dwExitCode);
 BOOL SetThreadPriority(HANDLE hThread, int nPriority);
 
 // ---- Win32_String.cpp, Win32_utils.cpp ----
+char* _strrev(char* szString);
 char* _strlwr(char* szString);
 DWORD CharLowerBuff(char* lpsz, DWORD cchLength);
 #define CharLowerBuffA CharLowerBuff

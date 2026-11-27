@@ -43,6 +43,8 @@ struct MacSurface {
 
 extern MacRendererFunctions* RENDERER_CurrentRenderedFunctions;
 extern MacSurface g_tSurface;
+extern int g_bMacFullScreen;
+extern int g_nRendererInitOption;
 extern int g_nMacScreenSide;
 extern int g_nRowTableWidth;
 // The 49 shift tables of 256 bytes (defined with the palette helpers); the tile code indexes them

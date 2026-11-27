@@ -34,6 +34,8 @@ import { fileURLToPath } from "node:url";
 const HERE = dirname(fileURLToPath(import.meta.url));
 const probe = process.env.D2_MAC_PROBE ?? join(homedir(), "code/re/diablo2/oracle/mac-probe");
 const ld = process.env.D2_MAC_LD ?? join(probe, "cli/Payload/usr/bin/ld");
+// crt1.o: the executable's entry (start), which calls main as the original binary's entry does.
+const crt1 = join(probe, "sdk/Payload/usr/lib/crt1.10.6.o");
 const sdk = process.env.D2_MAC_SDK ?? join(probe, "sdk107/MacOSX10.7.sdk");
 const LLVM = existsSync("/opt/homebrew/opt/llvm/bin") ? "/opt/homebrew/opt/llvm/bin/" : "";
 const FRAMEWORKS = ["Carbon", "Security", "CoreAudio", "DrawSprocket", "OpenGL", "AGL", "ApplicationServices",
@@ -72,7 +74,7 @@ objs.sort();
 
 function runLd(undefinedMode: string): string {
     const args = ["-arch", "i386", "-macosx_version_min", "10.7", "-syslibroot", sdk, "-undefined", undefinedMode,
-        "-o", join(outDir, "probe.out"), ...objs];
+        "-o", join(outDir, "probe.out"), ...(existsSync(crt1) ? [crt1] : []), ...objs];
     for (const f of FRAMEWORKS) args.push("-framework", f);
     args.push("-lc++", "-lSystem", "-lobjc");
     try {

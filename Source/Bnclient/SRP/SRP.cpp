@@ -162,6 +162,7 @@ int __thiscall SRP_ClientComputeSharedSecret(D2Srp * pSrp, BigData * * pPrivateK
     return 0;
 }
 
+#if !D2_OS_MAC
 int __thiscall SRP_ServerComputeSharedSecret(D2Srp * pThis, BigData * * ppClientPublic, int * ppServerPublic, BigData * * ppPrivateKey, BigData * * ppVerifier, BigData * * ppSharedSecret) {
     uint32_t nScramblingHash;
     SRP_HashBigNumToU32(pThis, (BigData**)ppServerPublic, &nScramblingHash);
@@ -191,6 +192,7 @@ int __thiscall SRP_ServerComputeSharedSecret(D2Srp * pThis, BigData * * ppClient
     SHA::SHA1_BigIntFree(pSharedBase);
     return 0;
 }
+#endif
 
 void __thiscall SRP_ComputeClientProof(D2Srp * pThis, char * szUsername, void * pSalt, void * pClientPublic, void * pServerPublic, void * pSessionKey, uint8_t * pClientProofOut) {
     D2BnSha1ContextStrc sha1Ctx;
@@ -442,6 +444,7 @@ void __thiscall SRP_ServerComputePublicB(D2Srp * * pThis, uint8_t * nContextBase
     SHA::SHA1_BigIntFree(pPublicB);
 }
 
+#if !D2_OS_MAC
 void __thiscall SRP_ClientVerifyAndComputeKey(D2Srp * * pThis, D2SrpServerSessionStrc * pContext, uint32_t * pServerProof) {
     // The values VC8 kept in pClientProofBuf's one frame slot, one member each: a frame object reaches the slot.
     union pClientProofBuf_u {
@@ -488,6 +491,7 @@ void __thiscall SRP_ClientVerifyAndComputeKey(D2Srp * * pThis, D2SrpServerSessio
       pnProofCur++;
     } while (nRemaining >= 4);
 }
+#endif
 
 // Registers: ppSrp in ECX (__thiscall); *ppSrp is forwarded to SRP_ComputeServerProof.
 void __thiscall SRP_ComputeFinalProof(D2Srp * * ppSrp, D2SrpServerSessionStrc * pContext) {

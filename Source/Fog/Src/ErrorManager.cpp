@@ -1071,6 +1071,7 @@ void __fastcall ShowUnrecoverableErrorDialog(int32_t eErrorType, char * szText, 
     /* UINT uType for MessageBoxA */ /* LPCSTR lpCaption for MessageBoxA */ /* LPCSTR lpText for MessageBoxA */ /* HWND hWnd for MessageBoxA */ MessageBoxA((HWND)0x0, szMessageBoxBuffer, szTitleBuffer, 0x30);
 }
 
+#if !D2_OS_MAC
 // Initializes Fog error manager and debugging subsystems on first call. Sets up project metadata (ID 0x108, "Diablo II", version "D2 1.14d"), retrieves executable directory via SFILE_GetExecutableDirectory into a 4096-byte buffer, initializes two critical sections for thread safety, starts the log writer thread, validates gadwBitMasks/gadwInvBitMasks lookup tables, and registers the exit handler. On subsequent calls with bLogGameStrartupInfo=TRUE, only logs startup info via LOGFILE_StoreGameStartupInfo.
 void __fastcall ERRORMANAGER_InitErrorManager(char * dwUnused1, char * szText, BOOL bLogGameStrartupInfo) {
     // Static local variables (originally global data)
@@ -5256,6 +5257,7 @@ void __fastcall ERRORMANAGER_InitErrorManager(char * dwUnused1, char * szText, B
       Storm::Source::SErr::SErrSetBlizzardErrorFunction(CRASH_FillupCrashTxt);
     }
 }
+#endif
 
 void __fastcall StubHook2_Unref_004095d0(int32_t nReserved) {
 
@@ -5303,7 +5305,8 @@ int ERRORMANAGER_ReturnTrue() {
 }
 
 // 1.14d mac: 002ef3cd
-int ERRORMANAGER_ReturnFalse() {
+// The callers pass the crash dump buffer and its size, which the Mac body never reads.
+int ERRORMANAGER_ReturnFalse(void* pOutBuffer, uint32_t* pnBufferSize) {
     return 0;
 }
 #endif
@@ -5323,6 +5326,11 @@ static char gszFogCrashReportCustomMessage[0x400] = {};
 // "D2 1.14d", the milestone string handed to the crash report.
 // 1.14d mac: 00552f56
 static char gszFogVersionString[16] = {};
+
+// StormMac/SOURCE/SERR.CPP, 0000fec0
+typedef void (*pfnBlizzardError)(const char* szTitle, const char* szText, char** ppExtra, int nUnused, int nFlags,
+                                 bool bFatal);
+void SERR_SetDisplayErrorCallback(pfnBlizzardError pfnCallback);
 
 // 1.14d mac: 002eed78
 void FOG_InitErrorManager(void* pUnused, char* szText, int bStoreStartupInfo) {
@@ -5386,8 +5394,17 @@ void FOG_InitErrorManager(void* pUnused, char* szText, int bStoreStartupInfo) {
 
     atexit(EXIT_AtExit);
     ERRORMANAGER_ReturnTrue();
-    Storm::Source::SErr::SErrSetBlizzardErrorFunction(CRASH_FillupCrashTxt);
+    SERR_SetDisplayErrorCallback((pfnBlizzardError)CRASH_FillupCrashTxt);
 }
 #endif
 
 } // namespace Fog::Src::ErrorManager
+
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 002ef085
+// The frame pointer of its own frame: the %08x of the "Unrecoverable internal error" text the
+// Mac renderer units format (Windows inlines GetInstructionPointer at each site instead).
+void* FOG_GetFramePointer(void) {
+    return *(void**)__builtin_frame_address(0);
+}
+#endif

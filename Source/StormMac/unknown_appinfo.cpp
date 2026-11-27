@@ -299,7 +299,7 @@ done:
 
 // 1.14d mac: 00554e48
 // The exit hook fp_fatal calls when the report says to quit; none means ExitToShell.
-extern void (*g_pfnFatalExitHook)(void);
+void (*g_pfnFatalExitHook)(void);
 char FPvfatal(const char* szFormat, va_list pArgs);
 
 // 1.14d mac: 00034519
@@ -770,7 +770,7 @@ unsigned char STORM_IsCDVolume(unsigned short nVRefNum) {
 
 void Mem_SetDefaultAllocators(void);
 void WIN32MAC_Initialize(void);
-void SLOG_InitCriticalSections(void);
+void SLogInitialize(void);
 void SMemInitialize(void);
 
 // 1.14d mac: 000354bd
@@ -779,7 +779,7 @@ void StormMacInit(void) {
     FlushEvents(0xFFFF, 0);
     Mem_SetDefaultAllocators();
     WIN32MAC_Initialize();
-    SLOG_InitCriticalSections();
+    SLogInitialize();
     SMemInitialize();
 }
 

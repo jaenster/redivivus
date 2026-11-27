@@ -34,13 +34,14 @@ struct MacAppProcs {
     void (*apfn[64])(void);
 };
 // 1.14d mac: 00397abc
-extern MacAppProcs* g_pMacAppProcs;
+// The pointer to the display driver table (g_pDisplayDriver, StormMac/MacDisplayDriver.cpp, 00397abc).
+extern MacAppProcs* g_pMacAppProcs __asm__("_g_pDisplayDriver");
 // 1.14d mac: 0019be00
 void MAC_GetDefaultDisplayMode(int* pnWidth, int* pnHeight, int* pnBitDepth);
 // 1.14d mac: 00036d19
 bool MACDISPLAY_SelectDriver(int nDriver);
 // 1.14d mac: 00036d8b
-void FUN_00036d8b(Boolean (*pfnCallback)(Boolean));
+void MACCURSOR_RegisterGuardProc(bool (*pfnGuard)(bool));
 // 1.14d mac: 00036d9f
 void MACCURSOR_RegisterSetCursorPosProc(bool (*pfnSetCursorPos)(int16_t*, int16_t*));
 // 1.14d mac: 00036db3
@@ -48,7 +49,7 @@ void MACCURSOR_RegisterGetCursorPosProc(bool (*pfnGetCursorPos)(int*, int*));
 // 1.14d mac: 00036830
 void MACCURSOR_ShowDisplayCursor(void);
 // 1.14d mac: 00036847
-void FUN_00036847(void);
+void MACCURSOR_HideDisplayCursor(void);
 // 1.14d mac: 00036ff5
 void MACCURSOR_InitCursor(void);
 // 1.14d mac: 0001e550
@@ -96,7 +97,13 @@ void MACGFX_EnumerateDisplayModes(int* pnDisplayModule, int* pnOption4, int* pnO
 // 1.14d mac: 0005e6ac
 void CLIENT_SetRendererMode(int nVideoMode, int bFullScreen);
 // 1.14d mac: 0004d278
-void D2WINSMACK_SetKeepVideoFile(void);
+namespace D2Win {
+namespace Src {
+namespace D2WinSmack {
+void D2WINSMACK_SetKeepTempFile(void);
+}
+}
+}
 // The configuration Game/Main.cpp parses the command line into (its D2IniConfigStrc, 0x3CD
 // bytes); only the bytes the shell uses are laid out.
 struct MacDisplayState {
@@ -215,7 +222,7 @@ int FUN_0019c96e(Boolean bFullScreen) {
         if (!D2GFX_SwitchModule(g_nMacVideoMode, 0, 2))
             MAC_ResetVideoSettingsAndExit();
     }
-    D2WINSMACK_SetKeepVideoFile();
+    D2Win::Src::D2WinSmack::D2WINSMACK_SetKeepTempFile();
     return 1;
 }
 
@@ -302,8 +309,6 @@ struct MacDisplayLimits {
 // The display module the set-up chose (the first output of MACGFX_EnumerateDisplayModes).
 static int s_nDisplayModule;
 
-// 1.14d mac: 00331dfa
-extern const char g_szMacDisplayName[];
 
 // 1.14d mac: 0019cc81
 // Brings the process to the front and sets the display up through the application's display
@@ -321,7 +326,7 @@ Boolean FUN_0019cc81(int nDisplayModule, int nUnused) {
     s_nDisplayModule = nDisplayModule;
     if (MACDISPLAY_SelectDriver(0)) {
         ((void (*)(void*, void*, void*))g_pMacAppProcs->apfn[49])((void*)MACCURSOR_InitCursor, (void*)MACCURSOR_ShowDisplayCursor,
-                                                                   (void*)FUN_00036847);
+                                                                   (void*)MACCURSOR_HideDisplayCursor);
         int nWidth;
         int nHeight;
         int nBitDepth;
@@ -341,9 +346,9 @@ Boolean FUN_0019cc81(int nDisplayModule, int nUnused) {
         tLimits.nDepth = nBitDepth;
         tLimits.nFlags = 0;
         if (((char (*)(void*, void*, int, const char*))g_pMacAppProcs->apfn[13])(&tRequest, &tLimits, s_nDisplayModule,
-                                                                                 g_szMacDisplayName) == 1) {
+                                                                                 "") == 1) {
             FPSetMessageBoxCallback(FUN_0019cf50);
-            FUN_00036d8b(FUN_0019cb40);
+            MACCURSOR_RegisterGuardProc((bool (*)(bool))FUN_0019cb40);
             MACCURSOR_RegisterSetCursorPosProc(MAC_SetCursorPos);
             MACCURSOR_RegisterGetCursorPosProc(MAC_GetCursorPos);
             return 1;

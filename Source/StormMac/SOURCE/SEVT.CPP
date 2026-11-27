@@ -21,7 +21,8 @@ LONG InterlockedIncrement(LPLONG pnValue);
 LONG InterlockedDecrement(LPLONG pnValue);
 // Out of line in SFILE.CPP's neighbourhood.
 void CRITSECT_Init(pthread_mutex_t* pMutex);
-void CRITSECT_Destroy(pthread_mutex_t* pMutex) __attribute__((visibility("hidden")));
+// The destructor SFileCritSect::~SFileCritSect[D2] (SFILE.CPP, 00016a72), which the statics register with __cxa_atexit.
+void CRITSECT_Destroy(pthread_mutex_t* pMutex) __attribute__((visibility("hidden"))) __asm__("__ZN13SFileCritSectD2Ev");
 
 extern "C" int __cxa_atexit(void (*pfnDestructor)(void*), void* pObject, void* pDso);
 extern "C" void* __dso_handle;

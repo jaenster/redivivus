@@ -51,6 +51,11 @@ BOOL FileTimeToMacDateTime(const FILETIME* pFileTime, UInt32* pnMacDate, void* p
 // 1.14d mac: 0002c199
 BOOL MacDateTimeToFileTime(const UInt32* pnMacDate, FILETIME* pFileTime);
 
+// 1.14d mac: 00554e40
+DWORD g_dwNewFileCreator;
+// 1.14d mac: 00554e44
+DWORD g_dwNewFileType;
+
 // 1.14d mac: 00021ad7
 HANDLE CreateFile(LPCSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, LPVOID lpSecurityAttributes,
                   DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile) {

@@ -16,7 +16,7 @@ void MAC_ConvertNewlinesToReturns(CFStringRef* pString);
 // 1.14d mac: 0001eafe
 unsigned char* c2pstr(char* szString);
 // 1.14d mac: 00036d5e
-void MAC_SetAlertBackground(bool bEnable);
+void MACCURSOR_CallGuardProc(bool bEnable);
 
 // 1.14d mac: 003f0e6c
 // Nesting count: above zero a fatal error goes to the debugger and not to a box.
@@ -101,7 +101,7 @@ int FPMessageBox(char* szText, char* szCaption, DWORD dwFlags) {
     if (s_pfnMessageBoxCallback != NULL) {
         s_pfnMessageBoxCallback();
     }
-    MAC_SetAlertBackground(true);
+    MACCURSOR_CallGuardProc(true);
 
     const char* szExplanation = szText;
     if (szCaption == NULL || *szCaption == '\0') {
@@ -185,7 +185,7 @@ int FPMessageBox(char* szText, char* szCaption, DWORD dwFlags) {
     CFRelease(cfMessage);
     CFRelease(cfExplain);
     if ((dwFlags & 0x20000000) == 0) {
-        MAC_SetAlertBackground(false);
+        MACCURSOR_CallGuardProc(false);
     }
 
     UInt32 nResult = 1;

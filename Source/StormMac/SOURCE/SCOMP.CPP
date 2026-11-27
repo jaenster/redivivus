@@ -19,7 +19,8 @@ void SErrSetLastError(DWORD dwErrCode);
 DWORD GetCurrentThreadId(void);
 // Out of line in SFILE.CPP's neighbourhood: a recursive pthread mutex.
 void CRITSECT_Init(pthread_mutex_t* pMutex);
-void CRITSECT_Destroy(void* pMutex);
+// The destructor SFileCritSect::~SFileCritSect[D2] (SFILE.CPP, 00016a72), which the statics register with __cxa_atexit.
+void CRITSECT_Destroy(pthread_mutex_t* pMutex) __asm__("__ZN13SFileCritSectD2Ev");
 
 // PKWARE's blast (3rd party, 3rdparty/blast).
 extern "C" {
@@ -907,7 +908,7 @@ void thunk_uncompress(uint8_t* pDest, unsigned long* pnDestLen, const uint8_t* p
 // The static initialiser: the temp buffer's mutex, destroyed at exit.
 void SCOMP_InitStatics(void) {
     CRITSECT_Init(&s_tTempMutex);
-    __cxa_atexit(CRITSECT_Destroy, &s_tTempMutex, &__dso_handle);
+    __cxa_atexit((void (*)(void*))CRITSECT_Destroy, &s_tTempMutex, &__dso_handle);
 }
 
 template void TSLink<HuffNode>::Unlink();
@@ -921,3 +922,12 @@ template void TSExplicitList<HuffNode, 0>::LinkNode(HuffNode*, uint32_t, HuffNod
 // 1.14d mac: 0000fe2c TSExplicitList<HuffNode,0>::UnlinkAll
 
 #endif  // D2_OS_MAC
+
+// 1.14d mac: 003cf6f4
+const SCompMethod g_atSCompMethods[5] = {
+    {0x40, (SCompCodec)SCOMP_DecompressADPCMMono},
+    {0x80, (SCompCodec)SCOMP_DecompressADPCMStereo},
+    {0x01, (SCompCodec)HUFFMAN_Decompress},
+    {0x02, (SCompCodec)thunk_uncompress},
+    {0x08, (SCompCodec)SCOMP_DecompressImplode},
+};

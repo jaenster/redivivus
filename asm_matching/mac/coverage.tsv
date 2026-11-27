@@ -216,7 +216,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 00010b81	Storm::Source::SErr::SErrSuppressErrors	20	StormMac/Storm Mac/SOURCE/SERR.CPP	file-map	Source/StormMac/SOURCE/SERR.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SERR.CPP	yes		data-guess
 00010b98	Storm::Source::SErr::SErrSetLastError	24	StormMac/Storm Mac/SOURCE/SERR.CPP|StormMac/Storm Mac/SOURCE/SEVT.CPP	between	Source/StormMac/SOURCE/SERR.CPP|Source/StormMac/SOURCE/SEVT.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SERR.CPP	yes	0041c340	data-guess
 00010bb3	Storm::Source::SErr::SErrReportResourceLeak	30	StormMac/Storm Mac/SOURCE/SERR.CPP|StormMac/Storm Mac/SOURCE/SEVT.CPP	between	Source/StormMac/SOURCE/SERR.CPP|Source/StormMac/SOURCE/SEVT.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SERR.CPP	yes	0041d1e0	
-00010bd1	Storm::Source::SErr::SErrReportNamedResourceLeak	310	StormMac/Storm Mac/SOURCE/SERR.CPP|StormMac/Storm Mac/SOURCE/SEVT.CPP	between	Source/StormMac/SOURCE/SERR.CPP|Source/StormMac/SOURCE/SEVT.CPP	blizzard-mac	match	Source/Storm/Source/SErr.cpp	no	0041d010	
+00010bd1	Storm::Source::SErr::SErrReportNamedResourceLeak	310	StormMac/Storm Mac/SOURCE/SERR.CPP|StormMac/Storm Mac/SOURCE/SEVT.CPP	between	Source/StormMac/SOURCE/SERR.CPP|Source/StormMac/SOURCE/SEVT.CPP	blizzard-mac	nonmatch	Source/Storm/Source/SErr.cpp	no	0041d010	pic-ref
 00010d08	Storm::Source::SErr::SERR_AddStormFacility	93	StormMac/Storm Mac/SOURCE/SERR.CPP|StormMac/Storm Mac/SOURCE/SEVT.CPP	between	Source/StormMac/SOURCE/SERR.CPP|Source/StormMac/SOURCE/SEVT.CPP	blizzard-mac	match	Source/Storm/Source/SErr.cpp	no	0041c0f0	
 00010d65	Storm::Source::SERR_WriteLogLineF	180	StormMac/Storm Mac/SOURCE/SERR.CPP|StormMac/Storm Mac/SOURCE/SEVT.CPP	between	Source/StormMac/SOURCE/SERR.CPP|Source/StormMac/SOURCE/SEVT.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SERR.CPP	yes		
 00010e19	Storm::Source::SErr::SERR_WriteLogTextCRLF	177	StormMac/Storm Mac/SOURCE/SERR.CPP|StormMac/Storm Mac/SOURCE/SEVT.CPP	between	Source/StormMac/SOURCE/SERR.CPP|Source/StormMac/SOURCE/SEVT.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SERR.CPP	yes		regalloc
@@ -257,7 +257,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 00013132	Storm::Source::SFile::SFILE_CreateCdThread	165	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	match	Source/Storm/Source/SFile.cpp	no	0041a880	
 000131d7	Storm::Source::SFile::SFileDdaDestroy	255	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	nonmatch	Source/Storm/Source/SFile.cpp	no	00419f30	regalloc
 000132d6	Storm::Source::SFile::SFileDdaGetPos	203	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	nonmatch	Source/Storm/Source/SFile.cpp	no	00418140	regalloc
-000133a1	Storm::Source::SFile::SFILE_GetStreamPosition	119	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SFILE.CPP	yes	00415760	unverified-ref
+000133a1	Storm::Source::SFile::SFILE_GetStreamPosition	119	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SFILE.CPP	yes	00415760	
 00013418	Storm::Source::SFile::SFileDdaInitialize	51	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SFILE.CPP	yes	00415ee0	
 0001344b	Storm::Source::SFile::SFileDestroy	626	StormMac/Storm Mac/SOURCE/SFILE.CPP	__FILE__	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	match	Source/Storm/Source/SFile.cpp	no	0041a110	unverified-ref
 000136bd	Storm::Source::SFile::SFileEnableDirectAccess	25	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	match	Source/Storm/Source/SFile.cpp	no	00415f70	
@@ -1003,7 +1003,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 00034428	Storm::Source::GetICInstance	135	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_appinfo.cpp	no		
 000344af	Storm::Source::ReleaseICInstance	45	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_appinfo.cpp	no		
 000344dc	Storm::Win32Mac::MacResolveAliasFile	61	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_appinfo.cpp	no		
-00034519	Storm::Source::fp_fatal	61	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/unknown_appinfo.cpp	no		data-guess
+00034519	Storm::Source::fp_fatal	61	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_appinfo.cpp	no		
 00034556	Storm::Win32Mac::GetVolumeInfoNoName	154	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/unknown_appinfo.cpp	no		crt-idiom
 000345f0	Storm::Win32Mac::GetCatInfoNoName	118	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_appinfo.cpp	no		
 00034666	Storm::Win32Mac::DetermineVRefNum	61	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_appinfo.cpp	no		
@@ -1020,7 +1020,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 000352af	Storm::Source::GetTextState	97	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_appinfo.cpp	no		
 00035310	Storm::Source::SetTextState	65	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_appinfo.cpp	no		
 00035351	Storm::STORM_IsCDVolume	364	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_appinfo.cpp	no		
-000354bd	Storm::StormMacInit	55	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_appinfo.cpp	no		unverified-ref
+000354bd	Storm::StormMacInit	55	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_appinfo.cpp	no		
 000354f4	Storm::Source::MyRuntimeTerminate	81	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_appinfo.cpp	no		
 00035545	Storm::Source::SSystem::StormGetInstance	23	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_appinfo.cpp	no	0041bef0	
 0003555c	Storm::Dlg_DisableMenusForModal	387	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/unknown_dialog.cpp	no		regalloc
@@ -1217,7 +1217,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 0005d17f	D2Client::FUN_0005d17f	5	?	unpaired	-	compiler	missing		-		
 0005e6ac	D2Client::CLIENT_SetRendererMode	29	?	unpaired	?	blizzard-mac	nonmatch	Source/D2Client/Game/Rendering.cpp	no		data-guess
 00062e42	D2Client::WALL2_DrawCellWallTiles	544	?	unpaired	?	shared-unpaired	missing		-	004df1c0	
-0006328d	D2Client::Cursor::CURSOR_SetOverrideValue	20	?	unpaired	?	blizzard-mac	nonmatch	Source/D2Client/Engine/Cursor.cpp	no		pic-ref
+0006328d	D2Client::Cursor::CURSOR_SetOverrideValue	20	?	unpaired	?	blizzard-mac	body	Source/D2Client/Engine/Cursor.cpp	no		pic-ref
 000632a1	D2Client::Cursor::CURSOR_GetOverrideClear	17	?	unpaired	?	blizzard-mac	match	Source/D2Client/Engine/Cursor.cpp	no		
 000632b2	D2Client::Cursor::CURSOR_SetOverrideValueAndClear	34	?	unpaired	?	blizzard-mac	nonmatch	Source/D2Client/Engine/Cursor.cpp	no		regalloc
 00064cf3	D2Client::Engine::Gfx::GFX_LoadModeCofAndSetFlag	61	D2Client/ENGINE/Gfx.cpp	file-map	Source/D2Client/ENGINE/Gfx.cpp	shared-unpaired	missing		-	00470610	
@@ -1225,7 +1225,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 0006e0b7	D2Client::GAME::Env::FUN_0006e0b7	5	D2Client/GAME/Env.cpp	file-map	-	compiler	missing		-		
 0006e5b3	D2Client::GAME::Game::GAME_SetInteractionPending	18	?	unpaired	?	blizzard-mac	nonmatch	Source/D2Client/Game/Game.cpp	no		pic-ref
 00071d5a	D2Client::GAME::Game::GAME_EndGameScreenOnMouseDown	119	D2Client/GAME/Game.cpp	file-map	Source/D2Client/GAME/Game.cpp	shared-unpaired	missing		-	0044e4f0	
-000723b4	D2Client::GAME::Game::GAME_ShowExitConfirmMenu	9	?	unpaired	?	blizzard-mac	nonmatch	Source/D2Client/Game/Game.cpp	no		unverified-ref
+000723b4	D2Client::GAME::Game::GAME_ShowExitConfirmMenu	9	?	unpaired	?	blizzard-mac	match	Source/D2Client/Game/Game.cpp	no		
 000724cc	D2Client::TSHashTableReuse_SGAMEDATA_DeletingDtor	54	?	unpaired	-	compiler	missing		-		
 00072660	TSLink<SGAMEDATA>::Unlink	63	?	unpaired	-	compiler	missing		-		
 000726a0	TSLink<SGAMEDATA>::NextLink	53	?	unpaired	-	compiler	missing		-		
@@ -1240,7 +1240,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 000749f5	D2Client::GAME::Record::RECORD_GetFlagB	18	?	unpaired	?	blizzard-mac	nonmatch	Source/D2Client/Game/Record.cpp	no		pic-ref
 00076284	D2Client::GAME::Roster::ROSTER_CheckMeAllowsPlayerLoot	68	D2Client/GAME/Roster.cpp	file-map	Source/D2Client/GAME/Roster.cpp	shared-unpaired	missing		-	00479c20	
 0007c26b	D2Client::GAME::Select::SELECT_IsValueOne	23	?	unpaired	?	blizzard-mac	match	Source/D2Client/Game/Select.cpp	no		
-0009475b	D2Client::Sound::SOUND_IsClientSampleActive	36	?	unpaired	?	blizzard-mac	match	Source/D2Client/Sound/Sound.cpp	no		unverified-ref
+0009475b	D2Client::Sound::SOUND_IsClientSampleActive	36	?	unpaired	?	blizzard-mac	match	Source/D2Client/Sound/Sound.cpp	no		
 00095d95	D2Client::FUN_00095d95	5	?	unpaired	-	compiler	missing		-		
 00095dd8	D2Client::Sound::SOUND_IsStreamChannelSampleActive	119	?	unpaired	?	blizzard-mac	nonmatch	Source/D2Client/Sound/SoundInst.cpp	no		regalloc
 000965c4	D2Client::Sound::SoundInst::FUN_000965c4	71	D2Client/Sound/SoundInst.cpp	file-map	Source/D2Client/Sound/SoundInst.cpp	shared-unpaired	missing		-	004b9ef0	
@@ -1289,7 +1289,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 000dbcdd	D2Client::FUN_000dbcdd	10	?	unpaired	-	compiler	missing		-		
 000dbce7	D2Client::UI::EscMenu::ESCMENU_SaveMouseSensitivity	78	?	unpaired	?	blizzard-mac	match	Source/D2Client/UI/EscMenu.cpp	no		
 000dbd35	D2Client::UI::EscMenu::ESCMENU_LoadMouseSensitivity	75	?	unpaired	?	blizzard-mac	match	Source/D2Client/UI/EscMenu.cpp	no		
-000dbf1a	D2Client::UI::EscMenu::ESCMENU_QuitToDesktop	97	?	unpaired	?	blizzard-mac	match	Source/D2Client/UI/EscMenu.cpp	no		unverified-ref
+000dbf1a	D2Client::UI::EscMenu::ESCMENU_QuitToDesktop	97	?	unpaired	?	blizzard-mac	match	Source/D2Client/UI/EscMenu.cpp	no		
 000dbf7b	D2Client::UI::EscMenu::ESCMENU_CancelQuitToDesktop	36	?	unpaired	?	blizzard-mac	match	Source/D2Client/UI/EscMenu.cpp	no		
 000dcc63	D2Client::FUN_000dcc63	31	?	unpaired	?	shared-unpaired	missing		-	0047f340	
 000dcc82	D2Client::FUN_000dcc82	31	?	unpaired	?	shared-unpaired	missing		-	0047f3a0	
@@ -1320,10 +1320,10 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 0011e970	D2Client::FUN_0011e970	21	?	unpaired	-	compiler	missing		-	006cad00	
 00124756	D2Client::UNIT::PlayerList::PLAYERLIST_FindEntry	54	?	unpaired	?	shared-unpaired	missing		-	0055b110	
 00128831	D2Client::UNIT::UnitMode::UNITMODE_ExecuteAttackAndQueueSkill	129	?	unpaired	?	blizzard-mac	match	Source/D2Client/Unit/UnitMode.cpp	no		
-0012b628	FUN_0012b628	5	?	unpaired	-	compiler	missing		-		
-0012b62d	FUN_0012b62d	5	?	unpaired	-	compiler	missing		-		
-0012b632	FUN_0012b632	10	?	unpaired	-	compiler	missing		-		
-0012b63c	FUN_0012b63c	5	?	unpaired	-	compiler	missing		-		
+0012b628	FUN_0012b628	5	?	unpaired	?	blizzard-mac	match	Source/D2Client/Warden/WardenMac.cpp	no		
+0012b62d	FUN_0012b62d	5	?	unpaired	?	blizzard-mac	match	Source/D2Client/Warden/WardenMac.cpp	no		
+0012b632	FUN_0012b632	10	?	unpaired	?	blizzard-mac	match	Source/D2Client/Warden/WardenMac.cpp	no		
+0012b63c	FUN_0012b63c	5	?	unpaired	?	blizzard-mac	match	Source/D2Client/Warden/WardenMac.cpp	no		
 0012bdc0	D2CMP::CelCmp::FUN_0012bdc0	17	D2CMP/SRC/CelCmp.cpp	file-map	Source/D2CMP/SRC/CelCmp.cpp	shared-unpaired	missing		-	00601a50	
 0012be84	D2CMP::CelCmp::FUN_0012be84	53	D2CMP/SRC/CelCmp.cpp	file-map	Source/D2CMP/SRC/CelCmp.cpp	shared-unpaired	missing		-	00601c70	
 0012befa	D2CMP::CelCmp::FUN_0012befa	53	D2CMP/SRC/CelCmp.cpp	file-map	Source/D2CMP/SRC/CelCmp.cpp	shared-unpaired	missing		-	00602140	
@@ -1514,7 +1514,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 002b1700	D2OpenGL::CD2Textures::GetFreeMemory	23	MacSpecific/Source/CD2Textures/CD2Textures.cpp	file-map	Source/MacSpecific/Source/CD2Textures/CD2Textures.cpp	blizzard-mac	match	Source/MacSpecific/Source/CD2Textures/CD2Textures.cpp	yes		
 002b1718	D2OpenGL::CD2Textures::CD2TEXTURES_GrowEntries	368	MacSpecific/Source/CD2Textures/CD2Textures.cpp	__FILE__	Source/MacSpecific/Source/CD2Textures/CD2Textures.cpp	blizzard-mac	nonmatch	Source/MacSpecific/Source/CD2Textures/CD2Textures.cpp	yes		regalloc
 002b1888	D2gfx::D2GfxHelperStrc::D2GFX_SetupRenderFunctions	32	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	missing		-	004f8dc0	
-002b18a8	D2gfx::D2GFX::fpFillYBufferTable	107	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	blizzard-mac	match	Source/D2gfx/Mac/D2GFXMacHelper.cpp	no		unverified-ref
+002b18a8	D2gfx::D2GFX::fpFillYBufferTable	107	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	blizzard-mac	match	Source/D2gfx/Mac/D2GFXMacHelper.cpp	no		
 002b1913	D2gfx::D2GFX::PALETTE_InitColorLookupTables	112	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	blizzard-mac	nonmatch	Source/D2gfx/Mac/D2GFXMacHelper.cpp	no		sched
 002b1983	FUN_002b1983	31	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	blizzard-mac	match	Source/D2gfx/Mac/D2GFXMacHelper.cpp	no		
 002b19a2	D2gfx::D2GFX::D2GFX_InitializeWindowSize	162	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	missing		-	004f8ea0	
@@ -1600,7 +1600,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 002b5b6d	D2gfx::D2GFX::GetHwnd	20	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	missing		-	004f59a0	
 002b5b81	D2gfx::D2GFX::D2GFX_GetScreenSize	70	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	missing		-	004f59b0	
 002b5bc7	D2gfx::D2GFX::UpdateOSCursorVisibilty	85	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	match	Source/D2gfx/Src/D2GFX.cpp	no	004f59f0	unverified-ref
-002b5c1c	FUN_002b5c1c	40	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	missing		-	004f5a30	
+002b5c1c	FUN_002b5c1c	40	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	match	Source/D2gfx/Mac/D2GFXMacForward.cpp	no	004f5a30	
 002b5c44	D2gfx::D2GFX::D2GFX_ResizeWindow	342	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	nonmatch	Source/D2gfx/Src/D2GFX.cpp	no	004f5aa0	semantic-guess
 002b5d9a	FUN_002b5d9a	10	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	blizzard-mac	match	Source/D2gfx/Mac/D2GFXMacForward.cpp	no		
 002b5da4	FUN_002b5da4	31	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	blizzard-mac	match	Source/D2gfx/Mac/D2GFXMacForward.cpp	no		
@@ -1617,7 +1617,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 002b603a	MACGFX_EnumerateDisplayModes	1179	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	blizzard-mac	nonmatch	Source/D2gfx/Mac/MACGFX.cpp	no		pic-ref
 002b64d5	FUN_002b64d5	86	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	blizzard-mac	match	Source/D2gfx/Mac/MACGFX.cpp	no		
 002b652b	MACGFX_CompareDisplayModes	89	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	blizzard-mac	nonmatch	Source/D2gfx/Mac/MACGFX.cpp	no		regalloc
-002b6584	D2Common::DATATBLS::DataTbls::CheckIfFileExists	88	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	nonmatch	Source/D2Hell/D2HellRoot.cpp	no	00516e46	pic-ref
+002b6584	D2Common::DATATBLS::DataTbls::CheckIfFileExists	88	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	match	Source/D2Hell/D2HellRoot.cpp	no	00516e46	
 002b65dc	Bnclient::BNetGW::D2FILE_CloseFile	67	Bnclient/BNetGW.cpp	file-map	Source/Bnclient/BNetGW.cpp	shared	nonmatch	Source/D2Hell/D2HellRoot.cpp	no	00516e84	semantic-guess
 002b661f	Bnclient::BNetGW::D2FILE_GetFileSize	182	Bnclient/BNetGW.cpp	file-map	Source/Bnclient/BNetGW.cpp	shared	nonmatch	Source/D2Hell/D2HellRoot.cpp	no	00516eab	semantic-guess
 002b66d5	D2FILE_SeekFile	186	Bnclient/BNetGW.cpp|D2Hell/SRC/Archive.cpp	between	Source/Bnclient/BNetGW.cpp|Source/D2Hell/SRC/Archive.cpp	shared	nonmatch	Source/D2Hell/D2HellRoot.cpp	no	00516f14	semantic-guess
@@ -1729,7 +1729,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 002e0f4a	D2OpenGL::OGL_MacSwapContext	428	D2OpenGL/Src/oglBlocks.cpp|D2OpenGL/Src/oglPerspective.cpp	between	Source/D2OpenGL/Src/oglBlocks.cpp|Source/D2OpenGL/Src/oglPerspective.cpp	blizzard-mac	nonmatch	Source/D2OpenGL/Src/oglMac.cpp	no		regalloc
 002e10f6	D2OpenGL::OGL_MacOpenWindow	1200	D2OpenGL/Src/oglBlocks.cpp|D2OpenGL/Src/oglPerspective.cpp	between	Source/D2OpenGL/Src/oglBlocks.cpp|Source/D2OpenGL/Src/oglPerspective.cpp	blizzard-mac	nonmatch	Source/D2OpenGL/Src/oglMac.cpp	no		data-guess
 002e15a6	D2OpenGL::OGL_MacSetRenderer	294	D2OpenGL/Src/oglBlocks.cpp|D2OpenGL/Src/oglPerspective.cpp	between	Source/D2OpenGL/Src/oglBlocks.cpp|Source/D2OpenGL/Src/oglPerspective.cpp	blizzard-mac	nonmatch	Source/D2OpenGL/Src/oglMac.cpp	no		regalloc
-002e16cc	D2OpenGL::OGL_MacCloseWindow	114	D2OpenGL/Src/oglBlocks.cpp|D2OpenGL/Src/oglPerspective.cpp	between	Source/D2OpenGL/Src/oglBlocks.cpp|Source/D2OpenGL/Src/oglPerspective.cpp	blizzard-mac	nonmatch	Source/D2OpenGL/Src/oglMac.cpp	no		pic-ref
+002e16cc	D2OpenGL::OGL_MacCloseWindow	114	D2OpenGL/Src/oglBlocks.cpp|D2OpenGL/Src/oglPerspective.cpp	between	Source/D2OpenGL/Src/oglBlocks.cpp|Source/D2OpenGL/Src/oglPerspective.cpp	blizzard-mac	match	Source/D2OpenGL/Src/oglMac.cpp	no		
 002e173e	D2OpenGL::OGL_MacSwapBuffers	31	D2OpenGL/Src/oglBlocks.cpp|D2OpenGL/Src/oglPerspective.cpp	between	Source/D2OpenGL/Src/oglBlocks.cpp|Source/D2OpenGL/Src/oglPerspective.cpp	blizzard-mac	match	Source/D2OpenGL/Src/oglMac.cpp	no		
 002e175d	D2OpenGL::OGL_MacClampMouseEvent	256	D2OpenGL/Src/oglBlocks.cpp|D2OpenGL/Src/oglPerspective.cpp	between	Source/D2OpenGL/Src/oglBlocks.cpp|Source/D2OpenGL/Src/oglPerspective.cpp	blizzard-mac	nonmatch	Source/D2OpenGL/Src/oglMac.cpp	no		pic-ref
 002e185d	D2OpenGL::OGL_MacGlobalToLocal	55	D2OpenGL/Src/oglBlocks.cpp|D2OpenGL/Src/oglPerspective.cpp	between	Source/D2OpenGL/Src/oglBlocks.cpp|Source/D2OpenGL/Src/oglPerspective.cpp	blizzard-mac	nonmatch	Source/D2OpenGL/Src/oglMac.cpp	no		pic-ref
@@ -1809,7 +1809,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 002e9952	D2Sound::D2SoundStrm::SOUNDSTRM_PlayMusicFile	151	D2Sound/Src/D2SoundStrm.cpp	file-map	Source/D2Sound/Src/D2SoundStrm.cpp	blizzard-mac	body	Source/D2Sound/Src/D2SoundFast.cpp	no		unpaired
 002ea0da	D2Sound::D2SoundUtil::SOUND_FreeAllSoundSmps	38	D2Sound/Src/D2SoundUtil.cpp	file-map	Source/D2Sound/Src/D2SoundUtil.cpp	blizzard-mac	match	Source/D2Sound/D2SoundUntil.cpp	no		
 002eed78	Fog::ErrorManager::FOG_InitErrorManager	737	Fog/Src/ErrorManager.cpp	file-map	Source/Fog/Src/ErrorManager.cpp	blizzard-mac	nonmatch	Source/Fog/Src/ErrorManager.cpp	yes		stack-layout
-002ef085	Fog::ErrorManager::FOG_GetFramePointer	7	Fog/Src/ErrorManager.cpp	file-map	Source/Fog/Src/ErrorManager.cpp	shared-unpaired	missing		-		
+002ef085	Fog::ErrorManager::FOG_GetFramePointer	7	Fog/Src/ErrorManager.cpp	file-map	Source/Fog/Src/ErrorManager.cpp	blizzard-mac	nonmatch	Source/Fog/Src/ErrorManager.cpp	yes		crt-idiom
 002ef34b	Fog::Src::ErrorManager::ERRORMANAGER_ReturnTrue	10	Fog/Src/ErrorManager.cpp	file-map	Source/Fog/Src/ErrorManager.cpp	blizzard-mac	match	Source/Fog/Src/ErrorManager.cpp	yes		
 002ef3cd	Fog::Src::ErrorManager::ERRORMANAGER_ReturnFalse	7	Fog/Src/ErrorManager.cpp	file-map	Source/Fog/Src/ErrorManager.cpp	blizzard-mac	match	Source/Fog/Src/ErrorManager.cpp	yes		
 002ef740	Fog::ErrorManager::FOG_GetInstallPath	44	Fog/Src/ErrorManager.cpp	file-map	Source/Fog/Src/ErrorManager.cpp	blizzard-mac	match	Source/Fog/Source/SFile.cpp	no		
@@ -1826,7 +1826,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 002f3d5a	Fog::Src::QServer::QServer::QSERVER_SendToClient	80	Fog/Src/QServer/QServer.cpp	file-map	Source/Fog/Src/QServer/QServer.cpp	shared-unpaired	missing		-	006bfad0	
 002f553b	Fog::FUN_002f553b	64	?	unpaired	?	shared-unpaired	missing		-	006bf660	
 002f557e	Fog::FUN_002f557e	5	?	unpaired	-	compiler	missing		-		
-002f70c5	Fog::Src::QServer::QServerNT::QSERVER_WaitLoopMac	101	?	unpaired	?	blizzard-mac	nonmatch	Source/Fog/Src/QServer/QServerNT.cpp	no		pic-ref
+002f70c5	Fog::Src::QServer::QServerNT::QSERVER_WaitLoopMac	101	?	unpaired	?	blizzard-mac	match	Source/Fog/Src/QServer/QServerNT.cpp	no		pic-ref
 002f7324	MACDISPLAY_SetGammaRamp	212	?	unit	?	blizzard-mac	match	Source/D2gfx/Mac/MACDISPLAYGamma.cpp	no		
 002f73f8	MACDISPLAY_RestoreGammaRamp	86	?	unit	?	blizzard-mac	match	Source/D2gfx/Mac/MACDISPLAYGamma.cpp	no		
 002f938c	FUN_002f938c	28	?	unpaired	-	compiler	missing		-		
@@ -1861,7 +1861,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 002ff60f	BINKAUDIO_DecodeBlock	1652	RAD/Bink/?	unit	-	third-party	missing		-		
 002ffc83	BINKAUDIO_FreeDecoder	9	RAD/Bink/?	unit	-	third-party	missing		-		
 002ffc8c	rdft	405	RAD/Bink/?	unit	-	third-party	missing		-		
-002ffe21	FUN_002ffe21	151	RAD/Bink/?	unit	-	third-party	missing		-		
+002ffe21	FUN_002ffe21	151	RAD/Bink/?	unit	-	third-party	nonmatch	Source/D2OpenGL/Src/oglMac.cpp	no		unverified-ref
 002ffeb8	BINK_QueueSubAllocation	93	RAD/Bink/?	unit	-	third-party	missing		-		
 002fff15	BINK_AllocQueuedBlocks	134	RAD/Bink/?	unit	-	third-party	missing		-		
 002fff9b	BinkSetSoundSystem	96	RAD/Bink/?	unit	-	third-party	missing		-		

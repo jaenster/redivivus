@@ -5,7 +5,7 @@
 #if !defined(_WIN32) && D2_OS_MAC
 
 // 1.14d mac: 0003602b
-int SDRAW_AlwaysTrue(void);
+int Storm_ReturnTrue(void);
 // 1.14d mac: 0001790c
 int SGdiDestroy(void);
 // 1.14d mac: 0001de67
@@ -25,7 +25,7 @@ uint32_t g_dwDriverPitch;
 
 // 1.14d mac: 00036035
 int SDrawDestroy(void) {
-    uint32_t bFirst = SDRAW_AlwaysTrue();
+    uint32_t bFirst = Storm_ReturnTrue();
     uint32_t bGdi = SGdiDestroy();
     uint32_t bVid = SVidDestroy();
     g_dwDriverActive = 0;

@@ -33,14 +33,40 @@ int g_bMacFullScreen;
 int nResolutionMode;
 // 1.14d mac: 005cbb98
 int g_nMacWindow;
+// 1.14d mac: 005cbb9c
+int g_nMacScreenSide;
 // 1.14d mac: 003c8144
 int D2GFXRenderedData[16];
 // 1.14d mac: 003c8148
 int g_bMacHardware;
+namespace D2OpenGL {
+namespace Renderer {
+extern void* OpenGLFunctionTable[57];
+}
+}
+
+// The helper table's slots (D2GFXMacHelper.cpp and D2GFXMacTiles.cpp).
+void fpFillYBufferTable(void* pBits, int nPitch, int nHeight, int n0C);
+void fpDrawVisTile(const uint8_t* pSrc, int nX, int nY);
+void FUN_002b38f3(const uint8_t* pSrc, int nX, int nY, uint8_t nLight);
+void fpDrawGroundTile(const MacGroundTile* pTile, int nScreenX, int nScreenY, const uint8_t* pLights);
+void fpDrawWallTile(const uint8_t* pSrc, int nX, int nY, const uint32_t* pCornerLights);
+void fpDrawBlendedVisTile(const uint8_t* pSrc, int nX, int nY, uint8_t nAlpha);
+void fpDrawRoofTile(const uint8_t* pSrc, int nX, int nY, const int* pCornerLights, uint8_t nAlpha);
+
 // 1.14d mac: 003c815c
-extern void* g_apMacHelperTable[];
+// What the renderer's InitPerspective takes: the surface, tile and palette slots, then a flag.
+void* g_apMacHelperTable[8] = {(void*)fpFillYBufferTable,
+                               (void*)fpDrawVisTile,
+                               (void*)FUN_002b38f3,
+                               (void*)fpDrawGroundTile,
+                               (void*)fpDrawWallTile,
+                               (void*)fpDrawBlendedVisTile,
+                               (void*)fpDrawRoofTile,
+                               (void*)1};
 // 1.14d mac: 003c817c
-extern MacRendererFunctions* g_apMacRenderers[];
+// Renderer function tables by renderer mode; mode 5 is the OpenGL one (003ce6ec).
+MacRendererFunctions* g_apMacRenderers[8] = {0, 0, 0, 0, 0, (MacRendererFunctions*)&D2OpenGL::Renderer::OpenGLFunctionTable, 0, 0};
 
 // 1.14d mac: 002b4b72
 // Step 2 creates the window; step 1 releases the renderer and loads the one of the given mode.

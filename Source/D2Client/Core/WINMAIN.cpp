@@ -297,6 +297,7 @@ BOOL __stdcall LoadDataForGameAndSetupServer(D2IniConfigStrc * D2IniData) {
     return 1;
 }
 
+#if !D2_OS_MAC
 void Unreferenced_0044b780() {
     HWND hWnd = D2gfx::D2GFX::GetHwnd();
     if (hWnd) {
@@ -305,6 +306,7 @@ void Unreferenced_0044b780() {
 
     D2gfx::D2GFX::D2GFX_ResetViewport();
 }
+#endif
 
 // 1.14d mac: 0005db6b
 D2IniConfigStrc * __stdcall D2IniData_Getter() {
@@ -394,11 +396,13 @@ int32_t __stdcall fAPPMODE_client_ReturnAppMode(HMODULE hModule, D2IniConfigStrc
       return 0;
     }
 
+#if !D2_OS_MAC
     bIsExpansion = Lng::CLIENT_LoadLNG();
     if (!bIsExpansion) {
       return 0;
     }
 
+#endif
     D2Win::D2GFX::UI_Init();
     D2Win::D2GFX::INIT_SetWndProcBGlobalPointer((::WndProcB)_Message::WndProcB);
     bIsExpansion = Fog::D2CheckExpansionGame();

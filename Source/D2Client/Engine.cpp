@@ -32,7 +32,7 @@
 // 1.14d mac: 00035351
 bool STORM_IsCDVolume(short nVRefNum);
 // 1.14d mac: 002b692a
-int FUN_002b692a(void);
+int ARCHIVE_UnmountCdVolumes(void);
 #endif
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -462,7 +462,7 @@ uint32_t __stdcall fpGameLoopFunction(uint32_t dwUnused) {
     if (LOADER_IsNamedVolumeMounted((char*)szVolumeName)) {
       gbCharScreenOkPressed = 1;
     } else {
-      ::FUN_002b692a();
+      ::ARCHIVE_UnmountCdVolumes();
     }
 
     return gbCharScreenOkPressed & 1;

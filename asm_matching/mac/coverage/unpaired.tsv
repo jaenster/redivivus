@@ -385,10 +385,10 @@ addr	class	win_addr	evidence
 00128e04	shared-unpaired	004ca870	UNITSND_GetSfxDataListHead: halt line 0xc2c, returns +0x78 field
 00129bff	shared-unpaired	004caa70	UNITSND_GetUnitSfxFlag: halt line 0xc8f, byte +0x70
 00129c3d	shared-unpaired	004caad0	UNITSND_GetSfxMode: halt line 0xca5, dword +0x74
-0012b628	compiler		5-byte void no-op stub, padding/stub
-0012b62d	compiler		5-byte void no-op stub, padding/stub
-0012b632	compiler		10-byte stub that returns 1, no body
-0012b63c	compiler		5-byte void no-op stub, padding/stub
+0012b628	mac-only		the Mac build's empty Warden hook WARDEN_Tick (the binary carries no Warden); ported in D2Client/Warden/WardenMac.cpp
+0012b62d	mac-only		the Mac build's empty Warden hook WARDEN_Cleanup (the binary carries no Warden); ported in D2Client/Warden/WardenMac.cpp
+0012b632	mac-only		the Mac build's empty Warden hook WARDEN_Initialize (the binary carries no Warden); ported in D2Client/Warden/WardenMac.cpp
+0012b63c	mac-only		the Mac build's empty Warden hook WARDEN_HandleServerPacket (the binary carries no Warden); ported in D2Client/Warden/WardenMac.cpp
 0012ba21	shared-unpaired	006014c0	same-name Windows function 006014c0 (CELCMP_DrawCelFrame); was: CELCMP_DrawCelFrame: Win 006014c0 is a different __stdcall DC6 path; Mac dispatches via RLE row-table pointer
 0012bdac	shared-unpaired	00601a30	win CELCMP_SetPixelDataFreeCallback stores the same callback global
 0012bdc0	shared-unpaired	00601a50	getter of gpCelPixelDataFreeCallback; win reads the global inline (DeleteCellFile)
@@ -734,7 +734,7 @@ addr	class	win_addr	evidence
 002edfed	shared-unpaired	006bcc90	FOG_GetDataArrayEntryOrHalt: halting wrapper around the handle lookup
 002ee03b	shared-unpaired	006bcc10	FOG_GetDataArrayEntry: index and serial check of a handle
 002eed78	mac-only		Calls Gestalt (Mac OS query) and sets up Mac product/OS info at init; Gestalt is a Mac-only API
-002ef085	shared-unpaired		returns EBP for fp_fatal messages; VC inlines it at each fatal site, clang keeps it out of line
+002ef085	mac-only		returns its own frame pointer for fp_fatal messages; the Windows build inlines GetInstructionPointer at each site, so no Windows function stands for it; ported in Fog/Src/ErrorManager.cpp
 002ef339	shared-unpaired	00407ff0	win GetErrorState returns g_dwErrorState, the flag the Mac body reads at 00552f54 (CheckErrorDuringError)
 002ef34b	mac-only		body only returns 1; no caller, no code reference
 002ef3cd	mac-only		body returns 0; no caller, no code reference

@@ -92,6 +92,11 @@ list(FILTER D2_MAC_SHARED_SOURCES EXCLUDE REGEX
 # Not in the 1.14d Mac binary: Lng.cpp is the Windows LNG resource DLL loader (no "LNG File" or
 # "D2.LNG" string, no LoadAcceleratorsA user, anywhere in DiabloII_macho).
 list(FILTER D2_MAC_SHARED_SOURCES EXCLUDE REGEX "/Source/D2Client/Core/Lng\\.cpp$")
+# Not in the 1.14d Mac binary: WardenClient.cpp is the Windows Warden client (module loader, RC4, packet
+# handler). DiabloII_macho has no "warden" string and no such code; the game calls four empty stubs
+# instead (0012b628..0012b640), which WardenMac.cpp carries. NWardenClient/ is the module interface
+# the loaded Warden DLL implements.
+list(FILTER D2_MAC_SHARED_SOURCES EXCLUDE REGEX "/Source/D2Client/Warden/(WardenClient\\.cpp|NWardenClient/.*)$")
 list(REMOVE_DUPLICATES D2_MAC_SHARED_SOURCES)
 list(SORT D2_MAC_SHARED_SOURCES)
 

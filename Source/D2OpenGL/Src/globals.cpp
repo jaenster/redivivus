@@ -49,6 +49,82 @@ int INT_ARRAY_00334c70[6] = { 0x200, 0x800, 0x800, 0x100, 0x100, 0x40 }; D2_GLOB
 
 uint64_t DAT_00335278 = 0x4330000000000000; D2_GLOBAL_GUARD(DAT_00335278, "DAT_00335278");
 
+#if !defined(_WIN32) && D2_OS_MAC
+#include "Source/D2OpenGL/Src/oglMac.h"
+#include "Source/D2OpenGL/Src/oglSmack.h"
+#include "Source/D2OpenGL/Src/oglPerspective.h"
+#include "Source/D2OpenGL/Src/oglVertex.h"
+#include "Source/D2OpenGL/Src/oglFloorCache.h"
+#include "Source/D2OpenGL/Src/oglSprite.h"
+#include "Source/D2OpenGL/Src/oglDebugFont.h"
+namespace D2OpenGL {
+namespace Renderer {
+// 1.14d mac: 003ce6ec
+// The renderer's function table, the one slot the Mac D2gfx selects for mode 5 (g_apMacRenderers): the
+// 57 entry points in the order D2gfx calls them.
+void* OpenGLFunctionTable[57] = {
+    (void*)&D2OpenGL::oglCore::OGL_Initialize,
+    (void*)&D2OpenGL::oglCore::OGL_InitPerspective,
+    (void*)&D2OpenGL::oglCore::OGL_Release,
+    (void*)&D2OpenGL::oglCore::OGL_CreateWindow,
+    (void*)&D2OpenGL::oglCore::OGL_DestroyWindow,
+    (void*)&D2OpenGL::oglCore::OGL_PauseSurface,
+    (void*)&D2OpenGL::oglCore::OGL_BeginScene,
+    (void*)&D2OpenGL::oglCore::OGL_EndScene1,
+    (void*)&D2OpenGL::oglCore::OGL_EndScene2,
+    (void*)&D2OpenGL::oglCore::OGL_ResizeWindow,
+    (void*)&D2OpenGL::oglCore::OGL_GetBackBuffer,
+    (void*)&D2OpenGL::oglMac::OGL_MacClampMouseEvent,
+    (void*)&D2OpenGL::oglMac::OGL_MacGlobalToLocal,
+    (void*)&D2OpenGL::oglMac::OGL_MacLocalToGlobal,
+    (void*)&D2OpenGL::oglMac::OGL_ActivateWindow,
+    (void*)&D2OpenGL::oglMac::OGL_SetOption,
+    (void*)&D2OpenGL::oglCore::OGL_BeginCutScene,
+    (void*)&D2OpenGL::oglCore::OGL_PlayCutScene,
+    (void*)&D2OpenGL::oglCore::OGL_CheckCutScene,
+    (void*)&D2OpenGL::oglSmack::OGL_DecodeSmacker,
+    (void*)&D2OpenGL::oglSmack::OGL_PlayerSmacker,
+    (void*)&D2OpenGL::oglSmack::OGL_CloseSmacker,
+    (void*)&D2OpenGL::oglCore::OGL_GetRenderStatistics,
+    (void*)&D2OpenGL::oglCore::OGL_GetScreenSize,
+    (void*)&D2OpenGL::oglCore::OGL_UpdateScaleFactor,
+    (void*)&D2OpenGL::oglCore::OGL_SetGamma,
+    (void*)&D2OpenGL::oglCore::OGL_CheckGamma,
+    (void*)&D2OpenGL::oglPerspective::OGL_SetPerspectiveScale,
+    (void*)&D2OpenGL::oglPerspective::OGL_AdjustPerspectivePosition,
+    (void*)&D2OpenGL::oglPerspective::OGL_PerspectiveScalePosition,
+    (void*)&D2OpenGL::oglPerspective::OGL_SetDefaultPerspectiveFactor,
+    (void*)&D2OpenGL::oglCore::OGL_SetPalette,
+    (void*)&D2OpenGL::oglCore::OGL_SetPaletteTable,
+    (void*)&D2OpenGL::oglVertex::OGL_SetGlobalLight,
+    (void*)&D2OpenGL::oglFloorCache::OGL_DrawGroundTile,
+    (void*)&D2OpenGL::oglSprite::OGL_DrawPerspectiveImage,
+    (void*)&D2OpenGL::oglSprite::OGL_DrawImage,
+    (void*)&D2OpenGL::oglSprite::OGL_DrawShiftedImage,
+    (void*)&D2OpenGL::oglSprite::OGL_DrawVerticalCropImage,
+    (void*)&D2OpenGL::oglSprite::OGL_DrawShadow,
+    (void*)&D2OpenGL::oglSprite::OGL_DrawImageFast,
+    (void*)&D2OpenGL::oglSprite::OGL_DrawClippedImage,
+    (void*)&D2OpenGL::oglVertex::OGL_DrawWallTile,
+    (void*)&D2OpenGL::oglVertex::OGL_DrawTransWallTile,
+    (void*)&D2OpenGL::oglVertex::OGL_DrawShadowTile,
+    (void*)&D2OpenGL::oglDebugFont::OGL_DrawRect,
+    (void*)&D2OpenGL::oglDebugFont::OGL_DrawRectEx,
+    (void*)&D2OpenGL::oglDebugFont::OGL_DrawSolidRect,
+    (void*)&D2OpenGL::oglDebugFont::OGL_DrawSolidSquare,
+    (void*)&D2OpenGL::oglDebugFont::OGL_DrawSolidRectEx,
+    (void*)&D2OpenGL::oglDebugFont::OGL_DrawSolidRectAlpha,
+    (void*)&D2OpenGL::oglDebugFont::OGL_DrawLine,
+    (void*)&D2OpenGL::oglDebugFont::OGL_ClearScreen,
+    (void*)&D2OpenGL::oglDebugFont::OGL_DrawString,
+    (void*)&D2OpenGL::oglDebugFont::OGL_DrawLight,
+    (void*)&D2OpenGL::oglSprite::OGL_DebugFillBackBuffer,
+    (void*)&D2OpenGL::oglCore::OGL_ClearCaches,
+};
+}  // namespace Renderer
+}  // namespace D2OpenGL
+#endif
+
 D2OGLCutsceneCapStrc D2OGLCutsceneCapStrc_ARRAY_003ce7d0[3] = {
     {
         /* .eCap = */ 0x84f5,

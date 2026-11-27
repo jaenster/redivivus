@@ -38,7 +38,7 @@ int GetApplicationInformation(void* pName, FSSpec* pFileSpec, uint32_t* pdwSigna
 
 // 1.14d mac: 0019f18a
 // Sleeps in 10 ms steps, at least ten of them and at least a quarter of a second.
-void FUN_0019f18a(void) {
+void MAC_SettleWait(void) {
     uint32_t dwStartTick = GetTickCount();
     uint32_t nSleepCount = 0;
     do {

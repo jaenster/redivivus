@@ -56,7 +56,6 @@ addr	name	reason_class	detail
 00012ac1	Storm::Source::SFile::SFileReadFileEx2	inline	397 vs 382 insns, 60% of the register-normalised stream aligns; calls 26 vs 25; helpers are inlined or called differently from the original
 000131d7	Storm::Source::SFile::SFileDdaDestroy	regalloc	78 vs 81 insns, 96% of the register-normalised stream aligns; same call sequence; register choice, spills and branch layout differ
 000132d6	Storm::Source::SFile::SFileDdaGetPos	regalloc	75 vs 75 insns, 97% of the register-normalised stream aligns; same call sequence; register choice, spills and branch layout differ
-000133a1	Storm::Source::SFile::SFILE_GetStreamPosition	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical; all 45 instructions are identical; 1 call target(s) cmp cannot name on our side (a destructor variant or a weak template copy in the object)
 0001344b	Storm::Source::SFile::SFileDestroy	unverified-ref	2 reference(s) only one side can resolve; every other instruction identical; all 173 instructions are identical; 5 call target(s) cmp cannot name on our side (a destructor variant or a weak template copy in the object)
 000137af	Storm::Source::SFile::SFILE_InitCryptTable	regalloc	66 vs 63 insns, 91% of the register-normalised stream aligns; same call sequence; register choice, spills and branch layout differ
 0001387f	Storm::Source::SFile::SFILE_FindFileOnDisk	regalloc	the original keeps the result in ebx and spills the flags to the frame; ours keeps the flags in ebx
@@ -331,13 +330,11 @@ addr	name	reason_class	detail
 00033c5f	Storm::Win32Mac::_ultoa	regalloc	6/36(orig) 31(ours): ours 'mov esi, dword ptr [ebp + 0x10]' orig 'mov edi, dword ptr [ebp + 0x10]'
 00033cef	Storm::Source::GetFileTypeAndCreatorForPath	regalloc	extension and creator switches match the original cases; orig keeps the result 'Temp' in eax from entry, ext/index in ebx/esi and tail-shares the War3/FrTh check, ours allocates edi/esi and orders blocks differently
 0003411f	Storm::Source::LaunchURL	crt-idiom	callees differ: orig-only [___memmove_chk] ours-only [_memmove]; buffers sit at ebp-0x154 in orig and ebp-0x110 in ours (frame 0x16c vs 0x170); orig calls __memmove_chk where ours calls memmove
-00034519	Storm::Source::fp_fatal	data-guess	orig loads the hook global once (mov eax,[PIC void]) and calls it; ours loads through &_g_pfnFatalExitHook and dereferences again, so the global's name and type are guessed
 00034556	Storm::Win32Mac::GetVolumeInfoNoName	crt-idiom	callees differ: orig-only [___memmove_chk] ours-only [_memcpy]; orig calls ___memmove_chk with object size 0x100 (fortify wrapper), ours calls plain _memcpy for the same copy
 000347e7	Storm::Win32Mac::MacCopyMachineName	pic-ref	orig leas three string literals s_szLogoMaskFiles+1d5c/1d6c/1d7c; ours leas unresolved [PIC ?] data with the same version-range control flow
 0003494a	Storm::Source::SaveFSSpecFromMem	stack-layout	orig frame 0x1fc vs ours 0x18c; orig tests bParseTrailer==1 first and keeps a different live set across the trailer parse and the CInfoPBRec update (379 insns); needs a full asm-driven rewrite
 00034f87	Storm::Source::SaveFileFromMemCreateDirs	sched	same control flow and frame layout; orig loads bUseTempFolder with mov cl + test cl,cl where ours emits cmp byte [mem],0, and keeps nResult in cx (mov cx,ax) where ours widens to ecx
 0003513f	Storm::Source::SaveWinPathFileFromMem	sched	same control flow and frame layout; orig loads bUseTempFolder with mov al + test al,al where ours emits cmp byte [mem],0, and keeps nResult in cx where ours widens with movsx
-000354bd	Storm::StormMacInit	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical; 1 reference(s) only one side can resolve; every other instruction identical
 0003555c	Storm::Dlg_DisableMenusForModal	regalloc	same calls and control flow; orig keeps the 16-bit item counter as inc/cmp di,si where clang425 strength-reduces to lea [edi-1]/[edi+1] with movsx
 000356df	Storm::Dlg_UpdateEditMenu	regalloc	same calls; orig derives the saved-bit flag with setns and spills bAnyEnabled as a byte, ours folds it into shr/sete and cmp
 000358fe	Storm::Dlg_RestoreMenus	regalloc	same calls and control flow; frame 0xc vs ours 0x1c: loop counters are 16-bit in the orig, widened and spilled in ours
@@ -411,11 +408,9 @@ addr	name	reason_class	detail
 0006328d	D2Client::Cursor::CURSOR_SetOverrideValue	pic-ref	the global is a file-local static here; the original reaches it by a PIC load through call $+5
 000632b2	D2Client::Cursor::CURSOR_SetOverrideValueAndClear	regalloc	argument copied through ecx in the original, compared in place here
 0006e5b3	D2Client::GAME::Game::GAME_SetInteractionPending	pic-ref	the global is a file-local static here; the original reaches it by a PIC load through call $+5
-000723b4	D2Client::GAME::Game::GAME_ShowExitConfirmMenu	unverified-ref	tail call to the esc-menu function: the original jumps to its named target, ours to a local label
 000726d6	D2Client::SGAMEDATA_FreeElementBlock	eh	callees differ: orig-only [__ZSt9terminatev] ours-only []; loop temporaries land in other stack slots (ebp-0x10 vs ebp-0x14)
 000749e3	D2Client::GAME::Record::RECORD_SetFlagA	pic-ref	the global is a file-local static here; the original reaches it by a PIC load through call $+5
 000749f5	D2Client::GAME::Record::RECORD_GetFlagB	pic-ref	the global is a file-local static here; the original reaches it by a PIC load through call $+5
-0009475b	D2Client::Sound::SOUND_IsClientSampleActive	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
 00095dd8	D2Client::Sound::SOUND_IsStreamChannelSampleActive	regalloc	callee-saved register choice differs from the first push (edi vs ebx)
 0009660b	D2Client::Sound::SoundInst::SOUNDINST_StopSoundsById	semantic-guess	ours expands the stop inline (GetSoundEnv, SOUNDHDR globals, master/music volume) where the original calls SOUND_StopUnitSound
 0009ea1a	D2Client::CHAT_OnIMEInputText	wrong	the original tests the 4-byte argument (cmp [ebp+0xc],0); ours tests only its low byte, so a value with a zero low byte differs
@@ -423,7 +418,6 @@ addr	name	reason_class	detail
 000a59b6	D2Client::UI::Editbox::EDITBOX_ConstructWrapper	pic-ref	tail call: the original jumps to its named target, ours to the Constructor label
 000aa68a	D2Client::Engine::LOADER_InsertDiscGameLoopCallback	sched	Windows-shared loop body: the volume-name select is scheduled before the null test in the original
 000ab26f	D2Client::LOADER_IsNamedVolumeMounted	stack-layout	stack protector guard load and local ordering differ in the Carbon volume walk (68 vs 69 insns)
-000dbf1a	D2Client::UI::EscMenu::ESCMENU_QuitToDesktop	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
 000ed666	D2Client::UI::SpellSel::SPELLSEL_ResetAndLayoutGrids	data-guess	memset length 0x3c5 in the original; sizeof the grid region (0x3c8) here so the size is not a raw literal
 000ef691	D2Client::UI::Text::TEXT_SetEventHandlersRegistered	wrong	the body tagged here is the Windows function Unreferenced_0049da60 (an unconditional handler batch change), not the Mac TEXT_SetEventHandlersRegistered(bRegister) that unregisters on 0 and registers on 1 with the state flag and GetTickCount; rewrite from the Mac body
 000fbd68	D2Client::FUN_000fbd68	wrong	ours calls GetPlayerUnit_UI, UNITS_GetRoom and NET_D2GS_CLIENT_Send_INT_INT that the original does not
@@ -468,7 +462,6 @@ addr	name	reason_class	detail
 002b14b4	D2OpenGL::CD2Textures::CD2TEXTURES_ListAppend	unverified-ref	3 reference(s) only one side can resolve; every other instruction identical; 3 reference(s) only one side can resolve; every other instruction identical
 002b1600	D2OpenGL::CD2Textures::CD2TEXTURES_ListRemove	unverified-ref	3 reference(s) only one side can resolve; every other instruction identical; 3 reference(s) only one side can resolve; every other instruction identical
 002b1718	D2OpenGL::CD2Textures::CD2TEXTURES_GrowEntries	regalloc	spill slots swapped; ebx lea hoisted by ours
-002b18a8	D2gfx::D2GFX::fpFillYBufferTable	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical; all 33 instructions identical; the load of g_nMacScreenSide resolves on our side only, the original address is not tagged as that global in the binary data cmp reads
 002b1913	D2gfx::D2GFX::PALETTE_InitColorLookupTables	sched	same instructions in a different order; same instructions; the 49-table copy loop keeps the byte offset in edi and the source cursor in ebx, ours the other way round (index loop and pointer loop give the same)
 002b1a44	FUN_002b1a44	crt-idiom	orig is an unrolled per-row copy with cascading cmp/ja and dec-counter chains (Duff-style); ours is a compact loop over g_anTileRowDest/Src/Width
 002b1ca9	FUN_002b1ca9	crt-idiom	orig is a fully unrolled copy (about 357 extra add-based offset steps); ours is a loop over g_anTileRow tables with shade lookup
@@ -531,7 +524,6 @@ addr	name	reason_class	detail
 002b5fa9	D2gfx::D2GFX::D2GFX_PlayerSmacker	semantic-guess	the halt path calls _exit where the original calls FOG_GetFramePointer and fp_fatal (Unrecoverable internal error); callees differ: orig-only [FOG_GetFramePointer fp_fatal] ours-only [_exit]
 002b603a	MACGFX_EnumerateDisplayModes	pic-ref	rewritten from the asm on a bitfield mode record (flag:1 width:15 height:16); every instruction identical except the constant-pool loads (65536.0 and the two default-mode images) and the indexed s_anTargetWidth/Height displacements, which sit at other offsets from the PIC base in our object
 002b652b	MACGFX_CompareDisplayModes	regalloc	same instructions modulo register choice; same instructions modulo register choice
-002b6584	D2Common::DATATBLS::DataTbls::CheckIfFileExists	pic-ref	same instructions; cmp naming: alias GetLastError=_GetLastError
 002b65dc	Bnclient::BNetGW::D2FILE_CloseFile	semantic-guess	the halt path calls _exit where the original calls FOG_GetFramePointer and fp_fatal (Unrecoverable internal error); callees differ: orig-only [FOG_GetFramePointer fp_fatal] ours-only [_exit]
 002b661f	Bnclient::BNetGW::D2FILE_GetFileSize	semantic-guess	the halt path calls _exit where the original calls FOG_GetFramePointer and fp_fatal (Unrecoverable internal error); callees differ: orig-only [FOG_GetFramePointer fp_fatal FOG_GetFramePointer fp_fatal] ours-only [_exit]
 002b66d5	D2FILE_SeekFile	semantic-guess	the halt path calls _exit where the original calls FOG_GetFramePointer and fp_fatal (Unrecoverable internal error); callees differ: orig-only [FOG_GetFramePointer fp_fatal FOG_GetFramePointer fp_fatal] ours-only [_exit]
@@ -597,7 +589,6 @@ addr	name	reason_class	detail
 002e0f4a	D2OpenGL::OGL_MacSwapContext	regalloc	esi/edi swapped for hBestMode and stack frame 0x4c vs 0x2c: ours spills the dwRefreshFixed temporaries; same call sequence otherwise
 002e10f6	D2OpenGL::OGL_MacOpenWindow	data-guess	ours loads the stack guard through the guessed _PTR____stack_chk_guard_003961fc pointer where the original uses PIC &___stack_chk_guard; frame 0x5c vs 0xac; the original also calls FUN_0019f18a
 002e15a6	D2OpenGL::OGL_MacSetRenderer	regalloc	control flow identical; orig keeps hRendererInfo in a stack slot and the PIC base in ebx, ours uses esi/edi (one extra spill)
-002e16cc	D2OpenGL::OGL_MacCloseWindow	pic-ref	same aglSetCurrentContext/aglDestroyContext/DisposeWindow sequence; ours reaches globals via _AGLContext_00552b34/_WindowRef_00552b30 and exits with jmp out instead of jmp FUN_0019f18a
 002e175d	D2OpenGL::OGL_MacClampMouseEvent	pic-ref	same flag and mode checks with one extra dereference per global; ours reads word pair via _SHORT_ARRAY_00552b38 offsets 0/2 instead of s_bOSChecked+9706/9708
 002e185d	D2OpenGL::OGL_MacGlobalToLocal	pic-ref	same flag test and word subtraction; ours reads the flag and the word pair through pointer globals (extra deref) instead of direct globals
 002e1894	D2OpenGL::OGL_MacLocalToGlobal	pic-ref	same as GlobalToLocal with add: flag and word pair reached through pointer globals in ours
@@ -662,3 +653,6 @@ addr	name	reason_class	detail
 002f27cd	Fog::Src::Excel::Excel::FOG_GetStringFromLinkIndex	sched	same loop and the four blank-to-NUL copies; the original unrolls the index search differently (60 instructions against our 52) and branches to a later exit
 002f70c5	Fog::Src::QServer::QServerNT::QSERVER_WaitLoopMac	pic-ref	same instructions; cmp naming: alias GetLastError=_GetLastError; unverifiable FOG_GetFramePointer / ?; instruction-identical apart from two call targets cmp cannot name on our side: GetLastError (not reconstructed in Win32Mac yet) and FOG_GetFramePointer (ours calls GetInstructionPointer)
 0030a84a	MAC_SpawnProcess	unverified-ref	3 reference(s) only one side can resolve; every other instruction identical; 3 reference(s) only one side can resolve; every other instruction identical
+00010bd1	Storm::Source::SErr::SErrReportNamedResourceLeak	pic-ref	the shared Storm/Source/SSystem.cpp names the option words as separate globals (gnSSystemOption1, gnSSystemOption3, ...), so ours reaches option 1 through its own cell where the original indexes the 00554df8 block from one
+002ef085	Fog::ErrorManager::FOG_GetFramePointer	crt-idiom	the original reads the saved frame pointer from [esp] and carries a second, unreachable epilogue; clang425 emits mov eax, ebp
+002ffe21	FUN_002ffe21	unverified-ref	1 reference(s) only one side can resolve (the CFString pixel-encoding constants); every other instruction identical but the final register move of the result

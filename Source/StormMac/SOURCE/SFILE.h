@@ -21,18 +21,24 @@ struct D2ArchiveStrc;
 struct D2StormAudioStreamRec;
 struct D2StormAsyncOpStrc;
 struct D2SsigContextStrc;
-// The Mac DirectSound shim's buffer (Storm::IDirectSoundBuffer); only the call this file makes.
+// The Mac DirectSound shim's buffer (Storm::IDirectSoundBuffer); only the calls this file makes.
+// The layer implements each method as a free function taking the object first
+// (Win32_DirectSound.cpp, Win32MacDirectSound.h); the members here are those functions: this
+// file's calls pass fewer arguments than the layer declares, so they bind to the layer's symbols.
 struct IDirectSoundBuffer {
-    int SetVolume(int nVolume);
-    int SetPan(int nPan);
-    int SetCurrentPosition(DWORD dwPosition);
-    int GetCurrentPosition(DWORD* pdwPlayCursor, DWORD* pdwWriteCursor);
-    int Release();
+    int SetVolume(int nVolume) __asm__("__Z28IDirectSoundBuffer_SetVolumeP18IDirectSoundBufferi");
+    int SetPan(int nPan) __asm__("__Z25IDirectSoundBuffer_SetPanP18IDirectSoundBufferi");
+    int SetCurrentPosition(DWORD dwPosition)
+        __asm__("__Z37IDirectSoundBuffer_SetCurrentPositionP18IDirectSoundBufferj");
+    int GetCurrentPosition(DWORD* pdwPlayCursor, DWORD* pdwWriteCursor)
+        __asm__("__Z37IDirectSoundBuffer_GetCurrentPositionP18IDirectSoundBufferPjS1_");
+    int Release() __asm__("__Z26IDirectSoundBuffer_ReleaseP18IDirectSoundBuffer");
     int Lock(DWORD dwOffset, DWORD dwBytes, void** ppvAudioPtr1, DWORD* pdwAudioBytes1, void** ppvAudioPtr2,
-             DWORD* pdwAudioBytes2, DWORD dwFlags);
-    int Unlock();
-    int Stop();
-    int Play(DWORD dwReserved1, DWORD dwPriority, DWORD dwFlags);
+             DWORD* pdwAudioBytes2, DWORD dwFlags) __asm__("__Z23IDirectSoundBuffer_LockP18IDirectSoundBufferiiPiS1_S1_S1_j");
+    int Unlock() __asm__("__Z25IDirectSoundBuffer_UnlockP18IDirectSoundBufferPvjS1_j");
+    int Stop() __asm__("__Z23IDirectSoundBuffer_StopP18IDirectSoundBuffer");
+    int Play(DWORD dwReserved1, DWORD dwPriority, DWORD dwFlags)
+        __asm__("__Z23IDirectSoundBuffer_PlayP18IDirectSoundBufferjjj");
 };
 
 struct D2MPQHashEntryStrc {
@@ -177,7 +183,8 @@ typedef char D2MPQ_size_async[(sizeof(D2StormAsyncOpStrc) == 0x44) ? 1 : -1];
 
 // The Mac DirectSound shim's device (Storm::IDirectSound).
 struct IDirectSound {
-    int CreateSoundBuffer(const void* pDescription, IDirectSoundBuffer** ppBuffer);
+    int CreateSoundBuffer(const void* pDescription, IDirectSoundBuffer** ppBuffer)
+        __asm__("__Z30IDirectSound_CreateSoundBufferP12IDirectSoundPKjPP18IDirectSoundBufferPv");
 };
 
 // ---- the entry points of the other Storm files this one calls ----

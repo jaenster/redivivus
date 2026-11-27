@@ -27,6 +27,8 @@
 #include "Source/D2Uni/D2Uni.h"
 #elif D2_ARCH_X86
 #include "Source/D2OpenGL/Src/D2gfxRenderer.h"
+// defined in D2GFXMacForward.cpp, in the global namespace
+void FUN_002b6035(void);
 #else
 #error "D2GFX.cpp: unsupported Mac architecture"
 #endif
@@ -126,10 +128,9 @@ BOOL __stdcall D2GFX_CheckGamma_ForGammaItem() {
 
 // JMP thunk
 #if D2_OS_MAC
-void FUN_002b6035(void);
 // 1.14d mac: 002b4b33
 void thunk_D2GFX_ResetViewport() {
-    FUN_002b6035();
+    ::FUN_002b6035();
 }
 #else
 void thunk_D2GFX_ResetViewport() {
