@@ -55,7 +55,7 @@ public:
     uint32_t m_size;         // 0x20: the byte count of type 3 data
 
     RegistryEntry() : m_type(SREG_TYPE_NONE), m_data(NULL), m_size(0) {}
-    __attribute__((noinline)) ~RegistryEntry();
+    ~RegistryEntry();
 };
 
 // A prefs file whose values have been read.
@@ -79,7 +79,7 @@ public:
     char m_szPath[SREG_PATH_MAX];  // 0x1C
     bool m_bUsed;            // 0x41C
 
-    __attribute__((noinline)) ~WriteRegistryEntry();
+    ~WriteRegistryEntry();
 };
 
 // 1.14d mac: 003f5060
@@ -346,6 +346,8 @@ int SRegDeleteValue(const char* szSubKey, const char* szValueName, uint32_t dwFl
     return 1;
 }
 
+// Out of line in 1.14d although its one remaining call site would inline it: the callee takes
+// ecx/edx (fastcc, so static), hence a second caller in this unit was dead-stripped at link.
 static __attribute__((noinline)) void SREG_ReadEscapedData(FILE* pFile, RegistryEntry* pEntry, bool bAppendTerminator);
 
 // The values of a prefs file, once.

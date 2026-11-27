@@ -40,7 +40,7 @@ void* g_pSGdiScratchBuffer;
 int g_nSGdiScratchBufferSize;
 
 // The callers outside this band pass the size in a register.
-int __attribute__((fastcall, noinline)) SGDI_ResizeScratchBuffer(int nSize);
+int __attribute__((fastcall)) SGDI_ResizeScratchBuffer(int nSize);
 
 // The instantiations clang-425 emitted into this file's object (stpl.h):
 // 1.14d mac: 00017a82 TSLinkList<SGdiObject>::~TSLinkList[D1]

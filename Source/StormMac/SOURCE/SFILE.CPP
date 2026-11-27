@@ -15,17 +15,16 @@
 #include <string.h>
 
 #define SFILE_FILE "/Users/bclemetson/dev/diablo2/Diablo2/Source/DiabloAll/../../../StormMac/Storm Mac/SOURCE/SFILE.CPP"
-#define SFILE_STATIC static __attribute__((noinline))
 
 // A critical section: a recursive pthread mutex.
-void CRITSECT_Init(pthread_mutex_t* pMutex) __attribute__((noinline));
+void CRITSECT_Init(pthread_mutex_t* pMutex);
 
 class SFileCritSect {
 public:
     pthread_mutex_t m_tMutex;
 
     SFileCritSect();
-    __attribute__((noinline)) ~SFileCritSect();
+    ~SFileCritSect();
 };
 
 template<class T>
@@ -88,13 +87,13 @@ extern uint8_t gaSFileSignatureRsaExponent[4];
 #define SFILE_LOCK() pthread_mutex_lock(&s_tLock.m_tMutex)
 #define SFILE_UNLOCK() pthread_mutex_unlock(&s_tLock.m_tMutex)
 
-SFILE_STATIC int32_t SFILE_GetStreamPosition(D2StormAudioStreamRec* pStream);
-SFILE_STATIC int SFILE_s_OpenArchive(D2ArchiveStrc* pArchive, uint32_t nFlags, int32_t bAllowEmpty,
-                                     D2ArchiveStrc** ppArchiveOut);
-SFILE_STATIC void SFILE_CreateCdThread(void);
+static int32_t SFILE_GetStreamPosition(D2StormAudioStreamRec* pStream);
+int SFILE_s_OpenArchive(D2ArchiveStrc* pArchive, uint32_t nFlags, int32_t bAllowEmpty,
+                        D2ArchiveStrc** ppArchiveOut);
+static void SFILE_CreateCdThread(void);
 struct FSSpec;
-SFILE_STATIC int SFILE_CancelAsyncRequest(HANDLE hBuffer, IDirectSoundBuffer* pStream);
-SFILE_STATIC void SFILE_InitCryptTable(void);
+static int SFILE_CancelAsyncRequest(HANDLE hBuffer, IDirectSoundBuffer* pStream);
+static void SFILE_InitCryptTable(void);
 int SFileReadFileEx2(D2MPQFileStrc* pFile, void* pBuffer, uint32_t nBytes, size_t* pnBytesRead,
                             void* pOverlapped, int nFlags, void* pfnComplete);
 int SFileCloseFile(D2MPQFileStrc* pFile);
@@ -164,7 +163,7 @@ void SFILE_CancelAsyncRequestNoReturn(int32_t nParam) {
 // 1.14d mac: 0001228d
 // Drops every queued request that reads into hBuffer or fills pStream, and leaves a request
 // carrying the dropped one's completion event so that the I/O thread signals it.
-SFILE_STATIC int SFILE_CancelAsyncRequest(HANDLE hBuffer, IDirectSoundBuffer* pStream) {
+static int SFILE_CancelAsyncRequest(HANDLE hBuffer, IDirectSoundBuffer* pStream) {
     int nCancelled = 0;
     if (pStream != NULL || hBuffer != 0) {
         SFILE_LOCK();
@@ -287,20 +286,24 @@ seeked:
 
 // 1.14d mac: 00013080
 // Walks a RIFF-style stream of (id, size) pairs to the chunk with the given id.
-static __attribute__((noinline, used)) uint32_t SFILE_FindChunk(D2MPQFileStrc* pMPQFile, int32_t nChunkId, int* pChunkSize) {
-    int32_t aEntry[2];
+static uint32_t SFILE_FindChunk(D2MPQFileStrc* pMPQFile, int32_t nChunkId, int* pChunkSize) {
+    // A chunk header, read whole: a struct, not an array (1.14d has no stack guard here).
+    struct {
+        int32_t nId;
+        int32_t nSize;
+    } tEntry;
     while (true) {
-        if (!SFileReadFileEx2(pMPQFile, aEntry, 8, NULL, NULL, 0, NULL)) {
+        if (!SFileReadFileEx2(pMPQFile, &tEntry, sizeof(tEntry), NULL, NULL, 0, NULL)) {
             return 0;
         }
-        if (aEntry[0] == nChunkId) {
+        if (tEntry.nId == nChunkId) {
             break;
         }
-        if (SFileSetFilePointer(pMPQFile, aEntry[1], NULL, 1) == 0xFFFFFFFF) {
+        if (SFileSetFilePointer(pMPQFile, tEntry.nSize, NULL, 1) == 0xFFFFFFFF) {
             return 0;
         }
     }
-    pChunkSize[0] = aEntry[1];
+    pChunkSize[0] = tEntry.nSize;
     DWORD dwPos = SFileSetFilePointer(pMPQFile, 0, NULL, 1);
     pChunkSize[1] = dwPos;
     return dwPos != 0xFFFFFFFF;
@@ -308,7 +311,7 @@ static __attribute__((noinline, used)) uint32_t SFILE_FindChunk(D2MPQFileStrc* p
 
 static DWORD SFILE_CdThreadProc(LPVOID pParam);
 // 1.14d mac: 00013132
-SFILE_STATIC void SFILE_CreateCdThread(void) {
+static void SFILE_CreateCdThread(void) {
     if (s_hCdThread == 0) {
         s_hCdEvent = CreateEventA(0, 0, 0, NULL);
         s_hCdThread = CreateThread(0, 0, SFILE_CdThreadProc, 0, 0, &s_dwCdThreadId, "CdThreadProc");
@@ -386,7 +389,7 @@ BOOL SFileDdaGetPos(D2MPQFileStrc* pFile, uint32_t* pdwCurrentPos, uint32_t* pdw
 }
 
 // 1.14d mac: 000133a1
-SFILE_STATIC int32_t SFILE_GetStreamPosition(D2StormAudioStreamRec* pStream) {
+static int32_t SFILE_GetStreamPosition(D2StormAudioStreamRec* pStream) {
     DWORD dwPlayCursor = 0;
     DWORD dwWriteCursor = 0;
     int nResult = pStream->pStream->GetCurrentPosition(&dwPlayCursor, &dwWriteCursor);
@@ -481,11 +484,11 @@ void SFileEnableSeekOptimization(BOOL bEnable) {
     s_bSeekOptimization = bEnable;
 }
 
-SFILE_STATIC void SFILE_ConvertRelativePathName(const char* szFileName, char* szOutPath, int32_t bStripDir);
-SFILE_STATIC uint32_t SFILE_FindFileOnDisk(const char* szFileName, uint32_t dwFlags, char* szOutPath);
-SFILE_STATIC D2MPQBlockEntryStrc* GetFileBlockEntry(D2ArchiveStrc* pArchive, const char* szFileName, uint32_t dwFlags,
+static void SFILE_ConvertRelativePathName(const char* szFileName, char* szOutPath, int32_t bStripDir);
+static uint32_t SFILE_FindFileOnDisk(const char* szFileName, uint32_t dwFlags, char* szOutPath);
+static D2MPQBlockEntryStrc* GetFileBlockEntry(D2ArchiveStrc* pArchive, const char* szFileName, uint32_t dwFlags,
                                               D2ArchiveStrc** ppArchiveOut);
-SFILE_STATIC int SFILE_GetHashTableIndex(uint32_t nUnused, const char* szFileName, D2ArchiveStrc* pArchive,
+static int SFILE_GetHashTableIndex(uint32_t nUnused, const char* szFileName, D2ArchiveStrc* pArchive,
                                    uint16_t nLocale, uint8_t nPlatform);
 
 // 1.14d mac: 000136ea
@@ -509,7 +512,7 @@ int SFileFileExistsEx(D2ArchiveStrc* pArchive, const char* szFileName, uint32_t 
 
 // 1.14d mac: 000137af
 // The MPQ crypt table: 5 x 256 dwords from the generator seed 0x100001.
-SFILE_STATIC void SFILE_InitCryptTable(void) {
+static void SFILE_InitCryptTable(void) {
     if (s_pCryptTable == NULL) {
         uint32_t* pTable = (uint32_t*)SMemAlloc(0x1400, SFILE_FILE, 0x31e, 0);
         s_pCryptTable = pTable;
@@ -528,7 +531,7 @@ SFILE_STATIC void SFILE_InitCryptTable(void) {
 }
 
 // 1.14d mac: 0001387f
-SFILE_STATIC uint32_t SFILE_FindFileOnDisk(const char* szFileName, uint32_t dwFlags, char* szOutPath) {
+static uint32_t SFILE_FindFileOnDisk(const char* szFileName, uint32_t dwFlags, char* szOutPath) {
     uint32_t nFound = 0;
     if ((dwFlags & 3) != 0) {
         if (dwFlags & 2) {
@@ -555,7 +558,7 @@ done:
 
 // 1.14d mac: 00013955
 // The block table entry of a file in the given archive, or in the first open archive that has it.
-SFILE_STATIC D2MPQBlockEntryStrc* GetFileBlockEntry(D2ArchiveStrc* pArchive, const char* szFileName, uint32_t dwFlags,
+static D2MPQBlockEntryStrc* GetFileBlockEntry(D2ArchiveStrc* pArchive, const char* szFileName, uint32_t dwFlags,
                                               D2ArchiveStrc** ppArchiveOut) {
     int nHashIndex;
     DWORD dwErrCode;
@@ -600,7 +603,7 @@ fail:
 }
 
 // 1.14d mac: 00013a6f
-SFILE_STATIC void SFILE_BuildDefaultBasePath(void) {
+void SFILE_BuildDefaultBasePath(void) {
     HANDLE hModule = GetModuleHandle(NULL);
     GetModuleFileName(hModule, s_szBasePath, 0x104);
     char* pLastSlash = SStrChrR(s_szBasePath, '\\');
@@ -696,7 +699,7 @@ uint32_t SFileLoadFileEx(D2ArchiveStrc* pArchive, const char* szFileName, void**
 }
 
 // 1.14d mac: 0001453f
-SFILE_STATIC void SFILE_ConvertRelativePathName(const char* szFileName, char* szOutPath, int32_t bStripDir) {
+static void SFILE_ConvertRelativePathName(const char* szFileName, char* szOutPath, int32_t bStripDir) {
     char szPath[260];
     if (s_szBasePath[0] == '\0') {
         SFILE_BuildDefaultBasePath();
@@ -712,7 +715,7 @@ SFILE_STATIC void SFILE_ConvertRelativePathName(const char* szFileName, char* sz
 }
 
 // 1.14d mac: 00014d7d
-SFILE_STATIC void SFILE_Decrypt(uint32_t* pData, uint32_t nByteLen, uint32_t nSeed) {
+static void SFILE_Decrypt(uint32_t* pData, uint32_t nByteLen, uint32_t nSeed) {
     uint32_t nKey = 0xEEEEEEEE;
     uint32_t* pTable = s_pCryptTable;
     for (uint32_t nCount = nByteLen >> 2; nCount != 0; nCount--) {
@@ -733,7 +736,7 @@ static int32_t s_nReadErrorMode = 2;
 static PFNSFILEREADERROR s_pfnReadError;
 
 // 1.14d mac: 00014c64
-SFILE_STATIC BOOL SFILE_ReadFileChecked(int32_t nFileOffset, uint32_t* pFilePosOut, HANDLE hFile, void* pOutputBuf,
+static BOOL SFILE_ReadFileChecked(int32_t nFileOffset, uint32_t* pFilePosOut, HANDLE hFile, void* pOutputBuf,
                                   uint32_t nBytesToRead, uint32_t* pBytesRead, const char* szFileName) {
     int nRetryCount = 0;
     do {
@@ -775,7 +778,7 @@ SFILE_STATIC BOOL SFILE_ReadFileChecked(int32_t nFileOffset, uint32_t* pFilePosO
 }
 
 // 1.14d mac: 00014ffd
-SFILE_STATIC BOOL SFILE_SyncReadFile(D2MPQFileStrc* pFileHandle, int32_t nFileOffset, void* pOutputBuf,
+static BOOL SFILE_SyncReadFile(D2MPQFileStrc* pFileHandle, int32_t nFileOffset, void* pOutputBuf,
                                uint32_t nBytesToRead, uint32_t* pBytesRead) {
     uint32_t aResult[2];
     aResult[1] = 0xFFFFFFFF;
@@ -859,11 +862,11 @@ int32_t SFileUnloadFile(void* pFile) {
     return 1;
 }
 
-SFILE_STATIC uint32_t SFILE_InternalReadAligned(D2MPQFileStrc* pMPQFile, uint32_t nAlignedOffset, void* pBuffer,
+static uint32_t SFILE_InternalReadAligned(D2MPQFileStrc* pMPQFile, uint32_t nAlignedOffset, void* pBuffer,
                                           uint32_t nBytes);
 
 // 1.14d mac: 000155db
-SFILE_STATIC uint32_t SFILE_InternalReadAlignedSector(D2MPQFileStrc* pMPQFile, uint32_t nAlignedOffset) {
+static uint32_t SFILE_InternalReadAlignedSector(D2MPQFileStrc* pMPQFile, uint32_t nAlignedOffset) {
     D2ArchiveStrc* pArchive = pMPQFile->pArchive;
     if (pArchive->pLastReadFile == pMPQFile && pArchive->nLastReadOffset == nAlignedOffset) {
         return pArchive->nLastReadResult;
@@ -895,13 +898,13 @@ struct SFileDecompressSink {
 };
 
 // 1.14d mac: 00015c1f
-SFILE_STATIC uint32_t SFILE_DecompressReadCallback(SFileDecompressSource* pState, void** ppData) {
+static uint32_t SFILE_DecompressReadCallback(SFileDecompressSource* pState, void** ppData) {
     *ppData = pState->pData;
     return pState->nSize;
 }
 
 // 1.14d mac: 00015c32
-SFILE_STATIC int SFILE_DecompressWriteCallback(SFileDecompressSink* pOutput, void* pData, size_t nSize) {
+static int SFILE_DecompressWriteCallback(SFileDecompressSink* pOutput, void* pData, size_t nSize) {
     memcpy(pOutput->pBuffer + pOutput->nOffset, pData, nSize);
     pOutput->nOffset += nSize;
     return 0;
@@ -910,7 +913,7 @@ SFILE_STATIC int SFILE_DecompressWriteCallback(SFileDecompressSink* pOutput, voi
 // 1.14d mac: 00015c64
 // Probes the archive's hash table for the three hashes of a name: the exact locale and
 // platform wins; a neutral entry is the fallback.
-SFILE_STATIC int SFILE_GetHashTableIndex(uint32_t nUnused, const char* szFileName, D2ArchiveStrc* pArchive, uint16_t nLocale,
+static int SFILE_GetHashTableIndex(uint32_t nUnused, const char* szFileName, D2ArchiveStrc* pArchive, uint16_t nLocale,
                                    uint8_t nPlatform) {
     uint32_t nStartIndex = 0x7fed7fed;
     uint32_t dwHashA = 0x7fed7fed;
@@ -1204,8 +1207,8 @@ int SFileOpenArchive(const char* szArchiveName, int nPriority, uint32_t dwFlags,
 // 1.14d mac: 000145e7
 // Finds the MPQ header (every 0x200 bytes from the start), reads and decrypts the hash and
 // block tables, links the archive by priority and reads its (attributes) file.
-SFILE_STATIC int SFILE_s_OpenArchive(D2ArchiveStrc* pArchive, uint32_t nFlags, int32_t bAllowEmpty,
-                                     D2ArchiveStrc** ppArchiveOut) {
+int SFILE_s_OpenArchive(D2ArchiveStrc* pArchive, uint32_t nFlags, int32_t bAllowEmpty,
+                        D2ArchiveStrc** ppArchiveOut) {
     uint8_t* pScanBuffer = (uint8_t*)SMemAlloc(0x1000, SFILE_FILE, 0xfaa, 0);
     uint32_t nOffset = pArchive->nArchiveOffset;
     uint32_t nBufferPos = 0;
@@ -1372,13 +1375,13 @@ struct SFileOverlapped {
     HANDLE hEvent;     // 0x10
 };
 
-SFILE_STATIC D2StormAsyncOpStrc* IssueRequest(D2MPQFileStrc* pFile, uint32_t nFileOffset, void* pChunkWritePtr,
+static D2StormAsyncOpStrc* IssueRequest(D2MPQFileStrc* pFile, uint32_t nFileOffset, void* pChunkWritePtr,
                                               void* pReadBufferBase, IDirectSoundBuffer* pStream,
                                               uint32_t nStreamPos, D2StormAudioStreamRec* pParentStream,
                                               uint32_t nBytesToRead, int32_t nTimeoutMs, int32_t nPriority,
                                               HANDLE hCompletionEvent, BOOL bAutoFree, BOOL bQueueImmediately,
                                               void* pCompletion);
-SFILE_STATIC uint32_t SFILE_InternalReadFile(uint32_t nUnused, uint32_t nOffset, D2MPQFileStrc* pFile,
+static uint32_t SFILE_InternalReadFile(uint32_t nUnused, uint32_t nOffset, D2MPQFileStrc* pFile,
                                              void* pDestination, uint32_t nBytes);
 
 // 1.14d mac: 00012ac1
@@ -1585,7 +1588,7 @@ void SFilePrioritizeRequest(void* pReadBufferBase, int nPriority) {
 
 // 1.14d mac: 0001505d
 // Queues a read for the I/O thread.
-SFILE_STATIC D2StormAsyncOpStrc* IssueRequest(D2MPQFileStrc* pFile, uint32_t nFileOffset, void* pChunkWritePtr,
+static D2StormAsyncOpStrc* IssueRequest(D2MPQFileStrc* pFile, uint32_t nFileOffset, void* pChunkWritePtr,
                                               void* pReadBufferBase, IDirectSoundBuffer* pStream,
                                               uint32_t nStreamPos, D2StormAudioStreamRec* pParentStream,
                                               uint32_t nBytesToRead, int32_t nTimeoutMs, int32_t nPriority,
@@ -1634,7 +1637,7 @@ SFILE_STATIC D2StormAsyncOpStrc* IssueRequest(D2MPQFileStrc* pFile, uint32_t nFi
 // Reads from an archive file the sector way: the unaligned head and tail through the
 // archive's one-sector cache, the aligned middle straight into the destination; the file's
 // CRC runs along while the reads are in order.
-SFILE_STATIC uint32_t SFILE_InternalReadFile(uint32_t nUnused, uint32_t nOffset, D2MPQFileStrc* pFile,
+static uint32_t SFILE_InternalReadFile(uint32_t nUnused, uint32_t nOffset, D2MPQFileStrc* pFile,
                                              void* pDestination, uint32_t nBytes) {
     uint8_t* pOutput = (uint8_t*)pDestination;
     uint32_t nFileSize = pFile->pBlockEntry->dwFileSize;
@@ -1914,7 +1917,7 @@ struct SFileBlastContext {
 // Reads whole sectors, starting on a sector boundary, into pDstBuf: loads the sector offset table
 // of a compressed file on first use, decrypts, and decompresses sector by sector. Returns the
 // bytes made.
-SFILE_STATIC uint32_t SFILE_InternalReadAligned(D2MPQFileStrc* pFile, uint32_t nFileOffset, void* pDestination,
+static uint32_t SFILE_InternalReadAligned(D2MPQFileStrc* pFile, uint32_t nFileOffset, void* pDestination,
                                                 uint32_t nReadLen) {
     uint8_t* pDstBuf = (uint8_t*)pDestination;
     D2ArchiveStrc* pArchive = pFile->pArchive;
@@ -2104,7 +2107,7 @@ struct SFileCompletion {
 // DirectSound streams (starting, refilling and finishing them), then picks the next request
 // by urgency (a stream about to run dry, an urgent read, one that is due, else the nearest
 // on the disc) and performs it, pacing plain reads to the byte budget.
-SFILE_STATIC DWORD SFILE_CdThreadProc(LPVOID pParam) {
+static DWORD SFILE_CdThreadProc(LPVOID pParam) {
     uint32_t nLastTick = GetTickCount();
     if (s_bCdThreadExit != 0) {
         s_bCdThreadExit = 0;

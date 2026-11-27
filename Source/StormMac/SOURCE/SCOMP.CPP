@@ -229,7 +229,7 @@ struct HuffTree {
     int nUsed;                       // 0x3068
     HuffNode* apBySymbol[0x102];     // 0x306C
 
-    __attribute__((noinline)) HuffTree();
+    HuffTree();
     // A node from the free list, or the next unused one.
     HuffNode* TakeNode() {
         HuffNode* pNode = tFree.Head();

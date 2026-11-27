@@ -95,8 +95,8 @@ decides, the boundary is chosen as follows.
 |`SRGN.cpp`|0001b087..0001c6f0|region code only, no literal names the file; ends with `SRGN_InitStatics`|
 |`SSTR.cpp`|0001c730..0001d2f9|SStrLower (0001d2f9) included|
 |`SSignature.cpp`|0001d302..0001d69e||
-|`STRANS.cpp`|0001d69e..0001de67|the UTF-8/UTF-16/Latin-1 helpers have no file evidence; placed here with their tables|
-|`SVID.cpp`|0001de67..0001e2fd|includes STORM_LaunchURL and its callback|
+|`STRANS.CPP`|0001d69e..0001de67|the UTF-8/UTF-16/Latin-1 helpers have no file evidence; placed here with their tables|
+|`SVID.CPP`|0001de67..0001e2fd|includes STORM_LaunchURL and its callback|
 |`unknown_allocators.cpp`|0001e2fd|`Mem_SetDefaultAllocators`, no file name recorded|
 |`SDRAW_VidDriver.cpp`|00036035|`SDrawDestroy`|
 

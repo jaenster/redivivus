@@ -3501,12 +3501,15 @@ int FUN_002b692a(void) {
 }
 
 
+#define D2HELL_MAC_ARCHIVE_FILE "/Users/bclemetson/dev/diablo2/Diablo2/Source/DiabloAll/../D2Hell/SRC/Archive.cpp"
+
 // 1.14d mac: 002b69ff
 // The Mac build opens the archive from the working directory, the executable's directory
 // (twice, the second time with a forward-slash-stripped copy of the path) and then from every
-// mounted volume the CD check accepts, where Windows walks the logical drives.
+// mounted volume the CD check accepts, where Windows walks the logical drives. The Mac
+// allocations carry the Mac build's __FILE__ of SRC/Archive.cpp, which this unit cannot produce.
 D2FogArchiveStrc* D2Hell::ARCHIVE_LoadMPQ(char* szMpqFileName, int32_t nZero, ::fpRequiredUserAction nfpRequiredUserAction, int32_t nTimeTBC) {
-    D2FogArchiveStrc* pFogArchive = D2_NEW_AT(D2FogArchiveStrc, ".\\SRC\\Archive.cpp", 0x20a);
+    D2FogArchiveStrc* pFogArchive = D2_NEW_AT(D2FogArchiveStrc, D2HELL_MAC_ARCHIVE_FILE, 0x20a);
     pFogArchive->hArchive = 0;
     uint32_t nFlags = (nZero != 0) | 2;
     char* szPath = pFogArchive->szArchivePath;
@@ -3515,7 +3518,7 @@ D2FogArchiveStrc* D2Hell::ARCHIVE_LoadMPQ(char* szMpqFileName, int32_t nZero, ::
         Storm::Source::SSTR::SStrCopy(szPath, szMpqFileName, 0x7fffffff);
         int bOpened = Storm::Source::SFile::SFileOpenArchive(szPath, (int*)(intptr_t)nTimeTBC, nFlags, &pArchive);
         if (!bOpened) {
-            if (!GetModuleFileNameA((HMODULE)0, szPath, 0x104)) {
+            if (!GetModuleFileName(0, szPath, MAX_PATH)) {
                 *szPath = '\0';
             }
             char* pszLastBackslash = strrchr(szPath, 0x5c);
@@ -3525,8 +3528,8 @@ D2FogArchiveStrc* D2Hell::ARCHIVE_LoadMPQ(char* szMpqFileName, int32_t nZero, ::
             Storm::Source::SSTR::SStrPack(szPath, szMpqFileName, 0x7fffffff);
             bOpened = Storm::Source::SFile::SFileOpenArchive(szPath, (int*)(intptr_t)nTimeTBC, nFlags, &pArchive);
             if (!bOpened) {
-                GetModuleFileNameA((HMODULE)0, szPath, 0x104);
-                pFogArchive->szArchivePath[0xff] = '\0';
+                GetModuleFileName(0, szPath, MAX_PATH);
+                pFogArchive->szArchivePath[MAX_PATH - 1] = '\0';
                 char* pszEnd = szPath;
                 while (*pszEnd) {
                     if (!Storm::Source::SSTR::SStrChr(pszEnd + 1, '\\')) {
@@ -3580,7 +3583,7 @@ opened:
             return pFogArchive;
         }
         if (!nfpRequiredUserAction || !(*nfpRequiredUserAction)()) {
-            D2_FREE_AT(pFogArchive, ".\\SRC\\Archive.cpp", 0x21a);
+            D2_FREE_AT(pFogArchive, D2HELL_MAC_ARCHIVE_FILE, 0x21a);
             return 0;
         }
         Sleep(100);

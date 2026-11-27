@@ -23,9 +23,16 @@ int CloseHandle(int hObject);
 // 1.14d mac: 0003411f
 int LaunchURL(char* szURL, int nLength, int (*pfnConfirm)(void), void* pArg);
 // 1.14d mac: 00036d5e
-bool STORM_NotifyCallback(bool bRequested);
+bool MACCURSOR_CallGuardProc(bool bFlag);
 
 #define ERROR_INVALID_PARAMETER 0x57
+
+// A region handle the video owns: deleting the video deletes it.
+class SVidRgn {
+public:
+    int m_hRgn;
+    ~SVidRgn() { SRgnDelete(m_hRgn); }
+};
 
 // An open video. The size of the record is not known: the code that allocates it is outside
 // this file's band.
@@ -39,12 +46,12 @@ public:
     uint8_t m_aPad50[0x8];
     void* m_pFrame;        // 0x58
     uint8_t m_aPad5C[0x34];
-    int m_ahRgn[2];        // 0x90
+    SVidRgn m_aRgn[2];     // 0x90: destroyed last to first
     uint8_t m_aPad98[0x8];
     void* m_pPalette;      // 0xA0
 };
 
-// Out-of-line destructor: see STransList in STRANS.cpp.
+// Out-of-line destructor: see STransList in STRANS.CPP.
 class SVidList : public TSExplicitList<SVid, 0> {
 public:
     ~SVidList();
@@ -66,25 +73,26 @@ int* g_pCodeStreams;
 // 1.14d mac: 003f0e58
 int g_hVideoLibrary;
 
+// Out of line in 1.14d although SVidPlayEnd, its one remaining caller, would inline it: it takes
+// the video in ecx (fastcc, so static), hence the unit's other video calls that validate a handle
+// were dead-stripped at link.
 static int SVID_IsVideoInList(SVid* pVideo) __attribute__((noinline));
 // 1.14d mac: 0001e067
 static int SVID_IsVideoInList(SVid* pVideo) {
-    for (SVid* pNode = g_tVideoList.Head(); pNode != NULL; pNode = g_tVideoList.Next(pNode)) {
+    SVid* pNode = g_tVideoList.Head();
+    while (!TSLink<SVid>::IsTerminator(pNode)) {
         if (pNode == pVideo) {
             return 1;
         }
+        pNode = g_tVideoList.Link(pNode)->m_next;
     }
     return 0;
 }
 
 // 1.14d mac: 0001e0f0
-// Deletes the node's two regions and the node, and returns the one after it.
+// Deletes the node (its destructor deletes its two regions) and returns the one after it.
 SVid* SVID_DeleteVideoNode(SVidList* pList, SVid* pNode) {
     SVid* pNext = pList->Next(pNode);
-    for (int i = 0; i < 2; i++) {
-        SRgnDelete(pNode->m_ahRgn[1 - i]);
-    }
-    pNode->m_link.Unlink();
     pNode->~SVid();
     SMemFree(pNode, "", -2, 0);
     return pNext;
@@ -140,9 +148,9 @@ int SVidDestroy(void) {
 }
 
 // 1.14d mac: 0001e2d0
-// LaunchURL's confirmation callback: asks the registered callback, then declines.
+// LaunchURL's confirmation callback: runs the cursor guard procedure (MacDisplayDriver.cpp), then declines.
 int STORM_LaunchURLCallback(void) {
-    STORM_NotifyCallback(true);
+    MACCURSOR_CallGuardProc(true);
     return 0;
 }
 

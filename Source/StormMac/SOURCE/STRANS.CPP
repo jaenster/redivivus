@@ -49,7 +49,6 @@ void* g_pTransScratch;
 // Frees a node and returns the one after it.
 STrans* TSList_DeleteNode_STrans(STransList* pList, STrans* pNode) {
     STrans* pNext = pList->Next(pNode);
-    pNode->m_link.Unlink();
     pNode->~STrans();
     SMemFree(pNode, "", -2, 0);
     return pNext;
@@ -64,8 +63,8 @@ int STRANS_DeleteTransRecord(STrans* pTrans) {
             SMemFree(g_pTransCacheBuffer, __FILE__, 0x35d, 0);
             pBuffer = pTrans->m_dwUnknown08;
         }
-        g_nTransCacheSize = pTrans->m_dwSize;
         g_pTransCacheBuffer = (void*)pBuffer;
+        g_nTransCacheSize = pTrans->m_dwSize;
         pTrans->m_dwUnknown08 = 0;
         pTrans->m_dwSize = 0;
     }
@@ -160,108 +159,142 @@ uint16_t gszUnicodeLatin1_1[256] = {
 // Accepts tab, line feed, carriage return, printable ASCII and well-formed 2 to 4 byte
 // sequences (no overlongs, no surrogates, nothing past U+10FFFF).
 int UTF8_IsValidString(char* szString) {
-    if (szString == NULL) {
+    uint8_t* p = (uint8_t*)szString;
+    if (p == NULL) {
         return 0;
     }
     for (;;) {
-        uint8_t c = (uint8_t)*szString;
-        if (c == '\t' || c == '\n' || c == '\r' || (uint8_t)(c - 0x20) < 0x5f) {
-            szString++;
-            continue;
-        }
-        if (c == 0) {
+        uint8_t c = *p;
+        if ((uint8_t)(c - '\t') < 2 || c == '\r') {
+            p++;
+        } else if (c == 0) {
             return 1;
-        }
-        int nTail;
-        uint8_t nLow = 0x80;
-        uint8_t nHigh = 0xBF;
-        if ((uint8_t)(c - 0xC2) < 0x1e) {
-            nTail = 1;
-        } else if (c == 0xED) {
-            nTail = 2;
-            nHigh = 0x9F;
+        } else if ((uint8_t)(c - 0x20) <= 0x5e) {
+            p++;
+        } else if ((uint8_t)(c - 0xC2) <= 0x1d) {
+            if (p[1] < 0x80 || p[1] > 0xBF) {
+                return 0;
+            }
+            p += 2;
         } else if (c == 0xE0) {
-            nTail = 2;
-            nLow = 0xA0;
-        } else if ((uint8_t)(c - 0xE1) < 0xf) {
-            nTail = 2;
+            if (p[1] < 0xA0 || p[1] > 0xBF || p[2] < 0x80 || p[2] > 0xBF) {
+                return 0;
+            }
+            p += 3;
+        } else if (c == 0xED) {
+            if (p[1] < 0x80 || p[1] > 0x9F || p[2] < 0x80 || p[2] > 0xBF) {
+                return 0;
+            }
+            p += 3;
+        } else if ((uint8_t)(c - 0xE1) <= 0xe) {
+            if (p[1] < 0x80 || p[1] > 0xBF || p[2] < 0x80 || p[2] > 0xBF) {
+                return 0;
+            }
+            p += 3;
         } else if (c == 0xF0) {
-            nTail = 3;
-            nLow = 0x90;
-        } else if ((uint8_t)(c - 0xF1) < 3) {
-            nTail = 3;
+            if (p[1] < 0x90 || p[1] > 0xBF || p[2] < 0x80 || p[2] > 0xBF || p[3] < 0x80 || p[3] > 0xBF) {
+                return 0;
+            }
+            p += 4;
+        } else if ((uint8_t)(c - 0xF1) <= 2) {
+            if (p[1] < 0x80 || p[1] > 0xBF || p[2] < 0x80 || p[2] > 0xBF || p[3] < 0x80 || p[3] > 0xBF) {
+                return 0;
+            }
+            p += 4;
         } else if (c == 0xF4) {
-            nTail = 3;
-            nHigh = 0x8F;
+            if (p[1] < 0x80 || p[1] > 0x8F || p[2] < 0x80 || p[2] > 0xBF || p[3] < 0x80 || p[3] > 0xBF) {
+                return 0;
+            }
+            p += 4;
         } else {
             return 0;
         }
-        uint8_t bSecond = (uint8_t)szString[1];
-        if (bSecond < nLow || bSecond > nHigh) {
-            return 0;
-        }
-        for (int i = 2; i <= nTail; i++) {
-            uint8_t bNext = (uint8_t)szString[i];
-            if (bNext < 0x80 || bNext > 0xBF) {
-                return 0;
-            }
-        }
-        szString += nTail + 1;
     }
 }
 
 // 1.14d mac: 0001d9b5
+// The Windows SSTR.cpp algorithm over a signed 16-bit input: the code unit is sign-extended
+// (movsx), so the surrogate pair test and the 4..6 byte forms fold away and a negative unit
+// becomes U+FFFD in two bytes.
 int UTF16_ToUTF8(uint8_t* pbUTF8, int nOutMaxChars, uint16_t* pszUTF16Out, int nInBytes, int* pnCharsWritten, int* pnBytesRead) {
-    uint16_t* pInEnd = nInBytes == 0x7fffffff ? (uint16_t*)0xffffffff : pszUTF16Out + nInBytes;
-    uint16_t* pIn = pszUTF16Out;
-    uint8_t* pOut = pbUTF8;
-    int nResult = -1;
-    while (pIn < pInEnd) {
-        uint16_t wChar = *pIn;
-        uint32_t nCodepoint = (int16_t)wChar;
-        int nBytes;
-        if (nCodepoint < 0x80) {
-            nBytes = 1;
-            if (wChar == 0) {
-                nResult = 1;
-                if (pOut < pbUTF8 + nOutMaxChars) {
-                    *pOut++ = 0;
-                    nResult = 0;
-                }
+    int16_t* pInEnd;
+    if (nInBytes == 0x7fffffff) {
+        pInEnd = (int16_t*)-1;
+    } else {
+        pInEnd = (int16_t*)pszUTF16Out + nInBytes;
+    }
+    uint8_t* pOutCur = pbUTF8;
+    int16_t* pInCur = (int16_t*)pszUTF16Out;
+    int nResult;
+    while (pInCur < pInEnd) {
+        uint32_t uCodepoint = *pInCur;
+        int nUnits = 1;
+        if (uCodepoint >= 0xd800 && uCodepoint <= 0xdbff) {
+            if (pInCur + 1 >= pInEnd) {
                 break;
             }
-        } else {
-            nBytes = 2;
-            if (wChar > 0x7ff) {
-                if ((int16_t)wChar < 0) {
-                    nCodepoint = 0xfffd;
-                }
-                nBytes = ((int16_t)wChar >= 0) | 2;
+            uint32_t uSurrPair = pInCur[1];
+            if (uSurrPair >= 0xdc00 && uSurrPair <= 0xdfff) {
+                uCodepoint = ((uCodepoint - 0xd7f7) << 10) + uSurrPair;
+                nUnits = 2;
             }
         }
-        uint8_t* pEnd = pOut + nBytes;
-        if (pbUTF8 + nOutMaxChars < pEnd) {
-            nResult = nBytes;
-            break;
+        if (uCodepoint < 0x80) {
+            nResult = 1;
+            if (uCodepoint == 0) {
+                if (pOutCur < pbUTF8 + nOutMaxChars) {
+                    *pOutCur++ = 0;
+                    nResult = 0;
+                }
+                goto report_counts;
+            }
+        } else if (uCodepoint < 0x800) {
+            nResult = 2;
+        } else if (uCodepoint < 0x10000) {
+            nResult = 3;
+        } else if (uCodepoint < 0x200000) {
+            nResult = 4;
+        } else if (uCodepoint < 0x4000000) {
+            nResult = 5;
+        } else if (uCodepoint <= 0x7fffffff) {
+            nResult = 6;
+        } else {
+            uCodepoint = 0xfffd;
+            nResult = 2;
         }
-        switch (nBytes) {
+        uint8_t* pEnd = pOutCur + nResult;
+        if (pEnd > pbUTF8 + nOutMaxChars) {
+            goto report_counts;
+        }
+        switch (nResult) {
+        case 6:
+            *--pEnd = (uint8_t)((uCodepoint & 0x3f) | 0x80);
+            uCodepoint >>= 6;
+        case 5:
+            *--pEnd = (uint8_t)((uCodepoint & 0x3f) | 0x80);
+            uCodepoint >>= 6;
+        case 4:
+            *--pEnd = (uint8_t)((uCodepoint & 0x3f) | 0x80);
+            uCodepoint >>= 6;
         case 3:
-            *--pEnd = (nCodepoint & 0x3f) | 0x80;
-            nCodepoint >>= 6;
+            *--pEnd = (uint8_t)((uCodepoint & 0x3f) | 0x80);
+            uCodepoint >>= 6;
         case 2:
-            *--pEnd = (nCodepoint & 0x3f) | 0x80;
-            nCodepoint >>= 6;
+            *--pEnd = (uint8_t)((uCodepoint & 0x3f) | 0x80);
+            uCodepoint >>= 6;
         case 1:
-            *--pEnd = nCodepoint | gdwUTF8FirstByteMark[nBytes];
+            *--pEnd = (uint8_t)(uCodepoint | gdwUTF8FirstByteMark[nResult]);
         }
-        pOut += nBytes;
-        pIn++;
+        pInCur += nUnits;
+        pOutCur = pEnd + nResult;
     }
+    nResult = -1;
+report_counts:
     if (pnBytesRead != NULL) {
-        *pnBytesRead = pIn - pszUTF16Out;
+        *pnBytesRead = pInCur - (int16_t*)pszUTF16Out;
     }
     if (pnCharsWritten != NULL) {
-        *pnCharsWritten = pOut - pbUTF8;
+        *pnCharsWritten = pOutCur - pbUTF8;
     }
     return nResult;
 }
@@ -271,66 +304,76 @@ int UTF8_ToUTF16(short* pszUTF16Out, int nOutMaxChars, uint8_t* pbUTF8In, int nI
     if (!UTF8_IsValidString((char*)pbUTF8In)) {
         return -1;
     }
-    uint8_t* pInEnd = nInBytes == 0x7fffffff ? (uint8_t*)0xffffffff : pbUTF8In + nInBytes;
-    uint8_t* pIn = pbUTF8In;
-    short* pOut = pszUTF16Out;
-    int nResult = -1;
-    while (pIn < pInEnd) {
-        uint32_t nExtra = gaUTF8ByteCountTable[*pIn];
-        if (pInEnd <= pIn + nExtra) {
-            nResult = ~nExtra;
-            break;
-        }
-        int nAccum = 0;
-        int nUsed = 0;
-        switch (nExtra) {
-        case 5:
-            nAccum = (nAccum + pIn[nUsed++]) << 6;
-        case 4:
-            nAccum = (nAccum + pIn[nUsed++]) << 6;
-        case 3:
-            nAccum = (nAccum + pIn[nUsed++]) << 6;
-        case 2:
-            nAccum = (nAccum + pIn[nUsed++]) << 6;
-        case 1:
-            nAccum = (nAccum + pIn[nUsed++]) << 6;
-        case 0:
-            nAccum += pIn[nUsed++];
-        }
-        if (pszUTF16Out + nOutMaxChars <= pOut) {
-            nResult = 1;
-            break;
-        }
-        uint32_t nCodepoint = nAccum - gdwUTF8ConversionTab[nExtra];
-        if (nCodepoint < 0x10000) {
-            *pOut++ = (short)nCodepoint;
-            if (nAccum == gdwUTF8ConversionTab[nExtra]) {
-                nResult = 0;
-                break;
-            }
-        } else if (nCodepoint < 0x110000) {
-            if (pszUTF16Out + nOutMaxChars <= pOut + 1) {
-                nResult = 1;
-                break;
-            }
-            nCodepoint -= 0x10000;
-            pOut[0] = (short)((nCodepoint >> 10) - 0x2800);
-            pOut[1] = (nCodepoint & 0x3ff) | 0xdc00;
-            pOut += sizeof(uint32_t) / sizeof(uint16_t);
-        } else {
-            *pOut++ = 0xfffd;
-        }
-        pIn += nUsed;
+    uint8_t* pInEnd;
+    if (nInBytes == 0x7fffffff) {
+        pInEnd = (uint8_t*)-1;
+    } else {
+        pInEnd = pbUTF8In + nInBytes;
     }
+    uint8_t* pInCur = pbUTF8In;
+    short* pOutCur = pszUTF16Out;
+    int nResult;
+    while (pInCur < pInEnd) {
+        uint32_t uByteCount = gaUTF8ByteCountTable[*pInCur];
+        if (pInCur + uByteCount >= pInEnd) {
+            nResult = -1 - uByteCount;
+            goto report_counts;
+        }
+        int nUsed = 0;
+        int nAccum = 0;
+        switch (uByteCount) {
+        case 5:
+            nUsed = 1;
+            nAccum = *pInCur << 6;
+        case 4:
+            nAccum = (nAccum + pInCur[nUsed++]) << 6;
+        case 3:
+            nAccum = (nAccum + pInCur[nUsed++]) << 6;
+        case 2:
+            nAccum = (nAccum + pInCur[nUsed++]) << 6;
+        case 1:
+            nAccum = (nAccum + pInCur[nUsed++]) << 6;
+        case 0:
+            nAccum += pInCur[nUsed++];
+        }
+        uint32_t uCodepoint = nAccum - gdwUTF8ConversionTab[uByteCount];
+        if (pOutCur >= pszUTF16Out + nOutMaxChars) {
+        output_full:
+            nResult = 1;
+            goto report_counts;
+        }
+        if (uCodepoint <= 0xffff) {
+            *pOutCur++ = (short)uCodepoint;
+            if (uCodepoint == 0) {
+                nResult = 0;
+                goto report_counts;
+            }
+        } else if (uCodepoint > 0x10ffff) {
+            *pOutCur++ = (short)0xfffd;
+        } else {
+            if (pOutCur + 1 >= pszUTF16Out + nOutMaxChars) {
+                goto output_full;
+            }
+            pOutCur[0] = (short)((uCodepoint - 0x10000) >> 10) - 0x2800;
+            pOutCur[1] = ((uCodepoint - 0x10000) & 0x3ff) | 0xdc00;
+            pOutCur += 2;
+        }
+        pInCur += nUsed;
+    }
+    nResult = -1;
+report_counts:
     if (pnBytesRead != NULL) {
-        *pnBytesRead = pIn - pbUTF8In;
+        *pnBytesRead = pInCur - pbUTF8In;
     }
     if (pnCharsWritten != NULL) {
-        *pnCharsWritten = pOut - pszUTF16Out;
+        *pnCharsWritten = pOutCur - pszUTF16Out;
     }
     return nResult;
 }
 
+// Kept out of line with the table as an argument: the Windows twin (Storm SSTR.cpp) has three
+// callers (Latin1, Latin2, Korean) and the Mac callee takes the table in ecx, so the original TU
+// had them too and the linker dead-stripped two. With only Latin1 here clang would inline it.
 static int TRANSTBL_SingleByteToUnicode(const uint16_t* pXlatTbl, uint16_t* pDest, uint8_t* pbSrc, int nCount) __attribute__((noinline));
 // 1.14d mac: 0001de00
 // Expands bytes through a 256-entry table, stopping at the terminating zero (which is

@@ -87,7 +87,7 @@ struct D2ArchiveStrc {
     D2MPQFileStrc* pArchiveFile;             // 0x148  the archive opened as a file (closed with it)
 
     D2ArchiveStrc() {}
-    __attribute__((noinline)) ~D2ArchiveStrc();
+    ~D2ArchiveStrc();
 };
 
 struct D2MPQFileStrc {
@@ -114,7 +114,7 @@ struct D2MPQFileStrc {
     uint32_t nExpectedFileSize;              // 0x154
 
     D2MPQFileStrc() : szFilePath(NULL), hFile(NULL), pArchive(NULL), pSectorTable(NULL), pReadBuffer(NULL) {}
-    __attribute__((noinline)) ~D2MPQFileStrc();
+    ~D2MPQFileStrc();
 };
 
 struct D2StormAudioStreamRec {
@@ -140,7 +140,7 @@ struct D2StormAudioStreamRec {
     uint32_t nRefCount;                      // 0x4C
 
     D2StormAudioStreamRec() {}
-    __attribute__((noinline)) ~D2StormAudioStreamRec();
+    ~D2StormAudioStreamRec();
 };
 
 struct D2StormAsyncOpStrc {
@@ -162,7 +162,7 @@ struct D2StormAsyncOpStrc {
     void* pCompletion;                       // 0x40
 
     D2StormAsyncOpStrc() {}
-    __attribute__((noinline)) ~D2StormAsyncOpStrc();
+    ~D2StormAsyncOpStrc();
 };
 // What cancelling a request leaves for the I/O thread to signal.
 struct SFileEventNode : TSLinkedNode<SFileEventNode> {  // m_link at 0x00

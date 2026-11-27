@@ -186,7 +186,7 @@ static const char* SERR_GetString(int32_t nErrorIndex) {
 }
 
 // 1.14d mac: 0001088b
-static void WriteErrorLog(const char* pszText) __attribute__((noinline));
+static void WriteErrorLog(const char* pszText);
 
 // 1.14d mac: 0000ffaa
 int SErrDisplayError(uint32_t nErrorCode, const char* pStackTrace, int32_t nTraceFlags, const char* pCustomMsg,
@@ -520,7 +520,7 @@ static void WriteErrorLog(const char* pszText) {
         LogComputerInfoHeader(1, SERR_WriteLogLineF, (void*)hFile, "Error", aLocalTime);
         SERR_WriteLogTextCRLF(hFile, pszText);
         if (g_pfnErrorLogExtraInfo != NULL) {
-            // a run-time sized array: the original allocates it on the stack at this point
+            // a run-time sized array: 1.14d moves esp down 0x1450 here (lea esi, [ebx - 0x1450]; mov esp, esi)
             uint32_t nExtraInfoSize = 0x1450;
             char szExtraInfo[nExtraInfoSize];
             szExtraInfo[0] = '\0';
