@@ -277,19 +277,17 @@ void __fastcall DefineSuperMonster(D2UnitStrc * pUnit, int32_t eModifier, int32_
       }
     }
 
-    uint32_t uVar3 = 0;
     pLocaleName = D2Common::DATATBLS::MonsterTbls::MONSTER_GetRandomUniqueSuffix(pUnit);
     uint16_t* pWVar2 = D2Common::DATATBLS::MonsterTbls::MONSTER_GetRandomUniquePrefix(pUnit);
     uint16_t* pFmtStr = D2Lang::StrTable::strtable::GetLocaleString(0x6b9);
-    UI::Inv::wsprintf(wszName, pFmtStr, pWVar2, pLocaleName, uVar3);
+    UI::Inv::wsprintf(wszName, pFmtStr, pWVar2, pLocaleName, nullptr);
     uint32_t nRandPct = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
     if ((int)nRandPct < 0x32) {
-      uVar3 = 0;
       pLocaleName = D2Common::DATATBLS::MonsterTbls::MONSTER_GetRandomUniqueAppelation(pUnit);
       pWVar2 = D2Common::DATATBLS::MonsterTbls::MONSTER_GetRandomUniqueSuffix(pUnit);
       pFmtStr = D2Common::DATATBLS::MonsterTbls::MONSTER_GetRandomUniquePrefix(pUnit);
       wszFormat = D2Lang::StrTable::strtable::GetLocaleString(0x6ba);
-      UI::Inv::wsprintf(wszName, wszFormat, pFmtStr, pWVar2, pLocaleName, uVar3);
+      UI::Inv::wsprintf(wszName, wszFormat, pFmtStr, pWVar2, pLocaleName, nullptr);
     }
 
     D2Common::Monsters::MONSTERS::SetSuperUniqueName(pUnit, wszName);

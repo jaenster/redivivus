@@ -792,7 +792,7 @@ void __stdcall DRAW_HideTaskbarAppBars() {
 
     _AppBarData appBarData;
     memset(&appBarData, 0, sizeof(appBarData));
-    appBarData.cbSize = 0x24;
+    appBarData.cbSize = sizeof(appBarData);
     appBarData.hWnd = hwndD2GFX_Window;
     for (int nEdge = 0; nEdge < (int)_countof(gaD2GFXWindowPlacements); nEdge++) {
       appBarData.uEdge = nEdge;
