@@ -2119,17 +2119,17 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 002ccd1d	FUN_002ccd1d	17	?	unpaired	?	shared-unpaired	missing		-	00449de0	
 002ccfd4	D2MCPClient::McpConnect::MCPCONNECT_SendStartup	323	?	unpaired	?	blizzard-mac	missing		-		
 002cfbd1	D2Multi::ChatDlg::FUN_002cfbd1	32	D2Multi/Src/ChatDlg.cpp	file-map	Source/D2Multi/Src/ChatDlg.cpp	shared-unpaired	missing		-	0043e570	
-002d098a	D2Multi::ChatDlg::FUN_002d098a	71	D2Multi/Src/ChatDlg.cpp	file-map	Source/D2Multi/Src/ChatDlg.cpp	blizzard-mac	missing		-		
+002d098a	D2Multi::ChatDlg::FUN_002d098a	71	D2Multi/Src/ChatDlg.cpp	file-map	Source/D2Multi/Src/ChatDlg.cpp	blizzard-mac	match	Source/D2Multi/Src/ChatDlg.cpp	yes		
 002d1dc6	D2Multi::ChatDlg::CHATDLG_DisplayTimestampedMessage	377	D2Multi/Src/ChatDlg.cpp	file-map	Source/D2Multi/Src/ChatDlg.cpp	shared-unpaired	body	Source/D2Multi/Src/ChatDlg.cpp	yes	0043e4c0	
-002d269b	D2Multi::ChatDlg::CHATDLG_ProcessChatInput	1802	D2Multi/Src/ChatDlg.cpp	file-map	Source/D2Multi/Src/ChatDlg.cpp	blizzard-mac	missing		-		
-002d42cf	D2Multi::ChatDlg::CHATDLG_HandleReplyCommand	649	D2Multi/Src/ChatDlg.cpp	file-map	Source/D2Multi/Src/ChatDlg.cpp	blizzard-mac	missing		-		
-002d4558	D2Multi::ChatDlg::CHATDLG_CompareInputPrefix	134	D2Multi/Src/ChatDlg.cpp	file-map	Source/D2Multi/Src/ChatDlg.cpp	shared-unpaired	missing		-	0043e6e0	
-002d45de	D2Multi::ChatDlg::CHATDLG_GetInputArgument	73	D2Multi/Src/ChatDlg.cpp	file-map	Source/D2Multi/Src/ChatDlg.cpp	shared-unpaired	missing		-	0043f870	
+002d269b	D2Multi::ChatDlg::CHATDLG_ProcessChatInput	1802	D2Multi/Src/ChatDlg.cpp	file-map	Source/D2Multi/Src/ChatDlg.cpp	blizzard-mac	nonmatch	Source/D2Multi/Src/ChatDlg.cpp	yes		stack-layout
+002d42cf	D2Multi::ChatDlg::CHATDLG_HandleReplyCommand	649	D2Multi/Src/ChatDlg.cpp	file-map	Source/D2Multi/Src/ChatDlg.cpp	blizzard-mac	nonmatch	Source/D2Multi/Src/ChatDlg.cpp	yes		stack-layout
+002d4558	D2Multi::ChatDlg::CHATDLG_CompareInputPrefix	134	D2Multi/Src/ChatDlg.cpp	file-map	Source/D2Multi/Src/ChatDlg.cpp	shared-unpaired	nonmatch	Source/D2Multi/Src/ChatDlg.cpp	yes	0043e6e0	regalloc
+002d45de	D2Multi::ChatDlg::CHATDLG_GetInputArgument	73	D2Multi/Src/ChatDlg.cpp	file-map	Source/D2Multi/Src/ChatDlg.cpp	shared-unpaired	match	Source/D2Multi/Src/ChatDlg.cpp	yes	0043f870	
 002d4627	D2Multi::ChatDlg::FUN_002d4627	248	D2Multi/Src/ChatDlg.cpp	__FILE__	Source/D2Multi/Src/ChatDlg.cpp	shared-unpaired	missing		-	0043e250	
 002d471f	D2Multi::ChatDlg::FUN_002d471f	44	D2Multi/Src/ChatDlg.cpp	file-map	Source/D2Multi/Src/ChatDlg.cpp	shared-unpaired	missing		-	0043dba0	
 002d474b	D2Multi::ChatDlg::FUN_002d474b	21	D2Multi/Src/ChatDlg.cpp	file-map	Source/D2Multi/Src/ChatDlg.cpp	shared-unpaired	missing		-	00440110	
 002d5842	D2Multi::ComCallback::COMCALLBACK_GetChannelName	17	D2Multi/Src/ComCallback.cpp	file-map	Source/D2Multi/Src/ComCallback.cpp	shared-unpaired	missing		-	00446cf0	
-002d5a7a	D2Multi::ComCallback::COMCALLBACK_RemoveUserFromChannelList	440	D2Multi/Src/ComCallback.cpp	__FILE__	Source/D2Multi/Src/ComCallback.cpp	blizzard-mac	missing		-		
+002d5a7a	D2Multi::ComCallback::COMCALLBACK_RemoveUserFromChannelList	440	D2Multi/Src/ComCallback.cpp	__FILE__	Source/D2Multi/Src/ComCallback.cpp	blizzard-mac	nonmatch	Source/D2Multi/Src/ComCallback.cpp	yes		stack-layout
 002d5d27	D2Multi::ComCallback::COMCALLBACK_AppendChatText	127	D2Multi/Src/ComCallback.cpp	file-map	Source/D2Multi/Src/ComCallback.cpp	shared-unpaired	missing		-	00447ab0	
 002d7520	D2Multi::ComCallback::COMCALLBACK_CompareUserNames	83	D2Multi/Src/ComCallback.cpp	file-map	Source/D2Multi/Src/ComCallback.cpp	blizzard-mac	nonmatch	Source/D2Multi/Src/ComCallback.cpp	yes		
 002d7874	FUN_002d7874	26	?	unpaired	?	blizzard-mac	missing		-		
