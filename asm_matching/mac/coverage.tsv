@@ -2090,8 +2090,8 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 002ba694	FUN_002ba694	97	?	unpaired	?	shared-unpaired	missing		-	0043b940	
 002bbb4d	FUN_002bbb4d	10	?	unpaired	?	shared-unpaired	missing		-	00436e90	
 002bc7d4	D2Launch::CharSel::CHARSEL_FindCachedRealmCharList	88	?	unpaired	?	shared-unpaired	missing		-	00437a70	
-002bcb53	D2Launch::CharSel::FUN_002bcb53	41	D2Launch/Src/CharSel.cpp	file-map	Source/D2Launch/Src/CharSel.cpp	blizzard-mac	missing		-		
-002bcce5	D2Launch::CharSel::FUN_002bcce5	275	D2Launch/Src/CharSel.cpp	file-map	Source/D2Launch/Src/CharSel.cpp	blizzard-mac	missing		-		
+002bcb53	D2Launch::CharSel::FUN_002bcb53	41	D2Launch/Src/CharSel.cpp	file-map	Source/D2Launch/Src/CharSel.cpp	blizzard-mac	match	Source/D2Launch/Src/CharSel.cpp	yes		
+002bcce5	D2Launch::CharSel::FUN_002bcce5	275	D2Launch/Src/CharSel.cpp	file-map	Source/D2Launch/Src/CharSel.cpp	blizzard-mac	match	Source/D2Launch/Src/CharSel.cpp	yes		
 002bd1c3	D2Launch::CharSel::CHARSEL_IsValidSaveName	49	D2Launch/Src/CharSel.cpp	file-map	Source/D2Launch/Src/CharSel.cpp	shared-unpaired	missing		-	00438f40	
 002c0e98	D2Launch::CharSel::CHARSEL_GetRealmNameChecked	34	D2Launch/Src/CharSel.cpp	file-map	Source/D2Launch/Src/CharSel.cpp	shared-unpaired	missing		-	00437a20	
 002c1420	D2Launch::FUN_002c1420	39	?	unpaired	?	blizzard-mac	missing		-		
@@ -2103,10 +2103,10 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 002c7bf7	D2Launch::MainMenus::MAINMENU_CompareRealmNames	37	D2Launch/Src/MainMenus.cpp	file-map	Source/D2Launch/Src/MainMenus.cpp	shared-unpaired	missing		-	00430b00	
 002c7c2d	D2Launch::MainMenus::MAINMENU_GetRealmName	79	D2Launch/Src/MainMenus.cpp	file-map	Source/D2Launch/Src/MainMenus.cpp	shared-unpaired	missing		-	00430b50	
 002c7efd	D2Launch::MainMenus::FUN_002c7efd	10	D2Launch/Src/MainMenus.cpp	file-map	Source/D2Launch/Src/MainMenus.cpp	blizzard-mac	match	Source/D2Launch/Src/MainMenus.cpp	yes		
-002c7f07	D2Launch::MainMenus::MAINMENU_RunFrontEnd	5542	D2Launch/Src/MainMenus.cpp	file-map	Source/D2Launch/Src/MainMenus.cpp	blizzard-mac	missing		-		
-002c96e5	D2Launch::MainMenus::MAINMENU_LoadCreditsText	1769	D2Launch/Src/MainMenus.cpp	__FILE__	Source/D2Launch/Src/MainMenus.cpp	blizzard-mac	missing		-		
-002c9eb7	D2Launch::MainMenus::MAINMENU_RunInsertExpansionCdDialog	88	D2Launch/Src/MainMenus.cpp	file-map	Source/D2Launch/Src/MainMenus.cpp	blizzard-mac	missing		-		
-002c9f0f	D2Launch::MainMenus::MAINMENU_PollInsertCdDialog	155	D2Launch/Src/MainMenus.cpp	file-map	Source/D2Launch/Src/MainMenus.cpp	blizzard-mac	missing		-		
+002c7f07	D2Launch::MainMenus::MAINMENU_RunFrontEnd	5542	D2Launch/Src/MainMenus.cpp	file-map	Source/D2Launch/Src/MainMenus.cpp	shared-unpaired	missing		-	004359d0	
+002c96e5	D2Launch::MainMenus::MAINMENU_LoadCreditsText	1769	D2Launch/Src/MainMenus.cpp	__FILE__	Source/D2Launch/Src/MainMenus.cpp	shared-unpaired	missing		-	00431050	
+002c9eb7	D2Launch::MainMenus::MAINMENU_RunInsertExpansionCdDialog	88	D2Launch/Src/MainMenus.cpp	file-map	Source/D2Launch/Src/MainMenus.cpp	blizzard-mac	nonmatch	Source/D2Launch/Src/MainMenus.cpp	yes		unverified-ref
+002c9f0f	D2Launch::MainMenus::MAINMENU_PollInsertCdDialog	155	D2Launch/Src/MainMenus.cpp	file-map	Source/D2Launch/Src/MainMenus.cpp	blizzard-mac	nonmatch	Source/D2Launch/Src/MainMenus.cpp	yes		unverified-ref
 002cb34c	D2Launch::MainMenus::MAINMENU_DoesArchiveFileExist	66	?	unpaired	?	blizzard-mac	missing		-		
 002cb38e	MAINMENU_IsAsciiAlphabeticChar	79	?	unpaired	?	blizzard-mac	missing		-		
 002cbd10	FUN_002cbd10	91	?	unpaired	?	blizzard-mac	missing		-		

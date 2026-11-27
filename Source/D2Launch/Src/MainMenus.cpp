@@ -4172,10 +4172,27 @@ DC6 * gaDC6CharCreateNecromancerSel[3] = {}; D2_GLOBAL_GUARD(gaDC6CharCreateNecr
 DC6 * gaDC6CharCreateSorceressSel[3] = {}; D2_GLOBAL_GUARD(gaDC6CharCreateSorceressSel, "gaDC6CharCreateSorceressSel");
 DC6 * DC6_FrontEnd_barbarian_bafws = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_barbarian_bafws, "DC6_FrontEnd_barbarian_bafws");
 DC6 * DC6_FrontEnd_paladin_pafws = 0; D2_GLOBAL_GUARD(DC6_FrontEnd_paladin_pafws, "DC6_FrontEnd_paladin_pafws");
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 0054a930
+uint8_t gbCinematicsMenuShown = 0; D2_GLOBAL_GUARD(gbCinematicsMenuShown, "gbCinematicsMenuShown");
+// The flag at 1.14d mac 0054a931 shares its name with a function, so it carries no address tag.
+uint8_t fpInsertPlayCd = 0; D2_GLOBAL_GUARD(fpInsertPlayCd, "fpInsertPlayCd");
+#else
 uint32_t gbCinematicsMenuShown = 0; D2_GLOBAL_GUARD(gbCinematicsMenuShown, "gbCinematicsMenuShown");
 uint32_t fpInsertPlayCd = 0; D2_GLOBAL_GUARD(fpInsertPlayCd, "fpInsertPlayCd");
+#endif
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 005cc1e4
+fpLoadAllMediaMpqFiles fpLoadAllMediaMpqCallback = (fpLoadAllMediaMpqFiles)0; D2_GLOBAL_GUARD(fpLoadAllMediaMpqCallback, "fpLoadAllMediaMpqCallback");
+#else
 static fpLoadAllMediaMpqFiles fpLoadAllMediaMpqCallback = (fpLoadAllMediaMpqFiles)0; D2_STATIC_GUARD(fpLoadAllMediaMpqCallback, "fpLoadAllMediaMpqCallback");
+#endif
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 0054a932
+uint8_t gbCdCheckPassed[25] = {}; D2_GLOBAL_GUARD(gbCdCheckPassed, "gbCdCheckPassed");
+#else
 uint32_t gbCdCheckPassed[25] = {}; D2_GLOBAL_GUARD(gbCdCheckPassed, "gbCdCheckPassed");
+#endif
 static int FORMS_nListExExCount = 0; D2_STATIC_GUARD(FORMS_nListExExCount, "FORMS_nListExExCount");
 static int FORMS_nListCount = 0; D2_STATIC_GUARD(FORMS_nListCount, "FORMS_nListCount");
 static uint32_t gbMainMenuUIActive = 0; D2_STATIC_GUARD(gbMainMenuUIActive, "gbMainMenuUIActive");
@@ -5694,11 +5711,19 @@ uint16_t * __stdcall MAINMENU_LoadCreditsFile(uint32_t * pnCharCount) {
     uint16_t* pwText;
     char szFilePath[260];
     char szExpFileName[21];
+#if !defined(_WIN32) && D2_OS_MAC
+    char szFileNameBase[15];
+#else
     char szFileNameBase[12];
+#endif
     char szLangAbbrev[4];
     D2MPQFileStrc* pArchive;
     D2Lang::StrTable::strtable::TABLES_GetLangAbbreviation(szLangAbbrev, 0);
+#if !defined(_WIN32) && D2_OS_MAC
+    memcpy(szFileNameBase, "MacCredits.txt", sizeof(szFileNameBase));
+#else
     memcpy(szFileNameBase, "Credits.txt", sizeof(szFileNameBase));
+#endif
     memcpy(szExpFileName, "ExpansionCredits.txt", sizeof(szExpFileName));
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
     char* szFileName = szFileNameBase;
@@ -6151,10 +6176,16 @@ void __stdcall UIMENU_PleaseInsertCinematicDiscWithCancelAndNotWorkingOkButtons(
     D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x1432), 0, false, 0);
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 005cc1e0
+fpLoadVideoMpqFiles fpLoadVideoMpqCallback;
+#endif
 // 1.14d mac: 002ca002
 BOOL fpRequiredUserAction() {
     // Static local variables (originally global data)
+#if !(!defined(_WIN32) && D2_OS_MAC)
     static fpLoadVideoMpqFiles fpLoadVideoMpqCallback; D2_STATIC_GUARD_BSS(fpLoadVideoMpqCallback, "D2Launch::MainMenus::fpRequiredUserAction::fpLoadVideoMpqCallback");
+#endif
 
     UIMENU_PleaseInsertCinematicDiscWithCancelAndNotWorkingOkButtons();
     gbCinematicsMenuShown = 0;
@@ -9741,6 +9772,50 @@ static void * keep_00437a00 = (0 ? (MAINMENU_GetRealmNameIfValid(*(int *)0), (vo
 #if !defined(_WIN32) && D2_OS_MAC
 // 1.14d mac: 002c7efd
 int MAINMENU_ReturnTrue() {
+    return 1;
+}
+#endif
+
+#if !defined(_WIN32) && D2_OS_MAC
+namespace D2Hell {
+int FUN_002b692a(void);
+}
+
+BOOL MAINMENU_PollInsertCdDialog();
+
+// 1.14d mac: 002c9eb7
+BOOL MAINMENU_RunInsertExpansionCdDialog() {
+    UIMENU_PleaseInsertExpansionCdWithNotWorkingCancelButton(0);
+    gbCinematicsMenuShown = 0;
+    ::fpInsertPlayCd = 0;
+    fpLoadAllMediaMpqCallback = D2Win::Src::D2WinArchive::MPQ_LoadAllMediaMpqFiles;
+    gbCdCheckPassed[0] = 0;
+    D2Win::Src::D2WinMain::MessagePump((pfnFramePump)MAINMENU_PollInsertCdDialog);
+    FORMS_DestroyList();
+    return ::fpInsertPlayCd;
+}
+
+// 1.14d mac: 002c9f0f
+BOOL MAINMENU_PollInsertCdDialog() {
+    BOOL bCdFound;
+    if (gbCdCheckPassed[0] == 1) {
+      bCdFound = fpLoadVideoMpqCallback(0, 1, 0);
+    } else {
+      bCdFound = fpLoadAllMediaMpqCallback(0, 0, 1, D2IniData_launcher);
+    }
+
+    if (bCdFound) {
+      ::fpInsertPlayCd = 1;
+      D2Win::Src::D2WinArchive::MPQ_UnloadAllMediaMpqFiles();
+      D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
+    } else {
+      D2Hell::FUN_002b692a();
+    }
+
+    if (gbCinematicsMenuShown || (::fpInsertPlayCd & 1)) {
+      D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
+    }
+
     return 1;
 }
 #endif

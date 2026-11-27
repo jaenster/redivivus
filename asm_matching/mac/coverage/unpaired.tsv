@@ -675,8 +675,8 @@ addr	class	win_addr	evidence
 002c7bf7	shared-unpaired	00430b00	same-name Windows function 00430b00 (MAINMENU_CompareRealmNames); was: strcmp of realm-name fields of two list entries; no verified win twin
 002c7c2d	shared-unpaired	00430b50	same-name Windows function 00430b50 (MAINMENU_GetRealmName); was: realm-name getter with fp_fatal assert at line 0x115c; no verified win twin
 002c7efd	mac-only		body only returns 1; no caller, no code reference
-002c7f07	mac-only		front-end runner calling LAUNCHER_InitNetworkLobbyQueue (mac-only), Mac intro/Aux Battle.net flow; no verified win twin
-002c96e5	mac-only		loads MacCredits.txt or ExpansionCredits.txt with UTF-16 BOM handling; Mac-named credits file; no verified win twin
+002c7f07	shared-unpaired	004359d0	win fAPPMODE_launcher_ReturnAppMode_Caller: same start-menu pick by nScreenToShow, same sound loads, same halt line 0x125a; IMAGE_LoadPredefinedImages/IMAGE_FreePredefinedImages are inlined on the Mac
+002c96e5	shared-unpaired	00431050	win MAINMENU_DisplayCredits (with MAINMENU_LoadCreditsFile 00430cd0 inlined) parses the same credits file (same halt lines 0x138b..0x146f); the Mac file name MacCredits.txt is under D2_OS_MAC in the shared loader
 002c9eb7	mac-only		expansion-CD dialog wrapper with MessagePump and FORMS_DestroyList; no verified win twin
 002c9f0f	mac-only		CD-poll callback using MPQ_UnloadAllMediaMpqFiles; no verified win twin
 002cb34c	mac-only		SFileOpenFileEx probe helper for MAINMENU_GetLocalizedFilePath; no verified win twin
