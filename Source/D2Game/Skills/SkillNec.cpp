@@ -1430,7 +1430,8 @@ BOOL __fastcall Skills_SrvDoFunc_057_IronGolem(::SGAMEDATA * pGame, D2UnitStrc *
       byPetType = 0;
     }
 
-    D2MonsterCastPetStrc sPetCastParams = {};
+    D2MonsterCastPetStrc sPetCastParams;
+    memset(&sPetCastParams, 0, sizeof(sPetCastParams));
     sPetCastParams.pPlayer = pUnit;
     sPetCastParams.classId = nClassId;
     sPetCastParams.nFunctionId = 0;
