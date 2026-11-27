@@ -580,7 +580,6 @@ void __stdcall SOUND_ShutdownAudio_Thunk() {
 // Plays a positioned (panned) sound effect using the game's channel system. Resolves the sound ID (randomizing from a group if flagged), checks for a duplicate already-playing instance, loads the sound file if needed, selects a mono/stereo/EAX channel, sets reverb and frequency, loads WAV data or opens a streaming file, and calls SOUNDSMP_Play/SOUNDSMP_OpenAndStreamFile. Returns the allocated channel slot on success, null on failure or if a duplicate throttle fires.
 D2ClientSoundChannelStrc * __fastcall SOUND_PlaySoundWithPanning(D2SoundChannelStrc * pMemory) {
     int32_t pRandomizedSoundId;
-    int32_t nResult;
     BOOL BVar2;
     int iVar3;
     char szSoundPath[80];
@@ -608,16 +607,15 @@ D2ClientSoundChannelStrc * __fastcall SOUND_PlaySoundWithPanning(D2SoundChannelS
       return nullptr;
     }
 
-    bool bStereo = pSoundTxt->Stereo != 0;
-    uint32_t nChannelType = (uint32_t)bStereo;
-    if (!bStereo) {
-      nResult = D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer();
-      if (nResult == 1) {
-        nChannelType = 2;
+    uint32_t nChannelType = 0;
+    if (pSoundTxt->Stereo) {
+      nChannelType = 1;
+    }
+    if (!(nChannelType & 1)) {
+      if (D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer() == 1) {
+        nChannelType |= 2;
       }
-
-      nResult = D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer();
-      if (nResult == 2) {
+      if (D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer() == 2) {
         nChannelType |= 6;
       }
     }
@@ -653,9 +651,7 @@ D2ClientSoundChannelStrc * __fastcall SOUND_PlaySoundWithPanning(D2SoundChannelS
 
     pPlayingChannel->dwLastEaxObstruction = 0.0;
     pPlayingChannel->nLastVolume = -1;
-    pPlayingChannel->dwLastPosX = 0.0;
-    pPlayingChannel->dwLastPosY = 0.0;
-    pPlayingChannel->dwLastPosZ = 0.0;
+    memset(&pPlayingChannel->dwLastPosX, 0, 3 * sizeof(float));
     SOUND_UpdateChannelParams(pPlayingChannel);
     D2SoundChannelStrc* pSoundDescBackup = pSoundDesc;
     if (!pSoundTxt->Stream) {
