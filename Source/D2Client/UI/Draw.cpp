@@ -489,7 +489,11 @@ void __stdcall FreeDraw() {
       DC6_EnteredAreaName = 0;
     }
 
+#if !defined(_WIN32) && D2_OS_MAC
+    CmdTbl::CMD_DisableKeyConfigMode();
+#else
     CmdTbl::CMD_ExitKeyConfigMode();
+#endif
     EscMenu::ESCMENU_Shutdown();
     ui::CONTROLCONFIG_Cleanup();
 }

@@ -829,3 +829,15 @@ _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca183(EHExceptionRecord * pException
 }
 
 } // namespace D2Client::UI::Editbox
+
+
+#if !defined(_WIN32) && D2_OS_MAC
+namespace D2Client::UI::Editbox {
+
+// 1.14d mac: 000a59b6
+void EDITBOX_ConstructWrapper(::EditBoxWrapper * pEditBox, int nPosX, int nPosY, int nWidth, int nMaxLines, int nMaxValue, uint16_t nMaxLength, fpEditBoxOnEnter pfnOnEnter, int nFont) {
+    EditBoxWrapper::Constructor(pEditBox, nPosX, nPosY, nWidth, nMaxLines, nMaxValue, nMaxLength, pfnOnEnter, nFont);
+}
+
+} // namespace D2Client::UI::Editbox
+#endif

@@ -2190,3 +2190,14 @@ void StaticInit_gwKeyNameBuffer() {
 }
 
 } // namespace D2Client::UI::CmdTbl
+
+#if !defined(_WIN32) && D2_OS_MAC
+namespace D2Client::UI::CmdTbl {
+
+// 1.14d mac: 000a14d8
+void CMD_DisableKeyConfigMode() {
+    CMD_ToggleKeyConfigMode(0, 0);
+}
+
+} // namespace D2Client::UI::CmdTbl
+#endif
