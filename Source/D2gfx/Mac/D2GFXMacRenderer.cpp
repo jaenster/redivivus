@@ -43,11 +43,16 @@ extern void* g_apMacHelperTable[];
 extern MacRendererFunctions* g_apMacRenderers[];
 
 // 1.14d mac: 002b4b72
-// Step 1 releases the renderer and loads the one of the given mode; step 2 creates the window.
+// Step 2 creates the window; step 1 releases the renderer and loads the one of the given mode.
+// Either returns what the renderer's last call returned.
+// The binary has it in D2GFX.cpp's unit: it lies between D2GFX_Initialize (002b4975) and
+// D2GFX_Release (002b4d0c) and reads that unit's renderer selector (003c817c) and helper
+// table (003c815c) directly, where this file can only reach them through pointer cells.
 int D2GFX_SwitchModule(int eMode, int bFullScreen, int nStep) {
     const char* szFormat;
+    BOOL bResult;
     if (nStep == 2) {
-        BOOL bResult = RENDERER_CurrentRenderedFunctions->pfnCreateWindow(g_nMacWindow, nResolutionMode);
+        bResult = RENDERER_CurrentRenderedFunctions->pfnCreateWindow(g_nMacWindow, nResolutionMode);
         if (bResult != 0) {
             D2GFX_InitializeWindowSize();
             D2GFX_SetPalette(0);
@@ -55,11 +60,7 @@ int D2GFX_SwitchModule(int eMode, int bFullScreen, int nStep) {
             return bResult;
         }
         szFormat = "D2GfxSwitchModule: *** GFXCreateSurface failed.";
-    } else {
-        if (nStep != 1) {
-            fp_fatal("D2GfxSwitchModule was given an unknown step!");
-            return 0;
-        }
+    } else if (nStep == 1) {
         if (RENDERER_CurrentRenderedFunctions->pfnDestroyWindow() == 0) {
             szFormat = "D2GfxSwitchModule: *** GFXCloseSurface failed.";
         } else if (RENDERER_CurrentRenderedFunctions->pfnRelease() == 0) {
@@ -78,17 +79,22 @@ int D2GFX_SwitchModule(int eMode, int bFullScreen, int nStep) {
                     g_bMacFullScreen = bFullScreen;
                     eRendererMode = eMode;
                     RENDERER_CurrentRenderedFunctions->pfnCheckCutScene(8, bFullScreen == 1);
-                    g_bMacHardware = 3 < eMode;
-                    if (eRendererMode < 4) {
-                        g_bMacHardware = 0;
+                    int bHardware = eMode > 3;
+                    if (eRendererMode <= 3) {
+                        bHardware = 0;
                     }
-                    if (RENDERER_CurrentRenderedFunctions->pfnInitPerspective(D2GFXRenderedData, g_apMacHelperTable) != 0) {
-                        return 1;
+                    g_bMacHardware = bHardware;
+                    bResult = RENDERER_CurrentRenderedFunctions->pfnInitPerspective(D2GFXRenderedData, g_apMacHelperTable);
+                    if (bResult != 0) {
+                        return bResult;
                     }
                     szFormat = "D2GfxSwitchModule: *** GFXInit failed.";
                 }
             }
         }
+    } else {
+        fp_fatal("D2GfxSwitchModule was given an unknown step!");
+        return 0;
     }
     LOGFILE_WriteStringToFile(szFormat);
     return 0;

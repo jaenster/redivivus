@@ -69,7 +69,19 @@ struct MacGroundTile {
 };
 
 extern int D2GFXRenderedData[];
-extern int g_anClip[17];
+struct MacClipBounds {
+    int nBottom;   // 0x00
+    int nLeft;     // 0x04
+    int nRight;    // 0x08
+};
+struct MacTileClip {
+    bool bTall;            // 0x00
+    MacClipBounds tOuter;  // 0x04
+    MacClipBounds tInner;  // 0x10
+};
+extern MacClipBounds g_tSurfaceClip;
+extern MacTileClip g_tGroundClip;
+extern MacTileClip g_tWallClip;
 extern int g_anRowOffsets[732];
 extern uint8_t g_abLightGrid[];
 extern int g_anTileRowDest[15];
