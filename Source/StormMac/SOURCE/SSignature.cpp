@@ -9,14 +9,17 @@
 
 #if !defined(_WIN32) && D2_OS_MAC
 
+#include "Source/StormMac/H/StormApi.h"
+
 #include <alloca.h>
 #include <string.h>
 
-struct Sha1;
+struct D2Sha1ContextStrc;
+typedef D2Sha1ContextStrc Sha1;
 struct BigData;
 
 // The verify stream's context. Its first fields are Windows' D2SsigContextStrc's.
-struct SsigContext {
+struct D2SsigContextStrc {
     uint32_t nModulusLen;     // 0x00: RSA modulus length in bytes, also the signature length
     uint32_t nExponentLen;    // 0x04
     uint32_t nBytesBuffered;  // 0x08: bytes in pDataBuffer
@@ -24,15 +27,12 @@ struct SsigContext {
     uint8_t* pDataBuffer;     // 0x10
     uint32_t aSha1State[23];  // 0x14: the Sha1 object (unknown_sha1.cpp), opaque here
 };
+typedef D2SsigContextStrc SsigContext;
 
 void* operator new(size_t nBytes);
 void Sha1_Initialize(Sha1* pContext);
-void Sha1_Append(Sha1* pContext, const uint8_t* pData, uint32_t nSize);
-void Sha1_Finalize(Sha1* pContext, uint8_t* pDigest);
-void SBigNew(BigData** ppBig);
-void SBigDel(BigData* pBig);
-void CryptRSA_Prepare(BigData** pRsa, void* pModulus, uint32_t nModulusLen, void* pExponent, uint32_t nExponentLen);
-void CryptRSA_Process(BigData** pRsa, void* pData, uint32_t nLen);
+void CryptRSA_Prepare(BigData** pRsa, const void* pModulus, uint32_t nModulusLen, const void* pExponent, uint32_t nExponentLen);
+void CryptRSA_Process(BigData** pRsa, uint8_t* pData, uint32_t nLen);
 
 // A big number for the length of a scope: SBigNew on construction, SBigDel on destruction.
 struct SBigScoped {
@@ -118,7 +118,7 @@ int SSignatureVerifyStream_Finish(SsigContext* pContext, void* pModulus, void* p
             }
             RsaKey tKey;
             CryptRSA_Prepare(&tKey.tModulus.pBig, pModulus, pContext->nModulusLen, pExponent, pContext->nExponentLen);
-            CryptRSA_Process(&tKey.tModulus.pBig, pSig, pContext->nModulusLen);
+            CryptRSA_Process(&tKey.tModulus.pBig, (uint8_t*)pSig, pContext->nModulusLen);
             bVerified = memcmp(pSig, pHash, pContext->nModulusLen) == 0;
         }
         SMemFree(pContext->pDataBuffer, __FILE__, 0xd4, 0);

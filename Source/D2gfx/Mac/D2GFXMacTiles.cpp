@@ -629,7 +629,7 @@ void fpDrawVisTile(const uint8_t* pSrc, int nX, int nY) {
                     }
                     uint8_t* pRunDst = pDst + nSkip;
                     pDst = pDst + nRun + nSkip;
-                    SMemCopy(pRunDst, pSrc + 2, nRun);
+                    SMemCopy(pRunDst, (void*)(pSrc + 2), nRun);
                     pSrc = pSrc + nRun + 2;
                 }
                 pDst = pDestRow + g_tSurface.nPitch;
@@ -677,7 +677,7 @@ void fpDrawVisTile(const uint8_t* pSrc, int nX, int nY) {
                         pDst = pRunStart + nRun + nSkip;
                         pNext = pRun + nRun + 2;
                         if (nSize != 0) {
-                            SMemCopy(pRunStart + nSkip + nStart, pRun + nStart + 2, nSize);
+                            SMemCopy(pRunStart + nSkip + nStart, (void*)(pRun + nStart + 2), nSize);
                         }
                     }
                 }

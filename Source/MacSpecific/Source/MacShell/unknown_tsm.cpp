@@ -27,8 +27,11 @@
 #include "Source/StormMac/H/stpl.h"
 
 typedef int BOOL;
+namespace D2Lang::StrTable::strtable {
 // 1.14d mac: 002b98b1
 uint32_t MISC_GetLanguageCode(void);
+}
+using D2Lang::StrTable::strtable::MISC_GetLanguageCode;
 void MAC_DeactivateTSMDocument(void);
 void MAC_ActivateTSMDocument(void);
 void MAC_ShutdownTSM(void);

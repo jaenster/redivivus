@@ -178,7 +178,7 @@ fail:
 // Reads at the fork's mark. A failed read rewinds to where it started and tries
 // again, at most ten times and for at most five seconds; giving up still returns 1.
 BOOL ReadFile(HANDLE hFile, LPVOID lpBuffer, DWORD nNumberOfBytesToRead, LPDWORD lpNumberOfBytesRead,
-              LPVOID lpOverlapped) {
+              OVERLAPPED* lpOverlapped) {
     int16_t nRefNum = GetWin32HandlePtr(hFile)->nRefNum;
     if (lpNumberOfBytesRead != NULL) {
         *lpNumberOfBytesRead = 0;
@@ -221,7 +221,7 @@ BOOL ReadFile(HANDLE hFile, LPVOID lpBuffer, DWORD nNumberOfBytesToRead, LPDWORD
 // 1.14d mac: 00021fc6
 // Writes in 256 KB pieces.
 BOOL WriteFile(HANDLE hFile, LPCVOID lpBuffer, DWORD nNumberOfBytesToWrite, LPDWORD lpNumberOfBytesWritten,
-               LPVOID lpOverlapped) {
+               OVERLAPPED* lpOverlapped) {
     Win32HandleObject* pFile = GetWin32HandlePtr(hFile);
     if (lpOverlapped == NULL) {
         int16_t nRefNum = pFile->nRefNum;

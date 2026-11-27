@@ -41,17 +41,19 @@ void* FUN_0019bbe8(void);
 // 1.14d mac: 005c865c
 extern int g_nMacAppInstance;
 // 1.14d mac: 00030cb2
-void* GetActiveWindow(void);
+struct Win32MacWindow;
+struct RECT;
+Win32MacWindow* GetActiveWindow(void);
 // 1.14d mac: 000305a7
-void* GetFocus(void);
+Win32MacWindow* GetFocus(void);
 // 1.14d mac: 0002956e
-BOOL PostMessage(void* hWnd, uint32_t nMessage, uint32_t nWParam, uint32_t nLParam);
+BOOL PostMessage(Win32MacWindow* hWnd, uint32_t nMessage, uint32_t nWParam, int32_t nLParam);
 // 1.14d mac: 000298e3
 void MSG_PostAltF4Keys(void);
 // 1.14d mac: 0002a16f
 void* GetModuleHandle(const char* szModuleName);
 // 1.14d mac: 000312bf
-BOOL InvalidateRect(void* hWnd, const void* pRect, BOOL bErase);
+BOOL InvalidateRect(Win32MacWindow* hWnd, const RECT* pRect, BOOL bErase);
 // 1.14d mac: 005c8a38
 // Set when the display did not end up in the state asked for. Defined here: MAC_HandleMenuCommand
 // stores to it directly, the display unit reaches it through a non-lazy pointer.
@@ -70,7 +72,7 @@ void* FUN_0019bbe8(void) {
 // A menu item: the edit commands go to the focused window as WM_CUT/COPY/PASTE/CLEAR (and the
 // two Storm-specific ones), quit sets the display flag, Alt-F4 is posted for the close item.
 uint8_t MAC_HandleMenuCommand(uint32_t nCommand) {
-    void* hWnd;
+    Win32MacWindow* hWnd;
     uint8_t bHandled = 0;
     if (nCommand < 0x81) {
         switch (nCommand) {

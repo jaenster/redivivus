@@ -10,7 +10,7 @@
 #include <stdio.h>
 
 // 1.14d mac: 0001e564
-int FPMessageBox(char* szText, char* szCaption, DWORD dwFlags);
+int FPMessageBox(const char* szText, const char* szCaption, DWORD dwFlags);
 // 1.14d mac: 0001e94c
 void MAC_ConvertNewlinesToReturns(CFStringRef* pString);
 // 1.14d mac: 0001eafe
@@ -39,7 +39,7 @@ void FPSetFatalSkipDebugStr(int bEnable) {
 }
 
 // 1.14d mac: 0001e4b8
-BOOL FPvfatal(char* szFormat, va_list args) {
+BOOL FPvfatal(const char* szFormat, va_list args) {
     unsigned char szMessage[256];
     vsprintf((char*)szMessage, szFormat, args);
     if (s_nFatalToDebugger < 1) {
@@ -62,7 +62,7 @@ void FPSetMessageBoxCallback(void (*pfnCallback)(void)) {
 // German and Japanese; everything else is English).
 // 1.14d mac: 0001e564
 // MessageBox on a Carbon standard alert; returns the IDxxx of the button hit.
-int FPMessageBox(char* szText, char* szCaption, DWORD dwFlags) {
+int FPMessageBox(const char* szText, const char* szCaption, DWORD dwFlags) {
     CFStringRef cfYes, cfNo, cfIgnore, cfAbort, cfRetry, cfCancel;
     CFStringEncoding nEncoding = 0x500;
     SInt32 nScript = GetScriptManagerVariable(smRegionCode);

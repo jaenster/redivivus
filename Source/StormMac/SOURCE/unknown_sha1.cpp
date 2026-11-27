@@ -9,6 +9,8 @@
 
 #if !defined(_WIN32) && D2_OS_MAC
 
+#include "Source/StormMac/H/StormApi.h"
+
 #include <string.h>
 
 // 1.14d mac: 00397084
@@ -17,11 +19,12 @@
 static const uint8_t g_abySha1Padding[64] = {0x80};
 
 // The context: the bit count (low, high), the five state words, the 64-byte block buffer.
-struct Sha1 {
+struct D2Sha1ContextStrc {
     uint64_t qwBitCount;      // 0x00
     uint32_t aState[5];       // 0x08
     uint8_t abyBlock[64];     // 0x1C
 };
+typedef D2Sha1ContextStrc Sha1;
 
 static inline uint32_t Rol(uint32_t dwValue, int nBits) {
     return dwValue << nBits | dwValue >> (32 - nBits);
@@ -86,7 +89,7 @@ void Sha1_Initialize(Sha1* pContext) {
 }
 
 // 1.14d mac: 0000a4b8
-void Sha1_Append(Sha1* pContext, const uint8_t* pData, uint32_t nSize) {
+void Storm::Source::SSignature::Sha1_Append(Sha1* pContext, uint8_t* pData, uint32_t nSize) {
     uint32_t i = (uint32_t)(pContext->qwBitCount >> 3) & 0x3f;
     pContext->qwBitCount += (uint64_t)nSize << 3;
     if (i != 0) {
@@ -113,7 +116,7 @@ void Sha1_Append(Sha1* pContext, const uint8_t* pData, uint32_t nSize) {
 }
 
 // 1.14d mac: 0000a56e
-void Sha1_Finalize(Sha1* pContext, uint8_t* pDigest) {
+void Storm::Source::SSignature::Sha1_Finalize(Sha1* pContext, uint8_t* pDigest) {
     uint8_t abyLength[8];
     uint32_t dwLow = (uint32_t)pContext->qwBitCount;
     uint32_t dwHigh = (uint32_t)(pContext->qwBitCount >> 32);
@@ -123,7 +126,7 @@ void Sha1_Finalize(Sha1* pContext, uint8_t* pDigest) {
         dwShifted = dwShifted >> 8 | dwHigh << 24;
         dwHigh >>= 8;
     }
-    Sha1_Append(pContext, g_abySha1Padding, (0x37 - (dwLow >> 3) & 0x3f) + 1);
+    Sha1_Append(pContext, (uint8_t*)g_abySha1Padding, (0x37 - (dwLow >> 3) & 0x3f) + 1);
     Sha1_Append(pContext, abyLength, 8);
     for (int nWord = 0; nWord != 5; nWord++) {
         uint32_t dwWord = pContext->aState[nWord];

@@ -75,7 +75,12 @@ eD2RendererMode eRendererMode = 0; D2_GLOBAL_GUARD(eRendererMode, "D2gfx::D2GFX:
 BOOL bD2GFX_Windowed = 0; D2_GLOBAL_GUARD(bD2GFX_Windowed, "bD2GFX_Windowed");
 uint32_t gnD2GFXResolutionMode = 0; D2_GLOBAL_GUARD(gnD2GFXResolutionMode, "gnD2GFXResolutionMode");
 static HWND hwndD2GFX_Window = 0; D2_STATIC_GUARD(hwndD2GFX_Window, "hwndD2GFX_Window");
+#if !defined(_WIN32) && D2_OS_MAC
+// The Mac build defines the renderer pointer in the Mac unit (D2GFXMacRenderer.cpp), whose renderer switch addresses it directly.
+extern D2RendererFunctionsStrc * RENDERER_CurrentRenderedFunctions;
+#else
 D2RendererFunctionsStrc * RENDERER_CurrentRenderedFunctions = 0; D2_GLOBAL_GUARD(RENDERER_CurrentRenderedFunctions, "RENDERER_CurrentRenderedFunctions");
+#endif
 namespace D2gfx::D2GFX {
 uint32_t gnGfxOverlayMode = 0; D2_GLOBAL_GUARD(gnGfxOverlayMode, "D2gfx::D2GFX::gnGfxOverlayMode");
 } // namespace D2gfx::D2GFX

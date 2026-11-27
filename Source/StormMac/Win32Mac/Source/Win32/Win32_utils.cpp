@@ -201,7 +201,7 @@ OSErr MacResolveAliasFile(FSSpec* pSpec, Boolean bResolveChains, Boolean* pbTarg
 // 1.14d mac: 0001eafe
 unsigned char* c2pstr(char* szString);
 // 1.14d mac: 0003e21d
-int MACFILE_FSSpecToPath(const FSSpec* pSpec, char* szPath, int nMaxPathSize);
+int MACFILE_FSSpecToPath(FSSpec* pSpec, char* szPath, int nMaxPathSize);
 
 // The path cache: for each volume and directory a path was resolved from, a hash
 // table of the directories under it, three levels deep, by their path relative to

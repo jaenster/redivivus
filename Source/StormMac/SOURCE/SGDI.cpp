@@ -5,6 +5,8 @@
 
 #if !defined(_WIN32) && D2_OS_MAC
 
+#include "Source/StormMac/H/StormApi.h"
+
 #include <stdint.h>
 
 // 1.14d mac: 00010bb3

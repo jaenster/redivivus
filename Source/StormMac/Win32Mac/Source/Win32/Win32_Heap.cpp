@@ -33,7 +33,7 @@ void Mem_Nop(void) {
 }
 
 // 1.14d mac: 0001e325
-void* MemReAlloc(void* pMem, size_t nSize, DWORD dwFlags) {
+void* MemReAlloc(void* pMem, size_t nSize) {
     int nOldSize = 0;
     if (pMem != NULL) {
         nOldSize = malloc_size(pMem);
@@ -51,9 +51,9 @@ void MemFree(void* pMem, DWORD dwFlags) {
 }
 
 // 1.14d mac: 0001e39a
-void MemFreeHandle(void** hMem) {
-    s_nAllocatedBytes -= GetHandleSize((Handle)hMem);
-    DisposeHandle((Handle)hMem);
+void MemFreeHandle(Handle hMem) {
+    s_nAllocatedBytes -= GetHandleSize(hMem);
+    DisposeHandle(hMem);
 }
 
 // 1.14d mac: 0001e3c0
@@ -77,8 +77,8 @@ void* MemAlloc(size_t nSize, DWORD dwFlags) {
 }
 
 // 1.14d mac: 0001e45c
-void** MemAllocHandle(int nSize) {
-    void** hMem = (void**)NewHandle(nSize);
+Handle MemAllocHandle(Size nSize) {
+    Handle hMem = NewHandle(nSize);
     s_nAllocatedBytes += nSize;
     return hMem;
 }

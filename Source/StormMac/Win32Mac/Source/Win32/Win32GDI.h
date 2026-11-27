@@ -32,7 +32,7 @@ typedef CGrafPtr GWorldPtr;
 // 1.14d mac: 0001e325
 void* MemReAlloc(void* pMem, size_t nSize);
 // 1.14d mac: 00033a6f
-int _strnicmp(const char* szA, const char* szB, size_t nCount);
+int _strnicmp(const char* szA, const char* szB, int nCount);
 // 1.14d mac: 00033a24
 int _stricmp(const char* szA, const char* szB);
 
@@ -131,7 +131,7 @@ struct Win32MacDCData {
     DWORD nTextAlign;             // 0x28
     LONG nCurrentX;               // 0x2C
     LONG nCurrentY;               // 0x30
-    void* hWnd;                   // 0x34
+    HWND hWnd;                    // 0x34
     LONG nOriginX;                // 0x38  the window's screen origin
     LONG nOriginY;                // 0x3C
     BYTE* pPixels;                // 0x40  the byte surface drawing goes to
@@ -152,7 +152,7 @@ BOOL SetRect(RECT* pRect, int nLeft, int nTop, int nRight, int nBottom);
 // 1.14d mac: 0002b28d
 BOOL SetRectEmpty(RECT* pRect);
 // 1.14d mac: 0002b2e1
-BOOL IntersectRect(RECT* pDest, RECT* pRect1, RECT* pRect2);
+BOOL IntersectRect(RECT* pDest, const RECT* pRect1, const RECT* pRect2);
 // 1.14d mac: 0002b485
 BOOL OffsetRect(RECT* pRect, int nDX, int nDY);
 // 1.14d mac: 0002b4ab
@@ -162,11 +162,11 @@ BOOL IsRectEmpty(RECT* pRect);
 void Rgn_SetEmptyStripRgn(int hRgn);
 
 // 1.14d mac: 0002fbf8
-void Wnd_CalculateVisibleRgn(void* hWnd, HRGN hRgn, int bClient);
+void Wnd_CalculateVisibleRgn(HWND hWnd, HRGN hRgn, int bClient);
 // 1.14d mac: 0002fec2
-BOOL ClientToScreen(void* hWnd, POINT* pPoint);
+BOOL ClientToScreen(HWND hWnd, POINT* pPoint);
 // 1.14d mac: 0002fdc5
-BOOL GetClientRect(void* hWnd, RECT* pRect);
+BOOL GetClientRect(HWND hWnd, RECT* pRect);
 // 1.14d mac: 0002fa76
 void Wnd_Shutdown(void);
 

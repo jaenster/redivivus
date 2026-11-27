@@ -9,19 +9,12 @@
 
 #if !defined(_WIN32) && D2_OS_MAC
 
+#include "Source/StormMac/H/StormApi.h"
+
 #include <string.h>
 
-void* SMemAlloc(uint32_t nBytes, const char* szFile, int nLine, uint32_t dwFlags);
-int SMemFree(void* pMem, const char* szFile, int nLine, uint32_t dwFlags);
-void SMemFill(void* pDest, size_t nSize, uint8_t byValue);
-void SErrSetLastError(DWORD dwErrCode);
 
 struct D2MPQFileStrc;
-BOOL SFileOpenFile(const char* szFile, D2MPQFileStrc** ppFile);
-BOOL SFileReadFile(D2MPQFileStrc* pFile, void* pBuffer, size_t nToRead, size_t* pnRead, void* pOverlapped);
-DWORD SFileSetFilePointer(D2MPQFileStrc* pFile, int nDistance, int* pnDistanceHigh, DWORD dwMoveMethod);
-DWORD SFileGetFileSize(D2MPQFileStrc* pFile, LPDWORD pdwFileSizeHigh);
-BOOL SFileCloseFile(D2MPQFileStrc* pFile);
 
 // The file-local routines are static: each has two callers and stays out of line, and LLVM
 // gives an internal function the fast convention (first two arguments in ecx and edx).
@@ -235,8 +228,9 @@ static int DecodeTgaMem(const uint8_t* pData, uint32_t nDataSize, uint8_t* pPale
 // 1.14d mac: 0000c0ae
 // Format 0: by the magic bytes; 1: BMP; 2: PCX; 3: TGA. The palette is 256 four-byte
 // entries.
-int SBmpDecodeImage(int nFormat, const void* pData, uint32_t nDataSize, uint8_t* pPalette, uint8_t* pbPixels,
-                    uint32_t nPixelBufSize, uint32_t* pnWidth, uint32_t* pnHeight, uint32_t* pnBpp) {
+int Storm::Source::SBMP::SBmpDecodeImage(int nFormat, const void* pData, uint32_t nDataSize, void* pPaletteArg, uint8_t* pbPixels,
+                    int nPixelBufSize, uint32_t* pnWidth, uint32_t* pnHeight, uint32_t* pnBpp) {
+    uint8_t* pPalette = (uint8_t*)pPaletteArg;
     if (pnWidth != NULL) {
         *pnWidth = 0;
     }
@@ -359,7 +353,7 @@ int SBmpLoadImage(const char* szFile, uint8_t* pPalette, uint8_t* pbPixels, uint
             SFileSetFilePointer(pFile,
                                 tFileHeader.dwOffBits - sizeof(BmpFileHeader) - 0x28 - (pPalette != NULL ? 0x400 : 0),
                                 NULL, FILE_CURRENT);
-            size_t nRead = 0;
+            uint32_t nRead = 0;
             uint8_t* pBuffer = (uint8_t*)SMemAlloc(tInfoHeader.dwSizeImage, SBMP_FILE, 0x1fa, 0);
             SFileReadFile(pFile, pBuffer, tInfoHeader.dwSizeImage, &nRead, NULL);
             int nDestWidth = (tInfoHeader.nWidth * tInfoHeader.wBitCount) >> 3;
@@ -420,7 +414,7 @@ int SBmpLoadImage(const char* szFile, uint8_t* pPalette, uint8_t* pbPixels, uint
     }
     case 3: {
         TgaHeader tHeader;
-        size_t nRead;
+        uint32_t nRead;
         if (!SFileReadFile(pFile, &tHeader, sizeof(TgaHeader), &nRead, NULL) || nRead != sizeof(TgaHeader) ||
             !SBMP_IsValidTgaHeader(&tHeader)) {
             break;

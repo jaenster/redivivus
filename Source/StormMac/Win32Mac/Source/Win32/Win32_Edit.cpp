@@ -20,7 +20,7 @@ typedef void (*TIMERPROC)(HWND hWnd, UINT uMsg, UINT nIDEvent, DWORD dwTime);
 #define EDIT_DRAG_TIMER 0x44726167
 
 void* GetProp(HWND hWnd, const char* szName);
-BOOL SetProp(HWND hWnd, const char* szName, void* pData);
+BOOL SetProp(HWND hWnd, const char* szName, int nData);
 void* RemoveProp(HWND hWnd, const char* szName);
 LONG DefWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 LONG SendMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -35,15 +35,15 @@ HWND SetCapture(HWND hWnd);
 BOOL ReleaseCapture(void);
 HWND SetFocus(HWND hWnd);
 HWND GetFocus(void);
-HDC BeginPaint(HWND hWnd, Win32MacPaintStruct* pPaint);
-BOOL EndPaint(HWND hWnd, const Win32MacPaintStruct* pPaint);
+HDC BeginPaint(HWND hWnd, PAINTSTRUCT* pPaint);
+BOOL EndPaint(HWND hWnd, const PAINTSTRUCT* pPaint);
 BOOL MessageBeep(UINT uType);
 BOOL Wnd_IsVisibleAndEnabled(HWND hWnd);
 DWORD GetSysColor(int nIndex);
 DWORD SetTextColor(HDC hDC, DWORD dwColor);
 int GetSystemMetrics(int nIndex);
 void* GetStockObject(int nIndex);
-void GDI_GetFontHeight(void* hFont, LONG* pnHeight);
+void GDI_GetFontHeight(HandleHeader** hFont, int* pnHeight);
 HDC GetDC(HWND hWnd);
 int ReleaseDC(HWND hWnd, HDC hDC);
 BOOL GetTextExtentPoint32(HDC hDC, const char* szText, int nLength, SIZE* pSize);
@@ -137,7 +137,7 @@ LONG Edit_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
                 pLine[2] = 0;
                 pLine[4] = 0;
                 pNew->nLines = 1;
-                BOOL bSet = SetProp(hWnd, s_szEditData, pNew);
+                BOOL bSet = SetProp(hWnd, s_szEditData, (int)(intptr_t)pNew);
                 lResult = bSet ? 0 : -1;
                 if (bSet) {
                     return lResult;
@@ -235,7 +235,7 @@ LONG Edit_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         return lResult;
     case 0xF: {  // WM_PAINT
         pEdit = (Win32MacEditData*)GetProp(hWnd, s_szEditData);
-        Win32MacPaintStruct tPaint;
+        PAINTSTRUCT tPaint;
         HDC hDC = BeginPaint(hWnd, &tPaint);
         char* pText = NULL;
         bool bHaveText = false;
@@ -407,7 +407,7 @@ LONG Edit_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             }
         }
         LONG nHeight;
-        GDI_GetFontHeight((void*)wParam, &nHeight);
+        GDI_GetFontHeight((HandleHeader**)wParam, &nHeight);
         pEdit->nLineHeight = nHeight;
         Edit_RecalculateLineOffsets(hWnd, pEdit);
         InvalidateRect(hWnd, NULL, 1);

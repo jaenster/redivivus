@@ -11,11 +11,10 @@
 
 #if !defined(_WIN32) && D2_OS_MAC
 
+#include "Source/StormMac/H/StormApi.h"
+
 #include <string.h>
 
-void* SMemAlloc(uint32_t nBytes, const char* szFile, int nLine, uint32_t dwFlags);
-int SMemFree(void* pMem, const char* szFile, int nLine, uint32_t dwFlags);
-void SErrSetLastError(DWORD dwErrCode);
 DWORD GetCurrentThreadId(void);
 // Out of line in SFILE.CPP's neighbourhood: a recursive pthread mutex.
 void CRITSECT_Init(pthread_mutex_t* pMutex);

@@ -26,7 +26,8 @@ void MACCURSOR_HideDisplayCursor(void);
 
 typedef void (*CursorProc)(void);
 typedef bool (*SuspendProc)(void);
-typedef bool (*CursorPosProc)(int32_t nX, int32_t nY);
+// The set-position callback takes its coordinates by address (the shell reads them through pointers).
+typedef bool (*CursorPosProc)(int16_t* pnX, int16_t* pnY);
 typedef bool (*GuardProc)(bool bFlag);
 typedef bool (*GetCursorPosProc)(int32_t*, int32_t*);
 
@@ -69,7 +70,7 @@ struct DisplayDriver {
     int (*pfnSlot50)(void);                                          // 0x50
     bool (*pfnSlot54)(int32_t, int32_t);                             // 0x54
     int (*pfnSlot58)(void);                                          // 0x58
-    bool (*pfnSetCursorPos)(int32_t, int32_t);                       // 0x5c
+    bool (*pfnSetCursorPos)(int16_t*, int16_t*);                     // 0x5c
     int32_t (*pfnHideCursor)(void);                                  // 0x60
     int32_t (*pfnShowCursor)(void);                                  // 0x64
     int32_t (*pfnGetShowCount)(void);                                // 0x68
@@ -230,11 +231,11 @@ int MACDISPLAY_Slot58(void) {
 }
 
 // 1.14d mac: 00036a01
-bool MACCURSOR_SetCursorPos(int32_t nX, int32_t nY) {
+bool MACCURSOR_SetCursorPos(int16_t* pnX, int16_t* pnY) {
     if (g_pfnSetCursorPosProc == NULL) {
         return false;
     }
-    return g_pfnSetCursorPosProc(nX, nY);
+    return g_pfnSetCursorPosProc(pnX, pnY);
 }
 
 // 1.14d mac: 00036a32

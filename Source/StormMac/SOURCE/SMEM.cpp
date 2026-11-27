@@ -7,17 +7,15 @@
 
 #include <stdint.h>
 
+#include "Source/StormMac/H/StormApi.h"
+
 // 1.14d mac: 0001e325
 void* MemReAlloc(void* pMem, size_t nSize);
 // 1.14d mac: 0000ffaa
-void SErrDisplayError(DWORD dwErrCode, const char* szFile, int nLine, const char* szDescription, int bRecoverable,
-                      int nExitCode);
-// 1.14d mac: 0001ccd5
-int SStrPrintf(char* szDest, uint32_t nMaxChars, const char* szFormat, ...);
+int SErrDisplayError(uint32_t nErrorCode, const char* pStackTrace, int32_t nTraceFlags, const char* pCustomMsg,
+                     int32_t nMessageFlags, UINT nExitCode);
 // 1.14d mac: 0002a41f
 void ExitProcess(UINT uExitCode);
-// 1.14d mac: 0003a9a0
-int SRegLoadValue(const char* szKeyName, const char* szValueName, DWORD dwFlags, int* pnValue);
 
 #define SMEM_FLAG_ZEROMEMORY 0x08
 #define SMEM_FLAG_NOMOVE 0x10
@@ -34,7 +32,7 @@ int g_nProtectMemory;
 static void SMEM_DisplayOutOfMemoryError(const char* szFile, int nLine, uint32_t nBytes);
 
 // 1.14d mac: 00018b0b
-void* SMemAlloc(uint32_t nBytes, const char* szFile, int nLine, uint32_t dwFlags) {
+void* Storm::Source::SMem::SMemAlloc(uint32_t nBytes, const char* szFile, uint32_t nLine, uint32_t dwFlags) {
     uint32_t dwProtect = (dwFlags >> 18) & 0x400;
     uint32_t dwAllocFlags = dwProtect + 0x100;
     if (!(dwFlags & SMEM_FLAG_ZEROMEMORY)) {
@@ -60,7 +58,7 @@ static void SMEM_DisplayOutOfMemoryError(const char* szFile, int nLine, uint32_t
 }
 
 // 1.14d mac: 00018c12
-void* SMemReAlloc(void* pMem, uint32_t nBytes, const char* szFile, int nLine, uint32_t dwFlags) {
+void* Storm::Source::SMem::SMemReAlloc(void* pMem, uint32_t nBytes, const char* szFile, int nLine, uint32_t dwFlags) {
     if (pMem && (dwFlags & SMEM_FLAG_NOMOVE)) {
         return NULL;
     }
@@ -74,13 +72,13 @@ int SMemDestroy(void) {
 }
 
 // 1.14d mac: 00018c44
-int SMemFree(void* pMem, const char* szFile, int nLine, uint32_t dwFlags) {
+int Storm::Source::SMem::SMemFree(void* pMem, const char* szFile, int nLine, uint32_t dwFlags) {
     MemFree(pMem, 0);
     return 1;
 }
 
 // 1.14d mac: 00018c67
-void SMemInitialize(void) {
+void Storm::Source::SMem::SMemInitialize(void) {
     if (!s_bInitialized) {
         SRegLoadValue("Internal", "Debug Memory", 0, &g_nDebugMemory);
         SRegLoadValue("Internal", "Protect Memory", 0, &g_nProtectMemory);

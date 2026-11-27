@@ -29,7 +29,7 @@ struct DlgMenuState {
 WIN32MAC_LAYOUT(DlgMenuState_size, sizeof(DlgMenuState) == 0x24);
 WIN32MAC_LAYOUT(DlgMenuState_window, offsetof(DlgMenuState, pWindow) == 0x20);
 
-typedef char (*DlgFilterProc)(DialogPtr pDialog, EventRecord* pEvent, short* pItemHit);
+typedef Boolean (*DlgFilterProc)(DialogPtr pDialog, EventRecord* pEvent, short* pItemHit);
 typedef void (*DlgIdleProc)(DialogPtr pDialog, DlgMenuState* pMenuState);
 typedef char (*DlgMenuProc)(DialogPtr pDialog, DlgMenuState* pMenuState, long nMenuResult, short* pItemHit);
 

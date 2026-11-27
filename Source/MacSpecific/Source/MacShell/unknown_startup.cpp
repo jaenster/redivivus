@@ -42,7 +42,7 @@ typedef Boolean (*MacDialogFilterProc)(DialogRef pDialog, EventRecord* pEvent, D
 // saved state (Storm's DlgMenuState, Source/StormMac/unknown_dialog.cpp); only the part the
 // shell fills is named. The 32-bit fields give the record 4-byte alignment, which is why
 // clang keeps the item stores of MAC_BeginModalDialog as separate 16-bit stores.
-struct MacModalState {
+struct DlgMenuState {
     uint8_t unk00[8];
     int16_t nMenuID;          // 0x08
     uint16_t nMenuItems;      // 0x0A
@@ -57,34 +57,45 @@ struct MacModalState {
     uint32_t dwEditSavedBits; // 0x1C
     WindowRef pWindow;        // 0x20
 };
-static_assert(sizeof(void*) != 4 || sizeof(MacModalState) == 0x24, "MacModalState");
+static_assert(sizeof(void*) != 4 || sizeof(DlgMenuState) == 0x24, "DlgMenuState");
 // 1.14d mac: 0003555c
-void Dlg_DisableMenusForModal(DialogRef pDialog, int nArg, MacModalState* pState);
+void Dlg_DisableMenusForModal(DialogRef pDialog, WindowRef pWindow, DlgMenuState* pState);
 // 1.14d mac: 00035ef1
-void Dlg_ModalDialog(DialogRef pDialog, MacModalState* pState, MacDialogFilterProc pfnFilter,
+void Dlg_ModalDialog(DialogRef pDialog, DlgMenuState* pState, MacDialogFilterProc pfnFilter,
                      DialogItemIndex* pnItemHit);
 // 1.14d mac: 000358fe
-void Dlg_RestoreMenus(DialogRef pDialog, MacModalState* pState);
+void Dlg_RestoreMenus(DialogRef pDialog, DlgMenuState* pState);
 // 1.14d mac: 0019f2b6
 void FLAMINGLOGO_Init(DialogRef pDialog, int nItem);
 // 1.14d mac: 0019f551
 void FLAMINGLOGO_Shutdown(void);
 // 1.14d mac: 0019f61c
 void FLAMINGLOGO_DrawFrame(ControlRef pControl);
+namespace D2Win::Src::D2WinMain {
 // 1.14d mac: 0004b543
-void D2WINMAIN_SetCursorVisible(BOOL bVisible);
+void D2WINMAIN_SetCursorVisible(int bVisible);
+}
+using D2Win::Src::D2WinMain::D2WINMAIN_SetCursorVisible;
 namespace D2Client {
 namespace Cursor {
 // 1.14d mac: 0006328d
 void CURSOR_SetOverrideValue(int nValue);
 }
 }
+struct D2IniConfigStrc;
+namespace D2Win::Src::D2WinArchive {
 // 1.14d mac: 00042c23
-BOOL MPQ_LoadAllMediaMpqFiles(void* pfnUserAction1, void* pfnUserAction2, int nFlags, void* pIni);
+BOOL MPQ_LoadAllMediaMpqFiles(int (*pfnUserAction1)(), int (*pfnUserAction2)(), int nFlags, D2IniConfigStrc* pIni);
 // 1.14d mac: 00042ab4
 void MPQ_UnloadAllMediaMpqFiles(void);
+}
+using D2Win::Src::D2WinArchive::MPQ_LoadAllMediaMpqFiles;
+using D2Win::Src::D2WinArchive::MPQ_UnloadAllMediaMpqFiles;
+namespace Fog {
 // 1.14d mac: 002edc4a
 BOOL D2CheckExpansionGame(void);
+}
+using Fog::D2CheckExpansionGame;
 // 1.14d mac: 002b692a
 void ARCHIVE_UnmountCdVolumes(void);
 // The application's procedure table (the slots after the shell's own: 0x6c, 0x70 and 0x74 bracket
@@ -97,33 +108,34 @@ struct MacAppProcs {
 extern MacAppProcs* g_pMacAppProcs __asm__("_g_pDisplayDriver");
 // ---- the SReg, Win32Mac and D2gfx entry points the shell calls ----
 
-// 1.14d mac: 0001ccd5
-int SStrPrintf(char* szDest, size_t nDestSize, const char* szFormat, ...);
 // File-local (its argument comes in ecx) yet called out of line by its one caller; clang-425
 // inlines a one-caller static unless told not to.
 static __attribute__((noinline)) char* FUN_0019b1ec(char* szCmdLine);
-// 1.14d mac: 0003a8e2
-int SRegLoadString(char* szSubKey, char* szValueName, int nFlags, char* szOutBuf, uint32_t dwOutBufSize);
-// 1.14d mac: 0003a9a0
-int SRegLoadValue(char* szSubKey, char* szValueName, int nFlags, int32_t* pnValue);
-// 1.14d mac: 0003abad
-int SRegSaveString(char* szSubKey, const char* szValueName, int nFlags, char* szValue);
-// 1.14d mac: 0003acba
-int SRegSaveValue(char* szSubKey, const char* szValueName, int nFlags, int32_t nValue);
+namespace Fog::Src::ErrorManager {
 // 1.14d mac: 002eed78
-void FOG_InitErrorManager(const char* szProduct, const char* szVersion, int nFlags);
+void FOG_InitErrorManager(void* pUnused, char* szText, int bStoreStartupInfo);
+}
+using Fog::Src::ErrorManager::FOG_InitErrorManager;
 // 1.14d mac: 0002ab8e
 char* GetCommandLine(void);
+namespace Game::Main {
 // 1.14d mac: 0019ebbe
-int ApplicationMain(int nInstance, void* pDisplayState, int nMode);
-// Options 2 and 3 are eight-byte values D2gfx takes by address; their fields are unknown.
-struct MacDisplayOption {
+int ApplicationMain(void* hInstance, D2IniConfigStrc* pD2IniData, uint32_t eApplicationModeAndRenderer);
+// Clears the configuration, initialises the ignore list and parses the switches.
+// 1.14d mac: 0019e8a1
+void MISC_InitD2IniAndIgnorelist(D2IniConfigStrc* pD2IniData, char* szCommandLine);
+}
+using Game::Main::ApplicationMain;
+using Game::Main::MISC_InitD2IniAndIgnorelist;
+// Options 2 and 3 are the display modes the module reports for the 640x480 and 800x600 targets;
+// the shell keeps the first eight bytes of each (MacDisplayMode in D2gfx/Mac/MACGFX.cpp).
+struct MacDisplayMode {
     int32_t n00;
     int32_t n04;
 };
 // 1.14d mac: 002b603a
-void MACGFX_EnumerateDisplayModes(int* pnDisplayModule, int* pnOption4, int* pnOption5, int* pnOption0,
-                                  MacDisplayOption* pOption2, MacDisplayOption* pOption3);
+void MACGFX_EnumerateDisplayModes(int* pnDisplayModule, int* pnOption4, int* pnOption5, uint32_t* pnDisplayID,
+                                  MacDisplayMode* pOption2, MacDisplayMode* pOption3);
 // The configuration Game/Main.cpp parses the command line into (its D2IniConfigStrc, 0x3CD
 // bytes); only the bytes the shell uses are laid out.
 struct MacDisplayState {
@@ -150,7 +162,7 @@ Boolean MAC_GameDiscDialogFilterProc(DialogRef pDialog, EventRecord* pEvent, Dia
 
 // 1.14d mac: 00536af4
 // The modal-dialog state shared by every dialog the shell shows.
-static MacModalState s_tModalState;
+static DlgMenuState s_tModalState;
 // 1.14d mac: 00536b18
 // The tick of the last disc check.
 static uint32_t s_dwLastDiscCheck;
@@ -246,7 +258,7 @@ void MAC_BeginModalDialog(DialogRef pDialog, int nArg) {
     if ((hMenu = GetMenuHandle(0x83)) != NULL) DisableMenuItem(hMenu, 0);
     if ((hMenu = GetMenuHandle(0x84)) != NULL) DisableMenuItem(hMenu, 0);
     DrawMenuBar();
-    Dlg_DisableMenusForModal(pDialog, nArg, &s_tModalState);
+    Dlg_DisableMenusForModal(pDialog, (WindowRef)nArg, &s_tModalState);
 }
 
 // 1.14d mac: 0019a9f2
@@ -391,9 +403,6 @@ static char s_szCmdLine[1024];
 // 1.14d mac: 003e0e9c
 const char* gApplicationModeCommandLineArgumentArray[6] = {"modstate0", "client", "server", "multiplayer", "launcher", "expand"};
 
-// 1.14d mac: 0019e8a1
-// Game/Main.cpp: clears the configuration, initialises the ignore list and parses the switches.
-void MISC_InitD2IniAndIgnorelist(MacDisplayState* pD2IniData, const char* szCommandLine);
 // 1.14d mac: 0019cc81
 Boolean FUN_0019cc81(int nOption0, int nFullScreen);
 
@@ -404,11 +413,11 @@ int MAC_ParseCommandLineAndRun(int nInstance, int nUnused1, int nUnused2, int nU
     char szVersion[260];
     char szCmdBuf[2048];
     char szSavedCmdLine[512];
-    int nOption0;
+    uint32_t nOption0;
     int32_t bUseCmdLine;
     g_nMacAppInstance = nInstance;
     SStrPrintf(szVersion, 0x104, "v%d.%02d", 1, 14);
-    FOG_InitErrorManager("Diablo II", szVersion, 1);
+    FOG_InitErrorManager((void*)"Diablo II", szVersion, 1);
     bUseCmdLine = 0;
     char* szCmdLine = GetCommandLine();
     char* pszRest;
@@ -439,11 +448,11 @@ int MAC_ParseCommandLineAndRun(int nInstance, int nUnused1, int nUnused2, int nU
             }
         }
     }
-    MISC_InitD2IniAndIgnorelist(&g_tMacDisplayState, szCmdLine);
+    MISC_InitD2IniAndIgnorelist((D2IniConfigStrc*)&g_tMacDisplayState, szCmdLine);
     MACGFX_EnumerateDisplayModes(NULL, NULL, NULL, &nOption0, NULL, NULL);
     int nResult = 0;
     if (FUN_0019cc81(nOption0, g_tMacDisplayState.bFullScreen)) {
-        nResult = ApplicationMain(nInstance, &g_tMacDisplayState, nMode);
+        nResult = ApplicationMain((void*)nInstance, (D2IniConfigStrc*)&g_tMacDisplayState, nMode);
     }
     return nResult;
 }

@@ -38,7 +38,7 @@
 
 // ---- Win32_Rect.cpp, Win32_Keys.cpp ----
 BOOL CopyRect(RECT* pDest, RECT* pSrc);
-BOOL IntersectRect(RECT* pDest, RECT* pRect1, RECT* pRect2);
+BOOL IntersectRect(RECT* pDest, const RECT* pRect1, const RECT* pRect2);
 BOOL PtInRect(RECT* pRect, POINT tPoint);
 short GetAsyncKeyState(BYTE byVirtKey);
 

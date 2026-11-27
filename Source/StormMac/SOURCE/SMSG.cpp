@@ -9,16 +9,16 @@
 
 #if !defined(_WIN32) && D2_OS_MAC
 
+#include "Source/StormMac/H/StormApi.h"
+
 #include <stdint.h>
 
-// 1.14d mac: 00010b98
-void SErrSetLastError(uint32_t dwErrCode);
 // 1.14d mac: 00011280
 int SEvtDispatch(uint32_t dwType, uint32_t dwSubType, uint32_t dwId, void* pData);
 // 1.14d mac: 0001183c
-int SEvtRegisterHandler(uint32_t dwType, uint32_t dwSubType, uint32_t dwId, uint32_t dwFlags, void* pfnHandler);
+int SEvtRegisterHandler(uint32_t dwType, uint32_t dwSubType, uint32_t dwId, int nFlags, void (*pfnHandler)(void*));
 // 1.14d mac: 00011c21
-int SEvtUnregisterHandler(uint32_t dwType, uint32_t dwSubType, uint32_t dwId, void* pfnHandler);
+int SEvtUnregisterHandler(uint32_t dwType, uint32_t dwSubType, uint32_t dwId, void (*pfnHandler)(void*));
 // 1.14d mac: 000115a5
 int SEvtUnregisterType(uint32_t dwType, uint32_t dwSubType);
 // 1.14d mac: 0001169c
@@ -83,7 +83,7 @@ static int SMSG_InternalRegister(uint32_t dwEventType, void* pWindow, uint32_t d
 static int SMSG_InternalUnregister(uint32_t dwEventType, void* pWindow, uint32_t dwKey, void* pfnHandler);
 
 // 1.14d mac: 00018cdb
-int SMsgBreakHandlerChain(void* pData) {
+int Storm::SMsgBreakHandlerChain(void* pData) {
     return SEvtBreakHandlerChain(pData);
 }
 
@@ -116,8 +116,8 @@ static void SMSG_DeleteWindow(void* pWindow) {
 }
 
 // 1.14d mac: 00018ddd
-int SMsgDispatchMessage(void* pWindow, uint32_t nMsg, uint32_t nWParam, int32_t nLParam, int* pbHandled,
-                        int32_t* pnResult) {
+int Storm::WindowHandle::SMsgDispatchMessage(Win32MacWindow* pWindow, uint32_t nMsg, uint32_t nWParam, int32_t nLParam, int* pbHandled,
+                        int* pnResult) {
     SMsgEventData tData;
     if (pbHandled) {
         *pbHandled = 0;
@@ -185,7 +185,8 @@ void* SMsgGetDefaultWindow(void) {
 }
 
 // 1.14d mac: 00018f51
-int SMsgPopRegisterState(uint32_t dwParam) {
+int Storm::WindowHandle::SMsgPopRegisterState(Win32MacWindow* pParam) {
+    uint32_t dwParam = (uint32_t)pParam;
     SEvtPopState(SMSG_EVENT_COMMAND, dwParam);
     SEvtPopState(SMSG_EVENT_SYSCOMMAND, dwParam);
     SEvtPopState(SMSG_EVENT_KEYDOWN, dwParam);
@@ -195,7 +196,8 @@ int SMsgPopRegisterState(uint32_t dwParam) {
 }
 
 // 1.14d mac: 00018fb6
-int SMsgPushRegisterState(uint32_t dwParam) {
+int Storm::WindowHandle::SMsgPushRegisterState(Win32MacWindow* pParam) {
+    uint32_t dwParam = (uint32_t)pParam;
     SEvtPushState(SMSG_EVENT_COMMAND, dwParam);
     SEvtPushState(SMSG_EVENT_SYSCOMMAND, dwParam);
     SEvtPushState(SMSG_EVENT_KEYDOWN, dwParam);
@@ -205,8 +207,8 @@ int SMsgPushRegisterState(uint32_t dwParam) {
 }
 
 // 1.14d mac: 0001901b
-void SMsgRegisterCommand(void* hWindow, uint32_t nCommandId, void* pfnHandler) {
-    SMSG_InternalRegister(SMSG_EVENT_COMMAND, hWindow, nCommandId, pfnHandler);
+void Storm::WindowHandle::SMsgRegisterCommand(Win32MacWindow* hWindow, uint32_t nCommandId, void (*pfnHandler)(void*)) {
+    SMSG_InternalRegister(SMSG_EVENT_COMMAND, hWindow, nCommandId, (void*)pfnHandler);
 }
 
 // 1.14d mac: 00019040
@@ -219,27 +221,27 @@ static int SMSG_InternalRegister(uint32_t dwEventType, void* pWindow, uint32_t d
         SMsgWindowRecord* pRecord = s_tWindowList.NewNode(STORM_LIST_LINK_BEFORE, 0, 0);
         pRecord->hWnd = pWindow;
     }
-    return SEvtRegisterHandler(dwEventType, (uint32_t)pWindow, dwKey, 0, pfnHandler);
+    return SEvtRegisterHandler(dwEventType, (uint32_t)pWindow, dwKey, 0, (void (*)(void*))pfnHandler);
 }
 
 // 1.14d mac: 000190c9
-void SMsgRegisterKeyDown(void* hWindow, uint32_t nKey, void* pfnHandler) {
-    SMSG_InternalRegister(SMSG_EVENT_KEYDOWN, hWindow, nKey, pfnHandler);
+void Storm::WindowHandle::SMsgRegisterKeyDown(Win32MacWindow* hWindow, uint32_t nKey, void (*pfnHandler)(void*)) {
+    SMSG_InternalRegister(SMSG_EVENT_KEYDOWN, hWindow, nKey, (void*)pfnHandler);
 }
 
 // 1.14d mac: 000190ee
-void SMsgRegisterKeyUp(void* hWindow, uint32_t nKey, void* pfnHandler) {
-    SMSG_InternalRegister(SMSG_EVENT_KEYUP, hWindow, nKey, pfnHandler);
+void Storm::WindowHandle::SMsgRegisterKeyUp(Win32MacWindow* hWindow, uint32_t nKey, void (*pfnHandler)(void*)) {
+    SMSG_InternalRegister(SMSG_EVENT_KEYUP, hWindow, nKey, (void*)pfnHandler);
 }
 
 // 1.14d mac: 00019113
-void SMsgRegisterMessage(void* hWindow, uint32_t nMessage, void* pfnHandler) {
-    SMSG_InternalRegister(SMSG_EVENT_MESSAGE, hWindow, nMessage, pfnHandler);
+void Storm::WindowHandle::SMsgRegisterMessage(Win32MacWindow* hWindow, uint32_t nMessage, void (*pfnHandler)(void*)) {
+    SMSG_InternalRegister(SMSG_EVENT_MESSAGE, hWindow, nMessage, (void*)pfnHandler);
 }
 
 // 1.14d mac: 00019138
-void SMsgUnregisterCommand(void* hWindow, uint32_t nCommandId, void* pfnHandler) {
-    SMSG_InternalUnregister(SMSG_EVENT_COMMAND, hWindow, nCommandId, pfnHandler);
+void Storm::WindowHandle::SMsgUnregisterCommand(Win32MacWindow* hWindow, uint32_t nCommandId, void (*pfnHandler)(void*)) {
+    SMSG_InternalUnregister(SMSG_EVENT_COMMAND, hWindow, nCommandId, (void*)pfnHandler);
 }
 
 // 1.14d mac: 0001915d
@@ -248,22 +250,22 @@ static int SMSG_InternalUnregister(uint32_t dwEventType, void* pWindow, uint32_t
         SMsgWindowRecord* pRecord = s_tWindowList.NewNode(STORM_LIST_LINK_BEFORE, 0, 0);
         pRecord->hWnd = pWindow;
     }
-    return SEvtUnregisterHandler(dwEventType, (uint32_t)pWindow, dwKey, pfnHandler);
+    return SEvtUnregisterHandler(dwEventType, (uint32_t)pWindow, dwKey, (void (*)(void*))pfnHandler);
 }
 
 // 1.14d mac: 000191c6
-void SMsgUnregisterKeyDown(void* hWindow, uint32_t nKey, void* pfnHandler) {
-    SMSG_InternalUnregister(SMSG_EVENT_KEYDOWN, hWindow, nKey, pfnHandler);
+void Storm::WindowHandle::SMsgUnregisterKeyDown(Win32MacWindow* hWindow, uint32_t nKey, void (*pfnHandler)(void*)) {
+    SMSG_InternalUnregister(SMSG_EVENT_KEYDOWN, hWindow, nKey, (void*)pfnHandler);
 }
 
 // 1.14d mac: 000191eb
-void SMsgUnregisterKeyUp(void* hWindow, uint32_t nKey, void* pfnHandler) {
-    SMSG_InternalUnregister(SMSG_EVENT_KEYUP, hWindow, nKey, pfnHandler);
+void Storm::WindowHandle::SMsgUnregisterKeyUp(Win32MacWindow* hWindow, uint32_t nKey, void (*pfnHandler)(void*)) {
+    SMSG_InternalUnregister(SMSG_EVENT_KEYUP, hWindow, nKey, (void*)pfnHandler);
 }
 
 // 1.14d mac: 00019210
-void SMsgUnregisterMessage(void* hWindow, uint32_t nMessage, void* pfnHandler) {
-    SMSG_InternalUnregister(SMSG_EVENT_MESSAGE, hWindow, nMessage, pfnHandler);
+void Storm::WindowHandle::SMsgUnregisterMessage(Win32MacWindow* hWindow, uint32_t nMessage, void (*pfnHandler)(void*)) {
+    SMSG_InternalUnregister(SMSG_EVENT_MESSAGE, hWindow, nMessage, (void*)pfnHandler);
 }
 
 // 1.14d mac: 00019235

@@ -11,9 +11,12 @@
 
 typedef int BOOL;
 
-void SMemCopy(void* pDest, const void* pSource, size_t nSize);
+#include "Source/StormMac/H/StormApi.h"
 void fp_fatal(const char* szFormat, ...);
-void LOGFILE_WriteStringToFile(const char* szFormat, ...);
+namespace Fog::Src::LogManager {
+void LOGFILE_WriteStringToFile(char* szFormat, ...);
+}
+using Fog::Src::LogManager::LOGFILE_WriteStringToFile;
 
 // The renderer's function table as the Mac build lays it out: only the slots D2gfx calls
 // itself are named.
@@ -24,9 +27,9 @@ struct MacRendererFunctions {
     BOOL(*pfnCreateWindow)(int nWindow, int nResolutionMode);   // 0x0C
     BOOL(*pfnDestroyWindow)(void);                     // 0x10
     void* unk14[6];                                    // 0x14
-    BOOL(*pfnSlot2C)(void);                            // 0x2C
-    BOOL(*pfnSlot30)(void);                            // 0x30
-    BOOL(*pfnSlot34)(void);                            // 0x34
+    BOOL(*pfnSlot2C)(void* pEvent);                            // 0x2C
+    BOOL(*pfnSlot30)(void* pPoint);                            // 0x30
+    BOOL(*pfnSlot34)(void* pPoint);                            // 0x34
     void* unk38;                                       // 0x38
     BOOL(*pfnCheckCutScene)(int nCommand, int nValue); // 0x3C
     void* unk40[35];                                   // 0x40

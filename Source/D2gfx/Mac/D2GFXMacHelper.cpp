@@ -11,12 +11,17 @@
 
 #if !defined(_WIN32) && D2_OS_MAC
 
-void SMemCopy(void* pDest, const void* pSource, size_t nSize);
 
+namespace D2gfx::D2GFX {
 // 1.14d mac: 002b19a2
 void D2GFX_InitializeWindowSize(void);
+}
+using D2gfx::D2GFX::D2GFX_InitializeWindowSize;
+namespace D2gfx::D2GFX {
 // 1.14d mac: 002b51ca
 void D2GFX_SetPaletteTable(uint8_t** ppPaletteTables);
+}
+using D2gfx::D2GFX::D2GFX_SetPaletteTable;
 void FUN_002b36b6(void);
 void FUN_002b35e9(int nWidth, int nHeight);
 

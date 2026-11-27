@@ -946,7 +946,7 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x5B_ChangeEmail(char * szText1, char * szTe
 #if D2_OS_MAC
 // The Mac error manager keeps no crash dump file: its loader answers zero (ErrorManager.cpp, global
 // namespace; named by its symbol because this unit's namespace would hide it).
-int ERRORMANAGER_ReturnFalse(void* pOutBuffer, uint32_t* pnBufferSize) __asm__("__Z24ERRORMANAGER_ReturnFalsePvPj");
+int ERRORMANAGER_ReturnFalse(void* pOutBuffer, uint32_t* pnBufferSize) __asm__("__ZN3Fog3Src12ErrorManager24ERRORMANAGER_ReturnFalseEPvPj");
 #endif
 
 // 1.14d mac: 00057bb3

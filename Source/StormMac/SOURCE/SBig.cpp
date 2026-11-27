@@ -14,12 +14,11 @@
 
 #if !defined(_WIN32) && D2_OS_MAC
 
+#include "Source/StormMac/H/StormApi.h"
+
 #include <string.h>
 #include <new>
 
-void* SMemAlloc(uint32_t nBytes, const char* szFile, int nLine, uint32_t dwFlags);
-int SMemFree(void* pMem, const char* szFile, int nLine, uint32_t dwFlags);
-void* SMemReAlloc(void* pMem, uint32_t nBytes, const char* szFile, int nLine, uint32_t dwFlags);
 
 // File-local routines. Internal linkage is in the binary: they take their first two arguments in
 // ecx/edx (LLVM's fastcc, given only to internal functions) and each sits right after its first
@@ -124,7 +123,7 @@ SBIG_LOCAL void SBIG_ToBinaryAppend(ByteArray* pBytes, BigBuffer* pBig);
 // ---- the exports ----
 
 // 1.14d mac: 0000a629
-void SBigAdd(BigData* pResult, BigData* pBigA, BigData* pBigB) {
+void Storm::Source::SBig::SBigAdd(BigData* pResult, BigData* pBigA, BigData* pBigB) {
     BigBuffer_Add(&pResult->tResult, &pBigA->tResult, &pBigB->tResult);
 }
 
@@ -142,7 +141,7 @@ SBIG_LOCAL void BigBuffer_Add(BigBuffer* pDest, BigBuffer* pSourceA, BigBuffer* 
 
 // 1.14d mac: 0000a71d
 // Only the SHA-1 code calls it (a forwarder onto BigBuffer_Compare).
-int32_t SBIG_CompareBigBuffers_ForSha1(BigData* pBigA, BigData* pBigB) {
+int32_t Storm::Source::SBig::SBIG_CompareBigBuffers_ForSha1(BigData* pBigA, BigData* pBigB) {
     return BigBuffer_Compare(&pBigA->tResult, &pBigB->tResult);
 }
 
@@ -159,7 +158,7 @@ SBIG_LOCAL int32_t BigBuffer_Compare(BigBuffer* pA, BigBuffer* pB) {
 
 // 1.14d mac: 0000a7b6
 // The array of each buffer is freed, then the object itself.
-void SBigDel(BigData* pBig) {
+void Storm::Source::SBig::SBigDel(BigData* pBig) {
     delete pBig;
 }
 
@@ -240,7 +239,7 @@ SBIG_LOCAL void BigBuffer_Div(BigBuffer* pQuotient, BigBuffer* pRemainder, BigBu
 }
 
 // 1.14d mac: 0000ace5
-void SBigFromBinary(BigData* pDstBignum, const void* pSrcBytes, uint32_t nByteCount) {
+void Storm::Source::SBig::SBigFromBinary(BigData* pDstBignum, const void* pSrcBytes, uint32_t nByteCount) {
     BigBuffer_FromBinary(&pDstBignum->tResult, pSrcBytes, nByteCount);
 }
 
@@ -264,14 +263,14 @@ SBIG_LOCAL void BigBuffer_FromBinary(BigBuffer* pResult, const void* pSrcBytes, 
 }
 
 // 1.14d mac: 0000ada4
-void SBigFromUnsigned(BigData* pDstBignum, uint32_t dwValue) {
+void Storm::Source::SBig::SBigFromUnsigned(BigData* pDstBignum, uint32_t dwValue) {
     TSBaseArray_Ui_Copy(&pDstBignum->tResult, pDstBignum->tResult.nStartWord, (uint32_t*)1);
     pDstBignum->tResult.pData[pDstBignum->tResult.nStartWord] = dwValue;
     SBIG_GrowToIndexNoZero(&pDstBignum->tResult, 1);
 }
 
 // 1.14d mac: 0000ade7
-void SBigMul(BigData* pResult, BigData* pBigA, BigData* pBigB) {
+void Storm::Source::SBig::SBigMul(BigData* pResult, BigData* pBigA, BigData* pBigB) {
     BigBuffer_Mul(&pResult->tResult, &pBigA->tResult, &pBigB->tResult, &pResult->tStack);
 }
 
@@ -309,13 +308,13 @@ SBIG_LOCAL void BigBuffer_MulMod(BigBuffer* pResult, BigBuffer* pA, BigBuffer* p
 }
 
 // 1.14d mac: 0000b032
-void SBigNew(BigData** ppBigData) {
+void Storm::Source::SBig::SBigNew(BigData** ppBigData) {
     void* pMem = SMemAlloc(sizeof(BigData), SBIG_FILE, 0x51e, 0);
     *ppBigData = pMem ? new (pMem) BigData : NULL;
 }
 
 // 1.14d mac: 0000b0fd
-void SBigPowMod(BigData* pResult, BigData* pBase, BigData* pExponent, BigData* pModulus) {
+void Storm::Source::SBig::SBigPowMod(BigData* pResult, BigData* pBase, BigData* pExponent, BigData* pModulus) {
     BigBuffer_PowMod(&pResult->tResult, &pBase->tResult, &pExponent->tResult, &pModulus->tResult, &pResult->tStack);
 }
 
@@ -470,7 +469,7 @@ SBIG_LOCAL void BigBuffer_Square(BigBuffer* pResult, BigBuffer* pInput, BigStack
 }
 
 // 1.14d mac: 0000b731
-void SBigSub(BigData* pResult, BigData* pBigA, BigData* pBigB) {
+void Storm::Source::SBig::SBigSub(BigData* pResult, BigData* pBigA, BigData* pBigB) {
     BigBuffer_Sub(&pResult->tResult, &pBigA->tResult, &pBigB->tResult);
 }
 
@@ -487,7 +486,7 @@ SBIG_LOCAL void BigBuffer_Sub(BigBuffer* pResult, BigBuffer* pLhs, BigBuffer* pR
 }
 
 // 1.14d mac: 0000b819
-void SBigToBinaryBuffer(BigData* pBigNum, void* pDest, uint32_t nMaxBytes, size_t* pnSize) {
+void Storm::Source::SBig::SBigToBinaryBuffer(BigData* pBigNum, void* pDest, uint32_t nMaxBytes, uint32_t* pnSize) {
     pBigNum->tBytes.nCount = 0;
     SBIG_ToBinaryAppend(&pBigNum->tBytes, &pBigNum->tResult);
     if (pBigNum->tBytes.nCount < nMaxBytes) {

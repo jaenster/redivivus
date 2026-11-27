@@ -334,7 +334,9 @@ typedef uintptr_t DWORD_PTR;
 typedef uintptr_t ULONG_PTR;
 typedef WORD LANGID;
 typedef long HRESULT;
+#if !D2_OS_MAC
 typedef unsigned short ATOM;
+#endif
 
 // Pointer and handle types
 typedef void* LPVOID;
@@ -345,8 +347,10 @@ typedef void* HANDLE;
 #endif
 typedef void* HMODULE;
 typedef void* HINSTANCE;
+#if !D2_OS_MAC
 typedef void* HWND;
 typedef void* HDC;
+#endif
 typedef void* HBITMAP;
 typedef void* HFONT;
 typedef void* HBRUSH;
@@ -356,12 +360,16 @@ typedef void* HCURSOR;
 typedef void* HICON;
 typedef void* HMENU;
 typedef void* HPALETTE;
+#if !D2_OS_MAC
 typedef void* HRGN;
+#endif
 typedef void* HRSRC;
 typedef void* HGLOBAL;
+#if !D2_OS_MAC
 typedef intptr_t LRESULT;
 typedef uintptr_t WPARAM;
 typedef intptr_t LPARAM;
+#endif
 typedef uint16_t LANGID;
 #if !D2_OS_MAC
 typedef intptr_t (__stdcall *FARPROC)();
@@ -490,7 +498,11 @@ BOOL VirtualFree(LPVOID lpAddress, SIZE_T dwSize, DWORD dwFreeType);
 }
 
 BOOL IsBadCodePtr(FARPROC lpfn);
+#if D2_OS_MAC
+BOOL IsBadReadPtr(const void* lp, SIZE_T ucb);
+#else
 BOOL IsBadReadPtr(const void* lp, UINT ucb);
+#endif
 BOOL IsBadWritePtr(LPVOID lp, UINT ucb);
 HANDLE CreateEventA(LPSECURITY_ATTRIBUTES lpEventAttributes, BOOL bManualReset, BOOL bInitialState, LPCSTR lpName);
 BOOL SetEvent(HANDLE hEvent);
@@ -498,8 +510,13 @@ BOOL ResetEvent(HANDLE hEvent);
 void PostQuitMessage(int nExitCode);
 BOOL PostMessageA(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 int GetSystemMetrics(int nIndex);
+#if D2_OS_MAC
+BOOL SetWindowPos(HWND hWnd, HWND hWndInsertAfter, int X, int Y, int cx, int cy, BYTE uFlags);
+BOOL ShowWindow(HWND hWnd, UINT nCmdShow);
+#else
 BOOL SetWindowPos(HWND hWnd, HWND hWndInsertAfter, int X, int Y, int cx, int cy, UINT uFlags);
 BOOL ShowWindow(HWND hWnd, int nCmdShow);
+#endif
 BOOL DestroyWindow(HWND hWnd);
 HWND CreateWindowExA(DWORD dwExStyle, LPCSTR lpClassName, LPCSTR lpWindowName, DWORD dwStyle, int X, int Y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam);
 BOOL GetClientRect(HWND hWnd, LPRECT lpRect);
@@ -869,9 +886,13 @@ DWORD GetModuleFileNameA(HMODULE hModule, LPSTR lpFilename, DWORD nSize);
 void GetLocalTime(LPSYSTEMTIME lpSystemTime);
 HANDLE GetCurrentProcess();
 SHORT GetKeyState(int nVirtKey);
+#if D2_OS_MAC
+BOOL SetRect(LPRECT lprc, int left, int top, int right, int bottom);
+#else
 void SetRect(LPRECT lprc, int left, int top, int right, int bottom);
 int WSAGetLastError();
 int WSACleanup();
+#endif
 #if !D2_OS_MAC
 DWORD timeGetTime(void);
 #endif

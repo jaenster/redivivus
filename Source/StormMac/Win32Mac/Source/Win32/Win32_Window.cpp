@@ -379,7 +379,7 @@ BOOL DestroyWindow(HWND hWnd) {
     }
     ShowWindow(hWnd, 0);
     Win32MacMsgState* pState = g_pMsgState;
-    Msg_RemoveMsgsForHWnd(pState, hWnd);
+    Msg_RemoveMsgsForHWnd((MsgRing*)pState, hWnd);
     Msg_RemoveMsgsForHWnd(MSGSTATE_INPUT_RING(pState), hWnd);
     if (pState->hWndFocus == hWnd) {
         HWND hAncestor = hWnd->pParent;

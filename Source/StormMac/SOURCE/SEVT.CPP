@@ -12,11 +12,10 @@
 
 #if !defined(_WIN32) && D2_OS_MAC
 
+#include "Source/StormMac/H/StormApi.h"
+
 #include <string.h>
 
-void* SMemAlloc(uint32_t nBytes, const char* szFile, int nLine, uint32_t dwFlags);
-int SMemFree(void* pMem, const char* szFile, int nLine, uint32_t dwFlags);
-void SErrSetLastError(DWORD dwErrCode);
 LONG InterlockedIncrement(LPLONG pnValue);
 LONG InterlockedDecrement(LPLONG pnValue);
 // Out of line in SFILE.CPP's neighbourhood.

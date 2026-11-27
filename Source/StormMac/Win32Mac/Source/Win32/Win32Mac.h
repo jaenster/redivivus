@@ -47,6 +47,24 @@ typedef const char* LPCSTR;
 typedef DWORD* LPDWORD;
 typedef LONG* LPLONG;
 
+// The window manager's, the device context's and the region's handles are pointers to the
+// layer's records (Win32MacWindow.h, Win32GDI.h), one spelling for the layer's units and for
+// the shared code, so that a function's mangled name is the same on both sides of a call.
+// The message parameters are 32 bits.
+// The shared code's records, named here for the entry points that take them by pointer.
+struct OVERLAPPED;
+struct SECURITY_ATTRIBUTES;
+struct Win32MacWindow;
+struct Win32MacDC;
+struct HandleHeader;
+typedef Win32MacWindow* HWND;
+typedef Win32MacDC* HDC;
+typedef HandleHeader** HRGN;
+typedef uint32_t WPARAM;
+typedef int32_t LPARAM;
+typedef int32_t LRESULT;
+typedef uint16_t ATOM;
+
 #ifndef FALSE
 #define FALSE 0
 #endif
@@ -201,6 +219,7 @@ struct Win32ThreadStartBlock {
 
 // The layer's own heap (0001e374, 0001e3c0): malloc/calloc underneath, flag 0x100 zeroes.
 void* MemAlloc(size_t nSize, DWORD dwFlags);
+void* MemReAlloc(void* pMem, size_t nSize);
 void MemFree(void* pMem, DWORD dwFlags);
 void* Priv_Alloc(size_t nSize);
 void Priv_Free(void* pMem);
@@ -268,7 +287,19 @@ HANDLE AllocWin32Handle(DWORD dwType);
 void FreeWin32Handle(HANDLE hHandle);
 BOOL AddObjectToKernelPool(HANDLE hObject);
 BOOL HANDLE_RemoveFromList(HANDLE hObject);
-void SMemZero(void* pDest, size_t nSize);
+// Storm's memory helpers (Win32_Memory.cpp), in the namespace the shared callers declare them in
+// (Source/Storm/Storm.h); the layer's own units reach them by the plain names.
+namespace Storm { namespace Source { namespace SMem {
+void SMemCopy(void* pDest, void* pSource, unsigned long nSize);
+void SMemFill(void* pDest, unsigned long nSize, unsigned char nValue);
+void SMemZero(void* pDest, unsigned long nSize);
+} } }
+using Storm::Source::SMem::SMemCopy;
+using Storm::Source::SMem::SMemFill;
+using Storm::Source::SMem::SMemZero;
+static inline void SMemCopy(void* pDest, const void* pSource, unsigned long nSize) {
+    Storm::Source::SMem::SMemCopy(pDest, const_cast<void*>(pSource), nSize);
+}
 Win32HandleObject* GetWin32HandlePtr(HANDLE hHandle);
 HANDLE HANDLE_FindThreadByPthread(pthread_t pThread);
 BOOL Event_SetSignaled(HANDLE hEvent, BOOL bSignaled);

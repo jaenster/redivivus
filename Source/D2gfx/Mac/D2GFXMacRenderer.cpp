@@ -12,13 +12,18 @@
 #if !defined(_WIN32) && D2_OS_MAC
 
 void fp_fatal(const char* szFormat, ...);
-// 1.14d mac: 002eff85
-void LOGFILE_WriteStringToFile(const char* szFormat, ...);
 
+namespace D2gfx::D2GFX {
 // 1.14d mac: 002b19a2
 void D2GFX_InitializeWindowSize(void);
+}
+using D2gfx::D2GFX::D2GFX_InitializeWindowSize;
+struct tagPALETTEENTRY;
+namespace D2gfx::D2GFX {
 // 1.14d mac: 002b5170
-void D2GFX_SetPalette(void* pPalette);
+void D2GFX_SetPalette(tagPALETTEENTRY* pPalette);
+}
+using D2gfx::D2GFX::D2GFX_SetPalette;
 void FUN_002b1983(void);
 
 // 1.14d mac: 005cbb80
@@ -36,7 +41,8 @@ int g_nMacWindow;
 // 1.14d mac: 005cbb9c
 int g_nMacScreenSide;
 // 1.14d mac: 003c8144
-int D2GFXRenderedData[16];
+// Defined by the shared D2GFX.cpp (initialised there).
+extern int D2GFXRenderedData[];
 // 1.14d mac: 003c8148
 int g_bMacHardware;
 namespace D2OpenGL {
@@ -95,7 +101,7 @@ int D2GFX_SwitchModule(int eMode, int bFullScreen, int nStep) {
             RENDERER_CurrentRenderedFunctions = 0;
             MacRendererFunctions* pRenderer = g_apMacRenderers[eMode];
             if (pRenderer == 0) {
-                LOGFILE_WriteStringToFile("Unsupported video mode - %d", eMode);
+                LOGFILE_WriteStringToFile((char*)"Unsupported video mode - %d", eMode);
                 szFormat = "D2GfxSwitchModule: *** sLoadGfxDLLFromType failed.";
             } else {
                 RENDERER_CurrentRenderedFunctions = pRenderer;
@@ -122,7 +128,7 @@ int D2GFX_SwitchModule(int eMode, int bFullScreen, int nStep) {
         fp_fatal("D2GfxSwitchModule was given an unknown step!");
         return 0;
     }
-    LOGFILE_WriteStringToFile(szFormat);
+    LOGFILE_WriteStringToFile((char*)szFormat);
     return 0;
 }
 

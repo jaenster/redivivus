@@ -145,7 +145,7 @@ BOOL GDI_ColorToPaletteIndex(DWORD dwColor, BYTE* pIndexOut);
 // 1.14d mac: 00022ca8
 // A new device context for the window, on the global list; freed again when its clip
 // region cannot be made.
-HDC GDI_NewHDC(void* hWnd) {
+HDC GDI_NewHDC(HWND hWnd) {
     HandleHeader** hHandle = Mem_HandleAlloc(GDI_TYPE_DC, 0x48, NULL);
     HGDIOBJ hHead = g_hDCList;
     if (hHandle != NULL) {
@@ -938,7 +938,7 @@ static UINT GDI_GetObjectType(HGDIOBJ hObject) {
 // 1.14d mac: 00024573
 // A DC for the window, its visible region as the clip and the window's font. Only one may
 // be out at a time: a second is deleted again and NULL returned.
-HDC GetDC(void* hWnd) {
+HDC GetDC(HWND hWnd) {
     HDC hResult = NULL;
     if (hWnd != NULL) {
         HDC hDC = GDI_NewHDC(hWnd);
@@ -972,7 +972,7 @@ HDC GetDC(void* hWnd) {
 }
 
 // 1.14d mac: 00024665
-BOOL ReleaseDC(void* hWnd, HDC hDC) {
+BOOL ReleaseDC(HWND hWnd, HDC hDC) {
     if (hDC != NULL) {
         g_nOutstandingDCs--;
         GDI_DeleteHDC(hDC);

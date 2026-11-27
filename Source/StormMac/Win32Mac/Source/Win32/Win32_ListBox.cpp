@@ -114,10 +114,12 @@ struct DRAWITEMSTRUCT {
     DWORD itemData;
 };
 
+typedef void (*TIMERPROC)(HWND hWnd, UINT uMsg, UINT nIDEvent, DWORD dwTime);
+
 // 1.14d mac: 00031618
 void* GetProp(HWND hWnd, LPCSTR szString);
 // 1.14d mac: 00031666
-BOOL SetProp(HWND hWnd, LPCSTR szString, void* hData);
+BOOL SetProp(HWND hWnd, LPCSTR szString, int nData);
 // 1.14d mac: 000316f2
 void* RemoveProp(HWND hWnd, LPCSTR szString);
 // 1.14d mac: 00030bdf
@@ -133,7 +135,7 @@ BOOL GetClientRect(HWND hWnd, RECT* pRect);
 // 1.14d mac: 00031060
 BOOL GetWindowRect(HWND hWnd, RECT* pRect);
 // 1.14d mac: 00030cfd
-BOOL SetWindowPos(HWND hWnd, HWND hWndInsertAfter, int X, int Y, int cx, int cy, UINT uFlags);
+BOOL SetWindowPos(HWND hWnd, HWND hWndInsertAfter, int X, int Y, int cx, int cy, BYTE uFlags);
 // 1.14d mac: 00030b93
 HWND GetParent(HWND hWnd);
 // 1.14d mac: 0003156b
@@ -143,7 +145,7 @@ LONG SendMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 // 1.14d mac: 00029755
 BOOL KillTimer(HWND hWnd, UINT nIDEvent);
 // 1.14d mac: 000296ce
-UINT SetTimer(HWND hWnd, UINT nIDEvent, UINT uElapse, void* pfnTimerFunc);
+UINT SetTimer(HWND hWnd, UINT nIDEvent, UINT uElapse, TIMERPROC pfnTimerFunc);
 // 1.14d mac: 000312bf
 BOOL InvalidateRect(HWND hWnd, const RECT* pRect, BOOL bErase);
 // 1.14d mac: 000313af
@@ -161,7 +163,7 @@ COLORREF SetTextColor(HDC hDC, COLORREF crColor);
 // 1.14d mac: 000247a8
 COLORREF SetBkColor(HDC hDC, COLORREF crColor);
 // 1.14d mac: 0002bbc3
-BOOL ExtTextOut(HDC hDC, int X, int Y, UINT fuOptions, const RECT* pRect, LPCSTR szString, UINT nCount);
+BOOL ExtTextOut(HDC hDC, int X, int Y, UINT fuOptions, RECT* pRect, LPCSTR szString, int nCount);
 // 1.14d mac: 00022da9
 HRGN CreateRectRgn(int nLeft, int nTop, int nRight, int nBottom);
 // 1.14d mac: 00023e6c
@@ -177,7 +179,7 @@ BOOL DeleteObject(HGDIOBJ hObject);
 // 1.14d mac: 00033a24
 int _stricmp(const char* szA, const char* szB);
 // 1.14d mac: 00033a6f
-int _strnicmp(const char* szA, const char* szB, size_t nCount);
+int _strnicmp(const char* szA, const char* szB, int nCount);
 
 static const char s_szListBoxData[] = "__ListBoxData";
 
@@ -347,7 +349,7 @@ LONG ListBox_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         pNew->nItemHeight = 0x10;
         pNew->pFirst = NULL;
         pNew->pLast = NULL;
-        return -(SetProp(hWnd, s_szListBoxData, pNew) == 0);
+        return -(SetProp(hWnd, s_szListBoxData, (int)(intptr_t)pNew) == 0);
     }
     case WM_DESTROY: {
         ListBoxData* pOld = (ListBoxData*)RemoveProp(hWnd, s_szListBoxData);

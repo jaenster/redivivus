@@ -11,13 +11,7 @@
 
 #if !defined(_WIN32) && D2_OS_MAC
 
-typedef uint32_t WPARAM;
-typedef int32_t LPARAM;
-typedef int32_t LRESULT;
-typedef uint16_t ATOM;
-struct Win32MacWindow;
 struct Win32MacWindowProp;
-typedef Win32MacWindow* HWND;
 typedef LRESULT (*WNDPROC)(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 struct RECT {
@@ -32,9 +26,7 @@ struct POINT {
     LONG y;
 };
 
-// A region: a handle to a strip region object (Win32_Region.cpp); opaque here.
-typedef void** HRGN;
-typedef void** HDC;
+// A region is a handle to a strip region object (Win32_Region.cpp), HRGN in Win32Mac.h.
 
 struct WNDCLASS {
     UINT style;           // 0x00
@@ -189,7 +181,7 @@ WIN32MAC_LAYOUT(Win32MacWindow_size, sizeof(Win32MacWindow) == 0x90);
 
 typedef void (*TIMERPROC)(HWND hWnd, UINT uMsg, UINT nIDEvent, DWORD dwTime);
 
-struct MSG {
+struct tagMSG {
     HWND hwnd;       // 0x00
     UINT message;    // 0x04
     WPARAM wParam;   // 0x08
@@ -197,6 +189,7 @@ struct MSG {
     DWORD time;      // 0x10
     POINT pt;        // 0x14
 };
+typedef tagMSG MSG;
 
 struct MsgRing {
     int nHead;                  // 0x00  next to read
@@ -239,8 +232,8 @@ WIN32MAC_LAYOUT(Win32MacMsgState_timers, offsetof(Win32MacMsgState, pTimers) == 
 WIN32MAC_LAYOUT(Win32MacMsgState_capture, offsetof(Win32MacMsgState, hWndCapture) == 0x91C);
 extern Win32MacMsgState* g_pMsgState;
 // The two message rings are at 0x000 and 0x468 of the state.
-void Msg_RemoveMsgsForHWnd(void* pRing, HWND hWnd);
-#define MSGSTATE_INPUT_RING(pState) ((void*)((BYTE*)(pState) + 0x468))
+void Msg_RemoveMsgsForHWnd(MsgRing* pRing, HWND hWnd);
+#define MSGSTATE_INPUT_RING(pState) ((MsgRing*)((BYTE*)(pState) + 0x468))
 
 // The desktop window (003f2504) of Win32_Window.cpp.
 extern HWND g_hDesktopWnd;
@@ -258,13 +251,13 @@ BOOL IntersectRect(RECT* pDest, const RECT* pSrc1, const RECT* pSrc2);
 HRGN CreateRectRgn(int nLeft, int nTop, int nRight, int nBottom);
 BOOL SetRectRgn(HRGN hRgn, int nLeft, int nTop, int nRight, int nBottom);
 int CombineRgn(HRGN hDest, HRGN hSrc1, HRGN hSrc2, int nMode);
-BOOL DeleteObject(void* hObject);
+BOOL DeleteObject(HandleHeader** hObject);
 BOOL FillRect(HDC hDC, const RECT* pRect, int hBrush);
 HDC GetDC(HWND hWnd);
 int ReleaseDC(HWND hWnd, HDC hDC);
 int ExtSelectClipRgn(HDC hDC, HRGN hRgn, int nMode);
 int GetClipBox(HDC hDC, RECT* pRect);
-int _strnicmp(const char* szA, const char* szB, size_t nCount);
+int _strnicmp(const char* szA, const char* szB, int nCount);
 LRESULT ListBox_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 LRESULT Edit_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 

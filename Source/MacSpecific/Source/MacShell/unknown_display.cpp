@@ -70,15 +70,19 @@ void MAC_DSpShutdown(void);
 // Converts a point to the renderer's coordinates; 0 without a renderer.
 int FUN_002b5dc3(Point* pPoint);
 extern "C" OSStatus DSpShutdown(void);
-// 1.14d mac: 0003ad51
-int SRegDeleteValue(const char* szKeyName, const char* szValueName, uint32_t dwFlags);
 // 1.14d mac: 00034519
 void fp_fatal(const char* szFormat, ...);
+namespace D2gfx::D2GFX {
 // 1.14d mac: 002b4d4f
 int D2GFX_GetRendererMode(void);
-// 1.14d mac: 002b4b3c
+}
+using D2gfx::D2GFX::D2GFX_GetRendererMode;
 // Option 10 reads back whether the renderer is busy; 2 and 3 take a pointer on the Mac.
+namespace D2gfx::D2GFX {
+// 1.14d mac: 002b4b3c
 void D2GFX_SetOption(int nOption, intptr_t nValue);
+}
+using D2gfx::D2GFX::D2GFX_SetOption;
 // 1.14d mac: 002b4b72
 int D2GFX_SwitchModule(int nVideoMode, int bFullScreen, int nStage);
 // 1.14d mac: 002b4d60
@@ -86,16 +90,20 @@ int D2GFX_SwitchModule(int nVideoMode, int bFullScreen, int nStage);
 int FUN_002b4d60(void);
 // 1.14d mac: 002b5c1c
 Boolean FUN_002b5c1c(void);
-// Options 2 and 3 are eight-byte values D2gfx takes by address; their fields are unknown.
-struct MacDisplayOption {
+// Options 2 and 3 are the display modes the module reports for the 640x480 and 800x600 targets;
+// the shell keeps the first eight bytes of each (MacDisplayMode in D2gfx/Mac/MACGFX.cpp).
+struct MacDisplayMode {
     int32_t n00;
     int32_t n04;
 };
 // 1.14d mac: 002b603a
-void MACGFX_EnumerateDisplayModes(int* pnDisplayModule, int* pnOption4, int* pnOption5, int* pnOption0,
-                                  MacDisplayOption* pOption2, MacDisplayOption* pOption3);
+void MACGFX_EnumerateDisplayModes(int* pnDisplayModule, int* pnOption4, int* pnOption5, uint32_t* pnDisplayID,
+                                  MacDisplayMode* pOption2, MacDisplayMode* pOption3);
+namespace D2Client::GAME::Rendering {
 // 1.14d mac: 0005e6ac
 void CLIENT_SetRendererMode(int nVideoMode, int bFullScreen);
+}
+using D2Client::GAME::Rendering::CLIENT_SetRendererMode;
 // 1.14d mac: 0004d278
 namespace D2Win {
 namespace Src {
@@ -246,9 +254,9 @@ void MAC_ApplyDisplayModuleSettings(void) {
     int nDisplayModule;
     int nOption4;
     int nOption5;
-    MacDisplayOption tOption2;
-    MacDisplayOption tOption3;
-    int nOption0;
+    MacDisplayMode tOption2;
+    MacDisplayMode tOption3;
+    uint32_t nOption0;
     MACGFX_EnumerateDisplayModes(&nDisplayModule, &nOption4, &nOption5, &nOption0, &tOption2, &tOption3);
     switch (nDisplayModule) {
     case 1:

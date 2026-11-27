@@ -6,6 +6,8 @@
 
 #if !defined(_WIN32) && D2_OS_MAC
 
+#include "Source/StormMac/H/StormApi.h"
+
 #include <CoreServices/CoreServices.h>
 
 // 1.14d mac: 000354bd

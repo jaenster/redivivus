@@ -29,16 +29,18 @@
 #include "Source/StormMac/H/stpl.h"
 
 typedef int BOOL;
+namespace Fog {
 // 1.14d mac: 002edc4a
 BOOL D2CheckExpansionGame(void);
-// 1.14d mac: 00028d7f
-void SMemZero(void* pMem, uint32_t nBytes);
+}
+using Fog::D2CheckExpansionGame;
 // 1.14d mac: 00029946
-void MSG_ExchangeCmdPeriodFlag(int* pnFlag);
-// 1.14d mac: 00013bad
-uint32_t SFileLoadFile(const char* szFileName, void** ppBuffer, uint32_t* pdwSize, uint32_t dwSearchScope, void* pOverlapped);
+uint32_t MSG_ExchangeCmdPeriodFlag(const uint32_t* pnFlag);
+namespace D2Lang::StrTable::strtable {
 // 1.14d mac: 002b8fba
 void TABLES_GetLangAbbreviation(char* szOut, int nLanguage);
+}
+using D2Lang::StrTable::strtable::TABLES_GetLangAbbreviation;
 // 1.14d mac: 002ee3a4
 namespace Fog {
 namespace Source {
@@ -49,8 +51,6 @@ void FILETOOLS_SetLogFilePathWithoutDateAndExtension2(char* szSuffix);
 }
 // 1.14d mac: 0003e2ab
 void FUN_0003e2ab(void);
-// 1.14d mac: 00018c44
-int SMemFree(void* pMem, const char* szFile, int nLine, uint32_t dwFlags);
 // 1.14d mac: 00396200
 // The cell is the exit hook fp_fatal calls (g_pfnFatalExitHook, unknown_appinfo.cpp, 00554e48).
 extern void (*g_pfnMacAbortHook)(void) __asm__("_g_pfnFatalExitHook");
@@ -98,12 +98,11 @@ static uint8_t MAC_HandleSuspendResumeEvent(EventRecord* pEvent);
 void FUN_0019db65(void);
 static void MAC_SynthesizeKeyEvent(EventRecord* pEvent, int nKeyCode, char bPressed);
 static uint8_t MAC_HandleMenuSelection(uint32_t nMenuResult);
+namespace Fog::Source::SFile {
 // 1.14d mac: 002ef3d4
 void SFILE_InitializeFileSystem(int nArg1, int nArg2);
-// 1.14d mac: 00014226
-int SFileOpenArchive(const char* szArchiveName, int nPriority, uint32_t dwFlags, void** phArchive);
-// 1.14d mac: 0001239c
-int SFileCloseArchive(void* hArchive);
+}
+using Fog::Source::SFile::SFILE_InitializeFileSystem;
 // ---- the SReg, Win32Mac and D2gfx entry points the shell calls ----
 // 1.14d mac: 0019b795
 int FUN_0019b795(void);
@@ -118,10 +117,11 @@ void FUN_0019b744(void);
 // 1.14d mac: 0019a59a
 void MAC_ShowAboutDialog(void);
 
-// 1.14d mac: 0001ccd5
-int SStrPrintf(char* szDest, size_t nDestSize, const char* szFormat, ...);
+namespace Fog::Src::ErrorManager {
 // 1.14d mac: 002eed78
-void FOG_InitErrorManager(const char* szProduct, const char* szVersion, int nFlags);
+void FOG_InitErrorManager(void* pUnused, char* szText, int bStoreStartupInfo);
+}
+using Fog::Src::ErrorManager::FOG_InitErrorManager;
 
 // 1.14d mac: 005c8a44
 // Set while a modal dialog has the events. Defined here: MAC_ProcessEvents addresses it directly.
@@ -316,7 +316,7 @@ static void MAC_HandleKeyDownEvent(EventRecord* pEvent) {
             bool bCmdPeriod = (nMessage & 0xFF) == '.';
             g_nCmdPeriod = bCmdPeriod;
             if (bCmdPeriod) {
-                MSG_ExchangeCmdPeriodFlag(&g_nCmdPeriod);
+                MSG_ExchangeCmdPeriodFlag((const uint32_t*)&g_nCmdPeriod);
                 nModifiers = pEvent->modifiers;
             }
         }
@@ -504,7 +504,7 @@ int main(int argc, char** argv, char** envp, char** apple) {
                                         char szVersion[260];
                                         SStrPrintf(szVersion, 0x104, "v%d.%02d", 1, 14);
                                         Fog::Source::SFile::FILETOOLS_SetLogFilePathWithoutDateAndExtension2((char*)"D2");
-                                        FOG_InitErrorManager("Diablo II", szVersion, 1);
+                                        FOG_InitErrorManager((void*)"Diablo II", szVersion, 1);
                                         g_pfnMacAbortHook = FUN_0019db13;
                                         SetEventMask(0xFFFF);
                                         if (FUN_0019b636()) {

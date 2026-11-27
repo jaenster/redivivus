@@ -3,6 +3,7 @@
 // GetDialogItemRect), followed by the file-saving and start-up code up to 00035545.
 // The original file name is not recorded: no 1.14d string or static initialiser names it.
 #include "Source/StormMac/Win32Mac/Source/Win32/Win32Mac.h"
+#include "Source/StormMac/H/StormApi.h"
 
 #if !defined(_WIN32) && D2_OS_MAC
 
@@ -321,7 +322,7 @@ void fp_fatal(const char* szFormat, ...) {
 // 1.14d mac: 000344dc
 // ResolveAliasFileWithMountFlags, the no-UI flag mapped to the mount flags.
 int MacResolveAliasFile(FSSpec* pFileSpec, Boolean bResolveChains, Boolean* pbTargetIsFolder, Boolean* pbWasAliased,
-                        char bAllowUI) {
+                        Boolean bAllowUI) {
     return ResolveAliasFileWithMountFlags(pFileSpec, bResolveChains, pbTargetIsFolder, pbWasAliased,
                                           bAllowUI == 0);
 }
@@ -741,7 +742,7 @@ void SetTextState(const short* pTextState) {
 // 1.14d mac: 00035351
 // A volume with a drive number that is locked, sized between 300 and 850 MiB and, by its
 // volume parameters, a CD: 1, else 0.
-unsigned char STORM_IsCDVolume(unsigned short nVRefNum) {
+unsigned char STORM_IsCDVolume(short nVRefNum) {
     HParamBlockRec tVolInfo;
     unsigned char abVolName[256];
     char szVolName[256];
@@ -770,8 +771,6 @@ unsigned char STORM_IsCDVolume(unsigned short nVRefNum) {
 
 void Mem_SetDefaultAllocators(void);
 void WIN32MAC_Initialize(void);
-void SLogInitialize(void);
-void SMemInitialize(void);
 
 // 1.14d mac: 000354bd
 void StormMacInit(void) {

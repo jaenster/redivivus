@@ -64,13 +64,21 @@ void PROCESS_SetExitHandler(void (*pfnExitHandler)(void));
 // 1.14d mac: 0002c02c
 uint32_t GetCurrentThreadId(void);
 // 1.14d mac: 00031060
-BOOL GetWindowRect(int hWnd, int* pRect);
+struct Win32MacWindow;
+struct RECT;
+BOOL GetWindowRect(Win32MacWindow* hWnd, RECT* pRect);
 // 1.14d mac: 000297c3
-void FUN_000297c3(uint32_t nMessage, uint32_t nWParam, uint32_t nLParam);
+void FUN_000297c3(uint32_t nMessage, uint32_t nWParam, int32_t nLParam);
+namespace D2gfx::D2GFX {
 // 1.14d mac: 002b5b6d
 void* GetHwnd(void);
+}
+using D2gfx::D2GFX::GetHwnd;
+namespace D2gfx::D2GFX {
 // 1.14d mac: 002b5b81
 int D2GFX_GetScreenSize(int* pnWidth, int* pnHeight);
+}
+using D2gfx::D2GFX::D2GFX_GetScreenSize;
 // 1.14d mac: 002b5da4
 // Hands a Carbon event to the renderer; 0 without one.
 uint8_t FUN_002b5da4(EventRecord* pEvent);
@@ -307,7 +315,7 @@ static uint8_t MAC_PostMouseMessage(uint32_t nMessage, uint32_t nWParamHigh, uin
     int nScreenWidth;
     int nScreenHeight;
     uint32_t nPoint = *(uint32_t*)&ptMouse;
-    GetWindowRect((int)GetHwnd(), aWindowRect);
+    GetWindowRect((Win32MacWindow*)GetHwnd(), (RECT*)aWindowRect);
     Point ptOrigin = {0, 0};
     LocalToGlobal(&ptOrigin);
     aWindowRect[0] = ptOrigin.h;

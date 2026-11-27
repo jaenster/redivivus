@@ -10,8 +10,10 @@
 
 #if !defined(_WIN32) && D2_OS_MAC
 
+#include "Source/StormMac/H/StormApi.h"
+
 // 1.14d mac: 00010bb3
-void SErrReportResourceLeak(char* szMessage);
+void SErrReportResourceLeak(const char* szMessage);
 
 // A transparency record: its link first, then the buffer it caches. The size of the record
 // is not known: the code that allocates it is not in this file's band.
@@ -216,7 +218,7 @@ int UTF8_IsValidString(char* szString) {
 // The Windows SSTR.cpp algorithm over a signed 16-bit input: the code unit is sign-extended
 // (movsx), so the surrogate pair test and the 4..6 byte forms fold away and a negative unit
 // becomes U+FFFD in two bytes.
-int UTF16_ToUTF8(uint8_t* pbUTF8, int nOutMaxChars, uint16_t* pszUTF16Out, int nInBytes, int* pnCharsWritten, int* pnBytesRead) {
+int Storm::Source::SSTR::UTF16_ToUTF8(uint8_t* pbUTF8, int nOutMaxChars, uint16_t* pszUTF16Out, int nInBytes, int* pnCharsWritten, int* pnBytesRead) {
     int16_t* pInEnd;
     if (nInBytes == 0x7fffffff) {
         pInEnd = (int16_t*)-1;
@@ -300,7 +302,7 @@ report_counts:
 }
 
 // 1.14d mac: 0001dbca
-int UTF8_ToUTF16(short* pszUTF16Out, int nOutMaxChars, uint8_t* pbUTF8In, int nInBytes, int* pnCharsWritten, int* pnBytesRead) {
+int Storm::Source::SSTR::UTF8_ToUTF16(short* pszUTF16Out, int nOutMaxChars, uint8_t* pbUTF8In, int nInBytes, int* pnCharsWritten, int* pnBytesRead) {
     if (!UTF8_IsValidString((char*)pbUTF8In)) {
         return -1;
     }
@@ -404,7 +406,7 @@ static int TRANSTBL_SingleByteToUnicode(const uint16_t* pXlatTbl, uint16_t* pDes
 }
 
 // 1.14d mac: 0001ddd4
-int TRANSTBL_Latin1ToUnicode(uint16_t* pDest, uint8_t* pbSrc, int nCount) {
+int Storm::Source::SSTR::TRANSTBL_Latin1ToUnicode(uint16_t* pDest, uint8_t* pbSrc, int nCount) {
     return TRANSTBL_SingleByteToUnicode(gszUnicodeLatin1_1, pDest, pbSrc, nCount);
 }
 

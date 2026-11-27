@@ -12,12 +12,10 @@
 
 #if !defined(_WIN32) && D2_OS_MAC
 
+#include "Source/StormMac/H/StormApi.h"
+
 #include <string.h>
 
-void* SMemAlloc(uint32_t nBytes, const char* szFile, int nLine, uint32_t dwFlags);
-int SMemFree(void* pMem, const char* szFile, int nLine, uint32_t dwFlags);
-void SMemZero(void* pDest, size_t nSize);
-void SErrSetLastError(DWORD dwErrCode);
 void SErrReportResourceLeak(const char* szType);
 
 #define SCODE_FILE "/Users/bclemetson/dev/diablo2/Diablo2/Source/DiabloAll/../../../StormMac/Storm Mac/SOURCE/SCODE.CPP"

@@ -13,15 +13,13 @@
 
 #if !defined(_WIN32) && D2_OS_MAC
 
+#include "Source/StormMac/H/StormApi.h"
+
 #include <pthread.h>
 #include <string.h>
 
 // ---- what the file calls outside itself ----
 
-// 1.14d mac: 00028dc1
-void SMemCopy(void* pDest, void* pSource, size_t nSize);
-// 1.14d mac: 00010b98
-void SErrSetLastError(DWORD dwErrCode);
 // 1.14d mac: 000115a5
 int SEvtUnregisterType(uint32_t nEventId, uint32_t nSubId);
 // 1.14d mac: 0002c035
@@ -31,22 +29,14 @@ BOOL SetEvent(HANDLE hEvent);
 // 1.14d mac: 00029fec
 BOOL FreeLibrary(HANDLE hModule);
 // 1.14d mac: 00028d67
-BOOL VirtualUnlock(void* pAddress, uint32_t dwSize);
+BOOL VirtualUnlock(void* pAddress, unsigned long dwSize);
 // 1.14d mac: 00028d2e
-BOOL VirtualFree(void* pAddress, int dwSize, int dwFreeType);
-// 1.14d mac: 00017c32
-void SLogClose(uint32_t nHandle);
-// 1.14d mac: 00017e0d
-BOOL SLogCreate(const char* szFileName, uint32_t dwFlags, uint32_t* pLogHandle);
-// 1.14d mac: 00018a6f
-void SLogWrite(uint32_t hLog, const char* szFormat, ...);
+BOOL VirtualFree(void* pAddress, unsigned long dwSize, uint32_t dwFreeType);
 // 1.14d mac: 0001839a
-void SLogDump(uint32_t nHandle, const void* pData, uint32_t nLength);
+void SLogDump(uint32_t nHandle, const uint8_t* pData, uint32_t nLength);
 // The log's indent: set to a column, or moved by a delta (named for what dump_packet does with them).
 // 1.14d mac: 00018872
 uint32_t SLogSetAbsIndent(uint32_t nHandle, uint32_t nIndent);
-// 1.14d mac: 000188c7
-uint32_t SLogSetIndent(uint32_t nHandle, int32_t nDelta);
 // 1.14d mac: 0001891e
 void SLogSetTimestamp(uint32_t nHandle, uint32_t nValue);
 // 1.14d mac: 000176a0
@@ -54,8 +44,6 @@ void CRITSECT_Init(pthread_mutex_t* pMutex);
 // 1.14d mac: 00016a72
 // The destructor SFileCritSect::~SFileCritSect[D2] (SFILE.CPP, 00016a72), which the statics register with __cxa_atexit.
 void CRITSECT_Destroy(pthread_mutex_t* pMutex) __attribute__((visibility("hidden"))) __asm__("__ZN13SFileCritSectD2Ev");
-// 1.14d mac: 0003a8e2
-BOOL SRegLoadString(const char* szSubKey, const char* szValueName, int32_t nFlags, char* szOutBuf, DWORD dwOutBufSize);
 // 1.14d mac: 00018860
 BOOL SLogIsInitialized(void);
 
@@ -400,7 +388,7 @@ void SLOG_EnsureLogCreated(SNetLogInfo* pLogInfo) {
         if (SLogIsInitialized() && pLogInfo->szName[0] != '\0') {
             pLogInfo->bCreated = 1;
             if (pLogInfo->bFromRegistry == 0) {
-                SLogCreate(pLogInfo->szName, 0, &pLogInfo->hLog);
+                SLogCreate(pLogInfo->szName, 0, (int*)&pLogInfo->hLog);
             } else {
                 SLOG_CreateFromRegistry(pLogInfo, pLogInfo->szName, pLogInfo->szValue, pLogInfo->nFlags);
             }
@@ -415,7 +403,7 @@ void SLOG_CreateFromRegistry(SNetLogInfo* pLogInfo, const char* szKey, const cha
     szPath[0] = '\0';
     SRegLoadString(szKey, szValue, 0, szPath, sizeof(szPath));
     if (szPath[0] != '\0') {
-        SLogCreate(szPath, 0, &pLogInfo->hLog);
+        SLogCreate(szPath, 0, (int*)&pLogInfo->hLog);
         if (nFlags == 0) {
             SLogSetTimestamp(pLogInfo->hLog, 0);
         }
@@ -454,7 +442,7 @@ static void dump_packet(const char* szLabel, int bReceive, SNetPacketHdr* pPacke
                       (byFlags & 1) ? " MF_ACK" : szNone, (byFlags & 2) ? " MF_RESENDREQUEST" : szNone,
                       (byFlags & 4) ? " MF_FORWARDED" : szNone, (byFlags & 4) ? " PF_JOINING" : szNone,
                       (byFlags & 8) ? " PF_LEAVING" : szNone);
-            SLogDump(hLog, pPacket, wSize);
+            SLogDump(hLog, (const uint8_t*)pPacket, wSize);
             SLogSetAbsIndent(hLog, 0);
         }
     }

@@ -188,28 +188,21 @@ struct IDirectSound {
 };
 
 // ---- the entry points of the other Storm files this one calls ----
-int SCompDecompress(void* pDest, uint32_t* pnDestSize, const void* pSource, uint32_t nSourceSize,
-                    const char* szArchivePath);
+int SCompDecompress(uint8_t* pDest, uint32_t* pnDestSize, uint8_t* pSource, uint32_t nSourceSize, uint32_t dwFlags);
 extern "C" {
 #include "3rdparty/blast/blast.h"
 }
-void SErrSetLastError(DWORD dwErrCode);
 void SErrReportResourceLeak(const char* szType);
 void SErrReportNamedResourceLeak(const char* szType, const char* szName);
-char* SStrChrR(const char* szString, char cChar);
-int SStrCopy(char* szDest, const char* szSource, uint32_t nMaxChars);
-int SStrPack(char* szDest, const char* szSource, uint32_t nMaxChars);
 void SSignatureVerifyStream_Begin(D2SsigContextStrc** ppContext, uint32_t nModulusLen, uint32_t nExponentLen);
 uint32_t SSignatureVerifyStream_GetSignatureLength(D2SsigContextStrc* pContext);
-void SSignatureVerifyStream_ProvideData(D2SsigContextStrc* pContext, const void* pData, uint32_t nSize);
-int SSignatureVerifyStream_Finish(D2SsigContextStrc* pContext, const void* pModulus, const void* pExponent);
+void SSignatureVerifyStream_ProvideData(D2SsigContextStrc* pContext, uint8_t* pData, size_t nSize);
+int SSignatureVerifyStream_Finish(D2SsigContextStrc* pContext, void* pModulus, void* pExponent);
 
-void SErrDisplayError(DWORD dwErrCode, const char* szFileName, int nLine, char* szDescription, int nFlags,
-                      int nRecoverable);
-uint32_t SStrLen(const char* szString);
+int SErrDisplayError(uint32_t nErrorCode, const char* pStackTrace, int32_t nTraceFlags, const char* pCustomMsg,
+                     int32_t nMessageFlags, UINT nExitCode);
 // mode 1 starts a CRC, 2 adds data, 4 finishes it
-void STORM_Crc32(const uint8_t* pData, uint32_t nSize, uint32_t* pCrc, int nMode);
-char* SStrDup(const char* szString);
+void STORM_Crc32(const uint8_t* pData, int nSize, uint32_t* pCrc, uint32_t nMode);
 uint8_t STORM_IsCDVolume(int16_t nVRefNum);
 
 // ---- the Win32 layer entry points this file calls (Win32Mac.h has the rest) ----
@@ -218,13 +211,13 @@ HANDLE CreateFile(LPCSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, L
 void MoveMemory(void* pDest, const void* pSource, size_t nSize);
 DWORD SetFilePointer(HANDLE hFile, LONG lDistanceToMove, LPLONG lpDistanceToMoveHigh, DWORD dwMoveMethod);
 BOOL ReadFile(HANDLE hFile, LPVOID lpBuffer, DWORD nNumberOfBytesToRead, LPDWORD lpNumberOfBytesRead,
-              LPVOID lpOverlapped);
+              OVERLAPPED* lpOverlapped);
 DWORD GetFileSize(HANDLE hFile, LPDWORD lpFileSizeHigh);
 DWORD GetFileAttributes(LPCSTR lpFileName);
 HANDLE GetModuleHandle(LPCSTR szModuleName);
 DWORD GetModuleFileName(HANDLE hModule, char* szFileName, DWORD nSize);
 char* PATH_MakeFullPath(char* szFullPath, LPCSTR szPath, DWORD nBufferSize);
-HANDLE CreateEventA(LPVOID lpEventAttributes, BOOL bManualReset, BOOL bInitialState, LPCSTR lpName);
+HANDLE CreateEventA(SECURITY_ATTRIBUTES* lpEventAttributes, BOOL bManualReset, BOOL bInitialState, LPCSTR lpName);
 BOOL SetEvent(HANDLE hEvent);
 DWORD GetLastError(void);
 HANDLE CreateThread(LPVOID lpThreadAttributes, size_t dwStackSize, LPTHREAD_START_ROUTINE pfnStart,

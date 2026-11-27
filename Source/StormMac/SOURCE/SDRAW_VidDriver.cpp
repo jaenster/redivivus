@@ -4,6 +4,8 @@
 
 #if !defined(_WIN32) && D2_OS_MAC
 
+#include "Source/StormMac/H/StormApi.h"
+
 // 1.14d mac: 0003602b
 int Storm_ReturnTrue(void);
 // 1.14d mac: 0001790c

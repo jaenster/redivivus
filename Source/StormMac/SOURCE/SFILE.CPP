@@ -9,6 +9,8 @@
 
 #if !defined(_WIN32) && D2_OS_MAC
 
+#include "Source/StormMac/H/StormApi.h"
+
 #include <ctype.h>
 #include <pthread.h>
 #include <stdio.h>
@@ -117,17 +119,12 @@ static void SFILE_CreateCdThread(void);
 struct FSSpec;
 static int SFILE_CancelAsyncRequest(HANDLE hBuffer, IDirectSoundBuffer* pStream);
 static void SFILE_InitCryptTable(void);
-int SFileReadFileEx2(D2MPQFileStrc* pFile, void* pBuffer, uint32_t nBytes, size_t* pnBytesRead,
-                            void* pOverlapped, int nFlags, void* pfnComplete);
-int SFileCloseFile(D2MPQFileStrc* pFile);
-int SFileOpenFileEx(D2ArchiveStrc* pArchive, const char* szFileName, uint32_t dwSearchScope,
-                    D2MPQFileStrc** ppFile);
 
 uint32_t SFileAuthenticateArchiveEx(D2ArchiveStrc* pArchive, uint32_t* pAuthResult, void* pModulusBytes,
                                     uint32_t nModulusLen, void* pExponentBytes, uint32_t nExponentLen);
 
 // 1.14d mac: 00011fec
-int SFileAuthenticateArchive(D2ArchiveStrc* pArchive, uint32_t* pAuthResult) {
+int Storm::Source::SFile::SFileAuthenticateArchive(D2ArchiveStrc* pArchive, uint32_t* pAuthResult) {
     if (SFileAuthenticateArchiveEx(pArchive, pAuthResult, NULL, 0, NULL, 0)) {
         return 1;
     }
@@ -169,13 +166,14 @@ uint32_t SFileAuthenticateArchiveEx(D2ArchiveStrc* pArchive, uint32_t* pAuthResu
 done:
     SMemFree(pData, SFILE_FILE, 0xaa5, 0);
     SFILE_UNLOCK();
-    int nVerified = SSignatureVerifyStream_Finish(pContext, pModulus, pExponent);
+    int nVerified = SSignatureVerifyStream_Finish(pContext, (void*)pModulus, (void*)pExponent);
     *pnResult = (nVerified != 0) * 4 + 1;
     return nVerified != 0;
 }
 
 // 1.14d mac: 00012264
-void SFILE_CancelAsyncRequestNoReturn(int32_t nParam) {
+void Storm::Source::SFile::SFILE_CancelAsyncRequestNoReturn(void* pParam) {
+    int32_t nParam = (int32_t)pParam;
     if (nParam != 0) {
         SFILE_CancelAsyncRequest(nParam, NULL);
         return;
@@ -212,7 +210,7 @@ static int SFILE_CancelAsyncRequest(HANDLE hBuffer, IDirectSoundBuffer* pStream)
 }
 
 // 1.14d mac: 0001239c
-int SFileCloseArchive(D2ArchiveStrc* pArchive) {
+int Storm::Source::SFile::SFileCloseArchive(D2ArchiveStrc* pArchive) {
     SFILE_LOCK();
     if (pArchive->pArchiveFile != NULL) {
         SFileCloseFile(pArchive->pArchiveFile);
@@ -226,7 +224,7 @@ int SFileCloseArchive(D2ArchiveStrc* pArchive) {
 }
 
 // 1.14d mac: 00012401
-int SFileCloseFile(D2MPQFileStrc* pFile) {
+int Storm::Source::SFile::SFileCloseFile(D2MPQFileStrc* pFile) {
     SFILE_LOCK();
     s_tFileList.UnlinkNode(pFile);
     if (pFile != NULL) {
@@ -239,7 +237,7 @@ int SFileCloseFile(D2MPQFileStrc* pFile) {
 }
 
 // 1.14d mac: 000128ed
-BOOL SFileDdaEnd(D2MPQFileStrc* pFile) {
+BOOL Storm::Source::SFile::SFileDdaEnd(D2MPQFileStrc* pFile) {
     SFILE_LOCK();
     D2StormAudioStreamRec* pStream = s_tStreamList.Head();
     while (pStream != NULL) {
@@ -264,7 +262,7 @@ BOOL SFileDdaEnd(D2MPQFileStrc* pFile) {
 }
 
 // 1.14d mac: 000129bc
-DWORD SFileSetFilePointer(D2MPQFileStrc* pMPQFile, int32_t nDistanceToMove, int* pnDistanceToMoveHigh,
+DWORD Storm::Source::SFile::SFileSetFilePointer(D2MPQFileStrc* pMPQFile, int32_t nDistanceToMove, int* pnDistanceToMoveHigh,
                           DWORD dwMoveMethod) {
     if (pnDistanceToMoveHigh != NULL && *pnDistanceToMoveHigh != 0) {
         SErrSetLastError(0x57);
@@ -343,7 +341,7 @@ static void SFILE_CreateCdThread(void) {
 }
 
 // 1.14d mac: 000131d7
-BOOL SFileDdaDestroy(void) {
+BOOL Storm::Source::SFile::SFileDdaDestroy(void) {
     SFILE_LOCK();
     s_bCdThreadDraining = 1;
     SFILE_UNLOCK();
@@ -370,7 +368,7 @@ BOOL SFileDdaDestroy(void) {
 }
 
 // 1.14d mac: 000132d6
-BOOL SFileDdaGetPos(D2MPQFileStrc* pFile, uint32_t* pdwCurrentPos, uint32_t* pdwEndPos) {
+BOOL Storm::Source::SFile::SFileDdaGetPos(D2MPQFileStrc* pFile, uint32_t* pdwCurrentPos, uint32_t* pdwEndPos) {
     SFILE_LOCK();
     BOOL nResult = 0;
     uint32_t nSize;
@@ -434,7 +432,7 @@ static int32_t SFILE_GetStreamPosition(D2StormAudioStreamRec* pStream) {
 }
 
 // 1.14d mac: 00013418
-BOOL SFileDdaInitialize(IDirectSound* pDirectSound) {
+BOOL Storm::Source::SFile::SFileDdaInitialize(IDirectSound* pDirectSound) {
     if (pDirectSound == NULL) {
         SErrSetLastError(0x57);
         return 0;
@@ -497,13 +495,13 @@ int SFileDestroy(void) {
 }
 
 // 1.14d mac: 000136bd
-int32_t SFileEnableDirectAccess(BOOL bUseDirect) {
+int32_t Storm::Source::SFile::SFileEnableDirectAccess(BOOL bUseDirect) {
     s_dwDirectAccessFlags = bUseDirect;
     return 1;
 }
 
 // 1.14d mac: 000136d6
-void SFileEnableSeekOptimization(BOOL bEnable) {
+void Storm::Source::SFile::SFileEnableSeekOptimization(BOOL bEnable) {
     s_bSeekOptimization = bEnable;
 }
 
@@ -637,7 +635,7 @@ void SFILE_BuildDefaultBasePath(void) {
 }
 
 // 1.14d mac: 00013adb
-int SFileGetFileName(D2MPQFileStrc* pFile, char* szText, int32_t nBufferSize) {
+int Storm::Source::SFile::SFileGetFileName(D2MPQFileStrc* pFile, char* szText, int32_t nBufferSize) {
     if (szText == NULL) {
         SErrSetLastError(0x57);
         return 0;
@@ -650,7 +648,7 @@ int SFileGetFileName(D2MPQFileStrc* pFile, char* szText, int32_t nBufferSize) {
 }
 
 // 1.14d mac: 00013b40
-DWORD SFileGetFileSize(D2MPQFileStrc* pMPQFile, LPDWORD pdwFileSizeHigh) {
+DWORD Storm::Source::SFile::SFileGetFileSize(D2MPQFileStrc* pMPQFile, LPDWORD pdwFileSizeHigh) {
     DWORD dwSize;
     if (pdwFileSizeHigh != NULL) {
         *pdwFileSizeHigh = 0;
@@ -670,8 +668,9 @@ uint32_t SFileLoadFileEx2(D2ArchiveStrc* pArchive, const char* szFileName, void*
                           size_t nExtraPadBytes, uint32_t nSearchScope, int32_t nReadCtx, int nReadFlags);
 
 // 1.14d mac: 00013bad
-uint32_t SFileLoadFile(const char* szFileName, void** ppOutBuffer, DWORD* pdwOutSize, size_t nExtraPadBytes,
-                       int32_t nReadCtx) {
+uint32_t Storm::Source::SFile::SFileLoadFile(const char* szFileName, void** ppOutBuffer, DWORD* pdwOutSize, uint32_t nExtraPadBytes,
+                       OVERLAPPED* pReadCtx) {
+    int32_t nReadCtx = (int32_t)pReadCtx;
     uint32_t nDiskScope = (s_dwDirectAccessFlags & 1) + 2;
     if ((s_dwDirectAccessFlags & 2) == 0) {
         nDiskScope = s_dwDirectAccessFlags & 1;
@@ -689,10 +688,10 @@ uint32_t SFileLoadFileEx2(D2ArchiveStrc* pArchive, const char* szFileName, void*
             *pdwOutSize = 0;
         }
         D2MPQFileStrc* pFile = NULL;
-        if (SFileOpenFileEx(pArchive, szFileName, nSearchScope, &pFile) != 0) {
+        if (SFileOpenFileEx(pArchive, szFileName, nSearchScope, (void**)&pFile) != 0) {
             DWORD dwFileSize = SFileGetFileSize(pFile, NULL);
             void* pBuffer = SMemAlloc(dwFileSize + nExtraPadBytes, SFILE_FILE, 0xf2d, 0);
-            if (SFileReadFileEx2(pFile, pBuffer, dwFileSize, NULL, (void*)nReadCtx, nReadFlags, NULL) == 0) {
+            if (SFileReadFileEx2(pFile, pBuffer, dwFileSize, NULL, (OVERLAPPED*)nReadCtx, nReadFlags, NULL) == 0) {
                 if (pBuffer != NULL) {
                     SMemFree(pBuffer, SFILE_FILE, 0xf43, 0);
                 }
@@ -716,9 +715,9 @@ uint32_t SFileLoadFileEx2(D2ArchiveStrc* pArchive, const char* szFileName, void*
 }
 
 // 1.14d mac: 00013d8b
-uint32_t SFileLoadFileEx(D2ArchiveStrc* pArchive, const char* szFileName, void** ppOutBuffer, DWORD* pdwOutSize,
-                         size_t nExtraPadBytes, uint32_t nSearchScope, int32_t nReadCtx) {
-    return SFileLoadFileEx2(pArchive, szFileName, ppOutBuffer, pdwOutSize, nExtraPadBytes, nSearchScope, nReadCtx, 0);
+uint32_t Storm::Source::SFile::SFileLoadFileEx(D2ArchiveStrc* pArchive, const char* szFileName, void** ppOutBuffer, DWORD* pdwOutSize,
+                         uint32_t nExtraPadBytes, uint32_t nSearchScope, OVERLAPPED* pReadCtx) {
+    return SFileLoadFileEx2(pArchive, szFileName, ppOutBuffer, pdwOutSize, nExtraPadBytes, nSearchScope, (int32_t)pReadCtx, 0);
 }
 
 // 1.14d mac: 0001453f
@@ -815,28 +814,28 @@ static BOOL SFILE_SyncReadFile(D2MPQFileStrc* pFileHandle, int32_t nFileOffset, 
 }
 
 // 1.14d mac: 00014de3
-int32_t SFileOpenFile(const char* szFileName, D2MPQFileStrc** ppFile) {
+int32_t Storm::Source::SFile::SFileOpenFile(const char* szFileName, D2MPQFileStrc** ppFile) {
     uint32_t nDiskScope = (s_dwDirectAccessFlags & 1) + 2;
     if ((s_dwDirectAccessFlags & 2) == 0) {
         nDiskScope = s_dwDirectAccessFlags & 1;
     }
     uint32_t nNoSource = !((s_dwDirectAccessFlags != 0) | !s_tArchiveList.IsEmpty());
-    return SFileOpenFileEx(NULL, szFileName, nNoSource | nDiskScope, ppFile);
+    return SFileOpenFileEx(NULL, szFileName, nNoSource | nDiskScope, (void**)ppFile);
 }
 
 // 1.14d mac: 00014fbb
-int SFileReadFile(D2MPQFileStrc* pFile, void* pBuffer, uint32_t nBytesToRead, size_t* pnBytesRead,
-                  void* pOverlapped) {
+int Storm::Source::SFile::SFileReadFile(D2MPQFileStrc* pFile, void* pBuffer, uint32_t nBytesToRead, uint32_t* pnBytesRead,
+                  OVERLAPPED* pOverlapped) {
     return SFileReadFileEx2(pFile, pBuffer, nBytesToRead, pnBytesRead, pOverlapped, 0, NULL);
 }
 
 // 1.14d mac: 0001545d
-void SFileSetAsyncBudget(uint32_t nBudgetBytesPerSec) {
+void Storm::Source::SFile::SFileSetAsyncBudget(uint32_t nBudgetBytesPerSec) {
     s_nAsyncBudget = nBudgetBytesPerSec;
 }
 
 // 1.14d mac: 00015471
-int32_t SFileSetBasePath(const char* szText) {
+int32_t Storm::Source::SFile::SFileSetBasePath(const char* szText) {
     if (szText == NULL) {
         SErrSetLastError(0x57);
         return 0;
@@ -860,7 +859,7 @@ int32_t SFileSetBasePath(const char* szText) {
 }
 
 // 1.14d mac: 0001553b
-void SFileSetDataChunkSize(uint32_t nChunkSize) {
+void Storm::Source::SFile::SFileSetDataChunkSize(uint32_t nChunkSize) {
     if ((nChunkSize & (nChunkSize - 1)) == 0) {
         s_nDataChunkSize = nChunkSize;
     } else {
@@ -869,14 +868,14 @@ void SFileSetDataChunkSize(uint32_t nChunkSize) {
 }
 
 // 1.14d mac: 0001556a
-BOOL SFileSetIoErrorMode(int32_t nErrorMode, void* pfnErrorHandler) {
+BOOL Storm::Source::SFile::SFileSetIoErrorMode(int32_t nErrorMode, int (*pfnErrorHandler)(void*, uint32_t, int)) {
     s_nReadErrorMode = nErrorMode;
     s_pfnReadError = (PFNSFILEREADERROR)pfnErrorHandler;
     return 1;
 }
 
 // 1.14d mac: 0001558c
-int32_t SFileUnloadFile(void* pFile) {
+int32_t Storm::Source::SFile::SFileUnloadFile(void* pFile) {
     if (pFile == NULL) {
         SErrSetLastError(0x57);
         return 0;
@@ -1072,7 +1071,8 @@ static uint32_t SFILE_HashFileKey(const char* szName) {
 // Opens a file from the disk when the flags allow and it is there, else from the archives.
 // Returns 2 for a disk file, 1 for an archive file, 0 on failure; with flag 4 the handle is
 // the raw file (positioned on the data for an archive file) instead of a record.
-int SFileOpenFileEx(D2ArchiveStrc* hArchive, const char* szFileName, uint32_t dwFlags, D2MPQFileStrc** ppFile) {
+int Storm::Source::SFile::SFileOpenFileEx(D2ArchiveStrc* hArchive, const char* szFileName, uint32_t dwFlags, void** ppFileArg) {
+    D2MPQFileStrc** ppFile = (D2MPQFileStrc**)ppFileArg;
     char szDiskPath[260];
     D2ArchiveStrc* pArchive;
     uint32_t nResult;
@@ -1171,7 +1171,8 @@ int SFileOpenFileEx(D2ArchiveStrc* hArchive, const char* szFileName, uint32_t dw
 }
 
 // 1.14d mac: 00014226
-int SFileOpenArchive(const char* szArchiveName, int nPriority, uint32_t dwFlags, D2ArchiveStrc** phArchive) {
+int Storm::Source::SFile::SFileOpenArchive(const char* szArchiveName, int* pnPriority, uint32_t dwFlags, D2ArchiveStrc** phArchive) {
+    int nPriority = (int)pnPriority;
     uint16_t aSpec[38];
     char szPath[260];
     if (phArchive != NULL) {
@@ -1338,7 +1339,7 @@ int SFILE_s_OpenArchive(D2ArchiveStrc* pArchive, uint32_t nFlags, int32_t bAllow
     D2MPQBlockEntryStrc* pTable = pArchive->pBlockTable;
     int nCount = pArchive->pMpqHeader->dwBlockTableSize;
     D2MPQFileStrc* pAttrFile;
-    if (SFileOpenFileEx(pArchive, "(attributes)", 0, &pAttrFile) != 0) {
+    if (SFileOpenFileEx(pArchive, "(attributes)", 0, (void**)&pAttrFile) != 0) {
         DWORD nSize = SFileGetFileSize(pAttrFile, NULL);
         uint8_t* pAttr = (uint8_t*)SMemAlloc(nSize, SFILE_FILE, 0x55f, 0);
         if (SFileReadFileEx2(pAttrFile, pAttr, nSize, NULL, NULL, 0, NULL) != 0 && nSize > 7) {
@@ -1412,8 +1413,8 @@ static uint32_t SFILE_InternalReadFile(uint32_t nUnused, uint32_t nOffset, D2MPQ
 // archive file is read through its read-ahead buffer; what is left is read directly or, for a
 // CD or an asynchronous read, queued in chunks for the I/O thread, which is waited for unless
 // the read is asynchronous.
-int SFileReadFileEx2(D2MPQFileStrc* hFile, void* pBuffer, uint32_t nBytesToRead, size_t* pnBytesRead,
-                     void* pOverlappedArg, int nPriority, void* ppCompletion) {
+int Storm::Source::SFile::SFileReadFileEx2(D2MPQFileStrc* hFile, void* pBuffer, uint32_t nBytesToRead, uint32_t* pnBytesRead,
+                     OVERLAPPED* pOverlappedArg, int nPriority, D2StormAsyncCompletionStrc* ppCompletion) {
     SFileOverlapped* pOverlapped = (SFileOverlapped*)pOverlappedArg;
     uint8_t* pDest = (uint8_t*)pBuffer;
     if (pnBytesRead != NULL) {
@@ -1809,7 +1810,7 @@ struct SFileWaveFormat {
 // 1.14d mac: 00012465
 // Starts streaming a RIFF wave file out of an MPQ through a DirectSound buffer, the caller's
 // or one made here.
-BOOL SFileDdaBeginEx(D2MPQFileStrc* hFile, uint32_t dwBufferBytes, uint32_t dwFlags, uint32_t dwInitialPos,
+BOOL Storm::Source::SFile::SFileDdaBeginEx(D2MPQFileStrc* hFile, uint32_t dwBufferBytes, uint32_t dwFlags, uint32_t dwInitialPos,
                      int32_t lVolume, int32_t lPan, IDirectSoundBuffer* lpDSB) {
     IDirectSoundBuffer* pBuffer = lpDSB;
     DWORD dwErrCode;
@@ -2089,7 +2090,7 @@ static uint32_t SFILE_InternalReadAligned(D2MPQFileStrc* pFile, uint32_t nFileOf
                         }
                         uint32_t nDestSize = nExpected;
                         if (SCompDecompress(pDstBuf + nDstPos, &nDestSize, pReadBuffer + nSrcPos, nCompressedLen,
-                                            pMpq->szArchivePath) == 0) {
+                                            (uint32_t)pMpq->szArchivePath) == 0) {
                             SErrDisplayError(0x85100083, pFile->pArchive->szArchivePath, -4, NULL, 0, 1);
                         }
                     } else if (nMethod == 0x100) {

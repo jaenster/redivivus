@@ -10,13 +10,12 @@
 
 #if !defined(_WIN32) && D2_OS_MAC
 
+#include "Source/StormMac/H/StormApi.h"
+
 #include <string.h>
 
 // ---- what this file calls ----
 
-void* SMemAlloc(uint32_t nBytes, const char* szFile, int nLine, uint32_t dwFlags);
-int SMemFree(void* pMem, const char* szFile, int nLine, uint32_t dwFlags);
-void SErrSetLastError(DWORD dwErrCode);
 
 void SGdiDestroy(void);
 void SVidDestroy(void);
@@ -36,17 +35,12 @@ BOOL Storm_ReturnTrue(void);
 // 1.14d mac: 00018ae2
 void SLogSetSettings(const uint32_t* pdwSetting1, const uint32_t* pdwSetting2);
 
-void SBigNew(uint32_t** ppBig);
-void SBigDel(uint32_t* pBig);
-void SBigFromBinary(uint32_t* pBig, const void* pBytes, uint32_t nBytes);
-void SBigPowMod(uint32_t* pResult, uint32_t* pBase, uint32_t* pExponent, uint32_t* pModulus);
-void SBigToBinaryBuffer(uint32_t* pBig, uint8_t* pOut, uint32_t nOutSize, uint32_t* pnWritten);
 
 BOOL GetModuleFileName(HANDLE hModule, char* szFilename, DWORD nSize);
-BOOL GetUserName(char* szBuffer, size_t* pnSize);
-BOOL GetComputerName(char* szBuffer, size_t* pnSize);
+BOOL GetUserName(char* szBuffer, DWORD* pnSize);
+BOOL GetComputerName(char* szBuffer, DWORD* pnSize);
 LONG InterlockedIncrement(LPLONG pnValue);
-void GetLocalTime(void* pSystemTime);
+void GetLocalTime(SYSTEMTIME* pSystemTime);
 
 // 1.14d mac: 00397050
 // Thirteen four-byte strings in place: "", then the three-letter months.
@@ -249,19 +243,19 @@ void STORM_Crc32(const uint8_t* pData, int nSize, uint32_t* pCrc, uint32_t dwFla
 // A key is a pair of big numbers: the modulus, then the exponent.
 // 1.14d mac: 0000989a
 // Crypt::RSA::Prepare
-void CryptRSA_Prepare(uint32_t** ppKey, const void* pModulus, uint32_t nModulusLen, const void* pExponent,
+void CryptRSA_Prepare(BigData** ppKey, const void* pModulus, uint32_t nModulusLen, const void* pExponent,
                       uint32_t nExponentLen) {
     SBigFromBinary(ppKey[0], pModulus, nModulusLen);
     SBigFromBinary(ppKey[1], pExponent, nExponentLen);
 }
 
-uint8_t* SSIGNATURE_RsaExportZeroPadded(uint32_t** ppBig, uint8_t* pOutBuf, uint32_t nBufLen);
+uint8_t* SSIGNATURE_RsaExportZeroPadded(BigData** ppBig, uint8_t* pOutBuf, uint32_t nBufLen);
 
 // 1.14d mac: 000098dc
 // Crypt::RSA::Process: data = data ^ exponent mod modulus, in place.
-void CryptRSA_Process(uint32_t** pKey, uint8_t* pData, uint32_t nSize) {
-    uint32_t* pInput;
-    uint32_t* pResult[2];
+void CryptRSA_Process(BigData** pKey, uint8_t* pData, uint32_t nSize) {
+    BigData* pInput;
+    BigData* pResult[2];
     SBigNew(&pInput);
     SBigFromBinary(pInput, pData, nSize);
     SBigNew(pResult);
@@ -273,7 +267,7 @@ void CryptRSA_Process(uint32_t** pKey, uint8_t* pData, uint32_t nSize) {
 
 // 1.14d mac: 000099a0
 // The big number as bytes, the rest of the buffer zeroed.
-uint8_t* SSIGNATURE_RsaExportZeroPadded(uint32_t** ppBig, uint8_t* pOutBuf, uint32_t nBufLen) {
+uint8_t* SSIGNATURE_RsaExportZeroPadded(BigData** ppBig, uint8_t* pOutBuf, uint32_t nBufLen) {
     uint32_t nWritten;
     SBigToBinaryBuffer(*ppBig, pOutBuf, nBufLen, &nWritten);
     if (nWritten < nBufLen && 0 < (int)(nBufLen - nWritten)) {
@@ -295,7 +289,7 @@ void LogComputerInfoHeader(uint32_t dwFlags, STORM_LOGFN pfnLog, void* pLogConte
         uint32_t dwEffectiveFlags;
         uint16_t aLocalTime[8];
         char szBuffer[0x4e + 1 + 0x100 - 0x4e];
-        size_t nBufferSize;
+        DWORD nBufferSize;
         if ((dwFlags == 0 || (dwEffectiveFlags = dwFlags, (dwFlags & 1) != 0)) &&
             (dwEffectiveFlags = dwFlags | 0x3c, szHeader != NULL) &&
             (dwEffectiveFlags = dwFlags | 0x3e, *szHeader == '\0')) {
@@ -315,7 +309,7 @@ void LogComputerInfoHeader(uint32_t dwFlags, STORM_LOGFN pfnLog, void* pLogConte
         if ((dwEffectiveFlags & 8) != 0) {
             if (pTime == NULL) {
                 pTime = aLocalTime;
-                GetLocalTime(aLocalTime);
+                GetLocalTime((SYSTEMTIME*)aLocalTime);
             }
             uint16_t nHour = pTime[4];
             uint16_t nHour12;

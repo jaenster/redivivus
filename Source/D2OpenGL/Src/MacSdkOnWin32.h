@@ -53,6 +53,22 @@ void __cxa_guard_release(__guard *pGuard);
 void __cxa_pure_virtual(void);
 }
 
+// Mac Storm's own entry points are global names in the Mac binary (the module imports them
+// by those names); the module sees them through the using-declarations in D2OpenGL.
+struct FSSpec;
+void fp_fatal(const char *szFormat, ...);
+void MAC_WarpMouseCursorPosition(Point ptPosition);
+int16_t FilepathToFSSpec(FSSpec *pSpec, const char *szPath, int nFlags);
+void MACCURSOR_InitCursor(void);
+void MACCURSOR_ShowDisplayCursor(void);
+void MACCURSOR_HideDisplayCursor(void);
+void MACCURSOR_SetCursorProcs(void);
+void MACCURSOR_RestoreCursor(void);
+CGDisplayModeRef MACDISPLAY_FindBestDisplayMode(CGDirectDisplayID nDisplay, uint32_t nWidth, uint32_t nHeight, uint32_t nBits,
+                                                uint32_t nRefreshHz, uint8_t bStretched, uint8_t bAcceptClosest);
+void MACDISPLAY_SetGammaRamp(CGDirectDisplayID nDisplay, int nGamma, int nContrast);
+void MACDISPLAY_RestoreGammaRamp(CGDirectDisplayID nDisplay);
+
 namespace D2OpenGL {
 
 inline CGRect *CGDisplayBounds(CGRect *pResult, CGDirectDisplayID nDisplay)
@@ -77,21 +93,9 @@ inline GLubyte *aglErrorString(GLenum nError)
 // ---- Mac Storm and MacSpecific helpers the renderer calls
 
 // Storm fp_fatal: every renderer halt is fp_fatal("... %08x line %d", address, line)
-void fp_fatal(char *szFormat, ...);
-void MAC_WarpMouseCursorPosition(uint32_t ptPosition);
-int16_t FilepathToFSSpec(void *pSpec, const void *szPath, int nFlags);
 // BinkOpen on the file HANDLE_GetFileRefNum last saw; the Mac passes the HFS refnum
 // Bink's BinkOpen (a third-party symbol): the renderer hands it the HFS refnum.
 void *BinkOpenRefNum(void *pRefNum, uint32_t dwFlags) __asm__("_BinkOpen");
-void MACCURSOR_InitCursor(void);
-void MACCURSOR_ShowDisplayCursor(void);
-void MACCURSOR_HideDisplayCursor(void);
-void MACCURSOR_SetCursorProcs(void);
-void MACCURSOR_RestoreCursor(void);
-CGDisplayModeRef MACDISPLAY_FindBestDisplayMode(CGDirectDisplayID nDisplay, uint32_t nWidth, uint32_t nHeight, uint32_t nBits,
-                                                uint32_t nRefreshHz, uint8_t bStretched, uint8_t bAcceptClosest);
-void MACDISPLAY_SetGammaRamp(CGDirectDisplayID nDisplay, int nGamma, int nContrast);
-void MACDISPLAY_RestoreGammaRamp(CGDirectDisplayID nDisplay);
 void MAC_SettleWait(void) __asm__("__Z14MAC_SettleWaitv");  // MacShell/unknown_util.cpp, 0019f18a
 int MAC_GetBinkSurfaceType(CGDirectDisplayID nDisplay) __asm__("__Z22MAC_GetBinkSurfaceTypej");  // oglMac.cpp, 002ffe21
 void MAC_OnWindowZoom(void) __asm__("__Z12FUN_0019c953v");  // MacShell/unknown_display.cpp, 0019c953: the zoom event
@@ -105,6 +109,27 @@ int SetRect(void *pRect, int nLeft, int nTop, int nRight, int nBottom) __asm__("
 // whose two further arguments the body never reads and the Mac callers do not pass.
 int SPRITECACHE_EnsureSpriteLoaded(::D2TileLibraryEntryStrc *pTile)
     __asm__("__ZN5D2CMP3SRC11SpriteCache22SPRITECACHE_AllocEntryEP22D2TileLibraryEntryStrcjj");
+// The shared renderer code passes untyped pointers and a packed point where the layer
+// takes records.
+inline void MAC_WarpMouseCursorPosition(uint32_t ptPosition)
+{
+    Point pt;
+    memcpy(&pt, &ptPosition, sizeof(pt));
+    ::MAC_WarpMouseCursorPosition(pt);
+}
+inline int16_t FilepathToFSSpec(void *pSpec, const void *szPath, int nFlags)
+{
+    return ::FilepathToFSSpec(static_cast<FSSpec *>(pSpec), static_cast<const char *>(szPath), nFlags);
+}
+using ::fp_fatal;
+using ::MACCURSOR_InitCursor;
+using ::MACCURSOR_ShowDisplayCursor;
+using ::MACCURSOR_HideDisplayCursor;
+using ::MACCURSOR_SetCursorProcs;
+using ::MACCURSOR_RestoreCursor;
+using ::MACDISPLAY_FindBestDisplayMode;
+using ::MACDISPLAY_SetGammaRamp;
+using ::MACDISPLAY_RestoreGammaRamp;
 using ::BinkOpenDirectSound;
 using ::__stack_chk_guard;
 using ::__stack_chk_fail;

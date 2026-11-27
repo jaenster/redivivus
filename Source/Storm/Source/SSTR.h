@@ -26,7 +26,11 @@ namespace Storm::Source::SSTR {
 // SStrTokenize calls it three times to test a character against a delimiter set.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed STRING_CutStringBeginingTillFoundString
+#if !defined(_WIN32) && D2_OS_MAC
+char * __stdcall SStrChr(const char * szText, char cTarget);
+#else
 char * __stdcall SStrChr(char * szText, char cTarget);
+#endif
 // @oracle PPC Mac Storm 1.10b export table (337 named TVector symbols), the authoritative Storm API.
 // @oracle-signature SStrChrR(const char *, char)
 // @oracle-basis Same guard, but records the LAST match while scanning to the terminator and returns that. Two
@@ -34,20 +38,32 @@ char * __stdcall SStrChr(char * szText, char cTarget);
 // they differ exactly as the two API names do.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed SSTR_FindLastChar
+#if !defined(_WIN32) && D2_OS_MAC
+char * __stdcall SStrChrR(const char * szText, char cTarget);
+#else
 char * __stdcall SStrChrR(char * szText, char cTarget);
+#endif
 // @oracle PPC Mac Storm 1.10b export table (337 named TVector symbols), the authoritative Storm API.
 // @oracle-signature SStrCmp(const char *, const char *, unsigned long)
 // @oracle-basis Three parameters; NULL guard sets error 0x57 and returns the pointer difference; otherwise a straight
 // call to the CRT strncmp. The case-sensitive half of the only Cmp/CmpI pair in the module.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed STRING_CompareTwoStringCaseSensitive
+#if !defined(_WIN32) && D2_OS_MAC
+int32_t __stdcall SStrCmp(const char * str_1, const char * str_2, uint32_t nMaxCount);
+#else
 int32_t __stdcall SStrCmp(char * str_1, char * str_2, uint32_t nMaxCount);
+#endif
 // @oracle PPC Mac Storm 1.10b export table (337 named TVector symbols), the authoritative Storm API.
 // @oracle-signature SStrCmpI(const char *, const char *, unsigned long)
 // @oracle-basis Identical to SStrCmp except it calls _strnicmp. The case-insensitive half of the pair.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed STRING_CompareTwoStringNoCaseSensitive
+#if !defined(_WIN32) && D2_OS_MAC
+int32_t __stdcall SStrCmpI(const char * str_1, const char * str_2, uint32_t nMaxCount);
+#else
 int32_t __stdcall SStrCmpI(char * str_1, char * str_2, uint32_t nMaxCount);
+#endif
 // @oracle PPC Mac Storm 1.10b export table (337 named TVector symbols), the authoritative Storm API.
 // @oracle-signature SStrCopy(char *, const char *, unsigned long)
 // @oracle-basis Three parameters (dst, src, dstsize). Bounded copy with the word-at-a-time zero-byte trick, always
@@ -55,13 +71,21 @@ int32_t __stdcall SStrCmpI(char * str_1, char * str_2, uint32_t nMaxCount);
 // the module; the append variant (SStrPack) is distinguished by first walking dst to its terminator.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed STRING_CopyStringWithSetLength
+#if !defined(_WIN32) && D2_OS_MAC
+uint32_t __stdcall SStrCopy(char * szBufferOutput, const char * szBufferInput, int32_t nBufferOutputLength);
+#else
 uint32_t __stdcall SStrCopy(char * szBufferOutput, char * szBufferInput, int32_t nBufferOutputLength);
+#endif
 // @oracle PPC Mac Storm 1.10b export table (337 named TVector symbols), the authoritative Storm API.
 // @oracle-signature SStrLen(const char *)
 // @oracle-basis One parameter. NULL guard then the word-at-a-time strlen. The only length function in the module.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed GetStringLength
+#if !defined(_WIN32) && D2_OS_MAC
+uint32_t __stdcall SStrLen(const char * szText);
+#else
 uint32_t __stdcall SStrLen(char * szText);
+#endif
 // @oracle PPC Mac Storm 1.10b export table (337 named TVector symbols), the authoritative Storm API.
 // @oracle-signature SStrPack(char *, const char *, unsigned long)
 // @oracle-basis Three parameters (dst, src, dstsize). Walks dst to its terminator with the same word-at-a-time scan
@@ -69,7 +93,11 @@ uint32_t __stdcall SStrLen(char * szText);
 // SStrPack is. Distinguished from SStrCopy purely by the leading end-of-destination scan.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed SSTR_AppendStringOptimized
+#if !defined(_WIN32) && D2_OS_MAC
+uint32_t __stdcall SStrPack(LPSTR szText, const char * szSource, uint32_t nBufferLength);
+#else
 uint32_t __stdcall SStrPack(LPSTR szText, char * szSource, uint32_t nBufferLength);
+#endif
 // @oracle PPC Mac Storm 1.10b export table (337 named TVector symbols), the authoritative Storm API.
 // @oracle-signature SStrPrintf(char *, unsigned long, const char *, ...)
 // @oracle-basis The only __cdecl varargs formatter in the module: (out, size, format, ...), NULL guard on out and
@@ -77,14 +105,22 @@ uint32_t __stdcall SStrPack(LPSTR szText, char * szSource, uint32_t nBufferLengt
 // va_list and is SStrVPrintf.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed STRING_printfToPointer
+#if !defined(_WIN32) && D2_OS_MAC
+uint32_t SStrPrintf(char * szOutput, uint32_t nSize, const char * Format, ...);
+#else
 uint32_t SStrPrintf(char * szOutput, uint32_t nSize, char * Format, ...);
+#endif
 // @oracle PPC Mac Storm 1.10b export table (337 named TVector symbols), the authoritative Storm API.
 // @oracle-signature SStrVPrintf(char *, unsigned long, const char *, char *)
 // @oracle-basis Four parameters, the fourth an explicit va_list; same NULL guard and same internal worker as
 // SStrPrintf. The va_list/varargs split is exactly what separates the two API names.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed SSTR_Vsnprintf
+#if !defined(_WIN32) && D2_OS_MAC
+uint32_t SStrVPrintf(char * szOutput, uint32_t nSize, const char * szFormatString, va_list vaArgs);
+#else
 uint32_t SStrVPrintf(char * szOutput, uint32_t nSize, char * szFormatString, va_list vaArgs);
+#endif
 // @oracle PPC Mac Storm 1.10b export table (337 named TVector symbols), the authoritative Storm API.
 // @oracle-signature SStrTokenize(const char **, char *, unsigned long, const char *, int *)
 // @oracle-basis Parameter-for-parameter with the API signature: (char **cursor, char *tokenOut, unsigned long maxLen,
@@ -93,7 +129,11 @@ uint32_t SStrVPrintf(char * szOutput, uint32_t nSize, char * szFormatString, va_
 // the token was quoted. Five parameters and there is no other tokenizer in the module.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed SSTR_ExtractQuotedToken
+#if !defined(_WIN32) && D2_OS_MAC
+void __stdcall SStrTokenize(char * * ppszCursor, char * szTokenOut, uint32_t nMaxLen, const char * szDelimiters, uint32_t * pbWasQuoted);
+#else
 void __stdcall SStrTokenize(char * * ppszCursor, char * szTokenOut, uint32_t nMaxLen, char * szDelimiters, uint32_t * pbWasQuoted);
+#endif
 // @blizzard SStrHash (SSTR.CPP)
 uint32_t __stdcall SStrHash(char * pszText, uint8_t bCaseSensitive, uint32_t nSeed);
 // @oracle PPC Mac Storm 1.10b export table (337 named TVector symbols), the authoritative Storm API.
@@ -119,7 +159,11 @@ void __stdcall SStrLower(char * szText);
 // the new buffer. The allocation site's own __FILE__ literal is what proves this module is SSTR.CPP.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed SSTR_Strdup
+#if !defined(_WIN32) && D2_OS_MAC
+char * __stdcall SStrDup(const char * szText);
+#else
 char * __stdcall SStrDup(char * szText);
+#endif
 int __stdcall UTF16_ToUTF8(uint8_t * pbUTF8, int nOutMaxChars, uint16_t * pszUTF16Out, int nInBytes, int * pnCharsWritten, int * pnBytesRead);
 int __stdcall UTF8_ToUTF16(short * pszUTF16Out, int nOutMaxChars, uint8_t * pbUTF8In, int nInBytes, int * pnCharsWritten, int * pnBytesRead);
 int __stdcall TRANSTBL_Latin1ToUnicode(uint16_t * dest, uint8_t * src, int count);

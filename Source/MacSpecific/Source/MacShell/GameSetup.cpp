@@ -31,41 +31,49 @@
 #include "Source/StormMac/H/stpl.h"
 
 typedef int BOOL;
+namespace Fog {
 // 1.14d mac: 002edc4a
 BOOL D2CheckExpansionGame(void);
-// 1.14d mac: 00018c44
-int SMemFree(void* pMem, const char* szFile, int nLine, uint32_t dwFlags);
+}
+using Fog::D2CheckExpansionGame;
 // 1.14d mac: 0019be00
 void MAC_GetDefaultDisplayMode(int* pnWidth, int* pnHeight, int* pnBitDepth);
 // 1.14d mac: 0002a6a3
 uint32_t GetTempPathFreeSpace(void);
+namespace Fog::Src::LogManager {
 // 1.14d mac: 002eff85
-void LOGFILE_WriteStringToFile(const char* szFormat, ...);
+void LOGFILE_WriteStringToFile(char* szFormat, ...);
+}
+using Fog::Src::LogManager::LOGFILE_WriteStringToFile;
 // 1.14d mac: 00033f9a
 int GetApplicationInformation(void* pName, FSSpec* pFileSpec, uint32_t* pdwSignature, uint64_t* pPSN);
+namespace Fog::Source::SFile {
 // 1.14d mac: 002ef3d4
 void SFILE_InitializeFileSystem(int nArg1, int nArg2);
+}
+using Fog::Source::SFile::SFILE_InitializeFileSystem;
 // 1.14d mac: 000136ea
-int SFileFileExistsEx(void* hArchive, const char* szFileName, uint32_t dwSearchScope);
-// 1.14d mac: 00014226
-int SFileOpenArchive(const char* szArchiveName, int nPriority, uint32_t dwFlags, void** phArchive);
-// 1.14d mac: 0001239c
-int SFileCloseArchive(void* hArchive);
 // 1.14d mac: 0001e564
 int FPMessageBox(const char* szText, const char* szCaption, uint32_t dwType);
 // 1.14d mac: 00304096
 // Bink's BinkSetMemory (third party)
 void BINK_SetMemory(void* (*pfnAlloc)(size_t), void (*pfnFree)(void*)) __asm__("_BinkSetMemory");
+namespace Bnclient {
 // 1.14d mac: 0005ad4d
 void BNMESSQUEUE_Shutdown(void);
+}
+using Bnclient::BNMESSQUEUE_Shutdown;
 // The Battle.net client's callback table; only the two slots GAMESETUP calls are laid out.
 struct BNetClientCallbacks {
     void (*pfnSetLoggingFlag)(void* pFlag);
     uint8_t unk04[0x90];
     int (*pfnDecodeCDKeys)(void);
 };
+namespace Bnclient {
 // 1.14d mac: 0005ad31
 BNetClientCallbacks* BNCLIENT_GetCallbacks(void);
+}
+using Bnclient::BNCLIENT_GetCallbacks;
 // 1.14d mac: 0019ced5
 void MAC_DisableMenus(void);
 extern "C" OSStatus DSpStartup(void);
@@ -242,7 +250,7 @@ Boolean FUN_0019bed3(void) {
             if (!SFileOpenArchive("Diablo II Patch", 0, 0, &hPatchArchive)) {
                 szText = "The file \"Diablo II Patch\" cannot be opened.";
             } else {
-                int nHasMarker = SFileFileExistsEx(hPatchArchive, "Data\\IAmExpansion", 0);
+                int nHasMarker = SFileFileExistsEx((D2ArchiveStrc*)hPatchArchive, "Data\\IAmExpansion", 0);
                 SFileCloseArchive(hPatchArchive);
                 if (bGameExpansion == (nHasMarker == 1)) {
                     return 1;

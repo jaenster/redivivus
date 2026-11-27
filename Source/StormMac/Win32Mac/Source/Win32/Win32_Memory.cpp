@@ -26,7 +26,6 @@ struct MasterPointerBlock {
     MasterPointerBlock* pNext;  // 0x3C
 };
 
-void SMemCopy(void* pDest, const void* pSource, size_t nSize);
 
 // 1.14d mac: 003f1130
 static MasterPointerBlock* s_pMasterPointers;
@@ -258,6 +257,7 @@ BOOL IsBadReadPtr(const void* lp, size_t ucb) {
     return 0;
 }
 
+namespace Storm { namespace Source { namespace SMem {
 // 1.14d mac: 00028d7f
 void SMemZero(void* pDest, size_t nSize) {
     bzero(pDest, nSize);
@@ -269,9 +269,10 @@ void SMemFill(void* pDest, size_t nSize, BYTE nValue) {
 }
 
 // 1.14d mac: 00028dc1
-void SMemCopy(void* pDest, const void* pSource, size_t nSize) {
+void SMemCopy(void* pDest, void* pSource, size_t nSize) {
     memcpy(pDest, pSource, nSize);
 }
+} } }
 
 // 1.14d mac: 00028de5
 void MoveMemory(void* pDest, const void* pSource, size_t nSize) {

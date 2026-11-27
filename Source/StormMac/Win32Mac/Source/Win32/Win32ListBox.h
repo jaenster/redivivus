@@ -17,7 +17,7 @@ struct POINT {
     LONG y;
 };
 
-struct MSG {
+struct tagMSG {
     HWND hwnd;     // 0x00
     UINT message;  // 0x04
     WPARAM wParam; // 0x08
@@ -25,6 +25,7 @@ struct MSG {
     DWORD time;    // 0x10
     POINT pt;      // 0x14
 };
+typedef tagMSG MSG;
 
 struct RECT {
     LONG left;
@@ -33,9 +34,7 @@ struct RECT {
     LONG bottom;
 };
 
-typedef void* HDC;
-typedef void* HGDIOBJ;
-typedef void* HRGN;
+typedef HandleHeader** HGDIOBJ;
 typedef uint32_t COLORREF;
 typedef LONG (*WNDPROC)(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 

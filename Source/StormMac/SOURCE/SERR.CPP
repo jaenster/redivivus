@@ -12,52 +12,48 @@
 
 #if !defined(_WIN32) && D2_OS_MAC
 
+#include "Source/StormMac/H/StormApi.h"
+
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
 
 // ---- what this file calls ----
 
-int SMemFree(void* pMem, const char* szFile, int nLine, uint32_t dwFlags);
 void* SMsgGetDefaultWindow(void);
 void* StormGetInstance(void);
-void SLogFlushAll(void);
-uint32_t SStrCopy(char* szDest, const char* szSource, int32_t nMaxChars);
-uint32_t SStrLen(const char* szString);
-char* SStrChrR(const char* szString, char cChar);
-void SStrPack(char* szDest, const char* szSource, uint32_t nMaxChars);
-int SStrPrintf(char* szDest, size_t nMaxChars, const char* szFormat, ...);
-int SRegLoadValue(const char* szKey, const char* szValue, uint32_t dwFlags, int32_t* pnValue);
 
 void SetLastError(DWORD dwErrCode);
 DWORD GetLastError(void);
 LONG InterlockedIncrement(LPLONG pnValue);
 LONG InterlockedDecrement(LPLONG pnValue);
-void* GetProcessHeap(void);
-void* HeapAlloc(void* hHeap, DWORD dwFlags, size_t nBytes);
-BOOL HeapFree(void* hHeap, DWORD dwFlags, void* pMem);
+HANDLE GetProcessHeap(void);
+void* HeapAlloc(HANDLE hHeap, DWORD dwFlags, size_t nBytes);
+BOOL HeapFree(HANDLE hHeap, DWORD dwFlags, void* pMem);
 void InitializeCriticalSection(CRITICAL_SECTION* pSection);
 void DeleteCriticalSection(CRITICAL_SECTION* pSection);
 void EnterCriticalSection(CRITICAL_SECTION* pSection);
 void LeaveCriticalSection(CRITICAL_SECTION* pSection);
 BOOL GetModuleFileName(HANDLE hModule, char* szFilename, DWORD nSize);
-HANDLE FindFirstFile(const char* szFileName, void* pFindData);
+struct Win32MacFindData;
+HANDLE FindFirstFile(char* szFileName, Win32MacFindData* pFindData);
 BOOL FindClose(HANDLE hFind);
 void OutputDebugString(const char* szOutputString);
 BOOL IsDebuggerPresent(void);
-int IsWindow(void* hWnd);
-BOOL IsWindowVisible(void* hWnd);
+struct Win32MacWindow;
+BOOL IsWindow(Win32MacWindow* hWnd);
+BOOL IsWindowVisible(Win32MacWindow* hWnd);
 int MessageBox(void* hWnd, const char* szText, const char* szCaption, UINT nType);
 void ExitProcess(UINT nExitCode);
-int LoadString(void* hInstance, UINT nId, char* szBuffer, int nBufferMax);
+int LoadString(int hInstance, UINT nId, char* szBuffer, int nBufferMax);
 int FormatMessage(DWORD dwFlags, const void* pSource, DWORD dwMessageId, DWORD dwLanguageId, char* szBuffer);
-BOOL CreateDirectory(const char* szPath, void* pSecurity);
+BOOL CreateDirectory(char* szPath, void* pSecurity);
 DWORD GetFileAttributes(const char* szFileName);
 HANDLE CreateFile(const char* szFileName, DWORD dwAccess, DWORD dwShare, void* pSecurity, DWORD dwCreation,
                   DWORD dwFlags, HANDLE hTemplate);
-BOOL WriteFile(HANDLE hFile, const void* pBuffer, size_t nBytes, int* pnWritten, void* pOverlapped);
-void GetLocalTime(void* pSystemTime);
-void LogComputerInfoHeader(uint32_t dwFlags, void (*pfnLog)(HANDLE, const char*, ...), void* pLogContext,
+BOOL WriteFile(HANDLE hFile, const void* pBuffer, DWORD nBytes, DWORD* pnWritten, OVERLAPPED* pOverlapped);
+void GetLocalTime(SYSTEMTIME* pSystemTime);
+void LogComputerInfoHeader(uint32_t dwFlags, void (*pfnLog)(void*, const char*, ...), void* pLogContext,
                            const char* szHeader, const uint16_t* pTime);
 void STORM_Nop(void);
 extern "C" void DebugStr(const unsigned char* pMessage);
@@ -194,7 +190,7 @@ uint32_t SErrGetErrorStr(uint32_t dwErrCode, char* szBuffer, size_t nBufferSize)
 static const char* SERR_GetString(int32_t nErrorIndex) {
     void* hInstance = StormGetInstance();
     const char* szString = s_szStringBuffer;
-    if (LoadString(hInstance, nErrorIndex + 0x5100, s_szStringBuffer, 0x100) == 0) {
+    if (LoadString((int)hInstance, nErrorIndex + 0x5100, s_szStringBuffer, 0x100) == 0) {
         szString = gaSErrMessageStrings[nErrorIndex];
     }
     return szString;
@@ -227,7 +223,7 @@ int SErrDisplayError(uint32_t nErrorCode, const char* pStackTrace, int32_t nTrac
     szModuleName[0] = '\0';
     GetModuleFileName(0, szModuleFile, 0x104);
     bzero(&tFindData, sizeof(tFindData));
-    HANDLE hFind = FindFirstFile(szModuleFile, (char*)&tFindData);
+    HANDLE hFind = FindFirstFile(szModuleFile, (Win32MacFindData*)&tFindData);
     if (hFind != 0) {
         FindClose(hFind);
     }
@@ -378,7 +374,7 @@ int SErrDisplayError(uint32_t nErrorCode, const char* pStackTrace, int32_t nTrac
     }
     if (!bHandled && s_pfnDisplayError == NULL) {
         void* hWnd = SMsgGetDefaultWindow();
-        if (hWnd == NULL || IsWindow(hWnd) == 0 || IsWindowVisible(hWnd) == 0) {
+        if (hWnd == NULL || IsWindow((Win32MacWindow*)hWnd) == 0 || IsWindowVisible((Win32MacWindow*)hWnd) == 0) {
             hWnd = NULL;
         }
         nMsgResult = MessageBox(hWnd, szFullMessage, szModuleName, nStyle | nIcon);
@@ -462,7 +458,7 @@ uint32_t SErrGetErrorStr(uint32_t dwErrCode, char* szBuffer, size_t nBufferSize)
 void SERR_WriteLogLineF(HANDLE hFile, const char* szFormat, ...) {
     char szBuffer[2048];
     va_list tArgs;
-    int nWritten;
+    DWORD nWritten;
     va_start(tArgs, szFormat);
     const char* szUsed = "";
     if (szFormat != NULL) {
@@ -480,7 +476,7 @@ void SERR_WriteLogLineF(HANDLE hFile, const char* szFormat, ...) {
 static void SERR_WriteLogTextCRLF(HANDLE hFile, const char* szText) {
     size_t nSize = strlen(szText);
     char szBuffer[nSize * 2 + 2];
-    int nWritten;
+    DWORD nWritten;
     int nLength = 2;
     szBuffer[0] = '\r';
     szBuffer[1] = '\n';
@@ -506,7 +502,7 @@ static void WriteErrorLog(const char* pszText) {
     char szPath[260];
     char szFileName[260];
     uint16_t aLocalTime[8];
-    GetLocalTime(aLocalTime);
+    GetLocalTime((SYSTEMTIME*)aLocalTime);
     GetModuleFileName(0, szModulePath, 0x104);
     SStrCopy(szPath, szModulePath, 0x104);
     char* pEnd = SStrChrR(szPath, '\\');
@@ -532,7 +528,7 @@ static void WriteErrorLog(const char* pszText) {
     SStrPack(szPath, szFileName, 0x104);
     HANDLE hFile = CreateFile(szPath, 0x40000000, 3, 0, 2, 0x80, 0);
     if (hFile != 0) {
-        LogComputerInfoHeader(1, SERR_WriteLogLineF, (void*)hFile, "Error", aLocalTime);
+        LogComputerInfoHeader(1, (void (*)(void*, const char*, ...))SERR_WriteLogLineF, (void*)hFile, "Error", aLocalTime);
         SERR_WriteLogTextCRLF(hFile, pszText);
         if (g_pfnErrorLogExtraInfo != NULL) {
             // a run-time sized array: 1.14d moves esp down 0x1450 here (lea esi, [ebx - 0x1450]; mov esp, esi)
@@ -555,7 +551,7 @@ void SErrSuppressErrors(BOOL bSuppress) {
 }
 
 // 1.14d mac: 00010b98
-void SErrSetLastError(DWORD dwErrCode) {
+void Storm::Source::SErr::SErrSetLastError(DWORD dwErrCode) {
     gdwStormLastErrorCode = dwErrCode;
     SetLastError(dwErrCode);
 }

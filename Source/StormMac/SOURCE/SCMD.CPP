@@ -11,24 +11,18 @@
 
 #if !defined(_WIN32) && D2_OS_MAC
 
+#include "Source/StormMac/H/StormApi.h"
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 
-void* SMemAlloc(uint32_t nBytes, const char* szFile, int nLine, uint32_t dwFlags);
-int SMemFree(void* pMem, const char* szFile, int nLine, uint32_t dwFlags);
-void SErrSetLastError(DWORD dwErrCode);
-uint32_t SStrLen(const char* szString);
-char* SStrChr(const char* szString, char cChar);
-uint32_t SStrCopy(char* szDest, const char* szSource, uint32_t nMaxChars);
-uint32_t SStrPack(char* szDest, const char* szSource, uint32_t nMaxChars);
-BOOL SStrTokenize(char** ppszCursor, char* szToken, uint32_t nTokenSize, const char* szDelimiters, int* pbQuoted);
-int _strnicmp(const char* szA, const char* szB, size_t nCount);
+int _strnicmp(const char* szA, const char* szB, int nCount);
 HANDLE CreateFile(const char* szName, DWORD dwAccess, DWORD dwShare, void* pSecurity, DWORD dwDisposition, DWORD dwFlags,
                   HANDLE hTemplate);
 DWORD GetFileSize(HANDLE hFile, DWORD* pdwHigh);
-BOOL ReadFile(HANDLE hFile, void* pBuffer, DWORD nBytes, DWORD* pnRead, void* pOverlapped);
+BOOL ReadFile(HANDLE hFile, void* pBuffer, DWORD nBytes, DWORD* pnRead, OVERLAPPED* pOverlapped);
 
 // The list templates are instantiations shared with other objects, so they keep the C calling
 // convention. noinline is kept as evidence, not cause: the binary calls every one of them out of
@@ -164,7 +158,9 @@ BOOL SCmdDestroy(void) {
 // 1.14d mac: 0000d532
 // Runs a command line over the registered switches; the positional arguments are the
 // first list's, in order, and a required one left over is an error.
-int SCmdProcess(char* szCmdLine, int bSkipProgName, CMDUNKNOWNCALLBACK pfnExtra, CMDERRORCALLBACK pfnError) {
+int Storm::Source::SCmdProcess(char* szCmdLine, int bSkipProgName, int (*pfnExtraArg)(char*), int (*pfnErrorArg)(uint32_t*)) {
+    CMDUNKNOWNCALLBACK pfnExtra = (CMDUNKNOWNCALLBACK)pfnExtraArg;
+    CMDERRORCALLBACK pfnError = (CMDERRORCALLBACK)pfnErrorArg;
     char* pszCursor = szCmdLine;
     if (szCmdLine == NULL) {
         SErrSetLastError(0x57);
@@ -205,7 +201,7 @@ static BOOL SCMD_ProcessTokens(char** ppszCursor, SCMD_PROCESSING* pProcessing, 
         do {
             char szToken[0x100];
             char szName[0x100];
-            int bQuoted = 0;
+            uint32_t bQuoted = 0;
             int nConsumed;
             int bOk;
             SStrTokenize(&pszNext, szToken, 0x100, " ,;\"\t\n\r\x1a", &bQuoted);
@@ -357,12 +353,11 @@ static void SCMD_ReportError(CMDERRORCALLBACK pfnError, DWORD dwError, const cha
     pfnError(&tError);
 }
 
-// 1.14d mac: 0000dc63
-BOOL SCmdRegisterArgList(const uint32_t* pCmdDefArray, uint32_t nCount);
 
 // 1.14d mac: 0000dce8
-BOOL SCmdRegisterArgument(uint32_t dwFlags, int nGroupId, const char* szText, void* pVariable, int nVariableSize,
-                          int nSetValue, int nSetMask, CMDCALLBACK pfnCallback) {
+BOOL Storm::Source::SCmdRegisterArgument(uint32_t dwFlags, uint32_t nGroupId, char* szText, void* pVariable, uint32_t nVariableSize,
+                          uint32_t nSetValue, uint32_t nSetMask, int (*pfnCallbackArg)(CMDPARAMS*, char*)) {
+    CMDCALLBACK pfnCallback = (CMDCALLBACK)pfnCallbackArg;
     const char* szName = "";
     if (szText != NULL) {
         szName = szText;
@@ -401,18 +396,26 @@ BOOL SCmdRegisterArgument(uint32_t dwFlags, int nGroupId, const char* szText, vo
     return 1;
 }
 
+// One definition of the list SCmdRegisterArgList takes: the four words of an argument.
+struct ARGLIST {
+    uint32_t dwFlags;
+    uint32_t nGroupId;
+    char* szText;
+    int (*pfnCallback)(CMDPARAMS*, char*);
+};
+
 // 1.14d mac: 0000dc63
-BOOL SCmdRegisterArgList(const uint32_t* pCmdDefArray, uint32_t nCount) {
+BOOL Storm::Source::SCmdRegisterArgList(ARGLIST* pCmdDefArray, uint32_t nCount) {
     if (pCmdDefArray == NULL) {
         SErrSetLastError(0x57);
         return 0;
     }
     for (uint32_t nIndex = 0; nIndex < nCount; nIndex++) {
-        if (!SCmdRegisterArgument(pCmdDefArray[0], pCmdDefArray[1], (const char*)pCmdDefArray[2], NULL, 0, 1, -1,
-                                  (CMDCALLBACK)pCmdDefArray[3])) {
+        if (!SCmdRegisterArgument(pCmdDefArray->dwFlags, pCmdDefArray->nGroupId, pCmdDefArray->szText, NULL, 0, 1, -1,
+                                  pCmdDefArray->pfnCallback)) {
             return 0;
         }
-        pCmdDefArray += 4;
+        pCmdDefArray++;
     }
     return 1;
 }

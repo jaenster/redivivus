@@ -11,6 +11,8 @@
 
 #if !defined(_WIN32) && D2_OS_MAC
 
+#include "Source/StormMac/H/StormApi.h"
+
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
@@ -30,7 +32,7 @@ LPVOID VirtualAlloc(LPVOID lpAddress, size_t dwSize, DWORD flAllocationType, DWO
 BOOL VirtualFree(LPVOID lpAddress, size_t dwSize, DWORD dwFreeType);
 // 1.14d mac: 00021fc6
 BOOL WriteFile(HANDLE hFile, LPCVOID lpBuffer, DWORD nNumberOfBytesToWrite, LPDWORD lpNumberOfBytesWritten,
-               LPVOID lpOverlapped);
+               OVERLAPPED* lpOverlapped);
 // 1.14d mac: 00022082
 BOOL FlushFileBuffers(HANDLE hFile);
 // 1.14d mac: 00021ad7
@@ -39,33 +41,15 @@ HANDLE CreateFile(LPCSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, L
 // 1.14d mac: 000220ca
 DWORD SetFilePointer(HANDLE hFile, LONG lDistanceToMove, LPLONG lpDistanceToMoveHigh, DWORD dwMoveMethod);
 // 1.14d mac: 000226f8
-BOOL CreateDirectory(LPCSTR lpPathName, LPVOID lpSecurityAttributes);
+BOOL CreateDirectory(char* lpPathName, LPVOID lpSecurityAttributes);
 // 1.14d mac: 0002a16f
 HANDLE GetModuleHandle(LPCSTR szModuleName);
 // 1.14d mac: 0002a0ea
 DWORD GetModuleFileName(HANDLE hModule, char* szFileName, DWORD nSize);
 // 1.14d mac: 0002d178
 void OutputDebugString(LPCSTR szOutputString);
-// 1.14d mac: 00028d9c
-void SMemFill(void* pDest, size_t nSize, BYTE nValue);
-// 1.14d mac: 00028dc1
-void SMemCopy(void* pDest, const void* pSource, size_t nSize);
-// 1.14d mac: 00010b98
-void SErrSetLastError(DWORD dwErrCode);
 // 1.14d mac: 00010bb3
 void SErrReportResourceLeak(const char* szType);
-// 1.14d mac: 0001ca30
-uint32_t SStrLen(const char* szString);
-// 1.14d mac: 0001c806
-uint32_t SStrCopy(char* szDest, const char* szSource, uint32_t nMaxChars);
-// 1.14d mac: 0001c730
-char* SStrChr(const char* szString, char cChar);
-// 1.14d mac: 0001c766
-char* SStrChrR(const char* szString, char cChar);
-// 1.14d mac: 0001caaf
-uint32_t SStrPack(char* szDest, const char* szSource, uint32_t nMaxChars);
-// 1.14d mac: 0001c7d3
-int SStrCmpI(const char* szString1, const char* szString2, uint32_t nMaxChars);
 
 // 1.14d mac: 0002c392
 void GetLocalTime(SYSTEMTIME* lpSystemTime);
@@ -130,7 +114,6 @@ uint32_t g_dwLogSetting2;
 // Nonzero: log text also goes to OutputDebugString.
 extern uint32_t gbCompressionDebugOutput;
 
-void SLogFlushAll(void);
 static SLogRecord* LockLog(uint32_t nHandle, uint32_t* pnSlotOut, int32_t bAllocate);
 static void SLOG_FlushLog(SLogRecord* pLog);
 static BOOL OpenLogFile(const char* szFileName, HANDLE* pnFileHandle, uint32_t dwFlags);
@@ -140,7 +123,7 @@ static void SLOG_WriteIndentSpaces(SLogRecord* pLog);
 static int STORM_GetMacPathPrefixLength(char* szPath);
 
 // 1.14d mac: 00017c32
-void SLogClose(uint32_t nHandle) {
+void Storm::Source::SLog::SLogClose(uint32_t nHandle) {
     if (s_bInitialized == 1) {
         uint32_t nSlot;
         SLogRecord* pLog = LockLog(nHandle, &nSlot, 0);
@@ -211,7 +194,7 @@ static void SLOG_FlushLog(SLogRecord* pLog) {
 }
 
 // 1.14d mac: 00017e0d
-BOOL SLogCreate(char* szFileName, uint32_t dwFlags, int* pLogHandle) {
+BOOL Storm::Source::SLog::SLogCreate(const char* szFileName, uint32_t dwFlags, int* pLogHandle) {
     bool bEmpty;
     if (!pLogHandle || (bEmpty = *szFileName == '\0', *pLogHandle = 0, bEmpty) || !szFileName) {
         SErrSetLastError(ERROR_INVALID_PARAMETER);
@@ -335,7 +318,7 @@ void SLogDestroy(void) {
 }
 
 // 1.14d mac: 00018339
-void SLogFlushAll(void) {
+void Storm::Source::SLog::SLogFlushAll(void) {
     for (int nSlot = 0; nSlot < SLOG_SLOTS; nSlot++) {
         EnterCriticalSection(&s_aCritSect[nSlot]);
         for (SLogRecord* pLog = s_apHead[nSlot]; pLog; pLog = pLog->pNext) {
@@ -453,7 +436,7 @@ static void SLOG_WriteIndentSpaces(SLogRecord* pLog) {
 }
 
 // 1.14d mac: 00018810
-void SLogInitialize(void) {
+void Storm::Source::SLog::SLogInitialize(void) {
     if (!s_bInitialized) {
         for (int nSlot = 0; nSlot < SLOG_SLOTS; nSlot++) {
             InitializeCriticalSection(&s_aCritSect[nSlot]);
@@ -484,7 +467,7 @@ uint32_t SLogSetAbsIndent(uint32_t nHandle, uint32_t nIndent) {
 
 // 1.14d mac: 000188c7
 // Moves the indent by a delta; returns the old one.
-uint32_t SLogSetIndent(uint32_t nHandle, int32_t nDelta) {
+uint32_t Storm::Source::SLog::SLogSetIndent(uint32_t nHandle, int32_t nDelta) {
     uint32_t nSlot;
     SLogRecord* pLog = LockLog(nHandle, &nSlot, 0);
     uint32_t nOld = 0;
@@ -534,7 +517,7 @@ void SLogPend(uint32_t nHandle, const char* szFormat, va_list pArgList) {
 }
 
 // 1.14d mac: 00018a6f
-void SLogWrite(uint32_t nHandle, const char* szFormat, ...) {
+void Storm::Source::SLog::SLogWrite(uint32_t nHandle, const char* szFormat, ...) {
     va_list pArgs;
     va_start(pArgs, szFormat);
     SLogPend(nHandle, szFormat, pArgs);

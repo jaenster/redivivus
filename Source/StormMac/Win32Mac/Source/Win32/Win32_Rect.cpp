@@ -68,7 +68,7 @@ BOOL CopyRect(RECT* pDest, RECT* pSrc) {
 
 // 1.14d mac: 0002b2e1
 // Writes the intersection into pDest (when not NULL); an empty RECT when there is none.
-BOOL IntersectRect(RECT* pDest, RECT* pRect1, RECT* pRect2) {
+BOOL IntersectRect(RECT* pDest, const RECT* pRect1, const RECT* pRect2) {
     int nLeft, nTop, nRight, nBottom;
     BOOL bResult;
     int nLeft1, nRight1, nTop1, nBottom1, nLeft2, nRight2, nTop2, nBottom2;
@@ -109,7 +109,7 @@ store:
 // 1.14d mac: 0002b378
 // The part of pRect1 pRect2 does not cover; trimmed only when the overlap spans a full
 // edge of pRect1. Nonzero when the result is not empty.
-BOOL SubtractRect(RECT* pDest, RECT* pRect1, RECT* pRect2) {
+BOOL SubtractRect(RECT* pDest, const RECT* pRect1, const RECT* pRect2) {
     BOOL bResult = 0;
     int nLeft, nTop, nRight, nBottom;
     if (pRect1 == NULL || pRect2 == NULL || pRect1->left >= pRect1->right || pRect1->top >= pRect1->bottom) {

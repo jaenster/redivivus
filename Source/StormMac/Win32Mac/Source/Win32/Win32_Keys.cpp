@@ -7,7 +7,6 @@
 
 #include <Carbon/Carbon.h>
 
-void SMemCopy(void* pDest, const void* pSource, size_t nSize);
 
 // 1.14d mac: 003f0f20
 // The key map GetAsyncKeyState read last (GetKeys: 128 bits).

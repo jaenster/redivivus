@@ -32,15 +32,15 @@
 
 // A memory file (Win32_memfile: handles into the layer's own locked blocks).
 // 1.14d mac: 00036440
-int GetMemFile2Ptr(int hMemFile);
+void* GetMemFile2Ptr(void* hMemFile);
 // 1.14d mac: 0003645d
-int AllocateMemFile2(int nSize, BYTE bStatic);
+void* AllocateMemFile2(int nSize, BYTE bStatic);
 // 1.14d mac: 00036580
-void FreeMemFile2(int hMemFile);
+void FreeMemFile2(void* hMemFile);
 // 1.14d mac: 0003661b
-int LockMemFile2(int hMemFile);
+void* LockMemFile2(void* hMemFile);
 // 1.14d mac: 000367c0
-void UnLockMemFile2(int hMemFile);
+void UnLockMemFile2(void* hMemFile);
 
 // One Sound Manager channel of a pool and the buffer playing on it.
 struct SoundChannelSlot {
@@ -61,7 +61,7 @@ WIN32MAC_LAYOUT(IDirectSound_size, sizeof(IDirectSound) == 200);
 // The sample data of a buffer, shared between buffers that duplicate each other.
 struct SoundData {
     int nSize;       // 0x00
-    int hMemFile;    // 0x04
+    void* hMemFile;  // 0x04
     int nRefCount;   // 0x08
 };
 
@@ -206,7 +206,7 @@ static void IDirectSound_SndChannelCallback(SndChannelPtr pChannel, SndCommand* 
         if (pBuffer->pChannel != 0 && pBuffer->bStopping == 0) {
             pBuffer->nPlayCursor += pBuffer->nChunkBytes;
             if (pBuffer->bLooping != 0) {
-                int nData = GetMemFile2Ptr(pBuffer->pData->hMemFile);
+                int nData = (int)(intptr_t)GetMemFile2Ptr(pBuffer->pData->hMemFile);
                 int nPos = pBuffer->nPlayCursor;
                 int nLeft = pBuffer->pData->nSize - nPos;
                 if (nLeft < 1) {
@@ -347,7 +347,7 @@ int32_t IDirectSound_CreateSoundBuffer(IDirectSound* pDirectSound, const uint32_
             SoundData* pData = (SoundData*)operator new(12);
             int nSize = pBufferDesc[2];
             pData->nSize = nSize;
-            int hMemFile = AllocateMemFile2(nSize + 0x100, (BYTE)((dwFlags & DSBCAPS_STATIC_) >> 1));
+            void* hMemFile = AllocateMemFile2(nSize + 0x100, (BYTE)((dwFlags & DSBCAPS_STATIC_) >> 1));
             pData->hMemFile = hMemFile;
             pData->nRefCount = 1;
             pBuffer->pData = pData;
@@ -505,7 +505,7 @@ int32_t IDirectSoundBuffer_Lock(IDirectSoundBuffer* pBuffer, int dwOffset, int d
                 dwBytes = dwBufferSize - dwOffset;
                 nWrapBytes = nOver;
             }
-            int nData = LockMemFile2(pBuffer->pData->hMemFile);
+            int nData = (int)(intptr_t)LockMemFile2(pBuffer->pData->hMemFile);
             if (ppvAudioPtr1 != 0) {
                 *ppvAudioPtr1 = dwOffset + nData;
             }
@@ -535,7 +535,7 @@ int32_t IDirectSoundBuffer_Play(IDirectSoundBuffer* pBuffer, DWORD dwReserved1, 
         hResult = DSERR_BUFFERLOST_;
         if (pBuffer->pChannel != 0) {
             pBuffer->bStopping = 0;
-            int nData = LockMemFile2(pBuffer->pData->hMemFile);
+            int nData = (int)(intptr_t)LockMemFile2(pBuffer->pData->hMemFile);
             pBuffer->tHeader.pSamples = (void*)nData;
             if (pBuffer->wBitsPerSample == 8 && pBuffer->nChannels == 1) {
                 pBuffer->tHeader.nChannelsOrLen = pBuffer->pData->nSize;

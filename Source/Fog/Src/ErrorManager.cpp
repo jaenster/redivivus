@@ -5271,13 +5271,6 @@ _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9bfb(EHExceptionRecord * pException
 #if !defined(_WIN32) && D2_OS_MAC
 // The Mac build keeps its error and log files in a "Blizzard" folder of the user's Application
 // Support folder, as a Mac path token ("\\{MacPathNN}\\Blizzard\\").
-// 1.14d mac: 0002c7c3
-void PATH_MakeMacPathToken(char* szOut, const unsigned char* pName, int16_t nVRefNum, int32_t nDirID, int32_t n08,
-                           int32_t n0C);
-// 1.14d mac: 0001c806
-int SStrCopy(char* szDest, const char* szSource, int nDestSize);
-// 1.14d mac: 0001ca30
-uint32_t SStrLen(const char* szString);
 
 // 1.14d mac: 002ef7cd
 bool FOG_MacGetBlizzardSupportPath(char* szPath, size_t nSize) {
@@ -5287,11 +5280,11 @@ bool FOG_MacGetBlizzardSupportPath(char* szPath, size_t nSize) {
     bool bResult = false;
     if (FSFindFolder(kUserDomain, kApplicationSupportFolderType, true, &tFolderRef) == noErr) {
         FSGetCatalogInfo(&tFolderRef, kFSCatInfoVolume | kFSCatInfoNodeID, &tCatalogInfo, NULL, NULL, NULL);
-        PATH_MakeMacPathToken(szSupportPath, (const unsigned char*)"\pBlizzard", tCatalogInfo.volume,
+        ::PATH_MakeMacPathToken(szSupportPath, (const unsigned char*)"\pBlizzard", tCatalogInfo.volume,
                               tCatalogInfo.nodeID, 0, 0);
         if (Fog::Source::SFile::FOG_AppendBackslash(szSupportPath, nSize) && Fog::Source::SFile::SafeCreateDirectoryTree(szSupportPath)) {
-            SStrCopy(szPath, szSupportPath, nSize);
-            bResult = SStrLen(szPath) == SStrLen(szSupportPath);
+            Storm::Source::SSTR::SStrCopy(szPath, szSupportPath, nSize);
+            bResult = Storm::Source::SSTR::SStrLen(szPath) == Storm::Source::SSTR::SStrLen(szSupportPath);
         }
     }
     return bResult;
@@ -5330,7 +5323,8 @@ static char gszFogVersionString[16] = {};
 // StormMac/SOURCE/SERR.CPP, 0000fec0
 typedef void (*pfnBlizzardError)(const char* szTitle, const char* szText, char** ppExtra, int nUnused, int nFlags,
                                  bool bFatal);
-void SERR_SetDisplayErrorCallback(pfnBlizzardError pfnCallback);
+// The StormMac function is global; this namespace would hide it.
+void SERR_SetDisplayErrorCallback(pfnBlizzardError pfnCallback) __asm__("__Z28SERR_SetDisplayErrorCallbackPFvPKcS0_PPciibE");
 
 // 1.14d mac: 002eed78
 void FOG_InitErrorManager(void* pUnused, char* szText, int bStoreStartupInfo) {

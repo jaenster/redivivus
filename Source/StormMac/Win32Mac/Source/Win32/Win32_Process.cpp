@@ -49,7 +49,7 @@ typedef BOOL (*Win32MacDllMain)(HANDLE hModule, DWORD dwReason, LPVOID pReserved
 // 1.14d mac: 0002b1d1
 int MessageBox(void* hWnd, LPCSTR szText, LPCSTR szCaption, UINT uType);
 // Win32_FP.cpp
-int FPMessageBox(char* szText, char* szCaption, DWORD dwFlags);
+int FPMessageBox(const char* szText, const char* szCaption, DWORD dwFlags);
 int32_t GetLanguage(void);
 int32_t GetUserDefaultLangID(void);
 DWORD LOCALE_BuildLangIdFromMac(void);
@@ -63,11 +63,12 @@ OSErr MacResolveAliasFile(FSSpec* pSpec, Boolean bResolveChains, Boolean* pbTarg
 // 1.14d mac: 0002c8f7
 void FSSpecToFilepath(char* szPath, const FSSpec* pSpec);
 // 1.14d mac: 0002cd41
-int PATH_ToPosixPath(const char* szPath, char* szPosixPath, size_t nSize);
+int PATH_ToPosixPath(const char* szPath, char* szPosixPath, int nSize);
 // 1.14d mac: 00025a77
 HANDLE AllocModuleHandle(void);
 // 1.14d mac: 00036fd3
-void Accel_DeleteAcceleratorList(void* pList);
+struct AccelNode;
+void Accel_DeleteAcceleratorList(AccelNode* pList);
 // 1.14d mac: 0002d039
 HANDLE HANDLE_FindModuleByPSN(ProcessSerialNumber* pPSN);
 // 1.14d mac: 0002d0d2
@@ -75,9 +76,10 @@ HANDLE HANDLE_FindModuleByName(LPCSTR szModuleName);
 // 1.14d mac: 0002b1f5
 int WSOCK_CloseSocket(int nSocket);
 // 1.14d mac: 00032b50
-int DirectDrawCreate(void* pGuid, void** ppDirectDraw, void* pUnknownOuter);
+int DirectDrawCreate(void* pGuid, int** ppDirectDraw, void* pUnknownOuter);
 // 1.14d mac: 00032b83
-int DirectSoundCreate(void* pGuid, void** ppDirectSound, void* pUnknownOuter);
+struct IDirectSound;
+int DirectSoundCreate(void* pGuid, IDirectSound** ppDirectSound, void* pUnknownOuter);
 
 FARPROC GetProcAddress(HANDLE hModule, LPCSTR szProcName);
 uint16_t WSOCK_Htons(uint16_t wValue);
@@ -256,7 +258,7 @@ BOOL FreeLibrary(HANDLE hModule) {
         dlclose(pLibrary);
     }
     if (pModule->pAccelList != NULL) {
-        Accel_DeleteAcceleratorList(pModule->pAccelList);
+        Accel_DeleteAcceleratorList((AccelNode*)pModule->pAccelList);
         pModule->pAccelList = NULL;
     }
     pModule = GetWin32HandlePtr(hModule);

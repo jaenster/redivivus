@@ -32,6 +32,9 @@ bool MACSEC_IsBlizzardSigned(const char* szPath);
 FILE* FOpenResolveMacPath(const char* szPath, const char* szMode);
 // Fog's Blizzard support folder (Mac: the Application Support path), the Mac twin of
 // SFILE_GetBlizzardAppDataPath.
-int FOG_MacGetBlizzardSupportPath(char* szBuffer, int nMaxLength);
+namespace Fog::Src::ErrorManager {
+bool FOG_MacGetBlizzardSupportPath(char* szBuffer, size_t nMaxLength);
+}
+using Fog::Src::ErrorManager::FOG_MacGetBlizzardSupportPath;
 
 #endif

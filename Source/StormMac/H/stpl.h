@@ -23,20 +23,9 @@
 #include <stddef.h>
 #include <stdint.h>
 
-// ---- the Storm entry points the templates call ----
+// ---- the Storm entry points the templates call (StormApi.h) ----
+#include "Source/StormMac/H/StormApi.h"
 
-// 1.14d mac: 00018b0b
-void* SMemAlloc(uint32_t nBytes, const char* szFile, int nLine, uint32_t dwFlags);
-// 1.14d mac: 00018c44
-int SMemFree(void* pMem, const char* szFile, int nLine, uint32_t dwFlags);
-// 1.14d mac: 00018c12
-void* SMemReAlloc(void* pMem, uint32_t nBytes, const char* szFile, int nLine, uint32_t dwFlags);
-// 1.14d mac: 0001cfaf
-uint32_t SStrHashHT(const char* szString);
-// 1.14d mac: 0001c7d3
-int SStrCmpI(const char* szString1, const char* szString2, uint32_t nMaxChars);
-// 1.14d mac: 0001c9bd
-char* SStrDup(const char* szString);
 // 1.14d mac: 00009632
 // Storm's global operator delete (an SMemFree).
 void operator delete(void* pMem) throw();
@@ -472,7 +461,7 @@ public:
     T* InternalNewNode(uint32_t nHashVal, uint32_t nExtraBytes, uint32_t dwFlags);
     T* Ptr(const char* szKey);
     T* New(const char* szKey, uint32_t nExtraBytes, uint32_t dwFlags) {
-        uint32_t nHashVal = SStrHashHT(szKey);
+        uint32_t nHashVal = SStrHashHT((uint8_t*)szKey);
         T* pNode = InternalNewNode(nHashVal, nExtraBytes, dwFlags);
         pNode->m_hashval = nHashVal;
         pNode->m_key = szKey;
@@ -606,7 +595,7 @@ T* TSHashTable<T, TKey>::Ptr(const char* szKey) {
     if (m_slotmask == (uint32_t)-1) {
         return NULL;
     }
-    uint32_t nHashVal = SStrHashHT(szKey);
+    uint32_t nHashVal = SStrHashHT((uint8_t*)szKey);
     List* pList = &m_slotlistarray[nHashVal & m_slotmask];
     for (T* pNode = pList->Head(); pNode; pNode = m_slotlistarray[nHashVal & m_slotmask].Next(pNode)) {
         if (pNode->m_hashval == nHashVal && pNode->m_key == szKey) {

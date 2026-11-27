@@ -8,12 +8,13 @@
 
 #if !defined(_WIN32) && D2_OS_MAC
 
-// 1.14d mac: 00010b98
-void SErrSetLastError(uint32_t dwErrCode);
+#include "Source/StormMac/H/StormApi.h"
+
 // 1.14d mac: 00010bb3
-void SErrReportResourceLeak(char* szMessage);
+void SErrReportResourceLeak(const char* szMessage);
 // 1.14d mac: 0000e610
-int SCodeDelete(int hCodeStream);
+struct SCodeStream;
+int SCodeDelete(SCodeStream* pCodeStream);
 // 1.14d mac: 0001b087
 void SRgnDelete(int hRgn);
 // 1.14d mac: 00029fec
@@ -21,7 +22,7 @@ int FreeLibrary(int hModule);
 // 1.14d mac: 00029e4b
 int CloseHandle(int hObject);
 // 1.14d mac: 0003411f
-int LaunchURL(char* szURL, int nLength, int (*pfnConfirm)(void), void* pArg);
+int LaunchURL(char* szURL, int nLength, int (*pfnConfirm)(void*), void* pArg);
 // 1.14d mac: 00036d5e
 bool MACCURSOR_CallGuardProc(bool bFlag);
 
@@ -133,10 +134,10 @@ int SVidDestroy(void) {
         SVidPlayEnd(pVideo);
     }
     if (g_pCodeStreams != NULL) {
-        SCodeDelete(g_pCodeStreams[0]);
-        SCodeDelete(g_pCodeStreams[1]);
-        SCodeDelete(g_pCodeStreams[2]);
-        SCodeDelete(g_pCodeStreams[3]);
+        SCodeDelete((SCodeStream*)g_pCodeStreams[0]);
+        SCodeDelete((SCodeStream*)g_pCodeStreams[1]);
+        SCodeDelete((SCodeStream*)g_pCodeStreams[2]);
+        SCodeDelete((SCodeStream*)g_pCodeStreams[3]);
         SMemFree(g_pCodeStreams, __FILE__, 0x272, 0);
         g_pCodeStreams = NULL;
     }
@@ -149,7 +150,7 @@ int SVidDestroy(void) {
 
 // 1.14d mac: 0001e2d0
 // LaunchURL's confirmation callback: runs the cursor guard procedure (MacDisplayDriver.cpp), then declines.
-int STORM_LaunchURLCallback(void) {
+int STORM_LaunchURLCallback(void* pArg) {
     MACCURSOR_CallGuardProc(true);
     return 0;
 }

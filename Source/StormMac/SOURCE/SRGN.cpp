@@ -12,6 +12,8 @@
 
 #if !defined(_WIN32) && D2_OS_MAC
 
+#include "Source/StormMac/H/StormApi.h"
+
 #include "Source/StormMac/H/stpl.h"
 
 #include <pthread.h>
@@ -22,8 +24,6 @@
 // RgnBlockLink_Unlink take NextLink in and stop matching.
 #define RGN_NOINLINE __attribute__((noinline))
 
-// 1.14d mac: 00010b98
-void SErrSetLastError(uint32_t dwErrCode);
 // 1.14d mac: 000176a0
 void CRITSECT_Init(pthread_mutex_t* pMutex);
 

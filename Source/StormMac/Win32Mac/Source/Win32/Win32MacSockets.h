@@ -150,8 +150,12 @@ static inline int getpeername(int s, struct sockaddr* pName, int* pnLen) {
 // Winsock's start-up and close are the Win32 layer's WSOCK_ functions (Win32_Process.cpp).
 int WSOCK_WSAStartup(uint16_t wVersionRequested, void* pWsaData);
 int WSOCK_CloseSocket(int nSocket);
+int WSOCK_WSACleanup(void);
 static inline int WSAStartup(uint16_t wVersionRequested, void* pWsaData) { return WSOCK_WSAStartup(wVersionRequested, pWsaData); }
 static inline int closesocket(int s) { return WSOCK_CloseSocket(s); }
+static inline int WSACleanup() { return WSOCK_WSACleanup(); }
+// The Mac's socket error is errno (the binary reads ___error()).
+static inline int WSAGetLastError() { return errno; }
 
 // The Winsock calls the shared code reaches through _Wrappers are BSD's, called directly.
 namespace _Wrappers {

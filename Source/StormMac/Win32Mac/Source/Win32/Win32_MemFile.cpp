@@ -25,12 +25,12 @@ struct MemFile2 {
 WIN32MAC_LAYOUT(MemFile2_size, sizeof(MemFile2) == 0x9C);
 WIN32MAC_LAYOUT(MemFile2_data, offsetof(MemFile2, pData) == 0x88);
 
-BOOL FPMessageBox(const char* szText, const char* szCaption, UINT uType);
+int FPMessageBox(const char* szText, const char* szCaption, UINT uType);
 void ExitProcess(UINT uExitCode);
 BOOL DeleteFile(const char* szFileName);
 HANDLE CreateFile(const char* szFileName, DWORD dwAccess, DWORD dwShare, void* pSecurity, DWORD dwDisposition,
                   DWORD dwFlags, HANDLE hTemplate);
-BOOL ReadFile(HANDLE hFile, void* pBuffer, DWORD nBytesToRead, DWORD* pnBytesRead, void* pOverlapped);
+BOOL ReadFile(HANDLE hFile, void* pBuffer, DWORD nBytesToRead, DWORD* pnBytesRead, OVERLAPPED* pOverlapped);
 
 // 1.14d mac: 003f492c
 BYTE s_bMemFile2Tracked;

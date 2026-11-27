@@ -20,20 +20,17 @@
 #include "Source/MacSpecific/Source/MacShell/QuickDrawMac.h"
 
 #include "Source/StormMac/H/stpl.h"
+#include "Source/StormMac/H/StormApi.h"
 
 typedef int BOOL;
 
-// 1.14d mac: 0000c421
-int SBmpLoadImage(const char* szFileName, void* pPalette, void* pBuffer, uint32_t nBufferSize, int* pnWidth,
-                  int* pnHeight, int* pnBitDepth);
-// 1.14d mac: 00014226
-int SFileOpenArchive(const char* szArchiveName, int nPriority, uint32_t dwFlags, void** phArchive);
-// 1.14d mac: 0001239c
-int SFileCloseArchive(void* hArchive);
 // 1.14d mac: 00034740
 void GetDialogItemRect(DialogRef pDialog, DialogItemIndex nItem, Rect* pRect);
+namespace Fog {
 // 1.14d mac: 002edc4a
 BOOL D2CheckExpansionGame(void);
+}
+using Fog::D2CheckExpansionGame;
 
 void FLAMINGLOGO_Shutdown(void);
 
@@ -110,7 +107,7 @@ void FLAMINGLOGO_Init(DialogRef pDialog, int nItem) {
     void* hGameArchive = 0;
     void* hPatchArchive = 0;
     void* hExpansionArchive = 0;
-    int nWidth, nHeight, nBitDepth;
+    uint32_t nWidth, nHeight, nBitDepth;
 
     BOOL bExpansion = D2CheckExpansionGame();
     s_pDialog = pDialog;

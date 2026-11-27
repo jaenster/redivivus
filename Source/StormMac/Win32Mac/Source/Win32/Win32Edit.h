@@ -43,7 +43,7 @@ struct Win32MacEditData {
 };
 WIN32MAC_LAYOUT(Win32MacEditData_size, sizeof(Win32MacEditData) == 0x4C);
 
-struct Win32MacPaintStruct {
+struct PAINTSTRUCT {
     DWORD adw[16];
 };
 

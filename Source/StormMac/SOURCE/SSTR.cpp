@@ -10,17 +10,16 @@
 
 #if !defined(_WIN32) && D2_OS_MAC
 
+#include "Source/StormMac/H/StormApi.h"
+
 #include <stdarg.h>
 #include <stdio.h>
 #include <string.h>
 
-// Storm's last-error setter, and the Win32 layer's case-insensitive compare and case folds.
-void SErrSetLastError(uint32_t dwErrCode);
-int _strnicmp(const char* szString1, const char* szString2, size_t nMaxChars);
+// The Win32 layer's case-insensitive compare and case folds.
+int _strnicmp(const char* szString1, const char* szString2, int nMaxChars);
 char* _strupr(char* szString);
 char* _strlwr(char* szString);
-
-uint32_t SStrLen(char* szText);
 
 #define ERROR_INVALID_PARAMETER 0x57
 
@@ -30,21 +29,21 @@ static const uint32_t gnHashLowTable[16] = {
 };
 
 // 1.14d mac: 0001c730
-char* SStrChr(char* szText, char cTarget) {
+char* Storm::Source::SSTR::SStrChr(const char* szText, char cTarget) {
     if (szText == NULL) {
         SErrSetLastError(ERROR_INVALID_PARAMETER);
         return NULL;
     }
     for (; *szText != '\0'; szText++) {
         if (*szText == cTarget) {
-            return szText;
+            return (char*)szText;
         }
     }
     return NULL;
 }
 
 // 1.14d mac: 0001c766
-char* SStrChrR(char* szText, char cTarget) {
+char* Storm::Source::SSTR::SStrChrR(const char* szText, char cTarget) {
     char* pLastMatch;
     if (szText == NULL) {
         SErrSetLastError(ERROR_INVALID_PARAMETER);
@@ -53,14 +52,14 @@ char* SStrChrR(char* szText, char cTarget) {
     pLastMatch = NULL;
     for (; *szText != '\0'; szText++) {
         if (*szText == cTarget) {
-            pLastMatch = szText;
+            pLastMatch = (char*)szText;
         }
     }
     return pLastMatch;
 }
 
 // 1.14d mac: 0001c7a0
-int SStrCmp(char* szString1, char* szString2, size_t nMaxCount) {
+int Storm::Source::SSTR::SStrCmp(const char* szString1, const char* szString2, uint32_t nMaxCount) {
     if (szString2 == NULL || szString1 == NULL) {
         SErrSetLastError(ERROR_INVALID_PARAMETER);
         return (int)szString1 - (int)szString2;
@@ -69,7 +68,7 @@ int SStrCmp(char* szString1, char* szString2, size_t nMaxCount) {
 }
 
 // 1.14d mac: 0001c7d3
-int SStrCmpI(const char* szString1, const char* szString2, uint32_t nMaxCount) {
+int Storm::Source::SSTR::SStrCmpI(const char* szString1, const char* szString2, uint32_t nMaxCount) {
     if (szString2 == NULL || szString1 == NULL) {
         SErrSetLastError(ERROR_INVALID_PARAMETER);
         return (int)szString1 - (int)szString2;
@@ -78,7 +77,7 @@ int SStrCmpI(const char* szString1, const char* szString2, uint32_t nMaxCount) {
 }
 
 // 1.14d mac: 0001c806
-uint32_t SStrCopy(char* szBufferOutput, char* szBufferInput, int nBufferOutputLength) {
+uint32_t Storm::Source::SSTR::SStrCopy(char* szBufferOutput, const char* szBufferInput, int nBufferOutputLength) {
     int n;
     if (szBufferInput == NULL || szBufferOutput == NULL) {
         SErrSetLastError(ERROR_INVALID_PARAMETER);
@@ -98,12 +97,12 @@ uint32_t SStrCopy(char* szBufferOutput, char* szBufferInput, int nBufferOutputLe
 }
 
 // 1.14d mac: 0001c9bd
-char* SStrDup(const char* szText) {
+char* Storm::Source::SSTR::SStrDup(const char* szText) {
     if (szText == NULL) {
         SErrSetLastError(ERROR_INVALID_PARAMETER);
         return NULL;
     }
-    size_t nBytes = SStrLen((char*)szText) + 1;
+    size_t nBytes = SStrLen(szText) + 1;
     char* pCopy = (char*)SMemAlloc(nBytes, __FILE__, 0x2b1, 0);
     if ((int)nBytes > 0) {
         memmove(pCopy, szText, nBytes);
@@ -112,12 +111,12 @@ char* SStrDup(const char* szText) {
 }
 
 // 1.14d mac: 0001ca30
-uint32_t SStrLen(char* szText) {
+uint32_t Storm::Source::SSTR::SStrLen(const char* szText) {
     if (szText == NULL) {
         SErrSetLastError(ERROR_INVALID_PARAMETER);
         return 0;
     }
-    char* p = szText;
+    const char* p = szText;
     while (*p != '\0') {
         p++;
     }
@@ -125,7 +124,7 @@ uint32_t SStrLen(char* szText) {
 }
 
 // 1.14d mac: 0001caaf
-uint32_t SStrPack(char* szText, char* szSource, int nBufferLength) {
+uint32_t Storm::Source::SSTR::SStrPack(char* szText, const char* szSource, uint32_t nBufferLength) {
     if (szSource == NULL || szText == NULL) {
         SErrSetLastError(ERROR_INVALID_PARAMETER);
         return 0;
@@ -154,7 +153,7 @@ uint32_t SStrPack(char* szText, char* szSource, int nBufferLength) {
 }
 
 // 1.14d mac: 0001ccd5
-size_t SStrPrintf(char* szOutput, size_t nSize, char* szFormat, ...) {
+uint32_t Storm::Source::SSTR::SStrPrintf(char* szOutput, uint32_t nSize, const char* szFormat, ...) {
     size_t nWritten = 0;
     if (szFormat == NULL || szOutput == NULL) {
         SErrSetLastError(ERROR_INVALID_PARAMETER);
@@ -174,7 +173,7 @@ size_t SStrPrintf(char* szOutput, size_t nSize, char* szFormat, ...) {
 }
 
 // 1.14d mac: 0001cd31
-uint32_t SStrVPrintf(char* szOutput, size_t nSize, char* szFormat, va_list vaArgs) {
+uint32_t Storm::Source::SSTR::SStrVPrintf(char* szOutput, uint32_t nSize, const char* szFormat, va_list vaArgs) {
     uint32_t nWritten = 0;
     if (szFormat == NULL || szOutput == NULL) {
         SErrSetLastError(ERROR_INVALID_PARAMETER);
@@ -193,7 +192,7 @@ uint32_t SStrVPrintf(char* szOutput, size_t nSize, char* szFormat, va_list vaArg
 // 1.14d mac: 0001cd8c
 // Copies the next token of *ppszString into szBuffer. Characters of szWhitespace separate
 // tokens; when the double quote is one of them, a quoted run is one token.
-void SStrTokenize(char** ppszString, char* szBuffer, uint32_t nBufferChars, char* szWhitespace, int* pbQuoted) {
+void Storm::Source::SSTR::SStrTokenize(char** ppszString, char* szBuffer, uint32_t nBufferChars, const char* szWhitespace, uint32_t* pbQuoted) {
     if (szWhitespace == NULL || *ppszString == NULL || ppszString == NULL || (nBufferChars != 0 && szBuffer == NULL)) {
         SErrSetLastError(ERROR_INVALID_PARAMETER);
         return;
@@ -255,7 +254,7 @@ void SStrTokenize(char** ppszString, char* szBuffer, uint32_t nBufferChars, char
 }
 
 // 1.14d mac: 0001ceaa
-uint32_t SStrHash(char* pszText, uint8_t bCaseSensitive, uint32_t nSeed) {
+uint32_t Storm::Source::SSTR::SStrHash(char* pszText, uint8_t bCaseSensitive, uint32_t nSeed) {
     if (pszText == NULL) {
         SErrSetLastError(ERROR_INVALID_PARAMETER);
         return 0;
@@ -301,7 +300,7 @@ uint32_t SStrHash(char* pszText, uint8_t bCaseSensitive, uint32_t nSeed) {
 
 // 1.14d mac: 0001cfaf
 // The key is upper-cased and '/' becomes '\\' in a 1024-byte buffer first.
-uint32_t SStrHashHT(const char* szText) {
+uint32_t Storm::Source::SSTR::SStrHashHT(uint8_t* szText) {
     uint8_t szUpper[1024];
     uint32_t nLen = 0;
     uint32_t a = 0x9e3779b9, b = 0x9e3779b9, c = 0;
@@ -347,12 +346,12 @@ uint32_t SStrHashHT(const char* szText) {
 }
 
 // 1.14d mac: 0001d2f0
-void SStrUpper(char* szText) {
+void Storm::Source::SSTR::SStrUpper(char* szText) {
     _strupr(szText);
 }
 
 // 1.14d mac: 0001d2f9
-void SStrLower(char* szText) {
+void Storm::Source::SSTR::SStrLower(char* szText) {
     _strlwr(szText);
 }
 

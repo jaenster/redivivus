@@ -13,6 +13,8 @@
 
 #if !defined(_WIN32) && D2_OS_MAC
 
+#include "Source/StormMac/H/StormApi.h"
+
 #import <Foundation/Foundation.h>
 #include <CoreServices/CoreServices.h>
 #include <stdio.h>
@@ -32,16 +34,6 @@ enum SRegValueType {
     SREG_TYPE_DATA = 3,
 };
 
-// 1.14d mac: 00010b98
-void SErrSetLastError(uint32_t dwErrorCode);
-// 1.14d mac: 0001c806
-int SStrCopy(char* szDest, const char* szSource, int nDestSize);
-// 1.14d mac: 0001c730
-char* SStrChr(const char* szString, char cChar);
-// 1.14d mac: 0001ccd5
-int SStrPrintf(char* szDest, size_t nDestSize, const char* szFormat, ...);
-// 1.14d mac: 0001ca30
-uint32_t SStrLen(const char* szString);
 
 // A value of the registry: its key is "<root>\<subkey>\<value>".
 class RegistryEntry {
@@ -199,7 +191,7 @@ static RegistryEntry* SREG_LookupValue(const char* szKeyPath, const char* szPref
 }
 
 // 1.14d mac: 0003a696
-int SRegLoadData(char* szSubKey, char* szValueName, int nFlags, uint8_t* pbData, uint32_t dwBufSize,
+int Storm::Source::SReg::SRegLoadData(char* szSubKey, char* szValueName, int nFlags, uint8_t* pbData, uint32_t dwBufSize,
                  uint32_t* pdwDataLen) {
     char szKeyPath[SREG_PATH_MAX];
     char szPrefsPath[SREG_PATH_MAX];
@@ -229,7 +221,7 @@ int SRegLoadData(char* szSubKey, char* szValueName, int nFlags, uint8_t* pbData,
 }
 
 // 1.14d mac: 0003a8e2
-int SRegLoadString(char* szSubKey, char* szValueName, int nFlags, char* szOutBuf, uint32_t dwOutBufSize) {
+int Storm::Source::SReg::SRegLoadString(const char* szSubKey, const char* szValueName, int nFlags, char* szOutBuf, uint32_t dwOutBufSize) {
     char szKeyPath[SREG_PATH_MAX];
     char szPrefsPath[SREG_PATH_MAX];
     char cValueName = *szValueName;
@@ -249,7 +241,7 @@ int SRegLoadString(char* szSubKey, char* szValueName, int nFlags, char* szOutBuf
 }
 
 // 1.14d mac: 0003a9a0
-int SRegLoadValue(char* szSubKey, char* szValueName, int nFlags, int32_t* pnValue) {
+int Storm::Source::SReg::SRegLoadValue(const char* szSubKey, const char* szValueName, int nFlags, int32_t* pnValue) {
     char szKeyPath[SREG_PATH_MAX];
     char szPrefsPath[SREG_PATH_MAX];
     if (pnValue == NULL || *szValueName == '\0' || szValueName == NULL || *szSubKey == '\0' || szSubKey == NULL) {
@@ -278,7 +270,7 @@ static RegistryEntry* SREG_FindOrCreateValue(const char* szKeyPath, const char* 
 }
 
 // 1.14d mac: 0003aa47
-int SRegSaveData(char* szSubKey, const char* szValueName, uint32_t dwFlags, uint8_t* pbData, uint32_t dwDataLen) {
+int Storm::Source::SReg::SRegSaveData(char* szSubKey, const char* szValueName, uint32_t dwFlags, uint8_t* pbData, uint32_t dwDataLen) {
     char szKeyPath[SREG_PATH_MAX];
     char szPrefsPath[SREG_PATH_MAX];
     char cSubKey = *szSubKey;
@@ -298,7 +290,7 @@ int SRegSaveData(char* szSubKey, const char* szValueName, uint32_t dwFlags, uint
 }
 
 // 1.14d mac: 0003abad
-int SRegSaveString(char* szSubKey, const char* szValueName, int nFlags, char* szValue) {
+int Storm::Source::SReg::SRegSaveString(char* szSubKey, const char* szValueName, int nFlags, char* szValue) {
     char szKeyPath[SREG_PATH_MAX];
     char szPrefsPath[SREG_PATH_MAX];
     if (szValue == NULL || *szValueName == '\0' || szValueName == NULL || *szSubKey == '\0' || szSubKey == NULL) {
@@ -318,7 +310,7 @@ int SRegSaveString(char* szSubKey, const char* szValueName, int nFlags, char* sz
 }
 
 // 1.14d mac: 0003acba
-int SRegSaveValue(char* szSubKey, const char* szValueName, int nFlags, int32_t nValue) {
+int Storm::Source::SReg::SRegSaveValue(char* szSubKey, const char* szValueName, int nFlags, int32_t nValue) {
     char szKeyPath[SREG_PATH_MAX];
     char szPrefsPath[SREG_PATH_MAX];
     char cSubKey = *szSubKey;
@@ -334,7 +326,7 @@ int SRegSaveValue(char* szSubKey, const char* szValueName, int nFlags, int32_t n
 }
 
 // 1.14d mac: 0003ad51
-int SRegDeleteValue(const char* szSubKey, const char* szValueName, uint32_t dwFlags) {
+int Storm::Source::SReg::SRegDeleteValue(const char* szSubKey, const char* szValueName, uint32_t dwFlags) {
     char szKeyPath[SREG_PATH_MAX];
     char szPrefsPath[SREG_PATH_MAX];
     SREG_BuildPrefsPaths(szSubKey, szValueName, dwFlags, szKeyPath, szPrefsPath);

@@ -19,7 +19,7 @@
 #include <time.h>
 
 // 1.14d mac: 000216b0
-HANDLE CreateEventA(LPVOID lpEventAttributes, BOOL bManualReset, BOOL bInitialState, LPCSTR lpName) {
+HANDLE CreateEventA(SECURITY_ATTRIBUTES* lpEventAttributes, BOOL bManualReset, BOOL bInitialState, LPCSTR lpName) {
     HANDLE hEvent = 0;
     if (lpEventAttributes == NULL) {
         char* szName = NULL;
