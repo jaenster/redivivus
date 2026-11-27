@@ -260,19 +260,19 @@ addr	name	reason_class	detail
 0001eb3a	MAC_GetMicroseconds	sched	orig keeps the inner `if (state==0)` re-test (test cl,cl after test ecx,ecx) and branches 0 first; clang425 folds the re-test in ours
 0001eba1	MAC_GetMilliseconds	sched	same as MAC_GetMicroseconds, whose body is inlined here
 0001ec40	WIN32MAC_Initialize	stack-layout	5/62(orig) 66(ours): ours 'sub esp, 0x17c' orig 'sub esp, 0x16c'
-0001ed6c	Edit_WndProc	wrong	callee sets differ: orig-only GetStockObject, ours-only GetSystemMetrics; SetProp/RemoveProp/Priv_Alloc appear only on the orig side of the call lists.
+0001ed6c	Edit_WndProc	sched	1725 vs 1780 insns; per-case GetProp, GetKeyState and callee multiset now equal; orig dispatches on message ranges with one result variable and per-case epilogues, the flat switch lays out differently
 00020a74	Edit_On_EM_SETSEL	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
 00020aff	Edit_Scroll	regalloc	orig keeps ecx in edi and adds to a stack slot; ours spills ecx to [ebp-0x6c] and reloads; calls identical.
-00020d81	Edit_SetSelection	semantic-guess	min/max written as cmp ebx,eax with cmovg versus cmp eax,ebx with cmovle; same logic, inverted form.
-00020e18	Edit_GetCharFromLineIndexXPos	semantic-guess	orig uses cmp reg,reg with jg/jge; ours uses cmp reg,[mem] with jl/jle; ebx vs esi register choice also differs.
-00020f10	Edit_DeleteSelection	semantic-guess	min/max via cmovg/cmovge versus cmovle/cmovge with swapped operands; otherwise the same sequence.
+00020d81	Edit_SetSelection	regalloc	51 insns both; same callee sequence; register choice or operand order differs
+00020e18	Edit_GetCharFromLineIndexXPos	sched	orig 83 vs ours 82 insns; same callee sequence; branch layout and instruction selection differ
+00020f10	Edit_DeleteSelection	regalloc	40 insns both; same callee sequence; register choice or operand order differs
 00020f78	Edit_RecalculateLineOffsets	stack-layout	same frame 0x4c; spill slot ebp-0x30 vs ebp-0x2c and GetDC result in esi vs ebx; one store vs sub-from-slot differs.
 000210bd	Edit_ScrollCaretIntoView	regalloc	orig stores esi to [esp] before a jmp that ours avoids by keeping esi in a register; one extra mov to stack.
-0002120d	Edit_LineFromChar	semantic-guess	branch sense inverted (jl vs jge) and block order differs; ours tests [ebp+0xc] before the loop, orig does not.
-00021343	Edit_InsertText	semantic-guess	min/max via cmovg vs cmovle; orig cmp ecx,eax with jle vs ours sub eax,ecx with jge; same comparison.
+0002120d	Edit_LineFromChar	regalloc	64 insns both; same callee sequence; register choice or operand order differs
+00021343	Edit_InsertText	sched	orig 87 vs ours 86 insns; same callee sequence; branch layout and instruction selection differ
 00021443	Edit_TextFitsInClient	stack-layout	same instructions; frame size or local offsets differ
-000214f2	Edit_RestoreEditDataBackup	wrong	only literal difference: orig moves 0x12 where ours moves 0x11.
-0002160c	Edit_CopySelectionToClipboard	semantic-guess	orig has not R and a cmovl/cmovg pair; ours has two cmovle and stores to stack slots instead.
+000214f2	Edit_RestoreEditDataBackup	regalloc	87 insns both; same callee sequence; register choice or operand order differs
+0002160c	Edit_CopySelectionToClipboard	sched	orig 59 vs ours 58 insns; same callee sequence; branch layout and instruction selection differ
 0002190a	MsgWaitForMultipleObjects	regalloc	6/132(orig) 137(ours): ours 'mov ebx, dword ptr [ebp + 0x14]' orig 'mov esi, dword ptr [ebp + 0x14]'
 00021ad7	CreateFile	stack-layout	5/271(orig) 267(ours): ours 'sub esp, 0xbc' orig 'sub esp, 0xcc'
 00021fc6	WriteFile	sched	same instructions in a different order
@@ -317,24 +317,25 @@ addr	name	reason_class	detail
 00026b7c	std::__1::__deque_base<Win32HandleObject,std::__1::allocator<Win32HandleObject>>::~__deque_base[D2]	eh	orig has __ZSt9terminatev and MemFree in the destructor; ours calls delete
 00026bc2	std::__1::__deque_base<Win32HandleObject,std::__1::allocator<Win32HandleObject>>::clear	eh	orig has __ZSt9terminatev and MemFree in clear; ours calls delete
 00026c70	_GLOBAL__I_a	pic-ref	same structure; orig takes the dtor address via lea and an unresolved PIC symbol, ours loads &___dso_handle and &dtor via mov
-00026d14	Keys_PrepareKeyMsg	wrong	constants differ: orig compares against 0x1f/0x30 with masks -3/-5 and flags 0x100/0x104; ours uses 0x20, or 0x80 and xor 0x101/0x105 with different state offsets
-00026f58	GetKeyState	semantic-guess	same table lookup and result; orig uses sete/or -0x80 branch form, ours uses movsx and or 0xff80, table displacement differs
-00026f82	GetAsyncKeyState	regalloc	same calls and table lookup; ours keeps the key map pointer in a different register with an extra spill and reload
-00027028	TranslateMessage	stack-layout	orig frame sub 0x1c and saves ebx, ours frame sub 0x10 with edi/esi only; same PostMessage path
-000270a4	ListBox_WndProc	wrong	call sequences diverge: orig early path calls Priv_Alloc and SetProp, ours calls GetParent/GetWindowLong/SendMessage first; frame 0x11c vs 0x12c
+00026d14	Keys_PrepareKeyMsg	sched	123 vs 119 insns; bKeyDown/bUpdateState are int-sized as in the asm; the first byChar test and the extended-key bit test compile differently
+00026f58	GetKeyState	regalloc	16 vs 14 insns; orig has no early zero of eax and returns the int directly
+00026f82	GetAsyncKeyState	regalloc	54 vs 55 insns; orig computes the byte index with a widening shift, ours narrows first
+00027028	TranslateMessage	regalloc	42 vs 39 insns; orig keeps the character byte in ebx
+000270a4	ListBox_WndProc	sched	969 vs 1071 insns; callee sequence identical; orig dispatches by range tests and keeps one result variable (frame 0x11c vs 0x12c); a goto-done rewrite made it worse (1092)
 00028224	ListBox_On_WM_LBUTTONDOWN	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
 000282fa	ListBox_On_LB_SETCURSEL	pic-ref	same calls; the string-literal reference resolves to __ListBoxData in orig and to an unnamed PIC symbol in ours
 00028353	ListBox_On_LB_SETTOPINDEX	pic-ref	same calls; __ListBoxData string reference differs (named vs unresolved PIC symbol), cmovle vs cmovg
 00028427	ListBox_FindString	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
-000286f8	LISTBOX_DeleteString	semantic-guess	same calls; orig and ours use different branch shape and the -1 constant lives in a different register
-0002890b	LISTBOX_MoveSelection	semantic-guess	same SetSelection call; orig uses jne/jmp, ours uses je plus an extra local store
+000286f8	LISTBOX_DeleteString	regalloc	83 vs 79 insns; orig keeps the new count in ebx and the result in edi, ours the reverse
+0002890b	LISTBOX_MoveSelection	regalloc	37 vs 39 insns; orig never spills hWnd across SetSelection
 000289ee	Mem_HandleAlloc	stack-layout	5/88(orig) 87(ours): ours 'sub esp, 0x1c' orig 'sub esp, 0xc'
 00028b01	Mem_Priv_FreeMasterPointer	regalloc	8/56(orig) 58(ours): ours 'mov dword ptr [ebp - 0x1c], eax' orig 'mov dword ptr [ebp - 0x18], eax'
 00028cab	VirtualAlloc	regalloc	2/48(orig) 44(ours): ours 'push edi' orig 'push ebx'
 00028e09	MSG_PeekQueuedMessage	regalloc	same compares and loads; orig loads [ebp+0x18] into edi then cmp reg,reg, ours cmp mem directly
-00028f1b	Msg_FillMouseMsgFromPoint	semantic-guess	same callees but WindowFromPoint is called first in orig and last in ours, with an extra store and a different branch target (jne #29 vs #28)
-0002934e	Wnd_FindWindowNeedingPaint	wrong	orig steps the list pointer by 0x54 and the next-link by 0x58, ours uses 0x50 and 0x5c (struct field offsets differ)
-000297df	MSG_EnqueueMessage	semantic-guess	orig uses cmovg where ours uses cmovle on the same tick/queue check and zeroes ecx early; select polarity unverified
+00028f1b	Msg_FillMouseMsgFromPoint	sched	135 vs 135 insns; same callees, WindowFromPoint branch is placed earlier in orig
+0002934e	Wnd_FindWindowNeedingPaint	sched	23 vs 23 insns; same structure, field offset order differs (0x54 vs 0x50 walk)
+000293a1	IPeekMessage	regalloc	95 insns both; same callee sequence; register choice or operand order differs
+000297df	MSG_EnqueueMessage	sched	orig 52 vs ours 49 insns; same callee sequence; branch layout and instruction selection differ
 00029af1	CLIPBOARD_GetText	regalloc	orig loads [ebp+0xc] into edx before the cmp while ours compares the memory operand directly; same calls and ops
 00029b86	LoadLibraryEx	regalloc	7/186(orig) 178(ours): ours 'pop ebx' orig 'pop ecx'
 00029e86	GetProcAddress	sched	20/87(orig) 87(ours): ours 'jmp #80' orig 'jmp #57'
@@ -344,16 +345,16 @@ addr	name	reason_class	detail
 0002af55	GetLocaleInfo	sched	36/86(orig) 90(ours): ours 'jne #88' orig 'jne #84'
 0002b05d	LOCALE_BuildLangIdFromMac	pic-ref	same calls; or-table lookup uses displacement 0x2f6fed in orig vs 0x696 in ours, with registers swapped
 0002b180	LOCALE_GetDefaultLangId	pic-ref	identical except the table displacement in the or-lookup (0x2f6eca orig vs 0x5bd ours)
-0002b1fe	Rect_PinPtInRect	semantic-guess	rect-pin logic reproduced with different boolean structure (orig cmov/setg chain, ours branches and setl); same intent, not instruction-derived
-0002b2e1	IntersectRect	semantic-guess	ours zero-initialises the output rect at entry and uses cmove with a 0x1c frame where orig uses branches and 0xc
-0002b378	SubtractRect	semantic-guess	same IntersectRect call; ours reorders the rect compares (jle vs jge) and stores copies to locals, frame 0x3c vs 0x2c
-0002b4d1	PtInRect	semantic-guess	same logic with branch sense and register use changed; ours pushes and pops esi and uses jl where orig uses jge
-0002b500	FindResourceEx	wrong	orig zero-extends the 16-bit arg (movzx) with sentinel 0xffff, ours sign-extends (movsx) with sentinel 0xffffffff
-0002b566	RESOURCE_FindEntry	wrong	orig compares against -1 and zero-extends word fields, ours compares against 0xffff and sign-extends (movsx); frame 0x23c vs 0x22c
-0002b7d2	LoadString	semantic-guess	same FindResourceEx call; orig does the signed divide-by-4 fixup (sar 0x1f, shr 0x1e) where ours uses inc and neg arithmetic
-0002b88c	Text_CalculateLineBreaks	semantic-guess	same calls; select compares are inverted (cmove/cmovle vs cmovne/cmovg) and a frame slot moves from 0x30 to 0x34
-0002ba27	GetTextExtentExPointA	semantic-guess	same calls; orig tests a pointer with cmp/je/sete/test where ours uses or with memory; locals shift from 0x48 to 0x58
-0002bbc3	ExtTextOut	semantic-guess	same calls; orig spills three values to the stack and has an extra jmp, ours does add reg,reg in registers
+0002b1fe	Rect_PinPtInRect	sched	41 insns both; same instructions, orig loads pRect->left before *pX; scheduler order differs
+0002b2e1	IntersectRect	regalloc	67 vs 63 insns; orig spills three of the eight loaded edges, ours two
+0002b378	SubtractRect	sched	100 vs 127 insns; branch structure rederived from the asm (intersect, full cover, row and column trims) but clang spills more (frame 0x3c vs 0x2c)
+0002b4d1	PtInRect	sched	22 vs 22 insns; orig keeps pRect in eax and needs no esi, ours holds the by-value POINT address in a second register
+0002b500	FindResourceEx	regalloc	38 vs 39 insns; orig keeps the three call arguments in esi/edi across the calls, ours reloads them
+0002b566	RESOURCE_FindEntry	regalloc	179 vs 181 insns; fastcall-free regparm3 signature, id types and buffer order now match; orig keeps szType in edi and hModule in esi, ours the reverse
+0002b7d2	LoadString	sched	72 vs 73 insns; the string-block size rounding is now (n + 3) / 4 * 4 as in the asm; the entry and copy loops are strength-reduced differently (dec vs neg/inc counter)
+0002b88c	Text_CalculateLineBreaks	sched	orig 138 vs ours 137 insns; same callee sequence; branch layout and instruction selection differ
+0002ba27	GetTextExtentExPointA	sched	orig 114 vs ours 110 insns; same callee sequence; branch layout and instruction selection differ
+0002bbc3	ExtTextOut	sched	orig 131 vs ours 127 insns; same callee sequence; branch layout and instruction selection differ
 0002bdea	THREAD_Create	inline	orig keeps the 8th parameter (constant 0 at both callers) un-propagated into static fastcc THREAD_Create; clang425 ipsccp folds it in ours
 0002bf09	CreateThread	inline	same cause as THREAD_Create: callee takes the constant as a real argument in orig
 0002bf49	_beginthreadex	inline	same cause as THREAD_Create: callee takes the constant as a real argument in orig
@@ -377,42 +378,39 @@ addr	name	reason_class	detail
 0002e7a0	TSHashTable<FileLocation,HASHKEY_STRI>::~TSHashTable[D2]	unverified-ref	2 reference(s) only one side can resolve; every other instruction identical
 0002e916	TSGrowableArray<PathCacheDir>::ReallocData	regalloc	body is a template of the shared Source/StormMac/H/stpl.h (outside this set); 55/101(orig) 101(ours): ours 'mov ecx, ebx' orig 'mov ecx, edi'
 0002ea70	_GLOBAL__I_a	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
-0002eae0	DefWindowProc	wrong	orig calls Wnd_GetTopParent, GetStockObject x2, EndPaint, GetClientRect; ours calls GetSystemMetrics x2, ReleaseDC, _strcpy instead and dispatch constants differ (0x202 vs 0x111 ordering)
-0002ef4a	Proc_ButtonWndProc	wrong	callee set differs: orig GetCapture, GetClientRect, EndPaint; ours ReleaseDC plus an extra SendMessage; frame 0xcc vs 0xbc; cmp constants 0x86/0xef vs 0x4/0xf0
+0002eae0	DefWindowProc	sched	orig 299 vs ours 288 insns; same callee sequence; branch layout and instruction selection differ
+0002ef4a	Proc_ButtonWndProc	sched	329 vs 330 insns; same callees, different block order and frame (0xcc vs 0xbc); orig shares one SendMessage(WM_COMMAND) tail, a rewrite with shared tails let clang merge the GetParent calls too (310 insns)
 0002f500	Proc_RegisterBuiltInClasses	crt-idiom	orig zero-fills the whole WNDCLASSEX with xorps/movaps and about 22 dword zero stores; ours stores only nonzero fields, so unset fields may differ
-0002f793	Proc_StaticWndProc	wrong	orig pairs BeginPaint with EndPaint; ours calls ReleaseDC after BeginPaint
-0002f888	Wnd_CreateDesktopWindow	wrong	orig calls GetStockObject and stores its result at +0x20; ours calls GetSystemMetrics and stores at +0x28 (offsets swapped)
+0002f793	Proc_StaticWndProc	sched	75 vs 76 insns; same callees; orig keeps the result in esi from the start, ours returns through eax
+0002f888	Wnd_CreateDesktopWindow	regalloc	78 insns both; same callee sequence; register choice or operand order differs
 0002faf8	Wnd_NewWndClass	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
-0002fb9f	Wnd_SendParentNotify	wrong	early-exit paths skip xor eax,eax, so the return value is the leftover PIC pop value instead of 0
-0002fbf8	Wnd_CalculateVisibleRgn	semantic-guess	same callees; ours has a 0x2c frame vs 0x3c, an extra spill to [ebp-0x24] and rearranged tests
-0002fdfe	Wnd_Iterate_RemoveWindowFromVisRgn	semantic-guess	same calls; the two early-out conditions are rearranged with je/jne into the same boolean test
+0002fbf8	Wnd_CalculateVisibleRgn	sched	orig 146 vs ours 141 insns; same callee sequence; branch layout and instruction selection differ
+0002fdfe	Wnd_Iterate_RemoveWindowFromVisRgn	sched	orig 53 vs ours 52 insns; same callee sequence; branch layout and instruction selection differ
 0002fec2	ClientToScreen	sched	same instructions in a different order
 0002fef3	ScreenToClient	sched	same instructions in a different order
-0002ff24	Wnd_ChildFromPoint	wrong	mask/compare constant differs: orig tests 0x48000000, ours tests 0x18000000
+0002ff24	Wnd_ChildFromPoint	sched	orig 65 vs ours 56 insns; same callee sequence; branch layout and instruction selection differ
 00030077	RegisterClassEx	pic-ref	orig loads &DefWindowProc with a mov from the data symbol, ours takes the address with lea
-0003020c	DestroyWindow	wrong	ours calls Wnd_SendParentNotify with args (esi, stale, stale, esi) where orig passes (esi, 2, [esi+8], esi); orig's extra arguments are missing in ours
+0003020c	DestroyWindow	sched	orig 140 vs ours 130 insns; same callee sequence; branch layout and instruction selection differ
 00030408	ShowWindow	data-guess	orig reads a dword value table, ours reads a byte at 0x2655 with stride 4; table address and width are guessed
-000304b5	SetFocus	semantic-guess	same calls; ours uses cmove from g_hDesktopWnd for the null-hwnd fallback where orig branches
-000305a7	GetFocus	semantic-guess	same call; ours uses esi and a 0x14 frame where orig uses edi and 0x10, with je/jne sense inverted
-000305f6	SetActiveWindow	semantic-guess	same calls; orig tests bits 0x10000000 and 0x8000000 separately, ours combines them into one 0x18000000 mask compare
-000307c9	CreateWindowEx	wrong	orig calls GetStockObject where ours calls GetSystemMetrics for the same slot; a different API result is used
-00030b23	Wnd_LinkToParent	semantic-guess	same field accesses and results; ours tests arg==-2 before arg==1 and reorders the branches
-00030cb2	GetActiveWindow	semantic-guess	same call; ours uses esi and a 0x14 frame where orig uses edi and 0x10, with je/jne sense inverted
-00030cfd	SetWindowPos	wrong	constants differ: orig compares a value with -3 where ours compares with -2; ours reads the flags argument as a byte (movzx al) where orig reads a dword
-00030fce	WindowFromPoint	semantic-guess	same callees; POINT argument copied via movsd/xmm0 in orig and passed as two dwords in ours; frame 0x2c vs 0x1c
-00031060	GetWindowRect	wrong	orig calls ClientToScreen twice; ours makes no calls and computes the rect from fields directly
-000310be	Wnd_InvalidateInParent	semantic-guess	same callee set, but orig calls InvalidateWndRect first and ours last; branch layout and RECT copy differ
-000311e9	Wnd_InvalidateWndRect	semantic-guess	same calls; the s_hScratchRgn null test branches via je/jmp in orig and via jne in ours
-000312bf	InvalidateRect	semantic-guess	same callee; orig has an extra test/jne/mov-0 sequence and two reg moves that ours lacks
-0003135a	UpdateWindow	semantic-guess	same call; orig returns 1/0 via branches, ours via setne/movzx on the same test
-00031539	Wnd_IsVisibleAndEnabled	semantic-guess	same logic with no calls: orig computes cl and al via branch, ours via and of two bit tests
-0003156b	GetWindowLong	wrong	switch case constant differs: orig compares with -0x15 and loads [ecx+4]; ours compares with -0x14 and loads [ecx+0x3c]
+000304b5	SetFocus	sched	orig 76 vs ours 68 insns; same callee sequence; branch layout and instruction selection differ
+000305a7	GetFocus	sched	orig 29 vs ours 27 insns; same callee sequence; branch layout and instruction selection differ
+000305f6	SetActiveWindow	sched	orig 101 vs ours 93 insns; same callee sequence; branch layout and instruction selection differ
+000307c9	CreateWindowEx	sched	orig 228 vs ours 223 insns; same callee sequence; branch layout and instruction selection differ
+00030b23	Wnd_LinkToParent	sched	orig 48 vs ours 49 insns; same callee sequence; branch layout and instruction selection differ
+00030cb2	GetActiveWindow	sched	orig 27 vs ours 25 insns; same callee sequence; branch layout and instruction selection differ
+00030cfd	SetWindowPos	sched	orig 234 vs ours 227 insns; same callee sequence; branch layout and instruction selection differ
+00030fce	WindowFromPoint	sched	orig 45 vs ours 42 insns; same callee sequence; branch layout and instruction selection differ
+000310be	Wnd_InvalidateInParent	sched	80 vs 77 insns; same callees, Wnd_InvalidateWndRect call sits in a different arm
+000311e9	Wnd_InvalidateWndRect	sched	orig 60 vs ours 58 insns; same callee sequence; branch layout and instruction selection differ
+000312bf	InvalidateRect	sched	orig 51 vs ours 45 insns; same callee sequence; branch layout and instruction selection differ
+00031539	Wnd_IsVisibleAndEnabled	regalloc	16 vs 18 insns; orig keeps both flags in al/cl and tests the disabled bit with sete, ours materialises them with shifts
+0003156b	GetWindowLong	sched	orig 76 vs ours 71 insns; same callee sequence; branch layout and instruction selection differ
 000316f2	RemoveProp	sched	same instructions in a different order
-00031766	Wnd_ClearUpdateRegionTree	wrong	orig passes a second argument 0 to the recursive Wnd_ClearUpdateRegionTree call; ours passes only one
-000317ac	Wnd_ReorderOwnedWindows	semantic-guess	same callees; the loop is rotated differently (extra jmp in ours, test at bottom vs top in orig)
-00031874	Wnd_MarkOwnedWindows	semantic-guess	same recursive call; ours saves ebx, zeroes esi and uses a 0xc frame vs orig 0x10, with an extra jmp in orig
+00031766	Wnd_ClearUpdateRegionTree	sched	orig tests the recursive result (always 0, signature takes a second argument passed as 0), clang 425 deduces it away (27 vs 21 insns)
+000317ac	Wnd_ReorderOwnedWindows	sched	orig 69 vs ours 67 insns; same callee sequence; branch layout and instruction selection differ
+00031874	Wnd_MarkOwnedWindows	sched	orig tests the recursive result (always 0), clang 425 deduces the function returns 0 and drops the test (30 vs 27 insns)
 000318bf	Wnd_InvalidateRectRecursive	crt-idiom	same callees; orig copies RECT fields with 8-byte movsd (xmm) while ours copies them dword by dword through GPRs
-00031a84	Win32VirtualKey_From_MacScanCode	semantic-guess	cmp 0x19/jbe and cmp 0x1a/jb are the same bound; orig loads the map byte with mov, ours with movzx; zero store scheduled differently
+00031a84	Win32VirtualKey_From_MacScanCode	regalloc	38 insns both; same callee sequence; register choice or operand order differs
 00031b0d	NewEmptyStripRgn	inline	orig tail-calls (jmp) the static fastcc Rgn_NewStripRgn(0); ours keeps it non-static fastcall (a static one gets the constant 0 folded in) so no sibcall
 00031b18	Rgn_NewStripRgn	inline	orig keeps nCapacity as a real fastcc parameter (both callers pass 0); ours is explicit fastcall because a static copy gets the 0 folded; body then differs in register choice
 00031ce9	Rgn_SetStripRgnRect	regalloc	7/70(orig) 69(ours): ours 'pop ebx' orig 'pop edi'
