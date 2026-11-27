@@ -1261,51 +1261,47 @@ uint32_t __stdcall SStrCopy(char * szBufferOutput, char * szBufferInput, int32_t
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed GetStringLength
 uint32_t __stdcall SStrLen(char * szText) {
-    char* pStrPos;
-    char* szToCheck;
-    uint32_t dwZeroMask;
-    uint32_t dwSub;
-    uint32_t dwWord;
-    DWORD dwAlignTemp;
-    uint32_t dwAlignSaved;
-    char* pNext;
     D2_CHECKS_BEGIN;
     D2_CHECK(szText);
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     uint32_t dwCarry = -1;
-    for (szToCheck = szText; pNext = szToCheck , dwAlignSaved = guStringAlignmentTemp , ((uintptr_t)szToCheck & 3) != 0; szToCheck++) {
-      if (*szToCheck == '\0') {
-        return (uint32_t)(szToCheck - szText);
+    char* pScan;
+    for (pScan = szText; (uintptr_t)pScan & 3; pScan++) {
+      if (*pScan == '\0') {
+        return (uint32_t)(pScan - szText);
       }
     }
 
-    do {
-      do {
-        guStringAlignmentTemp = dwAlignSaved;
-        pStrPos = pNext;
-        dwWord = *(uint32_t*)pStrPos;
-        dwSub = dwCarry - dwWord;
-        dwCarry = dwSub | dwWord;
-        dwZeroMask = (dwWord + 0x7efefeff ^ dwSub) & 0x81010101;
-        pNext = pStrPos + 4;
-        dwAlignSaved = guStringAlignmentTemp;
-      } while (!dwZeroMask);
+    while (true) {
+      uint32_t dwWord = *(uint32_t*)pScan;
+      dwCarry -= dwWord;
+      uint32_t dwZeroMask = dwWord + 0x7efefeff ^ dwCarry;
+      pScan += 4;
+      dwCarry |= dwWord;
+      dwZeroMask &= 0x81010101;
+      if (dwZeroMask) {
+        if ((char)dwWord == '\0') {
+          pScan -= 4;
+          break;
+        }
+        if ((char)(dwWord >> 8) == '\0') {
+          pScan -= 3;
+          break;
+        }
+        if (!(dwWord & 0xff0000)) {
+          pScan -= 2;
+          break;
+        }
+        if (!(dwWord & 0xff000000)) {
+          pScan -= 1;
+          break;
+        }
 
-      if ((char)dwWord == '\0') {
-        return (uint32_t)(pStrPos - szText);
+        guStringAlignmentTemp = dwZeroMask;
       }
-      if ((char)(dwWord >> 8) == '\0') {
-        return (uint32_t)(pStrPos - szText + 1);
-      }
-      if (!(dwWord & 0xff0000)) {
-        return (uint32_t)(pStrPos - szText + 2);
-      }
+    }
 
-      dwAlignSaved = dwZeroMask;
-    } while (dwWord & -16777216);
-
-    szToCheck = pStrPos + 3;
-    return (uint32_t)(szToCheck - szText);
+    return (uint32_t)(pScan - szText);
 }
 
 // @oracle PPC Mac Storm 1.10b export table (337 named TVector symbols), the authoritative Storm API.
