@@ -25,7 +25,6 @@ struct SsigContext {
     uint32_t aSha1State[23];  // 0x14: the Sha1 object
 };
 
-// 1.14d mac: 00009632
 void* operator new(size_t nBytes);
 void Sha1_Initialize(uint32_t* pSha1);
 void Sha1_Append(uint32_t* pSha1, const void* pData, uint32_t nBytes);

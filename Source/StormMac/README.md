@@ -73,3 +73,21 @@ No binary records the file names of this band, so the files are named for what t
 |`unknown_dialog.cpp`|0003555c..0003602b|7|modal dialog loop and its menu handling; the Dlg_ functions call each other and the two helpers are file-local (register-passed arguments)|
 |`Win32Mac/Source/Win32/Win32_Paths.cpp`|000360c2..00036440|2|path walking and fopen, after the Win32 layer's last named file|
 |`Win32Mac/Source/Win32/Win32_MemFile.cpp`|00036440..00036830|5|the MemFile2 family, which shares the statics 003f492c..003f4940|
+
+## StormMac/SOURCE file boundaries
+
+The Storm `SOURCE` files, cut from the binary's address order; where no `__FILE__` literal
+decides, the boundary is chosen as follows.
+
+|File|Range|Note|
+|-|-|-|
+|`SNET.cpp`|00019532..0001ae80|ends with `__sinit_SNET_CPP`|
+|`SRGN.cpp`|0001b087..0001c6f0|region code only, no literal names the file; ends with `SRGN_InitStatics`|
+|`SSTR.cpp`|0001c730..0001d2f9|SStrLower (0001d2f9) included|
+|`SSignature.cpp`|0001d302..0001d69e||
+|`STRANS.cpp`|0001d69e..0001de67|the UTF-8/UTF-16/Latin-1 helpers have no file evidence; placed here with their tables|
+|`SVID.cpp`|0001de67..0001e2fd|includes STORM_LaunchURL and its callback|
+|`unknown_allocators.cpp`|0001e2fd|`Mem_SetDefaultAllocators`, no file name recorded|
+|`SDRAW_VidDriver.cpp`|00036035|`SDrawDestroy`|
+
+Extensions are lowercase `.cpp` because the compare and coverage tools scan only that.
