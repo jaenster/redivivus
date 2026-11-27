@@ -1154,19 +1154,25 @@ D2ControlStrc * __stdcall D2WIN_FindClosestControlToMouse(D2ControlStrc * pContr
 }
 
 #if !defined(_WIN32) && D2_OS_MAC
+struct D2WinEditMenuMsgStrc {
+    uint32_t nReserved;
+    uint32_t nCommand;
+};
+
 // 1.14d mac: 0004bcf9
 // Storm message handler for the Edit menu: hands the command to the focused edit box while that box
 // is still in the form list, then ends the handler chain.
 void D2WIN_HandleEditMenuCommand(void * pMsg) {
+    uint32_t nCommand = ((D2WinEditMenuMsgStrc*)pMsg)->nCommand;
     ::D2WinEditBox* pFocused = pFormTextAndEditBox;
     if (pFocused) {
       D2ControlStrc* pControl = pFormImage;
       if (!pControl) {
-        D2WinEditBox::D2WINEDITBOX_HandleMenuCommand(pFocused, *(uint32_t*)((char*)pMsg + 4));
+        D2WinEditBox::D2WINEDITBOX_HandleMenuCommand(pFocused, nCommand);
       } else {
         do {
           if ((::D2WinEditBox*)pControl == pFocused) {
-            D2WinEditBox::D2WINEDITBOX_HandleMenuCommand(pFocused, *(uint32_t*)((char*)pMsg + 4));
+            D2WinEditBox::D2WINEDITBOX_HandleMenuCommand(pFocused, nCommand);
             break;
           }
           pControl = pControl->pNext;

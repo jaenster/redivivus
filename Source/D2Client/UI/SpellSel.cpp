@@ -2365,7 +2365,7 @@ static void * keep_004a8cf0 = (0 ? (SPELLSEL_IsMouseInRect(*(int32_t *)0, *(int3
 // The same grid reset SPELLSEL_Initialize does, followed by the four grid layouts, each of which
 // the Windows build only has as an unreferenced function (004aa680, 004aa6b0, 004aa6e0, 004aa710).
 void __stdcall SPELLSEL_ResetAndLayoutGrids() {
-    memset(&gSpellSelGridRegion, 0, 0x3c5);
+    memset(&gSpellSelGridRegion, 0, sizeof(gSpellSelGridRegion));
     memset(gSpellSelGridRegion.aRightHandSlots, 0xff, sizeof(gSpellSelGridRegion.aRightHandSlots));
     Unreferenced_004aa680();
     Unreferenced_004aa6b0(0);
