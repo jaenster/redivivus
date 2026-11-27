@@ -4302,47 +4302,27 @@ static BOOL __stdcall RelocateAndApplySyncWarp(::SGAMEDATA * pGame, D2UnitStrc *
     }
 }; D2_STATIC_GUARD(gaWarpOffsetTable, "D2Game::PLAYER::PlayerMsg::RelocateAndApplySyncWarp::gaWarpOffsetTable");
 
-    eD2UnitType eUnitType;
-    int32_t nRandRemainder;
-    int32_t dwUnitGUID;
-    D2WarpChanceStrc* pWarpEntry;
-    uint32_t sSeedNext;
-    int32_t bRelocSuccess = UNIT::SUnit::SUNIT_RelocateUnit(pGame, pUnit, nullptr, nX, nY, 0, 1);
-    if (!bRelocSuccess) {
+    if (!UNIT::SUnit::SUNIT_RelocateUnit(pGame, pUnit, nullptr, nX, nY, 0, 1)) {
       return 0;
     }
 
     GAME::Clients::RecordSyncWarpTimestamp(pGame, pUnit);
     int nDelayFrames = 0x7d;
-    BOOL BVar1 = GAME::Clients::CheckSyncWarpRateExceeded(pGame, pUnit);
-    if (BVar1 && pGame->nGameType == SGAMETYPE_BNET_HOST) {
-      int iVar2;
-      sSeedNext = D2_SeedRoll(&pUnit->sSeed);
-      nRandRemainder = sSeedNext % 100;
-      iVar2 = 0;
-      do {
-        pWarpEntry = gaWarpOffsetTable + iVar2;
-        if (nRandRemainder < pWarpEntry->nChancePct) {
-          nDelayFrames = gaWarpOffsetTable[iVar2].nOffset;
+    if (GAME::Clients::CheckSyncWarpRateExceeded(pGame, pUnit) && pGame->nGameType == SGAMETYPE_BNET_HOST) {
+      int nRoll = D2_SeedRoll(&pUnit->sSeed) % 100;
+      for (int i = 0; i < 3; i++) {
+        if (nRoll < gaWarpOffsetTable[i].nChancePct) {
+          nDelayFrames = gaWarpOffsetTable[i].nOffset;
           break;
         }
 
-        iVar2++;
-        nRandRemainder -= pWarpEntry->nChancePct;
-      } while (iVar2 < 3);
+        nRoll -= gaWarpOffsetTable[i].nChancePct;
+      }
     }
 
     int32_t nExpireFrame = pGame->dwGameFrame + nDelayFrames;
     D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_sync_warped, 1);
-    if (!pUnit) {
-      dwUnitGUID = -1;
-      eUnitType = UNIT_COUNT;
-    } else {
-      dwUnitGUID = pUnit->nUnitGUID;
-      eUnitType = pUnit->eUnitType;
-    }
-
-    D2StatListExStrc* pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, nExpireFrame, eUnitType, dwUnitGUID);
+    D2StatListExStrc* pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, nExpireFrame, !pUnit ? UNIT_COUNT : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID);
     D2Common::Stats::StatsEx::SetState(pStatsEx, STATE_sync_warped);
     D2Common::Stats::StatsEx::STATLIST_SetExpireFunction(pStatsEx, PLRMODES_StatExpireCallback_ClearState);
     D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatsEx, 1);
