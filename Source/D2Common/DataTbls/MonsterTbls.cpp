@@ -1626,25 +1626,21 @@ D2HirelingTxt * __stdcall GetHirelingEntryByNameId(BOOL bIsExpansion, uint16_t n
 }
 
 D2HirelingTxt * __stdcall GetHirelingEntryByClassId(BOOL bIsExpansion, int32_t nClassId, D2HirelingTxt * pPrevEntry) {
-    intptr_t nIndex = 0;
+    D2HirelingTxt* pHireling = nullptr;
+    uint16_t wVersion = bIsExpansion ? 100 : 0;
+    int nStart = 0;
     if (pPrevEntry) {
-      nIndex = ((intptr_t)pPrevEntry - (intptr_t)sgtDataTable.pTxtHireling) / 0x118 + 1;
+      nStart = pPrevEntry - sgtDataTable.pTxtHireling + 1;
     }
-    if (nIndex < sgtDataTable.nTxtHirelingSize) {
-      D2HirelingTxt* pEntry;
-      pEntry = sgtDataTable.pTxtHireling + nIndex;
-      while (pEntry->classId != nClassId || pEntry->version != (bIsExpansion ? 100 : 0)) {
-        nIndex++;
-        pEntry++;
-        if (nIndex >= sgtDataTable.nTxtHirelingSize) {
-          return nullptr;
-        }
+
+    for (int i = nStart; i < sgtDataTable.nTxtHirelingSize; i++) {
+      if (sgtDataTable.pTxtHireling[i].classId == nClassId && sgtDataTable.pTxtHireling[i].version == wVersion) {
+        pHireling = &sgtDataTable.pTxtHireling[i];
+        break;
       }
-
-      return sgtDataTable.pTxtHireling + nIndex;
     }
 
-    return nullptr;
+    return pHireling;
 }
 
 D2HirelingTxt * __stdcall GetHirelingEntry(int32_t bIsExpansion, int32_t nNpcClassId, int32_t nDifficulty, D2HirelingTxt * pPrevEntry) {
