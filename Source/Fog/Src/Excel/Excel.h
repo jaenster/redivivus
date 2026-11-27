@@ -79,4 +79,9 @@ int __fastcall FOG_ParseTxtLink(struct D2TxtLinkStrc * pTxtLink, char * szText);
 #endif // D2_MODULE_Fog
 // 1 internal function (defined in .cpp)
 
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 002f268e
+void __stdcall TXT_SwapTableRecords(const void * pFieldSizes, void * pData, int32_t nRows, int32_t nRecordSize);
+#endif
+
 } // namespace Fog::Src::Excel

@@ -1377,7 +1377,9 @@ struct D2ExcelLinkEntryStrc {
 static_assert(sizeof(D2ExcelLinkEntryStrc) == 8, "the link entries are 8 bytes");
 
 // 1.14d mac: 002f268e
-void EXCEL_WalkLinkTable(int* pEntry) {
+void __stdcall TXT_SwapTableRecords(const void * pFieldSizes, void * pData, int32_t nRows, int32_t nRecordSize) {
+    // The binary only walks the field-size table (8-byte entries, ended by a zero size).
+    const int* pEntry = (const int*)pFieldSizes;
     if (*pEntry) {
       do {
         pEntry += 2;
