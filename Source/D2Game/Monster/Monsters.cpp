@@ -1087,50 +1087,45 @@ void __thiscall MONSTER_RollAndAssignUMods(D2UnitStrc * pThis, ::SGAMEDATA * pGa
 
 // Copies transferable MonUMod enchantments from pSrcUnit to pDstUnit's MonUModList. If bAppend is false, finds the first empty slot in the destination list; if true, starts at slot 0. Only copies entries where the MonUModTxt xfer flag is set. Silently exits if either unit is not a valid monster with unit data. Used when spawning minions to inherit boss enchantments.
 static void __stdcall MONSTER_TransferEnchantments(D2UnitStrc * pSrcUnit, BOOL bAppend, D2UnitStrc * pDstUnit) {
-    uint8_t* pSrcEnchants;
-    uint8_t* nDstOffset;
-    uint8_t* pDstSlot;
-    uint8_t byUmodId;
-    if (!pSrcUnit || pSrcUnit->eUnitType != UNIT_MONSTER || !pSrcUnit->pUnitData.pUnitDataMonster) {
-      pSrcEnchants = 0;
-    } else {
-      pSrcEnchants = pSrcUnit->pUnitData.pUnitDataMonster->MonUModList;
-    }
-    if (!pDstUnit || pDstUnit->eUnitType != UNIT_MONSTER || !pDstUnit->pUnitData.pUnitDataMonster) {
-      nDstOffset = 0;
-    } else {
-      nDstOffset = pDstUnit->pUnitData.pUnitDataMonster->MonUModList;
-    }
-    if (!(pSrcEnchants && nDstOffset)) {
+    D2UnitDataMonsterStrc* pSrcData = GetMonsterDataInline(pSrcUnit);
+    uint8_t* pSrcEnchants = !pSrcData ? nullptr : pSrcData->MonUModList;
+    D2UnitDataMonsterStrc* pDstData = GetMonsterDataInline(pDstUnit);
+    uint8_t* pDstEnchants = !pDstData ? nullptr : pDstData->MonUModList;
+    if (!pSrcEnchants || !pDstEnchants) {
       return;
     }
 
-    int nSlot;
-    nSlot = 0;
+    int nSlot = 0;
     if (!bAppend) {
-      nSlot = 0;
-      do {
-        if (!nDstOffset[nSlot]) {
+      for (int i = 0; i < 9; i++) {
+        if (!pDstEnchants[i]) {
+          nSlot = i;
           goto copy_xfer_umods;
         }
-
-        nSlot++;
-      } while (nSlot < 9);
+      }
 
       nSlot = 9;
     }
 
     copy_xfer_umods:
-    pDstSlot = nDstOffset + nSlot;
-    D2DataTableTxtStrc* pDataTable = D2Common::ITEMS::Items::sgptDataTable;
-    for (; nSlot < 9 && (byUmodId = *pSrcEnchants , byUmodId != 0) && (int)(uint32_t)byUmodId < pDataTable->nTxtMonUmodSize && pDataTable->pTxtMonUmod + byUmodId; pSrcEnchants++) {
-      if (pDataTable->pTxtMonUmod[byUmodId].xfer != '\0') {
-        *pDstSlot = byUmodId;
-        pDstSlot++;
-        pDataTable = D2Common::ITEMS::Items::sgptDataTable;
+    pDstEnchants += nSlot;
+    for (; nSlot < 9; nSlot++) {
+      uint8_t nUModId = *pSrcEnchants;
+      if (!nUModId || nUModId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonUmodSize) {
+        break;
       }
 
-      nSlot++;
+      D2MonUModTxt* pUModTxt = &D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod[nUModId];
+      if (!pUModTxt) {
+        break;
+      }
+
+      if (pUModTxt->xfer) {
+        *pDstEnchants = nUModId;
+        pDstEnchants++;
+      }
+
+      pSrcEnchants++;
     }
 }
 
