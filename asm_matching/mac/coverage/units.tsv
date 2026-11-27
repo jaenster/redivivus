@@ -52,7 +52,16 @@ lo	hi	kind	class	file	redivivus	evidence
 000371f9	00039fdf	fixed	third-party	3rdParty/zlib/?	-	zlib 1.2.8 (version string, "invalid distance code"), pairs with Windows Storm::_3rdparty::zlib
 00039fdf	0003a696	fixed	third-party	3rdParty/blast/blast.c	-	PKWare DCL decoder blast.c (Mark Adler): blast, blast_construct, blast_bits, blast_decode
 0003a696	0003e30a	anchors	blizzard-mac	StormMac/Storm Mac/SOURCE/?		SReg plus its Mac backend, __FILE__ SRegMac.mm; stpl.h template instances
-0019a59a	0019f900	anchors	blizzard-mac	MacSpecific/Source/Mac Shell/?		Mac shell, __FILE__ GameSetup.cpp, D2FlamingLogo.cpp; the Baal AI starts at 0019f926
+0019a59a	0019b290	fixed	blizzard-mac	MacSpecific/Source/Mac Shell/?	Source/MacSpecific/Source/MacShell/unknown_startup.cpp	Source/MacSpecific/README.md: defines 005c865c/005c8660/005c8a30 (direct), ends with its file-local tokenizer, padding to 0019b290
+0019b290	0019bbe8	fixed	blizzard-mac	MacSpecific/Source/Mac Shell/?	Source/MacSpecific/Source/MacShell/unknown_input.cpp	Source/MacSpecific/README.md: padding on both sides, statics 00536c28..3d
+0019bbe8	0019bed3	fixed	blizzard-mac	MacSpecific/Source/Mac Shell/?	Source/MacSpecific/Source/MacShell/unknown_app.cpp	Source/MacSpecific/README.md: padding to 0019bbe8, stores 005c8a38 directly, its one-liners called out of line
+0019bed3	0019c7e4	fixed	blizzard-mac	MacSpecific/Source/Mac Shell/GameSetup.cpp		__FILE__ 0031a4da in GAMESETUP_Alloc/Free; FUN_0019bed3 takes their addresses directly and calls MAC_GetDefaultDisplayMode out of line (Source/MacSpecific/README.md)
+0019c7e4	0019cf88	fixed	blizzard-mac	MacSpecific/Source/Mac Shell/?	Source/MacSpecific/Source/MacShell/unknown_display.cpp	Source/MacSpecific/README.md: padding on both sides, defines 003b8d7c, 005c8a38 through a non-lazy pointer
+0019cf88	0019dd07	fixed	blizzard-mac	MacSpecific/Source/Mac Shell/?	Source/MacSpecific/Source/MacShell/unknown_main.cpp	Source/MacSpecific/README.md: padding to 0019cf88, its file-local functions close it at 0019dcd4
+0019dd07	0019e8a1	fixed	blizzard-mac	MacSpecific/Source/Mac Shell/?	Source/MacSpecific/Source/MacShell/unknown_tsm.cpp	Source/MacSpecific/README.md: after unknown_main.cpp's last file-local function; 003b8d84..8c, 00536ca8..cf0
+0019e8a1	0019f18a	fixed	shared	?	-	Game/Main.cpp: MISC_InitD2IniAndIgnorelist (Windows 004059a0, the parse inlined; Main.cpp's switch table 003b8d90) and ApplicationMain
+0019f18a	0019f2b6	fixed	blizzard-mac	MacSpecific/Source/Mac Shell/?	Source/MacSpecific/Source/MacShell/unknown_util.cpp	Source/MacSpecific/README.md: between Main.cpp and the logo, no file named
+0019f2b6	0019f900	fixed	blizzard-mac	MacSpecific/Source/Mac Shell/D2FlamingLogo.cpp		__FILE__ 0031a9d3 in FLAMINGLOGO_Init/Shutdown; the Baal AI starts at 0019f900
 0019ebbe		override	shared	?	-	ApplicationMain: paired with Windows 00405c30; the Mac calls are D2_OS_MAC blocks in the shared body
 002b0e04	002b1888	anchors	blizzard-mac	MacSpecific/Source/CD2Textures/?		__FILE__ CD2Textures.cpp in 4 functions
 002b1888	002b78f4	anchors	shared	?		D2gfx on the Mac: software tile drawers, the renderer dispatchers with Mac slots 11-13 and 16-21, MACGFX_*, MACSEC_*

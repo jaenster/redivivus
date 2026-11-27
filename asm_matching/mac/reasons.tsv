@@ -419,7 +419,6 @@ addr	name	reason_class	detail
 0019e2fb	MAC_ConvertTextToUnicode	stack-layout	same instructions; frame size or local offsets differ
 0019e432	FUN_0019e432	pic-ref	instruction-identical; the compare resolves the four function-local statics and their guards from the orig bss tags, ours by local symbols
 0019e764	MAC_ConvertUnicodeToText	stack-layout	same instructions; frame size or local offsets differ
-0019e8a1	MAC_ParseCommandLine	sched	same callees and 216 vs 217 insns; the g_aMacSwitches lookup bound (0x100) and the cmp 4 separator test are scheduled differently and the epilogue pops eax
 0019f18a	FUN_0019f18a	sched	same instructions in a different order
 0019f2b6	FLAMINGLOGO_Init	regalloc	re-derived (switch on the kind, mask table not static so its read stays before SMemAlloc); only left: orig keeps the 0/1 kind in esi and checks the Carbon range as lea esi+2/add -2, ours materialises or esi,2 and indexes the mask table with it. cmp.ts also leaves [pic + 4*idx + disp] table loads unnormalised (treats them as a jump table without a bound cmp), so this cannot read SAME until cmp.ts handles scaled PIC indices
 0019f61c	FLAMINGLOGO_DrawFrame	unverified-ref	4 reference(s) only one side can resolve; every other instruction identical
