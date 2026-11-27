@@ -76,6 +76,19 @@ list(FILTER D2_MAC_SHARED_SOURCES EXCLUDE REGEX "/Source/(D2gfx|D2Hell)/Mac/")
 # only duplicate StormMac's API against Win32 calls the Mac layer does not have.
 list(FILTER D2_MAC_SHARED_SOURCES EXCLUDE REGEX
     "/Source/Storm/(WindowHandle|Source/(SBMP|SCMD|SErr|SFile|SLog|SMem|SReg|SSignature|SSTR))\\.cpp$")
+# StormMac/SOURCE also holds the Mac binary's SBig.cpp, SCOMP.CPP and SEVT.CPP, and the binary has one
+# copy of each: its __FILE__ strings are ".../StormMac/Storm Mac/SOURCE/SBig.cpp" (SBigNew), "SCOMP.CPP" and
+# "SEVT.CPP", no Storm/Source path, and their functions are StormMac's (0000a629..0000bf46 SBig,
+# 0000eb42.. SCOMP, ..00011f70 SEVT; asm_matching/mac/coverage.tsv). The same-named Source/Storm units are the
+# Windows build's. StormRoot.cpp's one function, SMsgBreakHandlerChain, is StormMac's SMSG.cpp (00018cdb).
+# Storm's third-party code: the Mac SCOMP.CPP decompresses PKWARE implode with blast.c (00039fdf..0003a591),
+# so PKWARE's implode.cpp/explode.cpp are not in the binary; its zlib is inflate only (adler32, crc32,
+# inffast, inflate, inftrees, uncompr, zutil at 000371f9..00039fdf; no deflate, no "deflate" string), so
+# deflate.cpp and trees.cpp are not either.
+list(FILTER D2_MAC_SHARED_SOURCES EXCLUDE REGEX
+    "/Source/Storm/(StormRoot|Source/(SBig|SComp|SEVT))\\.cpp$")
+list(FILTER D2_MAC_SHARED_SOURCES EXCLUDE REGEX
+    "/Source/Storm/3rdparty/(PKWARE/(implode|explode)|zlib/(deflate|trees))\\.cpp$")
 # Not in the 1.14d Mac binary: Lng.cpp is the Windows LNG resource DLL loader (no "LNG File" or
 # "D2.LNG" string, no LoadAcceleratorsA user, anywhere in DiabloII_macho).
 list(FILTER D2_MAC_SHARED_SOURCES EXCLUDE REGEX "/Source/D2Client/Core/Lng\\.cpp$")
