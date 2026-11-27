@@ -53,6 +53,7 @@ bool MACCURSOR_CallGuardProc(bool bFlag);
 
 namespace Bnclient::BnDownload {
 
+// 1.14d mac: 0005272f
 static void __stdcall BNDOWNLOAD_WriteFileWithTimestamp(LPCSTR pThis, LPCVOID pData, DWORD nNumberOfBytesToWrite, FILETIME * pFileTime) {
     DWORD nBytesWritten;
     HANDLE hFile = Fog::Source::SFile::thunk_CreateFileA(pThis, 0x40000000, 0, (LPSECURITY_ATTRIBUTES)0x0, 2, 0x80, (HANDLE)0x0);
@@ -110,6 +111,7 @@ static BOOL __stdcall NET_CopyDllFromArchive(D2ArchiveStrc * pArchive, LPSTR szT
     return pMpqFile;
 }
 
+// 1.14d mac: 000536a3
 void __stdcall BNDOWNLOAD_SetCancelFlag() {
     gbBnetDownloadCancelFlag = 1;
 }
@@ -156,6 +158,7 @@ static DWORD BNDOWNLOAD_GetCachedFileSize(LPCSTR szText, FILETIME * pftCompare) 
     return 0;
 }
 
+// 1.14d mac: 000536d0
 int32_t __fastcall BNDOWNLOAD_PerformCheckRevision(uint32_t * pdwVersionOut, uint32_t * pdwChecksumOut, uint8_t * pbResultOut) {
     // Frame slots -1068..-8 are ONE object: &dwAuthResult is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -298,6 +301,7 @@ void __fastcall BNDOWNLOAD_UpdateProgressPercent(uint32_t dwUnused, int32_t nByt
     gnNetworkSendState = (uint32_t)(nBytesDone * 100) / nTotalSize;
 }
 
+// 1.14d mac: 0005450f
 void __fastcall BNDOWNLOAD_ResetState(uint32_t nResetValue) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00881f64);
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gbBnetFtpFileTransferActive[0] = '\0';
@@ -306,15 +310,18 @@ void __fastcall BNDOWNLOAD_ResetState(uint32_t nResetValue) {
     LeaveCriticalSection(&lpCriticalSection_00881f64);
 }
 
+// 1.14d mac: 00054551
 int __stdcall BNDOWNLOAD_GetProgress() {
     return gnNetworkSendState;
 }
 
+// 1.14d mac: 000547be
 int __fastcall BNDOWNLOAD_SetPatchFilename(char * szText) {
     Storm::Source::SSTR::SStrCopy(lpFileName_00881c58, szText, 0x7fffffff);
     return 1;
 }
 
+// 1.14d mac: 000547f1
 uint32_t __stdcall BNDOWNLOAD_HasPatchFilename() {
     return (uint32_t)(lpFileName_00881c58[0] != '\0');
 }
@@ -823,6 +830,7 @@ done:
 }
 #endif
 
+// 1.14d mac: 00052b80
 uint32_t __stdcall BnetDownloadFile_II(void * lpThreadParam) {
     u_short nPort;
     char* pcToken;
@@ -1061,6 +1069,7 @@ uint32_t __stdcall BnetDownloadFile_II(void * lpThreadParam) {
     return 0;
 }
 
+// 1.14d mac: 0005251f
 void __fastcall BNDOWNLOAD_InitiateFileDownload(int32_t pDownloadCtx, uint32_t dwDownloadFlags, uint32_t eFileType, uint32_t nOpcode, FILETIME * pFileTime, char * szText1, char * szText2) {
     FILETIME ftCacheTime;
     uint32_t nThreadId;
@@ -1127,6 +1136,7 @@ void __fastcall BNDOWNLOAD_InitiateFileDownload(int32_t pDownloadCtx, uint32_t d
 
 // Processes downloaded BNFTP files: version info, cache files, ads, bnserver.ini, and ExtraWork DLLs. Handles extraction, loading, and cleanup.
 // EDX nDownloadFlags: download context +0x22c (file download) or 2 (patch download); not read here.
+// 1.14d mac: 000527c1
 void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownloadFlags, uint32_t eFileType, uint32_t pModTime, LPCSTR szSourcePath, char * szDestPath, char * pPoolMgr, void * nSize, int32_t bDeleteSource, int32_t bIsExtraWork) {
     // Frame slots -4672..-4644 are ONE object: &dwStackPad5 is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -1368,6 +1378,7 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00881f64);
 }
 
+// 1.14d mac: 00054562
 uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pPatchList, uint32_t nSize) {
     FILETIME ftCacheTime;
     FILETIME ftZero;

@@ -108,6 +108,7 @@ char __fastcall D2FILE_VerifyFileSignature(LPCSTR szText) {
 }
 #endif
 
+// 1.14d mac: 002b6584
 BOOL __fastcall CheckIfFileExists(D2PoolManagerStrc * pMemory, char * szFilename, D2MPQFileStrc * * ppFile, BOOL bDontLogError) {
     BOOL bFileExists;
     int32_t hFileHandle = Fog::Source::SFile::ARCHIVE_OpenD2FileWrap(szFilename, ppFile);
@@ -128,6 +129,7 @@ BOOL __fastcall CheckIfFileExists(D2PoolManagerStrc * pMemory, char * szFilename
 
 // Closes an open Storm file (ERRORMANAGER_FCloseFile) and halts on line 0x49 if pFile is null. ECX pMemory is unused; callers pass their pool or 0.
 // Provenance: 1.14d asm 00516e84..00516ea6.
+// 1.14d mac: 002b65dc
 void __fastcall D2FILE_CloseFile(D2PoolManagerStrc * pMemory, D2MPQFileStrc * pFile) {
     if (!pFile) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x49);
@@ -138,6 +140,7 @@ void __fastcall D2FILE_CloseFile(D2PoolManagerStrc * pMemory, D2MPQFileStrc * pF
 }
 
 // Gets a file size from a Storm handle. Returns the size in EAX via its GuardStack tail; D2FILE_AllocAndLoadD2File reads it with MOV ESI,EAX at 005170a0 and uses it as the allocation size. Typed void, that caller allocated from an unassigned register and malloc failed.
+// 1.14d mac: 002b661f
 DWORD __fastcall D2FILE_GetFileSize(D2PoolManagerStrc * pMemory, D2MPQFileStrc * pFile, LPDWORD pFileSizeOut) {
     DWORD dwFileSizeResult;
     char szArchivePath[260];
@@ -156,6 +159,7 @@ DWORD __fastcall D2FILE_GetFileSize(D2PoolManagerStrc * pMemory, D2MPQFileStrc *
     }
 }
 
+// 1.14d mac: 002b66d5
 void __fastcall D2FILE_SeekFile(D2PoolManagerStrc * pMemory, D2MPQFileStrc * pFile, int32_t nDistanceToMove, int * pnNewPos, DWORD dwMoveMethod) {
     DWORD nSeekResult;
     char szArchivePath[260];
@@ -175,6 +179,7 @@ void __fastcall D2FILE_SeekFile(D2PoolManagerStrc * pMemory, D2MPQFileStrc * pFi
 }
 
 // Reads nBytesToRead from an open MPQ file into pBuffer and halts if the handle is null or the read is short. ESI is callee-saved scratch (00516f98 PUSH ESI, 00516f99 MOV ESI,EDX), not an argument. Each halt pushes its __LINE__ (0x87 at 00516fa5, 0x8f at 00516fef, 0x92 at 00517000) and enters the shared tail D2FILE_ReadFile_HaltTail at 00516faa.
+// 1.14d mac: 002b678f
 void __fastcall D2FILE_ReadFile(D2PoolManagerStrc * pMemory, D2MPQFileStrc * pFile, void * pBuffer, uint32_t nBytesToRead) {
     uint32_t nBytesRead;
     char szArchivePath[260];
@@ -215,6 +220,7 @@ uint32_t __fastcall D2FILE_OpenAndReadFile(D2PoolManagerStrc * pMemory, char * s
 }
 
 // @sourcefile .\SRC\Archive.cpp
+// 1.14d mac: 002b6888
 void * __fastcall D2FILE_AllocAndLoadD2File(D2PoolManagerStrc * pMemory, char * szFilename, uint32_t * pSize, char * szFile, int32_t nLine) {
     D2MPQFileStrc* pFile;
     DWORD dwFileSizeHigh;
@@ -384,6 +390,7 @@ D2FogArchiveStrc * __fastcall ARCHIVE_LoadMPQ(char * szMpqFileName, int32_t nZer
 #endif
 
 // @sourcefile .\SRC\Archive.cpp
+// 1.14d mac: 002b6e68
 void __fastcall ARCHIVE_FreeMpqFile(D2FogArchiveStrc * pFogArchive) {
     if (pFogArchive->hArchive) {
       Storm::Source::SFile::SFileCloseArchive(pFogArchive->hArchive);
@@ -393,6 +400,7 @@ void __fastcall ARCHIVE_FreeMpqFile(D2FogArchiveStrc * pFogArchive) {
     D2_FREE_AT(pFogArchive, ".\\SRC\\Archive.cpp", 0x25c);
 }
 
+// 1.14d mac: 002b6f3c
 pfnFaultError __fastcall RegisterExitFunction(pfnFaultError pfnNewCallback) {
     pfnFaultError pfnPrevCallback = g_pfnFaultErrorCallback;
     g_pfnFaultErrorCallback = pfnNewCallback;
@@ -638,6 +646,7 @@ void __fastcall FAULT_RegisterErrorHandler(pfnStormErrorHandler pfnHandler) {
     LeaveCriticalSection(&gcsErrorHandlerList);
 }
 
+// 1.14d mac: 002b6f56
 void __fastcall FAULT_LookupErrorString(uint32_t nErrorCode, char * szText, int32_t nMaxLen) {
     StormFaultHandlerNode* pErrorHandler;
     if (gbFaultHandlerListInitialized) {
@@ -690,6 +699,7 @@ void FAULT_ShowFormattedErrorAndTerminate(uint32_t nErrorCode, ...) {
 }
 #endif
 
+// 1.14d mac: 002b7030
 void FAULT_ShowFormattedErrorWithArgs(uint32_t nErrorCode, ...) {
     va_list __va;
     va_start(__va, nErrorCode);
@@ -822,6 +832,7 @@ BOOL __fastcall D2MEM_CompareBytes(uint8_t * pBuf1, uint8_t * pBuf2, uint32_t nB
     return 0;
 }
 
+// 1.14d mac: 002b6eb6
 int32_t D2MEM_FindLowestSetBit(uint32_t dwMask) {
     if (!dwMask) {
       return 0;
@@ -3125,6 +3136,7 @@ uint32_t __fastcall CRC32_Calculate(uint8_t * pbData, int nLen) {
     return ~uCRC;
 }
 
+// 1.14d mac: 002b7202
 int __fastcall SSTR_StringLength(char * szText) {
     int nLength = 0;
     char cChar = *szText;

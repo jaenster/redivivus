@@ -21,6 +21,7 @@ void __thiscall DEBUG_LogFormattedMessage(void * pThis, char * szMessage) {
     Storm::Source::SLog::SLogWrite(*(uint32_t*)pThis, szMessage);
 }
 
+// 1.14d mac: 0005aacf
 void __fastcall DEBUG_SetLoggingFlag(D2IniConfigStrc * nLoggingFlag) {
     // Static local variables (originally global data)
     static D2IniConfigStrc * g_nDebugLoggingFlag; D2_STATIC_GUARD_BSS(g_nDebugLoggingFlag, "Bnclient::Debug::DEBUG_SetLoggingFlag::g_nDebugLoggingFlag");

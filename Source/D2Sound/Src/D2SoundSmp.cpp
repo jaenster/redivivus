@@ -171,6 +171,7 @@ void __fastcall SOUNDSMP_WriteToBuffer(D2SoundSmpStrc * ppSoundSmp, int nWritePo
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gSoundSmpCs);
 }
 
+// 1.14d mac: 002e8b38
 BOOL __fastcall SOUNDSMP_ClearBuffer(IDirectSoundBuffer * pSoundSmp, DWORD dwWriteOffset, uint32_t nBytesToClear) {
     void* pLockedBuf = 0;
     if (!pSoundSmp) {
@@ -289,6 +290,7 @@ static BOOL __stdcall SOUNDSMP_CreateSoundBuffer(uint32_t nFlags, D2SoundSmpStrc
 #endif
 
 // @sourcefile .\Src\D2SoundSmp.cpp
+// 1.14d mac: 002e8c21
 D2SoundSmpStrc * __fastcall CallSounds(uint32_t nSoundFlags, uint32_t dwSampleParam) {
     g_nSoundSampleParam = dwSampleParam;
     if (nSoundFlags & 2) {
@@ -316,6 +318,7 @@ D2SoundSmpStrc * __fastcall CallSounds(uint32_t nSoundFlags, uint32_t dwSamplePa
     return pSoundSmp;
 }
 
+// 1.14d mac: 002e9163
 BOOL __fastcall SOUNDSMP_LoadWavDataIntoBuffer(D2SoundSmpStrc * ppSoundSmp, int * pWavData, uint32_t nWavDataSize) {
     WAVEFORMATEX waveFormat;
     if (!(ppSoundSmp && ppSoundSmp->pDSBuffer && pWavData && nWavDataSize)) {
@@ -366,6 +369,7 @@ BOOL __fastcall SOUNDSMP_Play(D2SoundSmpStrc * ppSoundSmp) {
     return 1;
 }
 
+// 1.14d mac: 002e937a
 int32_t __fastcall SOUNDSMP_IsPlaying(D2SoundSmpStrc * pSound) {
     if (pSound && pSound->pDSBuffer) {
       return pSound->bIsPlaying;
@@ -465,6 +469,7 @@ void __thiscall SOUNDSMP_Set3DPosition(D2SoundSmpStrc * pThis, float nSoundHandl
     exit(-1);
 }
 
+// 1.14d mac: 002e94ae
 uint32_t __fastcall SOUNDSMP_GetStreamProgress(D2SoundSmpStrc * pSound) {
     BOOL bStreamInfoOk;
     uint32_t nStreamSizeBytes;
@@ -490,6 +495,7 @@ uint32_t __fastcall SOUNDSMP_GetStreamProgress(D2SoundSmpStrc * pSound) {
     return 0;
 }
 
+// 1.14d mac: 002e9536
 void __fastcall SOUNDSMP_SetFrequency(D2SoundSmpStrc * pSound, BOOL bLoop) {
     if (!pSound) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x32f);
@@ -499,6 +505,7 @@ void __fastcall SOUNDSMP_SetFrequency(D2SoundSmpStrc * pSound, BOOL bLoop) {
     pSound->bLooping = bLoop;
 }
 
+// 1.14d mac: 002e9579
 void __fastcall SOUNDSMP_SetMinDistance(D2SoundSmpStrc * pSound, uint32_t nMinBufSize) {
     if (!pSound) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x33a);
@@ -569,6 +576,7 @@ void __fastcall SOUNDSMP_SetEaxRoomLevel(D2SoundSmpStrc * pSoundSmp, float fPara
 #endif
 }
 
+// 1.14d mac: 002e95f4
 uint32_t __fastcall SOUNDSMP_IsStreaming(D2SoundSmpStrc * pSound) {
     if (!pSound) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x37a);
@@ -578,6 +586,7 @@ uint32_t __fastcall SOUNDSMP_IsStreaming(D2SoundSmpStrc * pSound) {
     return (uint32_t)(pSound->pStreamFile != 0);
 }
 
+// 1.14d mac: 002e9778
 void __fastcall SOUNDSMP_StartFade(D2SoundSmpStrc * pSoundSmp, uint32_t dwTargetVolume, int32_t nFadeDuration) {
     if (!pSoundSmp) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x39e);
@@ -627,11 +636,13 @@ void __fastcall SOUNDSMP_SetGlobalVolume(uint32_t nVolume) {
     exit(-1);
 }
 
+// 1.14d mac: 002e96c6
 uint32_t __stdcall SOUNDSMP_GetEffectiveVolume() {
     IDirectSound* dwSpeakerFlag = SOUND_GetDirectSoundDevice();
     return dwSpeakerFlag ? gnSoundGlobalVolume : 0;
 }
 
+// 1.14d mac: 002e97f7
 BOOL __fastcall SOUNDSMP_OpenAndStreamFile(struct D2SoundSmpStrc * pSoundSmp, char * szText, int32_t nLooping, int32_t bIsLooping) {
     int32_t nLine;
     D2MPQFileStrc* pArchive;
@@ -660,6 +671,7 @@ BOOL __fastcall SOUNDSMP_OpenAndStreamFile(struct D2SoundSmpStrc * pSoundSmp, ch
     return 1;
 }
 
+// 1.14d mac: 002e92f2
 void __fastcall SOUNDSMP_CancelStream(D2SoundSmpStrc * ppnParam) {
     if (ppnParam && ppnParam->pDSBuffer) {
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gSoundSmpCs);
@@ -679,6 +691,7 @@ void __fastcall SOUNDSMP_CancelStream(D2SoundSmpStrc * ppnParam) {
     exit(-1);
 }
 
+// 1.14d mac: 002e8ac3
 void __fastcall SOUNDSMP_Stop(D2SoundSmpStrc * ppnParam) {
     if (ppnParam && ppnParam->pDSBuffer) {
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gSoundSmpCs);
@@ -696,6 +709,7 @@ void __fastcall SOUNDSMP_Stop(D2SoundSmpStrc * ppnParam) {
     exit(-1);
 }
 
+// 1.14d mac: 002e9639
 void __fastcall CleanupSoundBuffer(uint32_t nFadeTimeMs) {
     IDirectSound* dwSpeakerFlag = SOUND_GetDirectSoundDevice();
     if (!dwSpeakerFlag) {
@@ -787,6 +801,7 @@ static void SOUNDSMP_ReleaseInterfaces(D2SoundSmpStrc * ppnParam) {
 }
 
 // @sourcefile .\Src\D2SoundSmp.cpp
+// 1.14d mac: 002e8db5
 void __fastcall SOUNDSMP_Destroy(D2SoundSmpStrc * pSoundSmp) {
     if (!pSoundSmp) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x211);
@@ -858,6 +873,7 @@ void __fastcall SOUNDSMP_Reset(D2SoundSmpStrc * pSoundSmp) {
 }
 
 // lpStartAddress parameter of CreateThread
+// 1.14d mac: 002e8547
 DWORD __stdcall D2SOUNDSMP_SoundUpdateThreadProc(void * lpThreadParam) {
     // Static local variables (originally global data)
     static uint32_t gbWindowIsMinimized; D2_STATIC_GUARD_BSS(gbWindowIsMinimized, "D2Sound::Src::D2SoundSmp::D2SOUNDSMP_SoundUpdateThreadProc::gbWindowIsMinimized");
@@ -1007,6 +1023,7 @@ DWORD __stdcall D2SOUNDSMP_SoundUpdateThreadProc(void * lpThreadParam) {
     } while (true);
 }
 
+// 1.14d mac: 002e849a
 void __stdcall SOUNDSMP_CreateSoundThread() {
     DWORD dwThreadId;
     if (ghSoundThread) {
@@ -1100,6 +1117,7 @@ static int * __stdcall SOUNDSMP_FindWavChunk(uint32_t * pRemainingSize, uint32_t
     return nullptr;
 }
 
+// 1.14d mac: 002e9d7d
 void __fastcall SOUNDSMP_InitWaveFormat(WAVEFORMATEX * pWaveFormat, WORD nChannels) {
     memset(pWaveFormat, 0, sizeof(*pWaveFormat));
     pWaveFormat->nBlockAlign = nChannels * 2;

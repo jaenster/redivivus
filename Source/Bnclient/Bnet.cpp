@@ -13,6 +13,7 @@ static _RTL_CRITICAL_SECTION lpCriticalSection_00881860 = {}; D2_STATIC_GUARD(lp
 
 namespace Bnclient::Bnet {
 
+// 1.14d mac: 0005ab96
 int BNET_LogIndent(int32_t nIndentAction, int32_t nDelta) {
     int nResult = 0;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00881860);
@@ -40,6 +41,7 @@ int BNET_LogIndent(int32_t nIndentAction, int32_t nDelta) {
     return nResult;
 }
 
+// 1.14d mac: 0005aae3
 void BnetLog_WriteLine(char * Format, ...) {
     va_list __va;
     va_start(__va, Format);

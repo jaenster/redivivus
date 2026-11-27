@@ -52,17 +52,20 @@ uint32_t MAINMENU_ShowBnetConnectionError() {
     return 1;
 }
 
+// 1.14d mac: 002c374a
 BOOL __stdcall UIMENU_ToggleHardcoreMode(D2ControlMsg * pControlMsg) {
     MainMenus::D2IniData_launcher->eCTEMP_eD2PlayerStatus ^= PLAYERSTATUS_Hardcore;
     return 1;
 }
 
+// 1.14d mac: 002c2aa8
 BOOL __stdcall UIMENU_DisconnectAndReturnToMainMenu(D2ControlMsg * pControlMsg) {
     Launcher::LAUNCHER_DisconnectFromBnet();
     MainMenus::UIMENU_MainMenu();
     return 1;
 }
 
+// 1.14d mac: 002c3bf2
 BOOL __stdcall MAINMENU_ConnectViaTCPIPAndSelectChar(D2ControlMsg * pControlMsg) {
     char cCurChar;
     MainMenus::D2IniData_launcher->nGAMETYPE = GAMETYPE_LAN_HOST;

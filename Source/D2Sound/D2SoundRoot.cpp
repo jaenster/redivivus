@@ -61,6 +61,7 @@ DWORD __stdcall SOUND_GetLanguageCode() {
     return LanguageCode;
 }
 
+// 1.14d mac: 002e76ab
 IDirectSound * __stdcall SOUND_GetDirectSoundDevice() {
     return gpDirectSound;
 }
@@ -75,6 +76,7 @@ DWORD __stdcall SOUND_GetPrimaryBufferModeFlag() {
 #endif
 }
 
+// 1.14d mac: 002e76c3
 DWORD __stdcall SOUND_GetSound3DFlag() {
     return gbSound3DEnabled;
 }
@@ -106,6 +108,7 @@ DWORD __stdcall SOUND_GetHardwareAccelerationFlag() {
 }
 
 // Toggles EAX environment preset. Sets gpDirectSoundEAXInterface property based on param (1=generic, else=custom -10000 volume). Calls IDirectSound3DListener::Set() with EAX property GUIDs. Returns success flag.
+// 1.14d mac: 002e76fe
 BOOL __fastcall SOUND_ToggleEAXEnvironmentPreset(int nPresetType) {
     HRESULT hResult;
     if (!Sound::gpDirectSoundEAXInterface) {
@@ -134,6 +137,7 @@ BOOL __fastcall SOUND_ToggleEAXEnvironmentPreset(int nPresetType) {
     return 1;
 }
 
+// 1.14d mac: 002e7bbd
 char * __fastcall SOUND_GetDirectSoundErrorString(int hResult) {
     switch (hResult) {
       case -0x7787fff6:

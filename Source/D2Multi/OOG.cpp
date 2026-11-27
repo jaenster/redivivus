@@ -15,6 +15,7 @@ int __stdcall OOGUTIL_PrintCallback_SetFlag(D2ControlMsg * pControlMsg) {
     return 1;
 }
 
+// 1.14d mac: 002cfbac
 int __stdcall OOGUTIL_DrawCallback_SetModeAndClearMsgLoop(D2ControlMsg * pControlMsg) {
     gnOpenBNetMode = 4;
     D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();

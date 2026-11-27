@@ -12,6 +12,7 @@ namespace Bnclient::SHA {
 
 // Register params: pHashOut (ECX): uint8_t *, pWideStr (EDX): char *
 // @sourcefile .\SHA.cpp
+// 1.14d mac: 002f8a02
 uint8_t * __fastcall SHA1_HashWideString(uint8_t * pHashOut, char * pWideStr, int32_t nLength) {
     uint32_t i;
     uint8_t* pDstByte;
@@ -80,6 +81,7 @@ uint8_t * __fastcall SHA1_HashWideString(uint8_t * pHashOut, char * pWideStr, in
     return pResult;
 }
 
+// 1.14d mac: 002f744e
 BigData * __fastcall SHA1_BigIntFromUnsigned(uint32_t nValue) {
     BigData* pNewBigInt;
     Storm::Source::SBig::SBigNew(&pNewBigInt);
@@ -87,6 +89,7 @@ BigData * __fastcall SHA1_BigIntFromUnsigned(uint32_t nValue) {
     return pNewBigInt;
 }
 
+// 1.14d mac: 002f7479
 BigData * __fastcall SHA1_FromBigIntBytes(void * pData, uint32_t nByteCount) {
     BigData* pNewBigInt;
     Storm::Source::SBig::SBigNew(&pNewBigInt);
@@ -94,6 +97,7 @@ BigData * __fastcall SHA1_FromBigIntBytes(void * pData, uint32_t nByteCount) {
     return pNewBigInt;
 }
 
+// 1.14d mac: 002f74ab
 uint32_t __fastcall SHA1_ToBigIntBytes(BigData * pBigNum, uint8_t * pOutBuf, uint32_t nBufSize) {
     uint32_t nWritten;
     Storm::Source::SBig::SBigToBinaryBuffer(pBigNum, pOutBuf, nBufSize, &nWritten);
@@ -104,6 +108,7 @@ uint32_t __fastcall SHA1_ToBigIntBytes(BigData * pBigNum, uint8_t * pOutBuf, uin
     return nWritten;
 }
 
+// 1.14d mac: 002f74f9
 int32_t __fastcall SHA1_CompareBigInt(BigData * pBigA, BigData * pBigB) {
     int32_t nCmpResult = Storm::Source::SBig::SBIG_CompareBigBuffers_ForSha1(pBigA, pBigB);
     return nCmpResult;
@@ -111,6 +116,7 @@ int32_t __fastcall SHA1_CompareBigInt(BigData * pBigA, BigData * pBigB) {
 
 // Compares pBigInt with the unsigned dwValue: builds a temporary BigData from dwValue (SBigNew + SBigFromUnsigned), returns SBIG_CompareBigBuffers_ForSha1(pBigInt, tmp) and frees the temporary.
 // Provenance: 1.14d asm 0052a2f0.
+// 1.14d mac: 002f7502
 int32_t __fastcall SHA1_BigIntCompareValue(BigData * pBigInt, uint32_t dwValue) {
     BigData* pTmpBigInt;
     Storm::Source::SBig::SBigNew(&pTmpBigInt);
@@ -126,6 +132,7 @@ void __fastcall SHA1_BigIntShl(BigData * pResult, BigData * pBigSrc, uint32_t nS
     Storm::Source::SBig::SBigShl(pResult, pBigSrc, nShiftBits);
 }
 
+// 1.14d mac: 002f754d
 void __fastcall SHA1_BigIntAdd(BigData * pResult, BigData * pBigA, BigData * pBigB) {
     Storm::Source::SBig::SBigAdd(pResult, pBigA, pBigB);
 }
@@ -138,6 +145,7 @@ void __fastcall SHA1_BigIntAddValue(BigData * pResult, BigData * pBigA, uint32_t
     Storm::Source::SBig::SBigDel(pTmpBigInt);
 }
 
+// 1.14d mac: 002f7556
 void __fastcall SHA1_BigIntSub(BigData * pResult, BigData * pBigIntA, BigData * pBigIntB) {
     Storm::Source::SBig::SBigSub(pResult, pBigIntA, pBigIntB);
 }
@@ -154,6 +162,7 @@ void __fastcall SHA1_BigIntMul(BigData * pResult, BigData * pBigA, BigData * pBi
     Storm::Source::SBig::SBigMul(pResult, pBigA, pBigB);
 }
 
+// 1.14d mac: 002f755f
 void __fastcall SHA1_BigIntMulValue(BigData * pResult, BigData * pBigA, uint32_t dwValue) {
     BigData* pTmpBigInt;
     Storm::Source::SBig::SBigNew(&pTmpBigInt);
@@ -194,6 +203,7 @@ void __fastcall SHA1_BigIntMulMod(BigData * pResult, BigData * pBigA, BigData * 
     Storm::Source::SBig::SBigMod(pResult, pResult, pModulus);
 }
 
+// 1.14d mac: 002f75ab
 void __fastcall SHA1_BigIntPowMod(BigData * pResult, BigData * pBase, BigData * pExponent, BigData * pModulus) {
     Storm::Source::SBig::SBigPowMod(pResult, pBase, pExponent, pModulus);
 }
@@ -210,6 +220,7 @@ void __fastcall Unreferenced_0052a5f0(void * pContext) {
     Storm::Source::SBig::SBigIsPrime((BigData*)pContext);
 }
 
+// 1.14d mac: 002f75b4
 void __fastcall SHA1_BigIntFree(BigData * pBigData) {
     Storm::Source::SBig::SBigDel(pBigData);
 }

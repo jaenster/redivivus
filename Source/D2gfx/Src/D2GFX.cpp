@@ -113,11 +113,13 @@ void __stdcall RENDERING_ToggleCurrentEngineFlags() {
 }
 
 // JMP thunk
+// 1.14d mac: 000dc320
 BOOL __stdcall D2GFX_GetPerspectiveCapable_ForPerspectiveItem() {
     return ::D2gfx::D2GFX::D2GFX_GetPerspectiveCapable();
 }
 
 // JMP thunk
+// 1.14d mac: 000dc40a
 BOOL __stdcall D2GFX_CheckGamma_ForGammaItem() {
     return ::D2gfx::D2GFX::D2GFX_CheckGamma();
 }
@@ -189,10 +191,12 @@ eD2RendererMode __stdcall D2GFX_GetWindowed() {
     return bD2GFX_Windowed;
 }
 
+// 1.14d mac: 002b4d71
 DWORD __stdcall D2GFX_GetResolutionMode() {
     return gnD2GFXResolutionMode;
 }
 
+// 1.14d mac: 002b4d82
 BOOL __stdcall D2GFX_GetPerspectiveCapable() {
     return D2GFXRenderedData.bPerspectiveCapable;
 }
@@ -201,6 +205,7 @@ BOOL __stdcall D2GFX_GetFixAspect() {
     return bAspect;
 }
 
+// 1.14d mac: 002b4b51
 void __stdcall D2GFX_SetPerspectiveCapable(BOOL bResult) {
     if ((int)eRendererMode < 4) {
       bResult = FALSE;
@@ -213,10 +218,12 @@ uint32_t __stdcall IsWindowMode() {
     return (uint32_t)((int)eRendererMode >= 4);
 }
 
+// 1.14d mac: 002b4dae
 uint32_t __stdcall D2GFX_IsPerspectiveActive() {
     return D2GFXRenderedData.bPerspectiveCapable ? D2GFXRenderedData.bPerspectiveEnabled : 0;
 }
 
+// 1.14d mac: 002b4cf8
 void __stdcall D2GFX_SetPerspective(BOOL bPerspective) {
     D2GFXRenderedData.bPerspectiveEnabled = bPerspective;
 }
@@ -225,18 +232,22 @@ BOOL __stdcall D2GFX_GetBlendedShadows() {
     return D2GFXRenderedData.bBlendedShadows;
 }
 
+// 1.14d mac: 002b4dc8
 void __stdcall D2GFX_SetBlendedShadows(BOOL bResult) {
     D2GFXRenderedData.bBlendedShadows = bResult;
 }
 
+// 1.14d mac: 002b4e11
 BOOL __stdcall D2GFX_GetLowQuality() {
     return D2GFXRenderedData.bLowQuality;
 }
 
+// 1.14d mac: 002b4dfd
 void __stdcall D2GFX_SetLowQuality(BOOL bResult) {
     D2GFXRenderedData.bLowQuality = bResult;
 }
 
+// 1.14d mac: 002b4e22
 void __stdcall D2GFX_SetGamma(DWORD dwGamma) {
     if (dwGamma) {
       D2GFXRenderedData.nGamma = dwGamma;
@@ -245,15 +256,18 @@ void __stdcall D2GFX_SetGamma(DWORD dwGamma) {
     RENDERER_CurrentRenderedFunctions->nfpSetGamma(D2GFXRenderedData.nGamma);
 }
 
+// 1.14d mac: 002b4e54
 BOOL __stdcall D2GFX_CheckGamma() {
     int bResult = RENDERER_CurrentRenderedFunctions->nfpCheckGamma();
     return bResult;
 }
 
+// 1.14d mac: 002b4e69
 void __stdcall D2GFX_EnableVSync() {
     D2GFXRenderedData.bVSync = 1;
 }
 
+// 1.14d mac: 002b4e7e
 void __stdcall D2GFX_DisableFixAspect() {
     bAspect = 0;
 }
@@ -474,6 +488,7 @@ void __stdcall ShowOSCursor() {
 }
 #endif
 
+// 1.14d mac: 002b56e7
 void __stdcall D2GFX_GetWindowSizeByResolutionMode(int32_t nResolutionMode, int * nWidth, int * nHeight) {
     int32_t nLine;
     switch (nResolutionMode) {
@@ -944,6 +959,7 @@ void __stdcall D2GFX_ClearCaches() {
     RENDERER_CurrentRenderedFunctions->nfpClearCaches();
 }
 
+// 1.14d mac: 002b5e01
 BOOL __stdcall D2GFX_BeginCutScene() {
     if (!RENDERER_CurrentRenderedFunctions) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2ad);
@@ -954,6 +970,7 @@ BOOL __stdcall D2GFX_BeginCutScene() {
     return BVar1;
 }
 
+// 1.14d mac: 002b5ed7
 void __stdcall D2GFX_PlayCutScene(char * szFile, int32_t nResolution, void * pfFrame) {
     if (!RENDERER_CurrentRenderedFunctions) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2dc);
@@ -982,6 +999,7 @@ void __stdcall D2GFX_DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pBuf
     RENDERER_CurrentRenderedFunctions->nfpDecodeSmacker(szSmacker, pBuffer, nVersion);
 }
 
+// 1.14d mac: 002b5fa9
 void __stdcall D2GFX_PlayerSmacker(D2SmackerContextStrc * pContext) {
     if (!RENDERER_CurrentRenderedFunctions) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x30e);
@@ -1152,6 +1170,7 @@ void __stdcall EndCutScene(int32_t nResolution) {
 
 // Start render frame. Dispatches to backend (Glide/D3D/OpenGL/Rave) via vtable.
 // bClear=1 clears backbuffer. RGB sets clear color (level-specific darkness).
+// 1.14d mac: 002b4ebc
 BOOL __stdcall D2GFX_BeginScene(BOOL bClear, DWORD nRed, DWORD nGreen, DWORD nBlue) {
     BOOL bResult = RENDERER_CurrentRenderedFunctions->nfpBeginScene(bClear, (uint8_t)nRed, (uint8_t)nGreen, (uint8_t)nBlue);
     return bResult;
@@ -1163,6 +1182,7 @@ double __stdcall D2GFX_GetPerformanceFrequency() {
     return (double)liFrequency.QuadPart;
 }
 
+// 1.14d mac: 002b4fe1
 double D2GFX_CalculateGammaRamp() {
     // Static local variables (originally global data)
     // also labelled: lpPerformanceCount_007c9350, gdwPerfCounterInitHigh
@@ -1185,6 +1205,7 @@ static LARGE_INTEGER gliPerfCounterStart = {}; D2_STATIC_GUARD(gliPerfCounterSta
 
 // End render frame. Dispatches EndScene1/2 to backend, then Sleep() for frame pacing.
 // 5ms frame budget enforced - if frame took <5ms, sleeps remainder to throttle FPS.
+// 1.14d mac: 002b4ed3
 BOOL __stdcall D2GFX_EndScene() {
     // Static local variables (originally global data)
     static double gdFrameSleepRemainder = 0; D2_STATIC_GUARD(gdFrameSleepRemainder, "D2gfx::D2GFX::D2GFX_EndScene::gdFrameSleepRemainder");
@@ -1223,6 +1244,7 @@ BOOL __stdcall D2GFX_GetBackBuffer(BYTE * pBuffer) {
     return BVar1;
 }
 
+// 1.14d mac: 002b50a7
 uint32_t __stdcall D2GFX_IsWindowActive() {
     return (uint32_t)((int)eRendererMode >= 4);
 }
@@ -1243,6 +1265,7 @@ void __stdcall D2GFX_DrawSolidSquare(POINT * pPoint, BYTE nSize, BYTE nPaletteIn
     RENDERER_CurrentRenderedFunctions->nfpDrawSolidSquare(pPoint, nSize, nPaletteIndex);
 }
 
+// 1.14d mac: 002b50c2
 void __stdcall D2GFX_DrawSolidRectEx(int32_t nXStart, int32_t nYStart, int32_t nXEnd, int32_t nYEnd, BYTE nColor, DRAWMODE nDrawMode) {
     if (!(nXEnd >= nXStart && nYEnd >= nYStart)) {
       return;
@@ -1251,6 +1274,7 @@ void __stdcall D2GFX_DrawSolidRectEx(int32_t nXStart, int32_t nYStart, int32_t n
     RENDERER_CurrentRenderedFunctions->nfpDrawSolidRectEx(nXStart, nYStart, nXEnd, nYEnd, nColor, nDrawMode);
 }
 
+// 1.14d mac: 002b50f2
 void __stdcall D2GFX_DrawSolidRectAlpha(int32_t nXStart, int32_t nYStart, int32_t nXEnd, int32_t nYEnd, DWORD dwColor, DWORD nAlpha) {
     if (!(nXEnd >= nXStart && nYEnd >= nYStart)) {
       return;
@@ -1263,6 +1287,7 @@ void __stdcall D2GFX_DrawLine(int32_t nXStart, int32_t nYStart, int32_t nXEnd, i
     RENDERER_CurrentRenderedFunctions->nfpDrawLine(nXStart, nYStart, nXEnd, nYEnd, nColor, (uint8_t)nAlpha);
 }
 
+// 1.14d mac: 002b513c
 void __stdcall D2GFX_ClearScreen(BOOL bPartial) {
     RENDERER_CurrentRenderedFunctions->nfpClearScreen(bPartial);
 }
@@ -1285,6 +1310,7 @@ void __stdcall D2GFX_SetPaletteTable(BYTE * * ppPaletteTable) {
     PALETTE_InitColorLookupTables(ppPaletteTable);
 }
 
+// 1.14d mac: 002b51f3
 void __stdcall D2GFX_SetGlobalLight(int nRed, int nGreen, int nBlue) {
     RENDERER_CurrentRenderedFunctions->nfpSetGlobalLight(nRed, nGreen, nBlue);
 }
@@ -1293,11 +1319,13 @@ void __stdcall D2GFX_DrawPerspectiveImage(D2GfxDataStrc * pData, int32_t nPosX, 
     RENDERER_CurrentRenderedFunctions->nfpDrawPerspectiveImage(pData, nPosX, nPosY, dwGamma, nDrawMode, nScreenMode, pPalette);
 }
 
+// 1.14d mac: 002b55d8
 BOOL __stdcall D2GFX_DrawImage(D2GfxDataStrc * pGfxData, int32_t nPositionX, int32_t nPositionY, int32_t dwGamma, DRAWMODE eDrawMode, D2GamePalShiftGreenBloodStrc * pPalette) {
     BOOL BVar1 = RENDERER_CurrentRenderedFunctions->nfpDrawImage(pGfxData, nPositionX, nPositionY, dwGamma, eDrawMode, pPalette->abyRemap);
     return BVar1;
 }
 
+// 1.14d mac: 002b55f2
 void __stdcall D2GFX_DrawShiftedImage(D2GfxDataStrc * pDC6Context, int32_t nPositionX, int32_t nPositionY, int32_t dwGamma, DRAWMODE eMode, GLOBALPALLETE nGlobalPaletteShift) {
     RENDERER_CurrentRenderedFunctions->nfpDrawShiftedImage(pDC6Context, nPositionX, nPositionY, dwGamma, eMode, nGlobalPaletteShift);
 }
@@ -1314,10 +1342,12 @@ void __stdcall D2GFX_DrawSprite6(D2GfxDataStrc * pDC6Context, int32_t nPosX, int
     RENDERER_CurrentRenderedFunctions->nfpDrawClippedImage(pDC6Context, nPosX, nPosY, pClipRect, nDrawMode);
 }
 
+// 1.14d mac: 002b5649
 void __stdcall D2GFX_DrawShadow(D2GfxDataStrc * pDC6Context, int32_t nPositionX, int32_t nPositionY) {
     RENDERER_CurrentRenderedFunctions->nfpDrawShadow(pDC6Context, nPositionX + 2, nPositionY);
 }
 
+// 1.14d mac: 002b567f
 void __stdcall D2GFX_DrawImageColoredShape(D2GfxDataStrc * pDC6Context, int32_t nPositionX, int32_t nPositionY, BYTE nPaletteIndex) {
     RENDERER_CurrentRenderedFunctions->nfpDrawImageFast(pDC6Context, nPositionX, nPositionY, nPaletteIndex);
 }
@@ -1365,6 +1395,7 @@ int Unreferenced_004f6640() {
     return gnD2GFX_RequestedScaleFactor;
 }
 
+// 1.14d mac: 002b52cd
 void __stdcall D2GFX_SetPerspectiveScale(int32_t nXScale, int32_t nYScale) {
     if (!(eRendererMode == RENDERER_Glide || eRendererMode == RENDERED_Unused5 || eRendererMode == RENDERER_COUNT || eRendererMode == RENDERER_Direct3D)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x61);
@@ -1381,6 +1412,7 @@ void __stdcall D2GFX_SetPerspectiveScale(int32_t nXScale, int32_t nYScale) {
     return;
 }
 
+// 1.14d mac: 002b5366
 uint32_t __stdcall D2GFX_IsInPerspectiveBounds(int32_t nXpos, int32_t nYpos) {
     if (!(eRendererMode == RENDERER_Glide || eRendererMode == RENDERED_Unused5 || eRendererMode == RENDERER_COUNT || eRendererMode == RENDERER_Direct3D)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x74);
@@ -1411,6 +1443,7 @@ uint32_t __stdcall D2GFX_IsInPerspectiveBounds(int32_t nXpos, int32_t nYpos) {
     }
 }
 
+// 1.14d mac: 002b5415
 void __stdcall D2GFX_AdjustPerspectivePosition(int32_t nXpos, int32_t nYpos, int32_t nBais, int * pXAdjust, int * pYAdjust) {
     if ((int)eRendererMode < 4) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8b);
@@ -1426,6 +1459,7 @@ void __stdcall D2GFX_AdjustPerspectivePosition(int32_t nXpos, int32_t nYpos, int
     }
 }
 
+// 1.14d mac: 002b548b
 void __stdcall D2GFX_PerspecitveScalePosition(int32_t nXpos, int32_t nYpos, int32_t nAngle, int * pXpos, int * pYpos, BOOL bOrder) {
     if (!(eRendererMode == RENDERER_Glide || eRendererMode == RENDERED_Unused5 || eRendererMode == RENDERER_COUNT || eRendererMode == RENDERER_Direct3D)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x98);
@@ -1454,16 +1488,19 @@ void __stdcall D2GFX_SetDefaultPerspectiveFactor() {
     return;
 }
 
+// 1.14d mac: 002b520d
 void D2GFX_DrawString(int32_t nProbablyX, int32_t nProbablyY, char * szFormatString, ...) {
     va_list __va;
     va_start(__va, szFormatString);
     RENDERER_CurrentRenderedFunctions->nfpDrawString(nProbablyX, nProbablyY, szFormatString, __va);
 }
 
+// 1.14d mac: 002b524a
 void __stdcall D2GFX_DrawLight(DWORD * pLight, DWORD * pPlayerLight, int32_t nXpos, int32_t nYpos) {
     RENDERER_CurrentRenderedFunctions->nfpDrawLight(pLight, pPlayerLight, nXpos, nYpos);
 }
 
+// 1.14d mac: 002b5156
 void __stdcall D2GFX_DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc * pLight, int32_t nPosX, int32_t nPosY, int32_t nWorldXpos, int32_t nWorldYpos, BYTE nAlpha, int32_t nScreenPanels, void * pTileData) {
     RENDERER_CurrentRenderedFunctions->nfpDrawGroundTile(pTile, pLight, nPosX, nPosY, nWorldXpos, nWorldYpos, nAlpha, nScreenPanels, pTileData);
 }

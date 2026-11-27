@@ -9,10 +9,12 @@
 
 namespace D2Multi::OOG::ChatDlg {
 
+// 1.14d mac: 002d3b58
 void __stdcall CHATDLG_GameListCallback_Noop() {
 
 }
 
+// 1.14d mac: 002d4013
 int __stdcall CHATDLG_PrintCallback_SetFlag(uint32_t dwParam) {
     gbChatOptionButtonState = 1;
     return 1;

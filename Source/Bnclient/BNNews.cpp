@@ -46,6 +46,7 @@ typedef void (__stdcall *pfnVoidNoArgCallback)();
 
 namespace Bnclient::BnSend {
 
+// 1.14d mac: 0005c273
 void __fastcall BNNEWS_SetNewsChannel(int bIsClassic) {
     if (g_pfnNewsChannelCallback) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2f);
@@ -319,6 +320,7 @@ void __fastcall Unreferenced_0051d730(void * pArray) {
     Storm::Source::SMem::SMemFree(*(void**)((char*)pArray + 8), s___AUItem_NewsTable___0072ff8c, -2, 0);
 }
 
+// 1.14d mac: 0005c5f4
 BOOL __stdcall BNNEWS_Shutdown() {
     g_pfnMotdCallback = 0;
     g_pfnNewsCallback = 0;

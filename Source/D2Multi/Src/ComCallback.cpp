@@ -336,6 +336,7 @@ uint32_t gdwLastChatSendTick = 0; D2_GLOBAL_GUARD(gdwLastChatSendTick, "gdwLastC
 
 namespace D2Multi::ComCallback {
 
+// 1.14d mac: 002d0e2d
 int __stdcall EDITBOX_Cb_COMCALLBACK_ClearChannelUserList(void * pUnused) {
     COMCALLBACK_ClearChannelUserList();
     return 1;
@@ -394,11 +395,13 @@ char * __stdcall COMCALLBACK_GetCurrentChannelName() {
     return gszCurrentChannelName;
 }
 
+// 1.14d mac: 002d5853
 BOOL __fastcall COMCALLBACK_ReturnTrue(uint32_t dwCbArg1, uint32_t dwCbArg2, char * szText1, char * szText2) {
     return 1;
 }
 
 // Parses BNet channel user data blob into D2ChannelUserStrc. Reads product tag (D2DV/D2XP/STAR/etc.) from pbRawData, extracts char class, experience, quest flags, merc data. Returns nCharClassId for the character portrait.
+// 1.14d mac: 002d6e7c
 static uint8_t COMCALLBACK_CreateChannelUser(uint8_t * pbRawData, uint32_t nStatusFlags, D2ChannelUserStrc * pUser) {
     bool bIsD2Product;
     char* pszDst;
@@ -672,6 +675,7 @@ static uint8_t COMCALLBACK_CreateChannelUser(uint8_t * pbRawData, uint32_t nStat
 }
 
 // Formats D2ChannelUserStrc data for display: splits clan*charname, converts to wide strings, extracts realm name, calls D2COMP_SetUnitDisplayStrings with portrait/name/realm/clan strings.
+// 1.14d mac: 002d729b
 static void COMCALLBACK_FormatChannelUserData(D2ChannelUserStrc * pChannelUser) {
     char* pCharName;
     int nProductTag;
@@ -738,6 +742,7 @@ static void COMCALLBACK_FormatChannelUserData(D2ChannelUserStrc * pChannelUser) 
 }
 
 // Adds or updates a channel user in gpChannelUserLinkedListHead sorted list. Allocates 0x48-byte node, copies username and raw BNet data. Updates existing entry if username matches.
+// 1.14d mac: 002d62e5
 void __fastcall COMCALLBACK_AddOrUpdateChannelUser(char * szUsername, uint8_t * pbRawData) {
     int nCmpResult;
     intptr_t nCopyDelta;
@@ -811,6 +816,7 @@ void __fastcall COMCALLBACK_AddOrUpdateChannelUser(char * szUsername, uint8_t * 
     gpChannelUserLinkedListHead = pNewNode;
 }
 
+// 1.14d mac: 002d6066
 void __fastcall COMCALLBACK_FormatChatMessage(char * szText1, char * szText2, char * szFormattedOutput) {
     *szFormattedOutput = '\0';
     *szText2 = '\0';
@@ -862,12 +868,14 @@ void __fastcall COMCALLBACK_FormatChatMessage(char * szText1, char * szText2, ch
     Storm::Source::SSTR::SStrCopy(szFormattedOutput, szText1, 0x7fffffff);
 }
 
+// 1.14d mac: 002d66da
 BOOL __fastcall COMCALLBACK_HandleGameListError(uint32_t dwCbArg1, uint32_t dwCbArg2, uint32_t dwParam1, char * szChannelName) {
     pNetworkUnknown->pfnSendJoinChannel(szChannelName, 1, 0);
     ChatDlg::CHATDLG_ResetButtonsAndForms();
     return 1;
 }
 
+// 1.14d mac: 002d6b90
 BOOL __fastcall COMCALLBACK_ReturnFalse(uint32_t dwCbArg1, uint32_t dwCbArg2, char * szText1, char * szText2) {
     return 0;
 }
@@ -888,6 +896,7 @@ static int32_t COMCALLBACK_CheckUserListFlags(uint32_t * pnEventData) {
     return 1;
 }
 
+// 1.14d mac: 002d5272
 void __stdcall COMCALLBACK_ClearChannelUserList() {
     uint32_t dwCompFlags;
     uint16_t* wszString;
@@ -935,6 +944,7 @@ void __stdcall COMCALLBACK_ClearChannelUserList() {
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpLobbyForm0.pLobbyForm4, 0);
 }
 
+// 1.14d mac: 002d6b97
 void __fastcall COMCALLBACK_FormatWhisperFrom(uint16_t * wszText, int szSenderName) {
     int i;
     uint16_t wszBuffer[512];
@@ -966,6 +976,7 @@ void __fastcall COMCALLBACK_FormatWhisperFrom(uint16_t * wszText, int szSenderNa
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszBuffer);
 }
 
+// 1.14d mac: 002d6cae
 void __fastcall COMCALLBACK_FormatWhisperTo(uint16_t * wszText, int szTargetName) {
     int i;
     uint16_t wszBuffer[512];
@@ -1001,6 +1012,7 @@ void __fastcall COMCALLBACK_FormatWhisperTo(uint16_t * wszText, int szTargetName
     D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, wszBuffer);
 }
 
+// 1.14d mac: 002d4861
 BOOL __stdcall COMCALLBACK_ValidateGameJoinability() {
     // Static local variables (originally global data)
     static char gbChannelUserCountFormatPadding[50] = {}; D2_STATIC_GUARD(gbChannelUserCountFormatPadding, "D2Multi::ComCallback::COMCALLBACK_ValidateGameJoinability::gbChannelUserCountFormatPadding");
@@ -1033,6 +1045,7 @@ BOOL __stdcall COMCALLBACK_ValidateGameJoinability() {
     return 1;
 }
 
+// 1.14d mac: 002d537a
 BOOL __stdcall CHATDLG_OpenChatCommandsDialogRestoreFocus2(D2ControlMsg * pControlMsg) {
     OOGUtilities::UIMENU_DialogWindowChatCommands();
     ChatDlg::LAUNCHER_RestoreFocusToControl();
@@ -1053,6 +1066,7 @@ static int __fastcall PrintChannelText(char * szText, int32_t nColor) {
     return 1;
 }
 
+// 1.14d mac: 002d61ff
 static void __stdcall COMCALLBACK_AppendChatWithUser(char * szUsername, char * szMessage, int dwToTarget, int32_t nColor) {
     int i;
     uint16_t* pStr;
@@ -1076,6 +1090,7 @@ static void __stdcall COMCALLBACK_AppendChatWithUser(char * szUsername, char * s
     ChatDlg::CHATDLG_AppendTextToTextBox_ForComCallback(wszMain, nColor);
 }
 
+// 1.14d mac: 002d4bac
 void __stdcall COMCALLBACK_UpdateChannelUserList() {
     bool bSignedGreaterOrEqual2;
     bool bSignedGreaterOrEqual;
@@ -1373,6 +1388,7 @@ void __stdcall COMCALLBACK_UpdateChannelUserList() {
 }
 
 // Adds channel user to the visual list: stores status flags, parses raw data via CreateChannelUser, copies username, creates D2COMP composite, formats display data, updates channel user list UI.
+// 1.14d mac: 002d5e02
 static void __stdcall COMCALLBACK_AddUserToChannelList(D2ChannelUserStrc * pChannelUser, uint32_t nStatusFlags, char * szUsername, uint8_t * pbRawData) {
     pChannelUser->nStatusFlags = nStatusFlags;
     uint8_t bVar1 = COMCALLBACK_CreateChannelUser(pbRawData, nStatusFlags, pChannelUser);
@@ -1391,6 +1407,7 @@ static void __stdcall COMCALLBACK_AddUserToChannelList(D2ChannelUserStrc * pChan
     COMCALLBACK_UpdateChannelUserList();
 }
 
+// 1.14d mac: 002d51d3
 void __stdcall COMCALLBACK_ClearChannelListView() {
     uint32_t dwFlags;
     if (gpCurrentChatRoomContext) {
@@ -1414,6 +1431,7 @@ void __stdcall COMCALLBACK_ClearChannelListView() {
 }
 
 // Handles BNet channel join event. Finds matching user in gpChannelUserListHead by username, then calls AddUserToChannelList to build the visual composite. Returns 1 on match, 0 if not found.
+// 1.14d mac: 002d5da6
 BOOL __fastcall COMCALLBACK_HandleChannelJoin(uint32_t dwUnused, uint32_t dwCbArg2, char * szUsername, uint8_t * pbRawData) {
     D2ChannelUserStrc* pChannelUser = gpChannelUserListHead;
     do {
@@ -1454,6 +1472,7 @@ static void __stdcall COMCALLBACK_AppendChatWithColor(char * szUsername, int nCo
 }
 
 // Broadcasts chat message from local player to Battle.net channel. Retrieves current username from network interface, finds matching user in channel list to determine status flags (operator/speaker/moderator), formats message with username and clan tag prefix, then dispatches to chat system with appropriate color based on user status (0=operator red, 3=speaker/moderator yellow, 4=normal white).
+// 1.14d mac: 002d5eaa
 void __fastcall COMCALLBACK_BroadcastChatMessage(char * szMessageBody) {
     char* pszNameKey;
     char szChatMessageBuffer[256];
@@ -1512,6 +1531,7 @@ void __fastcall COMCALLBACK_BroadcastChatMessage(char * szMessageBody) {
 }
 
 // Handles incoming BNet whisper message. Checks ignore list, finds sender in channel user list for status flags, formats sender/message and appends to chat with appropriate color.
+// 1.14d mac: 002d6438
 BOOL __fastcall COMCALLBACK_HandleWhisperMessage(uint32_t dwCbArg1, uint32_t dwCbArg2, char * szUsername, char * szText) {
     int nCmpResult;
     char szClanTag[256];
@@ -1573,6 +1593,7 @@ BOOL __fastcall COMCALLBACK_HandleWhisperMessage(uint32_t dwCbArg1, uint32_t dwC
     return 1;
 }
 
+// 1.14d mac: 002d65dc
 BOOL __fastcall COMCALLBACK_AppendErrorMessage(uint32_t dwCbArg1, uint32_t dwCbArg2, uint32_t dwParam, char * szText) {
     int i;
     uint16_t* pStr;
@@ -1587,6 +1608,7 @@ BOOL __fastcall COMCALLBACK_AppendErrorMessage(uint32_t dwCbArg1, uint32_t dwCbA
     return 1;
 }
 
+// 1.14d mac: 002d65f9
 BOOL __fastcall COMCALLBACK_AppendInfoMessage(uint32_t dwCbArg1, uint32_t dwCbArg2, uint32_t dwParam, char * szText) {
     int i;
     uint16_t* pStr;
@@ -1601,6 +1623,7 @@ BOOL __fastcall COMCALLBACK_AppendInfoMessage(uint32_t dwCbArg1, uint32_t dwCbAr
     return 1;
 }
 
+// 1.14d mac: 002d6616
 BOOL __fastcall COMCALLBACK_HandleInfoRequest1(uint32_t dwCbArg1, uint32_t dwCbArg2, uint32_t dwParam1, char * szInfoArg) {
     int i;
     uint16_t* pStr;
@@ -1617,6 +1640,7 @@ BOOL __fastcall COMCALLBACK_HandleInfoRequest1(uint32_t dwCbArg1, uint32_t dwCbA
     return 1;
 }
 
+// 1.14d mac: 002d6678
 BOOL __fastcall COMCALLBACK_HandleInfoRequest2(uint32_t dwCbArg1, uint32_t dwCbArg2, uint32_t szUnused, char * szInfoArg) {
     int i;
     uint16_t* pStr;
@@ -1648,6 +1672,7 @@ static void __fastcall COMCALLBACK_ValidateWhisperTarget(char * szUsername, char
     ChatDlg::CHATDLG_AppendTextToTextBox_ForComCallback(wszText, 5);
 }
 
+// 1.14d mac: 002d6716
 BOOL __fastcall COMCALLBACK_ProcessWhisperCommand(uint32_t dwCbArg1, uint32_t dwCbArg2, char * szRawText, char * szWhisperText) {
     char szFormattedMsg[256];
     char szWhisperTarget[256];
@@ -1690,6 +1715,7 @@ BOOL __fastcall COMCALLBACK_ProcessWhisperCommand(uint32_t dwCbArg1, uint32_t dw
     return 1;
 }
 
+// 1.14d mac: 002d697d
 static void __stdcall COMCALLBACK_FormatWhisperReply(uint8_t * pbReplyText, uint8_t * pbSenderName, char * szReplyArg) {
     uint8_t* pbScanReply;
     int nCmp;
@@ -1739,6 +1765,7 @@ static void __stdcall COMCALLBACK_FormatWhisperReply(uint8_t * pbReplyText, uint
     ChatDlg::CHATDLG_AppendTextToTextBox_ForComCallback(wszUnicode, 2);
 }
 
+// 1.14d mac: 002d6837
 BOOL __fastcall COMCALLBACK_HandleWhisperReply(uint32_t dwCbArg1, uint32_t dwCbArg2, char * szText, char * szAccountName) {
     char* pchScan;
     uint8_t szFormattedMsg[256];
@@ -1807,6 +1834,7 @@ static void __fastcall COMCALLBACK_ValidateEmoteTarget(char * szPlayerName, char
     ChatDlg::CHATDLG_AppendTextToTextBox_ForComCallback(aWStack_678, 2);
 }
 
+// 1.14d mac: 002d6a83
 BOOL __fastcall COMCALLBACK_ProcessEmoteCommand(uint32_t dwCbArg1, uint32_t dwCbArg2, char * szText, char * szEmoteArg) {
     char szEmoteBody[256];
     char szEmoteTarget[256];
@@ -1836,6 +1864,7 @@ BOOL __fastcall COMCALLBACK_ProcessEmoteCommand(uint32_t dwCbArg1, uint32_t dwCb
 
 // Scrolls the chat-lobby user list by nScrollDelta rows: clamps gnChannelUserListScrollOffset to 0..gnChannelUserCount-11 (0 when fewer than 12 users), rebuilds the list through COMCALLBACK_UpdateChannelUserList when the offset changed, and shows the back/forward scroll buttons only when there is something to scroll to.
 // Provenance: asm 00448bd0..00448c6c; the four user-list scroll buttons call it with -10, 10, -1 and 1.
+// 1.14d mac: 002d4b01
 void __fastcall COMCALLBACK_ScrollChannelUserList(int32_t nScrollDelta) {
     uint32_t nMaxOffset;
     int nOldOffset = gnChannelUserListScrollOffset;
@@ -1867,6 +1896,7 @@ void __fastcall COMCALLBACK_ScrollChannelUserList(int32_t nScrollDelta) {
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpLobbyForm0.pCtlLobbyUserListNextLineButton, bShowDownArrows);
 }
 
+// 1.14d mac: 002d4ff8
 BOOL __stdcall COMCALLBACK_HandleUserListClick(D2ControlMsg * pnClickMsg) {
     // Static local variables (originally global data)
     static int gbLastChatSendTickPadding; D2_STATIC_GUARD_BSS(gbLastChatSendTickPadding, "D2Multi::ComCallback::COMCALLBACK_HandleUserListClick::gbLastChatSendTickPadding");
@@ -1949,6 +1979,7 @@ BOOL __stdcall COMCALLBACK_HandleUserListClick(D2ControlMsg * pnClickMsg) {
 }
 
 // Handles Battle.net game list errors by auto-squelching spamming users. When chat room context exists and throttle timer expires (1000ms cooldown), extracts username from context (strips clan tag *prefix), formats "/squelch *username" command, sends to network layer, clears channel view, and optionally adds user to ignore list if not self-squelching. Returns 1 on success, 0 if network send fails.
+// 1.14d mac: 002d54c0
 BOOL __stdcall COMCALLBACK_HandleGameListError1(D2ControlMsg * pControlMsg) {
     ::IgnoreList* pIgnoreList;
     char szSquelchCommand[256];
@@ -1995,6 +2026,7 @@ BOOL __stdcall COMCALLBACK_HandleGameListError1(D2ControlMsg * pControlMsg) {
     return 1;
 }
 
+// 1.14d mac: 002d5649
 BOOL __stdcall COMCALLBACK_HandleGameListError2(D2ControlMsg * pControlMsg) {
     uint8_t szSquelchCommand[256];
     char szUsername[256];
@@ -2032,6 +2064,7 @@ BOOL __stdcall COMCALLBACK_HandleGameListError2(D2ControlMsg * pControlMsg) {
 }
 
 // Creates or updates Battle.net channel user entry. If user doesn't exist in list, allocates D2ChannelUserStrc (180 bytes), copies username and character data, creates character composite sprite with class/items/level, randomizes animation frame, formats display name, appends to linked list, increments channel user count, formats channel title "Channel Name (N)" as Unicode, displays in chat window, sorts list, and updates UI. If user exists, updates via COMCALLBACK_AddUserToChannelList instead.
+// 1.14d mac: 002d7573
 D2ChannelUserStrc * __stdcall COMCALLBACK_CreateChannelUserEntry(char * szUsername, uint32_t * pCharDataAndItems, uint32_t dwStatusFlags) {
     // Static local variables (originally global data)
     static uint32_t gbChannelUserSeedInitialized; D2_STATIC_GUARD_BSS(gbChannelUserSeedInitialized, "D2Multi::ComCallback::COMCALLBACK_CreateChannelUserEntry::gbChannelUserSeedInitialized");
@@ -2161,6 +2194,7 @@ D2ChannelUserStrc * __stdcall COMCALLBACK_CreateChannelUserEntry(char * szUserna
     } while (true);
 }
 
+// 1.14d mac: 002d585d
 BOOL __fastcall COMCALLBACK_AddChannelUser(uint32_t dwStatusFlags, uint32_t dwCbArg2, uint32_t * pszUsername, uint32_t * pCharData) {
     COMCALLBACK_CreateChannelUserEntry((char*)pszUsername, pCharData, dwStatusFlags);
     return 1;
@@ -2182,6 +2216,7 @@ static void COMCALLBACK_OnChannelUserJoined(uint32_t * pCharData, uint32_t dwSta
     PrintChannelText(szNotifyMsg, 5);
 }
 
+// 1.14d mac: 002d587e
 BOOL __fastcall COMCALLBACK_OnChannelUserJoinedCallback(uint32_t dwStatusFlags, uint32_t dwCbArg2, uint32_t * pCharData, uint32_t * pszUsername) {
     COMCALLBACK_OnChannelUserJoined(pszUsername, dwStatusFlags, pCharData);
     return 1;
@@ -2271,6 +2306,7 @@ void __stdcall COMCALLBACK_RemoveChannelUser(char * szUsername) {
     COMCALLBACK_UpdateChannelUserList();
 }
 
+// 1.14d mac: 002d5914
 void __stdcall COMCALLBACK_ClearAllChannelUsers() {
     int i;
     uint16_t* pwszClear;
@@ -2317,6 +2353,7 @@ BOOL __fastcall COMCALLBACK_HandleChannelUserLeave(uint32_t dwCbArg1, uint32_t d
 
 // Chat event handler at gaComCallbackDispatch[7]: prints "You have joined channel: %s" to the chat box, copies szChannelName into gszCurrentChannelName and the multiplayer ini data (last channel, and the first-channel slot if empty), shows every gaChatUserListButtonArray button, deactivates gpCtlLobbyAccountList and clears the channel user list. Returns 1.
 // Provenance: asm 004496b0 (string "You have joined channel: %s"); dispatch slot 0070ec3c.
+// 1.14d mac: 002d5c32
 BOOL __fastcall COMCALLBACK_HandleJoinedChannel(uint32_t dwCbArg1, uint32_t dwCbArg2, uint32_t dwUnused, char * szChannelName) {
     int i;
     uint16_t* pwszClear;
@@ -2368,6 +2405,7 @@ void __fastcall COMCALLBACK_RemoveUserFromList(char * nStrBase, uint32_t * pnCar
     } while (--nByteCount);
 }
 
+// 1.14d mac: 002dc8cc
 BOOL __fastcall COMCALLBACK_DetectCDKeyInMessage(char * szChatText, uint32_t * pnKeyHi, uint32_t * pnKeyLo) {
     uint8_t byChar;
     int nVal;

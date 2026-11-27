@@ -14,6 +14,7 @@
 
 namespace D2Multi {
 
+// 1.14d mac: 002cdc4c
 BOOL __stdcall CHATDLG_DestroyFormsAndShowLadder(D2ControlMsg * pControlMsg) {
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpLobbyForm0.pCtlLobbyChannelButton, 0);
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpLobbyForm0.pCtlLobbyJoinButton, 0);
@@ -23,11 +24,13 @@ BOOL __stdcall CHATDLG_DestroyFormsAndShowLadder(D2ControlMsg * pControlMsg) {
     return 1;
 }
 
+// 1.14d mac: 002ce3b0
 BOOL __stdcall CHATDLG_OnPressDestroyAllForms(D2ControlMsg * pControlMsg) {
     ChatDlg::CHATDLG_DestroyAllForms();
     return 1;
 }
 
+// 1.14d mac: 002cdcb0
 BOOL __stdcall CHATDLG_ShowGatewaySelectTitle(D2ControlMsg * pControlMsg) {
     uint16_t* wszText = D2Lang::StrTable::strtable::GetLocaleString(0x147b);
     ChatDlg::UIMENU_PrintSmallTitleOnCenterScreen(wszText, nullptr);
@@ -38,6 +41,7 @@ BOOL __stdcall CHATDLG_ShowGatewaySelectTitle(D2ControlMsg * pControlMsg) {
 
 // OnPress of the chat-lobby CHANNEL button gpCtlLobbyChannelButton (gaPredefinedForms_b[7], string 0x14c2): releases the JOIN, LADDER and CREATE buttons, destroys the lobby side forms and opens the Create/Join Channels dialog (OOGUTIL_OpenChannelDialog); returns 1.
 // Provenance: asm 00442370; fpOnPressCallback of record 0070cfa0.
+// 1.14d mac: 002cd9a0
 BOOL __stdcall CHATDLG_DestroyFormsAndOpenChannelDialog(D2ControlMsg * pControlMsg) {
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpLobbyForm0.pCtlLobbyJoinButton, 0);
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpLobbyForm0.pCtlLobbyLadderButton, 0);
@@ -47,6 +51,7 @@ BOOL __stdcall CHATDLG_DestroyFormsAndOpenChannelDialog(D2ControlMsg * pControlM
     return 1;
 }
 
+// 1.14d mac: 002daa52
 BOOL __stdcall CHATDLG_DestroyFormsAndJoinGame(D2ControlMsg * pControlMsg) {
     ChatDlg::CHATDLG_DestroyAllForms();
     OOGUtilities::gpChatFormList = (void*)0x3;
@@ -59,6 +64,7 @@ BOOL __stdcall CHATDLG_DestroyFormsAndJoinGame(D2ControlMsg * pControlMsg) {
 
 // OnPress of the chat-lobby CREATE button gpCtlLobbyCreateButton (gaPredefinedForms_b[6], string 0x14c0): destroys the lobby side forms, opens the create-game dialog (OOGUTIL_OpenCreateGameDialog) and releases the CHANNEL, JOIN and LADDER buttons; returns 1.
 // Provenance: asm 004467d0; fpOnPressCallback of record 0070cf70.
+// 1.14d mac: 002daabf
 BOOL __stdcall CHATDLG_DestroyFormsAndOpenCreateGameDialog(D2ControlMsg * pControlMsg) {
     ChatDlg::CHATDLG_DestroyAllForms();
     OOGUtilities::OOGUTIL_OpenCreateGameDialog();
@@ -68,6 +74,7 @@ BOOL __stdcall CHATDLG_DestroyFormsAndOpenCreateGameDialog(D2ControlMsg * pContr
     return 1;
 }
 
+// 1.14d mac: 002d5394
 BOOL __stdcall CHATDLG_OpenChatCommandsDialogRestoreFocus(D2ControlMsg * pControlMsg) {
     OOGUtilities::UIMENU_DialogWindowChatCommands();
     ChatDlg::LAUNCHER_RestoreFocusToControl();

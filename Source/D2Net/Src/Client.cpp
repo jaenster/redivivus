@@ -38,6 +38,7 @@ static uint32_t gbClientConnectionShutdown = 0; D2_STATIC_GUARD(gbClientConnecti
 namespace D2Net::SRC::Client {
 
 // Sets client connection timeout value in gnNetConnectionTimeoutMs. Thread-safe update via critical section. Only applies to non-singleplayer modes.
+// 1.14d mac: 002dcb35
 void __fastcall NET_CLIENT_SetConnected(int32_t bConnected) {
     BOOL BVar1 = ::D2Net::Game::Server::NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer();
     if (BVar1) {
@@ -50,6 +51,7 @@ void __fastcall NET_CLIENT_SetConnected(int32_t bConnected) {
 }
 
 // Gets client connection timeout value from gnNetConnectionTimeoutMs. Thread-safe read via critical section. Returns 1 for singleplayer, 0 if no packet buffer.
+// 1.14d mac: 002dcb74
 int32_t __stdcall NET_CLIENT_IsConnected() {
     BOOL BVar1 = ::D2Net::Game::Server::NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer();
     if (BVar1) {
@@ -67,6 +69,7 @@ int32_t __stdcall NET_CLIENT_IsConnected() {
 
 // lpStartAddress parameter of CreateThread
 static sockaddr_in gClientSockAddr; D2_STATIC_GUARD_BSS(gClientSockAddr, "D2Net::SRC::Client::CLIENT_ServerConnectionThread_lpStartAddress::gClientSockAddr");
+// 1.14d mac: 002dcbc5
 DWORD __stdcall CLIENT_ServerConnectionThread_lpStartAddress(void * lpThreadParam) {
     // Static local variables (originally global data)
     // also labelled: sockaddr_in
@@ -103,6 +106,7 @@ static HANDLE __stdcall NET_CLIENT_CreateServerConnectionThread(void * pThreadPa
 #endif
 
 // @sourcefile .\SRC\Client.cpp
+// 1.14d mac: 002dd101
 void __stdcall NET_D2GS_ConnectToServer(eD2GSConnectionType neD2GSConnectionType, char * szIpAddress) {
     /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ pD2PacketClient_to_0xAE = 0;
     pD2PacketClient_from_0xAF = 0;
@@ -125,6 +129,7 @@ void __stdcall NET_D2GS_ConnectToServer(eD2GSConnectionType neD2GSConnectionType
 
 // Shuts down client-server connection. Frees packet buffer, sets shutdown flag, waits for thread (6s timeout), frees both packet queues (0xAF/0xAE), deletes critical section, closes socket for non-singleplayer.
 // @sourcefile .\SRC\Client.cpp
+// 1.14d mac: 002dd1d7
 void __stdcall NET_CLIENT_ShutdownConnection() {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882ce8);
     if (pD2PacketsClientBuffer) {
@@ -157,12 +162,14 @@ uint32_t __stdcall NET_D2GS_CLIENT_ExtractPacketSize_to0xAE(char * pBytes, uint3
     return nPacketSize;
 }
 
+// 1.14d mac: 002dd2e9
 uint32_t __stdcall NET_D2GS_CLIENT_ExtractPacketSize_from0xAE(char * pBytes, uint32_t nSize) {
     uint32_t nPacketSize = ::D2Net::SRC::D2Net::NET_D2GS_CLIENT_ExtractPacketSize((LPCRITICAL_SECTION*)&lpCriticalSection_00882ce8, &pD2PacketClient_from_0xAF, pBytes, nSize);
     return nPacketSize;
 }
 
 // @sourcefile .\SRC\Client.cpp
+// 1.14d mac: 002dd320
 int __stdcall NET_D2GS_CLIENT_ParseRecvBufferIntoPacketQueues() {
     uint32_t nRemaining = pD2PacketsClientBuffer->nCount;
     char* pCursor = pD2PacketsClientBuffer->pBytes;
@@ -250,6 +257,7 @@ void Unreferenced_0052aad0() {
 }
 
 // lpStartAddress parameter of CreateThread
+// 1.14d mac: 002dcd68
 DWORD __stdcall ThreadClientToServer(void * lpThreadParam) {
     int nSelectResult;
     BOOL BVar1;
@@ -405,6 +413,7 @@ static int32_t NET_SendPacketToD2GSOnline(char * pBytes, uint32_t nSize) {
     return nSendResult;
 }
 
+// 1.14d mac: 002dd549
 uint32_t __stdcall NET_D2GS_CLIENT_SendPacketAfterChecks(uint32_t nSize, int32_t Unused, char * pBytes) {
     uint32_t nSendResult;
     if (!pD2PacketsClientBuffer) {
@@ -427,6 +436,7 @@ uint32_t __stdcall NET_D2GS_CLIENT_SendPacketAfterChecks(uint32_t nSize, int32_t
 }
 
 // @sourcefile .\SRC\Client.cpp
+// 1.14d mac: 002dd5e9
 void __fastcall NET_D2GS_CLIENT_HandleIncomingBufferAndCreatePacket(char * pBytes, size_t pBytesSize) {
     size_t nSizeResult;
     DWORD nErrorLine;

@@ -121,6 +121,7 @@ static D2AmbientSoundEntryStrc * SOUND_GetAmbientSoundEntry(int32_t nIndex) {
 #endif
 }
 
+// 1.14d mac: 002e9ac4
 BOOL __stdcall SOUND_IsAmbientStreaming() {
     if (gpMusicStreamBuffer) {
       uint32_t bIsStreaming;
@@ -177,6 +178,7 @@ void __stdcall SOUND_ResetAmbientSoundFlags() {
 }
 #endif
 
+// 1.14d mac: 002e9a28
 void __fastcall SOUND_SetMusicEnabled(int32_t nEnabled) {
     if (nEnabled && !gnMusicEnabled) {
       SOUND_ResetAmbientSoundFlags();
@@ -190,6 +192,7 @@ BOOL __stdcall SOUND_GetMusicEnabled() {
     return gnMusicEnabled;
 }
 
+// 1.14d mac: 002e99e9 D2Sound::Src::D2SoundFast::SOUND_StopMusic
 void __stdcall SOUND_StopMusic() {
     if (!gpMusicStreamBuffer) {
       return;
@@ -204,6 +207,7 @@ void __stdcall SOUND_StopMusic() {
     D2SoundSmp::SOUNDSMP_Stop(gpMusicStreamBuffer);
 }
 
+// 1.14d mac: 002e9a73
 void __stdcall SOUND_FadeOutMusic() {
     if (!gpMusicStreamBuffer) {
       return;
@@ -437,16 +441,19 @@ void __stdcall SOUND_LoadRegistrySettings() {
     g_nSoundOptionsMusic = dwRegValue;
 }
 
+// 1.14d mac: 002e829c
 int32_t __stdcall SOUND_GetSoundMixer() {
     return g_nSoundMixerType;
 }
 
+// 1.14d mac: 002e82ad D2Sound::Src::D2SoundFast::SOUND_SetSoundMixer
 int32_t __fastcall SOUND_SetSoundMixer(int32_t nMixerType) {
     Storm::Source::SReg::SRegSaveValue("Diablo II", "Sound Mixer", 0, nMixerType);
     g_nSoundMixerType = nMixerType;
     return nMixerType;
 }
 
+// 1.14d mac: 002e82f1
 int __stdcall SOUND_GetMasterVolume() {
     return g_nSoundMasterVolume;
 }
@@ -457,16 +464,19 @@ int32_t __fastcall SOUND_SetMasterVolume(int32_t nVolume) {
     return nVolume;
 }
 
+// 1.14d mac: 002e8346
 int __stdcall SOUND_GetMusicVolume() {
     return g_nSoundMusicVolume;
 }
 
+// 1.14d mac: 002e8357
 int32_t __fastcall SOUND_SetMusicVolume(int32_t nVolume) {
     Storm::Source::SReg::SRegSaveValue("Diablo II", "Music Volume", 0, nVolume);
     g_nSoundMusicVolume = nVolume;
     return nVolume;
 }
 
+// 1.14d mac: 002e839b
 int __stdcall SOUND_GetPositionalBias() {
     return g_nSoundPositionalBias;
 }
@@ -477,6 +487,7 @@ int32_t __fastcall SOUND_SetPositionalBias(int32_t nBias) {
     return nBias;
 }
 
+// 1.14d mac: 002e83f0
 int __stdcall SOUND_GetNpcSpeech() {
     return g_nSoundNpcSpeech;
 }
@@ -487,16 +498,19 @@ int32_t __fastcall SOUND_SetNpcSpeech(int32_t nNpcSpeech) {
     return nNpcSpeech;
 }
 
+// 1.14d mac: 002e8445
 int __stdcall SOUND_GetOptionsMusic() {
     return g_nSoundOptionsMusic;
 }
 
+// 1.14d mac: 002e8456
 int32_t __fastcall SOUND_SetOptionsMusic(int32_t nOptionsMusic) {
     Storm::Source::SReg::SRegSaveValue("Diablo II", "Options Music", 0, nOptionsMusic);
     g_nSoundOptionsMusic = nOptionsMusic;
     return nOptionsMusic;
 }
 
+// 1.14d mac: 002e7d7b
 void __stdcall SOUND_InitSoundEffectBuffers() {
     IDirectSound* dwSpeakerFlag = SOUND_GetDirectSoundDevice();
     if (!(dwSpeakerFlag && !gnSoundEffectSampleCount)) {
@@ -517,6 +531,7 @@ void __stdcall SOUND_InitSoundEffectBuffers() {
 }
 
 // @sourcefile .\Src\D2SoundFast.cpp
+// 1.14d mac: 002e7ed1
 void __fastcall SOUND_LoadWavFile(char * szText) {
     WAVEFORMATEX sWaveFormat;
     uint32_t nAllocSize;
@@ -629,6 +644,7 @@ void Unreferenced_00514ff0() {
     } while ((intptr_t)ppDVar1 < (intptr_t)&gpaSoundEffectBuffers + 32);
 }
 
+// 1.14d mac: 002e80b6
 void __stdcall SOUND_FadeOutAllSoundEffects() {
     if (!gnSoundEffectSampleCount) {
       return;
@@ -651,6 +667,7 @@ int __stdcall SOUND_IsSoundEffectsInitialized() {
 }
 
 // @sourcefile .\Src\D2SoundFast.cpp
+// 1.14d mac: 002e7df1
 void __stdcall SOUND_FreeSoundEffectBuffers() {
     if (!gnSoundEffectSampleCount) {
       return;

@@ -23,6 +23,7 @@ static D2BnSha1ContextStrc g_SHA1Contexts[3] = {}; D2_STATIC_GUARD(g_SHA1Context
 
 namespace Bnclient::_net_sid {
 
+// 1.14d mac: 0005b050
 void __thiscall NET_SID_CLIENT_EncodeCDKeyHash(char * pThis, int32_t nSeed) {
     // Frame -92..-8 is ONE Ghidra variable the decompiler printed as 2 locals.
     // Separate locals let the compiler reorder them, so the pieces are one struct.
@@ -126,6 +127,7 @@ void __thiscall NET_SID_CLIENT_EncodeCDKeyHash(char * pThis, int32_t nSeed) {
     } while (nKeyCharOffset < 3);
 }
 
+// 1.14d mac: 0005adf2
 int32_t __fastcall NET_SID_CLIENT_DecodeCDKeyHash(int * pnData, uint32_t nDataSize, char * szCDKey) {
     uint32_t nAlignedLen;
     int nLoopIdx;
@@ -325,6 +327,7 @@ void __fastcall NET_SID_CLIENT_EncodeBuffer(uint32_t * pdwData, uint32_t nDataSi
     }
 }
 
+// 1.14d mac: 0005b486
 static int32_t NET_SID_CLIENT_DecodeAndValidateBuffer(int * pnData, uint32_t nDataSize) {
     uint32_t nSearchLimit;
     int nNonNullCount;
@@ -360,6 +363,7 @@ static int32_t NET_SID_CLIENT_DecodeAndValidateBuffer(int * pnData, uint32_t nDa
     return 0;
 }
 
+// 1.14d mac: 0005b3a5
 static uint32_t * NET_SID_CLIENT_LoadAndDecodeCDKeyFile(uint32_t * szFileName, DWORD * pdwFileSize) {
     *pdwFileSize = 0x400;
     uint32_t* pLoadedKeyBuf;
@@ -380,6 +384,7 @@ static uint32_t * NET_SID_CLIENT_LoadAndDecodeCDKeyFile(uint32_t * szFileName, D
     return pLoadedKeyBuf;
 }
 
+// 1.14d mac: 0005b1e3
 void __stdcall DecodeAndLoadKeys() {
     // Static local variables (originally global data)
     static uint32_t g_dwCdKeyClassicSize; D2_STATIC_GUARD_BSS(g_dwCdKeyClassicSize, "Bnclient::_net_sid::DecodeAndLoadKeys::g_dwCdKeyClassicSize");
@@ -487,6 +492,7 @@ void __stdcall DecodeAndLoadKeys() {
     }
 }
 
+// 1.14d mac: 0005b40c
 void __stdcall FreeKeys() {
     if (KeyClassic) {
       Storm::Source::SFile::SFileUnloadFile(KeyClassic);
@@ -504,6 +510,7 @@ uint32_t __stdcall NET_SID_CLIENT_GetProductId() {
     return g_dwProductId;
 }
 
+// 1.14d mac: 0005b466
 char * __fastcall NET_SID_CLIENT_GetCdKeyByType(int32_t nProductType) {
     char* pKey = KeyExpansion;
     if (nProductType) {
@@ -568,10 +575,12 @@ void __stdcall SHA0_Transform(uint32_t * pShaCtx) {
     pShaCtx[4] += e;
 }
 
+// 1.14d mac: 0005bdb9
 void __stdcall NET_SID_CLIENT_ClearSHAContexts() {
     memset(g_SHA1Contexts, 0, sizeof(g_SHA1Contexts));
 }
 
+// 1.14d mac: 0005bde0
 void __fastcall NET_SID_CLIENT_GetSHAState(int32_t nCtxIndex, uint32_t * pdwStateOut) {
     if (!pdwStateOut) {
       return;
@@ -584,6 +593,7 @@ void __fastcall NET_SID_CLIENT_GetSHAState(int32_t nCtxIndex, uint32_t * pdwStat
     pdwStateOut[4] = g_SHA1Contexts[nCtxIndex].aState[4];
 }
 
+// 1.14d mac: 0005be0f
 void __fastcall NET_SID_CLIENT_SHA1Compress(int32_t nCtxIndex, uint32_t * pdwBlock, uint32_t * pdwOutHash) {
     D2BnSha1ContextStrc* pCtx = &g_SHA1Contexts[nCtxIndex];
     int nBitCount = pCtx->nBitCountLow + 0x200;
@@ -603,6 +613,7 @@ void __fastcall NET_SID_CLIENT_SHA1Compress(int32_t nCtxIndex, uint32_t * pdwBlo
     }
 }
 
+// 1.14d mac: 0005c217
 void __fastcall NET_SID_CLIENT_InitSHAContext(int32_t nCtxIndex) {
     D2BnSha1ContextStrc* pCtx = &g_SHA1Contexts[nCtxIndex];
     pCtx->aState[0] = 0x67452301;
@@ -723,6 +734,7 @@ void __fastcall NET_SID_CLIENT_IDEAInvertKey(uint16_t * pEncryptKey, uint16_t * 
     } while (copyCounter);
 }
 
+// 1.14d mac: 0005b707
 void __fastcall NET_SID_CLIENT_IDEACrypt(uint16_t * pPlaintext, short * pCiphertext, uint16_t * pSubkeys) {
     short int* pOut3;
     short int finalMult0;
@@ -837,6 +849,7 @@ void __fastcall NET_SID_CLIENT_IDEACrypt(uint16_t * pPlaintext, short * pCiphert
     } while (true);
 }
 
+// 1.14d mac: 0005b8ec
 void __stdcall NET_SID_CLIENT_ClearIDEAContexts() {
     memset(g_IDEAKeySchedules, 0, sizeof(g_IDEAKeySchedules));
 }
@@ -846,11 +859,13 @@ void __stdcall NET_SID_CLIENT_ClearIDEAContexts() {
 namespace Bnclient {
 
 // IDEA cipher encrypt/decrypt dispatch: selects the key schedule at index nKeyScheduleIdx from g_IDEAKeySchedules (stride 0x68) and calls NET_SID_CLIENT_IDEACrypt on pPlaintext→pCiphertext. Used for SID/BNCS session encryption.
+// 1.14d mac: 0005b913
 void __fastcall NET_SID_CLIENT_IDEAEncryptDecrypt(int32_t nKeyScheduleIdx, uint16_t * pPlaintext, short * pCiphertext) {
     _net_sid::NET_SID_CLIENT_IDEACrypt(pPlaintext, pCiphertext, (uint16_t*)(g_IDEAKeySchedules + nKeyScheduleIdx * 0x68));
 }
 
 // Initializes an IDEA key schedule from a 128-bit key (4 dwords at pdwKeyMaterial) into slot nKeyScheduleIdx of g_IDEAKeySchedules. bEncryptMode!=0: expand key directly (encrypt schedule); ==0: expand then invert (decrypt schedule). Stack-cookie guarded.
+// 1.14d mac: 0005b945
 void __fastcall NET_SID_CLIENT_SetupIDEAKey(int32_t nKeyScheduleIdx, int32_t bEncryptMode, uint32_t * pdwKeyMaterial) {
     uint16_t aKeyScheduleBuf[52];
     uint16_t aUserKey[8];

@@ -476,6 +476,7 @@ void __fastcall SOUND_InitMusicBuffer(BOOL bSoundInBackground) {
     Src::D2SoundFast::gpMusicStreamBuffer = Src::D2SoundSmp::CallSounds(1, gnMusicBufferSize);
 }
 
+// 1.14d mac: 002e9921
 void __stdcall SOUND_FreeMusicBuffer() {
     if (Src::D2SoundFast::gpMusicStreamBuffer) {
       Src::D2SoundSmp::SOUNDSMP_Destroy(Src::D2SoundFast::gpMusicStreamBuffer);

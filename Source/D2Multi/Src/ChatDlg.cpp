@@ -1725,6 +1725,7 @@ int __fastcall Unreferenced_0043cc20(int param_1) {
 }
 
 // Loads all predefined DC6 image resources for the Battle.net launcher UI. Constructs resource paths using sprintf into a reusable buffer, then loads each DC6 file via IMAGE_LoadDC6 and stores the pointers in global variables (PTR_0077bc*). Resources include popup backgrounds, buttons, tabs for each character class, scrollbars, and selection/squelch auras.
+// 1.14d mac: 002ceb18
 void __stdcall IMAGE_LoadPredefinedImagesExEx() {
     char szPathBuffer[260];
     sprintf(szPathBuffer, "%s\\UI\\FrontEnd\\PopUpLargest2", "DATA\\GLOBAL");
@@ -1836,6 +1837,7 @@ void __stdcall IMAGE_LoadPredefinedImagesExEx() {
     D2Win::Src::D2Comp::D2COMP_SetSelectionAndAuraImages(gpDC6SquelchAura, gpDC6SelectAura);
 }
 
+// 1.14d mac: 002cf49c
 void __stdcall LAUNCHER_FreeLauncherImages() {
     // Static local variables (originally global data)
     static DC6 * gpDC6Unidentified_0077bc24; D2_STATIC_GUARD_BSS(gpDC6Unidentified_0077bc24, "D2Multi::ChatDlg::LAUNCHER_FreeLauncherImages::gpDC6Unidentified_0077bc24");
@@ -2060,6 +2062,7 @@ void __stdcall LAUNCHER_FreeLauncherImages() {
     gpDC6SelectAura = 0;
 }
 
+// 1.14d mac: 002cfa95
 void __stdcall LAUNCHER_RestoreFocusToControl() {
     if (!gpChatDlgInputEditBox) {
       return;
@@ -2079,6 +2082,7 @@ BOOL __stdcall LAUNCHER_GenerateJoinGameRequestId(D2ControlMsg * pControlMsg) {
 
 // OnPress of the chat-lobby user-list page-back button gpCtlLobbyUserListPrevPageButton: COMCALLBACK_ScrollChannelUserList(-10); returns 1.
 // Provenance: asm 0043d9e0 (RET 4); fpOnPressCallback of form record 0070d060 (FORM_Button), created in CHATDLG_CreateAllForms at 0043fce8.
+// 1.14d mac: 002cdcf3
 BOOL __stdcall CHATDLG_OnPressUserListPrevPage(D2ControlMsg * pControlMsg) {
     ComCallback::COMCALLBACK_ScrollChannelUserList(-10);
     return 1;
@@ -2086,6 +2090,7 @@ BOOL __stdcall CHATDLG_OnPressUserListPrevPage(D2ControlMsg * pControlMsg) {
 
 // OnPress of the chat-lobby user-list page-forward button gpCtlLobbyUserListNextPageButton: COMCALLBACK_ScrollChannelUserList(10); returns 1.
 // Provenance: asm 0043da00 (RET 4); fpOnPressCallback of form record 0070d090 (FORM_Button), created in CHATDLG_CreateAllForms at 0043fcf7.
+// 1.14d mac: 002cdd0f
 BOOL __stdcall CHATDLG_OnPressUserListNextPage(D2ControlMsg * pControlMsg) {
     ComCallback::COMCALLBACK_ScrollChannelUserList(10);
     return 1;
@@ -2093,6 +2098,7 @@ BOOL __stdcall CHATDLG_OnPressUserListNextPage(D2ControlMsg * pControlMsg) {
 
 // OnPress of the chat-lobby user-list line-back button gpCtlLobbyUserListPrevLineButton: COMCALLBACK_ScrollChannelUserList(-1); returns 1.
 // Provenance: asm 0043da20 (RET 4); fpOnPressCallback of form record 0070d0c0 (FORM_Button), created in CHATDLG_CreateAllForms at 0043fd06.
+// 1.14d mac: 002cdd2b
 BOOL __stdcall CHATDLG_OnPressUserListPrevLine(D2ControlMsg * pControlMsg) {
     ComCallback::COMCALLBACK_ScrollChannelUserList(-1);
     return 1;
@@ -2100,6 +2106,7 @@ BOOL __stdcall CHATDLG_OnPressUserListPrevLine(D2ControlMsg * pControlMsg) {
 
 // OnPress of the chat-lobby user-list line-forward button gpCtlLobbyUserListNextLineButton: COMCALLBACK_ScrollChannelUserList(1); returns 1.
 // Provenance: asm 0043da30 (RET 4); fpOnPressCallback of form record 0070d0f0 (FORM_Button), created in CHATDLG_CreateAllForms at 0043fd15.
+// 1.14d mac: 002cdd47
 BOOL __stdcall CHATDLG_OnPressUserListNextLine(D2ControlMsg * pControlMsg) {
     ComCallback::COMCALLBACK_ScrollChannelUserList(1);
     return 1;
@@ -2107,11 +2114,13 @@ BOOL __stdcall CHATDLG_OnPressUserListNextLine(D2ControlMsg * pControlMsg) {
 
 // Sets the active state of the game-list cache control pGameListCache via D2WINMAIN_SetControlActive. Returns TRUE (MOV EAX,1 at 0043dadd); the caller ignores it.
 // Provenance: asm 0043dad0; one caller, UIMENU_WaitInLine.
+// 1.14d mac: 002cfab8
 BOOL __fastcall LAUNCHER_SetGameListCacheActive(BOOL bActive) {
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(&pGameListCache->sControl, bActive);
     return 1;
 }
 
+// 1.14d mac: 002cfae3
 BOOL __stdcall CHATDLG_IsLobbyInitialized() {
     return gbLobbyInitialized;
 }
@@ -2133,6 +2142,7 @@ void __stdcall LAUNCHER_DestroyLauncherForms() {
     D2Win::Src::D2WinMain::D2WINMAIN_SetFocusedControl(&gpChatDlgInputEditBox->sControl);
 }
 
+// 1.14d mac: 002d0bc6
 int __stdcall isServerDown() {
     if (OOGUtilities::D2IniData_multiplayer->szCharacterRealm[0] != '\0') {
       int32_t bHasPeerName = D2MCPClient::McpConnect::HasPeerName();
@@ -2357,6 +2367,7 @@ void __stdcall UIMENU_CantTestItBeacuseItCrash() {
     /* Battle.net News Updates */ D2Win::Src::D2WinTextBox::SetText(BattleNetNews, D2Lang::StrTable::strtable::GetLocaleString(0x2b73), 3, false, 0);
 }
 
+// 1.14d mac: 002d0bf4
 void __stdcall CHATDLG_DestroyLobbyChatForms() {
     D2ControlStrc** pForm = gpCtlLobbyChat;
     do {
@@ -2595,6 +2606,7 @@ int __fastcall CHATDLG_AppendTextToTextBox(uint16_t * wszText, int32_t nLineStyl
     return 1;
 }
 
+// 1.14d mac: 002d2242
 BOOL __fastcall CHATDLG_AppendTextToTextBox_ForComCallback(uint16_t * wszText, int32_t nLineStyle) {
     if (gpChatMessagesTextBox) {
       D2Win::Src::D2WinTextBox::SetText(gpChatMessagesTextBox, wszText, nLineStyle, false, 1);
@@ -2603,6 +2615,7 @@ BOOL __fastcall CHATDLG_AppendTextToTextBox_ForComCallback(uint16_t * wszText, i
     return 1;
 }
 
+// 1.14d mac: 002d2288
 int __fastcall FORMS_DisplayBattleNetNews(uint16_t * wszText) {
     if (BattleNetNews) {
       D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(BattleNetNews);
@@ -2614,6 +2627,7 @@ int __fastcall FORMS_DisplayBattleNetNews(uint16_t * wszText) {
 
 // Shows gpCtlChannelOkButton only while gpCtlChannelNameEditBox holds a non-empty name: D2WINMAIN_SetControlVisible(gpCtlChannelOkButton, name non-empty). Run by that edit box's change callback and once at the end of OOGUTIL_OpenChannelDialog.
 // Provenance: asm 0043e660..0043e6b6; change callback installed at 00441097, tail jump at 004411d7.
+// 1.14d mac: 002d4760
 void __stdcall CHATDLG_UpdateChannelOkButtonState() {
     char szText[32];
     char cCur;
@@ -2760,6 +2774,7 @@ BOOL __stdcall CHATDLG_DetectCDKeyInString(char * szText) {
     return 0;
 }
 
+// 1.14d mac: 002d2da5
 static D2ControlStrc * FORMS_CreateAnyFormFromListEx(int32_t nFormIndex) {
     if (FORMS_nListExCount >= 0x20) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1475);
@@ -2772,6 +2787,7 @@ static D2ControlStrc * FORMS_CreateAnyFormFromListEx(int32_t nFormIndex) {
     return pForm;
 }
 
+// 1.14d mac: 002ceab7
 void __stdcall FORMS_DestroyListEx() {
     int nIndex = 0;
     if (FORMS_nListExCount > 0) {
@@ -2789,6 +2805,7 @@ void __stdcall FORMS_DestroyListEx() {
     gdwGameJoinRequestTick = 0;
 }
 
+// 1.14d mac: 002d25bd
 void __fastcall UIMENU_DrawTitleAndSubtitleOnCenterScreen(uint16_t * wszTitle, uint16_t * wszSubTitle) {
     FORMS_DestroyListEx();
     D2ControlStrc* pForm = FORMS_CreateAnyFormFromListEx(0x25);
@@ -2804,11 +2821,13 @@ void __fastcall UIMENU_DrawTitleAndSubtitleOnCenterScreen(uint16_t * wszTitle, u
     D2Win::Src::D2WinTextBox::SetText(pTextBox, wszSubTitle, 0, false, 0);
 }
 
+// 1.14d mac: 002d2e0d
 int __stdcall CHATDLG_DestroyListCallback(D2ControlMsg * pControlMsg) {
     FORMS_DestroyListEx();
     return 1;
 }
 
+// 1.14d mac: 002ce161
 BOOL __stdcall CHATDLG_InvokeCallbackIfSet(D2ControlMsg * pControlMsg) {
     if (gpfnChatDlgCallback) {
       (*gpfnChatDlgCallback)(pControlMsg);
@@ -2819,6 +2838,7 @@ BOOL __stdcall CHATDLG_InvokeCallbackIfSet(D2ControlMsg * pControlMsg) {
 
 // Opens the ladder type menu: background form 0x5d (gpDC6LadderChoiceEXP), title text box 0x5e (string 0x14c5), buttons 0x5f HARDCORE LADDER, 0x61 STANDARD LADDER, 0x62/0x63 expansion hardcore/standard ladder and 0x64 CANCEL (CHATDLG_OnPressCloseDialog); 0x60 is never created.
 // Provenance: asm 0043eb30..0043eb93; called by CHATDLG_DestroyFormsAndShowLadder (lobby LADDER button) and CHATDLG_OnPressCloseDialogRedrawLadder.
+// 1.14d mac: 002d425a
 void __stdcall CHATDLG_OpenLadderTypeMenu() {
     FORMS_CreateAnyFormFromListEx(0x5d);
     ::D2WinTextBox* pTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromListEx(0x5e);
@@ -2832,6 +2852,7 @@ void __stdcall CHATDLG_OpenLadderTypeMenu() {
     D2Win::Src::D2WinMain::CONTROL_SetEscapeButton(pControl);
 }
 
+// 1.14d mac: 002d2e22
 int __stdcall CHATDLG_UpdateButtonVisibility() {
     uint32_t bConfirmJoinVisible;
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpLobbyForm0.pCtlLobbyChannelButton, 0);
@@ -2861,6 +2882,7 @@ void __fastcall CHATDLG_SetLadderFilterAndRank(uint8_t nFilterMode, int nRank) {
     gnLadderBoardSelectedRank = nRank;
 }
 
+// 1.14d mac: 002d3030
 void __fastcall CHATDLG_RequestLadderRank(char * szText, int32_t bHardcore, int32_t nLadderRequestMode) {
     if (!g_pLadderBoardTextBox) {
       return;
@@ -2883,6 +2905,7 @@ void __fastcall CHATDLG_RequestLadderRank(char * szText, int32_t bHardcore, int3
 
 // Scrolls the ladder board up one page: selected rank (0070cd7c) -= gnLadderScrollPageSize, clamped at 0; restores the filter byte 0070cd62 from 0070cd63; returns 1.
 // Provenance: asm 0043ece0 (RET 4); only pointer is the OnPress field of form 0070e610.
+// 1.14d mac: 002ce85b
 BOOL __stdcall CHATDLG_OnPressLadderPageUp(D2ControlMsg * pControlMsg) {
     int nRank = gnLadderBoardSelectedRank - gnLadderScrollPageSize <= 0 ? 0 : gnLadderBoardSelectedRank - gnLadderScrollPageSize;
     g_nLadderFilterMode = gnLadderCurrentFilterMode;
@@ -2892,6 +2915,7 @@ BOOL __stdcall CHATDLG_OnPressLadderPageUp(D2ControlMsg * pControlMsg) {
 
 // Scrolls the ladder board down one page: selected rank (0070cd7c) += gnLadderScrollPageSize, clamped to [0077ad70] - page size; restores the filter byte 0070cd62 from 0070cd63; returns 1.
 // Provenance: asm 0043ed10 (RET 4); only pointer is the OnPress field of form 0070e640.
+// 1.14d mac: 002ce898
 BOOL __stdcall CHATDLG_OnPressLadderPageDown(D2ControlMsg * pControlMsg) {
     int nRank = gnLadderEntryTotal - gnLadderScrollPageSize;
     if (gnLadderScrollPageSize + gnLadderBoardSelectedRank < gnLadderEntryTotal - gnLadderScrollPageSize) {
@@ -2958,6 +2982,7 @@ void __stdcall UIMENU_LadderBoard_PrintClassButtonLabels() {
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(pTextBox, awszCharNames);
 }
 
+// 1.14d mac: 002d4091
 void __stdcall CHATDLG_DisableAllLadderButtons() {
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpCtlLadderBtnOverall, 0);
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpCtlLadderBtnAmazon, 0);
@@ -2973,6 +2998,7 @@ void __stdcall CHATDLG_DisableAllLadderButtons() {
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpCtlLadderBtnAssassin, 0);
 }
 
+// 1.14d mac: 002d415e
 void __stdcall CHATDLG_ClearLadderBoard() {
     uint16_t awszDash[2];
     char szDash[2];
@@ -2988,6 +3014,7 @@ void __stdcall CHATDLG_ClearLadderBoard() {
 
 // Returns the ladder filter id for class tab nLadderTab (0 Overall .. 7 Assassin) in the same group as nCurrentFilterMode: groups start at 0, 9, 0x13 and 0x1b and hold 8 ids each; any other nCurrentFilterMode halts at line 0x1a23. The eight CHATDLG_OnPressLadder* tab handlers pass their tab and g_nLadderFilterMode and store the result back into it.
 // Provenance: asm 0043f150..0043f1c3 (tab on the stack, filter in EAX).
+// 1.14d mac: 002d41f4
 static int32_t __stdcall CHATDLG_GetLadderFilterForTab(int32_t nLadderTab, uint32_t nCurrentFilterMode) {
     int32_t nBase;
     if (nCurrentFilterMode >= 0x9 && nCurrentFilterMode <= 0x10) {
@@ -3008,6 +3035,7 @@ static int32_t __stdcall CHATDLG_GetLadderFilterForTab(int32_t nLadderTab, uint3
 
 // OnPress handler of the ladder board's overall (all classes) tab: disables the ladder buttons, highlights gpCtlLadderBtnOverall, and unless the filter byte 0070cd62 already shows tab 0 (value 0 or 9), sets gnLadderListRowCount to 1000 (0x3e8), clears the board, recomputes the filter via CHATDLG_GetLadderFilterForTab(0, g_nLadderFilterMode), resets the selected rank (0070cd7c) and flags a reload; returns 1.
 // Provenance: asm 0043f1d0 (RET 4), OnPress field of form record #110 (0070e310); UIMENU_LadderBoard_PrintClassButtonLabels (0043ed60) labels button form 0x6e string 0x14ce.
+// 1.14d mac: 002ce4d6
 BOOL __stdcall CHATDLG_OnPressLadderOverall(D2ControlMsg * pControlMsg) {
     CHATDLG_DisableAllLadderButtons();
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpCtlLadderBtnOverall, 1);
@@ -3026,6 +3054,7 @@ BOOL __stdcall CHATDLG_OnPressLadderOverall(D2ControlMsg * pControlMsg) {
 
 // OnPress handler of the ladder board's Amazon tab (class id 0 + 1): disables the ladder buttons, highlights gpCtlLadderBtnAmazon, and unless the filter byte 0070cd62 already shows tab 1 (value 1 or 10), sets gnLadderListRowCount to 200 (0xc8), clears the board, recomputes the filter via CHATDLG_GetLadderFilterForTab(1, g_nLadderFilterMode), resets the selected rank (0070cd7c) and flags a reload; returns 1.
 // Provenance: asm 0043f230 (RET 4), OnPress field of form record #111 (0070e340); UIMENU_LadderBoard_PrintClassButtonLabels (0043ed60) labels button form 0x6f "AMA".
+// 1.14d mac: 002ce544
 BOOL __stdcall CHATDLG_OnPressLadderAmazon(D2ControlMsg * pControlMsg) {
     CHATDLG_DisableAllLadderButtons();
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpCtlLadderBtnAmazon, 1);
@@ -3044,6 +3073,7 @@ BOOL __stdcall CHATDLG_OnPressLadderAmazon(D2ControlMsg * pControlMsg) {
 
 // OnPress handler of the ladder board's Sorceress tab (class id 1 + 1): disables the ladder buttons, highlights gpCtlLadderBtnSorceress, and unless the filter byte 0070cd62 already shows tab 2 (value 2 or 11), sets gnLadderListRowCount to 200 (0xc8), clears the board, recomputes the filter via CHATDLG_GetLadderFilterForTab(2, g_nLadderFilterMode), resets the selected rank (0070cd7c) and flags a reload; returns 1.
 // Provenance: asm 0043f290 (RET 4), OnPress field of form record #112 (0070e370); UIMENU_LadderBoard_PrintClassButtonLabels (0043ed60) labels button form 0x70 "SOR".
+// 1.14d mac: 002ce5b5
 BOOL __stdcall CHATDLG_OnPressLadderSorceress(D2ControlMsg * pControlMsg) {
     CHATDLG_DisableAllLadderButtons();
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpCtlLadderBtnSorceress, 1);
@@ -3062,6 +3092,7 @@ BOOL __stdcall CHATDLG_OnPressLadderSorceress(D2ControlMsg * pControlMsg) {
 
 // OnPress handler of the ladder board's Necromancer tab (class id 2 + 1): disables the ladder buttons, highlights gpCtlLadderBtnNecromancer, and unless the filter byte 0070cd62 already shows tab 3 (value 3 or 12), sets gnLadderListRowCount to 200 (0xc8), clears the board, recomputes the filter via CHATDLG_GetLadderFilterForTab(3, g_nLadderFilterMode), resets the selected rank (0070cd7c) and flags a reload; returns 1.
 // Provenance: asm 0043f2f0 (RET 4), OnPress field of form record #113 (0070e3a0); UIMENU_LadderBoard_PrintClassButtonLabels (0043ed60) labels button form 0x71 "NEC".
+// 1.14d mac: 002ce626
 BOOL __stdcall CHATDLG_OnPressLadderNecromancer(D2ControlMsg * pControlMsg) {
     CHATDLG_DisableAllLadderButtons();
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpCtlLadderBtnNecromancer, 1);
@@ -3080,6 +3111,7 @@ BOOL __stdcall CHATDLG_OnPressLadderNecromancer(D2ControlMsg * pControlMsg) {
 
 // OnPress handler of the ladder board's Paladin tab (class id 3 + 1): disables the ladder buttons, highlights gpCtlLadderBtnPaladin, and unless the filter byte 0070cd62 already shows tab 4 (value 4 or 13), sets gnLadderListRowCount to 200 (0xc8), clears the board, recomputes the filter via CHATDLG_GetLadderFilterForTab(4, g_nLadderFilterMode), resets the selected rank (0070cd7c) and flags a reload; returns 1.
 // Provenance: asm 0043f350 (RET 4), OnPress field of form record #114 (0070e3d0); UIMENU_LadderBoard_PrintClassButtonLabels (0043ed60) labels button form 0x72 "PAL".
+// 1.14d mac: 002ce697
 BOOL __stdcall CHATDLG_OnPressLadderPaladin(D2ControlMsg * pControlMsg) {
     CHATDLG_DisableAllLadderButtons();
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpCtlLadderBtnPaladin, 1);
@@ -3098,6 +3130,7 @@ BOOL __stdcall CHATDLG_OnPressLadderPaladin(D2ControlMsg * pControlMsg) {
 
 // OnPress handler of the ladder board's Barbarian tab (class id 4 + 1): disables the ladder buttons, highlights gpCtlLadderBtnBarbarian, and unless the filter byte 0070cd62 already shows tab 5 (value 5 or 14), sets gnLadderListRowCount to 200 (0xc8), clears the board, recomputes the filter via CHATDLG_GetLadderFilterForTab(5, g_nLadderFilterMode), resets the selected rank (0070cd7c) and flags a reload; returns 1.
 // Provenance: asm 0043f3b0 (RET 4), OnPress field of form record #115 (0070e400); UIMENU_LadderBoard_PrintClassButtonLabels (0043ed60) labels button form 0x73 "BAR".
+// 1.14d mac: 002ce708
 BOOL __stdcall CHATDLG_OnPressLadderBarbarian(D2ControlMsg * pControlMsg) {
     CHATDLG_DisableAllLadderButtons();
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpCtlLadderBtnBarbarian, 1);
@@ -3116,6 +3149,7 @@ BOOL __stdcall CHATDLG_OnPressLadderBarbarian(D2ControlMsg * pControlMsg) {
 
 // OnPress handler of the ladder board's Druid tab (class id 5 + 1): disables the ladder buttons, highlights gpCtlLadderBtnDruid, and unless the filter byte 0070cd62 already shows tab 6 (value 6 or 15), sets gnLadderListRowCount to 200 (0xc8), clears the board, recomputes the filter via CHATDLG_GetLadderFilterForTab(6, g_nLadderFilterMode), resets the selected rank (0070cd7c) and flags a reload; returns 1. The button exists only when gbLadderExpansionEnabled (0070cd70) is set.
 // Provenance: asm 0043f410 (RET 4), OnPress field of form record #116 (0070e430); UIMENU_LadderBoard_PrintClassButtonLabels (0043ed60) labels button form 0x74 "DRU".
+// 1.14d mac: 002ce779
 BOOL __stdcall CHATDLG_OnPressLadderDruid(D2ControlMsg * pControlMsg) {
     CHATDLG_DisableAllLadderButtons();
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpCtlLadderBtnDruid, 1);
@@ -3134,6 +3168,7 @@ BOOL __stdcall CHATDLG_OnPressLadderDruid(D2ControlMsg * pControlMsg) {
 
 // OnPress handler of the ladder board's Assassin tab (class id 6 + 1): disables the ladder buttons, highlights gpCtlLadderBtnAssassin, and unless the filter byte 0070cd62 already shows tab 7 (value 7 or 16), sets gnLadderListRowCount to 200 (0xc8), clears the board, recomputes the filter via CHATDLG_GetLadderFilterForTab(7, g_nLadderFilterMode), resets the selected rank (0070cd7c) and flags a reload; returns 1. The button exists only when gbLadderExpansionEnabled (0070cd70) is set.
 // Provenance: asm 0043f470 (RET 4), OnPress field of form record #117 (0070e460); UIMENU_LadderBoard_PrintClassButtonLabels (0043ed60) labels button form 0x75 "ASN".
+// 1.14d mac: 002ce7ea
 BOOL __stdcall CHATDLG_OnPressLadderAssassin(D2ControlMsg * pControlMsg) {
     CHATDLG_DisableAllLadderButtons();
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpCtlLadderBtnAssassin, 1);
@@ -3180,6 +3215,7 @@ void __fastcall CHATDLG_SetControlParent(D2ControlStrc * pControl) {
 
 // Message-pump callback for CHATDLG_ReadUserProfile: asks pfnGetStoredReadUserData for the 3 profile keys of 1 account into gapszProfileReadBuffers with buffer sizes {8, 40, 200}, and ends the message loop once the reply is stored or the wait was cancelled. Always returns 1.
 // Provenance: asm 0043f5a4..0043f5d7.
+// 1.14d mac: 002d3ef5
 int __stdcall CHATDLG_PollUserProfileReply(int nFrameIndex) {
     int anBufferSizes[3];
     anBufferSizes[0] = 8;
@@ -3202,6 +3238,7 @@ uint32_t __fastcall CHATDLG_SendProfileData(char * szAccount, char * szSex, char
     return nResult;
 }
 
+// 1.14d mac: 002cdfdf
 BOOL __stdcall CHATDLG_ToggleLadderNews(D2ControlMsg * pControlMsg) {
     uint16_t nStringId;
     uint16_t awszMessage[20];
@@ -3246,6 +3283,7 @@ BOOL __stdcall CHATDLG_ToggleLadderNews(D2ControlMsg * pControlMsg) {
 
 // OnPress handler of the chat-commands dialog button (form record 0070ea70, FORM_Button, string 0x13ee, created by UIMENU_DialogWindowChatCommands): calls OOGUTIL_DestroyChatCommandsDialog; returns 1.
 // Provenance: 1.14d asm 0043f720 CALL 00444e20; MOV EAX,1; RET 4.
+// 1.14d mac: 002ce985
 BOOL __stdcall CHATDLG_OnPressChatCommandsOK(D2ControlMsg * pControlMsg) {
     OOGUtilities::OOGUTIL_DestroyChatCommandsDialog();
     return 1;
@@ -3305,6 +3343,7 @@ void __stdcall CHATDLG_FreePlayerNameList() {
     gpChatPlayerNameListHead = 0;
 }
 
+// 1.14d mac: 002d1f3f
 int __stdcall CHATDLG_CancelGameCreate() {
     D2MCPClient::McpConnect::NET_MCP_CLIENT_Send_0x13_CancelGameCreate();
     D2MCPClient::McpConnect::SetIsMPCJoinSuccesfull(0);
@@ -3325,6 +3364,7 @@ static void __stdcall SafeDefaultChannel(char * pszChannel) {
     Storm::Source::SReg::SRegSaveString("Diablo II", "Default Channel", 0, pszChannel);
 }
 
+// 1.14d mac: 002ce99a
 void __stdcall CHATDLG_DestroyAllForms() {
     // Static local variables (originally global data)
     static D2ControlStrc * gpChatDlgMainControl; D2_STATIC_GUARD_BSS(gpChatDlgMainControl, "D2Multi::ChatDlg::CHATDLG_DestroyAllForms::gpChatDlgMainControl");
@@ -3361,6 +3401,7 @@ BOOL __stdcall CHATDLG_SetDestroyCallback(uint32_t dwUnused, ChatDlgCallback pfn
     return 1;
 }
 
+// 1.14d mac: 002d0c53
 int __stdcall CHATDLG_HandleTabCompletion(uint32_t nKeyCode, size_t nSize, char * szText) {
     char* pcInputEnd;
     char* pcChannelEnd;
@@ -3410,6 +3451,7 @@ int __stdcall CHATDLG_HandleTabCompletion(uint32_t nKeyCode, size_t nSize, char 
     return 1;
 }
 
+// 1.14d mac: 002cff1d
 int __fastcall UIMENU_DrawSpecificJoinGameError(uint16_t * wszText, ChatDlgCallback pfnCallback) {
     CHATDLG_DestroyAllForms();
     if (pGameListCache) {
@@ -3435,6 +3477,7 @@ void __stdcall CHATDLG_ResetButtonsAndForms() {
     OOGUtilities::gpChatFormList = 0;
 }
 
+// 1.14d mac: 002cfbf1
 void __stdcall CHATDLG_CreateAllForms() {
     char szRealmCharName[256];
     if (!gbLobbyInitialized) {
@@ -3535,6 +3578,7 @@ uint32_t __fastcall OOGMENU_CreateGame(mcp0x03data * pMcpData, char * szServerIp
 }
 
 // Battle.net game creation and joining functions - handle both realm and open bnet modes
+// 1.14d mac: 002d20b0
 void __fastcall OOGMENU_JoinGame(int16_t nJoinId, char * szGameName, char * szPassword, char * szServerIp) {
     void* nAddress;
     int32_t nHasPeer;
@@ -3608,12 +3652,14 @@ int __stdcall EDITBOX_Cb_CHATDLG_UpdateChannelOkButtonState(void * pUnknown) {
 
 // OnPress of the CANCEL button (form 0x26, record 0070d570, string 0x13ef) of the chat password/CD-key warning popup: clears gpChatDlgInputEditBox and closes the popup (FORMS_DestroyListEx); returns 1. The popup builder UIMENU_DrawTitleAndSubtitleOnCenterScreen creates forms 0x25/0x27/0x28/0x29 but never 0x26, so this button is never shown in 1.14d.
 // Provenance: asm 00440120..00440137 (RET 4); FORMS_CreateAnyFormFromListEx ids from its callers.
+// 1.14d mac: 002ce189
 BOOL __stdcall CHATDLG_OnPressChatWarningCancel(D2ControlMsg * pControlMsg) {
     D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextWide(gpChatDlgInputEditBox, nullptr);
     FORMS_DestroyListEx();
     return 1;
 }
 
+// 1.14d mac: 002cfaf5
 void __fastcall UIMENU_DrawTitleOnCenterSmaller(uint16_t * wszTitle, ChatDlgCallback pCallback) {
     FORMS_DestroyListEx();
     D2ControlStrc* pForm = FORMS_CreateAnyFormFromListEx(0x21);
@@ -3627,6 +3673,7 @@ void __fastcall UIMENU_DrawTitleOnCenterSmaller(uint16_t * wszTitle, ChatDlgCall
     gpfnChatDlgCallback = pCallback ? pCallback : CHATDLG_DestroyListCallback;
 }
 
+// 1.14d mac: 002d0aed
 void __fastcall UIMENU_PrintSmallTitleOnCenterScreen(uint16_t * wszText, ChatDlgCallback pCallback) {
     FORMS_DestroyListEx();
     D2ControlStrc* pForm = FORMS_CreateAnyFormFromListEx(0x21);
@@ -3644,6 +3691,7 @@ void __fastcall UIMENU_PrintSmallTitleOnCenterScreen(uint16_t * wszText, ChatDlg
 
 // OnPress handler: CHATDLG_UpdateButtonVisibility, then CHATDLG_DestroyAllForms; returns 1.
 // Provenance: asm 00440240 (RET 4); fpOnPressCallback of form record 0070e110 (FORM_Button, string 0x13ef), gaPredefinedForms_b[100], the CANCEL shared by OOGUTIL_OpenCreateGameDialog, OOGUTIL_OpenChannelDialog, UIMENU_JoinGame and CHATDLG_OpenLadderTypeMenu (form 0x64).
+// 1.14d mac: 002ce458
 BOOL __stdcall CHATDLG_OnPressCloseDialog(D2ControlMsg * pControlMsg) {
     CHATDLG_UpdateButtonVisibility();
     CHATDLG_DestroyAllForms();
@@ -3652,6 +3700,7 @@ BOOL __stdcall CHATDLG_OnPressCloseDialog(D2ControlMsg * pControlMsg) {
 
 // OnPress handler of the ladder-board button gaPredefinedForms_b[0x6d] (0070e2c0, FORM_Button, string 0x13ef), created by UIMENU_LadderBoard_PrintClassesAndTableHeaders: releases gpCtlLobbyChannelButton, gpCtlLobbyCreateButton and gpCtlLobbyJoinButton, destroys the chat forms (CHATDLG_DestroyAllForms) and reopens the ladder type menu (CHATDLG_OpenLadderTypeMenu); returns 1.
 // Provenance: asm 00440260 (RET 4); FORMS_CreateAnyFormFromListEx(0x6d) at 004406fb.
+// 1.14d mac: 002ce472
 BOOL __stdcall CHATDLG_OnPressCloseLadderBoard(D2ControlMsg * pControlMsg) {
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpLobbyForm0.pCtlLobbyChannelButton, 0);
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gpLobbyForm0.pCtlLobbyCreateButton, 0);
@@ -3686,6 +3735,7 @@ BOOL __stdcall CHATDLG_UpdateChatRoomList() {
 
 // Callback of the FORM_Timer record gaPredefinedForms_b[0x80] (0070e650), created by UIMENU_LadderBoard_PrintClassesAndTableHeaders: once gdwLadderRankRequestTimeout has passed and the ladder board text box exists, if the chat-room list changed (CHATDLG_UpdateChatRoomList) or a filter change is pending and the selection moved, sends MCP 0x11 RequestLadderData for the selected rank and throttles the next request by 1000 ms; returns 1.
 // Provenance: 1.14d asm 00440350, called as fpOnPress by D2WinTimer DrawEx 004fd8d2.
+// 1.14d mac: 002ce8eb
 BOOL __stdcall CHATDLG_OnTimerRequestLadderData(D2ControlMsg * pControlMsg) {
     // Static local variables (originally global data)
     static uint32_t gnChatRoomListPrevSelectedBase = -0x1; D2_STATIC_GUARD(gnChatRoomListPrevSelectedBase, "D2Multi::ChatDlg::CHATDLG_OnTimerRequestLadderData::gnChatRoomListPrevSelectedBase");
@@ -3801,6 +3851,7 @@ void __fastcall CHATDLG_HandleChatListClick(int32_t nStartRank, int32_t nRankCou
     } while (nNextRank < nEndRank);
 }
 
+// 1.14d mac: 002d31f0
 void __stdcall UIMENU_LadderBoard_PrintClassesAndTableHeaders() {
     UIMENU_LadderBoard_PrintClassButtonLabels();
     D2ControlStrc* pForm = FORMS_CreateAnyFormFromListEx(0x6d);
@@ -3844,6 +3895,7 @@ void __stdcall UIMENU_LadderBoard_PrintClassesAndTableHeaders() {
     gszLadderCharNameFilter[0] = '\0';
 }
 
+// 1.14d mac: 002d30d0
 void __stdcall CHATDLG_OpenLadderClassicSoftcore() {
     uint16_t* pwszLabel;
     gbLadderExpansionEnabled = 0;
@@ -3879,6 +3931,7 @@ void __stdcall CHATDLG_OpenLadderClassicSoftcore() {
     D2MCPClient::McpConnect::MCPCONNECT_SetGameListCallbacks((pfnMCPGameListEntry)CHATDLG_HandleChatListClick, OOG::ChatDlg::CHATDLG_GameListCallback_Noop);
 }
 
+// 1.14d mac: 002d3b5d
 void __stdcall CHATDLG_OpenLadderClassicHardcore() {
     uint16_t* pwszLabel;
     gbLadderExpansionEnabled = 0;
@@ -3914,6 +3967,7 @@ void __stdcall CHATDLG_OpenLadderClassicHardcore() {
     D2MCPClient::McpConnect::MCPCONNECT_SetGameListCallbacks((pfnMCPGameListEntry)CHATDLG_HandleChatListClick, OOG::ChatDlg::CHATDLG_GameListCallback_Noop);
 }
 
+// 1.14d mac: 002d3c7d
 void __stdcall CHATDLG_OpenLadderExpansionSoftcore() {
     uint16_t* pwszLabel;
     gbLadderExpansionEnabled = 1;
@@ -3949,6 +4003,7 @@ void __stdcall CHATDLG_OpenLadderExpansionSoftcore() {
     D2MCPClient::McpConnect::MCPCONNECT_SetGameListCallbacks((pfnMCPGameListEntry)CHATDLG_HandleChatListClick, OOG::ChatDlg::CHATDLG_GameListCallback_Noop);
 }
 
+// 1.14d mac: 002d3d9d
 void __stdcall CHATDLG_OpenLadderExpansionHardcore() {
     uint16_t* pwszLabel;
     gbLadderExpansionEnabled = 1;
@@ -3986,6 +4041,7 @@ void __stdcall CHATDLG_OpenLadderExpansionHardcore() {
 
 // OnPress handler of a ladder-board button: destroys the chat forms (CHATDLG_DestroyAllForms), opens the ladder with CHATDLG_OpenLadderClassicSoftcore, sets the ladder type byte g_nLadderFilterMode (0070cd62) = 9 and gnLadderBoardSelectedRank = 0; returns 1.
 // Unreferenced by code; its address is the OnPress field (+0x20) of the button form at 0070e080 (string 0x14c5) in the FORMS_PredefinedFormStrc table.
+// 1.14d mac: 002ce3c5
 BOOL __stdcall CHATDLG_OnPressLadderClassicSoftcore(D2ControlMsg * pControlMsg) {
     CHATDLG_DestroyAllForms();
     CHATDLG_OpenLadderClassicSoftcore();
@@ -3996,6 +4052,7 @@ BOOL __stdcall CHATDLG_OnPressLadderClassicSoftcore(D2ControlMsg * pControlMsg) 
 
 // OnPress handler of a ladder-board button: destroys the chat forms (CHATDLG_DestroyAllForms), opens the ladder with CHATDLG_OpenLadderExpansionSoftcore, sets the ladder type byte g_nLadderFilterMode (0070cd62) = 0x1b and gnLadderBoardSelectedRank = 0; returns 1.
 // Unreferenced by code; its address is the OnPress field (+0x20) of the button form at 0070e0e0 (string 0x276a) in the FORMS_PredefinedFormStrc table.
+// 1.14d mac: 002ce427
 BOOL __stdcall CHATDLG_OnPressLadderExpansionSoftcore(D2ControlMsg * pControlMsg) {
     CHATDLG_DestroyAllForms();
     CHATDLG_OpenLadderExpansionSoftcore();
@@ -4006,6 +4063,7 @@ BOOL __stdcall CHATDLG_OnPressLadderExpansionSoftcore(D2ControlMsg * pControlMsg
 
 // OnPress handler of a ladder-board button: destroys the chat forms (CHATDLG_DestroyAllForms), opens the ladder with CHATDLG_OpenLadderExpansionHardcore, sets the ladder type byte g_nLadderFilterMode (0070cd62) = 0x13 and gnLadderBoardSelectedRank = 0; returns 1.
 // Unreferenced by code; its address is the OnPress field (+0x20) of the button form at 0070e0b0 (string 0x276b) in the FORMS_PredefinedFormStrc table.
+// 1.14d mac: 002ce3f6
 BOOL __stdcall CHATDLG_OnPressLadderExpansionHardcore(D2ControlMsg * pControlMsg) {
     CHATDLG_DestroyAllForms();
     CHATDLG_OpenLadderExpansionHardcore();
@@ -4016,6 +4074,7 @@ BOOL __stdcall CHATDLG_OnPressLadderExpansionHardcore(D2ControlMsg * pControlMsg
 
 // Reads szAccount's profile\sex, profile\location and profile\description keys (gaszChatDlgProfileKeys) through pfnSendReadUserData into szSex, szLocation and szDescription (destinations kept in gapszProfileReadBuffers), shows a wait title and pumps messages with CHATDLG_PollUserProfileReply until the reply is stored or the title is cancelled. Returns TRUE when the read completed, FALSE when cancelled (gbChatOptionButtonState set by CHATDLG_PrintCallback_SetFlag).
 // Provenance: asm 00440ca0..00440d01; key strings at 006d4ee0, 006d4ecc, 006d4eb8.
+// 1.14d mac: 002d3f71
 uint32_t __fastcall CHATDLG_ReadUserProfile(char * szAccount, char * szSex, char * szLocation, char * szDescription) {
     gapszProfileReadBuffers[1] = szLocation;
     gapszProfileReadBuffers[0] = szSex;
@@ -4037,6 +4096,7 @@ uint32_t __fastcall CHATDLG_ReadUserProfile(char * szAccount, char * szSex, char
 // Open: the ECX name. At the dispatch it is the message id; the body reads it as a player id.
 // The two readings are not reconciled.
 // @sourcefile .\Src\ChatDlg.cpp
+// 1.14d mac: 002d1bcc
 void __fastcall CHATDLG_StorePlayerName(uint32_t nPlayerId, uint32_t nDataLength, void * pMessageData) {
     D2ChatPlayerNameNodeStrc* pNode;
     D2ChatPlayerNameNodeStrc* pCur;
@@ -4072,6 +4132,7 @@ void __fastcall CHATDLG_StorePlayerName(uint32_t nPlayerId, uint32_t nDataLength
     CHATDLG_RefreshGameNameDisplay();
 }
 
+// 1.14d mac: 002d0e42
 int __fastcall CHATDLG_RunChatLobbyScreen(D2IniConfigStrc * pD2IniConfig) {
     // Static local variables (originally global data)
     static uint8_t gnOogReplyCommandIndex; D2_STATIC_GUARD_BSS(gnOogReplyCommandIndex, "D2Multi::ChatDlg::CHATDLG_RunChatLobbyScreen::gnOogReplyCommandIndex");
@@ -4374,6 +4435,7 @@ static uint32_t OOGUTIL_HandleReplyCommand(char * szText1, char * szText2) {
 
 // OnPress handler of a ladder-board button: destroys the chat forms (CHATDLG_DestroyAllForms), opens the ladder with CHATDLG_OpenLadderClassicHardcore, sets the ladder type byte g_nLadderFilterMode (0070cd62) = 0 and gnLadderBoardSelectedRank = 0; returns 1.
 // Unreferenced by code; its address is the OnPress field (+0x20) of the button form at 0070e020 (string 0x14c6) in the FORMS_PredefinedFormStrc table.
+// 1.14d mac: 002ce37f
 BOOL __stdcall CHATDLG_OnPressLadderClassicHardcore(D2ControlMsg * pControlMsg) {
     CHATDLG_DestroyAllForms();
     CHATDLG_OpenLadderClassicHardcore();
@@ -4549,6 +4611,7 @@ void __fastcall OOGUTIL_HandleChatCommands(char * szText) {
     CHATDLG_AppendTextToTextBox(wszOutputBuffer, 3);
 }
 
+// 1.14d mac: 002d22e1
 int __fastcall OOGUTIL_SendChatMessage(char * szText, int32_t bUseChannelPrefix) {
     char* pszSrc;
     uint16_t* wszSubTitle;
