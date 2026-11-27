@@ -44,7 +44,8 @@ struct D2MPQHeaderStrc {
     uint32_t dwBlockTableSize;   // 0x1C
 };
 
-// The block table entry as held in memory: the 0x10-byte disk entry plus the attributes.
+// The block table entry as held in memory: the 0x10-byte disk entry plus the attributes
+// (file time, CRC).
 struct D2MPQBlockEntryStrc {
     uint32_t dwFilePos;           // 0x00
     uint32_t dwCompressedSize;    // 0x04
@@ -52,15 +53,14 @@ struct D2MPQBlockEntryStrc {
     uint32_t dwFlags;             // 0x0C  0xff00 compressed, 0x10000 encrypted, 0x80000000 exists
     FILETIME ftFileTime;          // 0x10
     uint32_t dwCRC32;             // 0x18
-    uint8_t abMD5[16];            // 0x1C
 };
 
 struct D2ArchiveStrc {
-    TSLink<D2ArchiveStrc> m_link;        // 0x00  pPrev, pNext
+    TSLink<D2ArchiveStrc> m_link;            // 0x000  pPrev, pNext
     char szArchivePath[260];                 // 0x008
     HANDLE hFile;                            // 0x10C
-    int nArchiveType;                        // 0x110
-    int nFlags;                              // 0x114
+    int nArchiveType;                        // 0x110  0 disk, 1 and 3 read by the I/O thread (3: on a CD)
+    int nPriority;                           // 0x114  the list is in descending priority
     D2MPQFileStrc* pLastReadFile;            // 0x118  file whose aligned run is cached in pSectorBuffer
     uint32_t nLastReadOffset;                // 0x11C
     uint32_t nSectorSize;                    // 0x120
@@ -71,12 +71,9 @@ struct D2ArchiveStrc {
     D2MPQHeaderStrc* pMpqHeader;             // 0x134
     D2MPQBlockEntryStrc* pBlockTable;        // 0x138
     D2MPQHashEntryStrc* pHashTable;          // 0x13C
-    uint32_t nHashTableSize;                 // 0x140
+    uint32_t nFilePos;                       // 0x140  where the last checked read ended
     int nRefCount;                           // 0x144
     D2MPQFileStrc* pArchiveFile;             // 0x148  the archive opened as a file (closed with it)
-    D2ArchiveStrc* pBaseArchive;             // 0x14C
-    char szInternalPrefix[260];              // 0x150
-    int nPriority;                           // 0x254
 
     D2ArchiveStrc() {}
     ~D2ArchiveStrc();
@@ -156,8 +153,8 @@ struct D2StormAsyncOpStrc {
     D2StormAsyncOpStrc() {}
     ~D2StormAsyncOpStrc();
 };
-typedef char D2MPQ_size_block[(sizeof(D2MPQBlockEntryStrc) == 0x2c) ? 1 : -1];
-typedef char D2MPQ_size_archive[(sizeof(D2ArchiveStrc) == 0x258) ? 1 : -1];
+typedef char D2MPQ_size_block[(sizeof(D2MPQBlockEntryStrc) == 0x1c) ? 1 : -1];
+typedef char D2MPQ_size_archive[(sizeof(D2ArchiveStrc) == 0x14c) ? 1 : -1];
 typedef char D2MPQ_size_file[(sizeof(D2MPQFileStrc) == 0x158) ? 1 : -1];
 typedef char D2MPQ_size_stream[(sizeof(D2StormAudioStreamRec) == 0x50) ? 1 : -1];
 typedef char D2MPQ_size_async[(sizeof(D2StormAsyncOpStrc) == 0x44) ? 1 : -1];
@@ -177,8 +174,13 @@ int SSignatureVerifyStream_Finish(D2SsigContextStrc* pContext, const void* pModu
 void SErrDisplayError(DWORD dwErrCode, const char* szFileName, int nLine, char* szDescription, int nFlags,
                       int nRecoverable);
 uint32_t SStrLen(const char* szString);
+char* SStrDup(const char* szString);
+uint8_t STORM_IsCDVolume(int16_t nVRefNum);
 
 // ---- the Win32 layer entry points this file calls (Win32Mac.h has the rest) ----
+HANDLE CreateFile(LPCSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, LPVOID lpSecurityAttributes,
+                  DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile);
+void MoveMemory(void* pDest, const void* pSource, size_t nSize);
 DWORD SetFilePointer(HANDLE hFile, LONG lDistanceToMove, LPLONG lpDistanceToMoveHigh, DWORD dwMoveMethod);
 BOOL ReadFile(HANDLE hFile, LPVOID lpBuffer, DWORD nNumberOfBytesToRead, LPDWORD lpNumberOfBytesRead,
               LPVOID lpOverlapped);

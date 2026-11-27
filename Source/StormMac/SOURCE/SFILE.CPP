@@ -87,9 +87,13 @@ extern uint8_t gaSFileSignatureRsaExponent[4];
 #define SFILE_UNLOCK() pthread_mutex_unlock(&s_tLock.m_tMutex)
 
 SFILE_STATIC int32_t SFILE_GetStreamPosition(D2StormAudioStreamRec* pStream);
+SFILE_STATIC int SFILE_s_OpenArchive(D2ArchiveStrc* pArchive, uint32_t nFlags, int32_t bAllowEmpty,
+                                     D2ArchiveStrc** ppArchiveOut);
+SFILE_STATIC void SFILE_CreateCdThread(void);
+struct FSSpec;
 SFILE_STATIC int SFILE_CancelAsyncRequest(HANDLE hBuffer, IDirectSoundBuffer* pStream);
 SFILE_STATIC void SFILE_InitCryptTable(void);
-static int SFileReadFileEx2(D2MPQFileStrc* pFile, void* pBuffer, uint32_t nBytes, size_t* pnBytesRead,
+int SFileReadFileEx2(D2MPQFileStrc* pFile, void* pBuffer, uint32_t nBytes, size_t* pnBytesRead,
                             void* pOverlapped, int nFlags, void* pfnComplete);
 int SFileCloseFile(D2MPQFileStrc* pFile);
 int SFileOpenFileEx(D2ArchiveStrc* pArchive, const char* szFileName, uint32_t dwSearchScope,
@@ -990,5 +994,341 @@ D2MPQFileStrc::~D2MPQFileStrc() {
 // 1.14d mac: 00016a72 (the mutex destructor)
 SFileCritSect::~SFileCritSect() {
     pthread_mutex_destroy(&m_tMutex);
+}
+
+typedef void (*PFNSFILEOPENCALLBACK)(const char* szFileName, void* pParam);
+// 1.14d mac: 003f0594
+static PFNSFILEOPENCALLBACK s_pfnOpenCallback;
+// 1.14d mac: 003f0598
+static void* s_pOpenCallbackParam;
+
+// The key a name hashes to under hash type 3 (the name past any drive and directory).
+static uint32_t SFILE_HashFileKey(const char* szName) {
+    uint32_t dwKey = 0x7fed7fed;
+    if (szName != NULL) {
+        int32_t nSeed2 = 0xEEEEEEEE;
+        for (; *szName; szName++) {
+            uint32_t nChar = toupper(*szName) & 0xff;
+            dwKey = (dwKey + nSeed2) ^ s_pCryptTable[0x300 + nChar];
+            nSeed2 = dwKey + 3 + nSeed2 * 0x21 + nChar;
+        }
+    }
+    return dwKey;
+}
+
+// 1.14d mac: 00013dd3
+// Opens a file from the disk when the flags allow and it is there, else from the archives.
+// Returns 2 for a disk file, 1 for an archive file, 0 on failure; with flag 4 the handle is
+// the raw file (positioned on the data for an archive file) instead of a record.
+int SFileOpenFileEx(D2ArchiveStrc* hArchive, const char* szFileName, uint32_t dwFlags, D2MPQFileStrc** ppFile) {
+    char szDiskPath[260];
+    D2ArchiveStrc* pArchive;
+    uint32_t nResult;
+    if (ppFile != NULL) {
+        *ppFile = NULL;
+        if (*szFileName != '\0' && szFileName != NULL) {
+            if (s_pfnOpenCallback != NULL) {
+                s_pfnOpenCallback(szFileName, s_pOpenCallbackParam);
+            }
+            SFILE_LOCK();
+            SFILE_InitCryptTable();
+            bool bFromArchive = true;
+            if ((dwFlags & 3) != 0) {
+                if (SFILE_FindFileOnDisk(szFileName, (uint8_t)dwFlags, szDiskPath) == 0) {
+                    bFromArchive = true;
+                } else {
+                    HANDLE hDisk = CreateFile(szDiskPath, 0x80000000, 1, 0, 3, 0x8000000, 0);
+                    if (hDisk == 0) {
+                        bFromArchive = true;
+                    } else {
+                        bFromArchive = false;
+                        void* pHandle = (void*)hDisk;
+                        if ((dwFlags & 4) == 0) {
+                            D2MPQFileStrc* pFile = s_tFileList.NewNode(STORM_LIST_LINK_AFTER, 0, 0);
+                            SStrCopy(pFile->szFileName, szFileName, 0x104);
+                            pFile->szFilePath = SStrDup(szDiskPath);
+                            pFile->hFile = hDisk;
+                            pFile->nRefCount = 1;
+                            pFile->bChecksumEnabled = 0;
+                            pHandle = pFile;
+                        }
+                        *ppFile = (D2MPQFileStrc*)pHandle;
+                        nResult = 2;
+                    }
+                }
+            }
+            if (bFromArchive) {
+                D2MPQBlockEntryStrc* pBlockEntry = GetFileBlockEntry(hArchive, szFileName, dwFlags, &pArchive);
+                nResult = 0;
+                if (pBlockEntry != NULL) {
+                    if ((dwFlags & 4) == 0) {
+                        const char* szName = szFileName;
+                        char* pColon = SStrChrR(szName, ':');
+                        if (pColon != NULL) {
+                            szName = pColon + 1;
+                        }
+                        char* pSlash = SStrChrR(szName, '\\');
+                        if (pSlash != NULL) {
+                            szName = pSlash + 1;
+                        }
+                        uint32_t dwFileKey = SFILE_HashFileKey(szName);
+                        uint32_t nFileSize = pBlockEntry->dwFileSize;
+                        if (pBlockEntry->dwFlags & 0x20000) {
+                            dwFileKey = ((dwFileKey + pBlockEntry->dwFilePos) - pArchive->nArchiveOffset) ^ nFileSize;
+                        }
+                        uint32_t* pSectorOffsets = NULL;
+                        uint32_t nSectors = ((nFileSize - 1) + pArchive->nSectorSize) / pArchive->nSectorSize;
+                        if ((uint8_t)(pBlockEntry->dwFlags >> 8) != 0) {
+                            pSectorOffsets = (uint32_t*)SMemAlloc(nSectors * 4 + 4, SFILE_FILE, 0x1118, 0);
+                        }
+                        D2MPQFileStrc* pFile = s_tFileList.NewNode(STORM_LIST_LINK_AFTER, 0, 0);
+                        SStrCopy(pFile->szFileName, szFileName, 0x104);
+                        pFile->hFile = 0;
+                        pFile->pArchive = pArchive;
+                        pFile->pBlockEntry = pBlockEntry;
+                        pFile->nDecryptKey = dwFileKey;
+                        pFile->nSectorCount = nSectors;
+                        pFile->pSectorTable = pSectorOffsets;
+                        pFile->pReadBuffer = SMemAlloc(0x1000, SFILE_FILE, 0x1123, 0);
+                        pFile->nRefCount = 1;
+                        pFile->bChecksumEnabled = pBlockEntry->dwCRC32 != 0;
+                        pFile->nChecksumState = 1;
+                        if (pArchive != NULL) {
+                            pArchive->nRefCount++;
+                        }
+                        *ppFile = pFile;
+                        nResult = 1;
+                    } else {
+                        HANDLE hRaw = CreateFile(pArchive->szArchivePath, 0x80000000, 1, 0, 3, 0x8000000, 0);
+                        *ppFile = (D2MPQFileStrc*)hRaw;
+                        nResult = hRaw != 0;
+                        if (hRaw == 0) {
+                            SErrSetLastError(2);
+                        } else {
+                            SetFilePointer(hRaw, pBlockEntry->dwFilePos, NULL, 0);
+                        }
+                    }
+                }
+            }
+            SFILE_UNLOCK();
+            return nResult;
+        }
+    }
+    SErrSetLastError(0x57);
+    return 0;
+}
+
+// 1.14d mac: 00014226
+int SFileOpenArchive(const char* szArchiveName, int nPriority, uint32_t dwFlags, D2ArchiveStrc** phArchive) {
+    uint16_t aSpec[38];
+    char szPath[260];
+    if (phArchive != NULL) {
+        *phArchive = NULL;
+        if (*szArchiveName != '\0' && szArchiveName != NULL) {
+            SFILE_LOCK();
+            SFILE_InitCryptTable();
+            SStrCopy(szPath, szArchiveName, 0x104);
+            szPath[259] = '\0';
+            if (GetFileAttributes(szPath) & 0x10) {
+                if (*szArchiveName != '\\' && strstr(szArchiveName, ":\\") == NULL &&
+                    strstr(szArchiveName, "\\\\") == NULL) {
+                    SFILE_ConvertRelativePathName(szArchiveName, szPath, 0);
+                } else {
+                    SStrCopy(szPath, szArchiveName, 0x104);
+                }
+            }
+            uint32_t bOnCd = 0;
+            if (FilepathToFSSpec((FSSpec*)aSpec, szPath, 0) == 0) {
+                bOnCd = STORM_IsCDVolume(aSpec[0]) & 0xff;
+            }
+            if ((dwFlags & 1) == 0 || bOnCd != 0) {
+                HANDLE hFile = CreateFile(szPath, 0x80000000, 1, 0, 3, 0, 0);
+                if (hFile != 0) {
+                    D2ArchiveStrc* pArchive = (D2ArchiveStrc*)SMemAlloc(sizeof(D2ArchiveStrc), "", -2, 8);
+                    if (pArchive != NULL) {
+                        new (pArchive) D2ArchiveStrc;
+                    }
+                    SStrCopy(pArchive->szArchivePath, szPath, 0x104);
+                    pArchive->hFile = hFile;
+                    pArchive->nPriority = nPriority;
+                    pArchive->nRefCount = 1;
+                    if (bOnCd == 0) {
+                        pArchive->nArchiveType = (dwFlags & 2) == 0 ? 0 : 1;
+                    } else {
+                        pArchive->nArchiveType = 3;
+                    }
+                    pArchive->pMpqHeader = (D2MPQHeaderStrc*)SMemAlloc(0x20, SFILE_FILE, 0xf95, 0);
+                    pArchive->nArchiveOffset = 0;
+                    pArchive->nArchiveFileSize = GetFileSize(hFile, NULL);
+                    int nResult = SFILE_s_OpenArchive(pArchive, dwFlags, bOnCd, phArchive);
+                    SFILE_UNLOCK();
+                    return nResult;
+                }
+            } else {
+                SErrSetLastError(0xf);
+            }
+            SFILE_UNLOCK();
+            return 0;
+        }
+    }
+    SErrSetLastError(0x57);
+    return 0;
+}
+
+// 1.14d mac: 000145e7
+// Finds the MPQ header (every 0x200 bytes from the start), reads and decrypts the hash and
+// block tables, links the archive by priority and reads its (attributes) file.
+SFILE_STATIC int SFILE_s_OpenArchive(D2ArchiveStrc* pArchive, uint32_t nFlags, int32_t bAllowEmpty,
+                                     D2ArchiveStrc** ppArchiveOut) {
+    uint8_t* pScanBuffer = (uint8_t*)SMemAlloc(0x1000, SFILE_FILE, 0xfaa, 0);
+    uint32_t nOffset = pArchive->nArchiveOffset;
+    uint32_t nBufferPos = 0;
+    uint32_t nBufferLen = 0;
+    uint32_t nBytesRead;
+    while (true) {
+        if (nBufferLen + nBufferPos <= nOffset) {
+            SetFilePointer(pArchive->hFile, nOffset, NULL, 0);
+            nBytesRead = 0;
+            ReadFile(pArchive->hFile, pScanBuffer, 0x1000, &nBytesRead, 0);
+            if (nBytesRead < 0x20 ||
+                (nBufferPos = nOffset, nBufferLen = nBytesRead, nOffset = pArchive->nArchiveOffset,
+                 pArchive->nArchiveFileSize <= pArchive->nArchiveOffset + 0x20)) {
+                if (pArchive != NULL) {
+                    delete pArchive;
+                }
+                SErrSetLastError(0x8510006c);
+                SMemFree(pScanBuffer, SFILE_FILE, 0xfc7, 0);
+                return 0;
+            }
+        }
+        memcpy(pArchive->pMpqHeader, pScanBuffer + (nOffset - nBufferPos), sizeof(D2MPQHeaderStrc));
+        if (pArchive->pMpqHeader->dwMagic == 0x1a51504d && pArchive->pMpqHeader->dwHeaderSize > 0x1f) {
+            break;
+        }
+        nOffset = pArchive->nArchiveOffset + 0x200;
+        pArchive->nArchiveOffset = nOffset;
+    }
+    SMemFree(pScanBuffer, SFILE_FILE, 0xfee, 0);
+
+    D2MPQHeaderStrc* pHeader = pArchive->pMpqHeader;
+    pArchive->nSectorSize = 0x200 << (pHeader->wSectorSizeShift & 0x1f);
+    pArchive->pSectorBuffer = SMemAlloc(pArchive->nSectorSize, SFILE_FILE, 0xff3, 0);
+    pArchive->pHashTable = (D2MPQHashEntryStrc*)SMemAlloc(pHeader->dwHashTableSize << 4, SFILE_FILE, 0xffc, 0);
+    SFILE_ReadFileChecked(pHeader->dwHashTablePos + pArchive->nArchiveOffset, &pArchive->nFilePos, pArchive->hFile,
+                          pArchive->pHashTable, pHeader->dwHashTableSize << 4, &nBytesRead, pArchive->szArchivePath);
+    SFILE_Decrypt((uint32_t*)pArchive->pHashTable, pHeader->dwHashTableSize << 4,
+                  SFILE_HashFileKey("(hash table)"));
+
+    pArchive->pBlockTable =
+        (D2MPQBlockEntryStrc*)SMemAlloc(pHeader->dwBlockTableSize * 0x1c, SFILE_FILE, 0x101b, 0);
+    SFILE_ReadFileChecked(pHeader->dwBlockTablePos + pArchive->nArchiveOffset, &pArchive->nFilePos, pArchive->hFile,
+                          pArchive->pBlockTable, pHeader->dwBlockTableSize << 4, &nBytesRead,
+                          pArchive->szArchivePath);
+    SFILE_Decrypt((uint32_t*)pArchive->pBlockTable, pHeader->dwBlockTableSize << 4,
+                  SFILE_HashFileKey("(block table)"));
+
+    // The disk entries are 0x10 bytes; spread them out to make room for the attributes.
+    D2MPQBlockEntryStrc* pBlocks = pArchive->pBlockTable;
+    uint32_t nBlocks = pHeader->dwBlockTableSize;
+    int nBlock = nBlocks - 1;
+    D2MPQBlockEntryStrc* pDest = pBlocks + nBlock;
+    D2MPQBlockEntryStrc* pFirst = pDest;
+    if (nBlocks > 1) {
+        void* pSource = (char*)pBlocks + nBlock * 0x10;
+        do {
+            MoveMemory(pDest, pSource, 0x10);
+            pDest->ftFileTime.dwHighDateTime = 0;
+            pDest->ftFileTime.dwLowDateTime = 0;
+            pDest->dwCRC32 = 0;
+            pDest--;
+            pSource = (char*)pSource - 0x10;
+            nBlock--;
+            pFirst = pBlocks;
+        } while (nBlock != 0);
+    }
+    if (nBlocks != 0) {
+        pFirst->ftFileTime.dwHighDateTime = 0;
+        pFirst->ftFileTime.dwLowDateTime = 0;
+        pFirst->dwCRC32 = 0;
+    }
+    if (pArchive->nArchiveOffset != 0) {
+        nBlocks = pHeader->dwBlockTableSize;
+        for (uint32_t i = 0; i < nBlocks; i++) {
+            if (pBlocks[i].dwFilePos != 0) {
+                pBlocks[i].dwFilePos += pArchive->nArchiveOffset;
+                nBlocks = pHeader->dwBlockTableSize;
+            }
+        }
+    }
+
+    // Higher priority first.
+    D2ArchiveStrc* pRef = NULL;
+    for (D2ArchiveStrc* pNext = s_tArchiveList.Head(); pNext != NULL; pNext = s_tArchiveList.Next(pNext)) {
+        if (pNext->nPriority <= pArchive->nPriority) {
+            pRef = pNext;
+            break;
+        }
+    }
+    s_tArchiveList.LinkNode(pArchive, STORM_LIST_LINK_BEFORE, pRef);
+    if (pArchive->nArchiveType == 0) {
+        if ((nFlags & 1) != 0 && bAllowEmpty == 0) {
+            SFileCloseArchive(pArchive);
+            SErrSetLastError(0xf);
+            return 0;
+        }
+    } else {
+        SFILE_CreateCdThread();
+    }
+    *ppArchiveOut = pArchive;
+    SFILE_UNLOCK();
+
+    // The (attributes) file: CRCs and file times for the blocks.
+    D2MPQBlockEntryStrc* pTable = pArchive->pBlockTable;
+    int nCount = pArchive->pMpqHeader->dwBlockTableSize;
+    D2MPQFileStrc* pAttrFile;
+    if (SFileOpenFileEx(pArchive, "(attributes)", 0, &pAttrFile) != 0) {
+        DWORD nSize = SFileGetFileSize(pAttrFile, NULL);
+        uint8_t* pAttr = (uint8_t*)SMemAlloc(nSize, SFILE_FILE, 0x55f, 0);
+        if (SFileReadFileEx2(pAttrFile, pAttr, nSize, NULL, NULL, 0, NULL) != 0 && nSize > 7) {
+            DWORD nExpected = 8;
+            uint32_t nHasCrc = ((uint32_t*)pAttr)[1] & 1;
+            if (nHasCrc != 0) {
+                nExpected = nCount * 4 + 8;
+            }
+            uint32_t nHasTime = ((uint32_t*)pAttr)[1] & 2;
+            if (nHasTime != 0) {
+                nExpected += nCount * 8;
+            }
+            if (nSize == nExpected) {
+                uint32_t* pCrc = (uint32_t*)(pAttr + 8);
+                if (nHasCrc != 0 && nCount != 0) {
+                    for (int i = 0; i != nCount; i++) {
+                        pTable[i].dwCRC32 = pCrc[i];
+                    }
+                    pCrc = (uint32_t*)(pAttr + nCount * 4 + 8);
+                }
+                if (nHasTime != 0 && nCount != 0) {
+                    FILETIME* pTime = (FILETIME*)pCrc;
+                    for (int i = 0; i != nCount; i++) {
+                        pTable[i].ftFileTime = pTime[i];
+                    }
+                }
+            }
+        }
+        if (pAttr != NULL) {
+            SMemFree(pAttr, SFILE_FILE, 0x57f, 0);
+        }
+        SFileCloseFile(pAttrFile);
+    }
+    SFILE_LOCK();
+    return 1;
+}
+
+SFileCritSect::SFileCritSect() {
+    pthread_mutexattr_t tAttr;
+    pthread_mutexattr_init(&tAttr);
+    pthread_mutexattr_settype(&tAttr, PTHREAD_MUTEX_RECURSIVE);
+    pthread_mutex_init(&m_tMutex, &tAttr);
+    pthread_mutexattr_destroy(&tAttr);
 }
 #endif  // D2_OS_MAC
