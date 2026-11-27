@@ -1069,30 +1069,22 @@ static void __stdcall SKILLDESC_BuildStatListDesc(D2UnitStrc * pUnit, D2StatList
 }
 
 static int32_t __stdcall SKILLDESC_CalcStatGroupValue(int32_t nStatValue, D2ItemStatCostTxt * pItemStatCostTxt, D2UnitStrc * pUnit, eD2UnitStat eStat) {
-    int nRawStatValue;
-    uint32_t nBluntBonus;
-    D2ItemStatCostTxt* pStatCostLine;
     if (pItemStatCostTxt->op >= 2 && pItemStatCostTxt->op <= 5) {
-      eD2UnitStat eUnitStat;
-      eUnitStat = (eD2UnitStat)pItemStatCostTxt->opBase;
-      pStatCostLine = (int)eUnitStat >= 0 && (int)eUnitStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eUnitStat : nullptr;
-      if (!pStatCostLine) {
+      eD2UnitStat eBaseStat = (eD2UnitStat)pItemStatCostTxt->opBase;
+      D2ItemStatCostTxt* pBaseStatTxt = (int)eBaseStat >= 0 && (int)eBaseStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eBaseStat : nullptr;
+      if (!pBaseStatTxt) {
         return 0;
       }
 
-      nRawStatValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), eUnitStat, 0);
-      nStatValue = (nRawStatValue >> D2_SHIFT_COUNT(pStatCostLine->valshift)) * nStatValue >> D2_SHIFT_COUNT(pItemStatCostTxt->opParam);
+      nStatValue = (D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), eBaseStat, 0) >> D2_SHIFT_COUNT(pBaseStatTxt->valshift)) * nStatValue >> D2_SHIFT_COUNT(pItemStatCostTxt->opParam);
     }
 
-    int32_t nShiftedValue = nStatValue >> D2_SHIFT_COUNT(pItemStatCostTxt->valshift);
-    if (eStat == UNITSTAT_item_undeaddamage_percent && pUnit && pUnit->eUnitType == UNIT_ITEM) {
-      nBluntBonus = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Blunt);
-      if (nBluntBonus) {
-        nShiftedValue += 0x32;
-      }
+    nStatValue >>= D2_SHIFT_COUNT(pItemStatCostTxt->valshift);
+    if (eStat == UNITSTAT_item_undeaddamage_percent && pUnit && pUnit->eUnitType == UNIT_ITEM && D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Blunt)) {
+      nStatValue += 0x32;
     }
 
-    return nShiftedValue;
+    return nStatValue;
 }
 
 BOOL __stdcall SKILLDESC_CalcStatGroupMinMax(D2UnitStrc * pUnit, D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, int32_t nGroupValue, D2ItemStatCostTxt * pItemStatCostTxt, BOOL * pbIsFirstInGroup) {

@@ -2383,44 +2383,34 @@ static void __stdcall Unused_GetUnitList(uint16_t nServerId, D2Game_Line0x13af *
 
 // Searches the game on nServerId for nCount specific units identified by (pClassIds[i], pOutBuffer[i]) pairs and exports their type+mode into pUnitTypes (stride 0xd). Uses FindUnitFromTable for each entry; non-player hits additionally call a PFN_UnitTypeToName_ARRAY dispatch. Returns the count of units found. Counterpart to QSERVER_ExportUnitListByServerId for targeted rather than bulk export.
 int32_t __stdcall QSERVER_FindUnitsAndExportByServerId(uint16_t nServerId, int32_t nCount, D2QServerUnitRecordStrc * pUnitTypes, uint32_t * pClassIds, void * pOutBuffer) {
-    int _nServerId;
-    BOOL bBadCodePtr;
-    int nSearchIdx;
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerGameListCs);
-    uint32_t nSlotToken = gaQServerGameTokens[nServerId - 1];
     uint32_t nToken = 0;
+    EnterCriticalSection(&gQServerGameListCs);
+    uint32_t nSlotToken = gaQServerGameTokens[nServerId - 1];
     if (nSlotToken && nSlotToken != 0xffffffff) {
       nToken = nSlotToken;
     }
 
-    uint32_t nUnitGUID = 0x52f2f8;
     LeaveCriticalSection(&gQServerGameListCs);
     ::SGAMEDATA* pGame = QSERVER_FindAndLockGame(nToken);
-    _nServerId = 0;
+    int32_t nFound = 0;
     if (!pGame) {
       return 0;
     }
 
-    for (nSearchIdx = 0; nSearchIdx < nCount; nSearchIdx++) {
-      D2UnitStrc* pUnit;
-      nUnitGUID = ((uint32_t*)pOutBuffer)[nSearchIdx];
-      pUnit = UNIT::SUnit::FindUnitFromTable(pGame, pClassIds[nSearchIdx], nUnitGUID);
+    for (int i = 0; i < nCount; i++) {
+      D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable(pGame, pClassIds[i], ((uint32_t*)pOutBuffer)[i]);
       if (pUnit) {
-        nUnitGUID = 0x52f34f;
-        UNIT::SUnit::GetTypeAndMode(pUnit, pUnitTypes);
-        if (pClassIds[nSearchIdx] != UNIT_PLAYER) {
-          /* FARPROC lpfn for IsBadCodePtr */ bBadCodePtr = IsBadCodePtr((FARPROC)PFN_UnitTypeCallbackTable[pClassIds[nSearchIdx]]);
-          if (bBadCodePtr) {
+        UNIT::SUnit::GetTypeAndMode(pUnit, &pUnitTypes[nFound]);
+        if (pClassIds[i] != UNIT_PLAYER) {
+          if (IsBadCodePtr((FARPROC)PFN_UnitTypeCallbackTable[pClassIds[i]])) {
             Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1472);
             exit(-1);
           }
 
-          nUnitGUID = 0x52f378;
-          (*PFN_UnitTypeCallbackTable[pClassIds[nSearchIdx]])(pUnitTypes->szCharName, pUnit->nClassId);
+          (*PFN_UnitTypeCallbackTable[pClassIds[i]])(pUnitTypes[nFound].szCharName, pUnit->nClassId);
         }
 
-        _nServerId++;
-        pUnitTypes++;
+        nFound++;
       }
     }
 
@@ -2429,8 +2419,8 @@ int32_t __stdcall QSERVER_FindUnitsAndExportByServerId(uint16_t nServerId, int32
       exit(-1);
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pGame->lpCriticalSection);
-    return _nServerId;
+    LeaveCriticalSection(pGame->lpCriticalSection);
+    return nFound;
 }
 
 // Aggregates unit statistics across all active games in the global token table. For each game, iterates all 128 unit buckets and counts: players (bucket-type 0, increments pBucketCountdown[3]) and objects/monsters at bucket offset 0x19 (increments pBucketCountdown[1]). Also increments pBucketCountdown[0] per game found. Used for server-capacity and monitoring queries.

@@ -197,7 +197,7 @@ static BOOL __stdcall SOUNDSMP_CreateSoundBuffer(uint32_t nFlags, D2SoundSmpStrc
     uint32_t nBufSize = nFlags & 1 ? 0x40000 : 0x20000;
     uint32_t uVar1 = g_nSoundSampleParam ? 0x80a0 : 0xa0;
     uint32_t u3DFlag = nFlags & 2;
-    tBufferDesc.dwSize = 0x14;
+    tBufferDesc.dwSize = sizeof(tBufferDesc);
     if (u3DFlag) {
       tBufferDesc.dwFlags = uVar1 | 0x14;
     } else {

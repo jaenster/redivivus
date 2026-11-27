@@ -770,6 +770,10 @@ void __fastcall RollStonesOrder(D2QuestDataA1Q4Strc * pQuestSpecificData) {
     int aStoneClassIds[5];
     char szDebugBuf[80];
     uint32_t sNextSeed;
+    // The stone order (aStones, nStoneIndex, the stone GUIDs at 0x10) sits in the first 0x24 bytes
+    // of the A1Q4 object, which the A1Q4 struct does not describe; that range has no pointer, so the
+    // sub-struct view at the object base is the same on every arch. Every field past it is read
+    // through pA1Q4->sSub, which moves with the struct.
     D2QuestDataA1Q4SubStrc* pSubData = (D2QuestDataA1Q4SubStrc*)((D2QuestDataStrc*)pQuestSpecificData)->pQuestSpecificData.pA1Q4;
     memset(pSubData->aStones, 0, sizeof(pSubData->aStones));
     pSubData->nStoneIndex = 0;
@@ -1115,7 +1119,6 @@ BOOL __fastcall OBJOP_A1Q4_OpenCainGibbet(D2ObjectOperateFnArg * pOperation) {
 void __fastcall Objects_InitFn06_CairnStone(D2ObjectInitFnArg * pInitArg) {
     uint32_t nPortalSpawned;
     D2QuestDataA1Q4Strc* pObject;
-    D2QuestDataA1Q1Strc* pA1Q1Data;
     char cFlagByte;
     D2UnitStrc* pObjectUnit;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TheSearchForCain);
@@ -1159,9 +1162,9 @@ void __fastcall Objects_InitFn06_CairnStone(D2ObjectInitFnArg * pInitArg) {
         D2Common::Units::ChangeAnimMode(pObjectUnit, 2);
       }
     } else {
-      pA1Q1Data = (D2QuestDataA1Q1Strc*)pInitArg->pObject;
-      if (!pA1Q1Data || pA1Q1Data->sQuestGUID.aPlayerGUID[4] != 2) {
-        D2Common::Units::ChangeAnimMode((D2UnitStrc*)pA1Q1Data, 2);
+      pObjectUnit = pInitArg->pObject;
+      if (!pObjectUnit || pObjectUnit->eAnimMode.eObjectMode != 2) {
+        D2Common::Units::ChangeAnimMode(pObjectUnit, 2);
         return;
       }
     }
@@ -1236,10 +1239,12 @@ BOOL __fastcall OBJOP_A1Q4_ActivateCairnStone(D2ObjectOperateFnArg * pOperation)
       exit(-1);
     }
 
+    D2QuestDataA1Q4Strc* pA1Q4Data;
+    pA1Q4Data = __frame0.pQuestData->pQuestSpecificData.pA1Q4;
     D2QuestDataA1Q4SubStrc* pSubData;
-    pSubData = (D2QuestDataA1Q4SubStrc*)__frame0.pQuestData->pQuestSpecificData.pA1Q4;
-    if (!pSubData->bStonesRolled) {
-      pSubData->bStonesRolled = true;
+    pSubData = (D2QuestDataA1Q4SubStrc*)pA1Q4Data;
+    if (!pA1Q4Data->sSub.bStoneOrderRolled) {
+      pA1Q4Data->sSub.bStoneOrderRolled = true;
       RollStonesOrder((D2QuestDataA1Q4Strc*)__frame0.pQuestData);
     }
 
@@ -1262,7 +1267,7 @@ BOOL __fastcall OBJOP_A1Q4_ActivateCairnStone(D2ObjectOperateFnArg * pOperation)
     D2QuestDataStrc* pGame;
     pGame = __frame0.pQuestData;
     if (!pRoomListEnd) {
-      bQuestState = !(pSubData->nStoneAttemptCount % 64);
+      bQuestState = !((uint16_t)pA1Q4Data->sSub.nNoScrollClickCount % 64);
       if (bQuestState) {
         _bQuestStateAlt = D2Common::QuestRecord::GetQuestState(pBitBuffer_00, QUEST_TheSearchForCain, QUESTSTATE_Step0x03);
         if (!_bQuestStateAlt) {
@@ -1273,7 +1278,7 @@ BOOL __fastcall OBJOP_A1Q4_ActivateCairnStone(D2ObjectOperateFnArg * pOperation)
         }
       }
 
-      pSubData->nStoneAttemptCount++;
+      pA1Q4Data->sSub.nNoScrollClickCount++;
       return 0;
     }
     if (__frame0.pQuestData->bIsNotIntroduction == '\0') {
@@ -1284,9 +1289,9 @@ BOOL __fastcall OBJOP_A1Q4_ActivateCairnStone(D2ObjectOperateFnArg * pOperation)
     }
 
     __frame0.pExistingPortal = 0;
-    if (pSubData->bPortalArmed == '\x01') {
-      __frame0.pExistingPortal = UNIT::SUnit::FindUnitFromTable(pOperation->sArg.pGame, UNIT_OBJECT, pSubData->nPortalGUID);
-      if (!pSubData->bPortalSpawned && __frame0.pExistingPortal && __frame0.pExistingPortal->nClassId == 0x3d) {
+    if (pA1Q4Data->sSub.bRescueArmed == '\x01') {
+      __frame0.pExistingPortal = UNIT::SUnit::FindUnitFromTable(pOperation->sArg.pGame, UNIT_OBJECT, pA1Q4Data->sSub.nUnitGUID);
+      if (!pA1Q4Data->sSub.bScrollDeciphered && __frame0.pExistingPortal && __frame0.pExistingPortal->nClassId == 0x3d) {
         if (!pGame->nStateFlag && pGame->bIsNotIntroduction == '\x01') {
           QuestStartDebugNotify(pGame);
           QUEST_SetStateFlag(pGame, 1, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q4.cpp", 0x793);
@@ -1298,7 +1303,7 @@ BOOL __fastcall OBJOP_A1Q4_ActivateCairnStone(D2ObjectOperateFnArg * pOperation)
         }
       }
     }
-    if (pSubData->bAllStonesActivated == '\x01') {
+    if (pA1Q4Data->sSub.bStoneSequenceComplete == '\x01') {
       return 0;
     }
     if (pGame->nStateFlag != 5) {
@@ -1351,9 +1356,9 @@ BOOL __fastcall OBJOP_A1Q4_ActivateCairnStone(D2ObjectOperateFnArg * pOperation)
       D2Common::Units::ChangeAnimMode(__frame0.pExistingPortal, 6);
     }
 
-    pSubData->bAllStonesActivated = '\x01';
+    pA1Q4Data->sSub.bStoneSequenceComplete = '\x01';
     QUEST_RemoveQuestItemFromPlayer(pOperation->sArg.pGame, pOperation->pAttacker, 0x20646b62);
-    pSubData->field_0x7C--;
+    pA1Q4Data->sSub.nRewardRetryCount--;
     __frame0.pExistingPortal = (D2UnitStrc*)&pSubData->nUnitGUID;
     ptStonePos.x = 0;
     ptStonePos.y = 0;
@@ -1515,9 +1520,10 @@ void __fastcall Q04_SendStonesOrderToClient(::SGAMEDATA * pGame, D2UnitStrc * pU
     D2QuestDataA1Q4Strc* pQuestSpecificData = (D2QuestDataA1Q4Strc*)GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSearchForCain);
     if (pQuestSpecificData) {
       D2ClientStrc* pClient;
-      pSubData = (D2QuestDataA1Q4SubStrc*)((D2QuestDataStrc*)pQuestSpecificData)->pQuestSpecificData.pA1Q4;
-      if (!pSubData->bStonesRolled) {
-        pSubData->bStonesRolled = true;
+      D2QuestDataA1Q4Strc* pA1Q4Data = ((D2QuestDataStrc*)pQuestSpecificData)->pQuestSpecificData.pA1Q4;
+      pSubData = (D2QuestDataA1Q4SubStrc*)pA1Q4Data;
+      if (!pA1Q4Data->sSub.bStoneOrderRolled) {
+        pA1Q4Data->sSub.bStoneOrderRolled = true;
         RollStonesOrder(pQuestSpecificData);
       }
 

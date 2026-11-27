@@ -642,7 +642,7 @@ void __fastcall FreeCombatAndChangeAnimMode(::SGAMEDATA * pGame, D2UnitStrc * pU
     D2Common::Units::ChangeAnimMode(pUnit, dwMode);
 }
 
-// Cross-links the world coordinates of two portal object units so each stores the other's position as its destination. Writes pUnit2's X/Y into pUnit->pUnitDataObject->nLinkedPortalX/Y and vice versa. Also records each portal's room tile-rect top-left corner into the counterpart's nDurielUnk/nY fields for teleport destination look-up. Halts with an internal error if either unit pointer is null.
+// Cross-links the world coordinates of two portal object units so each stores the other's position as its destination. Writes pUnit2's X/Y into pUnit->pUnitDataObject->nLinkedPortalX/Y and vice versa. Also records each portal's room tile-rect top-left corner into the counterpart's nX/nY fields for teleport destination look-up. Halts with an internal error if either unit pointer is null.
 void __fastcall LinkPortalCoords(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     D2RoomStrc* pRoom;
     D2RoomStrc* pRoom_00;
@@ -702,7 +702,7 @@ void __fastcall LinkPortalCoords(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
       pRoom = D2Common::Units::UNITS_GetRoom(pUnit2);
       if (pRoom) {
         D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &roomCoords);
-        pUnit->pUnitData.pUnitDataMonster->nDurielUnk = roomCoords.sTileRect.left;
+        pUnit->pUnitData.pUnitDataObject->nX = roomCoords.sTileRect.left;
         pUnit->pUnitData.pUnitDataObject->nY = roomCoords.sTileRect.top;
       }
 
@@ -712,7 +712,7 @@ void __fastcall LinkPortalCoords(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
       }
 
       D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom_00, &roomCoords);
-      pUnit2->pUnitData.pUnitDataMonster->nDurielUnk = roomCoords.sTileRect.left;
+      pUnit2->pUnitData.pUnitDataObject->nX = roomCoords.sTileRect.left;
       pUnit2->pUnitData.pUnitDataObject->nY = roomCoords.sTileRect.top;
       return;
     }

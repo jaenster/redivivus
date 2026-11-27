@@ -1354,7 +1354,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
               uVar3 = pComp->nWidth;
             }
 
-            pComp->pSrcRow = gaCodecFrameOutputBase + (pComp->nHeight - sFrameBounds.nMinX) + (pComp->nXOffset2 - uVar3 - sFrameBounds.nMinY) * sFrameBounds.nWidth;
+            pComp->pSrcRow = gaCodecFrameOutputBase + (int32_t)(pComp->nHeight - sFrameBounds.nMinX) + (int32_t)(pComp->nXOffset2 - uVar3 - sFrameBounds.nMinY) * sFrameBounds.nWidth;
             pComp->nStrideValue0 = sFrameBounds.nWidth;
             pComp++;
             iVar6--;

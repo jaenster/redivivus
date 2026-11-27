@@ -1462,40 +1462,38 @@ static void __stdcall SKILLASS_FillKickDamage(::SGAMEDATA * pGame, D2DamageStrc 
 
 static void __stdcall D2CalcKickDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2SkillsTxt * pSkillTxt, int32_t nSkillLvl, BOOL bKickCheck, D2UnitStrc * pAttacker, eD2Skills eSkill) {
     D2DamageStrc sDamage;
-    uint32_t nToHit = D2Common::Skills::SKILLS_CalcToHit(pAttacker, eSkill, nSkillLvl);
-    int nProgToHit = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pAttacker, UNITSTAT_progressive_tohit, 0);
+    int nToHit = D2Common::Skills::SKILLS_CalcToHit(pAttacker, eSkill, nSkillLvl) + D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pAttacker, UNITSTAT_progressive_tohit, 0);
     memset(&sDamage, 0, sizeof(sDamage));
-    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pAttacker, pUnit, nToHit + nProgToHit, 0);
+    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pAttacker, pUnit, nToHit, 0);
     if (sDamage.wResultFlags & 1U) {
-      D2SkillsTxt* pSkillTxtKick;
       if (bKickCheck) {
         sDamage.wResultFlags |= 0xc;
       }
 
-      int dwEnDmgPctValue;
-      if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || (pSkillTxtKick = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill , !pSkillTxtKick)) {
-        dwEnDmgPctValue = 0;
+      D2SkillsTxt* pKickTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+      int nEnDmgPct;
+      if (!pKickTxt) {
+        nEnDmgPct = 0;
       } else if (nSkillLvl <= 0) {
-        dwEnDmgPctValue = 0;
+        nEnDmgPct = 0;
       } else {
-        dwEnDmgPctValue = (nSkillLvl - 1) * pSkillTxtKick->Param[1] + pSkillTxtKick->Param[0];
+        nEnDmgPct = (nSkillLvl - 1) * pKickTxt->Param[1] + pKickTxt->Param[0];
       }
 
-      sDamage.dwEnDmgPct = dwEnDmgPctValue;
+      sDamage.dwEnDmgPct = nEnDmgPct;
       SKILLASS_FillKickDamage(pGame, &sDamage, pUnit, eSkill, nSkillLvl, pAttacker);
     }
 
-    *(uint8_t*)(char*)&nSkillLvl = pSkillTxt->SrcDam;
     sDamage.dwHitClass = 1;
-    if (!(uint8_t)nSkillLvl) {
-      *(uint8_t*)(char*)&nSkillLvl = 0x80;
+    uint8_t nSrcDam = pSkillTxt->SrcDam;
+    if (!nSrcDam) {
+      nSrcDam = 0x80;
     }
 
-    UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pAttacker, pUnit, &sDamage, (uint8_t)nSkillLvl);
+    UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pAttacker, pUnit, &sDamage, nSrcDam);
 }
 
 BOOL __fastcall SKILLASS_SrvStFn24_DragonTalon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    int32_t nKickCount;
     D2SkillsTxt* pSkilsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkilsTxt) {
       return 0;
@@ -1509,18 +1507,16 @@ BOOL __fastcall SKILLASS_SrvStFn24_DragonTalon(::SGAMEDATA * pGame, D2UnitStrc *
     D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     if (!pTarget) {
       D2Common::Skills::SKILL_SetParam1(pSkills, 0);
-    } else {
-      BOOL bInRange;
-      bInRange = D2Common::Units::IsInMeleeRange(pUnit, pTarget, 0);
-      if (bInRange) {
-        nKickCount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkilsTxt->calc[0], eSkill, nSkillLvl);
-        D2Common::Skills::SKILL_SetParam1(pSkills, nKickCount - 1);
-        D2CalcKickDamage(pGame, pTarget, pSkilsTxt, nSkillLvl, (uint32_t)!(nKickCount - 1), pUnit, eSkill);
-        return 1;
-      }
+      return 0;
+    }
+    if (!D2Common::Units::IsInMeleeRange(pUnit, pTarget, 0)) {
+      return 0;
     }
 
-    return 0;
+    int32_t nKicksLeft = D2Common::Skills::D2GetSkillCalc(pUnit, pSkilsTxt->calc[0], eSkill, nSkillLvl) - 1;
+    D2Common::Skills::SKILL_SetParam1(pSkills, nKicksLeft);
+    D2CalcKickDamage(pGame, pTarget, pSkilsTxt, nSkillLvl, !nKicksLeft, pUnit, eSkill);
+    return 1;
 }
 
 // Server DoFunc for the Assassin Dragon Talon skill (skill srvdofunc 42). Validates the Skills.txt row, resolves the attack target, releases any charge-up attack and processes the combat queue. Decrements the skill's Param1 (remaining kick count); while kicks remain it keeps the SKSRVDOFUNC flag and re-arms the anim timer. On the final kick it rolls a knockback chance from skill calc[1..3] (selected by target being player/merc, boss, or a specific monster type) against the unit seed, then applies kick damage via D2CalcKickDamage and reprocesses the combat queue. Returns TRUE on success.
@@ -2400,7 +2396,8 @@ BOOL __fastcall Skills_SrvDoFunc_049_SummonShadowClone(::SGAMEDATA * pGame, D2Un
       byPetType = 0;
     }
 
-    D2MonsterCastPetStrc sSummonCast = {};
+    D2MonsterCastPetStrc sSummonCast;
+    memset(&sSummonCast, 0, sizeof(sSummonCast));
     sSummonCast.classId = nClassId;
     sSummonCast.nFunctionId = 0;
     sSummonCast.pPlayer = pUnit;

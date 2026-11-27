@@ -810,8 +810,8 @@ OSStatus OGL_MacWindowEventHandler(EventHandlerCallRef hCallRef, EventRef hEvent
           hWnd = (int*)D2gfx::D2GFX::GetHwnd();
           SendMessageA(hWnd, 0x10, 0, 0);
           nStatus = 0;
-          iVar3 = (int)(uintptr_t)D2gfx::D2GFX::GetHwnd();
-          if (!iVar3) {
+          hWnd = (int*)D2gfx::D2GFX::GetHwnd();
+          if (!hWnd) {
             nStatus = -0x2692;
           }
 

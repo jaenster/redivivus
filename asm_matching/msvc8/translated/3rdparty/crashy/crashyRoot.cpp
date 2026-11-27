@@ -68,8 +68,8 @@ int __stdcall SYSTEM_GetCurrentProcessThreadCount() {
     PROCESSENTRY32W processEntry;
     DWORD dwCurrentPid = GetCurrentProcessId();
     HANDLE hSnapshot = (HANDLE)CreateToolhelp32Snapshot(0xf, 0);
-    memset(&processEntry.cntUsage, 0, 0x228);
-    processEntry.dwSize = 0x22c;
+    memset(&processEntry.cntUsage, 0, sizeof(processEntry) - offsetof(PROCESSENTRY32W, cntUsage));
+    processEntry.dwSize = sizeof(processEntry);
     int bFound = Process32FirstW(hSnapshot, &processEntry);
     while (bFound && processEntry.th32ProcessID != dwCurrentPid) {
       bFound = Process32NextW(hSnapshot, &processEntry);

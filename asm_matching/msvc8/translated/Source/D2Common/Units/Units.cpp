@@ -1237,10 +1237,10 @@ void __stdcall UpdateFrame(D2UnitStrc * pUnit) {
 }
 
 void __stdcall SetFrameNonRate(D2UnitStrc * pUnit, int32_t nRate, int32_t nFailRate) {
-    pUnit->nGfxCurrentFrame += (int)pUnit->nAnimSpeed;
     nFailRate <<= 8;
+    pUnit->nGfxCurrentFrame += (int)pUnit->nAnimSpeed;
     if (pUnit->nGfxCurrentFrame >= nFailRate) {
-      pUnit->nGfxCurrentFrame = (nRate << 8) - nFailRate + pUnit->nGfxCurrentFrame;
+      pUnit->nGfxCurrentFrame += (nRate << 8) - nFailRate;
     }
 }
 

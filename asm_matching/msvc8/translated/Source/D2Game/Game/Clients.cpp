@@ -2357,7 +2357,7 @@ void __fastcall MovementUpdateForClient(::SGAMEDATA * pGame, D2RoomStrc * * ppRo
       exit(-1);
     }
 
-    for (pRoomUnit = (D2UnitStrc*)ppRoom[0x1d]; pRoomUnit; pRoomUnit = pRoomUnit->pRoomNext) {
+    for (pRoomUnit = ((D2RoomStrc*)ppRoom)->pUnitList; pRoomUnit; pRoomUnit = pRoomUnit->pRoomNext) {
       eUnitType = UNIT_COUNT;
       eUnitType = pRoomUnit->eUnitType;
       switch (eUnitType) {

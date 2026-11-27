@@ -874,50 +874,37 @@ static int32_t __stdcall WALL2_IsTileOccludingPlayer(D2DrlgTileDataStrc * pTileD
 
 // Appends a wall tile to the client wall-occlusion draw list (__stdcall with pTileData in EAX; pDrawList/pWall2Cell/pRoom on stack). Sets pWall2Cell->dwFlags bit 2 unless the tile type is 0/0xd or tile flag bit 2 is set, takes the next entry of pDrawList->aWall2Entries (capped at 3000), records the tile and its screen coords from room coordinates. If the tile occludes the player it starts a fade transition (fade to 0x80 when it starts occluding: nAlphaStart=0xFF, nAlphaEnd=0x80, nTransitionFlags |= 3; fade back when it stops: nAlphaStart=0x80, nAlphaEnd=0xFF, bit0 cleared, bit1 set; nFadeEndTime = now+500 ms, shortened by how far nCurrentAlpha already is from nAlphaStart). Inserts the entry into pWall2Cell->pWallList (+0x14) sorted by tile flags bits 14..16. No return; pure render-list bookkeeping.
 static void __stdcall WALL2_AddWallTile(D2Wall2DrawListStrc * pDrawList, D2Wall2CellStrc * pWall2Cell, D2RoomStrc * pRoom, D2DrlgTileDataStrc * pTileData) {
-    D2DrlgRoomCoordsStrc roomCoords;
     if (pTileData->nTileType && pTileData->nTileType != 0xd && !(pTileData->nFlags & 4)) {
       pWall2Cell->dwFlags |= 4;
     }
 
-    uint32_t nDrawEntryIdx;
-    nDrawEntryIdx = pDrawList->nWall2EntryCount;
-    pDrawList->nWall2EntryCount = nDrawEntryIdx + 1;
-    if (nDrawEntryIdx >= 3000) {
+    uint32_t nEntryIdx = pDrawList->nWall2EntryCount;
+    pDrawList->nWall2EntryCount = nEntryIdx + 1;
+    if (nEntryIdx >= 3000) {
       return;
     }
 
-    DWORD dwTick;
-    dwTick = GetTickCount();
-    D2Wall2DrawEntryStrc* pDVar1;
-    pDVar1 = pDrawList->aWall2Entries + nDrawEntryIdx;
-    int nFadeEndTime;
-    nFadeEndTime = dwTick + 500;
-    pDVar1->dwType = 1;
-    pDVar1->pData = pTileData;
-    pDVar1->pNext = 0;
+    int nFadeEndTime = GetTickCount() + 500;
+    D2Wall2DrawEntryStrc* pEntry = pDrawList->aWall2Entries + nEntryIdx;
+    pEntry->dwType = 1;
+    pEntry->pData = pTileData;
+    pEntry->pNext = 0;
     if (!(pTileData->nFlags & 4)) {
-      int32_t iVar3;
-      iVar3 = WALL2_IsTileOccludingPlayer(pTileData, pRoom);
-      nDrawEntryIdx = pTileData->nTransitionFlags;
-      if (iVar3) {
-        if (nDrawEntryIdx & 1) {
-          goto insert_draw_entry;
-        }
+      int32_t bOccluding = WALL2_IsTileOccludingPlayer(pTileData, pRoom);
+      uint32_t nTransitionFlags = pTileData->nTransitionFlags;
+      if (bOccluding) {
+        if (!(nTransitionFlags & 1)) {
+          pTileData->nAlphaStart = 0xff;
+          pTileData->nAlphaEnd = 0x80;
+          if (pTileData->nCurrentAlpha == 0xff) {
+            pTileData->nFadeEndTime = nFadeEndTime;
+          } else {
+            pTileData->nFadeEndTime = (int)((pTileData->nCurrentAlpha - 0xff) * 500) / 0x7f + nFadeEndTime;
+          }
 
-        pTileData->nAlphaStart = 0xff;
-        pTileData->nAlphaEnd = 0x80;
-        if (pTileData->nCurrentAlpha == 0xff) {
-          pTileData->nFadeEndTime = nFadeEndTime;
-          nDrawEntryIdx |= 3;
-        } else {
-          pTileData->nFadeEndTime = (int)((pTileData->nCurrentAlpha - 0xff) * 500) / 0x7f + nFadeEndTime;
-          nDrawEntryIdx |= 3;
+          pTileData->nTransitionFlags = nTransitionFlags | 3;
         }
-      } else {
-        if (!(nDrawEntryIdx & 1)) {
-          goto insert_draw_entry;
-        }
-
+      } else if (nTransitionFlags & 1) {
         pTileData->nAlphaStart = 0x80;
         pTileData->nAlphaEnd = 0xff;
         if (pTileData->nCurrentAlpha == 0x80) {
@@ -926,51 +913,48 @@ static void __stdcall WALL2_AddWallTile(D2Wall2DrawListStrc * pDrawList, D2Wall2
           pTileData->nFadeEndTime = (int)((0x80 - (uint32_t)pTileData->nCurrentAlpha) * 500) / 0x7f + nFadeEndTime;
         }
 
-        nDrawEntryIdx = nDrawEntryIdx & -2 | 2;
+        pTileData->nTransitionFlags = nTransitionFlags & -2 | 2;
       }
-
-      pTileData->nTransitionFlags = nDrawEntryIdx;
     }
 
-    insert_draw_entry:
-    D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &roomCoords);
-    pDVar1->nX = (roomCoords.dwXStart + pTileData->nPosX * 5) * 8;
-    pDVar1->nY = (roomCoords.dwYStart + pTileData->nPosY * 5) * 8;
+    {
+      D2DrlgRoomCoordsStrc roomCoords;
+      D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &roomCoords);
+      pEntry->nX = (roomCoords.dwXStart + pTileData->nPosX * 5) * 8;
+      pEntry->nY = (roomCoords.dwYStart + pTileData->nPosY * 5) * 8;
+    }
     D2Wall2DrawEntryStrc* pCurNode = pWall2Cell->pWallList;
     if (!pCurNode) {
-      pWall2Cell->pWallList = pDVar1;
+      pWall2Cell->pWallList = pEntry;
       return;
     }
 
     D2Wall2DrawEntryStrc* pPrevNode = 0;
-    int32_t nLayer = (int32_t)((uint32_t)((D2DrlgTileDataStrc*)pDVar1->pData)->nFlags >> 0xe & 7);
-    D2Wall2DrawEntryStrc* pNextNode;
-    while ((pNextNode = pCurNode->pNext) != 0) {
+    int32_t nLayer = (int32_t)((uint32_t)((D2DrlgTileDataStrc*)pEntry->pData)->nFlags >> 0xe & 7);
+    for (; pCurNode->pNext; pCurNode = pCurNode->pNext) {
       if (nLayer < (int32_t)((uint32_t)((D2DrlgTileDataStrc*)pCurNode->pData)->nFlags >> 0xe & 7)) {
-        pDVar1->pNext = pCurNode;
+        pEntry->pNext = pCurNode;
         if (pPrevNode) {
-          pPrevNode->pNext = pDVar1;
+          pPrevNode->pNext = pEntry;
         } else {
-          pWall2Cell->pWallList = pDVar1;
+          pWall2Cell->pWallList = pEntry;
         }
 
         break;
       }
 
       pPrevNode = pCurNode;
-      pCurNode = pNextNode;
     }
 
     if (pCurNode->pNext) {
       return;
     }
 
-    pCurNode->pNext = pDVar1;
+    pCurNode->pNext = pEntry;
 }
 
 // Adds a lower-wall tile (DT1 tile types 0x10..0x13) to the wall2 draw list: marks the cell (dwFlags bit 2) when the tile type is not 0/0xd and tile flag bit 2 is clear, takes a slot (max 3000), sets pass-mask bit 0, and inserts it into the cell's pUnderFloorList sorted by tile flags bits 14..16.
 static void __stdcall WALL2_AddLowerWallTile(D2Wall2DrawListStrc * pDrawList, D2Wall2CellStrc * pWall2Cell, D2RoomStrc * pRoom, D2DrlgTileDataStrc * pTileData) {
-    D2DrlgRoomCoordsStrc roomCoords;
     /* Handles tile types 0x10..0x13, the lower walls. */ if (pTileData->nTileType && pTileData->nTileType != 0xd && !(pTileData->nFlags & 4)) {
       pWall2Cell->dwFlags |= 4;
     }
@@ -981,93 +965,94 @@ static void __stdcall WALL2_AddLowerWallTile(D2Wall2DrawListStrc * pDrawList, D2
       return;
     }
 
-    D2Wall2DrawEntryStrc* pDVar1 = pDrawList->aWall2Entries + nEntryIdx;
-    pDVar1->dwType = 1;
-    pDVar1->pData = pTileData;
-    pDVar1->pNext = 0;
-    D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &roomCoords);
-    pDVar1->nX = (roomCoords.dwXStart + pTileData->nPosX * 5) * 8;
-    pDVar1->nY = (roomCoords.dwYStart + pTileData->nPosY * 5) * 8;
+    D2Wall2DrawEntryStrc* pEntry = pDrawList->aWall2Entries + nEntryIdx;
+    pEntry->dwType = 1;
+    pEntry->pData = pTileData;
+    pEntry->pNext = 0;
+    {
+      D2DrlgRoomCoordsStrc roomCoords;
+      D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &roomCoords);
+      pEntry->nX = (roomCoords.dwXStart + pTileData->nPosX * 5) * 8;
+      pEntry->nY = (roomCoords.dwYStart + pTileData->nPosY * 5) * 8;
+    }
     pDrawList->dwWall2PassMask |= Fog::BitBuffer::gadwBitMasks[0];
     D2Wall2DrawEntryStrc* pCurNode = pWall2Cell->pUnderFloorList;
     if (!pCurNode) {
-      pWall2Cell->pUnderFloorList = pDVar1;
+      pWall2Cell->pUnderFloorList = pEntry;
       return;
     }
 
     D2Wall2DrawEntryStrc* pPrevNode = 0;
-    int32_t nLayer = (int32_t)((uint32_t)((D2DrlgTileDataStrc*)pDVar1->pData)->nFlags >> 0xe & 7);
-    D2Wall2DrawEntryStrc* pNextNode;
-    while ((pNextNode = pCurNode->pNext) != 0) {
+    int32_t nLayer = (int32_t)((uint32_t)((D2DrlgTileDataStrc*)pEntry->pData)->nFlags >> 0xe & 7);
+    for (; pCurNode->pNext; pCurNode = pCurNode->pNext) {
       if (nLayer < (int32_t)((uint32_t)((D2DrlgTileDataStrc*)pCurNode->pData)->nFlags >> 0xe & 7)) {
-        pDVar1->pNext = pCurNode;
+        pEntry->pNext = pCurNode;
         if (pPrevNode) {
-          pPrevNode->pNext = pDVar1;
+          pPrevNode->pNext = pEntry;
         } else {
-          pWall2Cell->pUnderFloorList = pDVar1;
+          pWall2Cell->pUnderFloorList = pEntry;
         }
 
         break;
       }
 
       pPrevNode = pCurNode;
-      pCurNode = pNextNode;
     }
 
     if (pCurNode->pNext) {
       return;
     }
 
-    pCurNode->pNext = pDVar1;
+    pCurNode->pNext = pEntry;
 }
 
 // Adds a roof tile (DT1 tile type 0xf) to the wall2 draw list: takes a slot (max 3000), entry type 1, world X/Y from the room origin plus tile offsets *5*8, sets pass-mask bit 1, and inserts it into the cell's pRoofPassList sorted by tile flags bits 14..16.
 static void __stdcall WALL2_AddRoofTile(D2Wall2DrawListStrc * pDrawList, D2Wall2CellStrc * pWall2Cell, D2RoomStrc * pRoom, D2DrlgTileDataStrc * pTileData) {
-    D2DrlgRoomCoordsStrc roomCoords;
     uint32_t nEntryIdx = pDrawList->nWall2EntryCount;
     pDrawList->nWall2EntryCount = nEntryIdx + 1;
     if (nEntryIdx >= 3000) {
       return;
     }
 
-    D2Wall2DrawEntryStrc* pDVar1 = pDrawList->aWall2Entries + nEntryIdx;
-    pDVar1->dwType = 1;
-    pDVar1->pData = pTileData;
-    pDVar1->pNext = 0;
-    D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &roomCoords);
-    pDVar1->nX = (roomCoords.dwXStart + pTileData->nPosX * 5) * 8;
-    pDVar1->nY = (roomCoords.dwYStart + pTileData->nPosY * 5) * 8;
+    D2Wall2DrawEntryStrc* pEntry = pDrawList->aWall2Entries + nEntryIdx;
+    pEntry->dwType = 1;
+    pEntry->pData = pTileData;
+    pEntry->pNext = 0;
+    {
+      D2DrlgRoomCoordsStrc roomCoords;
+      D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &roomCoords);
+      pEntry->nX = (roomCoords.dwXStart + pTileData->nPosX * 5) * 8;
+      pEntry->nY = (roomCoords.dwYStart + pTileData->nPosY * 5) * 8;
+    }
     pDrawList->dwWall2PassMask |= Fog::BitBuffer::gadwBitMasks[1];
     D2Wall2DrawEntryStrc* pCurNode = pWall2Cell->pRoofPassList;
     if (!pCurNode) {
-      pWall2Cell->pRoofPassList = pDVar1;
+      pWall2Cell->pRoofPassList = pEntry;
       return;
     }
 
     D2Wall2DrawEntryStrc* pPrevNode = 0;
-    int32_t nLayer = (int32_t)((uint32_t)((D2DrlgTileDataStrc*)pDVar1->pData)->nFlags >> 0xe & 7);
-    D2Wall2DrawEntryStrc* pNextNode;
-    while ((pNextNode = pCurNode->pNext) != 0) {
+    int32_t nLayer = (int32_t)((uint32_t)((D2DrlgTileDataStrc*)pEntry->pData)->nFlags >> 0xe & 7);
+    for (; pCurNode->pNext; pCurNode = pCurNode->pNext) {
       if (nLayer < (int32_t)((uint32_t)((D2DrlgTileDataStrc*)pCurNode->pData)->nFlags >> 0xe & 7)) {
-        pDVar1->pNext = pCurNode;
+        pEntry->pNext = pCurNode;
         if (pPrevNode) {
-          pPrevNode->pNext = pDVar1;
+          pPrevNode->pNext = pEntry;
         } else {
-          pWall2Cell->pRoofPassList = pDVar1;
+          pWall2Cell->pRoofPassList = pEntry;
         }
 
         break;
       }
 
       pPrevNode = pCurNode;
-      pCurNode = pNextNode;
     }
 
     if (pCurNode->pNext) {
       return;
     }
 
-    pCurNode->pNext = pDVar1;
+    pCurNode->pNext = pEntry;
 }
 
 // Appends a tile to the cell's pShadowPassList and sets pass-mask bit 3. Called for every tile from DRLGROOM_GetRoofTilesFromRoom and for wall tiles whose flags bits 14..16 are clear.

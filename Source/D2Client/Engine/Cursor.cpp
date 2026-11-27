@@ -454,65 +454,49 @@ void __stdcall UI_DrawCursorWithItem() {
     static uint32_t gnCursorClipHeight; D2_STATIC_GUARD_BSS(gnCursorClipHeight, "D2Client::Cursor::UI_DrawCursorWithItem::gnCursorClipHeight");
     static uint32_t gnCursorItemAnimDrawOffset; D2_STATIC_GUARD_BSS(gnCursorItemAnimDrawOffset, "D2Client::Cursor::UI_DrawCursorWithItem::gnCursorItemAnimDrawOffset");
 
-    int32_t nClampedY;
-    uint32_t nDimension;
-    int nMaxX;
-    int nPositionX;
-    D2GfxDataStrc sGfxData;
-    int nOutValue;
-    int nMouseX;
-    int nCursorIndex = nCursorDataIndex;
-    D2UnitStrc* pUnit = pCursorItem;
     if (!gnCursorInitialized) {
       return;
     }
-    if (!pCursorItem || pCursorItem->eUnitType != UNIT_ITEM) {
-      if (nCursorDataIndex < 7) {
-        nMouseX = gnCursorType + MouseX;
-        if (MouseY < 0) {
-          nClampedY = 0;
-        } else {
-          nClampedY = MouseY;
-          if (MouseY > gnCursorClipHeight - 1) {
-            nClampedY = gnCursorClipHeight - 1;
-          }
-        }
 
-        nPositionX = gnCursorType;
-        if (nMouseX >= gnCursorType) {
-          nMaxX = gnCursorItemAnimDrawOffset - gnCursorType - 1;
-          nPositionX = nMouseX;
-          if (nMouseX > nMaxX) {
-            nPositionX = nMaxX;
-          }
-        }
-
-        memset(&sGfxData, 0, sizeof(sGfxData));
-        sGfxData.pDC6 = pCursorsDC6[nCursorIndex];
-        sGfxData.nFrameNumber = gCursorAnimationFrame >> 8;
-        sGfxData.nDirection = 0;
-        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nPositionX, nClampedY, -1, DRAW_SOLID, nullptr);
-        UI_UpdateCursorAnimation();
-      }
-    } else {
+    D2GfxDataStrc sGfxData;
+    if (pCursorItem && pCursorItem->eUnitType == UNIT_ITEM) {
       memset(&sGfxData, 0, sizeof(sGfxData));
-      nClampedY = Engine::GfxUtil::DC6_AssignParams(&sGfxData, pUnit, nullptr, 0, 0, &nOutValue, '\x01', -1);
-      if (nClampedY) {
-        nCursorIndex = D2CMP::SRC::SpriteCache::SPRITECACHE_GetOrLoadSprite(&sGfxData, 0, 1);
-        if (nCursorIndex) {
-          if (!sGfxData.pDC6Block) {
-            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 699);
-            exit(-1);
-          }
-
-          nDimension = D2CMP::SRC::CelCmp::GetDC6Height(sGfxData.pDC6Block);
-          nCursorIndex = MouseY - (nDimension >> 1);
-          nDimension = D2CMP::SRC::CelCmp::GetDC6Width(sGfxData.pDC6Block);
-          Engine::Gfx::DrawItemGfx(pCursorItem, gnCursorType - (nDimension >> 1) + MouseX, nCursorIndex);
-          return;
+      int nOutValue;
+      if (Engine::GfxUtil::DC6_AssignParams(&sGfxData, pCursorItem, nullptr, 0, 0, &nOutValue, '\x01', -1) && D2CMP::SRC::SpriteCache::SPRITECACHE_GetOrLoadSprite(&sGfxData, 0, 1)) {
+        if (!sGfxData.pDC6Block) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 699);
+          exit(-1);
         }
+
+        Engine::Gfx::DrawItemGfx(pCursorItem, gnCursorType - ((uint32_t)D2CMP::SRC::CelCmp::GetDC6Width(sGfxData.pDC6Block) >> 1) + MouseX, MouseY - ((uint32_t)D2CMP::SRC::CelCmp::GetDC6Height(sGfxData.pDC6Block) >> 1));
       }
+      return;
     }
+
+    int nCursorIndex = nCursorDataIndex;
+    if (nCursorIndex >= 7) {
+      return;
+    }
+
+    int nPositionX = gnCursorType + MouseX;
+    int nPositionY = MouseY;
+    if (MouseY < 0) {
+      nPositionY = 0;
+    } else if (MouseY > (int)gnCursorClipHeight - 1) {
+      nPositionY = gnCursorClipHeight - 1;
+    }
+    if (nPositionX < MouseX) {
+      nPositionX = MouseX;
+    } else if (nPositionX > (int)gnCursorItemAnimDrawOffset - MouseX - 1) {
+      nPositionX = gnCursorItemAnimDrawOffset - MouseX - 1;
+    }
+
+    memset(&sGfxData, 0, sizeof(sGfxData));
+    sGfxData.pDC6 = pCursorsDC6[nCursorIndex];
+    sGfxData.nDirection = 0;
+    sGfxData.nFrameNumber = gCursorAnimationFrame >> 8;
+    D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nPositionX, nPositionY, -1, DRAW_SOLID, nullptr);
+    UI_UpdateCursorAnimation();
 }
 
 int __stdcall GetMouseX() {

@@ -86,7 +86,7 @@ void __fastcall GetTarget(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // 2022.01.09 - dzik
 struct D2UnitStrc * __stdcall GetTargetEx(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 void __fastcall FreeCombatAndChangeAnimMode(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD dwMode);
-// Cross-links the world coordinates of two portal object units so each stores the other's position as its destination. Writes pUnit2's X/Y into pUnit->pUnitDataObject->nLinkedPortalX/Y and vice versa. Also records each portal's room tile-rect top-left corner into the counterpart's nDurielUnk/nY fields for teleport destination look-up. Halts with an internal error if either unit pointer is null.
+// Cross-links the world coordinates of two portal object units so each stores the other's position as its destination. Writes pUnit2's X/Y into pUnit->pUnitDataObject->nLinkedPortalX/Y and vice versa. Also records each portal's room tile-rect top-left corner into the counterpart's nX/nY fields for teleport destination look-up. Halts with an internal error if either unit pointer is null.
 void __fastcall LinkPortalCoords(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
 void __fastcall UNITS_SetStaticPathRoomCoords(struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom, int32_t nX, int32_t nY);
 struct D2UnitStrc * __fastcall UNITS_FindPortalOwnerUnit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);

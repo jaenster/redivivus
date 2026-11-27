@@ -2076,8 +2076,6 @@ BOOL __fastcall Missiles_SrvHitFunc_ApplyAuraStateToTarget(::SGAMEDATA * pGame, 
 
 // Server hit callback: applies the Terror state to a monster target. Only acts on UNIT_MONSTER targets not already terrored. Checks caster level + skill level + skill param1 > monster level as the terror eligibility condition. On success calls MONSTERAI_ApplyTerrorToMonster with bolt-speed and duration param4. Returns 0 on success/inapplicable, 1 on bad skill/owner.
 BOOL __fastcall Missiles_SrvHitFunc_ApplyTerrorToMonster(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
-    int32_t nTerrorParam;
-    int nMonsterLevel;
     eD2Skills eSkill = D2Common::Units::Missile::GetSkillId(pUnit);
     int32_t nSkillLvl = D2Common::Units::Missile::GetLevel(pUnit);
     D2SkillsTxt* pSkillTxt = GetSkillsTxtInline(eSkill);
@@ -2101,15 +2099,10 @@ BOOL __fastcall Missiles_SrvHitFunc_ApplyTerrorToMonster(::SGAMEDATA * pGame, D2
       return 1;
     }
 
-    BOOL eAuraState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTarget, (int)nAuraState);
-    if (!eAuraState) {
-      int nCasterLevel;
-      nCasterLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pOwnerUnit, UNITSTAT_level, 0);
-      nTerrorParam = D2Common::Skills::GetSkilParam1(eSkill);
-      nMonsterLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_level, 0);
-      if (nTerrorParam + (nCasterLevel + nSkillLvl) > nMonsterLevel) {
-        nTerrorParam = D2Common::Skills::GetSkillParam4(eSkill, nSkillLvl);
-        Monster::AI::MONSTERAI_ApplyTerrorToMonster(pGame, pOwnerUnit, pTarget, eSkill, D2Common::Skills::MISSILE_GetBoltSpeed(eSkill, nSkillLvl), nTerrorParam);
+    if (!D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTarget, (int)nAuraState)) {
+      int nTerrorLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pOwnerUnit, UNITSTAT_level, 0) + nSkillLvl + D2Common::Skills::GetSkilParam1(eSkill);
+      if (nTerrorLevel > D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_level, 0)) {
+        Monster::AI::MONSTERAI_ApplyTerrorToMonster(pGame, pOwnerUnit, pTarget, eSkill, D2Common::Skills::MISSILE_GetBoltSpeed(eSkill, nSkillLvl), D2Common::Skills::GetSkillParam4(eSkill, nSkillLvl));
       }
     }
 

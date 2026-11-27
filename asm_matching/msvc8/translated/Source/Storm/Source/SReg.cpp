@@ -386,10 +386,7 @@ BOOL __stdcall SRegSaveString(char * pszSubKey, LPCSTR szValueName, int32_t nFla
     D2_CHECK(pszValue);
     D2_CHECKS_ASSUME_(pszValue);
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
-    uint32_t nValueLength = SSTR::SStrLen(pszValue);
-    nValueLength += 1;
-    int nResult = SREG_InternalSaveEntry(pszSubKey, szValueName, 1, (uint8_t*)pszValue, nValueLength, nFlags);
-    return nResult;
+    return SREG_InternalSaveEntry(pszSubKey, szValueName, 1, (uint8_t*)pszValue, SSTR::SStrLen(pszValue) + 1, nFlags);
 }
 
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SRegSaveValue"

@@ -299,16 +299,11 @@ float __fastcall SOUND_CalculateUnitDistance(int32_t pThis, int, D2UnitStrc * pU
 }
 
 static void SOUND_Calculate3DPosition(float * pfPosition, D2SoundChannelStrc * pChannel) {
-    float fY;
     if (pChannel && pfPosition) {
-      float fVar1;
-      pChannel->fPosX = *pfPosition;
-      pChannel->fPosY = pfPosition[1];
-      pChannel->fPosZ = pfPosition[2];
-      fVar1 = SOUND_CalculatePanning(*pfPosition, -2000.0, 2000.0);
-      fY = SOUND_CalculatePanning(pfPosition[1], -2000.0, 2000.0);
-      fVar1 = _Utils::CalculateHypotenusePowered(fVar1, fY);
-      pChannel->fPanResult = fVar1;
+      memcpy(&pChannel->fPosX, pfPosition, offsetof(D2SoundChannelStrc, fPanResult) - offsetof(D2SoundChannelStrc, fPosX));
+      float fPanX = SOUND_CalculatePanning(pfPosition[0], -2000.0, 2000.0);
+      float fPanY = SOUND_CalculatePanning(pfPosition[1], -2000.0, 2000.0);
+      pChannel->fPanResult = _Utils::CalculateHypotenusePowered(fPanX, fPanY);
       return;
     }
 
@@ -317,28 +312,21 @@ static void SOUND_Calculate3DPosition(float * pfPosition, D2SoundChannelStrc * p
 }
 
 void __fastcall SOUND_PlayEnvironmentSound(int32_t nSoundId, int32_t nPosX, int32_t nPosY, int32_t nPosZ) {
-    float afPosition[3];
     if (!nSoundId) {
       return;
     }
-    if (!gpActiveSoundChannelsHead) {
-      return;
-    }
 
-    D2SoundChannelNodeStrc* pChannel = gpActiveSoundChannelsHead;
-    while (pChannel->pChannel->nChannelHandle != nSoundId) {
-      D2SoundChannelNodeStrc** pNextNode;
-      pNextNode = &pChannel->pNext;
-      pChannel = *pNextNode;
-      if (!*pNextNode) {
+    for (D2SoundChannelNodeStrc* pNode = gpActiveSoundChannelsHead; pNode; pNode = pNode->pNext) {
+      D2SoundChannelStrc* pChannel = pNode->pChannel;
+      if (pChannel->nChannelHandle == nSoundId) {
+        float afPosition[3];
+        afPosition[0] = (float)nPosX;
+        afPosition[1] = (float)nPosY;
+        afPosition[2] = (float)nPosZ + 640.0;
+        SOUND_Calculate3DPosition(afPosition, pChannel);
         return;
       }
     }
-
-    afPosition[0] = (float)nPosX;
-    afPosition[1] = (float)nPosY;
-    afPosition[2] = (float)nPosZ + 640.0;
-    SOUND_Calculate3DPosition(afPosition, pChannel->pChannel);
 }
 
 int __fastcall SOUND_PlaySound(eD2Sounds nSoundId, D2UnitStrc * pUnit, int32_t nDelay, int32_t nVolume, int32_t nParam) {

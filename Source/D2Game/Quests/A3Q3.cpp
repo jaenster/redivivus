@@ -981,15 +981,15 @@ void __fastcall Unreferenced_005b9c80(D2QuestDataStrc * pQuestData, D2UnitStrc *
 }
 
 // A3Q3 "Khalim's Will" — accessor: when the serpent/orb-object "pending" flag (field_0x06) is set,
-// returns its location (field_0x10) and GUID into pdwParam[0..1] and 1; else 0. Read-only.
+// returns the altar position (nAltarX, nAltarY) into pdwOut[0..1] and 1; else 0. Read-only.
 BOOL __fastcall Q20_GetSerpentLocation(::SGAMEDATA * pGame, uint32_t * pdwOut) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_BladeOfTheOldReligion);
     if (pQuestData) {
-      D2QuestDataA2Q3Strc* pA2Q3Data;
-      pA2Q3Data = (D2QuestDataA2Q3Strc*)pQuestData->pQuestSpecificData.pA2Q3;
-      if (pA2Q3Data->field_0x06) {
-        *pdwOut = (uint32_t)(uintptr_t)pA2Q3Data->pAltarRoom;
-        pdwOut[1] = pA2Q3Data->sPlayerGUID.aPlayerGUID[0];
+      D2QuestDataA3Q3Strc* pA3Q3Data;
+      pA3Q3Data = pQuestData->pQuestSpecificData.pA3Q3;
+      if (pA3Q3Data->field_0x6) {
+        *pdwOut = pA3Q3Data->nAltarX;
+        pdwOut[1] = pA3Q3Data->nAltarY;
         return 1;
       }
     }

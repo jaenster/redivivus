@@ -7,7 +7,7 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/Engine/Application.data.h"
 #include "Source/D2Headers/D2Arch.h"
-static_assert(sizeof(void*) != 4 || sizeof(D2DebugModuleInfo) == 0x228, "module list slots are copied whole: 0x228 bytes on 32-bit");
+static_assert(sizeof(void*) != 4 || sizeof(D2FogDebugModuleEntryStrc) == 0x228, "module list slots are copied whole: 0x228 bytes on 32-bit");
 static_assert(sizeof(D2FogAddressInfoStrc) == 0x348, "the resolved-address record CRASH_FormatStackTrace keeps in its frame");
 
 #if D2_ARCH_X86
@@ -209,58 +209,57 @@ static uint8_t __stdcall DEBUG_ParseModuleHeaders(D2FogDebugModuleEntryStrc * pp
 // Adds a loaded module to the crash dump module list by parsing PE headers
 static bool __stdcall DEBUG_AddModuleToList(int * pModuleList, LPCWSTR szModulePath, int32_t nPathLength, short * pModuleBase) {
     int nCopyCount;
-    D2DebugModuleInfo aModuleInfo;
-    /* LPBOOL lpUsedDefaultChar for WideCharToMultiByte */ /* LPCSTR lpDefaultChar for WideCharToMultiByte */ /* int cbMultiByte for WideCharToMultiByte */ /* LPSTR lpMultiByteStr for WideCharToMultiByte */ /* int cchWideChar for WideCharToMultiByte */ /* LPCWSTR lpWideCharStr for WideCharToMultiByte */ /* DWORD dwFlags for WideCharToMultiByte */ /* UINT CodePage for WideCharToMultiByte */ aModuleInfo.pBase = 0;
-    aModuleInfo.dwField04 = 0;
-    aModuleInfo.nModuleInfoPad0 = 0;
-    aModuleInfo.nModuleInfoPad1 = 0;
-    aModuleInfo.wModuleInfoPad2 = 0;
-    aModuleInfo.wModuleInfoPad3 = 0;
-    aModuleInfo.nModuleInfoPad4 = 0;
-    aModuleInfo.nModuleInfoPad5 = 0;
-    aModuleInfo.nModuleInfoPad6 = 0;
-    aModuleInfo.dwTimeStamp = 0;
-    aModuleInfo.dwBuild = 0;
-    aModuleInfo.szPath[0] = '\0';
-    aModuleInfo.szName[0] = '\0';
-    uint32_t nMbLen = WideCharToMultiByte(0xfde9, 0, szModulePath, nPathLength, aModuleInfo.szPath, 0x100, (LPCSTR)0x0, (LPBOOL)0x0);
+    D2FogDebugModuleEntryStrc aModuleInfo;
+    aModuleInfo.pImageBase = 0;
+    aModuleInfo.nImageSize = 0;
+    aModuleInfo.dwPdbSignature = 0;
+    aModuleInfo.guidPdb.Data1 = 0;
+    aModuleInfo.guidPdb.Data2 = 0;
+    aModuleInfo.guidPdb.Data3 = 0;
+    memset(aModuleInfo.guidPdb.Data4, 0, sizeof(aModuleInfo.guidPdb.Data4));
+    aModuleInfo.dwPdbAge = 0;
+    aModuleInfo.dwImageTimeDateStamp = 0;
+    aModuleInfo.dwTimestamp = 0;
+    aModuleInfo.szModuleName[0] = '\0';
+    aModuleInfo.szImagePath[0] = '\0';
+    uint32_t nMbLen = WideCharToMultiByte(0xfde9, 0, szModulePath, nPathLength, aModuleInfo.szModuleName, 0x100, (LPCSTR)0x0, (LPBOOL)0x0);
     if ((int)nMbLen < 0) {
-      aModuleInfo.szPath[0] = '\0';
+      aModuleInfo.szModuleName[0] = '\0';
     } else if (nMbLen > 0xff) {
-      aModuleInfo.szPath[0xff] = '\0';
+      aModuleInfo.szModuleName[0xff] = '\0';
     } else {
-      aModuleInfo.szPath[nMbLen] = '\0';
+      aModuleInfo.szModuleName[nMbLen] = '\0';
     }
 
-    char* pDst = strrchr(aModuleInfo.szPath, 0x2f);
+    char* pDst = strrchr(aModuleInfo.szModuleName, 0x2f);
     char* pBasename = 0;
     if ((uintptr_t)pDst > 0) {
       pBasename = pDst;
     }
 
-    pDst = strrchr(aModuleInfo.szPath, 0x5c);
+    pDst = strrchr(aModuleInfo.szModuleName, 0x5c);
     if (pDst && pDst > pBasename) {
       pBasename = pDst;
     }
 
-    pDst = strrchr(aModuleInfo.szPath, 0x3a);
+    pDst = strrchr(aModuleInfo.szModuleName, 0x3a);
     if (pDst && pDst > pBasename) {
       pBasename = pDst;
     }
     if (pBasename) {
       pBasename++;
     } else {
-      pBasename = aModuleInfo.szPath;
+      pBasename = aModuleInfo.szModuleName;
     }
 
-    pDst = aModuleInfo.szPath;
+    pDst = aModuleInfo.szModuleName;
     for (nCopyCount = 0x40; nCopyCount; nCopyCount--) {
       *(uint32_t*)pDst = *(uint32_t*)pBasename;
       pBasename += sizeof(uint32_t);
       pDst += sizeof(uint32_t);
     }
 
-    uint8_t bVar1 = DEBUG_ParseModuleHeaders((D2FogDebugModuleEntryStrc*)&aModuleInfo, pModuleBase);
+    uint8_t bVar1 = DEBUG_ParseModuleHeaders(&aModuleInfo, pModuleBase);
     if (!bVar1) {
       return true;
     }
@@ -268,11 +267,10 @@ static bool __stdcall DEBUG_AddModuleToList(int * pModuleList, LPCWSTR szModuleP
       return false;
     }
 
-    D2DebugModuleInfo* pSrcInfo = &aModuleInfo;
-    int* pListSlot = pModuleList + (*pModuleList * 0x8a + 1);
-    memcpy(pListSlot, pSrcInfo, sizeof(*pSrcInfo));
-    (*pModuleList)++;
-    nMbLen = *pModuleList;
+    D2FogDebugModuleTableStrc* pTable = (D2FogDebugModuleTableStrc*)pModuleList;
+    memcpy(&pTable->aEntries[pTable->nCount], &aModuleInfo, sizeof(aModuleInfo));
+    pTable->nCount++;
+    nMbLen = pTable->nCount;
     return nMbLen < 0x100;
 }
 
@@ -349,7 +347,7 @@ bool DEBUG_EnumerateModulesViaToolhelp32(int * pModuleList) {
     }
 
     bool bAddOk;
-    moduleEntry.dwSize = 0x428;
+    moduleEntry.dwSize = sizeof(moduleEntry);
     bHasModule = Module32FirstW(hSnapshot, &moduleEntry);
     while (true) {
       if (!bHasModule) {
@@ -361,7 +359,7 @@ bool DEBUG_EnumerateModulesViaToolhelp32(int * pModuleList) {
         break;
       }
 
-      moduleEntry.dwSize = 0x428;
+      moduleEntry.dwSize = sizeof(moduleEntry);
       bHasModule = Module32NextW(hSnapshot, &moduleEntry);
     }
 

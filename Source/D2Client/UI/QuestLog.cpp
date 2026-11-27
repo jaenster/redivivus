@@ -2192,31 +2192,31 @@ bool QUESTLOG_FindZooDummyMonster() {
 }
 
 void __fastcall QUESTLOG_SpawnZooDummyMonsters(int32_t nSpawnX, int32_t nSpawnY) {
-    if (gQuestLog.bZooSpawnArmed == '\0') {
+    if (!gQuestLog.bZooSpawnArmed) {
       return;
     }
 
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
-    uint32_t sNewSeed = D2_SeedRoll(&pPlayer->sSeed);
-    int nZooMonsterCount = sNewSeed % 3 + 2;
-    uint32_t i = 0;
+    int nZooMonsterCount = D2_SeedRoll(&pPlayer->sSeed) % 3 + 2;
+    int i = 0;
     if (nZooMonsterCount <= 0) {
       return;
     }
 
     do {
-      uint32_t nSpawnOffset;
-      nSpawnOffset = (int)i % 2;
-      pPlayer = UNIT::CUnit::CreateMissileOrMonster(0x95, nSpawnX + nSpawnOffset, nSpawnOffset + nSpawnY, UNIT_MONSTER, 1);
-      if (!pPlayer) {
-        gQuestLog.nZooMonsterGUID = -1;
+      int nSpawnOffset = i % 2;
+      D2UnitStrc* pMonster = UNIT::CUnit::CreateMissileOrMonster(0x95, nSpawnX + nSpawnOffset, nSpawnOffset + nSpawnY, UNIT_MONSTER, 1);
+      int nMonsterGUID;
+      if (!pMonster) {
+        nMonsterGUID = -1;
       } else {
-        gQuestLog.nZooMonsterGUID = pPlayer->nUnitGUID;
+        nMonsterGUID = pMonster->nUnitGUID;
       }
 
+      gQuestLog.nZooMonsterGUID = nMonsterGUID;
       i++;
       gQuestLog.bZooMonsterSpawned = 1;
-    } while ((int)i < nZooMonsterCount);
+    } while (i < nZooMonsterCount);
 }
 
 uint8_t * __fastcall Unreferenced_004a3200(uint8_t * pData) {
@@ -2275,105 +2275,83 @@ void __stdcall QUESTLOG_LoadQuestIconsForAct(int nActIndex, int32_t bResetSelect
     0x1a
 }; D2_STATIC_GUARD(gaQuestLogActIconRange, "D2Client::UI::QuestLog::QUESTLOG_LoadQuestIconsForAct::gaQuestLogActIconRange");
 
-    DC6* pIconImage;
-    int32_t* pQuestEntryBuf;
-    char szIconPath[260];
-    D2QuestLogEntryStrc byQuestEntryHeader;
-    int nSlotIndex;
-    nSlotIndex = 0;
-    int nVisibleCount;
-    nVisibleCount = 0;
-    uint32_t nFallbackQuest;
-    nFallbackQuest = -1;
+    int nSlotIndex = 0;
+    int nVisibleCount = 0;
+    uint32_t nFallbackQuest = -1;
     gQuestLog.nQuestLogActiveAct = -1;
-    BOOL bIsExpansion;
-    bIsExpansion = Fog::D2CheckExpansionGame();
-    if (!(bIsExpansion && (bIsExpansion = GAME::Game::CLIENT_CheckExpansion() , bIsExpansion != 0) || nActIndex != 4)) {
+    if ((!Fog::D2CheckExpansionGame() || !GAME::Game::CLIENT_CheckExpansion()) && nActIndex == 4) {
       return;
     }
 
-    int nIconIndex;
-    nIconIndex = gaQuestLogActIconRange[nActIndex * 2];
-    while (nIconIndex <= gaQuestLogActIconRange[nActIndex * 2 + 1]) {
+    for (int nIconIndex = gaQuestLogActIconRange[nActIndex * 2]; nIconIndex <= gaQuestLogActIconRange[nActIndex * 2 + 1]; nIconIndex++) {
       if (!gQuestLog.pQuestLogActImages[nIconIndex]) {
+        char szIconPath[260];
         sprintf(szIconPath, "%s\\ui\\menu\\%s", "DATA\\GLOBAL", gaszQuestIconNames[nIconIndex]);
-        pIconImage = Core::Archive::IMAGE_LoadDC6Ex(szIconPath, 0);
-        gQuestLog.pQuestLogActImages[nIconIndex] = pIconImage;
+        gQuestLog.pQuestLogActImages[nIconIndex] = Core::Archive::IMAGE_LoadDC6Ex(szIconPath, 0);
       }
-
-      nIconIndex++;
     }
 
-    uint32_t nSelectedQuest;
-    nSelectedQuest = gQuestLogSelectedQuestByAct[nActIndex];
-    if (nSelectedQuest == -1) {
-      uint8_t* pQuestIconEntry;
-      pQuestIconEntry = &gaQuestInfoTable[0].nIconIndex;
-      do {
-        if ((uint32_t)pQuestIconEntry[2] == nActIndex && ((D2QuestLogInfoStrc*)(pQuestIconEntry - 1))->bValid && *pQuestIconEntry < 0x1b && gQuestLog.pQuestLogActImages[*pQuestIconEntry]) {
-          pQuestEntryBuf = (int32_t*)byQuestEntryHeader.wszDescription;
-          for (nIconIndex = 0x96; nIconIndex; nIconIndex--) {
-            *pQuestEntryBuf = 0;
-            pQuestEntryBuf++;
-          }
+    uint32_t nSelectedQuest = gQuestLogSelectedQuestByAct[nActIndex];
+    if (nSelectedQuest != -1) {
+      gQuestLog.nQuestLogActiveAct = nSelectedQuest;
+      if (bResetSelection) {
+        gQuestLogSelectedQuestByAct[0] = -1;
+        gQuestLogSelectedQuestByAct[1] = -1;
+        gQuestLogSelectedQuestByAct[2] = -1;
+        gQuestLogSelectedQuestByAct[3] = -1;
+        gQuestLogSelectedQuestByAct[4] = -1;
+      }
+      return;
+    }
 
-          byQuestEntryHeader.eQuestId = (int32_t)((D2QuestLogInfoStrc*)(pQuestIconEntry - 1))->nQuestId;
-          QUESTLOG_PopulateQuestEntry(&byQuestEntryHeader);
-          if (byQuestEntryHeader.bStepAdvanced != '\0' || !byQuestEntryHeader.nDisplayState) {
-            gQuestLog.nQuestLogActiveAct = (uint32_t)byQuestEntryHeader.nQuestTableIndex;
-            nSlotIndex = 0x29;
-          }
-          if (byQuestEntryHeader.nDisplayState == 1) {
-            if (byQuestEntryHeader.nDisplayState != 2 && byQuestEntryHeader.nDisplayState != 1 && nFallbackQuest == -1) {
-              nFallbackQuest = (uint32_t)byQuestEntryHeader.nQuestTableIndex;
-            }
-          } else if (byQuestEntryHeader.nDisplayState != 2) {
-            if (byQuestEntryHeader.nDisplayState != 3) {
-              goto next_quest_entry;
-            }
-            if (byQuestEntryHeader.nDisplayState != 2 && byQuestEntryHeader.nDisplayState != 1 && nFallbackQuest == -1) {
-              nFallbackQuest = (uint32_t)byQuestEntryHeader.nQuestTableIndex;
-            }
+    D2QuestLogInfoStrc* pQuestInfo = gaQuestInfoTable;
+    while (true) {
+      if (pQuestInfo->nAct == nActIndex && pQuestInfo->bValid && pQuestInfo->nIconIndex < 0x1b && gQuestLog.pQuestLogActImages[pQuestInfo->nIconIndex]) {
+        D2QuestLogEntryStrc sQuestEntry;
+        uint32_t* pDescription = (uint32_t*)sQuestEntry.wszDescription;
+        for (int i = 0; i < 0x96; i++) {
+          pDescription[i] = 0;
+        }
+
+        sQuestEntry.eQuestId = pQuestInfo->nQuestId;
+        QUESTLOG_PopulateQuestEntry(&sQuestEntry);
+        if (sQuestEntry.bStepAdvanced || !sQuestEntry.nDisplayState) {
+          nSlotIndex = 0x29;
+          gQuestLog.nQuestLogActiveAct = sQuestEntry.nQuestTableIndex;
+        }
+        if (sQuestEntry.nDisplayState == 1 || sQuestEntry.nDisplayState == 2 || sQuestEntry.nDisplayState == 3) {
+          if (sQuestEntry.nDisplayState != 2 && sQuestEntry.nDisplayState != 1 && nFallbackQuest == -1) {
+            nFallbackQuest = sQuestEntry.nQuestTableIndex;
           }
 
           nVisibleCount++;
         }
+      }
 
-        next_quest_entry:
-        nSlotIndex++;
-        if (nSlotIndex >= 0x29) {
-          if (nVisibleCount && gQuestLog.nQuestLogActiveAct == -1) {
-            nSelectedQuest = gQuestLog.aQuestLogSelectedQuestByAct[nActIndex];
-            if (gQuestLog.aQuestLogSelectedQuestByAct[nActIndex] != -1 || (nSelectedQuest = nFallbackQuest , nFallbackQuest != -1)) {
-              gQuestLog.nQuestLogActiveAct = nSelectedQuest;
-            }
-          }
-          if (!bResetSelection) {
-            return;
-          }
+      nSlotIndex++;
+      if (nSlotIndex >= 0x29) {
+        break;
+      }
 
-          gQuestLogSelectedQuestByAct[0] = -1;
-          gQuestLogSelectedQuestByAct[1] = -1;
-          gQuestLogSelectedQuestByAct[2] = -1;
-          gQuestLogSelectedQuestByAct[3] = -1;
-          gQuestLogSelectedQuestByAct[4] = -1;
-          return;
-        }
-
-        pQuestIconEntry += sizeof(D2QuestLogInfoStrc);
-      } while (true);
+      pQuestInfo++;
     }
 
-    gQuestLog.nQuestLogActiveAct = nSelectedQuest;
-    if (!bResetSelection) {
-      return;
+    if (nVisibleCount && gQuestLog.nQuestLogActiveAct == -1) {
+      nSelectedQuest = gQuestLog.aQuestLogSelectedQuestByAct[nActIndex];
+      if (nSelectedQuest == -1) {
+        nSelectedQuest = nFallbackQuest;
+      }
+      if (nSelectedQuest != -1) {
+        gQuestLog.nQuestLogActiveAct = nSelectedQuest;
+      }
     }
-
-    gQuestLogSelectedQuestByAct[0] = -1;
-    gQuestLogSelectedQuestByAct[1] = -1;
-    gQuestLogSelectedQuestByAct[2] = -1;
-    gQuestLogSelectedQuestByAct[3] = -1;
-    gQuestLogSelectedQuestByAct[4] = -1;
+    if (bResetSelection) {
+      gQuestLogSelectedQuestByAct[0] = -1;
+      gQuestLogSelectedQuestByAct[1] = -1;
+      gQuestLogSelectedQuestByAct[2] = -1;
+      gQuestLogSelectedQuestByAct[3] = -1;
+      gQuestLogSelectedQuestByAct[4] = -1;
+    }
 }
 
 void __stdcall GameOverWtf() {

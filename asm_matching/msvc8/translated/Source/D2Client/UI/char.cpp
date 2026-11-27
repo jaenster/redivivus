@@ -583,85 +583,54 @@ int32_t __stdcall UI_GetStatValueForDisplay(int32_t nUnit) {
 }
 
 int32_t __stdcall UI_BuildStatWindowDescriptions() {
-    BOOL bExpansion;
     D2MonStatsInitStrc sMonStats;
-    short int wMonStatVal;
-    D2UnitStrc* pUnit;
-    pUnit = UNIT::Player::GetPlayerUnit_UI();
-    int32_t nTmp2;
-    nTmp2 = D2Common::Units::GetDefense(pUnit);
-    int nBlockRatio;
-    nBlockRatio = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_armorclass_vs_hth, 0);
-    nBlockRatio = nTmp2 + nBlockRatio;
-    uint8_t bVar1;
-    bVar1 = GAME::Game::GetDificulity();
-    uint32_t nDifficultyIndex;
-    nDifficultyIndex = (uint32_t)bVar1;
-    if ((int32_t)nDifficultyIndex >= 3) {
+    D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
+    int nChance = 100;
+    int nDefense = D2Common::Units::GetDefense(pUnit);
+    nDefense += D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_armorclass_vs_hth, 0);
+    int nDifficulty = GAME::Game::GetDificulity();
+    if (nDifficulty >= 3) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1d6);
       exit(-1);
     }
 
-    int nMonIdx;
-    nMonIdx = GAME::Select::SELECT_GetConstant13_Y();
-    D2MonStatsTxt* pMonStatsTxt;
-    pMonStatsTxt = nMonIdx >= 0 && nMonIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonIdx : nullptr;
+    int nMonIdx = GAME::Select::SELECT_GetConstant13_Y();
+    D2MonStatsTxt* pMonStatsTxt = nMonIdx >= 0 && nMonIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonIdx : nullptr;
     if (!pMonStatsTxt) {
       return 0;
     }
 
     memset(&sMonStats, 0, sizeof(sMonStats));
-    int nMonLevel;
-    nMonLevel = (int)pMonStatsTxt->aLevel[nDifficultyIndex];
-    D2MonStatsInitStrc* pMonScaledStats;
-    pMonScaledStats = &sMonStats;
-    D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nMonIdx, GAME::Game::GAMEDATA_GetLadderOrGameType(), nDifficultyIndex, nMonLevel, 8, pMonScaledStats);
-    nMonLevel = sMonStats.nTH;
-    if (!sMonStats.nTH) {
+    D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nMonIdx, GAME::Game::GAMEDATA_GetLadderOrGameType(), nDifficulty, pMonStatsTxt->aLevel[nDifficulty], 8, &sMonStats);
+    int nAttackRating = sMonStats.nTH;
+    if (!nAttackRating) {
       memset(&sMonStats, 0, sizeof(sMonStats));
-      nMonLevel = (int)pMonStatsTxt->aLevel[nDifficultyIndex];
-      pMonScaledStats = &sMonStats;
-      D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nMonIdx, GAME::Game::GAMEDATA_GetLadderOrGameType(), nDifficultyIndex, nMonLevel, 0x10, pMonScaledStats);
-      nMonLevel = sMonStats.nTH;
-      if (!sMonStats.nTH) {
+      D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nMonIdx, GAME::Game::GAMEDATA_GetLadderOrGameType(), nDifficulty, pMonStatsTxt->aLevel[nDifficulty], 0x10, &sMonStats);
+      nAttackRating = sMonStats.nTH;
+      if (!nAttackRating) {
         memset(&sMonStats, 0, sizeof(sMonStats));
-        nMonLevel = (int)pMonStatsTxt->aLevel[nDifficultyIndex];
-        pMonScaledStats = &sMonStats;
-        D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nMonIdx, GAME::Game::GAMEDATA_GetLadderOrGameType(), nDifficultyIndex, nMonLevel, 0x20, pMonScaledStats);
-        nMonLevel = sMonStats.nTH;
+        D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nMonIdx, GAME::Game::GAMEDATA_GetLadderOrGameType(), nDifficulty, pMonStatsTxt->aLevel[nDifficulty], 0x20, &sMonStats);
+        nAttackRating = sMonStats.nTH;
       }
-    }
-    if (pMonStatsTxt->Align != '\x01') {
-      uint8_t byDifficultyCheck;
-      bExpansion = GAME::Game::CLIENT_CheckExpansion();
-      if (!bExpansion) {
-        byDifficultyCheck = GAME::Game::GetDificulity();
-        if (byDifficultyCheck != '\0') {
-          nMonLevel = nMonLevel * 10 / 0xf;
-        }
-      }
-    }
-    if (nBlockRatio < 0) {
-      nMonLevel -= nBlockRatio;
-      nBlockRatio = 0;
-    }
-    if (nMonLevel < 0) {
-      nBlockRatio -= nMonLevel;
-      nMonLevel = 0;
-      check_zero_divisor:
-      if (!nBlockRatio) {
-        nBlockRatio = 100;
-        goto apply_level_factor;
-      }
-    } else if (!nMonLevel) {
-      goto check_zero_divisor;
     }
 
-    nBlockRatio = nMonLevel * 100 / (nMonLevel + nBlockRatio);
-    apply_level_factor:
-    wMonStatVal = pMonStatsTxt->aLevel[nDifficultyIndex];
-    nMonIdx = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
-    return wMonStatVal * nBlockRatio * 2 / (nMonIdx + wMonStatVal);
+    if (pMonStatsTxt->Align != 1 && !GAME::Game::CLIENT_CheckExpansion() && GAME::Game::GetDificulity()) {
+      nAttackRating = nAttackRating * 10 / 0xf;
+    }
+    if (nDefense < 0) {
+      nAttackRating -= nDefense;
+      nDefense = 0;
+    }
+    if (nAttackRating < 0) {
+      nDefense -= nAttackRating;
+      nAttackRating = 0;
+    }
+    if (nAttackRating || nDefense) {
+      nChance = nAttackRating * 100 / (nAttackRating + nDefense);
+    }
+
+    int nMonLevel = pMonStatsTxt->aLevel[nDifficulty];
+    return nMonLevel * nChance * 2 / (D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0) + nMonLevel);
 }
 
 int __fastcall UI_AppendColorCodeToString(uint16_t * pWszString, uint16_t * * pNextLineOut) {
