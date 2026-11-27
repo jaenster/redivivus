@@ -1,9 +1,9 @@
 // StormMac Storm Mac/SOURCE/SCMD.CPP: the command-line switch registry and parser,
 // 1.14d Intel Mac 0000d43e..0000e5cf.
 //
-// Two lists of switch definitions (CMDDEF, 0x40 bytes) are kept: the ones that take a
-// leading '-' or '/' (0003f0254) and the bare ones (0003f0260). SCmdProcess walks a
-// command line over them. The intrusive list helpers after the parser are the TSList
+// Two lists of switch definitions (CMDDEF, 0x40 bytes) are kept: the positional
+// arguments (0003f0254, kind 0x1000000 optional or 0x2000000 required) and the flags that
+// take a leading '-' or '/' (0003f0260, kind 0). SCmdProcess walks a command line over them. The intrusive list helpers after the parser are the TSList
 // instantiations this file's object holds; the file's static initialiser closes the run.
 //
 // __FILE__ is ".../StormMac/Storm Mac/SOURCE/SCMD.CPP".
@@ -30,15 +30,30 @@ HANDLE CreateFile(const char* szName, DWORD dwAccess, DWORD dwShare, void* pSecu
 DWORD GetFileSize(HANDLE hFile, DWORD* pdwHigh);
 BOOL ReadFile(HANDLE hFile, void* pBuffer, DWORD nBytes, DWORD* pnRead, void* pOverlapped);
 
-// File-local routines are not inlined and take their first two arguments in ecx and edx.
-#define SCMD_LOCAL static __attribute__((noinline))
-// The list templates are instantiations shared with other objects, so they keep the C calling convention.
+// The list templates are instantiations shared with other objects, so they keep the C calling
+// convention. noinline is kept as evidence, not cause: the binary calls every one of them out of
+// line (TSLINK_Unlink, 23 instructions, included) where clang-425 -Os inlines an inline function
+// of that size; what kept the original's out of line is not recovered.
 #define SCMD_TPL inline __attribute__((noinline))
+// Storm's release-build parameter check: every condition is evaluated and and-ed into one
+// mask (no short circuit), and a failure sets ERROR_INVALID_PARAMETER and returns 0.
+#define SCMD_VALIDATE_BEGIN int nValidMask = -1
+#define SCMD_VALIDATE(bCondition) if (!(bCondition)) nValidMask = 0
+#define SCMD_VALIDATE_END                \
+    if (nValidMask == 0) {               \
+        SErrSetLastError(0x57);          \
+        return 0;                        \
+    }
 #define SCMD_FILE "/Users/bclemetson/dev/diablo2/Diablo2/Source/DiabloAll/../../../StormMac/Storm Mac/SOURCE/SCMD.CPP"
 
-// 1.14d mac: gaSCMD_FallbackMessages
-// The messages for the errors 0x85100065, 0x8510006d and 0x6e, in that order.
-extern const char* gaSCMD_FallbackMessages[3];
+// 1.14d mac: 003cf6e8
+// The messages for the errors 0x85100065, 0x8510006d and 0x6e, in that order. The table is in
+// __const and SCMD_ReportError, its only reader, indexes it off the PIC base: a file-local constant.
+static const char* const gaSCMD_FallbackMessages[3] = {
+    "Invalid argument: %s",
+    "The syntax of the command is incorrect.",
+    "Unable to open response file: %s",
+};
 
 struct CMDDEF;
 typedef int (*CMDCALLBACK)(void* pParams, const char* szText);
@@ -49,7 +64,7 @@ typedef int (*CMDERRORCALLBACK)(void* pErrorInfo);
 struct CMDPARAMS {
     uint32_t dwFlags;
     int32_t nGroupId;
-    uintptr_t* pValue;
+    const char* szName;
     void* pVariable;
     uint32_t dwSetValue;
     uint32_t dwSetMask;
@@ -88,19 +103,29 @@ struct CMDLIST {
 };
 
 // 1.14d mac: 003f0254
-static CMDLIST s_tSwitchList;
+static CMDLIST s_tArgList;
 // 1.14d mac: 003f0260
-static CMDLIST s_tBareList;
+static CMDLIST s_tFlagList;
 // 1.14d mac: 003f026c
-// A required switch (kind 0x1000000) has been registered.
-static int32_t s_bRequiredRegistered;
+// An optional positional argument (kind 0x1000000) has been registered: a required one
+// may no longer follow.
+static int32_t s_bAddedOptional;
 
 // The next element of a list, NULL at the terminator.
+// Both tests are evaluated: the end test is a bitwise or.
+static inline bool ListIsTerminator(CMDDEF* pNext) {
+    return ((intptr_t)pNext == 0) | ((intptr_t)pNext & 1);
+}
+
 static inline CMDDEF* ListElement(CMDDEF* pNext) {
-    if ((pNext == NULL) | (((uintptr_t)pNext & 1) != 0)) {
-        return NULL;
-    }
-    return pNext;
+    return ListIsTerminator(pNext) ? NULL : pNext;
+}
+
+// The raw next pointer after pElement (NULL starts from the list's own link): an element,
+// or the terminator mark the caller tests for.
+static inline CMDDEF* ListRawNext(CMDLIST* pList, CMDDEF* pElement) {
+    CMDDEF* pLink = pElement != NULL ? pElement : (CMDDEF*)&pList->pLastLink;
+    return pLink->pNextElement;
 }
 
 void TSLIST_DeleteAll(CMDLIST* pList);
@@ -109,30 +134,30 @@ SCMD_TPL void TSLINK_Unlink(void* pLink);
 SCMD_TPL void* TSLINK_NextLink(void* pLink, int nLinkOffset);
 SCMD_TPL CMDDEF* TSList_NewNode(CMDLIST* pList, int nLinkType, int nExtraBytes, uint32_t dwAllocFlags);
 SCMD_TPL void TSList_LinkNode(CMDLIST* pList, CMDDEF* pNode, int nLinkType, void* pExistingLink);
-SCMD_LOCAL void SCMD_ReportError(const char* szItem, DWORD dwError, CMDERRORCALLBACK pfnError, const char* szText);
-SCMD_LOCAL CMDDEF* SCMD_FindFlagDef(const char* szToken, CMDDEF* pFirstDef, int32_t nMinLength);
-SCMD_LOCAL int PerformConversion(CMDDEF* pDef, const char* szValue, uint32_t* pnConsumed);
-SCMD_LOCAL BOOL SCMD_ProcessCurrentFlag(const char* szArgLine, SCMD_PROCESSING* pProcessing, int* pnConsumed);
-SCMD_LOCAL BOOL SCMD_ProcessTokens(SCMD_PROCESSING* pProcessing, char** ppszCursor, CMDDEF** ppPositional,
+// The file-local routines are static (LLVM gives them the fast convention: first two arguments
+// in ecx and edx) and stay out of line on their own.
+static void SCMD_ReportError(CMDERRORCALLBACK pfnError, DWORD dwError, const char* szText);
+static CMDDEF* SCMD_FindFlagDef(const char* szToken, CMDDEF* pFirstDef, int32_t nMinLength);
+static int PerformConversion(CMDDEF* pDef, const char* szValue, uint32_t* pnConsumed);
+static BOOL SCMD_ProcessCurrentFlag(const char* szArgLine, SCMD_PROCESSING* pProcessing, int* pnConsumed);
+static BOOL SCMD_ProcessTokens(char** ppszCursor, SCMD_PROCESSING* pProcessing, CMDDEF** ppPositional,
                                CMDUNKNOWNCALLBACK pfnExtra, CMDERRORCALLBACK pfnError);
 
 // 1.14d mac: 0000d43e
 // Frees every string value, then both lists.
 BOOL SCmdDestroy(void) {
     for (int nList = 0; nList != 2; nList++) {
-        CMDLIST* pList = nList != 0 ? &s_tBareList : &s_tSwitchList;
-        CMDDEF* pFlag = ListElement(pList->pFirst);
-        while (pFlag != NULL) {
+        CMDLIST* pList = nList != 0 ? &s_tFlagList : &s_tArgList;
+        for (CMDDEF* pFlag = ListElement(pList->pFirst); !ListIsTerminator(pFlag); pFlag = ListRawNext(pList, pFlag)) {
             if ((pFlag->dwFlags & 0x30000) == 0x20000 && pFlag->uValue != 0) {
                 SMemFree((void*)pFlag->uValue, SCMD_FILE, 0x21a, 0);
                 pFlag->uValue = 0;
             }
-            pFlag = ListElement(pFlag->pNextElement);
         }
     }
-    TSLIST_DeleteAll(&s_tSwitchList);
-    TSLIST_DeleteAll(&s_tBareList);
-    s_bRequiredRegistered = 0;
+    TSLIST_DeleteAll(&s_tArgList);
+    TSLIST_DeleteAll(&s_tFlagList);
+    s_bAddedOptional = 0;
     return 1;
 }
 
@@ -150,15 +175,15 @@ int SCmdProcess(char* szCmdLine, int bSkipProgName, CMDUNKNOWNCALLBACK pfnExtra,
     }
     SCMD_PROCESSING tProcessing;
     memset(&tProcessing, 0, sizeof(tProcessing));
-    CMDDEF* pPositional = ListElement(s_tSwitchList.pFirst);
+    CMDDEF* pPositional = ListElement(s_tArgList.pFirst);
     int bResult = 0;
-    if (SCMD_ProcessTokens(&tProcessing, &pszCursor, &pPositional, pfnExtra, pfnError)) {
+    if (SCMD_ProcessTokens(&pszCursor, &tProcessing, &pPositional, pfnExtra, pfnError)) {
         bResult = 1;
         while (pPositional != NULL) {
             if ((pPositional->dwFlags & 0x3000000) == 0x2000000) {
                 bResult = 0;
                 if (pfnError != NULL) {
-                    SCMD_ReportError("", 0x8510006d, pfnError, "");
+                    SCMD_ReportError(pfnError, 0x8510006d, "");
                 }
                 return bResult;
             }
@@ -173,7 +198,7 @@ int SCmdProcess(char* szCmdLine, int bSkipProgName, CMDUNKNOWNCALLBACK pfnExtra,
 // One token at a time: "@file" is read and parsed recursively, "-name" and "/name" name
 // switches (letters may be run together), anything else is the value of the switch
 // before it or the next positional argument.
-SCMD_LOCAL BOOL SCMD_ProcessTokens(SCMD_PROCESSING* pProcessing, char** ppszCursor, CMDDEF** ppPositional,
+static BOOL SCMD_ProcessTokens(char** ppszCursor, SCMD_PROCESSING* pProcessing, CMDDEF** ppPositional,
                                CMDUNKNOWNCALLBACK pfnExtra, CMDERRORCALLBACK pfnError) {
     if (**ppszCursor != '\0') {
         char* pszNext = *ppszCursor;
@@ -189,7 +214,7 @@ SCMD_LOCAL BOOL SCMD_ProcessTokens(SCMD_PROCESSING* pProcessing, char** ppszCurs
                     HANDLE hFile = CreateFile(szToken + 1, (DWORD)-0x80000000, 1, 0, 3, 0x8000000, 0);
                     if (hFile == 0) {
                         if (pfnError != NULL) {
-                            SCMD_ReportError(szToken + 1, 0x6e, pfnError, szToken + 1);
+                            SCMD_ReportError(pfnError, 0x6e, szToken + 1);
                         }
                         break;
                     }
@@ -200,7 +225,7 @@ SCMD_LOCAL BOOL SCMD_ProcessTokens(SCMD_PROCESSING* pProcessing, char** ppszCurs
                     CloseHandle(hFile);
                     pFileData[nBytesRead] = 0;
                     char* pFileCursor = pFileData;
-                    bOk = SCMD_ProcessTokens(pProcessing, &pFileCursor, ppPositional, pfnExtra, pfnError);
+                    bOk = SCMD_ProcessTokens(&pFileCursor, pProcessing, ppPositional, pfnExtra, pfnError);
                     SMemFree(pFileData, SCMD_FILE, 0x16a, 0);
                 } else if (SStrChr("-/", szToken[0]) != NULL && bQuoted == 0) {
                     pProcessing->pCurrent = NULL;
@@ -222,7 +247,7 @@ SCMD_LOCAL BOOL SCMD_ProcessTokens(SCMD_PROCESSING* pProcessing, char** ppszCurs
                         while (nTry != 0) {
                             if ((int)((nTextLen - 1) + nTry) < 0x100) {
                                 SStrCopy(szName + nTry - 1, pszText, 0x100);
-                                pFound = SCMD_FindFlagDef(szName, ListElement(s_tBareList.pFirst), 0);
+                                pFound = SCMD_FindFlagDef(szName, ListElement(s_tFlagList.pFirst), 0);
                                 if (pFound != NULL) {
                                     break;
                                 }
@@ -231,7 +256,7 @@ SCMD_LOCAL BOOL SCMD_ProcessTokens(SCMD_PROCESSING* pProcessing, char** ppszCurs
                         }
                         if (pFound == NULL) {
                             if (pfnError != NULL) {
-                                SCMD_ReportError(pszText, 0x85100065, pfnError, pszText);
+                                SCMD_ReportError(pfnError, 0x85100065, pszText);
                             }
                             bContinue = false;
                             break;
@@ -275,7 +300,7 @@ SCMD_LOCAL BOOL SCMD_ProcessTokens(SCMD_PROCESSING* pProcessing, char** ppszCurs
                     }
                     if (pfnExtra == NULL) {
                         if (pfnError != NULL) {
-                            SCMD_ReportError(szToken, 0x85100065, pfnError, szToken);
+                            SCMD_ReportError(pfnError, 0x85100065, szToken);
                         }
                         break;
                     }
@@ -296,21 +321,23 @@ SCMD_LOCAL BOOL SCMD_ProcessTokens(SCMD_PROCESSING* pProcessing, char** ppszCurs
 
 // 1.14d mac: 0000db26
 // The error callback's text: the registered message with the item put in, or a fallback.
-SCMD_LOCAL void SCMD_ReportError(const char* szItem, DWORD dwError, CMDERRORCALLBACK pfnError, const char* szText) {
+static void SCMD_ReportError(CMDERRORCALLBACK pfnError, DWORD dwError, const char* szText) {
     int nMessage;
-    if (dwError == 0x6e) {
-        nMessage = 2;
-    } else {
+    switch (dwError) {
+    case 0x85100065:
         nMessage = 0;
-        if (dwError != 0x85100065) {
-            if (dwError != 0x8510006d) {
-                return;
-            }
-            nMessage = 1;
-        }
+        break;
+    case 0x8510006d:
+        nMessage = 1;
+        break;
+    case 0x6e:
+        nMessage = 2;
+        break;
+    default:
+        return;
     }
-    char szFormat[256];
     char szMessage[256];
+    char szFormat[256];
     szFormat[0] = '\0';
     SStrCopy(szFormat, gaSCMD_FallbackMessages[nMessage], 0x100);
     if (strstr(szFormat, "%s") == NULL) {
@@ -340,16 +367,20 @@ BOOL SCmdRegisterArgument(uint32_t dwFlags, int nGroupId, const char* szText, vo
     if (szText != NULL) {
         szName = szText;
     }
-    uint32_t dwKind = dwFlags & 0x3000000;
     int nNameLen = SStrLen(szName);
-    if ((s_bRequiredRegistered & (dwKind == 0x2000000)) != 0 || (nVariableSize != 0 && pVariable == NULL) ||
-        0xf < nNameLen || (nNameLen < 1 && dwKind == 0) ||
-        ((dwFlags & 0x30000) == 0 && pVariable != NULL && nVariableSize != 4)) {
-        SErrSetLastError(0x57);
-        return 0;
+    SCMD_VALIDATE_BEGIN;
+    SCMD_VALIDATE(nVariableSize == 0 || pVariable != NULL);
+    SCMD_VALIDATE((dwFlags & 0x3000000) != 0x2000000 || !s_bAddedOptional);
+    SCMD_VALIDATE(nNameLen < 0x10);
+    SCMD_VALIDATE((dwFlags & 0x3000000) != 0 || nNameLen > 0);
+    SCMD_VALIDATE((dwFlags & 0x30000) != 0 || pVariable == NULL || nVariableSize == 4);
+    SCMD_VALIDATE_END;
+    CMDDEF* pDef;
+    if ((dwFlags & 0x3000000) == 0) {
+        pDef = TSList_NewNode(&s_tFlagList, 2, 0, 0);
+    } else {
+        pDef = TSList_NewNode(&s_tArgList, 2, 0, 0);
     }
-    CMDLIST* pList = dwKind == 0 ? &s_tBareList : &s_tSwitchList;
-    CMDDEF* pDef = TSList_NewNode(pList, 2, 0, 0);
     SStrCopy(pDef->szName, szName, 0x10);
     pDef->nGroupId = nGroupId;
     pDef->nNameLen = nNameLen;
@@ -364,8 +395,8 @@ BOOL SCmdRegisterArgument(uint32_t dwFlags, int nGroupId, const char* szText, vo
         nInitial = nSetValue;
     }
     pDef->uValue = nInitial;
-    if (dwKind == 0x1000000) {
-        s_bRequiredRegistered = 1;
+    if ((dwFlags & 0x3000000) == 0x1000000) {
+        s_bAddedOptional = 1;
     }
     return 1;
 }
@@ -388,7 +419,7 @@ BOOL SCmdRegisterArgList(const uint32_t* pCmdDefArray, uint32_t nCount) {
 
 // 1.14d mac: 0000de3a
 // Applies the pending switch, and every other definition its name still matches, to a value.
-SCMD_LOCAL BOOL SCMD_ProcessCurrentFlag(const char* szArgLine, SCMD_PROCESSING* pProcessing, int* pnConsumed) {
+static BOOL SCMD_ProcessCurrentFlag(const char* szArgLine, SCMD_PROCESSING* pProcessing, int* pnConsumed) {
     *pnConsumed = 0;
     CMDDEF* pDef = pProcessing->pCurrent;
     pProcessing->pCurrent = NULL;
@@ -403,75 +434,88 @@ SCMD_LOCAL BOOL SCMD_ProcessCurrentFlag(const char* szArgLine, SCMD_PROCESSING* 
     return 1;
 }
 
+// A flag: a leading '-' clears it, '+' sets it; otherwise the definition's default (bit 0
+// set: clear) applies. Inlined into PerformConversion, as are the two below.
+static void ConvertBool(CMDDEF* pDef, const char* szValue, uint32_t* pnConsumed) {
+    bool bSet;
+    if (*szValue == '-') {
+        bSet = false;
+        *pnConsumed = 1;
+    } else if (*szValue == '+') {
+        bSet = true;
+        *pnConsumed = 1;
+    } else if ((pDef->dwFlags & 1) != 0) {
+        bSet = false;
+    } else {
+        bSet = true;
+    }
+    pDef->uValue &= ~pDef->dwSetMask;
+    if (bSet) {
+        pDef->uValue |= pDef->dwSetValue;
+    }
+    if (pDef->pVariable != NULL) {
+        *(uint32_t*)pDef->pVariable &= ~pDef->dwSetMask;
+        if (bSet) {
+            *(uint32_t*)pDef->pVariable |= pDef->dwSetValue;
+        }
+    }
+}
+
+// A number, signed when bit 0 is set; the variable takes up to four bytes of it.
+static void ConvertNumber(CMDDEF* pDef, const char* szValue, uint32_t* pnConsumed) {
+    char* pszEnd = NULL;
+    if ((pDef->dwFlags & 1) != 0) {
+        pDef->uValue = strtol(szValue, &pszEnd, 0);
+    } else {
+        pDef->uValue = strtoul(szValue, &pszEnd, 0);
+    }
+    *pnConsumed = pszEnd != NULL ? (uint32_t)(pszEnd - szValue) : SStrLen(szValue);
+    if (pDef->pVariable != NULL) {
+        int nSize = (uint32_t)pDef->nVariableSize < sizeof(uint32_t) ? pDef->nVariableSize : (int)sizeof(uint32_t);
+        if (nSize > 0) {
+            memmove(pDef->pVariable, &pDef->uValue, nSize);
+        }
+    }
+}
+
+// A string: the definition keeps its own copy; the variable takes one of its size.
+static void ConvertString(CMDDEF* pDef, const char* szValue, uint32_t* pnConsumed) {
+    *pnConsumed = SStrLen(szValue);
+    if (pDef->uValue != 0) {
+        SMemFree((void*)pDef->uValue, SCMD_FILE, 0x8f, 0);
+    }
+    pDef->uValue = (uintptr_t)SMemAlloc(SStrLen(szValue) + 1, SCMD_FILE, 0x90, 0);
+    SStrCopy((char*)pDef->uValue, szValue, 0x7fffffff);
+    if (pDef->pVariable != NULL) {
+        SStrCopy((char*)pDef->pVariable, szValue, pDef->nVariableSize);
+    }
+}
+
 // 1.14d mac: 0000dec7
 // Stores a value into a definition: a string (copied), a number, or a flag set or cleared by
 // its mask (a leading '+' or '-' on the text chooses). Then the callback, then every other
 // definition of the same group and type takes the value too.
-SCMD_LOCAL int PerformConversion(CMDDEF* pDef, const char* szValue, uint32_t* pnConsumed) {
+static int PerformConversion(CMDDEF* pDef, const char* szValue, uint32_t* pnConsumed) {
     *pnConsumed = 0;
-    uint32_t dwFlags = pDef->dwFlags;
-    uint32_t dwType = dwFlags & 0x30000;
-    if (dwType == 0x20000) {
-        *pnConsumed = SStrLen(szValue);
-        if (pDef->uValue != 0) {
-            SMemFree((void*)pDef->uValue, SCMD_FILE, 0x8f, 0);
-        }
-        char* szCopy = (char*)SMemAlloc(SStrLen(szValue) + 1, SCMD_FILE, 0x90, 0);
-        pDef->uValue = (uintptr_t)szCopy;
-        SStrCopy(szCopy, szValue, 0x7fffffff);
-        if (pDef->pVariable != NULL) {
-            SStrCopy((char*)pDef->pVariable, szValue, pDef->nVariableSize);
-        }
-    } else if (dwType == 0x10000) {
-        char* pszEnd = NULL;
-        if ((dwFlags & 1) == 0) {
-            pDef->uValue = strtoul(szValue, &pszEnd, 0);
-        } else {
-            pDef->uValue = strtol(szValue, &pszEnd, 0);
-        }
-        *pnConsumed = pszEnd == NULL ? SStrLen(szValue) : (uint32_t)(pszEnd - szValue);
-        if (pDef->pVariable != NULL) {
-            size_t nSize = 4;
-            if ((uint32_t)pDef->nVariableSize < 5) {
-                nSize = pDef->nVariableSize;
-            }
-            if (0 < (int)nSize) {
-                memmove(pDef->pVariable, &pDef->uValue, nSize);
-            }
-        }
-    } else {
-        if (dwType != 0) {
-            return 0;
-        }
-        bool bSet;
-        if (*szValue == '+') {
-            *pnConsumed = 1;
-            bSet = true;
-        } else if (*szValue == '-') {
-            *pnConsumed = 1;
-            bSet = false;
-        } else {
-            bSet = (dwFlags & 1) == 0;
-        }
-        pDef->uValue = pDef->uValue & ~pDef->dwSetMask;
-        if (bSet) {
-            pDef->uValue = pDef->uValue | pDef->dwSetValue;
-        }
-        uint32_t* pVariable = (uint32_t*)pDef->pVariable;
-        if (pVariable != NULL) {
-            uint32_t dwNew = ~pDef->dwSetMask & *pVariable;
-            *pVariable = dwNew;
-            if (bSet) {
-                *pVariable = dwNew | pDef->dwSetValue;
-            }
-        }
+    switch (pDef->dwFlags & 0x30000) {
+    case 0:
+        ConvertBool(pDef, szValue, pnConsumed);
+        break;
+    case 0x10000:
+        ConvertNumber(pDef, szValue, pnConsumed);
+        break;
+    case 0x20000:
+        ConvertString(pDef, szValue, pnConsumed);
+        break;
+    default:
+        return 0;
     }
     pDef->bSupplied = 1;
     if (pDef->pfnCallback != NULL) {
         CMDPARAMS tParams;
         tParams.dwFlags = pDef->dwFlags;
         tParams.nGroupId = pDef->nGroupId;
-        tParams.pValue = &pDef->uValue;
+        tParams.szName = pDef->szName;
         tParams.pVariable = pDef->pVariable;
         tParams.dwSetValue = pDef->dwSetValue;
         tParams.dwSetMask = pDef->dwSetMask;
@@ -481,9 +525,9 @@ SCMD_LOCAL int PerformConversion(CMDDEF* pDef, const char* szValue, uint32_t* pn
         }
     }
     for (int nList = 0; nList != 2; nList++) {
-        CMDLIST* pList = nList != 0 ? &s_tBareList : &s_tSwitchList;
-        CMDDEF* pOther = ListElement(pList->pFirst);
-        while (pOther != NULL) {
+        CMDLIST* pList = nList != 0 ? &s_tFlagList : &s_tArgList;
+        for (CMDDEF* pOther = ListElement(pList->pFirst); !ListIsTerminator(pOther);
+             pOther = ListRawNext(pList, pOther)) {
             if (pOther->nGroupId == pDef->nGroupId && ((pDef->dwFlags ^ pOther->dwFlags) & 0x30000) == 0 &&
                 pOther != pDef) {
                 pOther->bSupplied = 1;
@@ -498,7 +542,6 @@ SCMD_LOCAL int PerformConversion(CMDDEF* pDef, const char* szValue, uint32_t* pn
                     pOther->uValue = pDef->uValue;
                 }
             }
-            pOther = ListElement(pOther->pNextElement);
         }
     }
     return 1;
@@ -506,7 +549,7 @@ SCMD_LOCAL int PerformConversion(CMDDEF* pDef, const char* szValue, uint32_t* pn
 
 // 1.14d mac: 0000e251
 // The longest definition (longer than nMinLength) whose name starts the token, from pFirstDef on.
-SCMD_LOCAL CMDDEF* SCMD_FindFlagDef(const char* szToken, CMDDEF* pFirstDef, int32_t nMinLength) {
+static CMDDEF* SCMD_FindFlagDef(const char* szToken, CMDDEF* pFirstDef, int32_t nMinLength) {
     int nTokenLen = SStrLen(szToken);
     CMDDEF* pFound = NULL;
     if (pFirstDef != NULL) {
@@ -535,8 +578,9 @@ SCMD_LOCAL CMDDEF* SCMD_FindFlagDef(const char* szToken, CMDDEF* pFirstDef, int3
 typedef uintptr_t LINKWORD;
 
 // 1.14d mac: 0000e2ea
-// A list's destructor: unlink everything, then the list's own link.
-SCMD_TPL void SCMD_ListDestructor(void* pList) {
+// A list's destructor: unlink everything, then the list's own link. The initialiser takes its
+// address directly (lea off the PIC base, no non-lazy pointer), so it is not a weak copy.
+static void SCMD_ListDestructor(void* pList) {
     TSLIST_UnlinkAll((CMDLIST*)pList);
     TSLINK_Unlink((LINKWORD*)pList + 1);
 }
@@ -579,22 +623,27 @@ SCMD_TPL void TSList_LinkNode(CMDLIST* pList, CMDDEF* pNode, int nLinkType, void
     if (*pLink != 0) {
         TSLINK_Unlink(pLink);
     }
-    LINKWORD* pTarget = pListWords + 1;
-    if (pExistingLink != NULL) {
-        pTarget = (LINKWORD*)pExistingLink;
+    LINKWORD* pTarget = (LINKWORD*)pExistingLink;
+    if (pExistingLink == NULL) {
+        pTarget = pListWords + 1;
     }
-    if (nLinkType == 2) {
-        LINKWORD* pPrevious = (LINKWORD*)*pTarget;
-        *pLink = (LINKWORD)pPrevious;
-        pLink[1] = pPrevious[1];
-        pPrevious[1] = (LINKWORD)pNode;
-        *pTarget = (LINKWORD)pLink;
-    } else if (nLinkType == 1) {
+    switch (nLinkType) {
+    case 1: {
         *pLink = (LINKWORD)pTarget;
         pLink[1] = pTarget[1];
         LINKWORD* pNextLink = (LINKWORD*)TSLINK_NextLink(pTarget, (int)*pListWords);
         *pNextLink = (LINKWORD)pLink;
         pTarget[1] = (LINKWORD)pNode;
+        break;
+    }
+    case 2: {
+        LINKWORD* pPrevious = (LINKWORD*)*pTarget;
+        *pLink = (LINKWORD)pPrevious;
+        pLink[1] = pPrevious[1];
+        pPrevious[1] = (LINKWORD)pNode;
+        *pTarget = (LINKWORD)pLink;
+        break;
+    }
     }
 }
 
@@ -639,14 +688,14 @@ extern "C" void* __dso_handle;
 // 1.14d mac: 0000e540
 // The file's static initialiser: both lists empty, a destructor for each.
 void SCMD_InitStaticLists(void) {
-    s_tSwitchList.nLinkOffset = 0;
-    s_tSwitchList.pLastLink = (CMDDEF*)&s_tSwitchList.pLastLink;
-    s_tSwitchList.pFirst = (CMDDEF*)((uintptr_t)&s_tSwitchList.pLastLink + 1);
-    __cxa_atexit(SCMD_ListDestructor, &s_tSwitchList, &__dso_handle);
-    s_tBareList.nLinkOffset = 0;
-    s_tBareList.pLastLink = (CMDDEF*)&s_tBareList.pLastLink;
-    s_tBareList.pFirst = (CMDDEF*)((uintptr_t)&s_tBareList.pLastLink + 1);
-    __cxa_atexit(SCMD_ListDestructor, &s_tBareList, &__dso_handle);
+    s_tArgList.nLinkOffset = 0;
+    s_tArgList.pLastLink = (CMDDEF*)&s_tArgList.pLastLink;
+    s_tArgList.pFirst = (CMDDEF*)((uintptr_t)&s_tArgList.pLastLink | 1);
+    __cxa_atexit(SCMD_ListDestructor, &s_tArgList, &__dso_handle);
+    s_tFlagList.nLinkOffset = 0;
+    s_tFlagList.pLastLink = (CMDDEF*)&s_tFlagList.pLastLink;
+    s_tFlagList.pFirst = (CMDDEF*)((uintptr_t)&s_tFlagList.pLastLink | 1);
+    __cxa_atexit(SCMD_ListDestructor, &s_tFlagList, &__dso_handle);
 }
 
 #endif  // D2_OS_MAC
