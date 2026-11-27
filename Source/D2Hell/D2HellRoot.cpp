@@ -73,6 +73,7 @@ static pfnFaultError g_pfnFaultErrorCallback = (pfnFaultError)0; D2_STATIC_GUARD
 
 namespace D2Hell {
 
+#if defined(_WIN32) || !D2_OS_MAC
 bool __fastcall D2FILE_CreateProcess(LPCSTR szText) {
     _STARTUPINFOA processInfo = { sizeof(processInfo) };
     _PROCESS_INFORMATION startupInfo;
@@ -85,7 +86,9 @@ bool __fastcall D2FILE_CreateProcess(LPCSTR szText) {
     /* HANDLE hObject for CloseHandle */ CloseHandle(startupInfo.hThread);
     return true;
 }
+#endif
 
+#if defined(_WIN32) || !D2_OS_MAC
 // NOTE: Return type changed void→char (1 callers, MEDIUM confidence)
 char __fastcall D2FILE_VerifyFileSignature(LPCSTR szText) {
     // Static local variables (originally global data)
@@ -103,6 +106,7 @@ char __fastcall D2FILE_VerifyFileSignature(LPCSTR szText) {
 
     return bIsSigned;
 }
+#endif
 
 BOOL __fastcall CheckIfFileExists(D2PoolManagerStrc * pMemory, char * szFilename, D2MPQFileStrc * * ppFile, BOOL bDontLogError) {
     BOOL bFileExists;
@@ -233,6 +237,7 @@ void * __fastcall D2FILE_AllocAndLoadD2File(D2PoolManagerStrc * pMemory, char * 
     return pBuffer;
 }
 
+#if defined(_WIN32) || !D2_OS_MAC
 static int __stdcall FindMPQOnCd(char * pszMpqName, int * pnPriority, D2ArchiveStrc * * ppArchive, LPSTR szText) {
     char* pcNextBackslash;
     DWORD dwDriveStringsLen;
@@ -304,7 +309,9 @@ static int __stdcall FindMPQOnCd(char * pszMpqName, int * pnPriority, D2ArchiveS
 
     return bOpenArchiveCdOk;
 }
+#endif
 
+#if defined(_WIN32) || !D2_OS_MAC
 static D2ArchiveStrc * __stdcall FindMpqFromDiskOrCd(char * pszMpqName, int * pnPriority, D2ArchiveStrc * pArchive, LPSTR szText) {
     uint32_t nFlags = 2;
     if (pArchive) { // on entry the slot is the "also search the CD" flag
@@ -339,7 +346,9 @@ static D2ArchiveStrc * __stdcall FindMpqFromDiskOrCd(char * pszMpqName, int * pn
     }
     return pArchive;
 }
+#endif
 
+#if defined(_WIN32) || !D2_OS_MAC
 // @sourcefile .\SRC\Archive.cpp
 D2FogArchiveStrc * __fastcall ARCHIVE_LoadMPQ(char * szMpqFileName, int32_t nZero, ::fpRequiredUserAction nfpRequiredUserAction, int32_t nTimeTBC) {
     BOOL BVar1;
@@ -372,6 +381,7 @@ D2FogArchiveStrc * __fastcall ARCHIVE_LoadMPQ(char * szMpqFileName, int32_t nZer
     D2_FREE_AT(pFogArchive, ".\\SRC\\Archive.cpp", 0x21a);
     return nullptr;
 }
+#endif
 
 // @sourcefile .\SRC\Archive.cpp
 void __fastcall ARCHIVE_FreeMpqFile(D2FogArchiveStrc * pFogArchive) {
@@ -389,22 +399,29 @@ pfnFaultError __fastcall RegisterExitFunction(pfnFaultError pfnNewCallback) {
     return pfnPrevCallback;
 }
 
+#if defined(_WIN32) || !D2_OS_MAC
 void __stdcall FAULT_TerminateCurrentProcess() {
     UINT uExitCode = -1;
     HANDLE hProcess = GetCurrentProcess();
     /* HANDLE hProcess for TerminateProcess */ TerminateProcess(hProcess, uExitCode);
 }
+#endif
 
+#if defined(_WIN32) || !D2_OS_MAC
 void __fastcall FAULT_ShowErrorAndTerminate(LPCSTR szText) {
     /* UINT uType for MessageBoxA */ /* LPCSTR lpCaption for MessageBoxA */ /* LPCSTR lpText for MessageBoxA */ /* HWND hWnd for MessageBoxA */ MessageBoxA((HWND)0x0, szText, "Diablo 2.EXE", 0x2010);
     FAULT_TerminateCurrentProcess();
 }
+#endif
 
+#if defined(_WIN32) || !D2_OS_MAC
 int __fastcall FAULT_ShowErrorMessageBox(LPCSTR szText) {
     MessageBoxA((HWND)0x0, szText, lpCaption_006cc848, 0x2010);
     return 1;
 }
+#endif
 
+#if defined(_WIN32) || !D2_OS_MAC
 void __fastcall FAULT_FormatAndShowError(LPCSTR szFile, int nLine, LPCSTR szExpression) {
     char szBuffer[512];
     if (g_pfnFaultErrorCallback) {
@@ -417,6 +434,7 @@ void __fastcall FAULT_FormatAndShowError(LPCSTR szFile, int nLine, LPCSTR szExpr
       FAULT_TerminateCurrentProcess();
     }
 }
+#endif
 
 StormLinkStrc * __thiscall LINKEDLIST_GetNodePointer(StormLinkStrc * pLink, intptr_t nLinkOffset) {
     StormLinkStrc* pResult;
@@ -645,6 +663,7 @@ void __fastcall FAULT_LookupErrorString(uint32_t nErrorCode, char * szText, int3
     Storm::Source::SSTR::SStrCopy(szText, "D2Hell Fault.cpp error.", nMaxLen);
 }
 
+#if defined(_WIN32) || !D2_OS_MAC
 void FAULT_ShowFormattedError(uint32_t nErrorCode, ...) {
     va_list __va;
     va_start(__va, nErrorCode);
@@ -657,7 +676,9 @@ void FAULT_ShowFormattedError(uint32_t nErrorCode, ...) {
       FAULT_TerminateCurrentProcess();
     }
 }
+#endif
 
+#if defined(_WIN32) || !D2_OS_MAC
 void FAULT_ShowFormattedErrorAndTerminate(uint32_t nErrorCode, ...) {
     va_list __va;
     va_start(__va, nErrorCode);
@@ -667,6 +688,7 @@ void FAULT_ShowFormattedErrorAndTerminate(uint32_t nErrorCode, ...) {
     /* va_list arglist for wvsprintfA */ /* LPCSTR param_2 for wvsprintfA */ /* LPSTR param_1 for wvsprintfA */ wvsprintfA(szFormattedMsg, szErrorMsg, __va);
     FAULT_ShowErrorAndTerminate(szFormattedMsg);
 }
+#endif
 
 void FAULT_ShowFormattedErrorWithArgs(uint32_t nErrorCode, ...) {
     va_list __va;
@@ -674,7 +696,11 @@ void FAULT_ShowFormattedErrorWithArgs(uint32_t nErrorCode, ...) {
     char szFormattedMsg[512];
     char szErrorMsg[512];
     FAULT_LookupErrorString(nErrorCode, szErrorMsg, 0x200);
+    #if !defined(_WIN32) && D2_OS_MAC
+    vsprintf(szFormattedMsg, szErrorMsg, __va);
+#else
     /* va_list arglist for wvsprintfA */ /* LPCSTR param_2 for wvsprintfA */ /* LPSTR param_1 for wvsprintfA */ wvsprintfA(szFormattedMsg, szErrorMsg, __va);
+#endif
     FAULT_ShowErrorMessageBox(szFormattedMsg);
 }
 
@@ -809,6 +835,7 @@ int32_t D2MEM_FindLowestSetBit(uint32_t dwMask) {
     return nBitPos + 1;
 }
 
+#if defined(_WIN32) || !D2_OS_MAC
 int32_t __fastcall D2FILE_VerifySignatureWinTrust(LPCSTR szText) {
     uint32_t nVerifyResult;
     LPWSTR pWideStr;
@@ -872,7 +899,9 @@ int32_t __fastcall D2FILE_VerifySignatureWinTrust(LPCSTR szText) {
     nVerifyResult = 4;
     return nVerifyResult;
 }
+#endif
 
+#if defined(_WIN32) || !D2_OS_MAC
 // Extracts signer organization from signed file's certificate. Converts file path to wide char, queries certificate store, retrieves X.509 certificate, extracts organization field (OID 2.5.4.10), converts back to ANSI.
 bool __fastcall D2FILE_GetSignerOrganization(LPCSTR szFilePath, LPSTR szOrgOut, int32_t nOrgMaxLen) {
     // Static local variables (originally global data)
@@ -990,6 +1019,7 @@ bool __fastcall D2FILE_GetSignerOrganization(LPCSTR szFilePath, LPSTR szOrgOut, 
     }
     return bGotOrg;
 }
+#endif
 
 uint32_t __fastcall CRC32_Calculate(uint8_t * pbData, int nLen) {
     // Static local variables (originally global data)
@@ -3470,5 +3500,92 @@ int FUN_002b692a(void) {
     return 1;
 }
 
+
+// 1.14d mac: 002b69ff
+// The Mac build opens the archive from the working directory, the executable's directory
+// (twice, the second time with a forward-slash-stripped copy of the path) and then from every
+// mounted volume the CD check accepts, where Windows walks the logical drives.
+D2FogArchiveStrc* D2Hell::ARCHIVE_LoadMPQ(char* szMpqFileName, int32_t nZero, ::fpRequiredUserAction nfpRequiredUserAction, int32_t nTimeTBC) {
+    D2FogArchiveStrc* pFogArchive = D2_NEW_AT(D2FogArchiveStrc, ".\\SRC\\Archive.cpp", 0x20a);
+    pFogArchive->hArchive = 0;
+    uint32_t nFlags = (nZero != 0) | 2;
+    char* szPath = pFogArchive->szArchivePath;
+    do {
+        D2ArchiveStrc* pArchive;
+        Storm::Source::SSTR::SStrCopy(szPath, szMpqFileName, 0x7fffffff);
+        int bOpened = Storm::Source::SFile::SFileOpenArchive(szPath, (int*)(intptr_t)nTimeTBC, nFlags, &pArchive);
+        if (!bOpened) {
+            if (!GetModuleFileNameA((HMODULE)0, szPath, 0x104)) {
+                *szPath = '\0';
+            }
+            char* pszLastBackslash = strrchr(szPath, 0x5c);
+            if (pszLastBackslash) {
+                pszLastBackslash[1] = '\0';
+            }
+            Storm::Source::SSTR::SStrPack(szPath, szMpqFileName, 0x7fffffff);
+            bOpened = Storm::Source::SFile::SFileOpenArchive(szPath, (int*)(intptr_t)nTimeTBC, nFlags, &pArchive);
+            if (!bOpened) {
+                GetModuleFileNameA((HMODULE)0, szPath, 0x104);
+                pFogArchive->szArchivePath[0xff] = '\0';
+                char* pszEnd = szPath;
+                while (*pszEnd) {
+                    if (!Storm::Source::SSTR::SStrChr(pszEnd + 1, '\\')) {
+                        break;
+                    }
+                    pszEnd = Storm::Source::SSTR::SStrChr(pszEnd + 1, '\\');
+                }
+                *pszEnd = '\0';
+                Storm::Source::SSTR::SStrPack(szPath, "\\", 0x7fffffff);
+                Storm::Source::SSTR::SStrPack(szPath, szMpqFileName, 0x7fffffff);
+                bool bNotFound = false;
+                bOpened = Storm::Source::SFile::SFileOpenArchive(szPath, (int*)(intptr_t)nTimeTBC, 2, &pArchive);
+                if (!bOpened) {
+                    HParamBlockRec tParam;
+                    Str255 szVolumeName;
+                    tParam.volumeParam.ioVolIndex = 1;
+                    tParam.volumeParam.ioVRefNum = 0;
+                    tParam.volumeParam.ioNamePtr = szVolumeName;
+                    short nResult = PBHGetVInfoSync(&tParam);
+                    short nVolIndex = 2;
+                    while (nResult == 0) {
+                        if ((EqualString(szVolumeName, (ConstStr255Param)"\pDiablo II Play Disc", 0, 0) ||
+                             EqualString(szVolumeName, (ConstStr255Param)"\pDiablo II Cinematics", 0, 0) ||
+                             EqualString(szVolumeName, (ConstStr255Param)"\pLord of Destruction", 0, 0)) &&
+                            STORM_IsCDVolume(tParam.volumeParam.ioVRefNum)) {
+                            unsigned char szMpqName[256];
+                            size_t nLen = strlen(szMpqFileName);
+                            memcpy(szMpqName + 1, szMpqFileName, nLen + 1);
+                            szMpqName[0] = (unsigned char)nLen;
+                            PATH_MakeMacPathToken(szPath, szMpqName, tParam.volumeParam.ioVRefNum, 2, 0x3f3f3f3f, 0x3f3f3f3f);
+                            if (Storm::Source::SFile::SFileOpenArchive(szPath, (int*)(intptr_t)nTimeTBC, 2, &pArchive)) {
+                                goto opened;
+                            }
+                        }
+                        tParam.volumeParam.ioVRefNum = 0;
+                        tParam.volumeParam.ioNamePtr = szVolumeName;
+                        tParam.volumeParam.ioVolIndex = nVolIndex;
+                        nResult = PBHGetVInfoSync(&tParam);
+                        nVolIndex = nVolIndex + 1;
+                    }
+                    bNotFound = true;
+                }
+opened:
+                if (bNotFound) {
+                    pArchive = 0;
+                }
+            }
+        }
+        pFogArchive->hArchive = pArchive;
+        if (pArchive) {
+            return pFogArchive;
+        }
+        if (!nfpRequiredUserAction || !(*nfpRequiredUserAction)()) {
+            D2_FREE_AT(pFogArchive, ".\\SRC\\Archive.cpp", 0x21a);
+            return 0;
+        }
+        Sleep(100);
+    } while (!pFogArchive->hArchive);
+    return pFogArchive;
+}
 
 #endif

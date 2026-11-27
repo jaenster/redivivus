@@ -67,6 +67,15 @@ endforeach()
 list(APPEND D2_MAC_SHARED_SOURCES "${CMAKE_SOURCE_DIR}/Source/globals/globals.cpp")
 # The Mac variants of D2gfx and D2Hell are Mac-only code, in d2_mac_objs.
 list(FILTER D2_MAC_SHARED_SOURCES EXCLUDE REGEX "/Source/(D2gfx|D2Hell)/Mac/")
+# Storm's Mac build is Source/StormMac/SOURCE (see Source/StormMac/README.md): the Mac binary
+# implements SStr*, SMem*, SFile*, SLog*, SReg*, SErr*, SBmp*, SCmd*, SMsg* and the signature
+# check in StormMac's SSTR/SMEM/SFILE/SLOG/SRegMac/SERR/SBMP/SCMD/SMSG/SSignature units (all in
+# d2_mac_objs, and the win-twin rows of its coverage.tsv name Win32-only counterparts: the
+# registry, the Win32 file API, WinTrust, the window-handle list). The same-named Source/Storm
+# units are the Windows implementations and are not in the Mac binary; compiling them here would
+# only duplicate StormMac's API against Win32 calls the Mac layer does not have.
+list(FILTER D2_MAC_SHARED_SOURCES EXCLUDE REGEX
+    "/Source/Storm/(WindowHandle|Source/(SBMP|SCMD|SErr|SFile|SLog|SMem|SReg|SSignature|SSTR))\\.cpp$")
 list(REMOVE_DUPLICATES D2_MAC_SHARED_SOURCES)
 list(SORT D2_MAC_SHARED_SOURCES)
 
