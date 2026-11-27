@@ -260,7 +260,7 @@ addr	name	reason_class	detail
 00026bc2	std::__1::__deque_base<Win32HandleObject,std::__1::allocator<Win32HandleObject>>::clear	eh	orig has __ZSt9terminatev and MemFree in clear; ours calls delete
 00026c70	_GLOBAL__I_a	pic-ref	same structure; orig takes the dtor address via lea and an unresolved PIC symbol, ours loads &___dso_handle and &dtor via mov
 00026d14	Keys_PrepareKeyMsg	sched	123 vs 119 insns; bKeyDown/bUpdateState are int-sized as in the asm; the first byChar test and the extended-key bit test compile differently
-00026f58	GetKeyState	regalloc	16 vs 14 insns; the orig returns the int without the movsx a short return adds, but declaring it int moves the (GetKeyState & 0x8000) test in IPeekMessage and loses that MATCH
+00026f58	GetKeyState	regalloc	14 vs 16 insns; int return in its own unit as the asm shows (no movsx); orig keeps nVirtKey in eax so the 0 is set on the zero edge and both returns stay separate, ours hoists xor eax, eax to entry (also tried a ternary and split returns)
 00026f82	GetAsyncKeyState	regalloc	54 vs 55 insns; orig computes the byte index with a widening shift, ours narrows first
 00027028	TranslateMessage	regalloc	42 vs 39 insns; orig keeps the character byte in ebx
 000270a4	ListBox_WndProc	sched	969 vs 1071 insns; callee sequence identical; orig dispatches by range tests and keeps one result variable (frame 0x11c vs 0x12c); a goto-done rewrite made it worse (1092)
@@ -278,7 +278,7 @@ addr	name	reason_class	detail
 0002934e	Wnd_FindWindowNeedingPaint	sched	23 vs 23 insns; same structure, field offset order differs (0x54 vs 0x50 walk)
 000297df	MSG_EnqueueMessage	sched	orig 52 vs ours 49 insns; same callee sequence; branch layout and instruction selection differ
 00029af1	CLIPBOARD_GetText	regalloc	orig loads [ebp+0xc] into edx before the cmp while ours compares the memory operand directly; same calls and ops
-00029b86	LoadLibraryEx	regalloc	7/186(orig) 178(ours): ours 'pop ebx' orig 'pop ecx'
+00029b86	LoadLibraryEx	regalloc	178 vs 186 insns; same blocks and callees; orig spills the PIC base to [ebp-0x560] and reloads it before each string lea, and carries the result in ecx into one shared exit; ours keeps the PIC base in ebx
 00029e86	GetProcAddress	sched	20/87(orig) 87(ours): ours 'jmp #80' orig 'jmp #57'
 0002a1d0	GetCurrentDirectory	regalloc	orig loads [ebp+0xc] into edx before cmp 0x28 while ours compares memory directly; same calls and ops
 0002a9a9	GetTempFileName	pic-ref	same calls and code shape; string and global displacements differ (lea 0x2e371e vs 0x5d6, global 0x36b686 vs 0x140d)
@@ -289,7 +289,7 @@ addr	name	reason_class	detail
 0002b1fe	Rect_PinPtInRect	sched	41 insns both; same instructions, orig loads pRect->left before *pX; scheduler order differs
 0002b2e1	IntersectRect	regalloc	67 vs 63 insns; orig spills three of the eight loaded edges, ours two
 0002b378	SubtractRect	sched	100 vs 127 insns; branch structure rederived from the asm (intersect, full cover, row and column trims) but clang spills more (frame 0x3c vs 0x2c)
-0002b4d1	PtInRect	sched	22 vs 22 insns; orig keeps pRect in eax and needs no esi, ours holds the by-value POINT address in a second register
+0002b4d1	PtInRect	regalloc	22 insns both in count; orig keeps pRect in eax and materialises the 0 on the failing edges with a duplicated return; ours hoists xor eax, eax and needs esi (tried an && chain and a nested if)
 0002b500	FindResourceEx	regalloc	38 vs 39 insns; orig keeps the three call arguments in esi/edi across the calls, ours reloads them
 0002b566	RESOURCE_FindEntry	regalloc	179 vs 181 insns; fastcall-free regparm3 signature, id types and buffer order now match; orig keeps szType in edi and hModule in esi, ours the reverse
 0002b7d2	LoadString	sched	72 vs 73 insns; the string-block size rounding is now (n + 3) / 4 * 4 as in the asm; the entry and copy loops are strength-reduced differently (dec vs neg/inc counter)
@@ -319,18 +319,15 @@ addr	name	reason_class	detail
 0002e7a0	TSHashTable<FileLocation,HASHKEY_STRI>::~TSHashTable[D2]	unverified-ref	2 reference(s) only one side can resolve; every other instruction identical
 0002e916	TSGrowableArray<PathCacheDir>::ReallocData	regalloc	body is a template of the shared Source/StormMac/H/stpl.h (outside this set); 55/101(orig) 101(ours): ours 'mov ecx, ebx' orig 'mov ecx, edi'
 0002ea70	_GLOBAL__I_a	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
-0002eae0	DefWindowProc	sched	orig 299 vs ours 288 insns; same callee sequence; branch layout and instruction selection differ
-0002ef4a	Proc_ButtonWndProc	sched	329 vs 330 insns; same callees, different block order and frame (0xcc vs 0xbc); orig shares one SendMessage(WM_COMMAND) tail, a rewrite with shared tails let clang merge the GetParent calls too (310 insns)
-0002f500	Proc_RegisterBuiltInClasses	crt-idiom	orig zero-fills the whole WNDCLASSEX with xorps/movaps and about 22 dword zero stores; ours stores only nonzero fields, so unset fields may differ
-0002f793	Proc_StaticWndProc	sched	75 vs 76 insns; same callees; orig keeps the result in esi from the start, ours returns through eax
+0002eae0	DefWindowProc	sched	280 vs 299 insns; same switch lowering pivots and callees; the orig keeps no-op cases 0x82..0x85, 0xa1..0xa4 and 0x203 as separate switch destinations (empty cmp/jmp pairs) that clang folds into default here, and holds the result in esi
+0002ef4a	Proc_ButtonWndProc	regalloc	310 vs 329 insns; one switch with the same pivots (0x1ff, 0xef, 0x86, 6, 2) and jump tables; orig keeps the PIC base in esi and wParam in edi with two POINT temporaries (frame 0xcc), ours spills the PIC base (frame 0xbc)
 0002f888	Wnd_CreateDesktopWindow	regalloc	78 insns both; same callee sequence; register choice or operand order differs
 0002faf8	Wnd_NewWndClass	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
 0002fbf8	Wnd_CalculateVisibleRgn	sched	orig 146 vs ours 141 insns; same callee sequence; branch layout and instruction selection differ
 0002fdfe	Wnd_Iterate_RemoveWindowFromVisRgn	sched	orig 53 vs ours 52 insns; same callee sequence; branch layout and instruction selection differ
-0002fec2	ClientToScreen	sched	same instructions in a different order
+0002fec2	ClientToScreen	regalloc	22 insns both; the x and y accumulators swap registers. Kept out of line: GetWindowRect (00031060, same unit) calls it twice, clang 425 -Os inlines it otherwise; a recursive form did not help
 0002fef3	ScreenToClient	sched	same instructions in a different order
-0002ff24	Wnd_ChildFromPoint	sched	orig 65 vs ours 56 insns; same callee sequence; branch layout and instruction selection differ
-00030077	RegisterClassEx	pic-ref	orig loads &DefWindowProc with a mov from the data symbol, ours takes the address with lea
+0002ff24	Wnd_ChildFromPoint	sched	62 vs 65 insns; takes the POINT by value and tests WS_CHILD|WS_DISABLED as the asm does; orig rotates the child loop and returns hChild from its own block (cmove), ours selects into esi
 0003020c	DestroyWindow	sched	orig 140 vs ours 130 insns; same callee sequence; branch layout and instruction selection differ
 00030408	ShowWindow	data-guess	orig reads a dword value table, ours reads a byte at 0x2655 with stride 4; table address and width are guessed
 000304b5	SetFocus	sched	orig 76 vs ours 68 insns; same callee sequence; branch layout and instruction selection differ
@@ -340,16 +337,16 @@ addr	name	reason_class	detail
 00030b23	Wnd_LinkToParent	sched	orig 48 vs ours 49 insns; same callee sequence; branch layout and instruction selection differ
 00030cb2	GetActiveWindow	sched	orig 27 vs ours 25 insns; same callee sequence; branch layout and instruction selection differ
 00030cfd	SetWindowPos	sched	orig 234 vs ours 227 insns; same callee sequence; branch layout and instruction selection differ
-00030fce	WindowFromPoint	sched	orig 45 vs ours 42 insns; same callee sequence; branch layout and instruction selection differ
+00030fce	WindowFromPoint	regalloc	46 vs 45 insns; same calls and POINT copies; orig keeps hResult in a stack slot ([ebp-0x24]) initialised to 0, ours in a register
 000310be	Wnd_InvalidateInParent	sched	80 vs 77 insns; same callees, Wnd_InvalidateWndRect call sits in a different arm
 000311e9	Wnd_InvalidateWndRect	sched	orig 60 vs ours 58 insns; same callee sequence; branch layout and instruction selection differ
 000312bf	InvalidateRect	sched	orig 51 vs ours 45 insns; same callee sequence; branch layout and instruction selection differ
 00031539	Wnd_IsVisibleAndEnabled	regalloc	16 vs 18 insns; orig keeps both flags in al/cl and tests the disabled bit with sete, ours materialises them with shifts
 0003156b	GetWindowLong	sched	orig 76 vs ours 71 insns; same callee sequence; branch layout and instruction selection differ
 000316f2	RemoveProp	sched	same instructions in a different order
-00031766	Wnd_ClearUpdateRegionTree	sched	orig tests the recursive result (always 0, signature takes a second argument passed as 0), clang 425 deduces it away (27 vs 21 insns)
+00031766	Wnd_ClearUpdateRegionTree	sched	27 vs 21 insns; orig tests the recursive result and passes nReserved=0, which clang 425 drops for any non-overridable definition (IPSCCP return tracking, dead-argument undef); reproduced only by an overridable (weak) definition, for which there is no binary evidence
 000317ac	Wnd_ReorderOwnedWindows	sched	orig 69 vs ours 67 insns; same callee sequence; branch layout and instruction selection differ
-00031874	Wnd_MarkOwnedWindows	sched	orig tests the recursive result (always 0), clang 425 deduces the function returns 0 and drops the test (30 vs 27 insns)
+00031874	Wnd_MarkOwnedWindows	sched	30 vs 27 insns; orig tests the recursive result (only ever 0), which clang 425 drops for any non-overridable definition (IPSCCP return tracking); its callers SetWindowPos and Wnd_ReorderOwnedWindows keep the test too
 000318bf	Wnd_InvalidateRectRecursive	crt-idiom	same callees; orig copies RECT fields with 8-byte movsd (xmm) while ours copies them dword by dword through GPRs
 00031a84	Win32VirtualKey_From_MacScanCode	regalloc	38 insns both; same callee sequence; register choice or operand order differs
 00031b0d	NewEmptyStripRgn	inline	orig tail-calls (jmp) the static fastcc Rgn_NewStripRgn(0); ours keeps it non-static fastcall (a static one gets the constant 0 folded in) so no sibcall
@@ -367,7 +364,6 @@ addr	name	reason_class	detail
 00032a2d	Rgn_AddRectToStripRgn	regalloc	same operations; orig reloads nRects and spills the bounds temporaries (frame 0x2c), ours keeps them in registers
 00032b50	DirectDrawCreate	sched	orig keeps `lpGuid==0 && pUnkOuter==0` as two compare-and-branch; ours merges them into one or
 00032b83	DirectSoundCreate	sched	orig keeps the two null tests as separate branches and loads the error code first; ours merges them into one or
-00032bcd	DirectSound_SetMinVolumeDelay	stack-layout	same instructions; frame size or local offsets differ
 00032c68	IDirectSound_SndChannelCallback	regalloc	11/151(orig) 150(ours): ours 'cmp ax, 0x4d48' orig 'cmp ax, 0x5348'
 00032e78	IDirectSound_Destroy	eh	orig has two __ZSt9terminatev calls (landing pads) that ours lacks; orig also pushes ebx
 00032f64	IDirectSound_CreateSoundBuffer	eh	orig has __Unwind_Resume and four delete landing-pad calls that ours lacks

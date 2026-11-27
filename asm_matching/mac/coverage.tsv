@@ -550,10 +550,10 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 0001eb1c	Storm::p2cstr	30	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_MacMisc.cpp	no		
 0001eb3a	Storm::MAC_GetMicroseconds	103	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_MacMisc.cpp	no		sched
 0001eba1	Storm::MAC_GetMilliseconds	141	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_MacMisc.cpp	no		sched
-0001ec2e	Storm::MAC_GetMicrosecondsThunk	9	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_MacMisc.cpp	no		
-0001ec37	Storm::MAC_GetMillisecondsThunk	9	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_MacMisc.cpp	no		
-0001ec40	Storm::WIN32MAC_Initialize	247	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_MacMisc.cpp	no		stack-layout
-0001ed37	Storm::Win32Mac::WinDestroy	50	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_MacMisc.cpp	no		
+0001ec2e	Storm::MAC_GetMicrosecondsThunk	9	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_MacInit.cpp	no		
+0001ec37	Storm::MAC_GetMillisecondsThunk	9	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_MacInit.cpp	no		
+0001ec40	Storm::WIN32MAC_Initialize	247	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_MacInit.cpp	no		stack-layout
+0001ed37	Storm::Win32Mac::WinDestroy	50	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_MacInit.cpp	no		
 0001ed6c	Storm::Win32Mac::Edit_WndProc	7247	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Edit.cpp	no		sched
 00020a74	Storm::Win32Mac::Edit_On_EM_SETSEL	139	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Edit.cpp	no		unverified-ref
 00020aff	Storm::Win32Mac::Edit_Scroll	523	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Edit.cpp	no		regalloc
@@ -777,7 +777,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 0002b378	Storm::Win32Mac::SubtractRect	269	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Rect.cpp	no		sched
 0002b485	Storm::Win32Mac::OffsetRect	38	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Rect.cpp	no		
 0002b4ab	Storm::Win32Mac::IsRectEmpty	38	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Rect.cpp	no		
-0002b4d1	Storm::Win32Mac::PtInRect	47	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Rect.cpp	no		sched
+0002b4d1	Storm::Win32Mac::PtInRect	47	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Rect.cpp	no		regalloc
 0002b500	Storm::Win32Mac::FindResourceEx	102	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Resource.cpp	no		regalloc
 0002b566	Storm::Win32Mac::RESOURCE_FindEntry	620	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Resource.cpp	no		regalloc
 0002b7d2	Storm::Win32Mac::LoadString	186	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Resource.cpp	no		sched
@@ -869,11 +869,11 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 0002e8a4	Storm::TSGROWABLEARRAY_Reserve_Elem14	113	StormMac/Storm Mac/Win32 Mac/Source/Win32/Win32_utils.cpp	unit	Source/StormMac/Win32Mac/Source/Win32/Win32_utils.cpp	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_utils.cpp	yes		
 0002e916	Storm::TSGROWABLEARRAY_SetMaxCount_Elem14	334	StormMac/Storm Mac/Win32 Mac/Source/Win32/Win32_utils.cpp	unit	Source/StormMac/Win32Mac/Source/Win32/Win32_utils.cpp	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_utils.cpp	yes		regalloc
 0002ea70	Storm::STORM_StaticInitMutexes	111	StormMac/Storm Mac/Win32 Mac/Source/Win32/Win32_utils.cpp	unit	Source/StormMac/Win32Mac/Source/Win32/Win32_utils.cpp	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_utils.cpp	yes		unverified-ref
-0002eae0	Storm::Win32Mac::DefWindowProc	1007	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		sched
-0002ef30	Storm::Proc_DesktopWndProc	26	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		
-0002ef4a	Storm::Win32Mac::Proc_ButtonWndProc	1386	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		sched
-0002f500	Storm::Win32Mac::Proc_RegisterBuiltInClasses	659	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		crt-idiom
-0002f793	Storm::Proc_StaticWndProc	245	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		sched
+0002eae0	Storm::Win32Mac::DefWindowProc	1007	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_WndProcs.cpp	no		sched
+0002ef30	Storm::Proc_DesktopWndProc	26	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_WndProcs.cpp	no		
+0002ef4a	Storm::Win32Mac::Proc_ButtonWndProc	1386	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_WndProcs.cpp	no		regalloc
+0002f500	Storm::Win32Mac::Proc_RegisterBuiltInClasses	659	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_WndProcs.cpp	no		
+0002f793	Storm::Proc_StaticWndProc	245	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_WndProcs.cpp	no		
 0002f888	Storm::Win32Mac::Wnd_CreateDesktopWindow	341	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		regalloc
 0002f9e0	Storm::Win32Mac::Wnd_InitWnd	64	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		
 0002fa20	Storm::Win32Mac::Wnd_FindClassByName	86	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		
@@ -886,13 +886,13 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 0002fdc5	Storm::Win32Mac::GetClientRect	57	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		
 0002fdfe	Storm::Win32Mac::Wnd_Iterate_RemoveWindowFromVisRgn	157	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		sched
 0002fe9b	Storm::Win32Mac::Wnd_GetTopParent	39	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		
-0002fec2	Storm::Win32Mac::ClientToScreen	49	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		sched
+0002fec2	Storm::Win32Mac::ClientToScreen	49	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		regalloc
 0002fef3	Storm::Win32Mac::ScreenToClient	49	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		sched
 0002ff24	Storm::Win32Mac::Wnd_ChildFromPoint	185	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		sched
 0002ffdd	Storm::Win32Mac::GetDesktopWindow	17	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		
 0002ffee	Storm::Win32Mac::CallWindowProc	91	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		
 00030049	Storm::Win32Mac::IsWindow	46	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		
-00030077	Storm::Win32Mac::RegisterClassEx	235	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		pic-ref
+00030077	Storm::Win32Mac::RegisterClassEx	235	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		
 00030162	Storm::Win32Mac::RegisterClass	101	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		
 000301c7	Storm::Win32Mac::UnregisterClass	68	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		
 0003020c	Storm::Win32Mac::DestroyWindow	508	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		sched
@@ -909,7 +909,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 00030c56	Storm::Win32Mac::ReleaseCapture	92	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		
 00030cb2	Storm::Win32Mac::GetActiveWindow	75	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		sched
 00030cfd	Storm::Win32Mac::SetWindowPos	721	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		sched
-00030fce	Storm::Win32Mac::WindowFromPoint	146	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		sched
+00030fce	Storm::Win32Mac::WindowFromPoint	146	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		regalloc
 00031060	Storm::Win32Mac::GetWindowRect	94	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		
 000310be	Storm::Wnd_InvalidateInParent	299	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		sched
 000311e9	Storm::Win32Mac::Wnd_InvalidateWndRect	204	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Window.cpp	no		sched
@@ -957,7 +957,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 00032a2d	Storm::Win32Mac::Rgn_AddRectToStripRgn	291	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_Region.cpp	no		regalloc
 00032b50	Storm::DirectDrawCreate	49	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no		sched
 00032b83	Storm::Win32Mac::DirectSoundCreate	72	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no		sched
-00032bcd	Storm::FUN_00032bcd	46	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no		stack-layout
+00032bcd	Storm::FUN_00032bcd	46	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no		
 00032bfc	Storm::IDirectSound::Construct	108	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no		
 00032c68	Storm::IDirectSound::SndChannelCallback	527	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no		regalloc
 00032e78	Storm::IDirectSound::Destroy	185	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/?	blizzard-mac	body	Source/StormMac/Win32Mac/Source/Win32/Win32_DirectSound.cpp	no		eh
@@ -1389,11 +1389,11 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 002b56cd	D2gfx::D2GFX::D2GFX_DrawShadowTile	26	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared-unpaired	missing		-		
 002b56e7	D2gfx::D2GFX::D2GFX_GetWindowSizeByResolutionMode	132	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	missing		-	004f5570	
 002b576b	D2gfx::D2GFX::D2GFX_CreateWindow	689	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	body	Source/D2gfx/Src/D2GFX.cpp	no	004f5610	
-002b5a1c	D2gfx::D2GFX::D2GFX_DestroyWindow	143	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	missing		-	004f5900	
+002b5a1c	D2gfx::D2GFX::D2GFX_DestroyWindow	143	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	body	Source/D2gfx/Src/D2GFX.cpp	no	004f5900	
 002b5aab	D2gfx::D2GFX::D2GFX_EndCutSceneReturnSceneState	194	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	body	Source/D2gfx/Src/D2GFX.cpp	no	004f6070	
 002b5b6d	D2gfx::D2GFX::GetHwnd	20	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	missing		-	004f59a0	
 002b5b81	D2gfx::D2GFX::D2GFX_GetScreenSize	70	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	missing		-	004f59b0	
-002b5bc7	D2gfx::D2GFX::UpdateOSCursorVisibilty	85	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	missing		-	004f59f0	
+002b5bc7	D2gfx::D2GFX::UpdateOSCursorVisibilty	85	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	body	Source/D2gfx/Src/D2GFX.cpp	no	004f59f0	
 002b5c1c	FUN_002b5c1c	40	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	missing		-	004f5a30	
 002b5c44	D2gfx::D2GFX::D2GFX_ResizeWindow	342	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	body	Source/D2gfx/Src/D2GFX.cpp	no	004f5aa0	
 002b5d9a	FUN_002b5d9a	10	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	blizzard-mac	body	Source/D2gfx/Mac/D2GFXMacForward.cpp	no		
