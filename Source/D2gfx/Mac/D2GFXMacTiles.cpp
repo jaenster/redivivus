@@ -84,7 +84,7 @@ void FUN_002b1ca9(const uint8_t* pSrc, uint8_t* pDest, int nLightX, int nLightXS
         uint32_t nWidth = *pnWidth;
         for (uint32_t i = 0; i < nWidth; i++) {
             pDestRow[nDestOffset + i] =
-                g_abMacShadeTable[pSrc[nSrcOffset + i] + g_abLightGrid[nDestOffset + i + nLightOffset] * 0x100];
+                MAC_SHIFT_TABLES[pSrc[nSrcOffset + i] + g_abLightGrid[nDestOffset + i + nLightOffset] * 0x100];
         }
         nLightY += nLightYStep;
         nLightX += nLightXStep;
@@ -204,69 +204,69 @@ void FUN_002b24c4(const uint8_t* pSrc, uint8_t* pDest, int nLightX, int nLightXS
                 uint8_t* pDst = pDest;
                 switch (nRun) {
                 case 32:
-                    pDst[nSkip + 31] = g_abMacShadeTable[pSrc[33] + pLight[nSkip + 31] * 0x100];
+                    pDst[nSkip + 31] = MAC_SHIFT_TABLES[pSrc[33] + pLight[nSkip + 31] * 0x100];
                 case 31:
-                    pDst[nSkip + 30] = g_abMacShadeTable[pSrc[32] + pLight[nSkip + 30] * 0x100];
+                    pDst[nSkip + 30] = MAC_SHIFT_TABLES[pSrc[32] + pLight[nSkip + 30] * 0x100];
                 case 30:
-                    pDst[nSkip + 29] = g_abMacShadeTable[pSrc[31] + pLight[nSkip + 29] * 0x100];
+                    pDst[nSkip + 29] = MAC_SHIFT_TABLES[pSrc[31] + pLight[nSkip + 29] * 0x100];
                 case 29:
-                    pDst[nSkip + 28] = g_abMacShadeTable[pSrc[30] + pLight[nSkip + 28] * 0x100];
+                    pDst[nSkip + 28] = MAC_SHIFT_TABLES[pSrc[30] + pLight[nSkip + 28] * 0x100];
                 case 28:
-                    pDst[nSkip + 27] = g_abMacShadeTable[pSrc[29] + pLight[nSkip + 27] * 0x100];
+                    pDst[nSkip + 27] = MAC_SHIFT_TABLES[pSrc[29] + pLight[nSkip + 27] * 0x100];
                 case 27:
-                    pDst[nSkip + 26] = g_abMacShadeTable[pSrc[28] + pLight[nSkip + 26] * 0x100];
+                    pDst[nSkip + 26] = MAC_SHIFT_TABLES[pSrc[28] + pLight[nSkip + 26] * 0x100];
                 case 26:
-                    pDst[nSkip + 25] = g_abMacShadeTable[pSrc[27] + pLight[nSkip + 25] * 0x100];
+                    pDst[nSkip + 25] = MAC_SHIFT_TABLES[pSrc[27] + pLight[nSkip + 25] * 0x100];
                 case 25:
-                    pDst[nSkip + 24] = g_abMacShadeTable[pSrc[26] + pLight[nSkip + 24] * 0x100];
+                    pDst[nSkip + 24] = MAC_SHIFT_TABLES[pSrc[26] + pLight[nSkip + 24] * 0x100];
                 case 24:
-                    pDst[nSkip + 23] = g_abMacShadeTable[pSrc[25] + pLight[nSkip + 23] * 0x100];
+                    pDst[nSkip + 23] = MAC_SHIFT_TABLES[pSrc[25] + pLight[nSkip + 23] * 0x100];
                 case 23:
-                    pDst[nSkip + 22] = g_abMacShadeTable[pSrc[24] + pLight[nSkip + 22] * 0x100];
+                    pDst[nSkip + 22] = MAC_SHIFT_TABLES[pSrc[24] + pLight[nSkip + 22] * 0x100];
                 case 22:
-                    pDst[nSkip + 21] = g_abMacShadeTable[pSrc[23] + pLight[nSkip + 21] * 0x100];
+                    pDst[nSkip + 21] = MAC_SHIFT_TABLES[pSrc[23] + pLight[nSkip + 21] * 0x100];
                 case 21:
-                    pDst[nSkip + 20] = g_abMacShadeTable[pSrc[22] + pLight[nSkip + 20] * 0x100];
+                    pDst[nSkip + 20] = MAC_SHIFT_TABLES[pSrc[22] + pLight[nSkip + 20] * 0x100];
                 case 20:
-                    pDst[nSkip + 19] = g_abMacShadeTable[pSrc[21] + pLight[nSkip + 19] * 0x100];
+                    pDst[nSkip + 19] = MAC_SHIFT_TABLES[pSrc[21] + pLight[nSkip + 19] * 0x100];
                 case 19:
-                    pDst[nSkip + 18] = g_abMacShadeTable[pSrc[20] + pLight[nSkip + 18] * 0x100];
+                    pDst[nSkip + 18] = MAC_SHIFT_TABLES[pSrc[20] + pLight[nSkip + 18] * 0x100];
                 case 18:
-                    pDst[nSkip + 17] = g_abMacShadeTable[pSrc[19] + pLight[nSkip + 17] * 0x100];
+                    pDst[nSkip + 17] = MAC_SHIFT_TABLES[pSrc[19] + pLight[nSkip + 17] * 0x100];
                 case 17:
-                    pDst[nSkip + 16] = g_abMacShadeTable[pSrc[18] + pLight[nSkip + 16] * 0x100];
+                    pDst[nSkip + 16] = MAC_SHIFT_TABLES[pSrc[18] + pLight[nSkip + 16] * 0x100];
                 case 16:
-                    pDst[nSkip + 15] = g_abMacShadeTable[pSrc[17] + pLight[nSkip + 15] * 0x100];
+                    pDst[nSkip + 15] = MAC_SHIFT_TABLES[pSrc[17] + pLight[nSkip + 15] * 0x100];
                 case 15:
-                    pDst[nSkip + 14] = g_abMacShadeTable[pSrc[16] + pLight[nSkip + 14] * 0x100];
+                    pDst[nSkip + 14] = MAC_SHIFT_TABLES[pSrc[16] + pLight[nSkip + 14] * 0x100];
                 case 14:
-                    pDst[nSkip + 13] = g_abMacShadeTable[pSrc[15] + pLight[nSkip + 13] * 0x100];
+                    pDst[nSkip + 13] = MAC_SHIFT_TABLES[pSrc[15] + pLight[nSkip + 13] * 0x100];
                 case 13:
-                    pDst[nSkip + 12] = g_abMacShadeTable[pSrc[14] + pLight[nSkip + 12] * 0x100];
+                    pDst[nSkip + 12] = MAC_SHIFT_TABLES[pSrc[14] + pLight[nSkip + 12] * 0x100];
                 case 12:
-                    pDst[nSkip + 11] = g_abMacShadeTable[pSrc[13] + pLight[nSkip + 11] * 0x100];
+                    pDst[nSkip + 11] = MAC_SHIFT_TABLES[pSrc[13] + pLight[nSkip + 11] * 0x100];
                 case 11:
-                    pDst[nSkip + 10] = g_abMacShadeTable[pSrc[12] + pLight[nSkip + 10] * 0x100];
+                    pDst[nSkip + 10] = MAC_SHIFT_TABLES[pSrc[12] + pLight[nSkip + 10] * 0x100];
                 case 10:
-                    pDst[nSkip + 9] = g_abMacShadeTable[pSrc[11] + pLight[nSkip + 9] * 0x100];
+                    pDst[nSkip + 9] = MAC_SHIFT_TABLES[pSrc[11] + pLight[nSkip + 9] * 0x100];
                 case 9:
-                    pDst[nSkip + 8] = g_abMacShadeTable[pSrc[10] + pLight[nSkip + 8] * 0x100];
+                    pDst[nSkip + 8] = MAC_SHIFT_TABLES[pSrc[10] + pLight[nSkip + 8] * 0x100];
                 case 8:
-                    pDst[nSkip + 7] = g_abMacShadeTable[pSrc[9] + pLight[nSkip + 7] * 0x100];
+                    pDst[nSkip + 7] = MAC_SHIFT_TABLES[pSrc[9] + pLight[nSkip + 7] * 0x100];
                 case 7:
-                    pDst[nSkip + 6] = g_abMacShadeTable[pSrc[8] + pLight[nSkip + 6] * 0x100];
+                    pDst[nSkip + 6] = MAC_SHIFT_TABLES[pSrc[8] + pLight[nSkip + 6] * 0x100];
                 case 6:
-                    pDst[nSkip + 5] = g_abMacShadeTable[pSrc[7] + pLight[nSkip + 5] * 0x100];
+                    pDst[nSkip + 5] = MAC_SHIFT_TABLES[pSrc[7] + pLight[nSkip + 5] * 0x100];
                 case 5:
-                    pDst[nSkip + 4] = g_abMacShadeTable[pSrc[6] + pLight[nSkip + 4] * 0x100];
+                    pDst[nSkip + 4] = MAC_SHIFT_TABLES[pSrc[6] + pLight[nSkip + 4] * 0x100];
                 case 4:
-                    pDst[nSkip + 3] = g_abMacShadeTable[pSrc[5] + pLight[nSkip + 3] * 0x100];
+                    pDst[nSkip + 3] = MAC_SHIFT_TABLES[pSrc[5] + pLight[nSkip + 3] * 0x100];
                 case 3:
-                    pDst[nSkip + 2] = g_abMacShadeTable[pSrc[4] + pLight[nSkip + 2] * 0x100];
+                    pDst[nSkip + 2] = MAC_SHIFT_TABLES[pSrc[4] + pLight[nSkip + 2] * 0x100];
                 case 2:
-                    pDst[nSkip + 1] = g_abMacShadeTable[pSrc[3] + pLight[nSkip + 1] * 0x100];
+                    pDst[nSkip + 1] = MAC_SHIFT_TABLES[pSrc[3] + pLight[nSkip + 1] * 0x100];
                 case 1:
-                    pDst[nSkip + 0] = g_abMacShadeTable[pSrc[2] + pLight[nSkip + 0] * 0x100];
+                    pDst[nSkip + 0] = MAC_SHIFT_TABLES[pSrc[2] + pLight[nSkip + 0] * 0x100];
                 }
                 pLight += nSkip + nRun;
                 pDest += nSkip + nRun;
@@ -458,69 +458,69 @@ void FUN_002b2da8(int nX, int nY, const uint8_t* pSrc, uint8_t* pDest, int nLigh
                         int nDest = nStart + nSkip;
                         switch (nVisible) {
                         case 32:
-                            pRunDst[nDest + 31] = g_abMacShadeTable[pRun[nStart + 33] + pLight[nSkip + 31] * 0x100];
+                            pRunDst[nDest + 31] = MAC_SHIFT_TABLES[pRun[nStart + 33] + pLight[nSkip + 31] * 0x100];
                         case 31:
-                            pRunDst[nDest + 30] = g_abMacShadeTable[pRun[nStart + 32] + pLight[nSkip + 30] * 0x100];
+                            pRunDst[nDest + 30] = MAC_SHIFT_TABLES[pRun[nStart + 32] + pLight[nSkip + 30] * 0x100];
                         case 30:
-                            pRunDst[nDest + 29] = g_abMacShadeTable[pRun[nStart + 31] + pLight[nSkip + 29] * 0x100];
+                            pRunDst[nDest + 29] = MAC_SHIFT_TABLES[pRun[nStart + 31] + pLight[nSkip + 29] * 0x100];
                         case 29:
-                            pRunDst[nDest + 28] = g_abMacShadeTable[pRun[nStart + 30] + pLight[nSkip + 28] * 0x100];
+                            pRunDst[nDest + 28] = MAC_SHIFT_TABLES[pRun[nStart + 30] + pLight[nSkip + 28] * 0x100];
                         case 28:
-                            pRunDst[nDest + 27] = g_abMacShadeTable[pRun[nStart + 29] + pLight[nSkip + 27] * 0x100];
+                            pRunDst[nDest + 27] = MAC_SHIFT_TABLES[pRun[nStart + 29] + pLight[nSkip + 27] * 0x100];
                         case 27:
-                            pRunDst[nDest + 26] = g_abMacShadeTable[pRun[nStart + 28] + pLight[nSkip + 26] * 0x100];
+                            pRunDst[nDest + 26] = MAC_SHIFT_TABLES[pRun[nStart + 28] + pLight[nSkip + 26] * 0x100];
                         case 26:
-                            pRunDst[nDest + 25] = g_abMacShadeTable[pRun[nStart + 27] + pLight[nSkip + 25] * 0x100];
+                            pRunDst[nDest + 25] = MAC_SHIFT_TABLES[pRun[nStart + 27] + pLight[nSkip + 25] * 0x100];
                         case 25:
-                            pRunDst[nDest + 24] = g_abMacShadeTable[pRun[nStart + 26] + pLight[nSkip + 24] * 0x100];
+                            pRunDst[nDest + 24] = MAC_SHIFT_TABLES[pRun[nStart + 26] + pLight[nSkip + 24] * 0x100];
                         case 24:
-                            pRunDst[nDest + 23] = g_abMacShadeTable[pRun[nStart + 25] + pLight[nSkip + 23] * 0x100];
+                            pRunDst[nDest + 23] = MAC_SHIFT_TABLES[pRun[nStart + 25] + pLight[nSkip + 23] * 0x100];
                         case 23:
-                            pRunDst[nDest + 22] = g_abMacShadeTable[pRun[nStart + 24] + pLight[nSkip + 22] * 0x100];
+                            pRunDst[nDest + 22] = MAC_SHIFT_TABLES[pRun[nStart + 24] + pLight[nSkip + 22] * 0x100];
                         case 22:
-                            pRunDst[nDest + 21] = g_abMacShadeTable[pRun[nStart + 23] + pLight[nSkip + 21] * 0x100];
+                            pRunDst[nDest + 21] = MAC_SHIFT_TABLES[pRun[nStart + 23] + pLight[nSkip + 21] * 0x100];
                         case 21:
-                            pRunDst[nDest + 20] = g_abMacShadeTable[pRun[nStart + 22] + pLight[nSkip + 20] * 0x100];
+                            pRunDst[nDest + 20] = MAC_SHIFT_TABLES[pRun[nStart + 22] + pLight[nSkip + 20] * 0x100];
                         case 20:
-                            pRunDst[nDest + 19] = g_abMacShadeTable[pRun[nStart + 21] + pLight[nSkip + 19] * 0x100];
+                            pRunDst[nDest + 19] = MAC_SHIFT_TABLES[pRun[nStart + 21] + pLight[nSkip + 19] * 0x100];
                         case 19:
-                            pRunDst[nDest + 18] = g_abMacShadeTable[pRun[nStart + 20] + pLight[nSkip + 18] * 0x100];
+                            pRunDst[nDest + 18] = MAC_SHIFT_TABLES[pRun[nStart + 20] + pLight[nSkip + 18] * 0x100];
                         case 18:
-                            pRunDst[nDest + 17] = g_abMacShadeTable[pRun[nStart + 19] + pLight[nSkip + 17] * 0x100];
+                            pRunDst[nDest + 17] = MAC_SHIFT_TABLES[pRun[nStart + 19] + pLight[nSkip + 17] * 0x100];
                         case 17:
-                            pRunDst[nDest + 16] = g_abMacShadeTable[pRun[nStart + 18] + pLight[nSkip + 16] * 0x100];
+                            pRunDst[nDest + 16] = MAC_SHIFT_TABLES[pRun[nStart + 18] + pLight[nSkip + 16] * 0x100];
                         case 16:
-                            pRunDst[nDest + 15] = g_abMacShadeTable[pRun[nStart + 17] + pLight[nSkip + 15] * 0x100];
+                            pRunDst[nDest + 15] = MAC_SHIFT_TABLES[pRun[nStart + 17] + pLight[nSkip + 15] * 0x100];
                         case 15:
-                            pRunDst[nDest + 14] = g_abMacShadeTable[pRun[nStart + 16] + pLight[nSkip + 14] * 0x100];
+                            pRunDst[nDest + 14] = MAC_SHIFT_TABLES[pRun[nStart + 16] + pLight[nSkip + 14] * 0x100];
                         case 14:
-                            pRunDst[nDest + 13] = g_abMacShadeTable[pRun[nStart + 15] + pLight[nSkip + 13] * 0x100];
+                            pRunDst[nDest + 13] = MAC_SHIFT_TABLES[pRun[nStart + 15] + pLight[nSkip + 13] * 0x100];
                         case 13:
-                            pRunDst[nDest + 12] = g_abMacShadeTable[pRun[nStart + 14] + pLight[nSkip + 12] * 0x100];
+                            pRunDst[nDest + 12] = MAC_SHIFT_TABLES[pRun[nStart + 14] + pLight[nSkip + 12] * 0x100];
                         case 12:
-                            pRunDst[nDest + 11] = g_abMacShadeTable[pRun[nStart + 13] + pLight[nSkip + 11] * 0x100];
+                            pRunDst[nDest + 11] = MAC_SHIFT_TABLES[pRun[nStart + 13] + pLight[nSkip + 11] * 0x100];
                         case 11:
-                            pRunDst[nDest + 10] = g_abMacShadeTable[pRun[nStart + 12] + pLight[nSkip + 10] * 0x100];
+                            pRunDst[nDest + 10] = MAC_SHIFT_TABLES[pRun[nStart + 12] + pLight[nSkip + 10] * 0x100];
                         case 10:
-                            pRunDst[nDest + 9] = g_abMacShadeTable[pRun[nStart + 11] + pLight[nSkip + 9] * 0x100];
+                            pRunDst[nDest + 9] = MAC_SHIFT_TABLES[pRun[nStart + 11] + pLight[nSkip + 9] * 0x100];
                         case 9:
-                            pRunDst[nDest + 8] = g_abMacShadeTable[pRun[nStart + 10] + pLight[nSkip + 8] * 0x100];
+                            pRunDst[nDest + 8] = MAC_SHIFT_TABLES[pRun[nStart + 10] + pLight[nSkip + 8] * 0x100];
                         case 8:
-                            pRunDst[nDest + 7] = g_abMacShadeTable[pRun[nStart + 9] + pLight[nSkip + 7] * 0x100];
+                            pRunDst[nDest + 7] = MAC_SHIFT_TABLES[pRun[nStart + 9] + pLight[nSkip + 7] * 0x100];
                         case 7:
-                            pRunDst[nDest + 6] = g_abMacShadeTable[pRun[nStart + 8] + pLight[nSkip + 6] * 0x100];
+                            pRunDst[nDest + 6] = MAC_SHIFT_TABLES[pRun[nStart + 8] + pLight[nSkip + 6] * 0x100];
                         case 6:
-                            pRunDst[nDest + 5] = g_abMacShadeTable[pRun[nStart + 7] + pLight[nSkip + 5] * 0x100];
+                            pRunDst[nDest + 5] = MAC_SHIFT_TABLES[pRun[nStart + 7] + pLight[nSkip + 5] * 0x100];
                         case 5:
-                            pRunDst[nDest + 4] = g_abMacShadeTable[pRun[nStart + 6] + pLight[nSkip + 4] * 0x100];
+                            pRunDst[nDest + 4] = MAC_SHIFT_TABLES[pRun[nStart + 6] + pLight[nSkip + 4] * 0x100];
                         case 4:
-                            pRunDst[nDest + 3] = g_abMacShadeTable[pRun[nStart + 5] + pLight[nSkip + 3] * 0x100];
+                            pRunDst[nDest + 3] = MAC_SHIFT_TABLES[pRun[nStart + 5] + pLight[nSkip + 3] * 0x100];
                         case 3:
-                            pRunDst[nDest + 2] = g_abMacShadeTable[pRun[nStart + 4] + pLight[nSkip + 2] * 0x100];
+                            pRunDst[nDest + 2] = MAC_SHIFT_TABLES[pRun[nStart + 4] + pLight[nSkip + 2] * 0x100];
                         case 2:
-                            pRunDst[nDest + 1] = g_abMacShadeTable[pRun[nStart + 3] + pLight[nSkip + 1] * 0x100];
+                            pRunDst[nDest + 1] = MAC_SHIFT_TABLES[pRun[nStart + 3] + pLight[nSkip + 1] * 0x100];
                         case 1:
-                            pRunDst[nDest + 0] = g_abMacShadeTable[pRun[nStart + 2] + pLight[nSkip + 0] * 0x100];
+                            pRunDst[nDest + 0] = MAC_SHIFT_TABLES[pRun[nStart + 2] + pLight[nSkip + 0] * 0x100];
                         }
                     }
                     pRunDst = pNextDst;
@@ -685,9 +685,9 @@ void FUN_002b38f3(const uint8_t* pSrc, int nX, int nY, uint8_t nLight) {
         }
         uint8_t* pDest = pBase + nRowOffset + nX;
         if (nX < g_anClip[16] && (nY < g_anClip[14] && -1 < nY) && g_anClip[15] <= nX) {
-            FUN_002b224c(pSrc, pDest, g_abMacShadeTable + (nLight & 0xf8) * 0x20, 0x20);
+            FUN_002b224c(pSrc, pDest, MAC_SHIFT_TABLES + (nLight & 0xf8) * 0x20, 0x20);
         } else {
-            FUN_002b2a08(nX, nY, pSrc, pDest, g_abMacShadeTable + (nLight & 0xf8) * 0x20, 0x20);
+            FUN_002b2a08(nX, nY, pSrc, pDest, MAC_SHIFT_TABLES + (nLight & 0xf8) * 0x20, 0x20);
         }
     }
 }
@@ -909,7 +909,7 @@ void fpDrawRoofTile(const uint8_t* pSrc, int nX, int nY, const int* pCornerLight
                         pLight += nSkip;
                         pDst += nSkip;
                         for (uint32_t i = 0; i < nRun; i++) {
-                            *pDst = pBlend[(g_abMacShadeTable[*pSrc + *pLight * 0x100] << 8) | *pDst];
+                            *pDst = pBlend[(MAC_SHIFT_TABLES[*pSrc + *pLight * 0x100] << 8) | *pDst];
                             pDst++;
                             pLight++;
                             pSrc++;
@@ -970,7 +970,7 @@ void fpDrawRoofTile(const uint8_t* pSrc, int nX, int nY, const int* pCornerLight
                         const uint8_t* pPixel = pRun + nStart + 2;
                         uint8_t* pPlot = pDst + nStart + nSkip;
                         while (pPixel < pRun + nVisible + 2 + nStart) {
-                            *pPlot = pBlend[(g_abMacShadeTable[*pPixel + *pRunLight * 0x100] << 8) | *pPlot];
+                            *pPlot = pBlend[(MAC_SHIFT_TABLES[*pPixel + *pRunLight * 0x100] << 8) | *pPlot];
                             pPlot++;
                             pRunLight++;
                             pPixel++;
@@ -993,9 +993,9 @@ void fpDrawRoofTile(const uint8_t* pSrc, int nX, int nY, const int* pCornerLight
 // A 15-row floor sub-block with one light level.
 void FUN_002b4270(const MacGroundBlock* pBlock, uint8_t* pDest, uint8_t nLight) {
     if ((pBlock->nFlags & 4) == 0) {
-        FUN_002b1a44(pBlock->pData, pDest, g_abMacShadeTable + (nLight & 0xf8) * 0x20);
+        FUN_002b1a44(pBlock->pData, pDest, g_abShiftTables[nLight >> 3]);
     } else {
-        FUN_002b224c(pBlock->pData, pDest, g_abMacShadeTable + (nLight & 0xf8) * 0x20, 0xf);
+        FUN_002b224c(pBlock->pData, pDest, g_abShiftTables[nLight >> 3], 0xf);
     }
 }
 
@@ -1057,7 +1057,7 @@ void FUN_002b4354(const MacGroundBlock* pBlock, int nX, int nY, uint8_t* pDest, 
                         const uint8_t* pPixel = nSrcStart + pData;
                         uint8_t* pPlot = nStart + g_anTileRowDest[nRow] + pDestRow;
                         do {
-                            *pPlot = g_abMacShadeTable[*pPixel + (nLight >> 3) * 0x100];
+                            *pPlot = MAC_SHIFT_TABLES[*pPixel + (nLight >> 3) * 0x100];
                             pPlot++;
                             pPixel++;
                         } while (pPixel < nCount + nSrcStart + pData);
@@ -1069,7 +1069,7 @@ void FUN_002b4354(const MacGroundBlock* pBlock, int nX, int nY, uint8_t* pDest, 
             } while (nRow != nRowEnd);
         }
     } else {
-        FUN_002b2a08(nX, nY, pBlock->pData, pDest, g_abMacShadeTable + (nLight >> 3) * 0x100, 0xf);
+        FUN_002b2a08(nX, nY, pBlock->pData, pDest, MAC_SHIFT_TABLES + (nLight >> 3) * 0x100, 0xf);
     }
 }
 
@@ -1120,7 +1120,7 @@ void FUN_002b44c2(const MacGroundBlock* pBlock, int nX, int nY, uint8_t* pDest, 
                         uint8_t* pPlot = nStart + nDestOffset + pDestRow;
                         const uint8_t* pLight = g_abLightGrid + nDestOffset + (nLightY >> 7) * 0x20 + (nLightX & 0x1fffff80) * 8;
                         do {
-                            *pPlot = g_abMacShadeTable[*pPixel + *pLight * 0x100];
+                            *pPlot = MAC_SHIFT_TABLES[*pPixel + *pLight * 0x100];
                             pPlot++;
                             pLight++;
                             pPixel++;

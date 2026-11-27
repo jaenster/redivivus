@@ -116,8 +116,8 @@ void FUN_0003e2ab(void);
 int SMemFree(void* pMem, const char* szFile, int nLine, uint32_t dwFlags);
 // 1.14d mac: 00396200
 extern void (*g_pfnMacAbortHook)(void);
-void MAC_DeactivateTSMDocument(void);
-void MAC_ActivateTSMDocument(void);
+__attribute__((noinline)) void MAC_DeactivateTSMDocument(void);
+__attribute__((noinline)) void MAC_ActivateTSMDocument(void);
 void MAC_ShutdownTSM(void);
 void MAC_DisposeTSMDocument(void);
 OSErr MAC_HandleTSMUpdateActiveInputArea(const AppleEvent* pAppleEvent);
@@ -131,6 +131,11 @@ __attribute__((noinline)) void FUN_0019b290(void);
 __attribute__((noinline)) void FUN_0019b2a2(void);
 __attribute__((noinline, weak)) void FUN_0019b2b4(int nExitCode);
 __attribute__((noinline)) bool MAC_PostKeyDown(EventRecord* pEvent);
+__attribute__((noinline)) void MAC_GetDefaultDisplayMode(int* pnWidth, int* pnHeight, int* pnBitDepth);
+__attribute__((noinline)) uint8_t MAC_HandleMouseDownEvent(EventRecord* pEvent);
+__attribute__((noinline)) uint8_t MAC_HandleMouseMoved(EventRecord* pEvent);
+__attribute__((noinline)) uint8_t MAC_HandleMouseUpEvent(EventRecord* pEvent);
+__attribute__((noinline)) bool MAC_HandleUpdateEvent(EventRecord* pEvent);
 __attribute__((noinline)) bool MAC_PostKeyUp(EventRecord* pEvent);
 __attribute__((noinline)) uint8_t FUN_0019bbcd(uint32_t nCommand);
 __attribute__((noinline)) void* FUN_0019bbe8(void);
@@ -157,14 +162,14 @@ void FPSetMessageBoxCallback(void (*pfnCallback)(void));
 // 1.14d mac: 0001e9bb
 void MAC_GetGlobalMouse(Point* pPoint);
 // 1.14d mac: 0001e9c4
-void MAC_WarpMouseCursorPosition(uint32_t ptCursor);
+void MAC_WarpMouseCursorPosition(Point ptCursor);
 // 1.14d mac: 002b5de2
 // Converts a game point to global coordinates; 0 without a renderer.
 int FUN_002b5de2(Point* pPoint);
 bool MAC_SetCursorPos(int16_t* pnX, int16_t* pnY);
 bool MAC_GetCursorPos(int* pnX, int* pnY);
-__attribute__((noinline)) bool MAC_OnApplicationDeactivate(EventRecord* pEvent);
-__attribute__((noinline)) bool MAC_OnApplicationActivate(EventRecord* pEvent);
+__attribute__((noinline, weak)) bool MAC_OnApplicationDeactivate(EventRecord* pEvent);
+__attribute__((noinline, weak)) bool MAC_OnApplicationActivate(EventRecord* pEvent);
 static __attribute__((noinline)) void MAC_HandleKeyDownEvent(EventRecord* pEvent);
 static __attribute__((noinline)) uint8_t MAC_HandleSuspendResumeEvent(EventRecord* pEvent);
 void FUN_0019db65(void);
@@ -506,16 +511,14 @@ Boolean MAC_CanLoadMediaMpqs(void) {
 // The disc prompt's filter: every 30 idle ticks and on disk events it looks for the disc again
 // and, with the game in front, sets item 4; on updates it draws the CD icon.
 Boolean MAC_GameDiscDialogFilterProc(DialogRef pDialog, EventRecord* pEvent, DialogItemIndex* pnItemHit) {
+    bool bDiskEvent = false;
     bool bIdleTimeout = false;
-    bool bDiskEvent;
-    if (pEvent->what == nullEvent) {
-        bIdleTimeout = s_dwLastDiscCheck + 30 < pEvent->when;
-        bDiskEvent = false;
-    } else if (pEvent->what == diskEvt) {
-        bDiskEvent = pEvent->message < 0x10000;
-        bIdleTimeout = false;
+    if (pEvent->what != nullEvent) {
+        if (pEvent->what == diskEvt) {
+            bDiskEvent = pEvent->message < 0x10000;
+        }
     } else {
-        bDiskEvent = false;
+        bIdleTimeout = pEvent->when > s_dwLastDiscCheck + 30;
     }
     if (bDiskEvent || bIdleTimeout) {
         s_dwLastDiscCheck = pEvent->when;
@@ -583,10 +586,10 @@ static uint8_t s_bEventsEnabled;
 bool g_bMacExiting;
 // 1.14d mac: 00536c37
 // Pressed state of the mouse buttons 0..5 (1 left, 2 right, 3 middle, 4 and 5 the extra ones).
-static bool s_abMouseButtons[6];
+static uint8_t s_abMouseButtons[6];
 // 1.14d mac: 00536c3d
 // Set while the right button is emulated by a command-click.
-static bool s_bCommandClick;
+bool g_bMacCommandClick;
 // 1.14d mac: 003e0e9c
 extern const char* gApplicationModeCommandLineArgumentArray[6];
 
@@ -666,17 +669,14 @@ static char* FUN_0019b1ec(char* szCmdLine) {
             s_pCmdLineScan++;
             s_nCmdLineLeft--;
         }
-        const char* szDelimiters = " \t";
-        if (ch == '"') {
-            szDelimiters = "\"";
-        }
+        const char* szDelimiters = (ch == '"') ? "\"" : " \t";
         char* pszToken = strtok(s_pCmdLineScan, szDelimiters);
         char* pszScan = s_pCmdLineScan;
         if (pszToken != NULL) {
             size_t nTokenLen = strlen(s_pCmdLineScan);
             pszRest = pszScan + nTokenLen + 1;
-            s_nCmdLineLeft -= nTokenLen + 1;
             s_pCmdLineScan = pszRest;
+            s_nCmdLineLeft -= nTokenLen + 1;
         }
     }
     return pszRest;
@@ -724,7 +724,7 @@ bool MAC_IsMousePointInGameScreen(Point ptMouse) {
     return false;
 }
 
-static uint8_t FUN_0019b51a(uint32_t nButton, bool bPressed, uint16_t nModifiers, Point ptMouse);
+static uint8_t FUN_0019b51a(uint32_t nButton, uint8_t bPressed, uint16_t nModifiers, Point ptMouse);
 
 // 1.14d mac: 0019b33e
 // The Carbon 'mous' handler: the wheel is posted as WM_MOUSEWHEEL, and the buttons from the
@@ -765,35 +765,38 @@ OSStatus MAC_HandleMouseCarbonEvent(EventHandlerCallRef hCallRef, EventRef hEven
 // 1.14d mac: 0019b51a
 // A new pressed state of a mouse button: posted as the matching WM_*BUTTON message when it
 // changed. A command-click on the left button counts as the right one.
-static uint8_t FUN_0019b51a(uint32_t nButton, bool bPressed, uint16_t nModifiers, Point ptMouse) {
+static uint8_t FUN_0019b51a(uint32_t nButton, uint8_t bPressed, uint16_t nModifiers, Point ptMouse) {
     uint32_t nMessage;
     uint32_t nWParamHigh;
+    bool bCanPost;
+    uint8_t bRightHeld;
     if (nButton > 5 || s_abMouseButtons[nButton] == bPressed) {
         return 0;
     }
     s_abMouseButtons[nButton] = bPressed;
     if (nButton == 1) {
         if (!bPressed) {
-            if (s_bCommandClick == 1) {
-                s_bCommandClick = 0;
+            if (g_bMacCommandClick == 1) {
+                bRightHeld = s_abMouseButtons[2];
+                g_bMacCommandClick = 0;
                 goto emulate;
             }
         } else if (nModifiers & 0x100) {
-            s_bCommandClick = 1;
+            bRightHeld = s_abMouseButtons[2];
+            g_bMacCommandClick = 1;
         emulate:
-            if (s_abMouseButtons[2] != 0) {
-                return 0;
-            }
+            bCanPost = bRightHeld == 0;
             nButton = 2;
             goto dispatch;
         }
         nMessage = 0x201 + (bPressed == 0);
         nWParamHigh = 0;
     } else {
-        if (!((nButton == 2) & s_bCommandClick) == 0) {
+        bCanPost = !((nButton == 2) & g_bMacCommandClick);
+    dispatch:
+        if (!bCanPost) {
             return 0;
         }
-    dispatch:
         switch (nButton) {
         case 1:
             nMessage = 0x201 + (bPressed == 0);
@@ -827,16 +830,17 @@ static uint8_t FUN_0019b51a(uint32_t nButton, bool bPressed, uint16_t nModifiers
 // extra buttons, the system and archive checks; on success the heap is purged and compacted.
 bool FUN_0019b636(void) {
     PROCESS_SetExitHandler(FUN_0019b732);
-    static EventHandlerUPP s_pfnMouseHandler = MAC_HandleMouseCarbonEvent;
+    static EventHandlerUPP s_pfnMouseHandler = NewEventHandlerUPP(MAC_HandleMouseCarbonEvent);
     EventTypeSpec aEvents[3] = {{kEventClassMouse, kEventMouseDown}, {kEventClassMouse, kEventMouseUp}, {kEventClassMouse, kEventMouseWheelMoved}};
     InstallEventHandler(GetApplicationEventTarget(), s_pfnMouseHandler, 3, aEvents, NULL, NULL);
-    Boolean bResult = FUN_0019bed3();
-    if (bResult) {
+    bool bResult = false;
+    if (FUN_0019bed3()) {
         PurgeMem(0x7FFFFFF0);
         CompactMem(0x7FFFFFF0);
         g_nMacMainThread = GetCurrentThreadId();
+        bResult = true;
     }
-    return bResult != 0;
+    return bResult;
 }
 
 // 1.14d mac: 0019b732
@@ -1035,64 +1039,72 @@ void* FUN_0019bbe8(void) {
 // two Storm-specific ones), quit sets the display flag, Alt-F4 is posted for the close item.
 uint8_t MAC_HandleMenuCommand(uint32_t nCommand) {
     void* hWnd;
-    uint32_t nMessage;
+    uint8_t bHandled = 0;
     if (nCommand < 0x81) {
         switch (nCommand) {
         case 4:
             hWnd = GetActiveWindow();
             if (hWnd == NULL) {
-                return 0;
+                break;
             }
-            nMessage = 0x3A2;
+            PostMessage(hWnd, 0x3A2, 0, 0);
+            bHandled = 1;
             break;
-        default:
-            return 0;
         case 7:
             MSG_PostAltF4Keys();
-            return 1;
+            bHandled = 1;
+            break;
         case 9:
             hWnd = GetFocus();
             if (hWnd == NULL && (hWnd = GetActiveWindow()) == NULL) {
-                return 0;
+                break;
             }
-            nMessage = 0x300;
+            PostMessage(hWnd, 0x300, 0, 0);
+            bHandled = 1;
             break;
         case 10:
             hWnd = GetFocus();
             if (hWnd == NULL && (hWnd = GetActiveWindow()) == NULL) {
-                return 0;
+                break;
             }
-            nMessage = 0x301;
+            PostMessage(hWnd, 0x301, 0, 0);
+            bHandled = 1;
             break;
         case 11:
             hWnd = GetFocus();
             if (hWnd == NULL && (hWnd = GetActiveWindow()) == NULL) {
-                return 0;
+                break;
             }
-            nMessage = 0x302;
+            PostMessage(hWnd, 0x302, 0, 0);
+            bHandled = 1;
             break;
         case 12:
             hWnd = GetFocus();
             if (hWnd == NULL && (hWnd = GetActiveWindow()) == NULL) {
-                return 0;
+                break;
             }
-            nMessage = 0x303;
+            PostMessage(hWnd, 0x303, 0, 0);
+            bHandled = 1;
             break;
         case 13:
             hWnd = GetFocus();
             if (hWnd == NULL && (hWnd = GetActiveWindow()) == NULL) {
-                return 0;
+                break;
             }
-            nMessage = 0x3A6;
+            PostMessage(hWnd, 0x3A6, 0, 0);
+            bHandled = 1;
+            break;
+        default:
+            break;
         }
-        PostMessage(hWnd, nMessage, 0, 0);
     } else {
         if (nCommand != 0x81) {
-            return 0;
+            return bHandled;
         }
         g_bMacDisplayMismatch = 1;
+        bHandled = 1;
     }
-    return 1;
+    return bHandled;
 }
 
 // 1.14d mac: 0019be00
@@ -1553,11 +1565,11 @@ bool MAC_SetCursorPos(int16_t* pnX, int16_t* pnY) {
     Point ptCursor;
     ptCursor.h = *pnX;
     ptCursor.v = *pnY;
-    int bConverted = FUN_002b5de2(&ptCursor);
-    if (bConverted != 0) {
-        MAC_WarpMouseCursorPosition(*(uint32_t*)&ptCursor);
+    if (FUN_002b5de2(&ptCursor) != 0) {
+        MAC_WarpMouseCursorPosition(ptCursor);
+        return true;
     }
-    return bConverted != 0;
+    return false;
 }
 
 // 1.14d mac: 0019ce1b
@@ -1565,12 +1577,12 @@ bool MAC_SetCursorPos(int16_t* pnX, int16_t* pnY) {
 bool MAC_GetCursorPos(int* pnX, int* pnY) {
     Point ptCursor;
     MAC_GetGlobalMouse(&ptCursor);
-    int bConverted = FUN_002b5dc3(&ptCursor);
-    if (bConverted != 0) {
+    if (FUN_002b5dc3(&ptCursor) != 0) {
         *pnX = ptCursor.h;
         *pnY = ptCursor.v;
+        return true;
     }
-    return bConverted != 0;
+    return false;
 }
 
 // 1.14d mac: 0019ce5a
@@ -1773,8 +1785,8 @@ int g_nCmdPeriod;
 // is posted. A command auto-repeat is dropped.
 static void MAC_HandleKeyDownEvent(EventRecord* pEvent) {
     uint16_t nModifiers = pEvent->modifiers;
-    UInt32 nMessage = pEvent->message;
     if (pEvent->what != autoKey || (nModifiers & 0x100) == 0) {
+        UInt32 nMessage = pEvent->message;
         if ((nModifiers & 0x100) == 0) {
             g_nCmdPeriod = 0;
         } else {
@@ -1805,17 +1817,17 @@ OSErr MAC_HandleOpenAppAppleEvent(const AppleEvent* pAppleEvent, AppleEvent* pRe
 }
 
 // 1.14d mac: 0019d4d3
-// GotRequiredParams: no missed-keyword attribute is fine, one found is errAEParamMissed.
+// GotRequiredParams: no missed-keyword attribute is fine, one found is errAEEventNotHandled.
 OSErr MAC_CheckRequiredAppleEventParams(const AppleEvent* pAppleEvent) {
-    DescType nReturnedType;
     Size nActualSize;
+    DescType nReturnedType;
     OSErr nError = AEGetAttributePtr(pAppleEvent, keyMissedKeywordAttr, typeWildCard, &nReturnedType, NULL, 0, &nActualSize);
-    if (nError == errAEDescNotFound) {
-        return 0;
-    }
-    short nResult = errAEParamMissed;
-    if (nError != 0) {
-        nResult = nError;
+    short nResult = 0;
+    if (nError != errAEDescNotFound) {
+        nResult = errAEEventNotHandled;
+        if (nError != 0) {
+            nResult = nError;
+        }
     }
     return nResult;
 }
@@ -1826,20 +1838,20 @@ OSErr MAC_HandleOpenDocumentsAppleEvent(const AppleEvent* pAppleEvent, AppleEven
     return 0;
 }
 
+typedef bool (*MacQuitQueryProc)(void);
 // 1.14d mac: 00536c58
 // Asks whether quitting is allowed; none means always.
-static uint8_t (*s_pfnQuitQuery)(void);
+MacQuitQueryProc g_pfnMacQuitQuery;
 
 // 1.14d mac: 0019d537
 // The 'quit' handler: Quit (menu command 7) unless the application vetoes it.
 OSErr MAC_HandleQuitAppleEvent(const AppleEvent* pAppleEvent, AppleEvent* pReply, SRefCon nRefCon) {
     OSErr nError = MAC_CheckRequiredAppleEventParams(pAppleEvent);
-    uint8_t bCancelQuit = 0;
-    if (s_pfnQuitQuery != NULL) {
-        bCancelQuit = s_pfnQuitQuery();
-        bCancelQuit = bCancelQuit ^ 1;
+    bool bCancelQuit = false;
+    if (g_pfnMacQuitQuery != NULL) {
+        bCancelQuit = !g_pfnMacQuitQuery();
     }
-    if (nError == 0 && bCancelQuit == 0) {
+    if (nError == 0 && !bCancelQuit) {
         FUN_0019bbcd(7);
     }
     return nError;
@@ -2008,9 +2020,6 @@ static uint8_t MAC_HandleMenuSelection(uint32_t nMenuResult) {
     uint32_t nCommand;
     HiliteMenu(0);
     int nMenu = (int)nMenuResult >> 16;
-    if (3 < (uint32_t)(nMenu - 0x81)) {
-        return 0;
-    }
     uint32_t nItem = nMenuResult & 0xFF;
     switch (nMenu) {
     case 0x81:
@@ -2051,6 +2060,8 @@ static uint8_t MAC_HandleMenuSelection(uint32_t nMenuResult) {
             return 0;
         }
         break;
+    default:
+        return 0;
     }
     return FUN_0019bbcd(nCommand);
 }
@@ -2286,10 +2297,10 @@ static TSMDocumentID s_hTSMDocument;
 void FUN_0019e432(void) {
     s_nSavedScriptVariable = GetScriptManagerVariable(8);
     SetScriptManagerVariable(8, 0);
-    static AEEventHandlerUPP s_pfnUpdate = (AEEventHandlerUPP)MAC_HandleTSMUpdateActiveInputArea;
-    static AEEventHandlerUPP s_pfnShowHide = (AEEventHandlerUPP)MAC_HandleTSMShowHideInputWindow;
-    static AEEventHandlerUPP s_pfnPosToOffset = (AEEventHandlerUPP)MAC_HandleTSMPosToOffset;
-    static AEEventHandlerUPP s_pfnOffsetToPos = (AEEventHandlerUPP)MAC_HandleTSMOffsetToPos;
+    static AEEventHandlerUPP s_pfnUpdate = NewAEEventHandlerUPP((AEEventHandlerProcPtr)MAC_HandleTSMUpdateActiveInputArea);
+    static AEEventHandlerUPP s_pfnShowHide = NewAEEventHandlerUPP((AEEventHandlerProcPtr)MAC_HandleTSMShowHideInputWindow);
+    static AEEventHandlerUPP s_pfnPosToOffset = NewAEEventHandlerUPP((AEEventHandlerProcPtr)MAC_HandleTSMPosToOffset);
+    static AEEventHandlerUPP s_pfnOffsetToPos = NewAEEventHandlerUPP((AEEventHandlerProcPtr)MAC_HandleTSMOffsetToPos);
     AEInstallEventHandler('tsvc', 'updt', s_pfnUpdate, 0, false);
     AEInstallEventHandler('tsvc', 'shiw', s_pfnShowHide, 0, false);
     AEInstallEventHandler('tsvc', 'p2st', s_pfnPosToOffset, 0, false);

@@ -45,8 +45,10 @@ extern MacRendererFunctions* RENDERER_CurrentRenderedFunctions;
 extern MacSurface g_tSurface;
 extern int g_nMacScreenSide;
 extern int g_nRowTableWidth;
-// 1.14d mac: 00396278 holds its address: 32 remap tables of 256 bytes, then the 256x256 shade table.
-extern uint8_t g_abMacShadeTable[];
+// The 49 shift tables of 256 bytes (defined with the palette helpers); the tile code indexes them
+// flat as light level * 256 + pixel.
+extern uint8_t g_abShiftTables[49][256];
+#define MAC_SHIFT_TABLES (&g_abShiftTables[0][0])
 
 // A floor tile's sub-block (0x14 bytes): where it sits in the tile, its light cell and its
 // pixels (uncompressed, or run-length when bit 2 of the flags is set).

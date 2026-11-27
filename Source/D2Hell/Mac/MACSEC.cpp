@@ -35,7 +35,7 @@ struct MacFaultHandlerList {
 // TSLink::NextLink: the next link, or the terminator at the end of a list.
 unsigned int TSLINK_NextLink(int* pLink, int nLinkOffset) {
     unsigned int pNext = pLink[1];
-    if (pNext == 0 || (pNext & 1) != 0) {
+    if ((pNext == 0) | (pNext & 1)) {
         pNext = pNext & 0xfffffffe;
     } else {
         if (nLinkOffset < 0) {
@@ -64,13 +64,13 @@ void TSLINK_Unlink(int* pLink) {
 void FUN_002b7162(int* pList) {
     unsigned int pNode = pList[2];
     while (true) {
-        if (pNode == 0 || (pNode & 1) != 0) {
+        if ((pNode == 0) | (pNode & 1)) {
             pNode = 0;
         }
         if (pNode == 0) {
             break;
         }
-        TSLINK_Unlink((int*)(*pList + pNode));
+        TSLINK_Unlink((int*)(pNode + *pList));
         pNode = pList[2];
     }
 }
@@ -264,28 +264,24 @@ int MACSEC_CheckCodeSignature(const char* szPath) {
     CFTypeRef pToRelease = pUrl;
     if (SecStaticCodeCreateWithPath(pUrl, 0, &pStaticCode) == 0 && pStaticCode != 0) {
         unsigned int nStatus = SecStaticCodeCheckValidityWithErrors(pStaticCode, 6, 0, 0);
-        if (nStatus < 0x8001212a) {
+        switch (nStatus) {
+        case 0:
             nResult = 0;
-            if (nStatus != 0) {
-                nResult = 4;
-            }
-        } else if (nStatus < 0x80012436) {
-            nResult = 4;
-            if (nStatus == 0x8001212a) {
-                nResult = 3;
-            }
-        } else if (nStatus < 0xfffefa0a) {
-            nResult = 4;
-            if (nStatus == 0x80012436) {
-                nResult = 3;
-            }
-        } else if (nStatus == 0xfffefa1b || nStatus == 0xfffefa0b) {
+            break;
+        case 0x8001212a:
+        case 0x80012436:
+            nResult = 3;
+            break;
+        case 0xfffefa1b:
+        case 0xfffefa0b:
             nResult = 2;
-        } else {
+            break;
+        case 0xfffefa0a:
+            nResult = 1;
+            break;
+        default:
             nResult = 4;
-            if (nStatus == 0xfffefa0a) {
-                nResult = 1;
-            }
+            break;
         }
         CFRelease(pUrl);
         pToRelease = pStaticCode;
