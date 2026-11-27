@@ -43,6 +43,7 @@ Two sources of evidence:
 |`Win32_Files.cpp`|00021a94..00022ca8|12 of 16|beta `__sinit_Win32_Files_cpp`, same functions in the same order|
 |`Win32_Process.cpp`|00029b68..0002b1fe|31 of 43|beta `__sinit_Win32_Process_cpp`, same order; SetLastError inlined into GetModuleFileName|
 |`Win32_TimeAndDate.cpp`|0002c0ee..0002c670|16 of 16|beta `__sinit_Win32_TimeAndDate_cpp`, same order|
+|`Win32_Window.cpp`|0002eae0..00031b0c|65|window manager (classes, window tree, focus, paint, props, key maps); no binary records the file name, `Win32_Window` follows the Win32_<Family> naming. Key tables 00031a84/00031af6 end the run before the region code (00031b0d, Win32_Region) |
 |`unknown_events.cpp`|000216b0..00021a94|7|beta: a separate unit linked before Win32_Files.cpp|
 |`unknown_closehandle.cpp`|00025660..000257bc|1|separate from the handle table: it calls GetWin32HandlePtr out of line, inlined if merged|
 |`unknown_handles.cpp`|000257bc..00026d14|3|ends with the static initialiser 00026c70|
@@ -50,6 +51,10 @@ Two sources of evidence:
 |`unknown_messages.cpp`|00028e09..00029968|19|beta: a unit of its own|
 |`unknown_priv.cpp`|00029968..00029b68|6|beta: Priv_ functions linked before Win32_Process.cpp; not in it in 1.14d (ExitProcess's body changes Priv_Alloc if merged)|
 |`unknown_threads.cpp`|0002bdea..0002c0ee|11|beta: a unit linked before Win32_utils.cpp|
+|`MacDisplayDriver.cpp`|00036830..000371f9 (less the unnamed 00036dc7..00036f91)|46|name unrecorded: one driver table (default display driver: cursor counter, palette, bounds) with its registration calls, then Accel_DeleteAcceleratorList and MACDISPLAY_FindBestDisplayMode by address order; D2OpenGL imports the MACCURSOR_*/MACDISPLAY_* names. Palette get/set stay DIFF: the original's indexed displacement is a link-time address|
+|`Win32_Region.cpp`|00031b0d..00032b50|21|name unrecorded: the strip-region run between the window manager's key-code helpers and the DirectX shims; one heap-block region type, so one unit|
+|`Win32_DirectSound.cpp`|00032b50..00033a24|31|name unrecorded: DirectDrawCreate, DirectSoundCreate and the IDirectSound/IDirectSoundBuffer/IKsPropertySet bodies share the sound-buffer globals 003f481c..003f4828|
+|`Win32_String.cpp`|00033a24..00033cef|11|name unrecorded: the CRT string and number helpers (_stricmp .. srand) before StormMac's own SOURCE run begins at 00033cef; several have Windows twins|
 
 The `unknown_*` names are descriptive: no binary records those files' names. The folder
 of the `Win32_*` files other than Win32_utils.cpp is inferred from it, and the header
@@ -57,3 +62,14 @@ of the `Win32_*` files other than Win32_utils.cpp is inferred from it, and the h
 (WinCompat.cpp, Win32_Registry.cpp, Allocation.cpp, FPMem.cpp, fp_assert.cpp,
 MessageBox.cpp, Utils.cpp, MousePosition.cpp, VolumeIsCD.cpp, ...); code from them goes
 under those names when it is reconstructed.
+
+## Storm Mac misc and Win32 layer tail (1.14d 00033cef..00036830)
+
+No binary records the file names of this band, so the files are named for what they hold:
+
+|file|1.14d range|functions|decision|
+|-|-|-|-|
+|`unknown_appinfo.cpp`|00033cef..00035545|26|application info, Internet Config, MoreFiles helpers, user/machine names, file saving, text state, start-up/terminate: one run of Storm Mac code without a recorded `__FILE__`; the static initialiser 00035290 ends the part that owns the app-location global|
+|`unknown_dialog.cpp`|0003555c..0003602b|7|modal dialog loop and its menu handling; the Dlg_ functions call each other and the two helpers are file-local (register-passed arguments)|
+|`Win32Mac/Source/Win32/Win32_Paths.cpp`|000360c2..00036440|2|path walking and fopen, after the Win32 layer's last named file|
+|`Win32Mac/Source/Win32/Win32_MemFile.cpp`|00036440..00036830|5|the MemFile2 family, which shares the statics 003f492c..003f4940|

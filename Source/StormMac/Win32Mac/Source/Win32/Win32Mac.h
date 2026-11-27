@@ -182,7 +182,7 @@ extern DWORD g_dwNewFileCreator;
 extern DWORD g_dwNewFileType;
 // 1.14d mac: 00033f9a
 // The running application's FSSpec and creator; every out pointer may be NULL.
-void GetApplicationInformation(void* pUnused, FSSpec* pAppSpec, DWORD* pdwCreator, uint64_t* pnSize);
+int GetApplicationInformation(void* pName, FSSpec* pFileSpec, DWORD* pdwSignature, uint64_t* pPSN);
 // 1.14d mac: 00033cef
 DWORD GetFileTypeAndCreatorForPath(LPCSTR szPath, DWORD* pdwCreator);
 
@@ -223,5 +223,42 @@ Win32HandleObject* GetWin32HandlePtr(HANDLE hHandle);
 HANDLE HANDLE_FindThreadByPthread(pthread_t pThread);
 BOOL Event_SetSignaled(HANDLE hEvent, BOOL bSignaled);
 BOOL CloseHandle(HANDLE hHandle);
+
+
+// ---- Win32_Region.cpp: strip regions (handles are 1-based indexes, 0 is none) ----
+// A rect of the layer's own, the same four dwords as the Win32 RECT.
+struct Win32MacRect {
+    LONG left;
+    LONG top;
+    LONG right;
+    LONG bottom;
+};
+// 1.14d mac: 00031b0d
+int NewEmptyStripRgn(void);
+// 1.14d mac: 00031b18
+int Rgn_NewStripRgn(int nCapacity);
+// 1.14d mac: 00031ce9
+void Rgn_SetStripRgnRect(int hRgn, const Win32MacRect* pRect);
+// 1.14d mac: 00031dca
+void DisposeStripRgn(int hRgn);
+// 1.14d mac: 00031e16
+int CountStripRgnRects(int hRgn);
+// 1.14d mac: 00031e3b
+int GetStripRgnRects(int hRgn, Win32MacRect* pRects, int nMaxRects);
+// 1.14d mac: 00031ed2
+void GetStripRgnBoundingRect(int hRgn, Win32MacRect* pRect);
+// 1.14d mac: 00031f17
+bool IsStripRgnEmpty(int hRgn);
+// 1.14d mac: 000320a6
+void CopyStripRgn(int hDest, int hSrc);
+// 1.14d mac: 0003215e
+void Rgn_UnionStripRgn(int hDest, int hSrc1, int hSrc2);
+// 1.14d mac: 00032754
+void Rgn_IntersectStripRgn(int hDest, int hSrc1, int hSrc2);
+// 1.14d mac: 00032887
+void Rgn_SubtractStripRgn(int hDest, int hSrc1, int hSrc2);
+// 1.14d mac: 000329b1
+void Rgn_DestroyAllRegions(void);
+// ---- end Win32_Region.cpp ----
 
 #endif  // D2_OS_MAC
