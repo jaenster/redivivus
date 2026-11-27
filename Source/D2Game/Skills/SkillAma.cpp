@@ -972,7 +972,8 @@ BOOL __fastcall Skills_SrvDoFunc_016_SummonValkyrie(::SGAMEDATA * pGame, D2UnitS
     }
 
     pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
-    D2MonsterCastPetStrc sSummonParams = {};
+    D2MonsterCastPetStrc sSummonParams;
+    memset(&sSummonParams, 0, sizeof(sSummonParams));
     sSummonParams.classId = nClassId;
     sSummonParams.nFunctionId = 0;
     sSummonParams.pPlayer = pUnit;
