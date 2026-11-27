@@ -174,11 +174,16 @@ nested namespace definitions, which clang-425 cannot parse, for the units that r
 The rest of the shared tree (D2Common, D2Game, D2Client, Fog, Storm ...) is in the Mac
 binary and builds as its own target, `d2_mac_shared_objs` (outside `all`; measure it with
 `ninja -k 0 d2_mac_shared_objs`). Its Win32 is the one the original compiled it against,
-Storm's Win32-on-Mac layer: on the Mac `d2_platform.h` includes `Win32Mac.h` (32-bit
-`DWORD`, `HANDLE` as a handle-table index, the pthread critical section, the layer's entry
-points) and BSD's socket types, and the generated Win32 stand-ins that clash are guarded
-`#if !defined(_WIN32) && !D2_OS_MAC`. `Win32Mac.h` carries the Win32 data types the shared
-code declares with (by value in the SDK's i386 layout, by pointer incomplete).
+Storm's Win32-on-Mac layer: on the Mac `d2_platform.h` includes only the layer's headers in
+`Source/StormMac/Win32Mac/Source/Win32/`, and the generated Win32 stand-ins that clash are guarded
+`#if !D2_OS_MAC`. `Win32Mac.h` (32-bit `DWORD`, `HANDLE` as a handle-table index, the pthread
+critical section, the calling conventions spelled away, `SYSTEMTIME`, `TIME_ZONE_INFORMATION` and
+the other Win32 data types the shared code declares with), `Win32MacSockets.h` (Winsock over BSD
+sockets), and, after the stand-ins' window types, `Win32MacKernel.h` and `Win32MacUser.h` (the
+layer's entry points under the names the shared code calls: `CreateFileA` is `CreateFile`,
+`PeekMessageA` is `PeekMessage`, `CreateThread` takes the thread's name) and `Win32MacDirectSound.h`
+(the DirectSound shim: the Mac has no COM vtables, so the shared code's `p->lpVtbl->Play(p, ...)`
+compiles to the direct call `IDirectSoundBuffer_Play(p, ...)` the binary makes).
 
 Measured 2026-11-27 over its 448 units, distinct error sites and failing units:
 
@@ -208,8 +213,7 @@ D2Client and D2Game compile with 0 errors. Where the Mac binary differs, the sha
 tables, its ping carries no module checksum, its text goes through MAC_ConvertTextToUnicode and
 MAC_ConvertUnicodeToText). What the binary lacks is guarded out: the Imm* IME (the Mac uses the Text
 Services Manager), Warden module loading, the Direct3D registry key; `Core/Lng.cpp` is out of the
-Mac target. `Source/D2Headers/d2_platform_mac.h` declares the layer's entry points under the names
-the shared code calls (`PeekMessageA` is `PeekMessage` there).
+Mac target.
 |total|1935 (386 units)|1146 (78 units)|78|
 
 What is left is in the bodies: Win32 API the Mac reaches another way (registry through

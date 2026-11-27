@@ -67,16 +67,6 @@ uint32_t SStrPack(char* szDest, const char* szSource, uint32_t nMaxChars);
 // 1.14d mac: 0001c7d3
 int SStrCmpI(const char* szString1, const char* szString2, uint32_t nMaxChars);
 
-struct SYSTEMTIME {
-    WORD wYear;
-    WORD wMonth;
-    WORD wDayOfWeek;
-    WORD wDay;
-    WORD wHour;
-    WORD wMinute;
-    WORD wSecond;
-    WORD wMilliseconds;
-};
 // 1.14d mac: 0002c392
 void GetLocalTime(SYSTEMTIME* lpSystemTime);
 

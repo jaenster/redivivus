@@ -23,17 +23,6 @@
 #define MAC_EPOCH_AS_FILETIME 0x0153B281E0FB4000ULL
 #define FILETIME_UNITS_PER_SECOND 10000000
 
-typedef struct _SYSTEMTIME {
-    WORD wYear;
-    WORD wMonth;
-    WORD wDayOfWeek;
-    WORD wDay;
-    WORD wHour;
-    WORD wMinute;
-    WORD wSecond;
-    WORD wMilliseconds;
-} SYSTEMTIME;
-
 // 1.14d mac: 003f2280
 // The Mac clock read once, at the first call, and the millisecond timer at that
 // moment; later times advance from them by the timer.
@@ -267,11 +256,6 @@ int GetDateFormat(DWORD Locale, DWORD dwFlags, const SYSTEMTIME* lpDate, LPCSTR 
     lpDateStr[cchDate - 1] = '\0';
     return 0;
 }
-
-typedef struct _TIME_ZONE_INFORMATION {
-    LONG Bias;                    // 0x00  minutes to add to local time for UTC
-    BYTE aRest[0xAC - 0x04];      // 0x04  names and daylight rules: not filled in
-} TIME_ZONE_INFORMATION;
 
 // 1.14d mac: 0002c5bb
 // An 'itl0' for DateString's short form: US separators, month/day/year, 12-hour.

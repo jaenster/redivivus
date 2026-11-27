@@ -25,6 +25,15 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#define WIN32MAC_LAYOUT(name, cond) typedef char name[(cond) ? 1 : -1]
+
+// One calling convention: the Windows conventions the shared code spells are spelled
+// away, as the 1.14d Mac build passes every argument on the stack.
+#define __cdecl
+#define __stdcall
+#define __fastcall
+#define __thiscall
+
 // Win32 scalar types, fixed-width so the layout holds on a 64-bit Mac too.
 typedef int32_t BOOL;
 typedef uint8_t BYTE;
@@ -65,6 +74,30 @@ typedef union _LARGE_INTEGER {
     int64_t QuadPart;
 } LARGE_INTEGER;
 
+typedef struct _SYSTEMTIME {
+    WORD wYear;                   // 0x00
+    WORD wMonth;                  // 0x02
+    WORD wDayOfWeek;              // 0x04
+    WORD wDay;                    // 0x06
+    WORD wHour;                   // 0x08
+    WORD wMinute;                 // 0x0A
+    WORD wSecond;                 // 0x0C
+    WORD wMilliseconds;           // 0x0E
+} SYSTEMTIME;
+typedef SYSTEMTIME* LPSYSTEMTIME;
+
+// GetTimeZoneInformation fills the bias only (Win32_TimeAndDate.cpp); the rest is the
+// Win32 layout the shared code declares it with (Bnclient's gateway time zone).
+typedef struct _TIME_ZONE_INFORMATION {
+    LONG Bias;                    // 0x00  minutes to add to local time for UTC
+    uint16_t StandardName[32];    // 0x04
+    SYSTEMTIME StandardDate;      // 0x44
+    LONG StandardBias;            // 0x54
+    uint16_t DaylightName[32];    // 0x58
+    SYSTEMTIME DaylightDate;      // 0x98
+    LONG DaylightBias;            // 0xA8
+} TIME_ZONE_INFORMATION;
+
 // The layer's critical section is a recursive pthread mutex.
 typedef pthread_mutex_t CRITICAL_SECTION;
 typedef CRITICAL_SECTION* LPCRITICAL_SECTION;
@@ -78,6 +111,9 @@ typedef DWORD (*LPTHREAD_START_ROUTINE)(LPVOID lpThreadParameter);
 #define PAGE_NOACCESS 0x01
 #define PAGE_READWRITE 0x04
 #define PAGE_EXECUTE_READWRITE 0x40
+
+WIN32MAC_LAYOUT(SYSTEMTIME_size, sizeof(SYSTEMTIME) == 0x10);
+WIN32MAC_LAYOUT(TIME_ZONE_INFORMATION_size, sizeof(TIME_ZONE_INFORMATION) == 0xAC);
 
 // Kernel-object types (Win32HandleObject::dwType) whose meaning is proven: CreateEventA
 // allocates 1, CreateFile 2, AllocModuleHandle 4, THREAD_Create 7. CloseHandle knows 1, 2, 4, 5 and 7 and
@@ -150,7 +186,6 @@ struct Win32HandleObject {
         };
     };
 };
-#define WIN32MAC_LAYOUT(name, cond) typedef char name[(cond) ? 1 : -1]
 WIN32MAC_LAYOUT(Win32HandleObject_size, sizeof(Win32HandleObject) == 0xB8);
 WIN32MAC_LAYOUT(Win32HandleObject_spec, offsetof(Win32HandleObject, tSpec) == 0x56);
 WIN32MAC_LAYOUT(Win32HandleObject_fork, offsetof(Win32HandleObject, bResourceFork) == 0x9D);
@@ -376,5 +411,12 @@ char* _ui64toa(uint64_t nValue, char* szBuffer, int nRadix);
 // No body in 1.14d: its one caller, STRTABLE_FormatInt64, is not in the Mac binary either.
 char* _i64toa(int64_t nValue, char* szBuffer, int nRadix);
 char* _ultoa(DWORD dwValue, char* szBuffer, DWORD dwRadix);
+
+// The Microsoft compiler's own names the shared code spells: its 64-bit integer, and its
+// rotate, which clang-425 folds from this idiom to one ROL.
+typedef long long __int64;
+static inline uint32_t _rotl(uint32_t dwValue, int nShift) {
+    return (dwValue << (nShift & 31)) | (dwValue >> ((32 - nShift) & 31));
+}
 
 #endif  // D2_OS_MAC

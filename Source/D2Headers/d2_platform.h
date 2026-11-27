@@ -294,20 +294,14 @@ static inline int WideCharToMultiByte(UINT cp, DWORD flags, const uint16_t* src,
 #else
 
 #if D2_OS_MAC
-// The Mac has the one calling convention: the shared code's Windows conventions are
-// spelled away, as the 1.14d Mac build passes every argument on the stack.
-#  define __cdecl
-#  define __stdcall
-#  define __fastcall
-#  define __thiscall
 // The shared code's Win32 on the Mac is Storm's Win32-on-Mac layer, as in the original
-// build: Win32Mac.h gives the scalar types (DWORD is 32 bits), HANDLE (an index into the
-// layer's handle table), the critical section (a pthread mutex) and the entry points the
-// layer implements, in place of the stand-ins below. Sockets are BSD's, as the Mac build
-// called them (Fog's Safesock and QServer): their types come from the system.
+// build: Win32Mac.h gives the calling conventions (spelled away), the scalar types (DWORD
+// is 32 bits), HANDLE (an index into the layer's handle table), the critical section (a
+// pthread mutex) and the layer's records, in place of the stand-ins below; Win32MacSockets.h
+// the Winsock surface over BSD sockets. The entry points, declared with the stand-ins'
+// window types, follow at the end of this file.
 #  include "Source/StormMac/Win32Mac/Source/Win32/Win32Mac.h"
-#  include <limits.h>
-#  include "Source/D2Headers/d2_mac_sockets.h"
+#  include "Source/StormMac/Win32Mac/Source/Win32/Win32MacSockets.h"
 #endif
 #ifndef _countof
 #  define _countof(a) (sizeof(a) / sizeof((a)[0]))
@@ -416,8 +410,10 @@ typedef FILETIME _FILETIME;
 typedef OVERLAPPED _OVERLAPPED;
 struct MEMORYSTATUS { DWORD dwLength; DWORD dwMemoryLoad; SIZE_T dwTotalPhys; SIZE_T dwAvailPhys; SIZE_T dwTotalPageFile; SIZE_T dwAvailPageFile; SIZE_T dwTotalVirtual; SIZE_T dwAvailVirtual; };
 typedef MEMORYSTATUS _MEMORYSTATUS;
+#if !D2_OS_MAC
 struct SYSTEMTIME { WORD wYear; WORD wMonth; WORD wDayOfWeek; WORD wDay; WORD wHour; WORD wMinute; WORD wSecond; WORD wMilliseconds; };
 typedef SYSTEMTIME _SYSTEMTIME;
+#endif
 struct SECURITY_ATTRIBUTES { DWORD nLength; LPVOID lpSecurityDescriptor; BOOL bInheritHandle; };
 typedef SECURITY_ATTRIBUTES _SECURITY_ATTRIBUTES;
 typedef SECURITY_ATTRIBUTES* LPSECURITY_ATTRIBUTES;
@@ -497,7 +493,7 @@ HDC GetDC(HWND hWnd);
 int ReleaseDC(HWND hWnd, HDC hDC);
 
 #endif // _WIN32
-#include "Source/D2Headers/d2_platform_mac.h"
+#include "Source/StormMac/Win32Mac/Source/Win32/Win32MacUser.h"
 
 // 3dfx Glide API types
 typedef float FxFloat;
@@ -775,22 +771,7 @@ static inline uint64_t __aullrem(uint32_t lo1, uint32_t hi1, uint32_t lo2, uint3
 static inline uint64_t _aullshr(uint64_t a, unsigned int n) { return a >> n; }
 
 #ifndef _WIN32
-#if D2_OS_MAC
-// The layer's own Interlocked* (Win32_Process.cpp), taking the volatile pointers the shared
-// code passes.
-static inline LONG InterlockedIncrement(volatile LONG* p) { return InterlockedIncrement((LPLONG)p); }
-static inline LONG InterlockedDecrement(volatile LONG* p) { return InterlockedDecrement((LPLONG)p); }
-static inline LONG InterlockedExchange(volatile LONG* p, LONG v) { return InterlockedExchange((LPLONG)p, v); }
-static inline LONG InterlockedCompareExchange(volatile LONG* p, LONG exchange, LONG comparand) {
-  return InterlockedCompareExchange((LPLONG)p, exchange, comparand);
-}
-static inline PVOID InterlockedCompareExchangePointer(PVOID volatile* ppDestination, PVOID pExchange, PVOID pComparand) {
-  return (PVOID)InterlockedCompareExchange((LPLONG)ppDestination, (LONG)(intptr_t)pExchange, (LONG)(intptr_t)pComparand);
-}
-static inline LONG d2_InterlockedCompareExchange(LONG* pDestination, LONG nExchange, LONG nComperand) {
-  return InterlockedCompareExchange((LPLONG)pDestination, nExchange, nComperand);
-}
-#else
+#if !D2_OS_MAC
 static inline LONG InterlockedIncrement(volatile LONG* p) { return ++(*p); }
 static inline LONG InterlockedDecrement(volatile LONG* p) { return --(*p); }
 static inline LONG InterlockedExchange(volatile LONG* p, LONG v) { LONG old = *p; *p = v; return old; }
@@ -870,42 +851,6 @@ int WSACleanup();
 DWORD timeGetTime(void);
 #endif
 
-#if !defined(_WIN32) && D2_OS_MAC
-// The Win32 entry points Storm's Win32-on-Mac layer implements under its own names (no A
-// suffix, no extern "C"); the shared code's Windows spelling resolves to them. Where
-// the Mac binary has no such call, the code that makes it is not in the Mac build.
-struct _TIME_ZONE_INFORMATION;
-DWORD GetTimeZoneInformation(_TIME_ZONE_INFORMATION* lpTimeZoneInformation);
-void GetSystemTime(SYSTEMTIME* lpSystemTime);
-LONG CompareFileTime(const FILETIME* lpFileTime1, const FILETIME* lpFileTime2);
-BOOL GetFileTime(HANDLE hFile, FILETIME* lpCreationTime, FILETIME* lpLastAccessTime, FILETIME* lpLastWriteTime);
-BOOL SetFileTime(HANDLE hFile, const FILETIME* lpCreationTime, const FILETIME* lpLastAccessTime,
-                 const FILETIME* lpLastWriteTime);
-DWORD GetTempPath(DWORD nBufferLength, char* szBuffer);
-DWORD CharLowerBuff(char* lpsz, DWORD cchLength);
-int GetLocaleInfo(DWORD dwLocale, DWORD dwLCType, char* szData, size_t nDataSize);
-int32_t GetUserDefaultLangID(void);
-DWORD LOCALE_GetUserLocaleId(void);
-WORD LOCALE_GetDefaultLangId(void);
-HANDLE GetModuleHandle(LPCSTR szModuleName);
-DWORD GetModuleFileName(HANDLE hModule, char* szFileName, DWORD nSize);
-// The layer's CRT thread start: the Mac signature carries the thread's name.
-HANDLE _beginthreadex(LPVOID lpSecurity, size_t nStackSize, LPTHREAD_START_ROUTINE pfnStart, LPVOID pArgList,
-                      DWORD dwInitFlag, LPDWORD pThreadId, LPCSTR szName);
-typedef long long __int64;
-#  define GetTempPathA GetTempPath
-#  define CharLowerBuffA CharLowerBuff
-#  define GetLocaleInfoA GetLocaleInfo
-#  define GetUserDefaultLCID LOCALE_GetUserLocaleId
-#  define GetSystemDefaultLangID LOCALE_GetDefaultLangId
-#  define INVALID_HANDLE_VALUE ((HANDLE)-1)
-// The compiler's rotate: clang-425 folds this idiom to one ROL.
-#  ifndef _rotl
-static inline uint32_t _rotl(uint32_t dwValue, int nShift) {
-    return (dwValue << (nShift & 31)) | (dwValue >> ((32 - nShift) & 31));
-}
-#  endif
-#endif
 
 #ifndef _WIN32
 typedef void* PRTL_CRITICAL_SECTION_DEBUG;
@@ -918,74 +863,6 @@ struct tagWINDOWPLACEMENT { UINT length; UINT flags; UINT showCmd; POINT ptMinPo
 typedef tagWINDOWPLACEMENT WINDOWPLACEMENT;
 typedef GUID IID;
 #endif // _WIN32
-#if !defined(_WIN32) && D2_OS_MAC
-// The Win32 entry points the shared code calls that Storm's Win32-on-Mac layer
-// implements, under the layer's own names (Win32_Files.cpp, Win32_Process.cpp,
-// Win32_TimeAndDate.cpp, Win32_GDI.cpp, Win32_Window.cpp, Win32_Rect.cpp).
-DWORD GetTempPath(DWORD nBufferLength, char* szBuffer);
-UINT GetTempFileName(LPCSTR szPathName, LPCSTR szPrefix, UINT uUnique, char* szTempFileName);
-BOOL FileTimeToSystemTime(const FILETIME* pFileTime, SYSTEMTIME* pSystemTime);
-BOOL FileTimeToLocalFileTime(const FILETIME* pFileTime, FILETIME* pLocalFileTime);
-BOOL GetCursorPos(POINT* pPoint);
-BOOL SetCursorPos(int nX, int nY);
-BOOL GetWindowRect(HWND hWnd, RECT* pRect);
-HWND GetDesktopWindow(void);
-BOOL AdjustWindowRectEx(void* pRect, DWORD dwStyle, BOOL bMenu, DWORD dwExStyle);
-BOOL UpdateWindow(HWND hWnd);
-HWND SetFocus(HWND hWnd);
-BOOL PtInRect(RECT* pRect, POINT tPoint);
-LRESULT DefWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-struct WNDCLASS {
-    UINT style;
-    WNDPROC lpfnWndProc;
-    int cbClsExtra;
-    int cbWndExtra;
-    int hInstance;
-    int hIcon;
-    int hCursor;
-    int hbrBackground;
-    LPCSTR lpszMenuName;
-    LPCSTR lpszClassName;
-};
-ATOM RegisterClass(const WNDCLASS* pClass);
-BOOL UnregisterClass(LPCSTR szClassName);
-// 00024c76: the layer's LoadCursor, a stub that returns 0.
-int LoadCursor(int hInstance, int nCursorId);
-HWND CreateWindowEx(DWORD dwExStyle, LPCSTR szClassName, LPCSTR szWindowName, DWORD dwStyle, int nX, int nY, int nWidth,
-                    int nHeight, HWND hWndParent, int hMenu, int hInstance, int lpParam);
-// The layer's ShowCursor (00024c7e) leaves the host's display count in eax, which the shared
-// code's show/hide loops read.
-int ShowCursor(BOOL bShow);
-#define HWND_NOTOPMOST ((HWND)-2)
-BOOL GetDiskFreeSpaceEx(LPCSTR szDirectory, uint64_t* pnFreeBytesAvailable, uint64_t* pnTotalBytes,
-                        uint64_t* pnTotalFreeBytes);
-BOOL PostMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-int GetDateFormat(DWORD Locale, DWORD dwFlags, const SYSTEMTIME* lpDate, LPCSTR lpFormat, char* lpDateStr, int cchDate);
-int Wnd_ReturnZero(void);
-// StormMac/SOURCE/SVID.cpp; callers read LaunchURL's result, left in eax.
-int STORM_LaunchURL(char* szURL);
-struct IDirectSound;
-int32_t DirectSoundCreate(void* lpGuid, IDirectSound** ppDS, void* pUnkOuter);
-// The layer's message (Win32_Messages.cpp), 0x1C bytes.
-struct tagMSG {
-    HWND hwnd;
-    UINT message;
-    WPARAM wParam;
-    LPARAM lParam;
-    DWORD time;
-    POINT pt;
-};
-BOOL PeekMessage(tagMSG* pMsg, HWND hWnd, UINT nMsgFilterMin, UINT nMsgFilterMax, UINT wRemoveMsg);
-BOOL GetMessage(tagMSG* pMsg, HWND hWnd, UINT nMsgFilterMin, UINT nMsgFilterMax);
-BOOL TranslateMessage(const tagMSG* pMsg);
-LONG DispatchMessage(const tagMSG* pMsg);
-#define PeekMessageA PeekMessage
-#define GetMessageA GetMessage
-#define DispatchMessageA DispatchMessage
-#define GetTempPathA GetTempPath
-#define GetTempFileNameA GetTempFileName
-#define DefWindowProcA DefWindowProc
-#endif
 #ifdef __cplusplus
 extern "C" IMAGE_DOS_HEADER __ImageBase;
 #else
@@ -1153,7 +1030,9 @@ namespace _Wrappers {
 #endif // _WIN32
 
 #if !defined(_WIN32) && D2_OS_MAC
-#  include "Source/D2Headers/d2_mac_win32.h"
+// The Win32-on-Mac layer's entry points, under the names the shared code calls.
+#  include "Source/StormMac/Win32Mac/Source/Win32/Win32MacKernel.h"
+#  include "Source/StormMac/Win32Mac/Source/Win32/Win32MacDirectSound.h"
 #endif
 
 // Array rows held by pointer (Ghidra `T[N] *` return and global types)

@@ -18,7 +18,7 @@
 struct D2BNetGatewayAccessStr;
 
 // Data types
-#ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
+#if !defined(_WIN32) && !D2_OS_MAC  // the Win32 SDK's on Windows, Win32Mac.h's on the Mac
 
 struct _TIME_ZONE_INFORMATION {
     /* 0x00 */ LONG Bias;

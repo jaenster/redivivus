@@ -7,6 +7,7 @@
 // the next chunk of its data, up to 0x2000 frames at a time when it loops. The original
 // name of this file is not recorded; see Source/StormMac/README.md.
 #include "Win32Mac.h"
+#include "Win32MacDirectSound.h"
 
 #if !defined(_WIN32) && D2_OS_MAC
 
@@ -324,7 +325,7 @@ int32_t IDirectSound_Release(IDirectSound* pDirectSound) {
 // A buffer with refcount 1. The primary buffer owns no memory; any other gets a data block
 // and a memory file 0x100 bytes larger than asked, locked unless it is static.
 int32_t IDirectSound_CreateSoundBuffer(IDirectSound* pDirectSound, const uint32_t* pBufferDesc,
-                                       IDirectSoundBuffer** ppBuffer) {
+                                       IDirectSoundBuffer** ppBuffer, void* pUnkOuter) {
     IDirectSoundBuffer* pBuffer = (IDirectSoundBuffer*)operator new(0xac);
     pBuffer->pChannel = 0;
     pBuffer->n14 = 0;
@@ -774,7 +775,9 @@ int32_t IDirectSoundBuffer_SetVolume(IDirectSoundBuffer* pBuffer, int nVolume) {
 }
 
 // 1.14d mac: 000339ba
-int32_t IDirectSoundBuffer_Unlock(IDirectSoundBuffer* pBuffer) {
+// The whole buffer stays locked between calls: the regions are not read.
+int32_t IDirectSoundBuffer_Unlock(IDirectSoundBuffer* pBuffer, void* pvAudioPtr1, DWORD dwAudioBytes1,
+                                  void* pvAudioPtr2, DWORD dwAudioBytes2) {
     int32_t hResult = E_FAIL_;
     if (s_pPrimaryBuffer != pBuffer) {
         UnLockMemFile2(pBuffer->pData->hMemFile);

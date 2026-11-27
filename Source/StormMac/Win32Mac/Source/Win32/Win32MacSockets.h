@@ -1,15 +1,19 @@
-// The shared code's Winsock vocabulary over the Mac's BSD sockets.
+// Storm's Win32-on-Mac layer: the Winsock surface over the Mac's BSD sockets.
 //
 // 1.14d Mac calls BSD's socket API directly (select, ioctl FIONBIO, close, inet_ntoa) and
-// has none of Winsock's types. The shared code (Fog's Safesock and QServer, D2Net) is
-// written against Winsock's in_addr (the S_un union), fd_set (fd_count / fd_array) and
-// the entry points of Winsock 1.1. This header gives those names, with the same layouts
-// the Windows build has, on top of the system types:
+// has none of Winsock's types; the layer's own Winsock code is WSOCK_WSAStartup and
+// WSOCK_CloseSocket (Win32_Process.cpp). The shared code (Fog's Safesock and QServer,
+// D2Net, Bnclient) is written against Winsock's in_addr (the S_un union), fd_set
+// (fd_count / fd_array) and the entry points of Winsock 1.1. This header gives those
+// names, with the same layouts the Windows build has, on top of the system types:
 //   - in_addr and sockaddr_in keep BSD's size and offsets (sin_len, sin_family, sin_port,
 //     sin_addr), so a pointer to them is a valid `struct sockaddr *` for connect/bind/accept;
 //   - fd_set is Winsock's counted array, and select() converts it to and from BSD's bitmap.
-// Included from d2_platform.h inside the Mac branch.
+// Not part of Win32Mac.h: the layer's own units use BSD's in_addr and fd_set. The shared
+// code takes it through d2_platform.h.
 #pragma once
+
+#include "Win32Mac.h"
 
 #if !defined(_WIN32) && D2_OS_MAC
 
