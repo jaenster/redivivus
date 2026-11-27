@@ -190,7 +190,7 @@ int * __stdcall SOUNDHDR_GetGlobal2() {
     return (int*)pSoundChannelDataArray;
 }
 
-int __stdcall SOUNDHDR_GetGlobal3() {
+uint32_t __stdcall SOUNDHDR_GetGlobal3() {
     return gnCurrentGameAudioVolume;
 }
 

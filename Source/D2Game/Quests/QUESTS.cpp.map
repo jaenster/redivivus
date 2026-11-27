@@ -1633,7 +1633,7 @@
       "namespace": "D2Game::Quests::QUESTS",
       "calledFunctions": [
         "Objects_InitFn19_JerhynPosition",
-        "PlaceGuardInFrontOfJerhyn"
+        "QUEST_PlaceGuardInFrontOfJerhyn"
       ],
       "usedTypes": [
         "D2ObjectInitFnArg",
@@ -3731,7 +3731,7 @@
       ]
     },
     {
-      "name": "PlaceGuardInFrontOfJerhyn",
+      "name": "QUEST_PlaceGuardInFrontOfJerhyn",
       "address": "0059f440",
       "lines": [
         {
@@ -3741,7 +3741,7 @@
       ],
       "namespace": "D2Game::Quests::QUESTS",
       "calledFunctions": [
-        "PlaceGuardInFrontOfJerhyn",
+        "QUEST_PlaceGuardInFrontOfJerhyn",
         "QUEST_GetQuestRecordState",
         "SpawnMonsterAtRoomPosSimple",
         "SetEvent",

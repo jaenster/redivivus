@@ -9618,7 +9618,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 0059f0c0	0059f29f	D2Game::Quests::QUESTS::Q12_Callback03_ChangedLevel	Source/D2Game/Quests/QUESTS	sourcemap	169	169	0	0.982	MATCH	3 refs unverified	479	0
 0059f2a0	0059f376	D2Game::Quests::QUESTS::Q12_InitData	Source/D2Game/Quests/QUESTS	sourcemap	51	51	0	0.863	MATCH	8 refs unverified	214	0
 0059f380	0059f439	D2Game::Quests::QUESTS::PlaceJerhyn	Source/D2Game/Quests/QUESTS	sourcemap	68	68	0	1.000	MATCH		185	0
-0059f440	0059f50c	D2Game::Quests::QUESTS::PlaceGuardInFrontOfJerhyn	Source/D2Game/Quests/QUESTS	sourcemap	76	76	26	0.842	INSN_COUNT_MATCH		169	31
+0059f440	0059f50c	D2Game::Quests::QUESTS::QUEST_PlaceGuardInFrontOfJerhyn	Source/D2Game/Quests/QUESTS	sourcemap	76	76	26	0.842	INSN_COUNT_MATCH		169	31
 0059f510	0059f565	D2Game::Quests::QUESTS::QUEST_CheckJerhynShouldBlock	Source/D2Game/Quests/QUESTS	sourcemap	31	31	0	1.000	MATCH		85	0
 0059f570	0059f57f	D2Game::Quests::QUESTS::QUEST_ShouldBlockJerhyn	Source/D2Game/Quests/QUESTS	sourcemap	6	6	0	1.000	MATCH		15	0
 0059f580	0059f81c	D2Game::Quests::QUESTS::QUEST_JerhynNpcAILogic	Source/D2Game/Quests/QUESTS	sourcemap	228	218	0	0.552	OUR-10		335	123

@@ -145,7 +145,7 @@ public:
     /* 0x0C */ uint32_t m_chunk; // growth granularity; 0 = CalcChunkSize picks one
 
     T* OperatorIndex(uint32_t nIndex);
-    static uint32_t Unreferenced_0044de40();
+    static int Unreferenced_0044de40();
     uint32_t CalcChunkSize(uint32_t nCount);
     static uint32_t __stdcall RoundToMultiple(uint32_t nValue, uint32_t nMultiple);
     void Destructor();
@@ -544,7 +544,7 @@ template<> void TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>::C
 // operator[]: address of element nIndex (stride 0xc).
 // Byte-identical to TSGrowableArray<TSExplicitList<CELLIST,..>>::OperatorIndex 00601cc0; T from the 0xc stride, the only 12-byte array element in this block.
 template<> TSExplicitList<::SGAMEDATA, -572662307>* TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::OperatorIndex(uint32_t nIndex);
-template<> uint32_t TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Unreferenced_0044de40();
+template<> int TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Unreferenced_0044de40();
 template<> inline uint32_t TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::CalcChunkSize(uint32_t nCount);
 // Static: rounds nValue up to a multiple of nMultiple.
 // Byte-identical to 0060e2e0; T by adjacency to this instantiation's CalcChunkSize 0044df30 (no xrefs).

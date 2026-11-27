@@ -102,7 +102,7 @@ void __fastcall UniDrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExSt
                                   int nWorldX, int nWorldY, BYTE nAlpha, int nScreenPanels, void * pTileData);
 void __fastcall UniDrawSolidRectEx(int nXStart, int nYStart, int nXEnd, int nYEnd, BYTE nColor, DRAWMODE eDrawMode);
 void __fastcall UniDrawSolidRectAlpha(int nXStart, int nYStart, int nXEnd, int nYEnd, DWORD dwColor, BYTE nAlpha);
-void __fastcall UniDrawLine(int nXStart, int nYStart, int nXEnd, int nYEnd, DWORD dwColor, BYTE nAlpha);
+void __fastcall UniDrawLine(int nXStart, int nYStart, int nXEnd, int nYEnd, BYTE dwColor, BYTE nAlpha);
 void __fastcall UniDrawRect(RECT * pRect, BYTE nColor);
 void __fastcall UniDrawRectEx(RECT * pRect, BYTE nColor);
 void __fastcall UniDrawSolidRect(RECT * pRect, BYTE nColor);

@@ -32,7 +32,7 @@ int __stdcall SOUNDHDR_GetTxtSoundEnvironSize();
 int __stdcall SOUNDHDR_GetGlobal0();
 int __stdcall SOUNDHDR_GetGlobal1();
 int * __stdcall SOUNDHDR_GetGlobal2();
-int __stdcall SOUNDHDR_GetGlobal3();
+uint32_t __stdcall SOUNDHDR_GetGlobal3();
 void __stdcall Cleanup();
 void __fastcall SOUNDHDR_SetGlobal4(uint32_t nMaxBytes);
 void __stdcall SOUNDHDR_Nop();

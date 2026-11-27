@@ -9618,7 +9618,7 @@ start	end	name	tu	symbol	method	detail
 0059f0c0	0059f29f	D2Game::Quests::QUESTS::Q12_Callback03_ChangedLevel	Source/D2Game/Quests/QUESTS	?Q12_Callback03_ChangedLevel@QUESTS@Quests@D2Game@@YIXPAUD2QuestDataStrc@@PAUD2QuestArgStrc@@@Z	sourcemap	sourcemap QUESTS.cpp.map
 0059f2a0	0059f376	D2Game::Quests::QUESTS::Q12_InitData	Source/D2Game/Quests/QUESTS	?Q12_InitData@QUESTS@Quests@D2Game@@YIXPAUD2QuestDataStrc@@@Z	sourcemap	sourcemap QUESTS.cpp.map
 0059f380	0059f439	D2Game::Quests::QUESTS::PlaceJerhyn	Source/D2Game/Quests/QUESTS	?PlaceJerhyn@QUESTS@Quests@D2Game@@YIXPAUD2QuestDataStrc@@PAUD2ObjectInitFnArg@@@Z	sourcemap	sourcemap QUESTS.cpp.map
-0059f440	0059f50c	D2Game::Quests::QUESTS::PlaceGuardInFrontOfJerhyn	Source/D2Game/Quests/QUESTS	?PlaceGuardInFrontOfJerhyn@QUESTS@Quests@D2Game@@YIXPAUD2QuestDataStrc@@PAUD2ObjectInitFnArg@@@Z	sourcemap	sourcemap QUESTS.cpp.map
+0059f440	0059f50c	D2Game::Quests::QUESTS::QUEST_PlaceGuardInFrontOfJerhyn	Source/D2Game/Quests/QUESTS	?QUEST_PlaceGuardInFrontOfJerhyn@QUESTS@Quests@D2Game@@YIXPAUD2QuestDataStrc@@PAUD2ObjectInitFnArg@@@Z	sourcemap	sourcemap QUESTS.cpp.map
 0059f510	0059f565	D2Game::Quests::QUESTS::QUEST_CheckJerhynShouldBlock	Source/D2Game/Quests/QUESTS	?QUEST_CheckJerhynShouldBlock@QUESTS@Quests@D2Game@@YIEPAUSGAMEDATA@@@Z	sourcemap	sourcemap QUESTS.cpp.map
 0059f570	0059f57f	D2Game::Quests::QUESTS::QUEST_ShouldBlockJerhyn	Source/D2Game/Quests/QUESTS	?QUEST_ShouldBlockJerhyn@QUESTS@Quests@D2Game@@YIHPAUSGAMEDATA@@@Z	sourcemap	sourcemap QUESTS.cpp.map
 0059f580	0059f81c	D2Game::Quests::QUESTS::QUEST_JerhynNpcAILogic	Source/D2Game/Quests/QUESTS	?QUEST_JerhynNpcAILogic@QUESTS@Quests@D2Game@@YIXPAUSGAMEDATA@@PAUD2UnitStrc@@PAH2@Z	sourcemap	sourcemap QUESTS.cpp.map

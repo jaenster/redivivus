@@ -760,7 +760,7 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg)
 }
 
 
-int __stdcall D2WINEDITBOX_FilterDigitChar(uint32_t dwUnused1, uint32_t dwUnused2, char * szText) {
+int __stdcall D2WINEDITBOX_FilterDigitChar(::D2WinEditBox * pEditBox, int nTextLen, char * szText) {
     if (*szText >= '0' && *szText <= '9') {
       return 1;
     }
@@ -768,7 +768,7 @@ int __stdcall D2WINEDITBOX_FilterDigitChar(uint32_t dwUnused1, uint32_t dwUnused
     return 0;
 }
 
-uint32_t __stdcall D2WINEDITBOX_FilterLetterChar(uint32_t dwUnused1, uint32_t dwUnused2, char * szText) {
+int __stdcall D2WINEDITBOX_FilterLetterChar(::D2WinEditBox * pEditBox, int nTextLen, char * szText) {
     if (!((*szText < 'a' || *szText > 'z') && (*szText < 'A' || *szText > 'Z'))) {
       return 1;
     }

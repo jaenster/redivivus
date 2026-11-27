@@ -995,7 +995,7 @@ void __fastcall ITEM_RecalcAllEquippedItems_ECX(D2UnitStrc * pUnit) {
     ITEM_RecalcAllEquippedItems_EBX(pUnit);
 }
 
-static void ITEM_SaveWeaponHandClassId(char eBodyLoc, D2UnitStrc * pUnit) {
+static void ITEM_SaveWeaponHandClassId(D2UnitStrc * pUnit, char eBodyLoc) {
     int16_t nWeaponAnimClass = D2Common::ITEMS::Items::ITEM_GetWeaponAnimClass(pUnit);
     if (eBodyLoc == '\x04') {
       gnWeaponHandClassId_Right = nWeaponAnimClass;
@@ -1995,7 +1995,7 @@ void __fastcall HandleItemEquip(uint8_t * pBytes) {
 
     Engine::Gfx::GFX_LoadUnitModeCof(pOwnerUnit, 0);
     if (pOwnerUnit == pLocalPlayer) {
-      ITEM_SaveWeaponHandClassId(stItemDetails.nBodyLoc, pItem);
+      ITEM_SaveWeaponHandClassId(pItem, stItemDetails.nBodyLoc);
       bResult = D2Common::ITEMS::Items::ITEMFLAG_CheckFlag(stItemDetails.flags, ITEMFLAG_IGNORE);
       pInventory = pInventoryTmp.pInventory2;
       if (!bResult) {
@@ -2170,7 +2170,7 @@ void __fastcall HandleItemIndirectSwapBodyItem(uint8_t * pBytes) {
         }
 
         Engine::Gfx::GFX_LoadUnitModeCof(pCharmItem, 0);
-        ITEM_SaveWeaponHandClassId(stItemDetails.nBodyLoc, pNewItem);
+        ITEM_SaveWeaponHandClassId(pNewItem, stItemDetails.nBodyLoc);
         ITEM_ApplySocketableAndEquipStats(0, pCharmItem, pNewItem);
         pUnit = pOwnerUnit;
         ITEM_RecalcAllEquippedItems_EBX(pOwnerUnit);
@@ -2358,7 +2358,7 @@ void __stdcall ITEM_HandleSwapBodyEquipItem(uint8_t * pPacket, D2UnitDataItemDet
       ITEM_ApplySocketableAndEquipStats(0, pOwnerUnit, pItem);
       ITEM_RecalcAllEquippedItems_EBX(pOwnerUnit);
       ITEM_RecalcAllEquippedItems_EBX(pOwnerUnit);
-      ITEM_SaveWeaponHandClassId(pItemDetails->nBodyLoc, pItem);
+      ITEM_SaveWeaponHandClassId(pItem, pItemDetails->nBodyLoc);
       Engine::Gfx::GFX_LoadUnitModeCof(pOwnerUnit, 0);
       UI::ui::UI_SendMouseMoveMessage();
       ITEM_RemoveUninterruptableState(pItem);
@@ -2508,7 +2508,7 @@ static void __stdcall ITEM_HandleWeaponSwitchItems(D2UnitDataItemDetailsStrc * p
             ITEM_ApplySocketableAndEquipStats(0, pOwnerUnit, pNewItem);
             ITEM_RecalcAllEquippedItems_EBX(pOwnerUnit);
             ITEM_RecalcAllEquippedItems_EBX(pOwnerUnit);
-            ITEM_SaveWeaponHandClassId(pUnitDataItemDetails->nBodyLoc, pNewItem);
+            ITEM_SaveWeaponHandClassId(pNewItem, pUnitDataItemDetails->nBodyLoc);
             Engine::Gfx::GFX_LoadUnitModeCof(pOwnerUnit, 0);
           } else {
             ITEM_RecalcAllEquippedItems_EBX(pOwnerUnit);
@@ -3535,7 +3535,7 @@ D2UnitStrc * __fastcall HandleItemUpdateStats(uint8_t * pbPacket) {
 
       Engine::Gfx::GFX_LoadUnitModeCof(pUnit, 0);
       if (pUnit == pLocalPlayer) {
-        ITEM_SaveWeaponHandClassId(stItemDetails.nBodyLoc, pCursorItem_lcl);
+        ITEM_SaveWeaponHandClassId(pCursorItem_lcl, stItemDetails.nBodyLoc);
         bFlag = D2Common::ITEMS::Items::ITEMFLAG_CheckFlag(stItemDetails.flags, ITEMFLAG_IGNORE);
         if (!bFlag) {
           D2Common::INVENTORY::Inventory::INVENTORY_SetCursorItem(pInventory, nullptr);

@@ -125,7 +125,7 @@ void __fastcall UniDrawSolidRectAlpha(int nXStart, int nYStart, int nXEnd, int n
 
 // ppc 1.10b: 10054590 (1.00 100839b0, 1.13d 1005a5b0, carbon 1.10b 103a3540, carbon 1.13d 103d2c90)
 // Bresenham, plotting only the points inside the back buffer. nAlpha is ignored.
-void __fastcall UniDrawLine(int nXStart, int nYStart, int nXEnd, int nYEnd, DWORD dwColor, BYTE nAlpha) {
+void __fastcall UniDrawLine(int nXStart, int nYStart, int nXEnd, int nYEnd, BYTE dwColor, BYTE nAlpha) {
     int nDX = nXEnd - nXStart;
     int nDY = nYEnd - nYStart;
     int nStepX = 1;

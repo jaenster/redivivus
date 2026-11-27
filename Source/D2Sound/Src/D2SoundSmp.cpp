@@ -951,13 +951,13 @@ void __stdcall SOUNDSMP_CreateSoundThread() {
     /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ ghSoundThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)D2SOUNDSMP_SoundUpdateThreadProc, (LPVOID)0x0, 0, &dwThreadId);
 }
 
-float __stdcall SOUNDSMP_LogVolumeToLinear(float dwVolume) {
-    long double fVar1 = log((double)dwVolume);
+float __stdcall SOUNDSMP_LogVolumeToLinear(float fVolume) {
+    long double fVar1 = log((double)fVolume);
     return (float)fVar1;
 }
 
-float __stdcall SOUNDSMP_LinearToLogVolume(float dwLinearValue, float dwScale) {
-    long double fVar1 = pow((double)dwLinearValue, (double)dwScale);
+float __stdcall SOUNDSMP_LinearToLogVolume(float fLinearValue, float fScale) {
+    long double fVar1 = pow((double)fLinearValue, (double)fScale);
     return (float)fVar1;
 }
 

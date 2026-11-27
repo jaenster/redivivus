@@ -2367,7 +2367,7 @@ BOOL __stdcall STATES_RemoveDisguiseStates(D2UnitStrc * pUnit) {
     return 1;
 }
 
-void __stdcall Unreferenced_006460b0(int32_t, int32_t, int32_t) {
+void __stdcall Unreferenced_006460b0(int nUnused1, int nUnused2, int nUnused3) {
 
 }
 

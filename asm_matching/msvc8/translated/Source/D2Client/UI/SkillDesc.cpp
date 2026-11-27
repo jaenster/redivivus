@@ -4081,7 +4081,7 @@ void __fastcall SKILLDESC_DrawDamageWithRange(D2UnitStrc * pUnit, int * pnMinDam
     SKILLDESC_CalcElemDamageRange(pUnit, pnMinDamage, pnMaxDamage, (uint32_t*)pnColor, pSkill);
 }
 
-static void __stdcall SKILLDESC_DrawElemDamageWithRange(D2UnitStrc * pUnit, int * pnMinDamage, int * pnMaxDamage, int32_t * pnColor, D2UnitStrc * pUnit2, D2SkillStrc * pSkill, int32_t nSrcDamage) {
+static void __stdcall SKILLDESC_DrawElemDamageWithRange(D2UnitStrc * pUnit, int * pnMinDamage, int * pnMaxDamage, int32_t * pnColor, D2SkillStrc * pSkill, D2UnitStrc * pUnit2, int32_t nSrcDamage) {
     if (!nSrcDamage) {
       return;
     }
@@ -4269,7 +4269,7 @@ void __fastcall SKILLDESC_DrawSkillDmgElemental(D2UnitStrc * pUnit, D2SkillStrc 
     nElemDmgType = 0;
     D2UnitStrc* pUnitSaved;
     pUnitSaved = pUnit;
-    SKILLDESC_DrawElemDamageWithRange(pUnit, &nElemMinDmg, &nElemMaxDmg, &nElemDmgType, nullptr, pSkill, (uint32_t)pSkillsTxt->SrcDam);
+    SKILLDESC_DrawElemDamageWithRange(pUnit, &nElemMinDmg, &nElemMaxDmg, &nElemDmgType, pSkill, nullptr, (uint32_t)pSkillsTxt->SrcDam);
     D2SkillsTxt* pSkillsTxtSaved;
     pSkillsTxtSaved = pSkillsTxt;
     uint32_t nElemColorIdx;
@@ -4784,7 +4784,7 @@ void __fastcall SKILLDESC_DrawSkillDmgElem2H(D2UnitStrc * pUnit, D2SkillStrc * p
     int nMinDamage = 0;
     int nMaxDamage = 0;
     uint32_t nElemType = SKILLDESC_ElemTypeToColorIndex((eD2ElementalDamageTypeDWORD)pSkillsTxt->EType);
-    SKILLDESC_DrawElemDamageWithRange(pUnit, &nMinDamage, &nMaxDamage, (int32_t*)&nElemType, nullptr, pSkill, (uint32_t)pSkillsTxt->SrcDam);
+    SKILLDESC_DrawElemDamageWithRange(pUnit, &nMinDamage, &nMaxDamage, (int32_t*)&nElemType, pSkill, nullptr, (uint32_t)pSkillsTxt->SrcDam);
     nMinDamage += D2Common::Skills::SKILL_CalcMinDamage(pUnit, (int)pSkillsTxt->skill, nSkillLevel, 0) >> 8;
     nMaxDamage += D2Common::Skills::SKILL_CalcMaxDamage(pUnit, (int)pSkillsTxt->skill, nSkillLevel, 0) >> 8;
     if (pSkillsTxt->EType == ELEMENTAL_POISON) {
@@ -4807,7 +4807,7 @@ void __fastcall SKILLDESC_DrawSkillDmgElem2HAlt(D2UnitStrc * pUnit, D2SkillStrc 
     uint32_t nElemType = SKILLDESC_ElemTypeToColorIndex((eD2ElementalDamageTypeDWORD)pSkillsTxt->EType);
     int nMinDamage = D2Common::Skills::SKILL_CalcMinDamage(pUnit, (int)pSkillsTxt->skill, nSkillLevel, 0) >> 8;
     int nMaxDamage = D2Common::Skills::SKILL_CalcMaxDamage(pUnit, (int)pSkillsTxt->skill, nSkillLevel, 0) >> 8;
-    SKILLDESC_DrawElemDamageWithRange(pUnit, &nMinDamage, &nMaxDamage, (int32_t*)&nElemType, nullptr, pSkill, (uint32_t)nSrcDam);
+    SKILLDESC_DrawElemDamageWithRange(pUnit, &nMinDamage, &nMaxDamage, (int32_t*)&nElemType, pSkill, nullptr, (uint32_t)nSrcDam);
     if (pSkillsTxt->EType == ELEMENTAL_POISON) {
       const int32_t nLength = D2Common::Skills::SKILLS_GetElementalLength(pUnit, (int)pSkillsTxt->skill, nSkillLevel, 1);
       nMinDamage += D2Common::Skills::SERVER_MinDamage(pUnit, (int)pSkillsTxt->skill, nSkillLevel, 1) * nLength >> 8;
@@ -4928,7 +4928,7 @@ void __fastcall SKILLDESC_DrawSkillDmgBow(D2UnitStrc * pUnit, D2SkillStrc * pSki
     nSkillLevel = SKILLDESC_ElemTypeToColorIndex((eD2ElementalDamageTypeDWORD)pSkillsTxt->EType);
     nMinDamage = nMinDamage * 0x4b >> 8;
     nMaxDamage = nMaxDamage * 0x4b >> 8;
-    SKILLDESC_DrawElemDamageWithRange(pUnit, &nMinDamage, &nMaxDamage, &nSkillLevel, nullptr, pSkill, (uint32_t)pSkillsTxt->SrcDam);
+    SKILLDESC_DrawElemDamageWithRange(pUnit, &nMinDamage, &nMaxDamage, &nSkillLevel, pSkill, nullptr, (uint32_t)pSkillsTxt->SrcDam);
     SKILLDESC_DrawDamageNumbers(nMinDamage, nMaxDamage, nSkillLevel, nXLeft, nY, nXRight);
 }
 
@@ -4994,7 +4994,7 @@ void __fastcall SKILLDESC_DrawSkillDmgKick(D2UnitStrc * pUnit, D2SkillStrc * pSk
     int nMaxDamage = 0;
     D2UnitStrc* pUnitSaved = pUnit;
     uint32_t nElemType = SKILLDESC_ElemTypeToColorIndex((eD2ElementalDamageTypeDWORD)pSkillsTxt->EType);
-    SKILLDESC_DrawElemDamageWithRange(pUnit, &nMinDamage, &nMaxDamage, (int32_t*)&nElemType, nullptr, pSkill, (uint32_t)pSkillsTxt->SrcDam);
+    SKILLDESC_DrawElemDamageWithRange(pUnit, &nMinDamage, &nMaxDamage, (int32_t*)&nElemType, pSkill, nullptr, (uint32_t)pSkillsTxt->SrcDam);
     D2UnitStrc* pUnitWorking = pUnitSaved;
     D2UnitStrc* pWeapon = D2Common::Units::GetWeaponBySkill(pUnitSaved, 1);
     if (!pWeapon || (nHandedness = D2Common::INVENTORY::Inventory::INVENTORY_GetWeaponHandedness(pUnitWorking, pUnitWorking->pInventory) , nHandedness != 2)) {
@@ -5541,7 +5541,7 @@ static void __stdcall SKILLDESC_DescLine1B_AppendDamage(D2UnitStrc * pUnit, int3
     SKILLDESC_FormatMissileDamage(nMinDmgScaled * 0x4b >> 8, nMaxDmgScaled * 0x4b >> 8, 0x10a1, wszText);
 }
 
-static void __stdcall SKILLDESC_DescLine1A_SkillDamage(uint16_t * wszText, D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t eSkillId, D2UnitStrc * pUnit) {
+static void __stdcall SKILLDESC_DescLine1A_SkillDamage(uint16_t * wszText, D2SkillsTxt * pSkillsTxt, D2UnitStrc * pUnit, int32_t eSkillId, int32_t nSkillLevel) {
     uint16_t wDmgTypeStringId;
     int32_t nMinDmgRaw = D2Common::Skills::SERVER_MinDamage(pUnit, eSkillId, nSkillLevel, 1);
     int32_t nMaxDmgRaw = D2Common::Skills::SERVER_MaxDamage(pUnit, eSkillId, nSkillLevel, 1);
@@ -6642,7 +6642,7 @@ BOOL __fastcall SKILLDESC_ProcessDescLine(D2UnitStrc * pUnit, uint16_t * pwszOut
         D2Lang::Unicode::UNISYS::AppendToBuffer(pwszOutput, pWszLocale);
       }
 
-      SKILLDESC_DescLine1A_SkillDamage(pwszOutput, pSkillsTxt, nSkillLevel, eSkill, pUnitLocal);
+      SKILLDESC_DescLine1A_SkillDamage(pwszOutput, pSkillsTxt, pUnitLocal, eSkill, nSkillLevel);
       return 1;
       case 0x1b:
         if (wDescTextA != 0x1506) {

@@ -279,7 +279,7 @@ void __fastcall DrawSolidRectAlpha(int nX1, int nY1, int nX2, int nY2, DWORD dwC
 }
 
 // Win 48 / Mac 51
-void __fastcall DrawLine(int nX1, int nY1, int nX2, int nY2, DWORD dwColor, BYTE nAlpha) {
+void __fastcall DrawLine(int nX1, int nY1, int nX2, int nY2, BYTE dwColor, BYTE nAlpha) {
     RaveDrawLine(nX1, nY1, nX2, nY2, (uint8_t)dwColor, nAlpha);
 }
 

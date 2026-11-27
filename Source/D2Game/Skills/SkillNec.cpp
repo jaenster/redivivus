@@ -338,7 +338,7 @@ uint32_t __fastcall SKILLNEC_ValidateAttackableTarget(::SGAMEDATA * pGame, D2Uni
     return UNIT::SUnit::UNITS_CheckIfCanAttackTarget(pGame, pUnit, pTarget) != 0;
 }
 
-void __thiscall SKILLNEC_AssignCurseAiBehavior(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nSkillId, int32_t pNecroSkillArg) {
+void __fastcall SKILLNEC_AssignCurseAiBehavior(::SGAMEDATA * pGame, D2UnitStrc * pCaster, D2UnitStrc * pUnit, int32_t nSkillId, int32_t nSkillLvl) {
     uint32_t nFunctionId;
     D2SkillsTxt* pSkillsTxt = nSkillId >= 0 && nSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;
     if (!pSkillsTxt) {
@@ -443,7 +443,7 @@ int32_t __fastcall SKILLNEC_ApplyCurseToUnit(D2UnitStrc * pUnit, D2NecroSkillArg
       return 0;
     }
     if (pNecroSkillArg->bRegisterExpireCallback) {
-      SKILLNEC_AssignCurseAiBehavior(pNecroSkillArg->pGame, pUnit, pNecroSkillArg->eSkill, pNecroSkillArg->nSkillLvl);
+      SKILLNEC_AssignCurseAiBehavior(pNecroSkillArg->pGame, pNecroSkillArg->pUnit, pUnit, pNecroSkillArg->eSkill, pNecroSkillArg->nSkillLvl);
     }
 
     for (int i = 1; i < 6; ++i) {

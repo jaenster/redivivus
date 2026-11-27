@@ -328,7 +328,7 @@ void __fastcall Q12_Callback03_ChangedLevel(struct D2QuestDataStrc * pQuestData,
 // A2Q4 - InitData. Quest registration/init. Allocates the A2Q4 quest-specific data block (0x48), zeroes state functions, wires the gossip table and the state-handler callbacks (0->Callback_00, 2->Callback_02, 3->Callback_03, 0xa->Callback_10, 0xb->Callback_11, 0xd->Callback_13), sets nQuestIdReal=TheArcaneSanctuary, fpActiveFilter=Q12_ActiveFilter, fpSequenceFilter=Q12_SequenceFilter, nSequenceQuestId=TheSummoner, and clears the Summoner/sun sub-flags.
 void __fastcall Q12_InitData(struct D2QuestDataStrc * pQuestData);
 void __fastcall PlaceJerhyn(struct D2QuestDataStrc * pQuestData, struct D2ObjectInitFnArg * pObjectInitArg);
-void __fastcall PlaceGuardInFrontOfJerhyn(struct D2QuestDataStrc * pQuestData, struct D2ObjectInitFnArg * pObjectInitArg);
+void __fastcall QUEST_PlaceGuardInFrontOfJerhyn(struct D2QuestDataStrc * pQuestData, struct D2ObjectInitFnArg * pObjectInitArg);
 BYTE __fastcall QUEST_CheckJerhynShouldBlock(::SGAMEDATA * pGame);
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).
 BOOL __fastcall QUEST_ShouldBlockJerhyn(::SGAMEDATA * pGame);

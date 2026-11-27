@@ -140,7 +140,7 @@ void __fastcall SKILLNEC_OnCurseExpire(struct D2UnitStrc * pUnit, eD2States eSta
 int __fastcall Unreferenced_005c33d0(int param_1);
 uint32_t __fastcall SKILLNEC_IsReviveOrRaiseSkeleton(eD2Skills eSkill);
 uint32_t __fastcall SKILLNEC_ValidateAttackableTarget(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);
-void __fastcall SKILLNEC_AssignCurseAiBehavior(::SGAMEDATA * pGame, int, struct D2UnitStrc * pUnit, int32_t nSkillId, int32_t pNecroSkillArg);
+void __fastcall SKILLNEC_AssignCurseAiBehavior(::SGAMEDATA * pGame, struct D2UnitStrc * pCaster, struct D2UnitStrc * pUnit, int32_t nSkillId, int32_t nSkillLvl);
 int32_t __fastcall SKILLNEC_ClampResistPenalty(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, int32_t nValue);
 // Applies a Necromancer curse (e.g. Dim Vision, Taunt, Terror, Attract and resist-penalty curses) to a target unit. If the curse requires AI registration, validates the target is an attackable monster of non-good alignment and that the corpse-consume gate passes. Clamps the primary resist-penalty stat; if attackable, builds a D2StateExArgStrc (skill, level, duration, aura state, optional expire-callback SKILLNEC_OnCurseExpire selected branchlessly) and applies the curse state via SetStateWithExpiryTime. Adds up to 5 extra clamped stats to the state's stat list, optionally registers curse AI behavior, updates anim speed, and fires aura target/aura events. Returns 1 on success, 0 if rejected.
 int32_t __fastcall SKILLNEC_ApplyCurseToUnit(struct D2UnitStrc * pUnit, struct D2NecroSkillArgStrc * pNecroSkillArg);

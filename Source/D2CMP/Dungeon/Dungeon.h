@@ -36,7 +36,7 @@ BYTE * __stdcall TILE_GetTileFlags(struct D2TileLibraryEntryStrc * pTileLibraryE
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
 void __stdcall TILEPROJECT_FreeSlot(struct D2TileLibraryHashStrc * * ppProjectSlots, struct D2TileLibraryHeaderStrc * pTileLibrary);
 int __stdcall TILEPROJECT_GetTileDataPtr(struct D2TileLibraryEntryStrc * pTileLibraryEntry);
-uint32_t __stdcall TILEPROJECT_GetTileOrientationIndex(uint32_t * pnOrientationIndex);
+int __stdcall TILEPROJECT_GetTileOrientationIndex(struct D2TileLibraryEntryStrc * pTileLibraryEntry);
 #endif // D2_MODULE_D2CMP
 
 } // namespace D2CMP::DUNGEON::Dungeon

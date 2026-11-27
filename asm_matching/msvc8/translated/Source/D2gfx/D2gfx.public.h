@@ -123,7 +123,7 @@ struct D2RendererFunctionsStrc {
     /* 0xB4 */ void (__fastcall *nfpDrawSolidSquare)(POINT *, BYTE, BYTE);
     /* 0xB8 */ void (__fastcall *nfpDrawSolidRectEx)(int, int, int, int, BYTE, DRAWMODE);
     /* 0xBC */ void (__fastcall *nfpDrawSolidRectAlpha)(int, int, int, int, DWORD, BYTE);
-    /* 0xC0 */ void (__fastcall *nfpDrawLine)(int, int, int, int, DWORD, BYTE);
+    /* 0xC0 */ void (__fastcall *nfpDrawLine)(int, int, int, int, BYTE, BYTE);
     /* 0xC4 */ void (__fastcall *nfpClearScreen)(BOOL);
     /* 0xC8 */ void (__fastcall *nfpDrawString)(int, int, char *, va_list);
     /* 0xCC */ void (__fastcall *nfpDrawLight)(DWORD *, DWORD *, int, int);

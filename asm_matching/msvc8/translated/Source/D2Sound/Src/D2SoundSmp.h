@@ -114,8 +114,8 @@ BOOL __fastcall SOUNDSMP_CheckBufferLost(struct D2SoundSmpStrc * ppnParam);
 // lpStartAddress parameter of CreateThread
 DWORD __stdcall D2SOUNDSMP_SoundUpdateThreadProc(void * lpThreadParam);
 void __stdcall SOUNDSMP_CreateSoundThread();
-float __stdcall SOUNDSMP_LogVolumeToLinear(float dwVolume);
-float __stdcall SOUNDSMP_LinearToLogVolume(float dwLinearValue, float dwScale);
+float __stdcall SOUNDSMP_LogVolumeToLinear(float fVolume);
+float __stdcall SOUNDSMP_LinearToLogVolume(float fLinearValue, float fScale);
 float SOUNDSMP_LogToLinearNoParam(float fValue);
 float SOUNDSMP_LinearToLogNoParam(float fValue, float fValue2);
 // No register arguments: EAX is first written by FNSTSW AX at 00516607 and only carries the x87 status word (1.14d asm).

@@ -1456,7 +1456,7 @@ int32_t __stdcall SKILLS_CalculateDamageReduction(int32_t nParam);
 int32_t __fastcall SKILLS_CalculateSynergyValue_Recursive(int32_t nLevel, int32_t nMinVal, int32_t nMaxVal);
 int32_t __stdcall SKILLS_CalcDiminishingReturns(int32_t nLevel, int32_t nMinVal, int32_t nMaxVal);
 int32_t __stdcall SKILLS_GetParam23WithDiminishing(int32_t nLevel, int32_t nSkillId);
-void __stdcall Unreferenced_006460b0(int32_t, int32_t, int32_t);
+void __stdcall Unreferenced_006460b0(int nUnused1, int nUnused2, int nUnused3);
 int __stdcall SKILL_CalcAttackFrames(struct D2UnitStrc * pUnit);
 // Evaluates one skill-description calc code (bParam selects which, 0..0x48) for skill eSkill at level/param nParam, optionally for unit pUnit; returns the computed value. Dispatches a large switch over the calc selector to skill range, mana cost (and shifted variants), to-hit, min/max/synergy damage (>>8 for display scaling), per-element min/max damage and length from the skill's descmissile entries, missile range, unit level/skill-level, aura/passive radii, and the raw skills.txt calc-column fields (auralencalc, calc[0..3], aurarangecalc, aurastatcalc[0..5], passivecalc[0..4], petmax, skpoints). For the raw-field cases it then runs the value through SKILLS_CompileSkillFormula against the skills calc-code blob. Bounds-checks eSkill; returns 0 on invalid skill/missile or out-of-range selector.
 uint32_t __stdcall SKILLDESC_EvalDescCalcValue(struct D2UnitStrc * pUnit, uint8_t byCalcType, eD2Skills eSkill, int nSkillLevel);

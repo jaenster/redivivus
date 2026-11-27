@@ -131,7 +131,7 @@ struct D2UnitStrc {
     /* 0x00 */ eD2UnitType eUnitType; // 0=PLAYER 1=MONSTER 2=OBJECT 3=MISSILE 4=ITEM 5=WARP
     /* 0x04 */ int nClassId; // hcIdx from PlrClass/MonStats/Objects/Missiles/Items/LvlWarps txt
     /* 0x08 */ struct D2PoolManagerStrc * pMemory;
-    /* 0x0C */ int nUnitGUID;
+    /* 0x0C */ uint32_t nUnitGUID;
     /* 0x10 */ uD2UnitMode eAnimMode;
     /* 0x14 */ D2UnitDataUnion pUnitData;
     /* 0x18 */ eAct nAct;

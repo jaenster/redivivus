@@ -1125,7 +1125,7 @@ void __fastcall Objects_InitFn19_JerhynPosition(D2ObjectInitFnArg * pInitArg) {
 
     for (pQuestData = pQuestCtrl->pQuestData; pQuestData; pQuestData = pQuestData->pPrev) {
       if (pQuestData->nQuestNoInternal == QUESTINT_TheArcaneSanctuary) {
-        PlaceGuardInFrontOfJerhyn(pQuestData, pInitArg);
+        QUEST_PlaceGuardInFrontOfJerhyn(pQuestData, pInitArg);
         return;
       }
     }
@@ -3125,7 +3125,7 @@ void __fastcall PlaceJerhyn(D2QuestDataStrc * pQuestData, D2ObjectInitFnArg * pO
     pA2Q4Data->nJerhynMonsterGUID = pSevenTombsData->nUnitGUID;
 }
 
-void __fastcall PlaceGuardInFrontOfJerhyn(D2QuestDataStrc * pQuestData, D2ObjectInitFnArg * pObjectInitArg) {
+void __fastcall QUEST_PlaceGuardInFrontOfJerhyn(D2QuestDataStrc * pQuestData, D2ObjectInitFnArg * pObjectInitArg) {
     D2RoomStrc* pRoom;
     int32_t nY;
     POINT pPoint;

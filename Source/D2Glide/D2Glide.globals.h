@@ -55,7 +55,7 @@ typedef void (__fastcall *fpDecodeSmacker)(char * szSmacker, D2SmackerContextStr
 typedef void (__fastcall *fpDrawClippedImage)(D2GfxDataStrc * pData, int nPosX, int nPosY, void * pCropRect, int nDrawMode);
 typedef void (__fastcall *fpDrawImageFast)(D2GfxDataStrc * pData, int nPosX, int nPosY, BYTE nPaletteIndex);
 typedef void (__fastcall *fpDrawLight)(DWORD * pLight, DWORD * pPlayerLight, int nPosX, int nPosY);
-typedef void (__fastcall *fpDrawLine)(int nXStart, int nYStart, int nXEnd, int nYEnd, DWORD dwColor, BYTE nAlpha);
+typedef void (__fastcall *fpDrawLine)(int nXStart, int nYStart, int nXEnd, int nYEnd, BYTE dwColor, BYTE nAlpha);
 typedef void (__fastcall *fpDrawPerspectiveImage)(D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwGamma, int nDrawMode, int nScreenMode, BYTE * pPalette);
 typedef void (__fastcall *fpDrawRect)(RECT * pRect, BYTE nPaletteIndex);
 typedef void (__fastcall *fpDrawRectEx)(RECT * pRect, BYTE nPaletteIndex);

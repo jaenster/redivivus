@@ -257,7 +257,7 @@ void __fastcall DrawSolidRectAlpha(int nX0, int nY0, int nX1, int nY1, DWORD dwC
 }
 
 // Win 48 / Mac 51. The colour is a palette index.
-void __fastcall DrawLine(int nX0, int nY0, int nX1, int nY1, DWORD dwColor, BYTE nAlpha) {
+void __fastcall DrawLine(int nX0, int nY0, int nX1, int nY1, BYTE dwColor, BYTE nAlpha) {
     OGL_DrawLine(nX0, nY0, nX1, nY1, static_cast<BYTE>(dwColor), nAlpha);
 }
 
