@@ -76,6 +76,9 @@ list(FILTER D2_MAC_SHARED_SOURCES EXCLUDE REGEX "/Source/(D2gfx|D2Hell)/Mac/")
 # only duplicate StormMac's API against Win32 calls the Mac layer does not have.
 list(FILTER D2_MAC_SHARED_SOURCES EXCLUDE REGEX
     "/Source/Storm/(WindowHandle|Source/(SBMP|SCMD|SErr|SFile|SLog|SMem|SReg|SSignature|SSTR))\\.cpp$")
+# Not in the 1.14d Mac binary: Lng.cpp is the Windows LNG resource DLL loader (no "LNG File" or
+# "D2.LNG" string, no LoadAcceleratorsA user, anywhere in DiabloII_macho).
+list(FILTER D2_MAC_SHARED_SOURCES EXCLUDE REGEX "/Source/D2Client/Core/Lng\\.cpp$")
 list(REMOVE_DUPLICATES D2_MAC_SHARED_SOURCES)
 list(SORT D2_MAC_SHARED_SOURCES)
 

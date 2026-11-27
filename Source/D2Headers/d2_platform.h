@@ -497,6 +497,7 @@ HDC GetDC(HWND hWnd);
 int ReleaseDC(HWND hWnd, HDC hDC);
 
 #endif // _WIN32
+#include "Source/D2Headers/d2_platform_mac.h"
 
 // 3dfx Glide API types
 typedef float FxFloat;
