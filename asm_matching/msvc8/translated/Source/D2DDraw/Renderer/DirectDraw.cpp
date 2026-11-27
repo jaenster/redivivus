@@ -654,12 +654,7 @@ BOOL __fastcall EndScene2() {
 }
 
 BOOL __fastcall GetBackBuffer(BYTE * pBuffer) {
-    uint8_t* pbSrcPixel;
-    int nX;
     DDSURFACEDESC ddSurfDescSize;
-    int nY;
-    int nWindowWidth;
-    int nRemapIndex;
     ddSurfDescSize.dwSize = sizeof(ddSurfDescSize);
     memset(&ddSurfDescSize.dwFlags, 0, sizeof(ddSurfDescSize) - sizeof(ddSurfDescSize.dwSize));
     if (!gpDDrawBackBuffer) {
@@ -672,31 +667,20 @@ BOOL __fastcall GetBackBuffer(BYTE * pBuffer) {
       return 0;
     }
 
-    uint8_t* pbDstPixel;
-    nY = 0;
-    nWindowWidth = RENDERER_nWindowWidth;
-    if (RENDERER_nWindowHeight > 0) {
-      do {
-        nX = 0;
-        pbDstPixel = pBuffer;
-        pbSrcPixel = (uint8_t*)ddSurfDescSize.lpSurface;
-        if (nWindowWidth > 0) {
-          do {
-            nRemapIndex = (uint32_t)*pbSrcPixel * 4;
-            *pbDstPixel = gaDirectDrawDitherPaletteRemap[(uint32_t)*pbSrcPixel * 4];
-            pbDstPixel[1] = gaDirectDrawDitherPaletteRemap[nRemapIndex + 1];
-            pbDstPixel[2] = gaDirectDrawDitherPaletteRemap[nRemapIndex + 2];
-            nX++;
-            pbDstPixel += 3;
-            nWindowWidth = RENDERER_nWindowWidth;
-            pbSrcPixel++;
-          } while (nX < RENDERER_nWindowWidth);
-        }
+    BYTE* pDstRow = pBuffer;
+    uint8_t* pSrcRow = (uint8_t*)ddSurfDescSize.lpSurface;
+    for (int nRow = 0; nRow < RENDERER_nWindowHeight; nRow++) {
+      uint8_t* pSrc = pSrcRow;
+      BYTE* pDst = pDstRow;
+      for (int nCol = 0; nCol < RENDERER_nWindowWidth; nCol++) {
+        uint8_t* pColor = &gaDirectDrawDitherPaletteRemap[*pSrc++ * 4];
+        *pDst++ = pColor[0];
+        *pDst++ = pColor[1];
+        *pDst++ = pColor[2];
+      }
 
-        ddSurfDescSize.lpSurface = (void*)((char*)ddSurfDescSize.lpSurface + ddSurfDescSize.lPitch);
-        nY++;
-        pBuffer += nWindowWidth * 3;
-      } while (nY < RENDERER_nWindowHeight);
+      pDstRow += RENDERER_nWindowWidth * 3;
+      pSrcRow += ddSurfDescSize.lPitch;
     }
 
     nHResult = gpDDrawBackBuffer->lpVtbl->Unlock(gpDDrawBackBuffer, (LPVOID)0x0);

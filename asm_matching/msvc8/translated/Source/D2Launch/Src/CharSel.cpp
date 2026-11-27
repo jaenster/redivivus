@@ -1998,13 +1998,12 @@ BOOL __stdcall CHARSEL_HandleCharListClick(D2ControlMsg * pControlMsg) {
     // Static local variables (originally global data)
     static unsigned int gdwLastCharListClickTick; D2_STATIC_GUARD_BSS(gdwLastCharListClickTick, "D2Launch::CharSel::CHARSEL_HandleCharListClick::gdwLastCharListClickTick");
 
-    BOOL bIsExpansion;
-    int nSlotIndex;
     if (!gnCharSelSelectedIndex) {
-      ::D2WinTextBox* nClickedControlId = (::D2WinTextBox*)pControlMsg->pControl;
+      int nPrevSelectedIndex = nSelectedCharIndex;
+      ::D2WinTextBox* pClickedControl = (::D2WinTextBox*)pControlMsg->pControl;
+      int nSlotIndex;
       for (nSlotIndex = 0; nSlotIndex < gnCharSelScreenSlotCount; nSlotIndex++) {
-        bIsExpansion = Fog::D2CheckExpansionGame();
-        if (bIsExpansion && nClickedControlId == (::D2WinTextBox*)gaCharSelExpansionIconControls[nSlotIndex] || nClickedControlId == gaCharSelScreenSlotControls[nSlotIndex]) {
+        if (Fog::D2CheckExpansionGame() && pClickedControl == (::D2WinTextBox*)gaCharSelExpansionIconControls[nSlotIndex] || pClickedControl == gaCharSelScreenSlotControls[nSlotIndex]) {
           break;
         }
       }
@@ -2018,19 +2017,16 @@ BOOL __stdcall CHARSEL_HandleCharListClick(D2ControlMsg * pControlMsg) {
         nSelectedCharIndex = -1;
       }
 
-      uint32_t dwTickNow = gdwLastCharListClickTick;
       if (pControlMsg->uMsg == 0x201) {
-        int nPrevSelectedIndex = nSelectedCharIndex;
-        dwTickNow = GetTickCount();
+        DWORD dwTickNow = GetTickCount();
         if (nSelectedCharIndex != -1 && nSelectedCharIndex == nPrevSelectedIndex && dwTickNow - gdwLastCharListClickTick < 500) {
-          bIsExpansion = SelectCharHandler(pControlMsg);
-          return bIsExpansion;
+          return SelectCharHandler(pControlMsg);
         }
+
+        gdwLastCharListClickTick = dwTickNow;
       }
 
-      gdwLastCharListClickTick = dwTickNow;
-      bIsExpansion = CHARSEL_UpdateSelectedCharDisplay();
-      return bIsExpansion;
+      return CHARSEL_UpdateSelectedCharDisplay();
     }
 
     return 1;
