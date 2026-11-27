@@ -1389,9 +1389,6 @@ static inline D2SkillsTxt* GetSkillsTxtInline(eD2Skills eSkill) {
 BOOL __fastcall Missiles_SrvHitFunc_HealTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     BOOL nMissileClassId;
     uint32_t dwTmp;
-    int nCurrentHp;
-    int32_t nHealAmount;
-    int nValue;
     int nMissileId;
     D2MissilesTxt* pMissileTxt = GetMissilesTxtInline(GetClassIdInline(pUnit));
     if (!pMissileTxt) {
@@ -1410,22 +1407,20 @@ BOOL __fastcall Missiles_SrvHitFunc_HealTarget(::SGAMEDATA * pGame, D2UnitStrc *
       if (nMissileClassId || (dwTmp = UNIT::SUnit::UNITS_CanUseSkillOnTarget(pGame, pOwnerUnit, pTarget, eSkill) , dwTmp != 0)) {
         pSkillTxt = D2Common::Skills::TXT_Skills_GetLine(eSkill);
         if (pSkillTxt) {
-          nHealAmount = D2Common::Skills::D2GetSkillCalc(pOwnerUnit, pSkillTxt->calc[0], eSkill, nSkillLevel);
-          nSkillLevel = D2Common::Skills::D2GetSkillCalc(pOwnerUnit, pSkillTxt->calc[1], eSkill, nSkillLevel);
-          dwTmp = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nSkillLevel * 0x100 + nHealAmount * -0x100);
-          nSkillLevel = dwTmp + nHealAmount * 0x100;
-          if (nSkillLevel <= 0) {
-            nSkillLevel = MISSILE_RollElementalDamage(pUnit, UNITSTAT_mindamage, ~UNITSTAT_strength, UNITSTAT_maxdamage);
+          int32_t nMinHeal = D2Common::Skills::D2GetSkillCalc(pOwnerUnit, pSkillTxt->calc[0], eSkill, nSkillLevel) << 8;
+          int32_t nMaxHeal = D2Common::Skills::D2GetSkillCalc(pOwnerUnit, pSkillTxt->calc[1], eSkill, nSkillLevel) << 8;
+          int32_t nHealAmount = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nMaxHeal - nMinHeal) + nMinHeal;
+          if (nHealAmount <= 0) {
+            nHealAmount = MISSILE_RollElementalDamage(pUnit, UNITSTAT_mindamage, ~UNITSTAT_strength, UNITSTAT_maxdamage);
           }
 
-          nCurrentHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_hitpoints, 0);
-          nHealAmount = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pTarget);
-          nValue = nCurrentHp + nSkillLevel;
-          if (nCurrentHp + nSkillLevel >= nHealAmount) {
-            nValue = nHealAmount;
+          int nNewHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_hitpoints, 0) + nHealAmount;
+          int nMaxHp = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pTarget);
+          if (nNewHp >= nMaxHp) {
+            nNewHp = nMaxHp;
           }
 
-          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTarget, UNITSTAT_hitpoints, nValue, 0);
+          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTarget, UNITSTAT_hitpoints, nNewHp, 0);
           if (pMissileTxt->ProgOverlay > 0) {
             D2Common::Units::SetOverlay(pTarget, (int)pMissileTxt->ProgOverlay, 0);
           }
@@ -1446,27 +1441,19 @@ BOOL __fastcall Missiles_SrvHitFunc_HealTarget(::SGAMEDATA * pGame, D2UnitStrc *
         }
       case UNIT_MONSTER:
         {
-          if (!pMissileTxt->sHitPar2) {
-            return 3;
-          }
-
           switch (pMissileTxt->sHitPar2) {
+            case 0:
+              return 3;
             case 2:
-              {
-                dwTmp = D2Common::Monsters::MONSTERS::IsDemon(pTarget);
-                if (dwTmp) {
-                  return 3;
-                }
-
-                break;
+              if (D2Common::Monsters::MONSTERS::IsDemon(pTarget)) {
+                return 3;
               }
+              break;
             default:
-              {
-                nMissileClassId = D2Common::Monsters::MONSTERS::MONSTER_IsMonsterUndead(pTarget);
-                if (nMissileClassId) {
-                  return 3;
-                }
+              if (D2Common::Monsters::MONSTERS::MONSTER_IsMonsterUndead(pTarget)) {
+                return 3;
               }
+              break;
           }
 
           break;
