@@ -175,7 +175,7 @@ int32_t DirectSoundCreate(void* lpGuid, IDirectSound** ppDS, void* pUnkOuter) {
 // 1.14d mac: 00032bcd
 // Makes the channels start at minimum volume from the next Play on, and keeps them there
 // once dwDelay milliseconds have passed (zero: for good, when the top bit is set).
-void DirectSound_SetMinVolumeDelay(DWORD dwUnused, DWORD dwDelay) {
+void DirectSound_SetMinVolumeDelay(DWORD dwDelay) {
     s_dwMinVolumeStart = GetTickCount();
     s_dwMinVolumeDelay = dwDelay;
     s_bMinVolume = dwDelay >> 31;

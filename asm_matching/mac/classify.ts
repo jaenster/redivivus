@@ -12,7 +12,9 @@ if (!cmpTsv || !insnsPath) { console.error("usage: classify.ts <cmp.tsv> <insns.
 const REG = /\b(e?[abcd]x|e?[sd]i|[abcd][lh]|xmm\d|st\(\d\))\b/g;
 const stripRegs = (s: string) => s.replace(REG, "R");
 const stripPic = (s: string) => s.replace(/\[(?:[a-z]+ \+ )?PIC [^\]]*\]|\bPIC [^\]]*/g, "[P]").replace(/call \S+$/, "call C");
-const stripStack = (s: string) => s.replace(/\[(ebp|esp)( [+-] 0x[0-9a-f]+)?\]/g, "[S]").replace(/^(sub|add) esp, 0x[0-9a-f]+/, "$1 esp, N");
+// Locals and outgoing arguments only: [ebp + n] is an incoming argument, and reading a
+// different one is a real difference, not a frame layout.
+const stripStack = (s: string) => s.replace(/\[(ebp - 0x[0-9a-f]+|esp( \+ 0x[0-9a-f]+)?)\]/g, "[S]").replace(/^(sub|add) esp, 0x[0-9a-f]+/, "$1 esp, N");
 const norm = (f: (s: string) => string) => (a: string[]) => a.map(f);
 const sortedKey = (a: string[]) => [...a].sort().join("\n");
 const calls = (a: string[]) => a.filter((x) => /^call /.test(x) && x !== "call $+5").map((x) => x.replace(/^call /, "")).filter((x) => x !== "?" && !/^(e[abcd]x|e[sd]i)$/.test(x));
