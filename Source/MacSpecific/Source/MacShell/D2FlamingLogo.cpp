@@ -178,7 +178,7 @@ void FLAMINGLOGO_Shutdown(void) {
 // 1.14d mac: 0019f61c
 // Every second tick (never more than ten frames behind): the next frame, copied into the
 // dialog item, through the mask when there is one.
-void FLAMINGLOGO_DrawFrame(void) {
+void FLAMINGLOGO_DrawFrame(ControlRef) {
     if (!s_pFrames)
         return;
     uint32_t dwTicks = TickCount();
