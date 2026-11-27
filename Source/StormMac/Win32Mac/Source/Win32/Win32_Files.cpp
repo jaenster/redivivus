@@ -11,13 +11,14 @@
 // A file handle (type 2) holds the refnum of one open fork, data or resource, and
 // the FSSpec it was opened through. Positions and sizes are 32-bit: a high
 // distance is refused.
-#include "Win32Mac.h"
+#include "Win32GDI.h"
 
 #if !defined(_WIN32) && D2_OS_MAC
 
 #include <CoreServices/CoreServices.h>
 #include <string.h>
 #include <time.h>
+#include <stdlib.h>
 
 // 1.14d mac: 00021a94
 // The File Manager refnum behind a file handle.
@@ -460,6 +461,190 @@ void SetFileTimeAtClose(HANDLE hFile) {
             PBSetCatInfoSync(&tPB);
         }
     }
+}
+
+// MoreFiles (third party), 1.14d mac: 00036f91
+extern "C" OSErr FSpIterateDirectory(const FSSpec* pSpec, short nMaxLevels,
+                                     void (*pfnFilter)(const CInfoPBRec*, Boolean*, void*), void* pYourData);
+bool PATH_IsSeparator(char cChar);
+void FlushPartialPathCache(void);
+void SetLastError(DWORD dwErrCode);
+
+// 1.14d mac: 000226f8
+// A path that is not a Mac path token succeeds without doing anything; a directory that
+// exists sets ERROR_ALREADY_EXISTS and still succeeds.
+BOOL CreateDirectory(char* szPathName, void* pSecurityAttributes) {
+    BOOL bResult = 1;
+    if (PATH_IsMacPathToken(szPathName) && szPathName[0xD] != '\0') {
+        char szTrimmed[261];
+        char* szPath = szPathName;
+        size_t nLen = strlen(szPathName);
+        if (PATH_IsSeparator(szPathName[nLen - 1])) {
+            szPath = szTrimmed;
+            strncpy(szPath, szPathName, nLen - 1);
+            szTrimmed[nLen - 1] = '\0';
+        }
+        FSSpec tSpec;
+        FilepathToFSSpec(&tSpec, szPath, 0);
+        OSErr nErr = noErr;
+        bool bExists = false;
+        if (tSpec.name[0] != '\0') {
+            SInt32 nCreatedDirId;
+            nErr = FSpDirCreate(&tSpec, smSystemScript, &nCreatedDirId);
+            if (nErr == dupFNErr) {
+                SetLastError(0xB7);
+                nErr = dupFNErr;
+                bExists = true;
+            }
+        }
+        bResult = (nErr == noErr) | bExists;
+        FlushPartialPathCache();
+    }
+    return bResult;
+}
+
+struct FindMatchContext {
+    Win32MacFindList* pList;      // 0x000
+    unsigned char aMask[256];     // 0x004  Pascal string
+    OSType nType;                 // 0x104  0 = any
+    OSType nCreator;              // 0x108  0 = any
+};
+
+// 1.14d mac: 00022a33
+// FSpIterateDirectory's callback: the entry is recorded at the end of the list and kept
+// (the count moves on) when it matches the mask and the type and creator.
+void FindFile_MatchCallback(const CInfoPBRec* pCatInfo, Boolean* pbQuit, void* pvContext) {
+    FindMatchContext* pContext = (FindMatchContext*)pvContext;
+    Win32MacFindList* pList = pContext->pList;
+    Win32MacFSSpec* pEntry = &pList->pEntries[pList->nCount];
+    pEntry->vRefNum = pCatInfo->hFileInfo.ioVRefNum;
+    pEntry->parID = pCatInfo->hFileInfo.ioFlParID;
+    memmove(pEntry->name, pCatInfo->hFileInfo.ioNamePtr, pCatInfo->hFileInfo.ioNamePtr[0] + 1);
+    const unsigned char* aMask = pContext->aMask;
+    unsigned nMaskLen = aMask[0];
+    if (nMaskLen != 0) {
+        const unsigned char* pName = pCatInfo->hFileInfo.ioNamePtr;
+        if (aMask[1] == '*') {
+            if (aMask[2] == '.' && aMask[3] != '*') {
+                if (_strnicmp((const char*)aMask + 2, (const char*)pName + (2 - nMaskLen) + pName[0], nMaskLen - 1) !=
+                    0) {
+                    goto done;
+                }
+            } else if (nMaskLen != 1 && (nMaskLen != 3 || aMask[2] != '.' || aMask[3] != '*')) {
+                goto done;
+            }
+        } else {
+            if (aMask[nMaskLen] == '*') {
+                if (_strnicmp((const char*)aMask + 1, (const char*)pName + 1, nMaskLen - 1) != 0) {
+                    goto done;
+                }
+            } else if (!EqualString(aMask, pName, false, false)) {
+                goto done;
+            }
+        }
+    }
+    if ((pContext->nCreator == 0 || pContext->nCreator == pCatInfo->hFileInfo.ioFlFndrInfo.fdCreator) &&
+        (pContext->nType == 0 || pContext->nType == pCatInfo->hFileInfo.ioFlFndrInfo.fdType)) {
+        pList->nCount++;
+    }
+done:
+    *pbQuit = pList->nCapacity <= pList->nCount;
+}
+
+BOOL FindNextFile(HANDLE hFind, Win32MacFindData* pFindData);
+BOOL FindClose(HANDLE hFind);
+
+// 1.14d mac: 000227f8
+// Collects the matches of the directory into a find handle (type 3) and returns it with
+// the first entry; the mask "*.*" (or "*" without type/creator) answers with "..".
+HANDLE FindFirstFile(char* szPattern, Win32MacFindData* pFindData) {
+    HANDLE hFind = 0;
+    if (PATH_IsMacPathToken(szPattern)) {
+        char szDir[260];
+        char szMask[260];
+        strncpy(szDir, szPattern, 0x104);
+        char* pSlash = strrchr(szDir, '\\');
+        strcpy(szMask, pSlash + 1);
+        pSlash[1] = '\0';
+        FSSpec tSpec;
+        if (FilepathToFSSpec(&tSpec, szDir, 0) == 0) {
+            Win32MacPathToken* pToken = FilepathWorkingDirectory(szDir);
+            int32_t nCreator = pToken->n08;
+            int32_t nType = pToken->n0C;
+            Win32MacFindList* pList = (Win32MacFindList*)MemAlloc(sizeof(Win32MacFindList), 0x100);
+            pList->pEntries = (Win32MacFSSpec*)MemAlloc(70000, 0x100);
+            pList->nCapacity = 1000;
+            FindMatchContext tContext;
+            tContext.pList = pList;
+            bzero(tContext.aMask, sizeof(tContext.aMask));
+            tContext.nType = nType;
+            tContext.nCreator = nCreator;
+            CopyCStringToPascal(szMask, tContext.aMask);
+            FSpIterateDirectory(&tSpec, 1, FindFile_MatchCallback, &tContext);
+            pList->pEntries = (Win32MacFSSpec*)MemReAlloc(pList->pEntries, pList->nCount * sizeof(Win32MacFSSpec));
+            pList->nCapacity = pList->nCount;
+            hFind = AllocWin32Handle(3);
+            GetWin32HandlePtr(hFind)->pType5Data = pList;
+            if (strcmp("*.*", szMask) != 0 && (strcmp("*", szMask) != 0 || nType != 0 || nCreator != 0)) {
+                if (!FindNextFile(hFind, pFindData)) {
+                    FindClose(hFind);
+                    hFind = 0;
+                }
+                return hFind;
+            }
+            bzero(pFindData, sizeof(Win32MacFindData));
+            pFindData->dwFileAttributes = 0x10;
+            pFindData->cFileName[0] = '.';
+            pFindData->cFileName[1] = '.';
+            pFindData->cFileName[2] = '\0';
+        }
+    }
+    return hFind;
+}
+
+// 1.14d mac: 00022b6a
+// Entries whose catalog lookup fails are skipped; 0 when none are left.
+BOOL FindNextFile(HANDLE hFind, Win32MacFindData* pFindData) {
+    Win32HandleObject* pHandle = GetWin32HandlePtr(hFind);
+    Win32MacFindList* pList;
+    Win32MacFSSpec* pEntry;
+    CInfoPBRec tPB;
+    do {
+        pList = (Win32MacFindList*)pHandle->pType5Data;
+        int nIndex = pList->nNext;
+        if (pList->nCount <= nIndex) {
+            return 0;
+        }
+        pList->nNext = nIndex + 1;
+        pEntry = &pList->pEntries[nIndex];
+        bzero(pFindData, sizeof(Win32MacFindData));
+        tPB.hFileInfo.ioFDirIndex = 0;
+        tPB.hFileInfo.ioVRefNum = pEntry->vRefNum;
+        tPB.hFileInfo.ioDirID = pEntry->parID;
+        tPB.hFileInfo.ioNamePtr = pEntry->name;
+    } while (PBGetCatInfoSync(&tPB) != noErr);
+    CopyPascalStringToC(pEntry->name, pFindData->cFileName);
+    if (tPB.hFileInfo.ioFlAttrib & 0x10) {
+        pFindData->dwFileAttributes |= 0x10;
+    }
+    if (pEntry->name[0] != 0 && pEntry->name[1] == '.') {
+        pFindData->dwFileAttributes |= 2;
+    }
+    MacDateTimeToFileTime(&tPB.hFileInfo.ioFlCrDat, &pFindData->tCreationTime);
+    MacDateTimeToFileTime(&tPB.hFileInfo.ioFlMdDat, &pFindData->tLastAccessTime);
+    MacDateTimeToFileTime(&tPB.hFileInfo.ioFlMdDat, &pFindData->tLastWriteTime);
+    pFindData->nFileSizeLow = tPB.hFileInfo.ioFlLgLen;
+    return 1;
+}
+
+// 1.14d mac: 00022c53
+BOOL FindClose(HANDLE hFind) {
+    Win32HandleObject* pHandle = GetWin32HandlePtr(hFind);
+    Win32MacFindList* pList = (Win32MacFindList*)pHandle->pType5Data;
+    MemFree(pList->pEntries, 0);
+    MemFree(pList, 0);
+    FreeWin32Handle(hFind);
+    return 1;
 }
 
 #endif  // D2_OS_MAC

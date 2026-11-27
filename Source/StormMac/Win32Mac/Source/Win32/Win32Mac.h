@@ -6,8 +6,9 @@
 // one (see Source/StormMac/README.md): Win32_utils.cpp's 1.14d __FILE__ is
 // ".../StormMac/Storm Mac/Win32 Mac/Source/Win32/Win32_utils.cpp" (0030ece4).
 // Win32_Files.cpp, Win32_Process.cpp and Win32_TimeAndDate.cpp carry the names the
-// PPC Storm 1.10 Beta's static initialisers give their code; unknown_*.cpp hold units
-// whose original file name no binary records.
+// PPC Storm 1.10 Beta's static initialisers give their code; the other files here
+// (Win32_Events.cpp, Win32_Memory.cpp, Win32_Rect.cpp ...) hold units whose original
+// file name no binary records.
 //
 // Mac-only: every file here compiles to nothing unless D2_OS_MAC. Each guard is spelled
 // `#if !defined(_WIN32) && D2_OS_MAC`: the VC8 oracle's translator reads every source in

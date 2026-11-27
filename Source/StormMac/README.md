@@ -43,14 +43,14 @@ Two sources of evidence:
 |`Win32_Files.cpp`|00021a94..00022ca8|12 of 16|beta `__sinit_Win32_Files_cpp`, same functions in the same order|
 |`Win32_Process.cpp`|00029b68..0002b1fe|31 of 43|beta `__sinit_Win32_Process_cpp`, same order; SetLastError inlined into GetModuleFileName|
 |`Win32_TimeAndDate.cpp`|0002c0ee..0002c670|16 of 16|beta `__sinit_Win32_TimeAndDate_cpp`, same order|
+|`Win32_Events.cpp`|000216b0..00021a94|7|beta: a separate unit linked before Win32_Files.cpp|
+|`Win32_CloseHandle.cpp`|00025660..000257bc|1|separate from the handle table: it calls GetWin32HandlePtr out of line, inlined if merged|
+|`Win32_Handles.cpp`|000257bc..00026d14|23|handle table, libc++ deque instantiations; ends with the static initialiser 00026c70|
+|`Win32_Memory.cpp`|000289b8..00028e09|19|beta: a unit of its own (SMemZero/Fill/Copy are SMem_Mac.cpp in the beta, but sit inside this run in 1.14d)|
+|`Win32_Messages.cpp`|00028e09..00029968|19|beta: a unit of its own|
+|`Win32_Priv.cpp`|00029968..00029b68|6|beta: Priv_ functions linked before Win32_Process.cpp; not in it in 1.14d (ExitProcess's body changes Priv_Alloc if merged)|
+|`Win32_Threads.cpp`|0002bdea..0002c0ee|11|beta: a unit linked before Win32_utils.cpp|
 |`Win32_Window.cpp`|0002eae0..00031b0c|65|window manager (classes, window tree, focus, paint, props, key maps); no binary records the file name, `Win32_Window` follows the Win32_<Family> naming. Key tables 00031a84/00031af6 end the run before the region code (00031b0d, Win32_Region) |
-|`unknown_events.cpp`|000216b0..00021a94|7|beta: a separate unit linked before Win32_Files.cpp|
-|`unknown_closehandle.cpp`|00025660..000257bc|1|separate from the handle table: it calls GetWin32HandlePtr out of line, inlined if merged|
-|`unknown_handles.cpp`|000257bc..00026d14|3|ends with the static initialiser 00026c70|
-|`unknown_memory.cpp`|000289b8..00028e09|19|beta: a unit of its own (SMemZero/Fill/Copy are SMem_Mac.cpp in the beta, but sit inside this run in 1.14d)|
-|`unknown_messages.cpp`|00028e09..00029968|19|beta: a unit of its own|
-|`unknown_priv.cpp`|00029968..00029b68|6|beta: Priv_ functions linked before Win32_Process.cpp; not in it in 1.14d (ExitProcess's body changes Priv_Alloc if merged)|
-|`unknown_threads.cpp`|0002bdea..0002c0ee|11|beta: a unit linked before Win32_utils.cpp|
 |`MacDisplayDriver.cpp`|00036830..000371f9 (less the unnamed 00036dc7..00036f91)|46|name unrecorded: one driver table (default display driver: cursor counter, palette, bounds) with its registration calls, then Accel_DeleteAcceleratorList and MACDISPLAY_FindBestDisplayMode by address order; D2OpenGL imports the MACCURSOR_*/MACDISPLAY_* names. Palette get/set stay DIFF: the original's indexed displacement is a link-time address|
 |`Win32_Region.cpp`|00031b0d..00032b50|21|name unrecorded: the strip-region run between the window manager's key-code helpers and the DirectX shims; one heap-block region type, so one unit|
 |`Win32_DirectSound.cpp`|00032b50..00033a24|31|name unrecorded: DirectDrawCreate, DirectSoundCreate and the IDirectSound/IDirectSoundBuffer/IKsPropertySet bodies share the sound-buffer globals 003f481c..003f4828|

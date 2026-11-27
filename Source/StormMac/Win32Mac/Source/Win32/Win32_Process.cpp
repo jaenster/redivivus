@@ -9,7 +9,7 @@
 // functions, GetCommandLine, the Interlocked functions, the critical sections, the locale
 // queries, GetLastError, SetLastError and MessageBox: 1.14d's run from 00029b68 to
 // 0002b1fe. The Priv_ allocator and clipboard linked just before it are another unit
-// (unknown_priv.cpp).
+// (Win32_Priv.cpp).
 // SetLastError is inlined into GetModuleFileName in 1.14d, so they share a unit there too.
 // The folder is that of Win32_utils.cpp, the one Win32_ file whose 1.14d path is in the
 // binary. GetCommandLine (0002ab8e) is Objective-C and the locale functions
@@ -31,6 +31,7 @@
 #include <netdb.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
 #include <sys/socket.h>
 
 #define MODULE_DDRAW ((HANDLE)0xC0000002)
@@ -47,6 +48,11 @@ typedef BOOL (*Win32MacDllMain)(HANDLE hModule, DWORD dwReason, LPVOID pReserved
 
 // 1.14d mac: 0002b1d1
 int MessageBox(void* hWnd, LPCSTR szText, LPCSTR szCaption, UINT uType);
+// Win32_FP.cpp
+int FPMessageBox(char* szText, char* szCaption, DWORD dwFlags);
+int32_t GetLanguage(void);
+int32_t GetUserDefaultLangID(void);
+WORD LOCALE_BuildLangIdFromMac(void);
 // Defined below (0002a41f).
 void ExitProcess(UINT uExitCode);
 // 1.14d mac: 00033a24
@@ -648,6 +654,313 @@ void LeaveCriticalSection(LPCRITICAL_SECTION pCriticalSection) {
 // 1.14d mac: 0002af4c
 void DeleteCriticalSection(LPCRITICAL_SECTION pCriticalSection) {
     pthread_mutex_destroy(pCriticalSection);
+}
+
+// Mac region code (the 'itlc' word) to Win32 sublanguage.
+// 1.14d mac: 00321ea8
+const DWORD g_aRegionSubLangId[0x6B] = {
+    1, 1, 2, 1, 1, 1, 2, 1, 1, 0, 2, 3, 1, 0, 0, 3,
+    0, 2, 4, 2, 0, 0, 0, 0, 0, 0, 1, 5, 4, 4, 2, 1,
+    0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 6, 1, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 2, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 3, 0, 0, 0,
+    0, 0, 2, 0, 4, 2, 0, 0, 0, 0, 0,
+};
+
+// Mac script/language code (the 'itlb' word) to Win32 primary language.
+// 1.14d mac: 00322054
+const DWORD g_aMacLangPrimaryId[0x95] = {
+    9, 12, 7, 16, 19, 29, 10, 6, 22, 20, 13, 17, 1, 11, 8, 15,
+    0, 31, 26, 0, 0, 0, 30, 18, 39, 21, 14, 37, 38, 0, 56, 41,
+    25, 4, 0, 0, 28, 24, 5, 27, 36, 0, 26, 0, 2, 34, 35, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    42, 33, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+    0, 45, 3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 54, 0, 0,
+    0, 0, 0, 0, 0,
+};
+
+// The LCIDs GetLocaleInfo knows by name: primary language, sublanguage, and the index into
+// g_aLocaleStrings.
+struct Win32MacLocaleMap {
+    WORD wPrimaryLang;
+    WORD wSubLang;
+    DWORD dwStringsIndex;
+};
+// 1.14d mac: 003972a4
+Win32MacLocaleMap g_aLocaleMap[8] = {
+    {9, 1, 0},
+    {12, 1, 1},
+    {9, 2, 2},
+    {7, 1, 3},
+    {16, 1, 4},
+    {19, 1, 5},
+    {10, 1, 8},
+    {22, 1, 71},
+};
+
+// Per region: language code, country code, abbreviated country name, country name.
+struct Win32MacLocaleStrings {
+    const char* szLanguageCode;   // LOCALE_SABBREVLANGNAME
+    const char* szCountryCode;    // LOCALE_ICOUNTRY
+    const char* szCountryAbbrev;  // LOCALE_SABBREVCTRYNAME
+    const char* szCountryName;    // LOCALE_SENGCOUNTRY
+};
+// 1.14d mac: 003972e4
+Win32MacLocaleStrings g_aLocaleStrings[0x6C] = {
+    {"ENU", "1", "USA", "United States"},
+    {"FRA", "33", "FRA", "France"},
+    {"ENG", "44", "GBR", "United Kingdom"},
+    {"DEU", "49", "DEU", "Germany"},
+    {"ITA", "39", "ITA", "Italy"},
+    {"NLD", "31", "NLD", "Netherlands"},
+    {"NLB", "32", "BEL", "Belgium"},
+    {"SVE", "46", "SWE", "Sweden"},
+    {"ESP", "34", "ESP", "Spain"},
+    {"DAN", "45", "DNK", "Denmark"},
+    {"PTG", "351", "PRT", "Portugal"},
+    {"FRC", "2", "CAN", "Canada"},
+    {"NOR", "47", "NOR", "Norway"},
+    {"HEB", "972", "ISR", "Israel"},
+    {"", "", "", ""},
+    {"ENA", "61", "AUS", "Australia"},
+    {"", "", "", ""},
+    {"FIN", "358", "FIN", "Finland"},
+    {"FRS", "41", "CHE", "Switzerland"},
+    {"DES", "41", "CHE", "Switzerland"},
+    {"ELL", "30", "GRC", "Greece"},
+    {"ISL", "354", "ISL", "Iceland"},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"TRK", "90", "TUR", "Turkey"},
+    {"", "", "", ""},
+    {"NLD", "31", "NLD", "Netherlands"},
+    {"DEL", "352", "LUX", "Luxembourg"},
+    {"ENC", "2", "CAN", "Canada"},
+    {"ENC", "2", "CAN", "Canada"},
+    {"PTG", "351", "PRT", "Portugal"},
+    {"NOR", "47", "NOR", "Norway"},
+    {"DAN", "45", "DNK", "Denmark"},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"ITS", "41", "CHE", "Switzerland"},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"ROM", "40", "ROM", "Romania"},
+    {"", "", "", ""},
+    {"LTH", "370", "LTU", "Lithuania"},
+    {"PLK", "48", "POL", "Poland"},
+    {"HUN", "36", "HUN", "Hungary"},
+    {"ETI", "372", "EST", "Estonia"},
+    {"LVI", "371", "LVA", "Latvia"},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"FAR", "981", "IRN", "Iran"},
+    {"RUS", "7", "RUS", "Russia"},
+    {"ENI", "353", "IRL", "Ireland"},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"CSY", "42", "CZE", "Czech Republic"},
+    {"SKY", "42", "SVK", "Slovakia"},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"BEL", "375", "BLR", "Belarus"},
+    {"UKR", "380", "UKR", "Ukraine"},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"SRL", "381", "SPB", "Serbia"},
+    {"SLV", "386", "SVN", "Slovenia"},
+    {"", "", "", ""},
+    {"HRV", "385", "HRV", "Croatia"},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"PTB", "55", "BRA", "Brazil"},
+    {"BGR", "359", "BGR", "Bulgaria"},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"ESM", "52", "MEX", "Mexico"},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"FRA", "33", "FRA", "France"},
+    {"DEA", "43", "AUT", "Austria"},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"FRB", "32", "BEL", "Belgium"},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"NON", "47", "NOR", "Norway"},
+    {"AFK", "27", "ZAF", "South Africa"},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {"", "", "", ""},
+    {NULL, NULL, NULL, NULL},
+};
+
+// 1.14d mac: 0002af55
+// LOCALE_SABBREVLANGNAME (3), LOCALE_ICOUNTRY (5), LOCALE_SABBREVCTRYNAME (7) and
+// LOCALE_SENGCOUNTRY (0x1002) of the region the LCID names (the user's when it names none);
+// the length with the terminator, 0 for an unknown type.
+//
+// The map holds 8 entries and the loop stops there, but the test after it is against 0x95:
+// the original takes the map's entry even when none matched (it reads the one past the end).
+int GetLocaleInfo(DWORD dwLocale, DWORD dwLCType, char* szData, size_t nDataSize) {
+    const Win32MacLocaleMap* pLocaleMap = g_aLocaleMap;
+    int nRegion;
+    if (dwLocale != 0 && dwLocale != 0x400 && dwLocale != 0x800) {
+        DWORD dwSubLang = (dwLocale >> 10) & 0x3F;
+        DWORD nIndex = 0;
+        do {
+            if (pLocaleMap[nIndex].wPrimaryLang == (dwLocale & 0x3FF) &&
+                (dwSubLang == 0 || dwSubLang == pLocaleMap[nIndex].wSubLang)) {
+                break;
+            }
+            nIndex++;
+        } while (nIndex < 8);
+        if (nIndex != 0x95) {
+            nRegion = pLocaleMap[nIndex].dwStringsIndex;
+            goto haveRegion;
+        }
+    }
+    nRegion = GetUserDefaultLangID();
+haveRegion:
+    int nResult = 0;
+    const char* szValue;
+    if (dwLCType < 0x1002) {
+        if (dwLCType == 3) {
+            szValue = g_aLocaleStrings[nRegion].szLanguageCode;
+        } else if (dwLCType == 5) {
+            szValue = g_aLocaleStrings[nRegion].szCountryCode;
+        } else {
+            if (dwLCType != 7) {
+                return 0;
+            }
+            szValue = g_aLocaleStrings[nRegion].szCountryAbbrev;
+        }
+    } else {
+        if (dwLCType != 0x1002) {
+            return 0;
+        }
+        szValue = g_aLocaleStrings[nRegion].szCountryName;
+    }
+    if (szValue != NULL) {
+        size_t nLength = strlen(szValue);
+        if ((int)nDataSize > 0) {
+            strncpy(szData, szValue, nDataSize);
+            szData[nDataSize - 1] = '\0';
+            nLength = strlen(szData);
+        }
+        nResult = nLength + 1;
+    }
+    return nResult;
+}
+
+// 1.14d mac: 0002b05d
+// Win32 LANGID (sublanguage << 10 | primary language) of the Mac language and region;
+// US English when either is out of range.
+WORD LOCALE_BuildLangIdFromMac(void) {
+    DWORD nMacLanguage = GetLanguage();
+    DWORD nMacRegion = GetUserDefaultLangID();
+    DWORD wLangId = 0x409;
+    if (nMacLanguage < 0x95 && nMacRegion < 0x6B) {
+        wLangId = (g_aRegionSubLangId[nMacRegion] << 10) | g_aMacLangPrimaryId[nMacLanguage];
+    }
+    return (WORD)wLangId;
+}
+
+// 1.14d mac: 0002b0a0
+// The language word of the 'itlb' resource the system 'itlc' names; 0 when either is missing.
+int32_t GetLanguage(void) {
+    int32_t nResult = 0;
+    Handle hItlc = GetResource('itlc', 0);
+    if (hItlc != NULL) {
+        HLock(hItlc);
+        nResult = 0;
+        if (*(short**)hItlc != NULL) {
+            Handle hItlb = GetResource('itlb', **(short**)hItlc);
+            if (hItlb != NULL) {
+                HLock(hItlb);
+                nResult = *(short*)(*(char**)hItlb + 0xC);
+                HUnlock(hItlb);
+                ReleaseResource(hItlb);
+            }
+        }
+        HUnlock(hItlc);
+        ReleaseResource(hItlc);
+    }
+    return nResult;
+}
+
+// 1.14d mac: 0002b126
+// The region word of the system 'itlc' resource; 0 when it is missing.
+int32_t GetUserDefaultLangID(void) {
+    int32_t nResult = 0;
+    Handle hItlc = GetResource('itlc', 0);
+    if (hItlc != NULL) {
+        HLock(hItlc);
+        nResult = 0;
+        if (*hItlc != NULL) {
+            nResult = *(short*)(*(char**)hItlc + 0xC);
+        }
+        HUnlock(hItlc);
+        ReleaseResource(hItlc);
+    }
+    return nResult;
+}
+
+// 1.14d mac: 0002b177
+WORD LOCALE_GetUserLocaleId(void) {
+    return LOCALE_BuildLangIdFromMac();
+}
+
+// 1.14d mac: 0002b180
+WORD LOCALE_GetDefaultLangId(void) {
+    DWORD nMacLanguage = GetLanguage();
+    DWORD nMacRegion = GetUserDefaultLangID();
+    DWORD wLangId = 0x409;
+    if (nMacLanguage < 0x95 && nMacRegion < 0x6B) {
+        wLangId = (g_aRegionSubLangId[nMacRegion] << 10) | g_aMacLangPrimaryId[nMacLanguage];
+    }
+    return (WORD)wLangId;
+}
+
+// 1.14d mac: 0002b1c0
+DWORD GetLastError(void) {
+    return g_dwLastError;
+}
+
+// 1.14d mac: 0002b1d1
+int MessageBox(void* hWnd, LPCSTR szText, LPCSTR szCaption, UINT uType) {
+    return FPMessageBox((char*)szText, (char*)szCaption, uType);
+}
+
+// 1.14d mac: 0002b1f5
+int WSOCK_CloseSocket(int nSocket) {
+    return close(nSocket);
 }
 
 #endif  // D2_OS_MAC
