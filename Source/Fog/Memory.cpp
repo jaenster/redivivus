@@ -1021,4 +1021,17 @@ void * __fastcall ReAllocServerMemory(D2PoolManagerStrc * pPoolManagerStrc, void
     return pResult;
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+// The Mac binary keeps two empty memory-manager hooks that return 0; MSVC folded them away.
+// 1.14d mac: 002f33e9
+int32_t MEMORY_HookReturnsZeroA() {
+    return 0;
+}
+
+// 1.14d mac: 002f33ff
+int32_t MEMORY_HookReturnsZeroB() {
+    return 0;
+}
+#endif
+
 } // namespace Fog::Memory

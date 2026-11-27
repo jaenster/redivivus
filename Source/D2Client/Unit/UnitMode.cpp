@@ -997,4 +997,22 @@ void __fastcall UNITMODE_ExecuteDeferredAction(D2UnitStrc * pUnit) {
 
 static void * keep_00480e30 = (0 ? (UNITMODE_SetModeAndLoadCof(*(int32_t *)0, *(D2UnitStrc * *)0), (void *)0) : (void *)0);
 
+#if !defined(_WIN32) && D2_OS_MAC
+// Mac only: attacks with the click's modifier choosing attack or alternate attack, then queues
+// the skill and target on a player as the pending interaction.
+// 1.14d mac: 00128831
+void UNITMODE_ExecuteAttackAndQueueSkill(D2UnitStrc * pUnit, int32_t eQueuedSkill, int32_t eTargetType, int32_t nTargetGUID) {
+    uint32_t dwClickFlags = GAME::Game::GetMouseClickFlags();
+    eD2UnitModeAction nActionType = (dwClickFlags & 8) ? UNITMODEACTION_ATTACK_ALT : UNITMODEACTION_ATTACK;
+    UNITMODE_ExecuteSkillAction(nActionType, pUnit, eTargetType, nTargetGUID, 0);
+    if (pUnit && pUnit->eUnitType == UNIT_PLAYER && pUnit->pUnitData.pUnitDataPlayer) {
+      D2UnitDataPlayerStrc* pPlayerData = pUnit->pUnitData.pUnitDataPlayer;
+      pPlayerData->bHasPendingInteract = 1;
+      pPlayerData->eQueuedSkillId = eQueuedSkill;
+      pPlayerData->eTargetUnitType = eTargetType;
+      pPlayerData->nTargetUnitGUID = nTargetGUID;
+    }
+}
+#endif
+
 } // namespace D2Client::UNIT::UnitMode

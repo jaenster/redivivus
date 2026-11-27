@@ -377,3 +377,26 @@ template<> ::SGAMEDATA * TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATAL
     ::SGAMEDATA* pSVar1 = this->TSHashTable<::SGAMEDATA, HASHKEY_NONE>::New(nNewToken, &this->tKey, 0, 0);
     return pSVar1;
 }
+
+#if !defined(_WIN32) && D2_OS_MAC
+// The Mac binary initialises a game hash table in a function of its own (the Windows build has it
+// inline in the table constructor): four slots, each slot list linked through m_linktoslot.
+// 1.14d mac: 001af228
+void TSHashTableSGAMEDATA_Initialize(TSHashTable<SGAMEDATA, HASHKEY_NONE> * pTable) {
+    pTable->nSlotMask = 3;
+    pTable->tSlotListArray.SetCount(4);
+    uint32_t nSlot = 0;
+    do {
+      TSExplicitList<::SGAMEDATA, -572662307>* pSlotList = &pTable->tSlotListArray.m_data[nSlot];
+      if (pSlotList->m_linkoffset != offsetof(::SGAMEDATA, m_linktoslot)) {
+        pSlotList->UnlinkAll();
+        TSLink<::SGAMEDATA>* pTerminator = &pSlotList->m_terminator;
+        pTerminator->m_prevlink = pTerminator;
+        pSlotList->m_linkoffset = offsetof(::SGAMEDATA, m_linktoslot);
+        pSlotList->m_terminator.m_next = ~(uintptr_t)pTerminator;
+      }
+
+      nSlot++;
+    } while (nSlot <= pTable->nSlotMask);
+}
+#endif

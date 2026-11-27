@@ -751,4 +751,20 @@ SOCKET __fastcall CreateSocketLocal(D2QServerStrc * pQServer, int nPort) {
 
 static void * keep_006c2810 = (0 ? (PopAndFreeCompletedSendPacket(*(D2QServerClientConnectionStrc * *)0), (void *)0) : (void *)0);
 
+#if !defined(_WIN32) && D2_OS_MAC
+// The Mac binary's wait loop of the NT server file: it runs for 100 ms unless the last error is
+// WAIT_TIMEOUT, halting at line 0x3c8 on every pass.
+// 1.14d mac: 002f70c5
+int32_t QSERVER_WaitLoopMac() {
+    DWORD dwStart = GetTickCount();
+    DWORD dwNow = GetTickCount();
+    while (dwStart - dwNow < 0x65 && GetLastError() != 0x102) {
+      fp_fatal("Unrecoverable internal error %08x line %d", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3c8);
+      dwNow = GetTickCount();
+    }
+
+    return 0;
+}
+#endif
+
 } // namespace Fog::Src::QServer::QServerNT

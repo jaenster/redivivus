@@ -1802,4 +1802,26 @@ void __stdcall MONMODE_InitModeChange(D2UnitStrc * pUnit, eD2MonsterAnimMode nUn
 
 static void * keep_005a61b0 = (0 ? (MONSTERMODE_ConsumeStoredPosition(*(int * *)0, *(int * *)0, *(char * *)0, *(D2MonsterPathParamStrc * *)0), (void *)0) : (void *)0);
 
+#if !defined(_WIN32) && D2_OS_MAC
+// Puts the monster into its first skill mode against its current target, runs the lifecycle
+// transition and fires the AI-think callback; the Mac binary keeps two identical copies.
+// 1.14d mac: 001dd3f3
+void MONMODE_EnterSkill1AndThink(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+    D2ModeChangeStrc sModeChange;
+    MONMODE_InitModeChange(pUnit, eD2MonsterAnimMode_ns::Skill1, &sModeChange);
+    sModeChange.pTargetUnit = UNIT::SUnit::GetTargetEx(pGame, pUnit);
+    MONSTERAI_ExecuteLifecycleTransition(pGame, &sModeChange, 1);
+    GAME::Event::Dispatch::Monster::MONSTEREVENT_DefaultCallback(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0, 0);
+}
+
+// 1.14d mac: 001dd468
+void MONMODE_EnterSkill1AndThink2(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+    D2ModeChangeStrc sModeChange;
+    MONMODE_InitModeChange(pUnit, eD2MonsterAnimMode_ns::Skill1, &sModeChange);
+    sModeChange.pTargetUnit = UNIT::SUnit::GetTargetEx(pGame, pUnit);
+    MONSTERAI_ExecuteLifecycleTransition(pGame, &sModeChange, 1);
+    GAME::Event::Dispatch::Monster::MONSTEREVENT_DefaultCallback(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0, 0);
+}
+#endif
+
 } // namespace D2Game::Monster::MonsterMode

@@ -3360,4 +3360,28 @@ int __fastcall OOGUTIL_ValidateStringFilter(DWORD dwUnused, char * szText) {
     return 1;
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+// Game name edit box key filter: clears the game list selection, then accepts letters, digits,
+// space, apostrophe, hyphen and underscore.
+// 1.14d mac: 002d7ffc
+int __stdcall EDITBOX_Cb_OOGUTIL_FilterGameNameChar(::D2WinEditBox * pEditBox, int nTextLen, char * pKeyChar) {
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetSelectedLine(gpOOGGameListTextBox, -1);
+    uint32_t nKey = (uint32_t)(int)*pKeyChar;
+    int nAccepted = 1;
+    if (nKey < '_') {
+      if (nKey == ' ' || nKey == '\'' || nKey == '-') {
+        return 1;
+      }
+    } else if (nKey == '_') {
+      return 1;
+    }
+
+    if ((uint8_t)(nKey - '0') > 9 && (uint8_t)(nKey - 'A') > 25) {
+      nAccepted = (uint8_t)(nKey - 'a') < 26;
+    }
+
+    return nAccepted;
+}
+#endif
+
 } // namespace D2Multi::OOGUtilities
