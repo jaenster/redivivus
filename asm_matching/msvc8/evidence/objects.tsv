@@ -1,0 +1,214 @@
+start	name	tu	kind	live_in	foreign_callers	sourcefile	caller_sourcefiles
+00401070	Fog::_3rdparty::crashy::Constructor	Fog/3rdparty/crashy/Report	convention	ecx	Fog/Src/ErrorManager:2		
+00401090	Fog::_3rdparty::crashy::ScalarDeletingDestructor	Fog/3rdparty/crashy/Report	convention	ecx			
+00401100	Fog::_3rdparty::crashy::Open	Fog/3rdparty/crashy/Report	convention	ecx	Fog/Src/ErrorManager:2		
+00401220	Fog::_3rdparty::crashy::AddAttachment	Fog/3rdparty/crashy/Report	convention	ecx	Fog/Src/ErrorManager:3		
+00401540	Fog::_3rdparty::crashy::SYSTEM_CaptureThreadContext	Fog/3rdparty/crashy	object	ecx+edi+edx	Fog/Engine/Application:1, Fog/File:1		
+00401df0	Fog::Debug::GetModuleInfoForAddress	Fog/Debug	object	edi+esi	Fog/Engine/Application:1		
+004020d0	Fog::Debug::GetSourceLineForAddress	Fog/Debug	object	edi+esi	Fog/Engine/Application:1		
+00404010	Fog::File::FILETOOLS_ExtractFilename	Fog/File	object	eax+ebx	Fog/3rdparty/crashy/Report:1		
+00404150	Fog::File::STRING_AppendStringToString	Fog/File	object	eax+ecx	Fog/3rdparty/crashy:18		
+00404ab0	Fog::Engine::Application::DEBUG_AddModuleToList	Fog/Engine/Application	convention	ecx			
+00405060	Fog::Engine::Application::DEBUG_UnwindStackFrames	Fog/Engine/Application	convention	ecx	Fog/File:1		
+00405250	Fog::Engine::Application::DEBUG_FormatAddressInfo	Fog/Engine/Application	object	ebx	Fog/File:1		
+00409220	Fog::Memory::FindFirstFreeBit	Fog/Memory	convention	ecx			
+0040fe60	Fog::Src::LogManager::DestroyListNodeAndFree	Fog/Src/LogManager	convention	ecx			
+0041b0b0	Storm::Source::SFile::SFILE_LoadAttributes	Storm/Source/SFile	convention	ecx		.\SOURCE\SFILE.CPP	
+0041fa80	Storm::SLOG_LockLog	Storm/H/Storm	object	edi	Storm/Source/SSComp:4		
+0041fce0	Storm::Source::SSComp::SLOG_UnlockLog	Storm/Source/SSComp	object	eax	Storm/H/Storm:2		
+004211c0	Storm::Source::SBig::TSFixedArray_Uc_ReallocData	Storm/Source/SBig	convention	ecx			
+004215c0	Storm::Source::SBig::TSBaseArray_Ui_Copy	Storm/Source/SBig	convention	ecx			
+00421630	Storm::Source::SBig::TSGrowableArray_Uc_Reserve	Storm/Source/SBig	convention	ecx			
+004216e0	Storm::Source::SBig::TSFixedArray_Ui_ReallocData	Storm/Source/SBig	convention	ecx			
+00421770	Storm::Source::SBig::TSFixedArray_UcAlt_ReallocData	Storm/Source/SBig	convention	ecx			
+00421980	Storm::Source::SBig::TSGrowableArray_Uc_SetCount	Storm/Source/SBig	convention	ecx			
+004219f0	Storm::Source::SBig::TSBaseArray_Uc_Copy	Storm/Source/SBig	convention	ecx			
+00421a50	Storm::Source::SBig::TSBaseArray_UcAlt_Copy	Storm/Source/SBig	convention	ecx			
+00421ab0	Storm::Source::SBig::TSGrowableArray_Ui_Reserve	Storm/Source/SBig	convention	ecx			
+00421b00	Storm::Source::SBig::TSGrowableArray_UcAlt_Reserve	Storm/Source/SBig	convention	ecx			
+00421ba0	Storm::Source::SBig::TSGrowableArray_Ui_Assign	Storm/Source/SBig	convention	ecx			
+00421f10	Storm::Source::SBig::TSGrowableArray_Ui_SetCount	Storm/Source/SBig	convention	ecx			
+0042cc40	Storm::_3rdparty::zlib::trees::copy_block	Storm/3rdparty/zlib/trees	convention	ecx+edx			
+00447fd0	D2Multi::ComCallback::COMCALLBACK_AddUserToChannelList	D2Multi/ComCallback	convention	ecx+edx			
+004481f0	D2Multi::ComCallback::COMCALLBACK_BroadcastChatMessage	D2Multi/ComCallback	convention	ecx	D2Multi/OOGUtilities:1		
+0044f820	TSHashObject<>::Destructor	D2Client/GAME/stpl_SGAMEDATA	convention	ecx	D2Client/GAME/Game/stpl_SGAMEDATA:2, D2Game/GAME/stpl_SGAMEDATA:1		
+0044f890	UnlinkNode_Unreferenced	D2Client/GAME/stpl_SGAMEDATA	convention	ecx			
+0044f930	USGAMEDATA::TSExplicitList<>::UnlinkAll	D2Client/GAME/stpl_SGAMEDATA	convention	ecx	D2Client/GAME/Game/stpl_SGAMEDATA:1		
+0044fa00	TSHashTable<>::InternalClear	D2Client/GAME/stpl_SGAMEDATA	convention	ecx	D2Client/GAME/Game/stpl_SGAMEDATA:2		
+0044fdd0	Destructor_Unreferenced2	D2Client/GAME/Game/stpl_SGAMEDATA	convention	ecx			
+004500a0	TSHashObjectChunk<>::ScalarDeletingDestructor	D2Client/GAME/Game/stpl_SGAMEDATA	convention	ecx			
+00450210	TSHashTable<>::Destructor	D2Client/GAME/Game/stpl_SGAMEDATA	convention	ecx			
+00450520	TSHashTable<>::Destroy	D2Client/GAME/Game/stpl_SGAMEDATA	convention	ecx			
+00450550	TSHashTable<>::ScalarDeletingDestructor	D2Client/GAME/Game/stpl_SGAMEDATA	convention	ecx			
+00450580	USGAMEDATA::TSExplicitList<>::Clear	D2Client/GAME/Game/stpl_SGAMEDATA	convention	ecx	D2Client/GAME/stpl_SGAMEDATA:1		
+00450690	TSHashTableReuse<>::InternalDestroy	D2Client/GAME/Game/stpl_SGAMEDATA	convention	ecx			
+004506b0	TSHashTable<>::Constructor	D2Client/GAME/Game/stpl_SGAMEDATA	convention	ecx	D2Client/GAME/stpl_SGAMEDATA:1		
+00450760	TSHashTableReuse<>::Destructor	D2Client/GAME/Game/stpl_SGAMEDATA	convention	ecx	D2Client/GAME/stpl_SGAMEDATA:1		
+004508a0	USGAMEDATA::TSExplicitList<>::LinkNode	D2Client/GAME/Game/stpl_SGAMEDATA	convention	ecx	D2Client/GAME/stpl_SGAMEDATA:1		
+00450950	D2Client::GAME::Game::CopyConstructor	D2Client/GAME/Game/SGAMEDATA	convention	ecx	D2Client/GAME/stpl_SGAMEDATA:1		
+00450fa0	USGAMEDATA::TSExplicitList<>::NewNode	D2Client/GAME/stpl_SGAMEDATA	convention	ecx			
+004510b0	TSHashTableReuse<>::Destroy	D2Client/GAME/stpl_SGAMEDATA	convention	ecx			
+004510d0	TSHashTableReuse<>::ScalarDeletingDestructor	D2Client/GAME/stpl_SGAMEDATA	convention	ecx			
+00451100	TSHashTableReuse<>::Constructor	D2Client/GAME/stpl_SGAMEDATA	convention	ecx	Storm/_unnamespaced:1		
+004526c0	D2Client::UI::ui::UI_BuildUberBossImmunityString	D2Client/UI/ui	object	ebx	D2Client/UI/Draw:2	.\UI\ui.cpp	
+00453640	D2Client::UI::ui::UI_SetMultipleButtonKeyBindings	D2Client/UI/ui	object	esi	D2Client/UI/Draw:6		
+00456ee0	D2Client::UI::Draw::DRAW_UI	D2Client/UI/Draw	convention	ecx	D2Client/GAME/Game/Game:1		
+00463940	D2Client::UNIT::Player::FindUnit	D2Client/UNIT/Player	object	eax+ecx+edx	D2Client/UNIT/CUnit:3		
+00463a50	D2Client::UNIT::Player::InsertIntoHashTable	D2Client/UNIT/Player	object	esi	D2Client/UNIT/CUnit:2		
+00465400	D2Client::UNIT::CUnit::GetPlayerUnitPartyId	D2Client/UNIT/CUnit	object	eax	D2Client/GAME/Roster:2, D2Client/UI/Automap:6, D2Client/UI/Hireables:1		.\UI\automap.cpp
+00465ee0	D2Client::UNIT::CUnit::RemoveObjectFromServerObjectTable	D2Client/UNIT/CUnit	convention	ecx+edx	D2Client/GAME/SCmd:1, D2Client/UI/npcmenu/Merc:1, D2Client/UNIT/Item:30, D2Client/UNIT/Missile:2, D2Client/UNIT/Player:1		.\UNIT\Item.cpp
+0046dcc0	D2Client::Engine::Gfx::GFX_LoadCofFile	D2Client/Engine/Gfx	object	eax	D2Client/Engine/GfxInfo:1	.\ENGINE\Gfx.cpp	.\ENGINE\Gfx.cpp
+0046e740	D2Client::Engine::GfxInfo::GFX_LoadCompositCof	D2Client/Engine/GfxInfo	object	eax	D2Client/Engine/Gfx:2	.\ENGINE\Gfx.cpp	.\ENGINE\Gfx.cpp
+0046e8d0	D2Client::Engine::GfxInfo::GFX_LoadMonsterModeCof	D2Client/Engine/GfxInfo	object	edi+esi	D2Client/Engine/Gfx:2	.\ENGINE\Gfx.cpp	.\ENGINE\Gfx.cpp
+0046e980	D2Client::Engine::GfxInfo::GFX_LoadObjectModeCof	D2Client/Engine/GfxInfo	object	edi+esi	D2Client/Engine/Gfx:2	.\ENGINE\Gfx.cpp	.\ENGINE\Gfx.cpp
+0046ed50	D2Client::Engine::GfxInfo::GFX_GetUnitHealthBarColor	D2Client/Engine/GfxInfo	object	esi	D2Client/Engine/Gfx:2	.\ENGINE\Gfx.cpp	.\ENGINE\Gfx.cpp
+004792e0	D2Client::GAME::Roster::GetRosterPlayerByGUID	D2Client/GAME/Roster	convention	edx			
+00479bc0	D2Client::GAME::Roster::GetRosterPartyId	D2Client/GAME/Roster	object	eax	D2Client/GAME/RosterPets:2, D2Client/UI/Automap:2, D2Client/UI/Hireables:1, D2Client/UI/Party:7, D2Client/UI/ui:2		
+00479c00	D2Client::GAME::Roster::GetUnitPartyId	D2Client/GAME/Roster	object	eax	D2Client/UNIT/CUnit:1		
+0047c420	D2Client::UI::Chat::ChatCommandProcessor	D2Client/UI/Chat	convention	ecx			
+0047cc90	D2Client::UI::Chat::UI_SLIDER_GetValueFromPosition	D2Client/UI/Chat	object	eax+ecx+edx	D2Client/UI/EscMenu:2		
+004801c0	D2Client::Warden::Constructor	D2Client/Warden/WardenClient	convention	ecx			
+0048bbe0	D2Client::UI::Inv::CloseScrollOfWhatever	D2Client/UI/Inv	convention	ecx	D2Client/UI/Text:1		
+004a0050	D2Client::UI::Text::TEXT_OpenMessageLogDialog	D2Client/UI/Text	convention	ecx	D2Client/UI/Draw:1		
+004a4fa0	D2Client::UI::ui::UI_IsMouseOverActiveControlConfigButton	D2Client/UI/ui	object	eax+edi	D2Client/UI/ControlConfig:2		
+004aaaa0	D2Client::UI::SpellSel::SPELLSEL_DrawTabHeader	D2Client/UI/SpellSel	convention	ecx			
+004ac7e0	D2Client::UNIT::MonUnique::CheckMonTypeForMonster	D2Client/UNIT/MonUnique	convention	ecx+edx	D2Client/UNIT/CUnit:2, D2Client/UNIT/Monster:7		
+004b1640	D2Client::UI::npcmenu::SetInteractedUnitInfo	D2Client/UI/npcmenu	object	eax	D2Client/UI/ui:2		
+004b1a10	D2Client::UI::npcmenu::inline_NPC_IsInteractableSideNpc	D2Client/UI/npcmenu	object	eax	D2Client/UI/ui:1		
+004b66b0	D2Client::UI::npcmenu::NPCMENU_HandleMenuSelection	D2Client/UI/npcmenu	object	esi	D2Client/UI/ui:1		
+004ba020	D2Client::Sound::SOUND_UpdateAllChannels	D2Client/Sound/Sound	object	ebx	D2Client/Sound/SoundHdr:1		
+004baf20	D2Client::UI::Button::ButtonImplementation::Constructor	D2Client/UI/Button/ButtonImplementation	convention	ecx	D2Client/UI/Button/ButtonWrapper:1		
+004bb0f0	D2Client::UI::Button::ButtonWrapper::Constructor	D2Client/UI/Button/ButtonWrapper	convention	ecx	D2Client/UI/ui:2		.\UI\ui.cpp
+004bbbb0	D2Client::UI::Editbox::EditBoxImplementation::Constructor	D2Client/UI/Editbox/EditBoxImplementation	convention	ecx	D2Client/UI/Editbox/EditBoxWrapper:1		
+004bbd80	D2Client::UI::Editbox::EditBoxWrapper::Constructor	D2Client/UI/Editbox/EditBoxWrapper	convention	ecx	D2Client/UI/ui:1		.\UI\ui.cpp
+004bc340	D2Client::UI::Spinner::SpinnerImplementation::Constructor	D2Client/UI/Spinner/SpinnerImplementation	convention	ecx	D2Client/UI/Spinner/SpinnerWrapper:1		
+004bc480	D2Client::UI::Spinner::SpinnerWrapper::Constructor	D2Client/UI/Spinner/SpinnerWrapper	convention	ecx	D2Client/UI/ui:1		.\UI\ui.cpp
+004be410	D2Client::UI::ListBox::ListBoxImplementation::DrawTruncatedText	D2Client/UI/ListBox/ListBoxImplementation	convention	ecx			
+004be500	D2Client::UI::ListBox::ListBoxImplementation::AddItem	D2Client/UI/ListBox/ListBoxImplementation	convention	ecx			
+004be720	D2Client::UI::ListBox::ListBoxImplementation::IsMouseOnScrollUp	D2Client/UI/ListBox/ListBoxImplementation	convention	ecx			
+004be770	D2Client::UI::ListBox::ListBoxImplementation::IsMouseOnScrollDown	D2Client/UI/ListBox/ListBoxImplementation	convention	ecx			
+004be7c0	D2Client::UI::ListBox::ListBoxImplementation::IsMouseOnScrollTrack	D2Client/UI/ListBox/ListBoxImplementation	convention	ecx			
+004be810	D2Client::UI::ListBox::ListBoxImplementation::IsMouseInBounds	D2Client/UI/ListBox/ListBoxImplementation	convention	ecx			
+004be860	D2Client::UI::ListBox::ListBoxImplementation::OnMouseWheel	D2Client/UI/ListBox/ListBoxImplementation	convention	ecx			
+004be910	D2Client::UI::ListBox::ListBoxImplementation::OnUpArrow	D2Client/UI/ListBox/ListBoxImplementation	convention	ecx			
+004be990	D2Client::UI::ListBox::ListBoxImplementation::OnDownArrow	D2Client/UI/ListBox/ListBoxImplementation	convention	ecx			
+004bea50	D2Client::UI::ListBox::ListBoxImplementation::HitTestItem	D2Client/UI/ListBox/ListBoxImplementation	convention	ecx			
+004beb70	D2Client::UI::ListBox::ListBoxImplementation::OnMouseMove	D2Client/UI/ListBox/ListBoxImplementation	convention	ecx			
+004bebc0	D2Client::UI::ListBox::ListBoxImplementation::OnChar	D2Client/UI/ListBox/ListBoxImplementation	convention	ecx			
+004bf2f0	D2Client::UI::ListBox::ListBoxImplementation::HandleScrollTrackClick	D2Client/UI/ListBox/ListBoxImplementation	convention	ecx			
+004bf430	D2Client::UI::ListBox::ListBoxImplementation::OnMouseDown	D2Client/UI/ListBox/ListBoxImplementation	convention	ecx			
+004bf530	D2Client::UI::ListBox::ListBoxImplementation::OnMouseUp	D2Client/UI/ListBox/ListBoxImplementation	convention	ecx			
+004bf650	D2Client::UI::ListBox::ListBoxImplementation::Constructor	D2Client/UI/ListBox/ListBoxImplementation	convention	ecx	D2Client/UI/ListBox/ListBoxWrapper:1		
+004bf8f0	D2Client::UI::ListBox::ListBoxWrapper::Constructor	D2Client/UI/ListBox/ListBoxWrapper	convention	ecx	D2Client/UI/Text:1, D2Client/UI/npcmenu:1		
+004bfa70	D2Client::ITEM_ToggleHandState	D2Client/D2Client	object	esi	D2Client/UI/UseItem:1, D2Client/UI/ui:1		.\UI\UseItem.cpp
+004c0550	D2Client::UI::ui::UI_HandleHoradricCubePacket	D2Client/UI/ui	object	ebx	D2Client/GAME/SCmd:1		
+004db7b0	D2Client::Engine::GfxUtil::GFXUTIL_BuildCofParams	D2Client/Engine/GfxUtil	object	eax+ecx+edx	D2Client/D2Client:5	.\ENGINE\GfxUtil.cpp	
+004f5570	D2gfx::D2GFX::D2GFX_GetWindowSizeByResolutionMode	D2gfx/D2GFX	object	ebx+edi	D2Win/Src/D2WinMain:2		
+00515950	D2Sound::Src::D2SoundSmp::SOUNDSMP_Set3DPosition	D2Sound/Src/D2SoundSmp	convention	ecx	D2Client/GAME/Sound:1		
+00517df5	D2FILE_CleanupCryptHandles	Storm/_unnamespaced	object	ebx	Bnclient/Bnclient:1		
+00517fd0	Bnclient::BNGatewayAccess::Nth	Bnclient/BNGatewayAccess	convention	ecx			
+00518190	Bnclient::BNGatewayAccess::GetGatewayList	Bnclient/BNGatewayAccess	convention	ecx		.\BNetGW.cpp	
+005183f0	Bnclient::BNGatewayAccess::FindSection	Bnclient/BNGatewayAccess	convention	ecx			
+00518580	Bnclient::BNGatewayAccess::PickClosestZone	Bnclient/BNGatewayAccess	convention	ecx			
+005223f0	Bnclient::_net_sid::NET_SID_CLIENT_Send_0x58_AuthAccountUpgradeProof	Bnclient/net_sid	convention	ecx			
+00524930	D2Lang::StrTable::strtable::STRTABLE_GetStringByIndex	D2Lang/StrTable/strtable	convention	ecx+edx			
+005266c0	D2Lang::Unicode::UNISYS::UNICODE_FindWideChar	D2Lang/Unicode/UNISYS	convention	ecx	D2Client/UI/Inv:3		
+005276a0	D2Lang::Unicode::UNISYS::UNICODE_ReadByteRange	D2Lang/Unicode/UNISYS	convention	ecx			
+005276c0	D2Lang::Unicode::UNISYS::UNICODE_CheckByteInRange	D2Lang/Unicode/UNISYS	convention	ecx			
+00527e70	Bnclient::SRP::SRP_ExtractSessionKeyBytes	Bnclient/SRP	convention	ecx			
+00528550	Bnclient::SRP::SRP_ExportPublicValues	Bnclient/SRP	convention	ecx			
+005285a0	Bnclient::SRP::SRP_SetParameters	Bnclient/SRP	convention	ecx	Bnclient/net_sid:1		
+00528660	Bnclient::SRP::SRP_ClientGenerateVerifier	Bnclient/SRP	convention	ecx	Bnclient/net_sid:3		
+005286d0	Bnclient::SRP::SRP_GenerateAccountCredentials	Bnclient/SRP	convention	ecx	Bnclient/net_sid:2		
+00528760	Bnclient::SRP::SRP_ClientKeyExchange	Bnclient/SRP	convention	ecx	Bnclient/net_sid:1		
+00528890	Bnclient::SRP::SRP_ClientVerifyServerProof	Bnclient/SRP	convention	ecx	Bnclient/net_sid:1		
+005289f0	Bnclient::SRP::SRP_ServerComputePublicB	Bnclient/SRP	convention	ecx			
+00528ac0	Bnclient::SRP::SRP_ClientVerifyAndComputeKey	Bnclient/SRP	convention	ecx			
+0052e590	TSHashTable<>::Delete	D2Game/GAME/stpl_SGAMEDATA	convention	ecx			
+0052e650	TSHashTable<>::Ptr	D2Game/GAME/stpl_SGAMEDATA	convention	ecx	D2Game/GAME/Server:2		
+0052ff20	TSHashTable<>::GrowListArray	D2Game/GAME/stpl_SGAMEDATA	convention	ecx			
+00530600	TSHashTable<>::MonitorFullness	D2Game/GAME/stpl_SGAMEDATA	convention	ecx			
+00530820	TSHashTable<>::New	D2Game/GAME/stpl_SGAMEDATA	convention	ecx	D2Game/GAME/Server:2		.\GAME\Game.cpp
+00532e90	D2Game::PLAYER::PlayerSave::_oldSaveGameLoadingPart6	D2Game/PLAYER/PlayerSave	convention	edx			
+005394a0	D2Game::GAME::Clients::CLIENT_PlacePlayerInRoom	D2Game/GAME/Clients	convention	ecx+edx	D2Game/GAME/Server:1		.\GAME\Game.cpp
+0053cb80	D2Game::GAME::SCmd::NET_D2GS_SERVER_Send_0x81_UPDATEPETPARAMS	D2Game/GAME/SCmd	convention	ecx	D2Game/PLAYER/PlayerPets:2		.\PLAYER\PlayerPets.cpp
+0053e2c0	D2Game::GAME::SCmd::SCMD_WriteBooleanToBitBuffer	D2Game/GAME/SCmd	convention	ecx			
+0053ef30	D2Game::GAME::SCmd::Send0x9CItemHandleInShop	D2Game/GAME/SCmd	convention	ecx	D2Game/UNIT/Item:2	.\GAME\SCmd.cpp	.\INVENTORY\InvMode.cpp
+0053f4b0	D2Game::GAME::Arena::AllocArenaControl	D2Game/GAME/Arena	convention	ecx	D2Game/GAME/Server:2	.\GAME\Arena.cpp	.\GAME\Game.cpp
+0053f720	D2Game::GAME::Arena::SERVER_ARENA_KillHandler	D2Game/GAME/Arena	object	edi	D2Game/PLAYER/PlayerModes:1, D2Game/UNIT/SUnitDmg:1		.\PLAYER\PlrModes.cpp
+00540320	D2Game::UNIT::Party::PARTY_AddUnitToParty	D2Game/UNIT/Party	convention	ecx+edx	D2Game/PLAYER/PlayerScreen:3	.\UNIT\Party.cpp	
+00545fa0	D2Game::Quests::QUESTS::RemoveQuestTimer	D2Game/Quests/QUESTS	convention	ecx+edx		.\QUESTS\QUESTS.CPP	
+005490e0	D2Game::PLAYER::PlayerMsg::SERVER_IsItemOnCursor	D2Game/PLAYER/PlayerMsg	convention	ecx			
+00549150	D2Game::PLAYER::PlayerMsg::IsPlayerTheOwner	D2Game/PLAYER/PlayerMsg	convention	ecx			
+005491b0	D2Game::PLAYER::PlayerMsg::ItemBelongsToUnit	D2Game/PLAYER/PlayerMsg	convention	ecx			
+005492f0	D2Game::PLAYER::PlayerMsg::ItemBelongsToInventoryOf	D2Game/PLAYER/PlayerMsg	convention	ecx			
+0054a420	D2Game::PLAYER::PlayerMsg::CHAT_IsInteractingWithOtherPlayer	D2Game/PLAYER/PlayerMsg	convention	edx			
+00554630	D2Game::UNIT::SUnit::GetPartyId	D2Game/UNIT/SUnit	object	eax	D2Game/GAME/SCmd:4, D2Game/ITEMS/ItemMode:1, D2Game/Objects/ObjectsMode:3, D2Game/PLAYER/PlayerScreen:10, D2Game/Quests/QUESTS/A1Q1:1, D2Game/Quests/QUESTS/A1Q3:2, D2Game/Quests/QUESTS/A1Q4:3, D2Game/Quests/QUESTS/A1Q6:1, D2Game/Quests/QUESTS/A2Q1:1, D2Game/Quests/QUESTS/A2Q4:1, D2Game/Quests/QUESTS/A2Q5:1, D2Game/Quests/QUESTS/A2Q6:3, D2Game/Quests/QUESTS/A2Q7:1, D2Game/Quests/QUESTS/A3Q1:1, D2Game/Quests/QUESTS/A3Q3:1, D2Game/Quests/QUESTS/A3Q4:2, D2Game/Quests/QUESTS/A3Q5:1, D2Game/Quests/QUESTS/A3Q6:1, D2Game/Quests/QUESTS/A4Q2:1, D2Game/Quests/QUESTS/A4Q3:1, D2Game/Quests/QUESTS/A5Q1:1, D2Game/Quests/QUESTS/A5Q2:1, D2Game/Quests/QUESTS/A5Q3:2, D2Game/Quests/QUESTS/A5Q4:1, D2Game/Quests/QUESTS/A5Q5:1, D2Game/Quests/QUESTS/A5Q6:1, D2Game/UNIT/Party:4, D2Game/UNIT/PlayerList:2, D2Game/UNIT/SUnitDmg:1		.\GAME\SCmd.cpp, .\OBJECTS\ObjMode.cpp, .\PLAYER\PartyScreen.cpp, .\UNIT\Party.cpp, d:\diablo2\Diablo2\Source\D2Game/Quests/a1q3.cpp, d:\diablo2\Diablo2\Source\D2Game/Quests/a1q4.cpp, d:\diablo2\Diablo2\Source\D2Game/Quests/a3q3.cpp, d:\diablo2\Diablo2\Source\D2Game/Quests/a3q4.cpp, d:\diablo2\Diablo2\Source\D2Game/Quests/a4q3.cpp
+0055c2c0	D2Game::ITEMS::ItemMode::ITEMMODE_AddStatsList	D2Game/ITEMS/ItemMode	convention	edx		.\ITEMS\ItemMode.cpp	
+0056ac10	D2Game::PLAYER::PlayerSave2::LoadMerc2	D2Game/PLAYER/PlayerSave2	convention	ecx			
+0056cf40	D2Game::SKILLS::SkillsServer::LinkPortal	D2Game/SKILLS/SkillsServer	convention	ecx	D2Game/Objects/ObjectsMode:2		
+0056e050	D2Game::SKILLS::SkillsServer::SKILLS_CalcPetSkillDamage	D2Game/SKILLS/SkillsServer	convention	ecx	D2Game/Monster/Monsters:1		
+00570420	D2Game::SKILLS::SkillsServer::SKILL_ApplyStunState	D2Game/SKILLS/SkillsServer	convention	ecx	D2Game/SKILLS/SkillBar:1		
+00576900	D2Game::UNIT::SUNITNPC::SUNITNPC_RollStoreItemQuality	D2Game/UNIT/SUNITNPC	convention	ecx			
+0057c3e0	D2Game::UNIT::SUnitDmg::DAMAGE_GetMonsterDrainEffectiveness	D2Game/UNIT/SUnitDmg	convention	ecx			
+0057ec10	D2Game::UNIT::SUnitDmg::DAMAGE_CalculateHitCheck	D2Game/UNIT/SUnitDmg	convention	ecx+edx	D2Game/Monster/Monsters:1, D2Game/SKILLS/SkillAma:4, D2Game/SKILLS/SkillAss:5, D2Game/SKILLS/SkillBar:5, D2Game/SKILLS/SkillDruid:3, D2Game/SKILLS/SkillMonst:2, D2Game/SKILLS/SkillNec:1, D2Game/SKILLS/SkillPal:4, D2Game/SKILLS/SkillsServer:3		.\SKILLS\SkillDruid.cpp
+00585580	D2Game::Objects::ObjectsMode::OBJMODE_FinalizePortalLink	D2Game/Objects/ObjectsMode	convention	ecx+edx			
+0059ef70	D2Game::Quests::QUESTS::ReplaceJerhyn	D2Game/Quests/QUESTS	object	eax+esi	D2Game/Quests/QUESTS/A2Q4:1		
+005a01e0	D2Game::Monsters::GetBossNo	D2Game/Monster/Monsters	object	eax	D2Game/GAME/SCmd:1, D2Game/PLAYER/PlayerMsg:1, D2Game/Quests/QUESTS:1, D2Game/Quests/QUESTS/A5Q1:1, D2Game/UNIT/SUnitInactive:1		.\PLAYER\PlrMsg.cpp, .\UNIT\SUnitInactive.cpp
+005a0760	D2Game::Monsters::MONSTER_RollAndAssignUMods	D2Game/Monster/Monsters	convention	ecx			
+005a88e0	D2Game::MISSILES::MissilesMode::MISSILE_RollAttackHit	D2Game/MISSILES/MissilesMode	convention	ecx			
+005b0da0	D2Game::Monster::AI::AI_CanApplyColdState	D2Game/Monster/AI/AI	convention	ecx			
+005c2970	D2Game::SKILLS::Items::ITEMMOD_GenerateQualityItem	D2Game/SKILLS/Items	convention	ecx			
+00603e70	TSHashTableReuse<>::Constructor	D2CMP/SRC/stpl_CELLIST	convention	ecx	Storm/_unnamespaced:1		
+00609120	D2CMP::SRC::LRUCache::LRUCACHE_PopOldest	D2CMP/SRC/LRUCache	convention	edx			
+0060de00	D2Common::Chat::Ignorelist::IgnoreList::SavePersistentSetting	D2Common/Chat/Ignorelist/IgnoreList	convention	ecx			
+0060df10	D2Common::Chat::Ignorelist::IgnoreList::AppendLineToFile	D2Common/Chat/Ignorelist/IgnoreList	convention	ecx			
+0060dff0	D2Common::Chat::Ignorelist::IGNORELIST_ParsePattern	D2Common/Chat/Ignorelist	convention	ecx			
+0060e7a0	TSHashTable<>::Delete	D2Common/Chat/stpl_StringEntryNode	convention	ecx			
+0060e9e0	CopyConstructor_Unreferenced	D2Common/Chat/stpl_StringEntryNode	convention	ecx			
+0060eaa0	TSHashTable<>::Next	D2Common/Chat/stpl_StringEntryNode	convention	ecx	D2Common/Chat/Ignorelist/IgnoreList:1		
+0060eae0	TSHashObject<>::Destructor	D2Common/Chat/stpl_StringEntryNode	convention	ecx	D2Common/Chat/Ignorelist/stpl_StringEntryNode:1		
+0060eb70	TSHashTable<>::InternalClear	D2Common/Chat/stpl_StringEntryNode	convention	ecx	D2Common/Chat/Ignorelist/stpl_StringEntryNode:2		
+0060f590	TSHashTable<>::Ptr	D2Common/Chat/Ignorelist/stpl_StringEntryNode	convention	ecx			
+0060f8b0	TSHashTable<>::Ptr	D2Common/Chat/Ignorelist/stpl_StringEntryNode	convention	ecx	D2Common/Chat/Ignorelist/IgnoreList:2		
+0060fc40	D2Common::Chat::Ignorelist::IgnoreList::CheckAccountNameIgnored	D2Common/Chat/Ignorelist/IgnoreList	convention	ecx			
+0060fd50	D2Common::Chat::Ignorelist::IgnoreList::CheckCharNameIgnored	D2Common/Chat/Ignorelist/IgnoreList	convention	ecx			
+0060fd90	TSHashTable<>::Destructor	D2Common/Chat/Ignorelist/stpl_StringEntryNode	convention	ecx			
+00610020	TSHashTable<>::Destroy	D2Common/Chat/Ignorelist/stpl_StringEntryNode	convention	ecx			
+00610050	TSHashTable<>::ScalarDeletingDestructor	D2Common/Chat/Ignorelist/stpl_StringEntryNode	convention	ecx			
+006101b0	TSHashTable<>::GrowListArray	D2Common/Chat/Ignorelist/stpl_StringEntryNode	convention	ecx			
+00610380	D2Common::Chat::Ignorelist::IgnoreList::CheckIgnored	D2Common/Chat/Ignorelist/IgnoreList	convention	ecx			
+006104a0	TSHashTable<>::Constructor	D2Common/Chat/Ignorelist/stpl_StringEntryNode	convention	ecx	D2Common/Chat/Ignorelist/IgnoreList:2		
+00610840	TSHashTable<>::MonitorFullness	D2Common/Chat/Ignorelist/stpl_StringEntryNode	convention	ecx			
+00610b30	TSHashTable<>::Constructor	D2Common/Chat/Ignorelist/stpl_MappingEntryNode	convention	ecx	D2Common/Chat/Ignorelist/IgnoreList:1		
+00610be0	TSHashTable<>::New	D2Common/Chat/Ignorelist/stpl_StringEntryNode	convention	ecx			
+00610d60	TSHashTable<>::New	D2Common/Chat/Ignorelist/stpl_StringEntryNode	convention	ecx	D2Common/Chat/Ignorelist/IgnoreList:1		
+00611200	D2Common::Chat::Ignorelist::IgnoreList::Constructor	D2Common/Chat/Ignorelist/IgnoreList	convention	ecx	D2Common/Chat/Ignorelist:2		.\Chat\Ignorelist.cpp
+00611320	D2Common::Chat::Ignorelist::IgnoreList::AddAccountMapping	D2Common/Chat/Ignorelist/IgnoreList	convention	ecx		.\Chat\Ignorelist.cpp	
+0061b390	D2Common::DUNGEON::Dungeon::InitNearRooms	D2Common/DUNGEON/Dungeon	convention	ecx+edx			
+00624b90	D2Common::Logging::STATLIST_BinarySearchStatById	D2Common/Logging	object	eax+edi	D2Common/Stats/StatsEx:10		
+006342b0	D2Common::DATATBLS::ItemTbls::TXT_AllocTxt_uniqueitems	D2Common/DATATBLS/ItemTbls	convention	ecx	D2Common/DATATBLS/DataTbls:1	.\DATATBLS\ItemTbls.cpp	
+00634dc0	D2Common::DATATBLS::ItemTbls::TXT_AllocTxt_setitems	D2Common/DATATBLS/ItemTbls	convention	ecx	D2Common/DATATBLS/DataTbls:1	.\DATATBLS\ItemTbls.cpp	
+00637910	D2Common::DATATBLS::ItemTbls::TXT_QualityRatio_GetLine	D2Common/DATATBLS/ItemTbls	object	edi	D2Game/ITEMS/Items/Drop:2		
+0063b5e0	D2Common::INVENTORY::Inventory::INVENTORY_FindPlacementSlot	D2Common/INVENTORY/Inventory	convention	ecx+edx			
+0063b790	D2Common::INVENTORY::Inventory::INVENTORY_FindGridPositionByOwner	D2Common/INVENTORY/Inventory	convention	ecx+edx			
+0063b7d0	D2Common::INVENTORY::Inventory::INVENTORY_FindGridPositionByOwner2	D2Common/INVENTORY/Inventory	convention	ecx+edx			
+0063b810	D2Common::INVENTORY::Inventory::INVENTORY_FindGridPositionByOwner3	D2Common/INVENTORY/Inventory	convention	ecx+edx			
+00642390	D2Common::Drlg::DRLG_ApplyRoomExStateFlags	D2Common/Drlg/Drlg	convention	edx			
+00643bc0	D2Common::Skills::SelectSkillLeft	D2Common/Skills	object	esi	D2Client/GAME/SCmd:2, D2Client/UI/Panel:1, D2Client/UI/SpellSel:1, D2Client/UNIT/Item:1, D2Game/Monster/AI/AI:5, D2Game/SKILLS/SkillsServer:1		.\SKILLS\Skills.cpp
+00643c50	D2Common::Skills::SelectSkillRight	D2Common/Skills	object	esi	D2Client/GAME/SCmd:2, D2Client/UI/Panel:1, D2Client/UI/SpellSel:1, D2Client/UNIT/Item:1, D2Game/Monster/AI/AI:2, D2Game/SKILLS/SkillNec:1, D2Game/SKILLS/SkillsServer:1		.\SKILLS\Skills.cpp
+006724e0	D2Common::Drlg::Maze::ReplaceRoom	D2Common/Drlg/Maze	convention	edx			
+006793e0	D2Common::Drlg::Path::DRLGPATH_FindNonBlockedDirectionFromTriplet	D2Common/Drlg/Path	object	eax	D2Common/Drlg/Drlg:1		
+0067b9f0	D2Common::Drlg::Path::DRLGPATH_BuildBresenhamPointList	D2Common/Drlg/Path	object	esi	D2Common/Drlg/Drlg:1		
+006b87a0	D2Direct3D::Renderer::RENDERER_D3D_BuildWallTileVerticesNoPerspective	D2Direct3D/Renderer/Direct3D	convention	ecx			
+006be510	Fog::Src::_unused_broken	Fog/Src/QServer/QServer	convention	ecx			
+006be980	Fog::Src::HACKL_CheckAndResetHacklistEntry	Fog/Src/QServer/QServer	convention	ecx	Fog/Src/QServer/QServerNT:1		
+006bf660	Fog::Src::MatchesGameTokenFilter	Fog/Src/QServer/QServer	convention	ecx	Fog/Src/QServer/QServerNT:1		
+006c4160	Storm::Source::SCMD_GetListHead	Storm/Source/SCMD	convention	ecx			
+006c4180	Storm::Source::SCMD_MoveToList	Storm/Source/SCMD	convention	ecx			
+006c4230	Storm::Source::SCMD_GetNextOffset	Storm/Source/SCMD	convention	ecx			
+006c4290	Storm::Source::SCMD_UnlinkNode	Storm/Source/SCMD	convention	ecx			
+006c44c0	Storm::Source::SCMD_AllocNode	Storm/Source/SCMD	convention	ecx			
+006c4520	Storm::Source::SCMD_FreeNode	Storm/Source/SCMD	convention	ecx			
+006c47b0	Storm::Source::SCMD_RemoveNode	Storm/Source/SCMD	convention	ecx			
+006c54d0	Storm::Source::SBMP::SBMP_DecodeBmpFile	Storm/Source/SBMP	convention	ecx+edx			

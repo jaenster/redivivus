@@ -1,0 +1,353 @@
+fixer	on	candidates	kept	match_gained	note
+fix_static	91b25d0	706	688	83	sequential per-TU run over the first 98 TUs, stopped; 81 of its promotions removed functions nothing calls and were undone before the commit
+fix_static	91b25d0	2248	1178	149	batch run over the rest
+fix_static --demote	288d593	106	42	4	after /GS- for the client-side modules
+fix_static	0606668	478	242	28	after /GS- for the client-side modules
+fix_compare	005687d	3887	3734	228
+fix_assert	2337aa4	310	300	150
+fix_ifelse	10bd3ac	111	99	3
+fix_compare	0755a71	199	42	8	second pass
+fix_assert	0755a71	10	1	0	second pass
+fix_compare	fe34d5a	1344	1118	18	registers masked in the alignment, flag-neutral instructions skipped
+fix_ifelse	fe34d5a	42	27	0	registers masked in the alignment
+fix_guardstack	988531e	340	281	20
+fix_idioms	71cef89	141	125	7	seed_mod, seed_divides
+fix_uninline	25b80f9	35	33	4	InitSeed_Param_666
+fix_ifelse	da0360d	32	20	0	
+fix_ifelse	da0360d	1401	1253	66	
+fix_compare	da0360d	300	81	0	
+fix_static	d661081	273	41	6	
+fix_static --demote	d661081	76	11	0	
+fix_compare	d661081	347	101	1	
+fix_assert	d661081	13	5	0	
+fix_ifelse	d661081	254	143	3	
+fix_guardstack	d661081	71	16	0	
+fix_idioms	d661081	16	3	0	seed_mod, seed_divides
+fix_uninline	d661081	2	0	0	
+fix_static	d661081	237	3	0	
+fix_static --demote	d661081	68	3	0	
+fix_compare	d661081	267	45	1	
+fix_assert	d661081	8	0	0	
+fix_ifelse	d661081	165	62	0	
+fix_guardstack	d661081	56	0	0	
+fix_idioms	d661081	13	0	0	seed_mod, seed_divides
+fix_uninline	d661081	2	0	0	
+fix_static	d661081	237	3	0	
+fix_static --demote	d661081	68	3	0	
+fix_compare	d661081	240	18	0	
+fix_assert	d661081	8	0	0	
+fix_ifelse	d661081	154	53	0	
+fix_guardstack	d661081	55	0	0	
+fix_idioms	d661081	13	0	0	seed_mod, seed_divides
+fix_uninline	d661081	2	0	0	
+fix_compare	7572b7b	246	24	0	
+fix_static	38385d0	50	0	0	
+fix_static --demote	38385d0	21	2	0	
+fix_compare	38385d0	174	85	0	
+fix_assert	38385d0	4	4	0	
+fix_ifelse	38385d0	110	75	0	
+fix_guardstack	38385d0	23	5	0	
+fix_idioms	38385d0	9	3	0	seed_mod, seed_divides
+fix_uninline	38385d0	1	0	0	
+fix_static	38385d0	50	0	0	
+fix_static --demote	38385d0	19	0	0	
+fix_compare	38385d0	97	8	0	
+fix_assert	38385d0	0	0	0	
+fix_ifelse	38385d0	58	23	0	
+fix_guardstack	38385d0	18	0	0	
+fix_idioms	38385d0	6	0	0	seed_mod, seed_divides
+fix_uninline	38385d0	1	0	0	
+fix_static	38385d0	50	0	0	
+fix_static --demote	38385d0	19	0	0	
+fix_compare	38385d0	96	7	0	
+fix_assert	38385d0	0	0	0	
+fix_ifelse	38385d0	56	21	0	
+fix_guardstack	38385d0	18	0	0	
+fix_idioms	38385d0	6	0	0	seed_mod, seed_divides
+fix_uninline	38385d0	1	0	0	
+fix_idioms	9dec387	11	4	1	range
+fix_compare	fbdf9e2	477	79	16	
+fix_switch	64cd803	71	51	6	
+fix_return	9a197eb	127	94	25	
+fix_gsbuffer	c49bb03	108	31	3	
+fix_gsbuffer	c49bb03	77	63	17	
+fix_order --by store	1324698	42	9	0	
+fix_order --by store	1324698	51	7	0	
+fix_order --by offset	1324698	85	21	6	
+fix_order --by offset	1324698	103	18	0	
+fix_order --by store	1324698	34	1	0	
+fix_gsbuffer --members	26687f0	1	1	3	
+fix_idioms	26687f0	16	11	0	alldiv
+fix_uninline	26687f0	17	14	0	
+fix_assert	26687f0	64	53	13	
+fix_compare	26687f0	597	67	10	
+fix_assert	87bda9d	278	243	26	
+fix_assert	87bda9d	37	1	0	
+fix_idioms	87bda9d	94	77	1	seed_rem, seed_div, seed_bit
+fix_guardstack	87bda9d	71	71	1	
+fix_stringops	87bda9d	270	215	32	
+fix_stringops	87bda9d	75	16	2	
+fix_compare	87bda9d	716	174	2	
+fix_nestcall	87bda9d	1769	899	77	
+fix_nestcall	87bda9d	194	103	10	runs
+fix_stringops	87bda9d	73	14	0	
+fix_nestcall	87bda9d	1178	209	15	
+fix_nestcall	87bda9d	144	38	4	runs
+fix_switch	87bda9d	66	27	1	
+fix_return	87bda9d	5	2	0	
+fix_permute	87bda9d	33	17	7	max-run 4
+fix_return	87bda9d	5	1	0	
+fix_static	87bda9d	200	29	3	
+fix_static --demote	87bda9d	61	7	2	
+fix_compare	87bda9d	637	89	3	
+fix_assert	87bda9d	39	5	0	
+fix_ifelse	87bda9d	190	94	0	
+fix_switch	87bda9d	39	2	0	
+fix_guardstack	87bda9d	0	0	0	
+fix_idioms	87bda9d	40	4	0	seed_mod, seed_divides, range, alldiv, seed_rem, seed_div, seed_bit
+fix_uninline	87bda9d	4	1	0	
+fix_return	87bda9d	4	0	0	
+fix_gsbuffer	87bda9d	14	3	0	
+fix_stringops	87bda9d	64	6	1	
+fix_nestcall	87bda9d	1085	86	6	
+fix_order --by offset	87bda9d	91	2	0	
+fix_order --by store	87bda9d	32	0	0	
+fix_permute	87bda9d	24	7	2	max-run 4
+fix_permute	87bda9d	75	21	6	max-run 4
+fix_allocargs	4020f59	534	532	174	
+fix_static	4020f59	286	107	76	
+fix_static --demote	4020f59	47	0	0	
+fix_compare	4020f59	855	300	9	
+fix_assert	4020f59	101	70	8	
+fix_ifelse	4020f59	264	158	7	
+fix_switch	4020f59	42	3	0	
+fix_guardstack	4020f59	47	47	1	
+fix_allocargs	4020f59	20	19	2	
+fix_idioms	4020f59	44	8	0	seed_mod, seed_divides, range, alldiv, seed_rem, seed_div, seed_bit
+fix_uninline	4020f59	9	6	1	
+fix_return	4020f59	21	17	1	
+fix_gsbuffer	4020f59	9	2	0	
+fix_stringops	4020f59	79	25	3	
+fix_nestcall	4020f59	1069	73	3	
+fix_order --by offset	4020f59	87	1	0	
+fix_order --by store	4020f59	30	1	0	
+fix_permute	4020f59	19	3	1	max-run 4
+fix_allocargs	4020f59	28	27	25	
+fix_allocargs	4020f59	2	1	1	
+fix_static	4020f59	2	0	0	
+fix_static	4020f59	178	3	2	
+fix_static	4020f59	2	1	3	
+fix_static --demote	4020f59	4	1	0	
+fix_allocargs	4020f59	10	9	2	
+fix_allocargs	4020f59	60	58	1	
+fix_caseorder	674b9c2	115	107	5	
+fix_permute	674b9c2	65	27	22	max-run 4
+fix_forloop	674b9c2	12	11	2	
+fix_compare	674b9c2	780	159	13	
+fix_static	674b9c2	147	2	0	the third promotion kept, FindFirstFreeBit, undone: judged beside an unverified edit
+fix_static --demote	674b9c2	57	6	0	
+fix_fastcall	674b9c2	30	26	3	
+fix_refile	e872585	135	67	18	first pass: a lost match dropped every move touching its TU, a function less similar dropped its move
+fix_refile	e872585	69	28	1	second pass over what the first dropped: a loss laid on the move whose functions explain it, similarity in sum
+fix_static	b15539a	1440	1200	277	
+fix_static --demote	b15539a	0	0	0	
+fix_fastcall	b15539a	34	28	4	
+fix_compare	b15539a	5605	5166	299	
+fix_assert	b15539a	623	591	177	
+fix_ifelse	b15539a	1516	1349	70	
+fix_switch	b15539a	121	72	8	
+fix_caseorder	b15539a	114	102	5	
+fix_forloop	b15539a	12	10	0	
+fix_guardstack	b15539a	340	340	24	
+fix_allocargs	b15539a	599	597	260	
+fix_idioms	b15539a	240	206	9	seed_mod, seed_divides, range, alldiv, seed_rem, seed_div, seed_bit
+fix_uninline	b15539a	50	47	4	
+fix_return	b15539a	70	66	26	
+fix_gsbuffer	b15539a	76	70	16	
+fix_stringops	b15539a	288	231	27	
+fix_nestcall	b15539a	2167	1034	85	
+fix_order --by offset	b15539a	103	37	6	
+fix_order --by store	b15539a	34	5	0	
+fix_permute	b15539a	71	34	21	max-run 4
+fix_static	b15539a	236	37	6	
+fix_static --demote	b15539a	0	0	0	
+fix_fastcall	b15539a	6	0	0	
+fix_compare	b15539a	617	192	15	
+fix_assert	b15539a	34	5	0	
+fix_ifelse	b15539a	263	148	1	
+fix_switch	b15539a	47	6	0	
+fix_caseorder	b15539a	12	4	0	
+fix_forloop	b15539a	3	2	0	
+fix_guardstack	b15539a	0	0	0	
+fix_allocargs	b15539a	8	6	2	
+fix_idioms	b15539a	34	1	0	seed_mod, seed_divides, range, alldiv, seed_rem, seed_div, seed_bit
+fix_uninline	b15539a	3	0	0	
+fix_return	b15539a	4	0	0	
+fix_gsbuffer	b15539a	6	0	0	
+fix_stringops	b15539a	65	8	0	
+fix_nestcall	b15539a	1164	9	0	
+fix_order --by offset	b15539a	78	0	0	
+fix_order --by store	b15539a	29	0	0	
+fix_permute	b15539a	44	7	4	max-run 4
+fix_static	b15539a	199	0	0	
+fix_static --demote	b15539a	0	0	0	
+fix_fastcall	b15539a	6	0	0	
+fix_compare	b15539a	451	25	0	
+fix_assert	b15539a	29	0	0	
+fix_ifelse	b15539a	166	60	0	
+fix_switch	b15539a	40	0	0	
+fix_caseorder	b15539a	8	0	0	
+fix_forloop	b15539a	1	0	0	
+fix_guardstack	b15539a	0	0	0	
+fix_allocargs	b15539a	2	0	0	
+fix_idioms	b15539a	33	0	0	seed_mod, seed_divides, range, alldiv, seed_rem, seed_div, seed_bit
+fix_uninline	b15539a	3	0	0	
+fix_return	b15539a	4	0	0	
+fix_gsbuffer	b15539a	6	0	0	
+fix_stringops	b15539a	60	3	1	
+fix_nestcall	b15539a	1155	0	0	
+fix_order --by offset	b15539a	78	0	0	
+fix_order --by store	b15539a	29	0	0	
+fix_permute	b15539a	39	2	1	max-run 4
+fix_refile	33e0708	133	91	19	
+fix_refile	33e0708	43	2	0	
+fix_static	33e0708	223	29	4	
+fix_static --demote	33e0708	8	6	2	
+fix_fastcall	33e0708	6	1	0	
+fix_compare	33e0708	555	106	4	
+fix_assert	33e0708	37	8	0	
+fix_ifelse	33e0708	178	71	0	
+fix_switch	33e0708	41	2	0	
+fix_caseorder	33e0708	10	2	0	
+fix_forloop	33e0708	1	0	0	
+fix_guardstack	33e0708	27	27	2	
+fix_allocargs	33e0708	9	7	0	
+fix_idioms	33e0708	36	4	0	seed_mod, seed_divides, range, alldiv, seed_rem, seed_div, seed_bit
+fix_uninline	33e0708	3	0	0	
+fix_return	33e0708	6	2	0	
+fix_gsbuffer	33e0708	6	0	0	
+fix_stringops	33e0708	69	10	1	
+fix_nestcall	33e0708	1173	9	3	
+fix_order --by offset	33e0708	84	2	0	
+fix_order --by store	33e0708	32	0	0	
+fix_permute	33e0708	40	1	0	max-run 4
+fix_refile	33e0708	41	0	0	
+fix_static	33e0708	194	0	0	
+fix_static --demote	33e0708	2	1	0	
+fix_fastcall	33e0708	5	0	0	
+fix_compare	33e0708	485	55	0	
+fix_assert	33e0708	29	0	0	
+fix_ifelse	33e0708	151	43	0	
+fix_switch	33e0708	39	0	0	
+fix_caseorder	33e0708	8	0	0	
+fix_forloop	33e0708	1	0	0	
+fix_guardstack	33e0708	0	0	0	
+fix_allocargs	33e0708	2	0	0	
+fix_idioms	33e0708	32	0	0	seed_mod, seed_divides, range, alldiv, seed_rem, seed_div, seed_bit
+fix_uninline	33e0708	3	0	0	
+fix_return	33e0708	4	0	0	
+fix_gsbuffer	33e0708	6	0	0	
+fix_stringops	33e0708	59	0	0	
+fix_nestcall	33e0708	1164	0	0	
+fix_order --by offset	33e0708	84	0	0	
+fix_order --by store	33e0708	32	0	0	
+fix_permute	33e0708	39	0	0	max-run 4
+fix_restore	9fc2665	71	36	36	bodies from 1d82411
+fix_restore	a21d207	34	6	1	bodies from 1d82411
+fix_gsbuffer --members	f2f93e6	5	2	6	
+fix_static	c7d73c6	512	213	3	
+fix_idioms	603f591	127	105	8	pow2div
+fix_refile	d88d8bc	52	11	4	
+fix_refile	2be83a7	42	1	0	
+fix_static	2be83a7	299	4	0	
+fix_static --demote	2be83a7	1	0	0	
+fix_fastcall	2be83a7	5	1	0	
+fix_compare	2be83a7	516	87	0	
+fix_assert	2be83a7	30	1	0	
+fix_ifelse	2be83a7	156	48	0	
+fix_switch	2be83a7	39	1	0	
+fix_caseorder	2be83a7	8	2	0	
+fix_forloop	2be83a7	2	1	0	
+fix_guardstack	2be83a7	0	0	0	
+fix_allocargs	2be83a7	3	1	0	
+fix_idioms	2be83a7	57	6	0	seed_mod, seed_divides, range, alldiv, seed_rem, seed_div, seed_bit, pow2div
+fix_uninline	2be83a7	4	1	0	
+fix_return	2be83a7	4	0	0	
+fix_gsbuffer	2be83a7	6	0	0	
+fix_stringops	2be83a7	61	1	0	
+fix_nestcall	2be83a7	1259	86	4	
+fix_order --by offset	2be83a7	83	0	0	
+fix_order --by store	2be83a7	31	0	0	
+fix_permute	2be83a7	45	1	1	max-run 4
+fix_refile	2be83a7	41	0	0	
+fix_static	2be83a7	295	0	0	
+fix_static --demote	2be83a7	1	0	0	
+fix_fastcall	2be83a7	4	0	0	
+fix_compare	2be83a7	458	36	0	
+fix_assert	2be83a7	29	0	0	
+fix_ifelse	2be83a7	154	43	0	
+fix_switch	2be83a7	38	0	0	
+fix_caseorder	2be83a7	6	0	0	
+fix_forloop	2be83a7	1	0	0	
+fix_guardstack	2be83a7	0	0	0	
+fix_allocargs	2be83a7	2	0	0	
+fix_idioms	2be83a7	51	0	0	seed_mod, seed_divides, range, alldiv, seed_rem, seed_div, seed_bit, pow2div
+fix_uninline	2be83a7	3	0	0	
+fix_return	2be83a7	4	0	0	
+fix_gsbuffer	2be83a7	6	0	0	
+fix_stringops	2be83a7	60	0	0	
+fix_nestcall	2be83a7	1175	0	0	
+fix_order --by offset	2be83a7	83	0	0	
+fix_order --by store	2be83a7	31	0	0	
+fix_permute	2be83a7	44	0	0	max-run 4
+fix_idioms	b1b48df	240	116	7	maskcast
+fix_paramtype	74e8c5d	23	11	41	
+fix_compare	77771c1	629	189	1	
+fix_localtype	83ed95e	73	33	0	
+fix_compare	8a9435a	469	174	0	
+fix_refile	2f14218	42	0	0	
+fix_static	2f14218	294	3	1	
+fix_static --demote	2f14218	1	0	0	
+fix_fastcall	2f14218	4	0	0	
+fix_paramtype	2f14218	12	0	0	
+fix_compare	2f14218	326	35	2	
+fix_assert	2f14218	30	2	0	
+fix_ifelse	2f14218	157	52	0	
+fix_switch	2f14218	42	2	0	
+fix_caseorder	2f14218	6	0	0	
+fix_forloop	2f14218	1	0	0	
+fix_guardstack	2f14218	0	0	0	
+fix_allocargs	2f14218	3	1	0	
+fix_idioms	2f14218	171	5	0	seed_mod, seed_divides, range, alldiv, seed_rem, seed_div, seed_bit, pow2div, maskcast
+fix_localtype	2f14218	40	0	0	
+fix_uninline	2f14218	3	0	0	
+fix_return	2f14218	3	0	0	
+fix_gsbuffer	2f14218	6	0	0	
+fix_stringops	2f14218	58	0	0	
+fix_nestcall	2f14218	1111	6	0	
+fix_order --by offset	2f14218	82	1	0	
+fix_order --by store	2f14218	30	0	0	
+fix_permute	2f14218	53	9	8	max-run 4
+fix_refile	2f14218	42	0	0	
+fix_static	2f14218	291	0	0	
+fix_static --demote	2f14218	1	0	0	
+fix_fastcall	2f14218	4	0	0	
+fix_paramtype	2f14218	12	0	0	
+fix_compare	2f14218	312	21	0	
+fix_assert	2f14218	28	0	0	
+fix_ifelse	2f14218	148	43	0	
+fix_switch	2f14218	40	0	0	
+fix_caseorder	2f14218	6	0	0	
+fix_forloop	2f14218	1	0	0	
+fix_guardstack	2f14218	0	0	0	
+fix_allocargs	2f14218	2	0	0	
+fix_idioms	2f14218	166	0	0	seed_mod, seed_divides, range, alldiv, seed_rem, seed_div, seed_bit, pow2div, maskcast
+fix_localtype	2f14218	40	0	0	
+fix_uninline	2f14218	3	0	0	
+fix_return	2f14218	3	0	0	
+fix_gsbuffer	2f14218	6	0	0	
+fix_stringops	2f14218	58	0	0	
+fix_nestcall	2f14218	1103	0	0	
+fix_order --by offset	2f14218	81	0	0	
+fix_order --by store	2f14218	30	0	0	
+fix_permute	2f14218	44	0	0	max-run 4

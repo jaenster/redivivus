@@ -1,0 +1,677 @@
+start	end	name	tu	symbol	method	detail
+00681a48	00681a57	__security_check_cookie	libcmt.lib/secchk	@__security_check_cookie@4	lib-exact	linked
+00681a57	00681a7b	_amsg_exit	libcmt.lib/crt0dat	__amsg_exit	lib-exact	linked
+00681a7b	00681aa1	__crtCorExitProcess	libcmt.lib/crt0dat	___crtCorExitProcess	lib-exact	linked
+00681aa1	00681ab6	__crtExitProcess	libcmt.lib/crt0dat	___crtExitProcess	lib-exact	linked
+00681ac8	00681ae0	_initterm	libcmt.lib/crt0dat	__initterm	lib-exact	linked
+00681ae0	00681b00	_initterm_e	libcmt.lib/crt0dat	__initterm_e	lib-exact	linked
+00681b00	00681b37	_get_osplatform	libcmt.lib/crt0dat	__get_osplatform	lib-order	after _initterm_e 1.00; linked
+00681baf	00681beb	_get_winmajor	libcmt.lib/crt0dat	__get_winmajor	lib-votes	3 of 3 call sites, 1.00; linked
+00681c95	00681d27	_cinit	libcmt.lib/crt0dat	__cinit	lib-exact	linked
+00681d27	00681e03	doexit	libcmt.lib/crt0dat	_doexit	lib-order	after _cinit 0.99; 2 pieces; linked
+00681e09	00681e1a	exit	libcmt.lib/crt0dat	_exit	lib-exact	linked
+00681e1a	00681e2b	_exit	libcmt.lib/crt0dat	__exit	lib-exact	linked
+00681e2b	00681e3a	_cexit	libcmt.lib/crt0dat	__cexit	lib-exact	linked
+00681e3a	00681e49	_c_exit	libcmt.lib/crt0dat	__c_exit	lib-exact	linked
+00681e49	00681e95	_init_pointers	libcmt.lib/crt0dat	__init_pointers	lib-exact	linked
+00681e95	00681ea6	atol	libcmt.lib/atox	_atol	lib-votes	8 of 8 call sites, 1.00; linked
+00681ea6	00681ebb	_atol_l	libcmt.lib/atox	__atol_l	lib-order	after atol 1.00; linked
+00681ebb	00681ec0	atoi	libcmt.lib/atox	_atoi	lib-votes	28 of 28 call sites, 1.00; linked
+00681ec0	00681ec5	_atoi_l	libcmt.lib/atox	__atoi_l	lib-order	after atoi 1.00; linked
+00681ef0	00681f6a	memset	libcmt.lib/memset	_memset	lib-exact	linked
+00681f6a	00681fdc	_fclose_nolock	libcmt.lib/fclose	__fclose_nolock	lib-exact	linked
+00681fdc	00682058	fclose	libcmt.lib/fclose	_fclose	lib-exact	2 pieces; linked
+00682058	00682197	fputc	libcmt.lib/fputc	_fputc	lib-votes	8 of 8 call sites, 0.98; 2 pieces; linked
+00682197	006822d6	putc	libcmt.lib/fputc	_putc	lib-order	after fputc 0.98; 2 pieces; linked
+006822d6	0068239a	_fsopen	libcmt.lib/fopen	__fsopen	lib-exact	2 pieces; linked
+0068239a	006823ad	fopen	libcmt.lib/fopen	_fopen	lib-order	after _fsopen 1.00; linked
+006823fd	00682478	sprintf	libcmt.lib/sprintf	_sprintf	lib-exact	linked
+006824cb	006824ea	_snprintf_s	libcmt.lib/sprintf	__snprintf_s	lib-exact	one of 2 identical; linked
+00682591	0068264f	strncmp	libcmt.lib/strncmp	_strncmp	lib-exact	linked
+0068264f	0068270e	strtok	libcmt.lib/strtok	_strtok	lib-exact	linked
+00682740	00682764	fast_error_exit	libcmt.lib/wincrt0	_fast_error_exit	lib-exact	one of 2 identical; linked
+00682764	006827a5	check_managed_app	libcmt.lib/wincrt0	_check_managed_app	lib-exact	one of 4 identical; linked
+006827a5	00682970	__tmainCRTStartup	libcmt.lib/wincrt0	___tmainCRTStartup	lib-similar	0.97, next 0.90; 4 pieces; linked
+00682990	006829bd	strrchr	libcmt.lib/strrchr	_strrchr	lib-exact	linked
+006829c0	00682d25	memcpy	libcmt.lib/memcpy	_memcpy	lib-votes	172 of 172 call sites, 1.00; linked
+00682d25	00682da1	_vsprintf_l	libcmt.lib/vsprintf	__vsprintf_l	lib-exact	linked
+00682da1	00682db8	vsprintf	libcmt.lib/vsprintf	_vsprintf	lib-order	after _vsprintf_l 1.00; linked
+00682e71	00682f22	_vsnprintf_l	libcmt.lib/vsnprint	__vsnprintf_l	lib-exact	linked
+00682f22	00682f3d	_vsnprintf	libcmt.lib/vsnprint	__vsnprintf	lib-order	after _vsnprintf_l 1.00; linked
+00682f3d	00682f3e	_fpclear	libcmt.lib/fpinit	__fpclear	lib-order	before _cfltcvt_init 1.00; linked
+00682f3e	00682f9e	_cfltcvt_init	libcmt.lib/fpinit	__cfltcvt_init	lib-exact	linked
+00682fae	00682fcc	_fpmath	libcmt.lib/fpinit	__fpmath	lib-exact	linked
+00682fd0	00682fec	_ftol2_pentium4	libcmt.lib/ftol2	__ftol2_pentium4	lib-similar	0.89, next 0.00; linked
+00683006	0068307b	_ftol2	libcmt.lib/ftol2	__ftol2	lib-exact	linked
+006831b0	006831db	_chkstk	libcmt.lib/chkstk	__chkstk	lib-exact	linked
+006831db	00683288	_snprintf	libcmt.lib/snprintf	__snprintf	lib-exact	linked
+006832a5	006832d0	_JumpToContinuation	libcmt.lib/trnsctrl	?_JumpToContinuation@@YGXPAXPAUEHRegistrationNode@@@Z	lib-exact	linked
+006832ea	0068333c	_UnwindNestedFrames	libcmt.lib/trnsctrl	?_UnwindNestedFrames@@YGXPAUEHRegistrationNode@@PAUEHExceptionRecord@@@Z	lib-exact	linked
+006833f8	00683428	CatchGuardHandler	libcmt.lib/trnsctrl	?CatchGuardHandler@@YA?AW4_EXCEPTION_DISPOSITION@@PAUEHExceptionRecord@@PAUCatchGuardRN@@PAX2@Z	lib-exact	linked
+00683428	006834fd	_CallSETranslator	libcmt.lib/trnsctrl	?_CallSETranslator@@YAHPAUEHExceptionRecord@@PAUEHRegistrationNode@@PAX2PBU_s_FuncInfo@@H1@Z	lib-exact	linked
+006834fd	0068359a	TranslatorGuardHandler	libcmt.lib/trnsctrl	?TranslatorGuardHandler@@YA?AW4_EXCEPTION_DISPOSITION@@PAUEHExceptionRecord@@PAUTranslatorGuardRN@@PAX2@Z	lib-exact	linked
+0068359a	0068360d	_GetRangeOfTrysToCheck	libcmt.lib/trnsctrl	?_GetRangeOfTrysToCheck@@YAPBU_s_TryBlockMapEntry@@PBU_s_FuncInfo@@HHPAI1@Z	lib-exact	linked
+0068360d	00683635	_CreateFrameInfo	libcmt.lib/trnsctrl	__CreateFrameInfo	lib-exact	linked
+00683635	00683656	_IsExceptionObjectToBeDestroyed	libcmt.lib/trnsctrl	__IsExceptionObjectToBeDestroyed	lib-exact	linked
+00683656	006836a2	_FindAndUnlinkFrame	libcmt.lib/trnsctrl	__FindAndUnlinkFrame	lib-exact	linked
+006836a2	00683700	_CallCatchBlock2	libcmt.lib/trnsctrl	?_CallCatchBlock2@@YAPAXPAUEHRegistrationNode@@PBU_s_FuncInfo@@PAXHK@Z	lib-exact	linked
+00683700	006837b9	_onexit_nolock	libcmt.lib/onexit	__onexit_nolock	lib-exact	linked
+006837b9	006837e8	__onexitinit	libcmt.lib/onexit	___onexitinit	lib-exact	linked
+006837e8	00683824	_onexit	libcmt.lib/onexit	__onexit	lib-exact	2 pieces; linked
+00683824	00683836	atexit	libcmt.lib/onexit	_atexit	lib-exact	linked
+00683840	00683ba5	memmove	libcmt.lib/memmove	_memmove	lib-votes	26 of 26 call sites, 1.00; linked
+00683ba5	00683cf2	realloc	libcmt.lib/realloc	_realloc	lib-votes	6 of 6 call sites, 0.75; 2 pieces; linked
+00683dc0	00683e39	_recalloc	libcmt.lib/realloc	__recalloc	lib-exact	linked
+00683e39	00683e88	V6_HeapAlloc	libcmt.lib/malloc	_V6_HeapAlloc	lib-exact	2 pieces; linked
+00683efd	00683fc0	malloc	libcmt.lib/malloc	_malloc	lib-exact	linked
+00683fc0	0068401f	free	libcmt.lib/free	_free	lib-votes	166 of 166 call sites, 0.81; 2 pieces; linked
+0068404e	006840d0	_LocaleUpdate::_LocaleUpdate	libcmt.lib/stricmp	??0_LocaleUpdate@@QAE@PAUlocaleinfo_struct@@@Z	lib-exact	one of 146 identical; linked
+006840d0	006840de	_LocaleUpdate::~_LocaleUpdate	libcmt.lib/stricmp	??1_LocaleUpdate@@QAE@XZ	lib-exact	one of 146 identical; linked
+006840e1	00684116	__ascii_stricmp	libcmt.lib/stricmp	___ascii_stricmp	lib-exact	linked
+00684116	006841e9	_stricmp_l	libcmt.lib/stricmp	__stricmp_l	lib-exact	linked
+006841e9	00684239	_stricmp	libcmt.lib/stricmp	__stricmp	lib-order	after _stricmp_l 1.00; linked
+00684240	006842ea	_alldiv	libcmt.lib/lldiv	__alldiv	lib-exact	linked
+006842ea	00684449	_fwrite_nolock	libcmt.lib/fwrite	__fwrite_nolock	lib-exact	linked
+00684449	006844cb	fwrite	libcmt.lib/fwrite	_fwrite	lib-exact	2 pieces; linked
+006844cb	006846d1	_fread_nolock_s	libcmt.lib/fread	__fread_nolock_s	lib-exact	linked
+006846ec	00684782	fread_s	libcmt.lib/fread	_fread_s	lib-exact	2 pieces; linked
+00684782	0068479d	fread	libcmt.lib/fread	_fread	lib-order	after fread_s 1.00; linked
+0068479d	00684935	_ftell_nolock	libcmt.lib/ftell	__ftell_nolock	lib-order	before ftell 0.96; linked
+00684935	006849a3	ftell	libcmt.lib/ftell	_ftell	lib-exact	2 pieces; linked
+006849a3	00684a2a	_fseek_nolock	libcmt.lib/fseek	__fseek_nolock	lib-exact	linked
+00684a2a	00684aaf	fseek	libcmt.lib/fseek	_fseek	lib-exact	2 pieces; linked
+00684af3	00684b12	_set_se_translator	libcmt.lib/user	?_set_se_translator@@YAP6AXIPAU_EXCEPTION_POINTERS@@@ZP6AXI0@Z@Z	lib-exact	linked
+00684b6d	00684bd5	vscan_fn	libcmt.lib/sscanf	_vscan_fn	lib-exact	linked
+00684bd5	00684bf4	sscanf	libcmt.lib/sscanf	_sscanf	lib-votes	7 of 7 call sites, 0.91; linked
+00684c60	00684c94	_allmul	libcmt.lib/llmul	__allmul	lib-exact	linked
+00684c94	00684dd9	fprintf	libcmt.lib/fprintf	_fprintf	lib-similar	0.96, next 0.88; linked
+00684eb1	00684ecc	type_info::operator?8	libcmt.lib/typinfo	??8type_info@@QBE_NABV0@@Z	lib-exact	linked
+00684f20	00684f44	ValidateLocalCookies	libcmt.lib/chandler4	_ValidateLocalCookies	lib-exact	linked
+00684f50	006850e6	_except_handler4	libcmt.lib/chandler4	__except_handler4	lib-exact	linked
+006850e6	0068511f	_time32	libcmt.lib/mt_obj/time	__time32	lib-exact	linked
+00685127	0068523e	_tolower_l	libcmt.lib/tolower	__tolower_l	lib-exact	linked
+0068523e	00685265	tolower	libcmt.lib/tolower	_tolower	lib-exact	linked
+0068526d	00685385	_toupper_l	libcmt.lib/toupper	__toupper_l	lib-exact	linked
+00685385	006853ac	toupper	libcmt.lib/toupper	_toupper	lib-exact	linked
+006853b0	0068548f	_alldvrm	libcmt.lib/lldvrm	__alldvrm	lib-exact	linked
+0068548f	006855dd	vfprintf_helper	libcmt.lib/vfprintf	_vfprintf_helper	lib-similar	0.98, next 0.89; 2 pieces; linked
+0068568b	006856c7	_time64	libcmt.lib/time64	__time64	lib-exact	linked
+006856e9	006859ae	_localtime64_s	libcmt.lib/loctim64	__localtime64_s	lib-exact	linked
+006859d2	00685a85	strncpy_s	libcmt.lib/strncpy_s	_strncpy_s	lib-exact	linked
+00685a90	00685ab8	swap	libcmt.lib/qsort	_swap	lib-order	before shortsort 1.00; linked
+00685ac0	00685b47	shortsort	libcmt.lib/qsort	_shortsort	lib-exact	linked
+00685b50	00685df7	qsort	libcmt.lib/qsort	_qsort	lib-exact	linked
+00685df7	00685e27	wcsrchr	libcmt.lib/wcsrchr	_wcsrchr	lib-exact	linked
+00685e27	00685eed	_wfsopen	libcmt.lib/wfopen	__wfsopen	lib-exact	2 pieces; linked
+00685eed	00685f00	_wfopen	libcmt.lib/wfopen	__wfopen	lib-order	after _wfsopen 1.00; linked
+00685f00	00685f50	_wfopen_s	libcmt.lib/wfopen	__wfopen_s	lib-order	after _wfopen 1.00; linked
+00685f50	00686040	_strnicmp_l	libcmt.lib/strnicmp	__strnicmp_l	lib-exact	linked
+00686040	0068609c	_strnicmp	libcmt.lib/strnicmp	__strnicmp	lib-order	after _strnicmp_l 1.00; linked
+006860ae	006860c9	_freea	libcmt.lib/strupr	__freea	lib-exact	one of 17 identical; linked
+006860c9	00686245	_strupr_s_l_stat	libcmt.lib/strupr	?_strupr_s_l_stat@@YAHPADIPAUlocaleinfo_struct@@@Z	lib-exact	linked
+00686245	00686278	_strupr_s_l	libcmt.lib/strupr	__strupr_s_l	lib-exact	linked
+006862a2	00686304	_strupr	libcmt.lib/strupr	__strupr	lib-exact	linked
+00686304	00686485	_strlwr_s_l_stat	libcmt.lib/strlwr	?_strlwr_s_l_stat@@YAHPADIPAUlocaleinfo_struct@@@Z	lib-exact	linked
+00686485	006864b7	_strlwr_s_l	libcmt.lib/strlwr	__strlwr_s_l	lib-exact	linked
+006864e1	00686543	_strlwr	libcmt.lib/strlwr	__strlwr	lib-exact	linked
+00686543	0068676e	strtoxl	libcmt.lib/strtol	?strtoxl@@YAKPAUlocaleinfo_struct@@PBDPAPBDHH@Z	lib-exact	linked
+0068676e	00686797	strtol	libcmt.lib/strtol	_strtol	lib-order	after strtoxl 1.00; linked
+00686797	006867b2	_strtol_l	libcmt.lib/strtol	__strtol_l	lib-order	after strtol 1.00; linked
+006867b2	006867dc	strtoul	libcmt.lib/strtol	_strtoul	lib-order	after _strtol_l 1.00; linked
+006867f7	006868ff	_fullpath	libcmt.lib/fullpath	__fullpath	lib-exact	linked
+00686900	00686986	strstr	libcmt.lib/strstr	_strstr	lib-exact	linked
+00686990	006869d0	strpbrk	libcmt.lib/strpbrk	_strpbrk	lib-exact	linked
+006869d0	006869e6	_alloca_probe_16	libcmt.lib/alloca16	__alloca_probe_16	lib-exact	linked
+006869fc	00686a61	operator?_L	libcmt.lib/ehvecctr	??_L@YGXPAXIHP6EX0@Z1@Z	lib-exact	2 pieces
+00686a73	00686ad1	__ArrayUnwind	libcmt.lib/ehvecdtr	?__ArrayUnwind@@YGXPAXIHP6EX0@Z@Z	lib-exact	3 pieces
+00686ad1	00686b34	operator?_M	libcmt.lib/ehvecdtr	??_M@YGXPAXIHP6EX0@Z@Z	lib-exact	2 pieces
+00686b40	00686b5f	_aullshr	libcmt.lib/ullshr	__aullshr	lib-exact	linked
+00686b60	00686bf5	_aulldvrm	libcmt.lib/ulldvrm	__aulldvrm	lib-exact	linked
+00686c00	00686c68	_aulldiv	libcmt.lib/ulldiv	__aulldiv	lib-exact	linked
+00686c70	00686d22	_allrem	libcmt.lib/llrem	__allrem	lib-exact	linked
+00686d30	00686d51	_allshr	libcmt.lib/llshr	__allshr	lib-exact	linked
+00686d51	00686da5	_isalpha_l	libcmt.lib/_ctype	__isalpha_l	lib-exact	linked
+00686da5	00686dd0	isalpha	libcmt.lib/_ctype	_isalpha	lib-exact	linked
+00686dd0	00686e1f	_isupper_l	libcmt.lib/_ctype	__isupper_l	lib-exact	linked
+00686ec0	00686f0f	_isdigit_l	libcmt.lib/_ctype	__isdigit_l	lib-exact	linked
+00686f0f	00686f38	isdigit	libcmt.lib/_ctype	_isdigit	lib-exact	linked
+00686f38	00686f8c	_isxdigit_l	libcmt.lib/_ctype	__isxdigit_l	lib-exact	linked
+00686f8c	00686fb7	isxdigit	libcmt.lib/_ctype	_isxdigit	lib-exact	linked
+00686fb7	00687006	_isspace_l	libcmt.lib/_ctype	__isspace_l	lib-exact	linked
+00687006	0068702f	isspace	libcmt.lib/_ctype	_isspace	lib-exact	linked
+006870a7	006870fb	_isalnum_l	libcmt.lib/_ctype	__isalnum_l	lib-exact	linked
+006870fb	00687126	isalnum	libcmt.lib/_ctype	_isalnum	lib-exact	linked
+00687330	00687454	strncpy	libcmt.lib/strncpy	_strncpy	lib-exact	linked
+00687454	00687461	srand	libcmt.lib/rand	_srand	lib-exact	linked
+00687461	00687483	rand	libcmt.lib/rand	_rand	lib-exact	linked
+00687490	006875c5	strncat	libcmt.lib/strncat	_strncat	lib-exact	linked
+006875c5	00687605	xtoa	libcmt.lib/xtoa	_xtoa@16	lib-exact	linked
+00687605	0068762d	_itoa	libcmt.lib/xtoa	__itoa	lib-order	after xtoa 1.00; linked
+00687652	0068766a	_ultoa	libcmt.lib/xtoa	__ultoa	lib-order	before x64toa 1.00; linked
+0068766a	006876d7	x64toa	libcmt.lib/xtoa	@x64toa@20	lib-exact	linked
+006876d7	00687708	_i64toa	libcmt.lib/xtoa	__i64toa	lib-order	after x64toa 1.00; linked
+00687708	00687723	_ui64toa	libcmt.lib/xtoa	__ui64toa	lib-order	after _i64toa 1.00; linked
+00687740	006877fe	strchr	libcmt.lib/strchr	_strchr	lib-similar	1.00, next 0.00; linked
+006877fe	00687828	_purecall	libcmt.lib/purevirt	__purecall	lib-exact	linked
+00687860	00687895	_strrev	libcmt.lib/strrev	__strrev	lib-exact	linked
+006878a0	0068799e	_except_handler3	libcmt.lib/exsup3	__except_handler3	lib-exact	linked
+006879c0	006879d4	_CIsqrt	libcmt.lib/sqrt	__CIsqrt	lib-votes	6 of 6 call sites, 0.83; linked
+00687bd0	00687c0f	pow	libcmt.lib/pow	_pow	lib-similar	0.93, next 0.87; linked
+00687c10	00687c64	_CIpow	libcmt.lib/pow	__CIpow	lib-order	after pow 0.79; linked
+00687fb0	00687ff5	_SEH_prolog4	libcmt.lib/sehprolg4	__SEH_prolog4	lib-exact	linked
+00687ff5	00688009	_SEH_epilog4	libcmt.lib/sehprolg4	__SEH_epilog4	lib-exact	linked
+00688009	00688042	_endthreadex	libcmt.lib/threadex	__endthreadex	lib-exact	linked
+00688042	00688083	_callthreadstartex	libcmt.lib/threadex	__callthreadstartex	lib-exact	3 pieces; linked
+00688083	00688103	_threadstartex	libcmt.lib/threadex	__threadstartex@4	lib-exact	linked
+00688103	006881b1	_beginthreadex	libcmt.lib/threadex	__beginthreadex	lib-exact	linked
+006881b1	00688271	bsearch	libcmt.lib/bsearch	_bsearch	lib-exact	linked
+00688271	006883f8	fgets	libcmt.lib/fgets	_fgets	lib-similar	0.99, next 0.00; 2 pieces; linked
+006883f8	006884a7	printf	libcmt.lib/printf	_printf	lib-exact	one of 2 identical; 2 pieces; linked
+00688536	0068854c	_get_printf_count_output	libcmt.lib/printf	__get_printf_count_output	lib-exact	linked
+006887a9	0068880b	_flush	libcmt.lib/fflush	__flush	lib-exact	linked
+0068880b	0068884d	_fflush_nolock	libcmt.lib/fflush	__fflush_nolock	lib-exact	linked
+0068884d	00688927	flsall	libcmt.lib/fflush	_flsall	lib-exact	4 pieces; linked
+00688927	0068897a	fflush	libcmt.lib/fflush	_fflush	lib-exact	2 pieces; linked
+0068897a	00688983	_flushall	libcmt.lib/fflush	__flushall	lib-order	after fflush 1.00; linked
+00688990	006889d6	strcspn	libcmt.lib/strcspn	_strcspn	lib-exact	linked
+006889d6	00688ada	__report_gsfailure	libcmt.lib/gs_report	___report_gsfailure	lib-exact	linked
+00688ada	00688b46	_use_encode_pointer	libcmt.lib/tidtable	__use_encode_pointer	lib-exact	linked
+00688b46	00688bb4	_encode_pointer	libcmt.lib/tidtable	__encode_pointer	lib-exact	linked
+00688bb4	00688bbd	_encoded_null	libcmt.lib/tidtable	__encoded_null	lib-order	after _encode_pointer 1.00; linked
+00688bbd	00688c2b	_decode_pointer	libcmt.lib/tidtable	__decode_pointer	lib-exact	linked
+00688c2b	00688c34	__crtTlsAlloc	libcmt.lib/tidtable	___crtTlsAlloc@4	lib-order	after _decode_pointer 1.00; linked
+00688c34	00688c49	__fls_getvalue	libcmt.lib/tidtable	___fls_getvalue@4	lib-exact	linked
+00688c49	00688c4f	__get_flsindex	libcmt.lib/tidtable	___get_flsindex	lib-order	after __fls_getvalue 1.00; linked
+00688c4f	00688c81	__set_flsgetvalue	libcmt.lib/tidtable	___set_flsgetvalue	lib-exact	linked
+00688c81	00688c9a	__fls_setvalue	libcmt.lib/tidtable	___fls_setvalue@8	lib-exact	linked
+00688c9a	00688cd7	_mtterm	libcmt.lib/tidtable	__mtterm	lib-exact	linked
+00688cd7	00688d96	_initptd	libcmt.lib/tidtable	__initptd	lib-exact	2 pieces; linked
+00688d96	00688e0d	_getptd_noexit	libcmt.lib/tidtable	__getptd_noexit	lib-exact	linked
+00688e0d	00688e25	_getptd	libcmt.lib/tidtable	__getptd	lib-exact	linked
+00688e25	00688f46	_freefls	libcmt.lib/tidtable	__freefls@4	lib-exact	3 pieces; linked
+00688f46	00688faf	_freeptd	libcmt.lib/tidtable	__freeptd	lib-exact	linked
+00688fbb	0068913f	_mtinit	libcmt.lib/tidtable	__mtinit	lib-exact	linked
+0068913f	006892df	_NMSG_WRITE	libcmt.lib/crt0msg	__NMSG_WRITE	lib-exact	linked
+006892ff	00689338	_FF_MSGBANNER	libcmt.lib/crt0msg	__FF_MSGBANNER	lib-exact	linked
+00689338	00689381	_mtinitlocks	libcmt.lib/mlock	__mtinitlocks	lib-exact	linked
+00689381	006893d6	_mtdeletelocks	libcmt.lib/mlock	__mtdeletelocks	lib-exact	linked
+006893d6	006893eb	_unlock	libcmt.lib/mlock	__unlock	lib-exact	linked
+00689403	006894c6	_mtinitlocknum	libcmt.lib/mlock	__mtinitlocknum	lib-exact	2 pieces; linked
+006894c6	006894f7	_lock	libcmt.lib/mlock	__lock	lib-exact	linked
+006894f7	00689501	_initp_misc_invarg	libcmt.lib/invarg	__initp_misc_invarg	lib-order	before _invoke_watson 1.00; linked
+00689501	006895fd	_invoke_watson	libcmt.lib/invarg	__invoke_watson	lib-exact	linked
+00689635	00689659	_invalid_parameter	libcmt.lib/invarg	__invalid_parameter	lib-exact	linked
+00689672	006896ad	_get_errno_from_oserr	libcmt.lib/dosmap	__get_errno_from_oserr	lib-exact	linked
+006896ad	006896c0	_errno	libcmt.lib/dosmap	__errno	lib-exact	linked
+006896c0	006896d3	__doserrno	libcmt.lib/dosmap	___doserrno	lib-exact	linked
+006896d3	006896f1	_dosmaperr	libcmt.lib/dosmap	__dosmaperr	lib-exact	linked
+006897c3	006897e2	_initp_misc_cfltcvt_tab	libcmt.lib/cmiscdat	__initp_misc_cfltcvt_tab	lib-exact	linked
+006897f0	00689819	_ValidateImageBase	libcmt.lib/pesect	__ValidateImageBase	lib-exact	linked
+00689820	00689862	_FindPESection	libcmt.lib/pesect	__FindPESection	lib-exact	linked
+00689870	0068992b	_IsNonwritableInCurrentImage	libcmt.lib/pesect	__IsNonwritableInCurrentImage	lib-exact	3 pieces; linked
+0068992b	00689964	terminate	libcmt.lib/hooks	?terminate@@YAXXZ	lib-exact	3 pieces; linked
+00689964	00689977	unexpected	libcmt.lib/hooks	?unexpected@@YAXXZ	lib-exact	linked
+00689977	006899ae	_inconsistency	libcmt.lib/hooks	?_inconsistency@@YAXXZ	lib-exact	3 pieces; linked
+006899ae	006899bf	_initp_eh_hooks	libcmt.lib/hooks	__initp_eh_hooks	lib-exact	linked
+006899bf	006899c0	_initp_misc_winxfltr	libcmt.lib/winxfltr	__initp_misc_winxfltr	lib-order	before xcptlookup 1.00; linked
+006899c0	006899f2	xcptlookup	libcmt.lib/winxfltr	_xcptlookup	lib-exact	linked
+006899f2	00689b50	_XcptFilter	libcmt.lib/winxfltr	__XcptFilter	lib-exact	linked
+00689b50	00689b6b	__CppXcptFilter	libcmt.lib/winxfltr	___CppXcptFilter	lib-exact	linked
+00689b6b	00689b84	_initp_misc_winsig	libcmt.lib/winsig	__initp_misc_winsig	lib-exact	linked
+00689b84	00689c07	ctrlevent_capture	libcmt.lib/winsig	_ctrlevent_capture@4	lib-order	after _initp_misc_winsig 0.90; 2 pieces; linked
+00689c1f	00689c53	siglookup	libcmt.lib/winsig	_siglookup	lib-exact	linked
+00689c53	00689c60	__get_sigabrt	libcmt.lib/winsig	___get_sigabrt	lib-order	after siglookup 1.00; linked
+00689c60	00689c69	__fpecode	libcmt.lib/winsig	___fpecode	lib-exact	linked
+00689c72	00689e73	signal	libcmt.lib/winsig	_signal	lib-order	after __fpecode 0.88; 2 pieces; linked
+00689eaf	0068a032	raise	libcmt.lib/winsig	_raise	lib-similar	0.92, next 0.00; 2 pieces; linked
+0068a16d	0068a2c7	__getlocaleinfo	libcmt.lib/inithelp	___getlocaleinfo	lib-exact	linked
+0068a2c7	0068a2d1	_initp_misc_purevirt	libcmt.lib/inithelp	__initp_misc_purevirt	lib-order	after __getlocaleinfo 1.00; linked
+0068a2d1	0068a2db	_initp_misc_initcrit	libcmt.lib/initcrit	__initp_misc_initcrit	lib-order	before __crtInitCritSecNoSpinCount 1.00; linked
+0068a2db	0068a2eb	__crtInitCritSecNoSpinCount	libcmt.lib/initcrit	___crtInitCritSecNoSpinCount@8	lib-exact	linked
+0068a2eb	0068a3b0	__crtInitCritSecAndSpinCount	libcmt.lib/initcrit	___crtInitCritSecAndSpinCount	lib-exact	3 pieces; linked
+0068a401	0068a423	_callnewh	libcmt.lib/handler	__callnewh	lib-exact	linked
+0068a826	0068a83a	_sse2_mathfcns_init	libcmt.lib/mathfcns	__sse2_mathfcns_init	lib-exact	linked
+0068a84e	0068a8e5	_close_nolock	libcmt.lib/close	__close_nolock	lib-order	before _close 0.74; linked
+0068a8e5	0068a9b2	_close	libcmt.lib/close	__close	lib-similar	0.98, next 0.88; 2 pieces; linked
+0068a9b2	0068a9df	_fileno	libcmt.lib/fileno	__fileno	lib-exact	linked
+0068a9df	0068aa0b	_freebuf	libcmt.lib/_freebuf	__freebuf	lib-exact	linked
+0068aa0b	0068aa11	__iob_func	libcmt.lib/_file	___iob_func	lib-order	before __initstdio 1.00; linked
+0068aa11	0068aac2	__initstdio	libcmt.lib/_file	___initstdio	lib-order	before __endstdio 0.96; linked
+0068aac2	0068aae2	__endstdio	libcmt.lib/_file	___endstdio	lib-exact	linked
+0068aae2	0068ab1e	_lock_file	libcmt.lib/_file	__lock_file	lib-exact	linked
+0068ab1e	0068ab4c	_lock_file2	libcmt.lib/_file	__lock_file2	lib-exact	linked
+0068ab4c	0068ab82	_unlock_file	libcmt.lib/_file	__unlock_file	lib-exact	linked
+0068ab82	0068abac	_unlock_file2	libcmt.lib/_file	__unlock_file2	lib-exact	linked
+0068abac	0068ad0c	_flsbuf	libcmt.lib/_flsbuf	__flsbuf	lib-similar	0.99, next 0.00; linked
+0068ad0c	0068af60	_ioinit	libcmt.lib/ioinit	__ioinit	lib-order	before _ioterm 0.73; 3 pieces; linked
+0068af60	0068afac	_ioterm	libcmt.lib/ioinit	__ioterm	lib-similar	0.89, next 0.00; linked
+0068afac	0068b24c	_openfile	libcmt.lib/_open	__openfile	lib-exact	linked
+0068b24c	0068b382	_getstream	libcmt.lib/stream	__getstream	lib-similar	0.90, next 0.00; 2 pieces; linked
+0068b384	0068b414	_local_unwind4	libcmt.lib/exsup4	__local_unwind4	lib-exact	linked
+0068b414	0068b45a	_unwind_handler4	libcmt.lib/exsup4	__unwind_handler4	lib-order	after _local_unwind4 0.95; linked
+0068b476	0068b48d	_EH4_CallFilterFunc	libcmt.lib/exsup4	@_EH4_CallFilterFunc@8	lib-exact	linked
+0068b48d	0068b4a6	_EH4_TransferToHandler	libcmt.lib/exsup4	@_EH4_TransferToHandler@8	lib-exact	linked
+0068b4a6	0068b4c0	_EH4_GlobalUnwind	libcmt.lib/exsup4	@_EH4_GlobalUnwind@4	lib-exact	linked
+0068b4c0	0068b4d7	_EH4_LocalUnwind	libcmt.lib/exsup4	@_EH4_LocalUnwind@16	lib-order	after _EH4_GlobalUnwind 0.89; linked
+0068b4d7	0068b50a	write_char	libcmt.lib/output	_write_char	lib-votes	2 of 2 call sites, 1.00; linked
+0068b50a	0068b52e	write_multi_char	libcmt.lib/output	_write_multi_char	lib-votes	3 of 3 call sites, 1.00; linked
+0068b52e	0068b578	write_string	libcmt.lib/output	_write_string	lib-votes	3 of 3 call sites, 1.00; linked
+0068b5a3	0068bf37	_output_l	libcmt.lib/output	__output_l	lib-similar	1.00, next 0.00; linked
+0068bf37	0068c001	_vsnprintf_helper	libcmt.lib/vsnprnc	__vsnprintf_helper	lib-exact	linked
+0068c0f1	0068c1f6	_vsnprintf_s_l	libcmt.lib/vsnprnc	__vsnprintf_s_l	lib-exact	linked
+0068c263	0068c2a0	__CxxUnhandledExceptionFilter	libcmt.lib/unhandld	?__CxxUnhandledExceptionFilter@@YGJPAU_EXCEPTION_POINTERS@@@Z	lib-exact	linked
+0068c2a0	0068c2ae	__CxxSetUnhandledExceptionFilter	libcmt.lib/unhandld	___CxxSetUnhandledExceptionFilter	lib-exact	linked
+0068c2ae	0068c30b	_wincmdln	libcmt.lib/wincmdln	__wincmdln	lib-exact	linked
+0068c30b	0068c3e6	_setenvp	libcmt.lib/stdenvp	__setenvp	lib-exact	linked
+0068c3f0	0068c588	parse_cmdline	libcmt.lib/stdargv	_parse_cmdline	lib-exact	linked
+0068c588	0068c641	_setargv	libcmt.lib/stdargv	__setargv	lib-exact	linked
+0068c641	0068c776	__crtGetEnvironmentStringsA	libcmt.lib/a_env	___crtGetEnvironmentStringsA	lib-exact	linked
+0068c776	0068c7d1	__heap_select	libcmt.lib/heapinit	___heap_select	lib-exact	linked
+0068c7d1	0068c82b	_heap_init	libcmt.lib/heapinit	__heap_init	lib-exact	linked
+0068c8a5	0068c939	__security_init_cookie	libcmt.lib/gs_support	___security_init_cookie	lib-exact	linked
+0068dc05	0068dc76	_forcdecpt_l	libcmt.lib/cvt	__forcdecpt_l	lib-exact	linked
+0068dc76	0068dcf6	_cropzeros_l	libcmt.lib/cvt	__cropzeros_l	lib-exact	linked
+0068dcf6	0068dd0c	_positive	libcmt.lib/cvt	__positive	lib-exact	linked
+0068dd0c	0068dd4c	_fassign_l	libcmt.lib/cvt	__fassign_l	lib-exact	linked
+0068dd4c	0068dd63	_fassign	libcmt.lib/cvt	__fassign	lib-order	after _fassign_l 1.00; linked
+0068dd63	0068dd80	_shift	libcmt.lib/cvt	__shift	lib-exact	linked
+0068dd9c	0068df09	_cftoe2_l	libcmt.lib/cvt	__cftoe2_l	lib-exact	linked
+0068df09	0068dfd7	_cftoe_l	libcmt.lib/cvt	__cftoe_l	lib-exact	linked
+0068dfd7	0068dff5	_cftoe	libcmt.lib/cvt	__cftoe	lib-order	after _cftoe_l 1.00; linked
+0068dff5	0068e366	_cftoa_l	libcmt.lib/cvt	__cftoa_l	lib-exact	linked
+0068e384	0068e479	_cftof2_l	libcmt.lib/cvt	__cftof2_l	lib-exact	linked
+0068e479	0068e532	_cftof_l	libcmt.lib/cvt	__cftof_l	lib-exact	linked
+0068e54d	0068e645	_cftog_l	libcmt.lib/cvt	__cftog_l	lib-exact	linked
+0068e663	0068e6e9	_cfltcvt_l	libcmt.lib/cvt	__cfltcvt_l	lib-exact	linked
+0068e6e9	0068e70a	_cfltcvt	libcmt.lib/cvt	__cfltcvt	lib-order	after _cfltcvt_l 1.00; linked
+0068e70a	0068e733	_setdefaultprecision	libcmt.lib/fp8	__setdefaultprecision	lib-exact	linked
+0068e733	0068e76f	_ms_p5_test_fdiv	libcmt.lib/testfdiv	__ms_p5_test_fdiv	lib-exact	linked
+0068e76f	0068e798	_ms_p5_mp_test_fdiv	libcmt.lib/testfdiv	__ms_p5_mp_test_fdiv	lib-exact	linked
+0068e7c1	0068eb66	__libm_error_support	libcmt.lib/libm_error	___libm_error_support	lib-similar	0.99, next 0.00; linked
+0068eb66	0068eb88	std::bad_exception::`scalar deleting dtor`	libcmt.lib/frame	??_Gbad_exception@std@@UAEPAXI@Z	lib-order	before __TypeMatch 1.00; linked
+0068eb88	0068ebe4	__TypeMatch	libcmt.lib/frame	___TypeMatch	lib-exact	linked
+0068ebe4	0068ec28	__FrameUnwindFilter	libcmt.lib/frame	___FrameUnwindFilter	lib-exact	linked
+0068ec28	0068ed09	__FrameUnwindToState	libcmt.lib/frame	___FrameUnwindToState	lib-order	after __FrameUnwindFilter 0.94; 3 pieces; linked
+0068ed09	0068ed4e	ExFilterRethrow	libcmt.lib/frame	?ExFilterRethrow@@YAHPAU_EXCEPTION_POINTERS@@@Z	lib-exact	linked
+0068ed4e	0068eda2	__DestructExceptionObject	libcmt.lib/frame	___DestructExceptionObject	lib-exact	3 pieces; linked
+0068eda2	0068edc7	__AdjustPointer	libcmt.lib/frame	___AdjustPointer	lib-exact	linked
+0068f016	0068f048	__CxxCallUnwindDtor	libcmt.lib/frame	___CxxCallUnwindDtor	lib-exact	3 pieces; linked
+0068f048	0068f07b	__CxxCallUnwindDelDtor	libcmt.lib/frame	___CxxCallUnwindDelDtor	lib-exact	3 pieces; linked
+0068f07b	0068f0ad	__CxxCallUnwindStdDelDtor	libcmt.lib/frame	___CxxCallUnwindStdDelDtor	lib-exact	3 pieces; linked
+0068f0ad	0068f0e8	__CxxCallUnwindVecDtor	libcmt.lib/frame	___CxxCallUnwindVecDtor	lib-exact	3 pieces; linked
+0068f0e8	0068f161	IsInExceptionSpec	libcmt.lib/frame	?IsInExceptionSpec@@YAEPAUEHExceptionRecord@@PBU_s_ESTypeList@@@Z	lib-exact	linked
+0068f161	0068f1aa	CallUnexpected	libcmt.lib/frame	?CallUnexpected@@YAXPBU_s_ESTypeList@@@Z	lib-order	after IsInExceptionSpec 0.76; linked
+0068f25c	0068f3f8	CallCatchBlock	libcmt.lib/frame	?CallCatchBlock@@YAPAXPAUEHExceptionRecord@@PAUEHRegistrationNode@@PAU_CONTEXT@@PBU_s_FuncInfo@@PAXHK@Z	lib-exact	4 pieces; linked
+0068f3f8	0068f56f	__BuildCatchObjectHelper	libcmt.lib/frame	___BuildCatchObjectHelper	lib-order	after CallCatchBlock 0.97; 3 pieces; linked
+0068f577	0068f608	__BuildCatchObject	libcmt.lib/frame	___BuildCatchObject	lib-exact	3 pieces; linked
+0068f74b	0068f7b7	CatchIt	libcmt.lib/frame	?CatchIt@@YAXPAUEHExceptionRecord@@PAUEHRegistrationNode@@PAU_CONTEXT@@PAXPBU_s_FuncInfo@@PBU_s_HandlerType@@PBU_s_CatchableType@@PBU_s_TryBlockMapEntry@@H1E@Z	lib-exact	linked
+0068f7b7	0068f8a9	FindHandlerForForeignException	libcmt.lib/frame	?FindHandlerForForeignException@@YAXPAUEHExceptionRecord@@PAUEHRegistrationNode@@PAU_CONTEXT@@PAXPBU_s_FuncInfo@@HH1@Z	lib-exact	linked
+0068f8a9	0068fbff	FindHandler	libcmt.lib/frame	?FindHandler@@YAXPAUEHExceptionRecord@@PAUEHRegistrationNode@@PAU_CONTEXT@@PAXPBU_s_FuncInfo@@EH1@Z	lib-exact	linked
+0068fbff	0068fc17	std::bad_exception::bad_exception	libcmt.lib/frame	??0bad_exception@std@@QAE@ABV01@@Z	lib-order	after FindHandler 1.00; linked
+0068fc17	0068fcfb	__InternalCxxFrameHandler	libcmt.lib/frame	___InternalCxxFrameHandler	lib-exact	linked
+0068fd00	0068fd4c	_CallSettingFrame	libcmt.lib/lowhelpr	__CallSettingFrame@12	lib-exact	linked
+0068fd7d	0068fdbd	_malloc_crt	libcmt.lib/crtheap	__malloc_crt	lib-exact	linked
+0068fdbd	0068fe05	_calloc_crt	libcmt.lib/crtheap	__calloc_crt	lib-exact	linked
+0068fe05	0068fe50	_realloc_crt	libcmt.lib/crtheap	__realloc_crt	lib-exact	linked
+0068fe50	0068fea0	_recalloc_crt	libcmt.lib/crtheap	__recalloc_crt	lib-exact	linked
+0068fea0	0068fea8	_malloc_crt_fastcall	libcmt.lib/crtheap	@_malloc_crt_fastcall@4	lib-order	after _recalloc_crt 1.00; linked
+0068febc	0068ff5f	_msize	libcmt.lib/msize	__msize	lib-exact	2 pieces; linked
+00690002	0069004a	__sbh_heap_init	libcmt.lib/sbheap	___sbh_heap_init	lib-exact	linked
+0069004a	00690075	__sbh_find_block	libcmt.lib/sbheap	___sbh_find_block	lib-exact	linked
+00690075	00690389	__sbh_free_block	libcmt.lib/sbheap	___sbh_free_block	lib-exact	linked
+00690389	00690439	__sbh_alloc_new_region	libcmt.lib/sbheap	___sbh_alloc_new_region	lib-exact	linked
+00690439	0069053f	__sbh_alloc_new_group	libcmt.lib/sbheap	___sbh_alloc_new_group	lib-exact	linked
+0069053f	0069081e	__sbh_resize_block	libcmt.lib/sbheap	___sbh_resize_block	lib-exact	linked
+00690c75	00690f58	__sbh_alloc_block	libcmt.lib/sbheap	___sbh_alloc_block	lib-exact	linked
+00690f58	00690f87	CPtoLCID	libcmt.lib/mbctype	?CPtoLCID@@YAHH@Z	lib-exact	linked
+00690f87	00690fdc	setSBCS	libcmt.lib/mbctype	?setSBCS@@YAXPAUthreadmbcinfostruct@@@Z	lib-exact	linked
+00690fdc	00691166	setSBUpLow	libcmt.lib/mbctype	?setSBUpLow@@YAXPAUthreadmbcinfostruct@@@Z	lib-exact	linked
+00691166	0069120a	__updatetmbcinfo	libcmt.lib/mbctype	___updatetmbcinfo	lib-exact	2 pieces; linked
+0069120a	00691284	getSystemCP	libcmt.lib/mbctype	?getSystemCP@@YAHH@Z	lib-exact	linked
+00691284	0069145d	_setmbcp_nolock	libcmt.lib/mbctype	__setmbcp_nolock	lib-exact	linked
+00691499	00691603	_setmbcp	libcmt.lib/mbctype	__setmbcp	lib-similar	0.89, next 0.00; 2 pieces; linked
+00691633	00691651	__initmbctable	libcmt.lib/mbctype	___initmbctable	lib-exact	linked
+0069165d	0069179d	__freetlocinfo	libcmt.lib/setlocal	___freetlocinfo	lib-exact	linked
+0069179d	00691823	__addlocaleref	libcmt.lib/setlocal	___addlocaleref	lib-exact	linked
+00691823	006918af	__removelocaleref	libcmt.lib/setlocal	___removelocaleref	lib-exact	linked
+006918af	006918d3	_copytlocinfo_nolock	libcmt.lib/setlocal	__copytlocinfo_nolock	lib-exact	linked
+006918d3	00691911	_updatetlocinfoEx_nolock	libcmt.lib/setlocal	__updatetlocinfoEx_nolock	lib-exact	linked
+00691911	00691987	__updatetlocinfo	libcmt.lib/setlocal	___updatetlocinfo	lib-exact	2 pieces; linked
+006919ed	00691a40	sync_legacy_variables_lk	libcmt.lib/setlocal	_sync_legacy_variables_lk	lib-exact	linked
+00691a40	00691ad6	_free_locale	libcmt.lib/setlocal	__free_locale	lib-exact	2 pieces; linked
+00691adb	00691b6b	_get_current_locale	libcmt.lib/setlocal	__get_current_locale	lib-order	after _free_locale 0.98; 2 pieces; linked
+00691b6b	00691ba9	_strcats	libcmt.lib/setlocal	__strcats	lib-exact	linked
+00691ba9	00691cd2	__lc_strtolc	libcmt.lib/setlocal	___lc_strtolc	lib-exact	linked
+00691cd2	00691d3d	__lc_lctostr	libcmt.lib/setlocal	___lc_lctostr	lib-exact	linked
+00691d3d	00691eae	_setlocale_get_all	libcmt.lib/setlocal	__setlocale_get_all	lib-exact	linked
+00691eae	00692082	_expandlocale	libcmt.lib/setlocal	__expandlocale	lib-exact	linked
+00692082	00692378	_setlocale_set_cat	libcmt.lib/setlocal	__setlocale_set_cat	lib-exact	linked
+00692378	00692546	_setlocale_nolock	libcmt.lib/setlocal	__setlocale_nolock	lib-exact	linked
+0069263e	006927ae	setlocale	libcmt.lib/setlocal	_setlocale	lib-similar	0.94, next 0.00; 4 pieces; linked
+00692dd0	00692eac	_write	libcmt.lib/write	__write	lib-votes	6 of 6 call sites, 0.99; 2 pieces; linked
+00692eac	00692fcc	_filbuf	libcmt.lib/_filbuf	__filbuf	lib-similar	0.98, next 0.79; linked
+00692fcc	0069358d	_read_nolock	libcmt.lib/read	__read_nolock	lib-similar	1.00, next 0.00; linked
+0069358d	0069368a	_read	libcmt.lib/read	__read	lib-order	after _read_nolock 0.79; 2 pieces; linked
+0069368a	00693705	memcpy_s	libcmt.lib/memcpy_s	_memcpy_s	lib-exact	linked
+00693705	00693777	_lseek_nolock	libcmt.lib/lseek	__lseek_nolock	lib-similar	0.95, next 0.00; linked
+00693777	00693853	_lseek	libcmt.lib/lseek	__lseek	lib-order	after _lseek_nolock 0.99; 2 pieces; linked
+00693860	006938eb	strlen	libcmt.lib/strlen	_strlen	lib-exact	linked
+006938eb	0069393f	__check_float_string	libcmt.lib/input	___check_float_string	lib-votes	6 of 6 call sites, 1.00; linked
+00693964	0069397a	_inc	libcmt.lib/input	__inc	lib-order	before _whiteout 1.00; linked
+00693987	006939ac	_whiteout	libcmt.lib/input	__whiteout	lib-order	before _input_l 1.00; linked
+006939ac	006945f9	_input_l	libcmt.lib/input	__input_l	lib-similar	1.00, next 0.00; linked
+006953d8	0069546e	_stbuf	libcmt.lib/_sftbuf	__stbuf	lib-exact	linked
+0069546e	0069549d	_ftbuf	libcmt.lib/_sftbuf	__ftbuf	lib-exact	linked
+0069549d	0069550d	type_info::_Type_info_dtor	libcmt.lib/typname	?_Type_info_dtor@type_info@@CAXPAV1@@Z	lib-order	before type_info::_Name_base 1.00; 2 pieces; linked
+0069550d	00695602	type_info::_Name_base	libcmt.lib/typname	?_Name_base@type_info@@CAPBDPBV1@PAU__type_info_node@@@Z	lib-exact	2 pieces; linked
+00695602	00695672	type_info::_Type_info_dtor_internal	libcmt.lib/typname	?_Type_info_dtor_internal@type_info@@CAXPAV1@@Z	lib-order	after type_info::_Name_base 1.00; 2 pieces; linked
+00695672	006956a3	__unDNameHelper	libcmt.lib/typname	___unDNameHelper	lib-exact	linked
+006956a3	0069578e	type_info::_Name_base_internal	libcmt.lib/typname	?_Name_base_internal@type_info@@CAPBDPBV1@PAU__type_info_node@@@Z	lib-exact	2 pieces; linked
+0069578e	006957e1	__clean_type_info_names_internal	libcmt.lib/typname	___clean_type_info_names_internal	lib-exact	2 pieces; linked
+006957f0	00695878	strcmp	libcmt.lib/strcmp	_strcmp	lib-exact	linked
+00695892	00695c34	__crtLCMapStringA_stat	libcmt.lib/a_map	?__crtLCMapStringA_stat@@YAHPAUlocaleinfo_struct@@KKPBDHPADHHH@Z	lib-exact	linked
+00695c34	00695c77	__crtLCMapStringA	libcmt.lib/a_map	___crtLCMapStringA	lib-exact	linked
+00695c77	00695cad	_isleadbyte_l	libcmt.lib/_wctype	__isleadbyte_l	lib-exact	linked
+00695cad	00695cbb	isleadbyte	libcmt.lib/_wctype	_isleadbyte	lib-order	after _isleadbyte_l 1.00; linked
+00695ede	00695f94	_isctype_l	libcmt.lib/isctype	__isctype_l	lib-exact	linked
+00695fc3	00695ff6	write_char	libcmt.lib/outputs	_write_char	lib-votes	2 of 2 call sites, 1.00; linked
+00695ff6	0069601a	write_multi_char	libcmt.lib/outputs	_write_multi_char	lib-votes	3 of 3 call sites, 1.00; linked
+0069601a	00696064	write_string	libcmt.lib/outputs	_write_string	lib-votes	3 of 3 call sites, 1.00; linked
+00696064	00696a14	_output_s_l	libcmt.lib/outputs	__output_s_l	lib-similar	1.00, next 0.00; linked
+00696a38	00696d81	_tzset_nolock	libcmt.lib/tzset	__tzset_nolock	lib-exact	3 pieces; linked
+00696d81	00696f76	cvtdate	libcmt.lib/tzset	_cvtdate	lib-exact	linked
+00696f76	0069714c	_isindst_nolock	libcmt.lib/tzset	__isindst_nolock	lib-order	after cvtdate 0.78; linked
+0069714c	0069719b	__tzset	libcmt.lib/tzset	___tzset	lib-exact	2 pieces; linked
+0069719b	006971d3	_tzset	libcmt.lib/tzset	__tzset	lib-exact	2 pieces; linked
+006971d3	00697214	_isindst	libcmt.lib/tzset	__isindst	lib-exact	2 pieces; linked
+00697214	00697450	_gmtime64_s	libcmt.lib/gmtime64	__gmtime64_s	lib-exact	linked
+00697450	00697474	_gmtime64	libcmt.lib/gmtime64	__gmtime64	lib-order	after _gmtime64_s 1.00; linked
+00697474	006974a8	_get_daylight	libcmt.lib/timeset	__get_daylight	lib-votes	3 of 3 call sites, 1.00; linked
+006974a8	006974dc	_get_dstbias	libcmt.lib/timeset	__get_dstbias	lib-votes	3 of 3 call sites, 1.00; linked
+006974dc	00697510	_get_timezone	libcmt.lib/timeset	__get_timezone	lib-votes	2 of 2 call sites, 1.00; linked
+00697510	006975b2	_get_tzname	libcmt.lib/timeset	__get_tzname	lib-exact	linked
+006975b2	006975b8	__daylight	libcmt.lib/timeset	___daylight	lib-votes	2 of 2 call sites, 1.00; linked
+006975b8	006975be	__dstbias	libcmt.lib/timeset	___dstbias	lib-order	after __daylight 1.00; linked
+006975be	006975c4	__timezone	libcmt.lib/timeset	___timezone	lib-votes	2 of 2 call sites, 1.00; linked
+006975c4	006975ca	__tzname	libcmt.lib/timeset	___tzname	lib-order	after __timezone 1.00; linked
+006976f7	0069773f	__getgmtimebuf	libcmt.lib/mt_obj/gmtime	___getgmtimebuf	lib-exact	linked
+00697763	006979ef	_wopenfile	libcmt.lib/_wopen	__wopenfile	lib-exact	linked
+006979f0	00697a51	__ascii_strnicmp	libcmt.lib/_strnicm	___ascii_strnicmp	lib-exact	linked
+00697a51	00697ab6	strcpy_s	libcmt.lib/strcpy_s	_strcpy_s	lib-exact	linked
+00697ab6	00697ad0	strnlen	libcmt.lib/strlen_s	_strnlen	lib-exact	linked
+00697ad0	00697b07	_validdrive	libcmt.lib/getcwd	__validdrive	lib-exact	linked
+00697b07	00697c3c	_getdcwd_nolock	libcmt.lib/getcwd	__getdcwd_nolock	lib-exact	linked
+00697c3c	00697c85	_getcwd	libcmt.lib/getcwd	__getcwd	lib-exact	one of 2 identical; 2 pieces; linked
+00697c85	00697ccf	_getdcwd	libcmt.lib/getcwd	__getdcwd	lib-exact	one of 2 identical; 2 pieces; linked
+00697ccf	00697dd4	_calloc_impl	libcmt.lib/calloc	__calloc_impl	lib-similar	0.94, next 0.00; 2 pieces; linked
+00697ded	00697e2c	calloc	libcmt.lib/calloc	_calloc	lib-exact	linked
+00697e2c	00697f1f	abort	libcmt.lib/abort	_abort	lib-exact	linked
+00697f1f	00697f3d	_set_abort_behavior	libcmt.lib/abort	__set_abort_behavior	lib-exact	linked
+00697f3d	00697f71	CallDestructExceptionObject	libcmt.lib/calldtor	_CallDestructExceptionObject	lib-exact	linked
+00697f74	00697f94	_global_unwind2	libcmt.lib/exsup	__global_unwind2	lib-exact	linked
+00697f94	00697fd9	_unwind_handler	libcmt.lib/exsup	__unwind_handler	lib-order	after _global_unwind2 0.95; linked
+00697fd9	0069805d	_local_unwind2	libcmt.lib/exsup	__local_unwind2	lib-order	after _unwind_handler 0.95; linked
+00698080	00698089	_NLG_Notify1	libcmt.lib/exsup	__NLG_Notify1	lib-order	before _NLG_Notify 1.00; linked
+00698089	006980a8	_NLG_Notify	libcmt.lib/exsup	__NLG_Notify	lib-exact	linked
+006980a8	006980ab	_NLG_Call	libcmt.lib/exsup	__NLG_Call	lib-order	after _NLG_Notify 1.00; linked
+006980b0	00698161	ValidateScopeTableHandlers	libcmt.lib/eh3valid	_ValidateScopeTableHandlers	lib-exact	linked
+00698170	00698512	_ValidateEH3RN	libcmt.lib/eh3valid	__ValidateEH3RN	lib-order	after ValidateScopeTableHandlers 0.99; 3 pieces; linked
+00698520	00698587	_trandisp1	libcmt.lib/87disp	__trandisp1	lib-exact	linked
+006986f0	00698707	_startTwoArgErrorHandling	libcmt.lib/genexcep	__startTwoArgErrorHandling	lib-order	before _startOneArgErrorHandling 1.00; linked
+00698707	00698743	_startOneArgErrorHandling	libcmt.lib/genexcep	__startOneArgErrorHandling	lib-exact	linked
+00698750	00698765	_twoToTOS	libcmt.lib/common	__twoToTOS	lib-exact	linked
+00698765	0069877c	_load_CW	libcmt.lib/common	__load_CW	lib-exact	linked
+0069877c	00698795	_convertTOStoQNaN	libcmt.lib/common	__convertTOStoQNaN	lib-exact	linked
+00698795	006987d8	_fload_withFB	libcmt.lib/common	__fload_withFB	lib-exact	linked
+006987d8	006987ee	_checkTOS_withFB	libcmt.lib/common	__checkTOS_withFB	lib-exact	linked
+006987ee	006987fb	_fast_exit	libcmt.lib/common	__fast_exit	lib-exact	linked
+006987fb	00698825	_math_exit	libcmt.lib/common	__math_exit	lib-exact	linked
+00698b61	00698ba6	_fFEXP	libcmt.lib/87tran	__fFEXP	lib-similar	0.95, next 0.00; linked
+00698ca1	00698cf1	_ffexpm1	libcmt.lib/87tran	__ffexpm1	lib-similar	0.87, next 0.00; 2 pieces; linked
+00698d60	00698d79	_CIpow_pentium4	libcmt.lib/pow_pentium4	__CIpow_pentium4	lib-similar	0.90, next 0.77; linked
+006998c0	00699924	_d_inttype	libcmt.lib/powhlp	__d_inttype	lib-exact	linked
+00699924	00699a62	_powhlp	libcmt.lib/powhlp	__powhlp	lib-exact	linked
+00699d00	00699d90	vprintf_helper	libcmt.lib/vprintf	_vprintf_helper	lib-exact	one of 2 identical; 2 pieces; linked
+0069a1ac	0069a28d	_commit	libcmt.lib/commit	__commit	lib-similar	0.99, next 0.00; 2 pieces; linked
+0069a28d	0069a295	_crt_debugger_hook	libcmt.lib/dbghook	__crt_debugger_hook	lib-votes	4 of 4 call sites, 1.00; linked
+0069a295	0069a452	__crtMessageBoxA	libcmt.lib/crtmbox	___crtMessageBoxA	lib-exact	one of 2 identical; linked
+0069a452	0069a4c3	strcat_s	libcmt.lib/strcat_s	_strcat_s	lib-exact	linked
+0069a4c3	0069a509	_set_error_mode	libcmt.lib/errmode	__set_error_mode	lib-exact	linked
+0069a519	0069a522	_fptrap	libcmt.lib/crt0fp	__fptrap	lib-exact	linked
+0069a522	0069a65d	__crtGetLocaleInfoW_stat	libcmt.lib/w_loc	?__crtGetLocaleInfoW_stat@@YAHPAUlocaleinfo_struct@@KKPA_WHH@Z	lib-exact	linked
+0069a65d	0069a698	__crtGetLocaleInfoW	libcmt.lib/w_loc	___crtGetLocaleInfoW	lib-order	after __crtGetLocaleInfoW_stat 1.00; linked
+0069a698	0069a7d5	__crtGetLocaleInfoA_stat	libcmt.lib/a_loc	?__crtGetLocaleInfoA_stat@@YAHPAUlocaleinfo_struct@@KKPADHH@Z	lib-exact	linked
+0069a7d5	0069a810	__crtGetLocaleInfoA	libcmt.lib/a_loc	___crtGetLocaleInfoA	lib-order	after __crtGetLocaleInfoA_stat 1.00; linked
+0069a810	0069a860	has_osfxsr_set	libcmt.lib/cpu_disp	_has_osfxsr_set	lib-exact	3 pieces; linked
+0069a860	0069a8c0	_get_sse2_info	libcmt.lib/cpu_disp	__get_sse2_info	lib-exact	linked
+0069a8c0	0069a8cd	__sse2_available_init	libcmt.lib/cpu_disp	___sse2_available_init	lib-exact	linked
+0069a8cd	0069a94a	_set_osfhnd	libcmt.lib/osfinfo	__set_osfhnd	lib-similar	0.94, next 0.00; linked
+0069a94a	0069a9cb	_free_osfhnd	libcmt.lib/osfinfo	__free_osfhnd	lib-similar	0.94, next 0.00; linked
+0069a9cb	0069aa3c	_get_osfhandle	libcmt.lib/osfinfo	__get_osfhandle	lib-similar	0.97, next 0.00; linked
+0069aa3c	0069aadc	__lock_fhandle	libcmt.lib/osfinfo	___lock_fhandle	lib-similar	0.96, next 0.00; 2 pieces; linked
+0069aadc	0069aafe	_unlock_fhandle	libcmt.lib/osfinfo	__unlock_fhandle	lib-similar	0.90, next 0.00; linked
+0069aafe	0069abda	_alloc_osfhnd	libcmt.lib/osfinfo	__alloc_osfhnd	lib-order	after _unlock_fhandle 0.63; 2 pieces; linked
+0069ac8f	0069adad	_open_osfhandle	libcmt.lib/osfinfo	__open_osfhandle	lib-similar	0.81, next 0.75; 3 pieces; linked
+0069adad	0069ae4c	_fcloseall	libcmt.lib/closeall	__fcloseall	lib-exact	2 pieces; linked
+0069ae4c	0069aecf	_lseeki64_nolock	libcmt.lib/lseeki64	__lseeki64_nolock	lib-similar	0.96, next 0.00; linked
+0069aecf	0069afe8	_lseeki64	libcmt.lib/lseeki64	__lseeki64	lib-similar	0.99, next 0.00; 2 pieces; linked
+0069afe8	0069b02c	_getbuf	libcmt.lib/_getbuf	__getbuf	lib-exact	linked
+0069b02c	0069b08a	_isatty	libcmt.lib/isatty	__isatty	lib-similar	0.97, next 0.75; linked
+0069b08a	0069b7e3	_tsopen_nolock	libcmt.lib/open	__tsopen_nolock	lib-similar	0.98, next 0.86; linked
+0069b7e3	0069b899	_open	libcmt.lib/open	__open	lib-order	after _tsopen_nolock 0.98; 3 pieces; linked
+0069b899	0069b965	_sopen_helper	libcmt.lib/open	__sopen_helper	lib-order	after _open 0.99; 2 pieces; linked
+0069b9b3	0069bbcd	_mbsicmp_l	libcmt.lib/mbsicmp	__mbsicmp_l	lib-exact	linked
+0069bbcd	0069bbe0	_mbsicmp	libcmt.lib/mbsicmp	__mbsicmp	lib-order	after _mbsicmp_l 1.00; linked
+0069bbe0	0069bd49	_mbsnbcmp_l	libcmt.lib/mbsnbcmp	__mbsnbcmp_l	lib-exact	linked
+0069bd49	0069bd60	_mbsnbcmp	libcmt.lib/mbsnbcmp	__mbsnbcmp	lib-order	after _mbsnbcmp_l 1.00; linked
+0069bd60	0069bebf	_wctomb_s_l	libcmt.lib/wctomb	__wctomb_s_l	lib-exact	linked
+0069bebf	0069beda	wctomb_s	libcmt.lib/wctomb	_wctomb_s	lib-order	after _wctomb_s_l 1.00; linked
+0069bf59	0069bfaa	x_ismbbtype_l	libcmt.lib/ismbbyte	?x_ismbbtype_l@@YAHPAUlocaleinfo_struct@@IHH@Z	lib-exact	linked
+0069c117	0069c12a	_ismbblead	libcmt.lib/ismbbyte	__ismbblead	lib-exact	linked
+0069c41c	0069c4d9	_fptostr	libcmt.lib/_fptostr	__fptostr	lib-exact	linked
+0069c4d9	0069c594	__dtold	libcmt.lib/cfout	___dtold	lib-exact	linked
+0069c594	0069c622	_fltout2	libcmt.lib/cfout	__fltout2	lib-exact	linked
+0069c622	0069c68c	_controlfp_s	libcmt.lib/contrlfp	__controlfp_s	lib-exact	linked
+0069c68f	0069c969	_raise_exc_ex	libcmt.lib/fpexcept	__raise_exc_ex	lib-exact	linked
+0069c969	0069c98a	_raise_exc	libcmt.lib/fpexcept	__raise_exc	lib-exact	one of 2 identical; linked
+0069c9ab	0069cb8c	_handle_exc	libcmt.lib/fpexcept	__handle_exc	lib-exact	linked
+0069cb8c	0069cbb4	_set_errno_from_matherr	libcmt.lib/fpexcept	__set_errno_from_matherr	lib-exact	linked
+0069ced7	0069cee8	_frnd	libcmt.lib/frnd	__frnd	lib-exact	linked
+0069cee8	0069cf12	_set_exp	libcmt.lib/util	__set_exp	lib-exact	linked
+0069cf76	0069cfd1	_sptype	libcmt.lib/util	__sptype	lib-exact	linked
+0069cfd1	0069d080	_decomp	libcmt.lib/util	__decomp	lib-exact	linked
+0069d080	0069d08b	_statfp	libcmt.lib/fpctrl	__statfp	lib-exact	linked
+0069d08b	0069d097	_clrfp	libcmt.lib/fpctrl	__clrfp	lib-exact	linked
+0069d097	0069d0be	_ctrlfp	libcmt.lib/fpctrl	__ctrlfp	lib-exact	linked
+0069d0be	0069d114	_set_statfp	libcmt.lib/fpctrl	__set_statfp	lib-exact	linked
+0069d130	0069d1a2	__set_fpsr_sse2	libcmt.lib/fpctrl	___set_fpsr_sse2	lib-similar	0.97, next 0.00; 3 pieces; linked
+0069d240	0069d28e	std::exception::exception	libcmt.lib/stdexcpt	??0exception@std@@QAE@ABQBD@Z	lib-exact	linked
+0069d2a6	0069d2fe	std::exception::exception	libcmt.lib/stdexcpt	??0exception@std@@QAE@ABV01@@Z	lib-exact	linked
+0069d354	0069d36a	std::exception::~exception	libcmt.lib/stdexcpt	??1exception@std@@UAE@XZ	lib-exact	linked
+0069d36a	0069d377	std::exception::what	libcmt.lib/stdexcpt	?what@exception@std@@UBEPBDXZ	lib-exact	linked
+0069d4df	0069d515	_EH_prolog3_catch	libcmt.lib/ehprolg3	__EH_prolog3_catch	lib-exact	linked
+0069d5b6	0069d600	_CxxThrowException	libcmt.lib/throw	__CxxThrowException@8	lib-exact	linked
+0069d600	0069d60d	_ValidateRead	libcmt.lib/validate	?_ValidateRead@@YAHPBXI@Z	lib-votes	5 of 5 call sites, 1.00; linked
+0069d60d	0069d61a	_ValidateWrite	libcmt.lib/validate	?_ValidateWrite@@YAHPAXI@Z	lib-votes	4 of 4 call sites, 1.00; linked
+0069d61a	0069d627	_ValidateExecute	libcmt.lib/validate	?_ValidateExecute@@YAHP6GHXZ@Z	lib-order	after _ValidateWrite 1.00; linked
+0069d627	0069d7df	__crtGetStringTypeA_stat	libcmt.lib/a_str	?__crtGetStringTypeA_stat@@YAHPAUlocaleinfo_struct@@KPBDHPAGHHH@Z	lib-exact	linked
+0069d7df	0069d81f	__crtGetStringTypeA	libcmt.lib/a_str	___crtGetStringTypeA	lib-order	after __crtGetStringTypeA_stat 1.00; linked
+0069d84e	0069dc67	_get_lc_time	libcmt.lib/inittime	__get_lc_time	lib-exact	linked
+0069dc67	0069ddf7	__free_lc_time	libcmt.lib/inittime	___free_lc_time	lib-exact	linked
+0069ddf7	0069de6a	__init_time	libcmt.lib/inittime	___init_time	lib-exact	linked
+0069de9d	0069dedd	__free_lconv_num	libcmt.lib/initnum	___free_lconv_num	lib-exact	linked
+0069dedd	0069e0a5	__init_numeric	libcmt.lib/initnum	___init_numeric	lib-exact	linked
+0069e0d8	0069e161	__free_lconv_mon	libcmt.lib/initmon	___free_lconv_mon	lib-exact	linked
+0069e161	0069e425	__init_monetary	libcmt.lib/initmon	___init_monetary	lib-exact	linked
+0069e425	0069e7ba	__init_ctype	libcmt.lib/initctyp	___init_ctype	lib-exact	linked
+0069e7f9	0069e86e	___lc_codepage_func	libcmt.lib/initctyp	____lc_codepage_func	lib-similar	0.92, next 0.83; linked
+0069f91a	0069f97a	TranslateName	libcmt.lib/getqloc	_TranslateName	lib-exact	linked
+0069f98e	0069fa05	ProcessCodePage	libcmt.lib/getqloc	_ProcessCodePage	lib-exact	linked
+0069fa05	0069fa23	TestDefaultCountry	libcmt.lib/getqloc	_TestDefaultCountry	lib-exact	linked
+0069fa23	0069fa55	LcidFromHexString	libcmt.lib/getqloc	_LcidFromHexString	lib-exact	linked
+0069fa55	0069fa70	GetPrimaryLen	libcmt.lib/getqloc	_GetPrimaryLen	lib-exact	linked
+0069fa70	0069fb06	CountryEnumProc	libcmt.lib/getqloc	_CountryEnumProc@4	lib-exact	linked
+0069fb06	0069fb78	TestDefaultLanguage	libcmt.lib/getqloc	_TestDefaultLanguage	lib-exact	linked
+0069fb78	0069fd48	LangCountryEnumProc	libcmt.lib/getqloc	_LangCountryEnumProc@4	lib-exact	linked
+0069fd48	0069fe07	LanguageEnumProc	libcmt.lib/getqloc	_LanguageEnumProc@4	lib-exact	linked
+0069fe33	0069fe98	GetLcidFromLangCountry	libcmt.lib/getqloc	_GetLcidFromLangCountry	lib-exact	linked
+0069fe98	0069fed4	GetLcidFromLanguage	libcmt.lib/getqloc	_GetLcidFromLanguage	lib-exact	linked
+0069fed4	006a00b7	__get_qualified_locale	libcmt.lib/getqloc	___get_qualified_locale	lib-exact	linked
+006a1629	006a2ca9	memcmp	libcmt.lib/memcmp	_memcmp	lib-exact	linked
+006a2ca9	006a2d6b	_putwch_nolock	libcmt.lib/putwch	__putwch_nolock	lib-exact	linked
+006a2d6b	006a2e06	_cputws	libcmt.lib/putwch	__cputws	lib-exact	2 pieces; linked
+006a2e06	006a2e4c	_putwch	libcmt.lib/putwch	__putwch	lib-exact	2 pieces; linked
+006a2e4c	006a2f5f	_mbtowc_l	libcmt.lib/mbtowc	__mbtowc_l	lib-exact	linked
+006a2f5f	006a2f76	mbtowc	libcmt.lib/mbtowc	_mbtowc	lib-order	after _mbtowc_l 1.00; linked
+006a2f76	006a3094	_ungetc_nolock	libcmt.lib/ungetc	__ungetc_nolock	lib-order	before ungetc 0.97; linked
+006a3094	006a3106	ungetc	libcmt.lib/ungetc	_ungetc	lib-exact	2 pieces; linked
+006a3127	006a314d	HeapManager::Destructor	libcmt.lib/undname	?Destructor@HeapManager@@QAEXXZ	lib-exact	linked
+006a314d	006a31b0	UnDecorator::getNumberOfDimensions	libcmt.lib/undname	?getNumberOfDimensions@UnDecorator@@CAHXZ	lib-exact	linked
+006a31b0	006a3624	UnDecorator::getTypeEncoding	libcmt.lib/undname	?getTypeEncoding@UnDecorator@@CAHXZ	lib-exact	linked
+006a36f8	006a3711	UnDecorator::UScore	libcmt.lib/undname	?UScore@UnDecorator@@SAPBDW4Tokens@@@Z	lib-exact	linked
+006a3711	006a3795	HeapManager::getMemory	libcmt.lib/undname	?getMemory@HeapManager@@QAEPAXIH@Z	lib-exact	linked
+006a37b4	006a3850	DName::DName	libcmt.lib/undname	??0DName@@QAE@ABV0@@Z	lib-exact	linked
+006a3850	006a385a	DName::status	libcmt.lib/undname	?status@DName@@QBE?AW4DNameStatus@@XZ	lib-exact	linked
+006a38ca	006a3945	DName::operator=	libcmt.lib/undname	??4DName@@QAEAAV0@ABV0@@Z	lib-exact	linked
+006a394e	006a3973	Replicator::operator?A	libcmt.lib/undname	??AReplicator@@QBEABVDName@@H@Z	lib-exact	linked
+006a3984	006a39ad	DNameNode::operator?Y	libcmt.lib/undname	??YDNameNode@@QAEAAV0@PAV0@@Z	lib-exact	linked
+006a39cb	006a39e6	charNode::getString	libcmt.lib/undname	?getString@charNode@@UBEPADPADH@Z	lib-exact	linked
+006a39e6	006a39ea	pcharNode::length	libcmt.lib/undname	?length@pcharNode@@UBEHXZ	lib-order	after charNode::getString 1.00; linked
+006a39ea	006a3a19	pDNameNode::pDNameNode	libcmt.lib/undname	??0pDNameNode@@QAE@PAVDName@@@Z	lib-exact	linked
+006a3a19	006a3a3e	DNameStatusNode::DNameStatusNode	libcmt.lib/undname	??0DNameStatusNode@@QAE@W4DNameStatus@@@Z	lib-exact	linked
+006a3a3e	006a3a42	DNameStatusNode::length	libcmt.lib/undname	?length@DNameStatusNode@@UBEHXZ	lib-order	after DNameStatusNode::DNameStatusNode 1.00; linked
+006a3a42	006a3a4f	DNameStatusNode::getLastChar	libcmt.lib/undname	?getLastChar@DNameStatusNode@@UBEDXZ	lib-exact	linked
+006a3a5d	006a3a7d	und_strncpy	libcmt.lib/undname	?und_strncpy@@YAPADPADPBDI@Z	lib-exact	linked
+006a3aa2	006a3ad5	UnDecorator::getDataIndirectType	libcmt.lib/undname	?getDataIndirectType@UnDecorator@@CA?AVDName@@XZ	lib-exact	linked
+006a3ad5	006a3b09	UnDecorator::getThisType	libcmt.lib/undname	?getThisType@UnDecorator@@CA?AVDName@@XZ	lib-exact	linked
+006a3b1c	006a3b72	DName::DName	libcmt.lib/undname	??0DName@@QAE@PAV0@@Z	lib-exact	linked
+006a3b72	006a3bd3	DName::DName	libcmt.lib/undname	??0DName@@QAE@W4DNameStatus@@@Z	lib-exact	linked
+006a3bd3	006a3bea	DName::isValid	libcmt.lib/undname	?isValid@DName@@QBEHXZ	lib-exact	linked
+006a3bea	006a3bff	DName::isEmpty	libcmt.lib/undname	?isEmpty@DName@@QBEHXZ	lib-exact	linked
+006a3bff	006a3c13	DName::isUDC	libcmt.lib/undname	?isUDC@DName@@QBEHXZ	lib-exact	linked
+006a3c35	006a3c5a	DName::length	libcmt.lib/undname	?length@DName@@QBEHXZ	lib-exact	linked
+006a3c5a	006a3c92	DName::getLastChar	libcmt.lib/undname	?getLastChar@DName@@QBEDXZ	lib-exact	linked
+006a3c92	006a3d23	DName::getString	libcmt.lib/undname	?getString@DName@@QBEPADPADH@Z	lib-exact	linked
+006a3d23	006a3d58	DName::operator?_5	libcmt.lib/undname	??_5DName@@QAEAAV0@ABV0@@Z	lib-exact	linked
+006a3d58	006a3dd9	DName::operator=	libcmt.lib/undname	??4DName@@QAEAAV0@W4DNameStatus@@@Z	lib-exact	linked
+006a3dd9	006a3df7	Replicator::Replicator	libcmt.lib/undname	??0Replicator@@QAE@XZ	lib-exact	linked
+006a3df7	006a3e3e	Replicator::operator?Y	libcmt.lib/undname	??YReplicator@@QAEAAV0@ABVDName@@@Z	lib-exact	linked
+006a3e3e	006a3e85	DNameNode::clone	libcmt.lib/undname	?clone@DNameNode@@QAEPAV1@XZ	lib-exact	linked
+006a3e85	006a3eea	pcharNode::pcharNode	libcmt.lib/undname	??0pcharNode@@QAE@PBDH@Z	lib-exact	linked
+006a3eea	006a3efc	pcharNode::getLastChar	libcmt.lib/undname	?getLastChar@pcharNode@@UBEDXZ	lib-exact	linked
+006a3efc	006a3f2d	pcharNode::getString	libcmt.lib/undname	?getString@pcharNode@@UBEPADPADH@Z	lib-exact	linked
+006a3f2d	006a3f3c	pDNameNode::length	libcmt.lib/undname	?length@pDNameNode@@UBEHXZ	lib-exact	linked
+006a3f3c	006a3f4b	pDNameNode::getLastChar	libcmt.lib/undname	?getLastChar@pDNameNode@@UBEDXZ	lib-exact	linked
+006a3f4b	006a3f68	pDNameNode::getString	libcmt.lib/undname	?getString@pDNameNode@@UBEPADPADH@Z	lib-exact	linked
+006a3f68	006a3f9b	DNameStatusNode::getString	libcmt.lib/undname	?getString@DNameStatusNode@@UBEPADPADH@Z	lib-exact	linked
+006a3f9b	006a400e	UnDecorator::UnDecorator	libcmt.lib/undname	??0UnDecorator@@QAE@PADPBDHP6APADJ@ZK@Z	lib-exact	linked
+006a400e	006a403d	UnDecorator::getReturnType	libcmt.lib/undname	?getReturnType@UnDecorator@@CA?AVDName@@PAV2@@Z	lib-exact	linked
+006a404c	006a40c5	DName::operator?Y	libcmt.lib/undname	??YDName@@QAEAAV0@W4DNameStatus@@@Z	lib-exact	linked
+006a412d	006a41d3	DName::doPchar	libcmt.lib/undname	?doPchar@DName@@AAEXPBDH@Z	lib-exact	linked
+006a41d3	006a41f9	DName::DName	libcmt.lib/undname	??0DName@@QAE@D@Z	lib-exact	linked
+006a41f9	006a422a	DName::DName	libcmt.lib/undname	??0DName@@QAE@PBD@Z	lib-exact	linked
+006a422a	006a42fa	DName::DName	libcmt.lib/undname	??0DName@@QAE@AAPBDD@Z	lib-exact	linked
+006a42fa	006a4363	DName::DName	libcmt.lib/undname	??0DName@@QAE@_K@Z	lib-exact	linked
+006a4363	006a43f9	DName::DName	libcmt.lib/undname	??0DName@@QAE@_J@Z	lib-exact	linked
+006a43f9	006a4427	DName::operator?H	libcmt.lib/undname	??HDName@@QBE?AV0@W4DNameStatus@@@Z	lib-order	after DName::DName 1.00; linked
+006a4427	006a4489	DName::operator?Y	libcmt.lib/undname	??YDName@@QAEAAV0@ABV0@@Z	lib-exact	linked
+006a4514	006a4530	DName::operator=	libcmt.lib/undname	??4DName@@QAEAAV0@D@Z	lib-exact	linked
+006a4530	006a455a	DName::operator=	libcmt.lib/undname	??4DName@@QAEAAV0@PBD@Z	lib-exact	linked
+006a455a	006a4600	UnDecorator::getCallingConvention	libcmt.lib/undname	?getCallingConvention@UnDecorator@@CA?AVDName@@XZ	lib-exact	linked
+006a4600	006a4637	UnDecorator::getVCallThunkType	libcmt.lib/undname	?getVCallThunkType@UnDecorator@@CA?AVDName@@XZ	lib-exact	linked
+006a4637	006a4688	DName::operator?H	libcmt.lib/undname	??HDName@@QBE?AV0@ABV0@@Z	lib-exact	linked
+006a46b6	006a4720	DName::operator?Y	libcmt.lib/undname	??YDName@@QAEAAV0@D@Z	lib-exact	linked
+006a4720	006a478c	DName::operator?Y	libcmt.lib/undname	??YDName@@QAEAAV0@PBD@Z	lib-exact	linked
+006a478c	006a486c	UnDecorator::getArgumentList	libcmt.lib/undname	?getArgumentList@UnDecorator@@CA?AVDName@@XZ	lib-exact	linked
+006a486c	006a48bb	UnDecorator::getVdispMapType	libcmt.lib/undname	?getVdispMapType@UnDecorator@@CA?AVDName@@ABV2@@Z	lib-exact	linked
+006a48bb	006a48dd	operator?H	libcmt.lib/undname	??H@YA?AVDName@@DABV0@@Z	lib-votes	23 of 23 call sites, 1.00; linked
+006a48dd	006a48ff	operator?H	libcmt.lib/undname	??H@YA?AVDName@@W4DNameStatus@@ABV0@@Z	lib-votes	13 of 13 call sites, 1.00; linked
+006a48ff	006a4921	operator?H	libcmt.lib/undname	??H@YA?AVDName@@PBDABV0@@Z	lib-votes	30 of 30 call sites, 1.00; linked
+006a4921	006a494f	DName::operator?H	libcmt.lib/undname	??HDName@@QBE?AV0@D@Z	lib-votes	35 of 35 call sites, 1.00; linked
+006a494f	006a497d	DName::operator?H	libcmt.lib/undname	??HDName@@QBE?AV0@PBD@Z	lib-votes	14 of 14 call sites, 1.00; linked
+006a497d	006a4abe	UnDecorator::getDimension	libcmt.lib/undname	?getDimension@UnDecorator@@CA?AVDName@@_N@Z	lib-exact	linked
+006a4abe	006a4b92	UnDecorator::getEnumType	libcmt.lib/undname	?getEnumType@UnDecorator@@CA?AVDName@@XZ	lib-exact	linked
+006a4b92	006a4c56	UnDecorator::getArgumentTypes	libcmt.lib/undname	?getArgumentTypes@UnDecorator@@CA?AVDName@@XZ	lib-exact	linked
+006a4c56	006a4cd4	UnDecorator::getThrowTypes	libcmt.lib/undname	?getThrowTypes@UnDecorator@@CA?AVDName@@XZ	lib-exact	linked
+006a4cd4	006a4df9	UnDecorator::getExtendedDataIndirectType	libcmt.lib/undname	?getExtendedDataIndirectType@UnDecorator@@CA?AVDName@@AADAA_NH@Z	lib-exact	linked
+006a4df9	006a4f58	UnDecorator::getArrayType	libcmt.lib/undname	?getArrayType@UnDecorator@@CA?AVDName@@ABV2@@Z	lib-exact	linked
+006a4f58	006a4f89	UnDecorator::getLexicalFrame	libcmt.lib/undname	?getLexicalFrame@UnDecorator@@CA?AVDName@@XZ	lib-exact	linked
+006a4fbf	006a510f	UnDecorator::getVfTableType	libcmt.lib/undname	?getVfTableType@UnDecorator@@CA?AVDName@@ABV2@@Z	lib-exact	linked
+006a510f	006a51af	UnDecorator::getStringEncoding	libcmt.lib/undname	?getStringEncoding@UnDecorator@@CA?AVDName@@PADH@Z	lib-exact	linked
+006a51af	006a51ff	UnDecorator::getSignedDimension	libcmt.lib/undname	?getSignedDimension@UnDecorator@@CA?AVDName@@XZ	lib-exact	linked
+006a51ff	006a54ba	UnDecorator::getTemplateConstant	libcmt.lib/undname	?getTemplateConstant@UnDecorator@@CA?AVDName@@XZ	lib-exact	linked
+006a54ba	006a5593	UnDecorator::getPtrRefDataType	libcmt.lib/undname	?getPtrRefDataType@UnDecorator@@CA?AVDName@@ABV2@H@Z	lib-exact	linked
+006a55a7	006a575f	UnDecorator::getTemplateArgumentList	libcmt.lib/undname	?getTemplateArgumentList@UnDecorator@@CA?AVDName@@XZ	lib-exact	linked
+006a575f	006a5cce	UnDecorator::getOperatorName	libcmt.lib/undname	?getOperatorName@UnDecorator@@CA?AVDName@@_NPA_N@Z	lib-exact	linked
+006a5cce	006a5e21	UnDecorator::getTemplateName	libcmt.lib/undname	?getTemplateName@UnDecorator@@CA?AVDName@@_N@Z	lib-exact	linked
+006a5e21	006a600b	UnDecorator::getZName	libcmt.lib/undname	?getZName@UnDecorator@@CA?AVDName@@_N@Z	lib-exact	linked
+006a600b	006a60ef	UnDecorator::getScopedName	libcmt.lib/undname	?getScopedName@UnDecorator@@CA?AVDName@@XZ	lib-exact	linked
+006a60fe	006a61fe	UnDecorator::getECSUDataType	libcmt.lib/undname	?getECSUDataType@UnDecorator@@CA?AVDName@@XZ	lib-exact	linked
+006a61fe	006a6244	UnDecorator::getSymbolName	libcmt.lib/undname	?getSymbolName@UnDecorator@@CA?AVDName@@XZ	lib-exact	linked
+006a6244	006a62d6	UnDecorator::getBasedType	libcmt.lib/undname	?getBasedType@UnDecorator@@CA?AVDName@@XZ	lib-exact	linked
+006a62d6	006a6e18	UnDecorator::composeDeclaration	libcmt.lib/undname	?composeDeclaration@UnDecorator@@CA?AVDName@@ABV2@@Z	lib-exact	linked
+006a6e18	006a7029	UnDecorator::getDecoratedName	libcmt.lib/undname	?getDecoratedName@UnDecorator@@CA?AVDName@@XZ	lib-exact	linked
+006a7029	006a72b4	UnDecorator::getScope	libcmt.lib/undname	?getScope@UnDecorator@@CA?AVDName@@XZ	lib-exact	linked
+006a72b4	006a75f5	UnDecorator::getFunctionIndirectType	libcmt.lib/undname	?getFunctionIndirectType@UnDecorator@@CA?AVDName@@ABV2@@Z	lib-exact	linked
+006a75f5	006a7ad9	UnDecorator::getDataIndirectType	libcmt.lib/undname	?getDataIndirectType@UnDecorator@@CA?AVDName@@ABV2@D0H@Z	lib-exact	linked
+006a7ad9	006a7c25	UnDecorator::operator?B	libcmt.lib/undname	??BUnDecorator@@QAEPADXZ	lib-exact	linked
+006a7c25	006a7d3b	UnDecorator::getPtrRefType	libcmt.lib/undname	?getPtrRefType@UnDecorator@@CA?AVDName@@ABV2@0D@Z	lib-exact	linked
+006a7d8c	006a7e2f	__unDName	libcmt.lib/undname	___unDName	lib-exact	2 pieces; linked
+006a7e2f	006a7ed2	__unDNameEx	libcmt.lib/undname	___unDNameEx	lib-exact	2 pieces; linked
+006a7ed2	006a8259	UnDecorator::getBasicDataType	libcmt.lib/undname	?getBasicDataType@UnDecorator@@CA?AVDName@@ABV2@@Z	lib-exact	linked
+006a8259	006a8397	UnDecorator::getPrimaryDataType	libcmt.lib/undname	?getPrimaryDataType@UnDecorator@@CA?AVDName@@ABV2@@Z	lib-exact	linked
+006a8397	006a8448	UnDecorator::getDataType	libcmt.lib/undname	?getDataType@UnDecorator@@CA?AVDName@@PAV2@@Z	lib-exact	linked
+006a8448	006a84ac	UnDecorator::getExternalDataType	libcmt.lib/undname	?getExternalDataType@UnDecorator@@CA?AVDName@@ABV2@@Z	lib-exact	linked
+006a84ac	006a84f3	__ansicp	libcmt.lib/convrtcp	___ansicp	lib-exact	linked
+006a84f3	006a86a5	__convertcp	libcmt.lib/convrtcp	___convertcp	lib-exact	linked
+006a86a5	006a8727	_iswctype_l	libcmt.lib/iswctype	__iswctype_l	lib-exact	linked
+006a879a	006a881b	_getenv_helper_nolock	libcmt.lib/getenv	__getenv_helper_nolock	lib-exact	linked
+006a8950	006a89d3	getenv	libcmt.lib/getenv	_getenv	lib-order	before getenv_s 1.00; 2 pieces; linked
+006a89d3	006a8aab	getenv_s	libcmt.lib/getenv	_getenv_s	lib-exact	2 pieces; linked
+006a8aab	006a8b91	_dupenv_s	libcmt.lib/getenv	__dupenv_s	lib-exact	2 pieces; linked
+006a8b91	006a92eb	_tsopen_nolock	libcmt.lib/wopen	__tsopen_nolock	lib-similar	0.98, next 0.86; linked
+006a92eb	006a9398	_wopen	libcmt.lib/wopen	__wopen	lib-order	after _tsopen_nolock 0.96; 2 pieces; linked
+006a93a1	006a946d	_wsopen_helper	libcmt.lib/wopen	__wsopen_helper	lib-order	after _wopen 0.99; 2 pieces; linked
+006a94bb	006a95ca	_wcsicmp_l	libcmt.lib/wcsicmp	__wcsicmp_l	lib-exact	linked
+006a95ca	006a965b	_wcsicmp	libcmt.lib/wcsicmp	__wcsicmp	lib-order	after _wcsicmp_l 1.00; linked
+006a965b	006a9690	wcsncmp	libcmt.lib/wcsncmp	_wcsncmp	lib-exact	linked
+006a9690	006a9756	_getdrive	libcmt.lib/drive	__getdrive	lib-exact	linked
+006a9756	006a97f7	_chdrive	libcmt.lib/drive	__chdrive	lib-exact	2 pieces; linked
+006a97f7	006a98f3	_87except	libcmt.lib/87except	__87except	lib-exact	linked
+006a9900	006a9a17	fdiv_main_routine	libcmt.lib/adj_fdiv	_fdiv_main_routine	lib-exact	linked
+006aa0f1	006aa106	_safe_fdivr	libcmt.lib/adj_fdiv	__safe_fdivr	lib-similar	0.88, next 0.75; linked
+006aaaad	006aab41	_fpclass	libcmt.lib/ieeemisc	__fpclass	lib-exact	linked
+006aab41	006aacf5	_chsize_nolock	libcmt.lib/chsize	__chsize_nolock	lib-exact	linked
+006aacf5	006aade2	_chsize_s	libcmt.lib/chsize	__chsize_s	lib-order	after _chsize_nolock 0.99; 2 pieces; linked
+006aadfa	006aaeb6	_setmode_nolock	libcmt.lib/setmode	__setmode_nolock	lib-votes	3 of 3 call sites, 0.79; linked
+006aaefc	006aaf30	_get_fmode	libcmt.lib/setmode	__get_fmode	lib-order	before _setmode 1.00; linked
+006aaf30	006ab027	_setmode	libcmt.lib/setmode	__setmode	lib-similar	0.99, next 0.00; 2 pieces; linked
+006ac904	006acfc4	__strgtold12_l	libcmt.lib/strgtold	___strgtold12_l	lib-exact	linked
+006ad08a	006ad950	$I10_OUTPUT	libcmt.lib/x10fout	_$I10_OUTPUT	lib-exact	linked
+006ad950	006ad9bf	_set_controlfp	libcmt.lib/ieee87	__set_controlfp	lib-exact	linked
+006ada53	006adae1	_hw_cw	libcmt.lib/ieee87	__hw_cw	lib-exact	linked
+006adbbc	006adc5c	__hw_cw_sse2	libcmt.lib/ieee87	___hw_cw_sse2	lib-exact	linked
+006ae39f	006ae6a2	_control87	libcmt.lib/ieee87	__control87	lib-exact	linked
+006ae9ab	006aea86	xtoa_s	libcmt.lib/xtoas	_xtoa_s@20	lib-exact	linked
+006aea86	006aeaae	_itoa_s	libcmt.lib/xtoas	__itoa_s	lib-exact	linked
+006aec50	006aec6f	__initconout	libcmt.lib/initcon	___initconout	lib-exact	linked
+006aec6f	006aec9c	__termcon	libcmt.lib/initcon	___termcon	lib-exact	linked
+006aec9c	006aecb2	wcslen	libcmt.lib/wcslen	_wcslen	lib-exact	linked
+006aecb2	006aeed6	__crtGetStringTypeW_stat	libcmt.lib/w_str	?__crtGetStringTypeW_stat@@YAHPAUlocaleinfo_struct@@KPB_WHPAGHH@Z	lib-exact	linked
+006aeed6	006aef14	__crtGetStringTypeW	libcmt.lib/w_str	___crtGetStringTypeW	lib-exact	linked
+006aef14	006af000	_mbsnbicoll_l	libcmt.lib/mbsnbico	__mbsnbicoll_l	lib-exact	linked
+006af000	006af017	_mbsnbicoll	libcmt.lib/mbsnbico	__mbsnbicoll	lib-order	after _mbsnbicoll_l 1.00; linked
+006af017	006af0ac	__wtomb_environ	libcmt.lib/wtombenv	___wtomb_environ	lib-exact	linked
+006af0ac	006af159	_towlower_l	libcmt.lib/towlower	__towlower_l	lib-exact	linked
+006af315	006af4e1	__mtold12	libcmt.lib/mantold	___mtold12	lib-exact	linked
+006af4fb	006af884	__crtCompareStringA_stat	libcmt.lib/a_cmp	?__crtCompareStringA_stat@@YAHPAUlocaleinfo_struct@@KKPBDH1HH@Z	lib-exact	linked
+006af884	006af8c4	__crtCompareStringA	libcmt.lib/a_cmp	___crtCompareStringA	lib-exact	linked
+006af8c4	006af9bc	_strnicoll_l	libcmt.lib/strnicol	__strnicoll_l	lib-exact	linked
+006af9e3	006afa30	findenv	libcmt.lib/setenv	_findenv	lib-exact	linked
+006afa30	006afa8d	copy_environ	libcmt.lib/setenv	_copy_environ	lib-order	after findenv 1.00; linked
+006afa8d	006afcd9	__crtsetenv	libcmt.lib/setenv	___crtsetenv	lib-exact	linked
+006afcf5	006aff56	__crtLCMapStringW_stat	libcmt.lib/w_map	?__crtLCMapStringW_stat@@YAHPAUlocaleinfo_struct@@KKPB_WHPA_WHH@Z	lib-exact	linked
+006aff56	006aff96	__crtLCMapStringW	libcmt.lib/w_map	___crtLCMapStringW	lib-order	after __crtLCMapStringW_stat 1.00; linked
+006aff96	006affe6	_strdup	libcmt.lib/strdup	__strdup	lib-exact	linked
+006affe6	006b00a0	_mbschr_l	libcmt.lib/mbschr	__mbschr_l	lib-exact	linked
+006b00a0	006b00b3	_mbschr	libcmt.lib/mbschr	__mbschr	lib-order	after _mbschr_l 1.00; linked

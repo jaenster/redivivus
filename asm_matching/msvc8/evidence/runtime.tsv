@@ -1,0 +1,969 @@
+start	ghidra_name	why
+00681a57	compiler::_amsg_exit	libmap
+00681a7b	compiler::__crtCorExitProcess	libmap
+00681aa1	compiler::__crtExitProcess	libmap
+00681ac8	compiler::_initterm	libmap
+00681b00	compiler::_get_osplatform	libmap
+00681baf	compiler::_get_winmajor	libmap
+00681d27	compiler::doexit	libmap
+00681e09	compiler::exit	libmap
+00681e1a	compiler::_exit	libmap
+00681e3a	compiler::_c_exit	libmap
+00681e95	compiler::atol	libmap
+00681ef0	compiler::memset	libmap
+00681f6a	compiler::_fclose_nolock	libmap
+00681fdc	compiler::fclose	libmap
+00682058	compiler::fputc	libmap
+006822d6	compiler::_fsopen	libmap
+0068239a	compiler::fopen	libmap
+006823fd	compiler::sprintf	libmap
+00682591	compiler::strncmp	libmap
+0068264f	compiler::strtok	libmap
+00682990	compiler::strrchr	libmap
+006829c0	compiler::memcpy	libmap
+00682d25	compiler::_vsprintf_l	libmap
+00682da1	compiler::vsprintf	libmap
+00682e71	compiler::_vsnprintf_l	libmap
+00682f22	compiler::_vsnprintf	libmap
+00682f3d	compiler::_fpclear	libmap
+00682f3e	compiler::_cfltcvt_init	libmap
+00682fae	compiler::_fpmath	libmap
+006831b0	compiler::_chkstk	libmap
+006831db	compiler::_snprintf	libmap
+00683635	compiler::_IsExceptionObjectToBeDestroyed	libmap
+00683656	compiler::_FindAndUnlinkFrame	libmap
+00683700	compiler::_onexit_nolock	libmap
+006837b9	compiler::__onexitinit	libmap
+006837e8	compiler::_onexit	libmap
+00683824	compiler::atexit	libmap
+00683840	compiler::memmove	libmap
+00683ba5	compiler::realloc	libmap
+00683dc0	compiler::_recalloc	libmap
+00683e39	compiler::V6_HeapAlloc	libmap
+00683efd	compiler::malloc	libmap
+00683fc0	compiler::free	libmap
+0068404e	compiler::_LocaleUpdate	libmap
+006840e1	compiler::__ascii_stricmp	libmap
+00684116	compiler::_stricmp_l	libmap
+006841e9	compiler::_stricmp	libmap
+00684240	compiler::_alldiv	libmap
+006842ea	compiler::_fwrite_nolock	libmap
+00684449	compiler::fwrite	libmap
+006844cb	compiler::_fread_nolock_s	libmap
+006846ec	compiler::fread_s	libmap
+00684782	compiler::fread	libmap
+0068479d	compiler::_ftell_nolock	libmap
+00684935	compiler::ftell	libmap
+006849a3	compiler::_fseek_nolock	libmap
+00684a2a	compiler::fseek	libmap
+00684af3	compiler::_set_se_translator	libmap
+00684b6d	compiler::vscan_fn	libmap
+00684bd5	compiler::sscanf	libmap
+00684c60	compiler::_allmul	libmap
+00684c94	compiler::fprintf	libmap
+00684f50	compiler::_except_handler4	libmap
+006850e6	compiler::_time32	libmap
+00685127	compiler::_tolower_l	libmap
+0068523e	compiler::tolower	libmap
+0068526d	compiler::_toupper_l	libmap
+00685385	compiler::toupper	libmap
+006853b0	compiler::_alldvrm	libmap
+0068548f	compiler::vfprintf_helper	libmap
+00685637	compiler::vfprintf	libmap
+0068568b	compiler::_time64	libmap
+006856e9	compiler::_localtime64_s	libmap
+006859d2	compiler::strncpy_s	libmap
+00685a90	compiler::swap	libmap
+00685ac0	compiler::shortsort	libmap
+00685b50	compiler::qsort	libmap
+00685df7	compiler::wcsrchr	libmap
+00685e27	compiler::_wfsopen	libmap
+00685eed	compiler::_wfopen	libmap
+00685f50	compiler::_strnicmp_l	libmap
+00686040	compiler::_strnicmp	libmap
+006860ae	compiler::_freea	libmap
+006860c9	compiler::_strupr_s_l_stat	libmap
+00686245	compiler::_strupr_s_l	libmap
+006862a2	compiler::_strupr	libmap
+00686304	compiler::_strlwr_s_l_stat	libmap
+00686485	compiler::_strlwr_s_l	libmap
+006864e1	compiler::_strlwr	libmap
+00686543	compiler::strtoxl	libmap
+0068676e	compiler::strtol	libmap
+006867b2	compiler::strtoul	libmap
+006867f7	compiler::_fullpath	libmap
+00686900	compiler::strstr	libmap
+00686990	compiler::strpbrk	libmap
+006869d0	compiler::_alloca_probe_16	libmap
+006869fc	compiler::`eh_vector_constructor_iterator'	libmap
+00686a73	compiler::__ArrayUnwind	libmap
+00686ad1	compiler::`eh_vector_destructor_iterator'	libmap
+00686b40	compiler::_aullshr	libmap
+00686b60	compiler::_aulldvrm	libmap
+00686c00	compiler::_aulldiv	libmap
+00686c70	compiler::_allrem	libmap
+00686d30	compiler::_allshr	libmap
+00686d51	compiler::_isalpha_l	libmap
+00686da5	compiler::isalpha	libmap
+00686ec0	compiler::_isdigit_l	libmap
+00686f0f	compiler::isdigit	libmap
+00686f38	compiler::_isxdigit_l	libmap
+00686f8c	compiler::isxdigit	libmap
+00686fb7	compiler::_isspace_l	libmap
+00687006	compiler::isspace	libmap
+006870a7	compiler::_isalnum_l	libmap
+006870fb	compiler::isalnum	libmap
+00687330	compiler::strncpy	libmap
+00687454	compiler::srand	libmap
+00687461	compiler::rand	libmap
+00687490	compiler::strncat	libmap
+006875c5	compiler::xtoa	libmap
+00687605	compiler::_itoa	libmap
+00687652	compiler::_ultoa	libmap
+0068766a	compiler::x64toa	libmap
+006876d7	compiler::_i64toa	libmap
+00687708	compiler::_ui64toa	libmap
+00687740	compiler::strchr	libmap
+006877fe	compiler::_purecall	libmap
+00687860	compiler::_strrev	libmap
+006878a0	compiler::_except_handler3	libmap
+00687fb0	compiler::_SEH_prolog4	libmap
+00687ff5	compiler::_SEH_epilog4	libmap
+00688009	compiler::_endthreadex	libmap
+00688042	compiler::_callthreadstartex	libmap
+00688103	compiler::_beginthreadex	libmap
+006881b1	compiler::bsearch	libmap
+00688271	compiler::fgets	libmap
+00688536	compiler::_get_printf_count_output	libmap
+006887a9	compiler::_flush	libmap
+0068880b	compiler::_fflush_nolock	libmap
+0068884d	compiler::flsall	libmap
+00688927	compiler::fflush	libmap
+0068897a	compiler::_flushall	libmap
+00688990	compiler::strcspn	libmap
+00688ada	compiler::_use_encode_pointer	libmap
+00688b46	compiler::_encode_pointer	libmap
+00688bb4	compiler::_encoded_null	libmap
+00688bbd	compiler::_decode_pointer	libmap
+00688c34	compiler::__fls_getvalue	libmap
+00688c49	compiler::__get_flsindex	libmap
+00688c4f	compiler::__set_flsgetvalue	libmap
+00688c81	compiler::__fls_setvalue	libmap
+00688cd7	compiler::_initptd	libmap
+00688d96	compiler::_getptd_noexit	libmap
+00688e0d	compiler::_getptd	libmap
+00688e25	compiler::_freefls	libmap
+00688f46	compiler::_freeptd	libmap
+0068913f	compiler::_NMSG_WRITE	libmap
+006892ff	compiler::_FF_MSGBANNER	libmap
+006893d6	compiler::_unlock	libmap
+00689403	compiler::_mtinitlocknum	libmap
+006894c6	compiler::_lock	libmap
+00689635	compiler::_invalid_parameter	libmap
+00689672	compiler::_get_errno_from_oserr	libmap
+006896ad	compiler::_errno	libmap
+006896c0	compiler::__doserrno	libmap
+006896d3	compiler::_dosmaperr	libmap
+006897f0	compiler::_ValidateImageBase	libmap
+00689820	compiler::_FindPESection	libmap
+00689870	compiler::_IsNonwritableInCurrentImage	libmap
+0068992b	compiler::terminate	libmap
+00689977	compiler::_inconsistency	libmap
+006899f2	compiler::_XcptFilter	libmap
+00689c1f	compiler::siglookup	libmap
+00689c53	compiler::__get_sigabrt	libmap
+00689eaf	compiler::raise	libmap
+0068a2db	compiler::__crtInitCritSecNoSpinCount	libmap
+0068a2eb	compiler::__crtInitCritSecAndSpinCount	libmap
+0068a401	compiler::_callnewh	libmap
+0068a826	compiler::_sse2_mathfcns_init	libmap
+0068a84e	compiler::_close_nolock	libmap
+0068a8e5	compiler::_close	libmap
+0068a9b2	compiler::_fileno	libmap
+0068a9df	compiler::_freebuf	libmap
+0068aa0b	compiler::__iob_func	libmap
+0068aa11	compiler::__initstdio	libmap
+0068aac2	compiler::__endstdio	libmap
+0068aae2	compiler::_lock_file	libmap
+0068ab1e	compiler::_lock_file2	libmap
+0068ab4c	compiler::_unlock_file	libmap
+0068ab82	compiler::_unlock_file2	libmap
+0068abac	compiler::_flsbuf	libmap
+0068afac	compiler::_openfile	libmap
+0068b24c	compiler::_getstream	libmap
+0068b384	compiler::_local_unwind4	libmap
+0068b414	compiler::_unwind_handler4	libmap
+0068b476	compiler::_EH4_CallFilterFunc	libmap
+0068b4a6	compiler::_EH4_GlobalUnwind	libmap
+0068b4c0	compiler::_EH4_LocalUnwind	libmap
+0068b4d7	compiler::write_char	libmap
+0068b50a	compiler::write_multi_char	libmap
+0068b52e	compiler::write_string	libmap
+0068b5a3	compiler::_output_l	libmap
+0068bf37	compiler::_vsnprintf_helper	libmap
+0068c0f1	compiler::_vsnprintf_s_l	libmap
+0068c263	compiler::__CxxUnhandledExceptionFilter	libmap
+0068c2a0	compiler::__CxxSetUnhandledExceptionFilter	libmap
+0068c8a5	compiler::__security_init_cookie	libmap
+0068dc05	compiler::_forcdecpt_l	libmap
+0068dc76	compiler::_cropzeros_l	libmap
+0068dcf6	compiler::_positive	libmap
+0068dd0c	compiler::_fassign_l	libmap
+0068dd4c	compiler::_fassign	libmap
+0068dd63	compiler::_shift	libmap
+0068dd9c	compiler::_cftoe2_l	libmap
+0068df09	compiler::_cftoe_l	libmap
+0068dfd7	compiler::_cftoe	libmap
+0068dff5	compiler::_cftoa_l	libmap
+0068e384	compiler::_cftof2_l	libmap
+0068e479	compiler::_cftof_l	libmap
+0068e54d	compiler::_cftog_l	libmap
+0068e663	compiler::_cfltcvt_l	libmap
+0068e6e9	compiler::_cfltcvt	libmap
+0068e70a	compiler::_setdefaultprecision	libmap
+0068e76f	compiler::_ms_p5_mp_test_fdiv	libmap
+0068e7c1	compiler::__libm_error_support	libmap
+0068ebe4	compiler::__FrameUnwindFilter	libmap
+0068ec28	compiler::__FrameUnwindToState	libmap
+0068ed09	compiler::ExFilterRethrow	libmap
+0068ed4e	compiler::__DestructExceptionObject	libmap
+0068fd00	compiler::_CallSettingFrame	libmap
+0068fd7d	compiler::_malloc_crt	libmap
+0068fdbd	compiler::_calloc_crt	libmap
+0068fe05	compiler::_realloc_crt	libmap
+0068fe50	compiler::_recalloc_crt	libmap
+0068febc	compiler::_msize	libmap
+0069004a	compiler::__sbh_find_block	libmap
+00690075	compiler::__sbh_free_block	libmap
+00690389	compiler::__sbh_alloc_new_region	libmap
+00690439	compiler::__sbh_alloc_new_group	libmap
+0069053f	compiler::__sbh_resize_block	libmap
+00690c75	compiler::__sbh_alloc_block	libmap
+00690f58	compiler::CPtoLCID	libmap
+00690f87	compiler::setSBCS	libmap
+00690fdc	compiler::setSBUpLow	libmap
+00691166	compiler::__updatetmbcinfo	libmap
+0069120a	compiler::getSystemCP	libmap
+00691284	compiler::_setmbcp_nolock	libmap
+00691499	compiler::_setmbcp	libmap
+00691633	compiler::__initmbctable	libmap
+0069165d	compiler::__freetlocinfo	libmap
+0069179d	compiler::__addlocaleref	libmap
+00691823	compiler::__removelocaleref	libmap
+006918d3	compiler::_updatetlocinfoEx_nolock	libmap
+00691911	compiler::__updatetlocinfo	libmap
+00692dd0	compiler::_write	libmap
+00692eac	compiler::_filbuf	libmap
+00692fcc	compiler::_read_nolock	libmap
+0069358d	compiler::_read	libmap
+0069368a	compiler::memcpy_s	libmap
+00693705	compiler::_lseek_nolock	libmap
+00693777	compiler::_lseek	libmap
+00693860	compiler::strlen	libmap
+006938eb	compiler::__check_float_string	libmap
+00693964	compiler::_inc	libmap
+00693987	compiler::_whiteout	libmap
+006939ac	compiler::_input_l	libmap
+006953d8	compiler::_stbuf	libmap
+006957f0	compiler::strcmp	libmap
+00695892	compiler::__crtLCMapStringA_stat	libmap
+00695c34	compiler::__crtLCMapStringA	libmap
+00695c77	compiler::_isleadbyte_l	libmap
+00695cad	compiler::isleadbyte	libmap
+00695ede	compiler::_isctype_l	libmap
+00696a38	compiler::_tzset_nolock	libmap
+00696d81	compiler::cvtdate	libmap
+00696f76	compiler::_isindst_nolock	libmap
+0069714c	compiler::__tzset	libmap
+006971d3	compiler::_isindst	libmap
+00697214	compiler::_gmtime64_s	libmap
+00697474	compiler::_get_daylight	libmap
+006974a8	compiler::_get_dstbias	libmap
+006974dc	compiler::_get_timezone	libmap
+00697763	compiler::_wopenfile	libmap
+006979f0	compiler::__ascii_strnicmp	libmap
+00697a51	compiler::strcpy_s	libmap
+00697ab6	compiler::strnlen	libmap
+00697ad0	compiler::_validdrive	libmap
+00697b07	compiler::_getdcwd_nolock	libmap
+00697ccf	compiler::_calloc_impl	libmap
+00697ded	compiler::calloc	libmap
+00697e2c	compiler::abort	libmap
+00697f1f	compiler::_set_abort_behavior	libmap
+00697f3d	compiler::CallDestructExceptionObject	libmap
+00697f74	compiler::_global_unwind2	libmap
+00697f94	compiler::_unwind_handler	libmap
+00697fd9	compiler::_local_unwind2	libmap
+00698080	compiler::_NLG_Notify1	libmap
+00698089	compiler::_NLG_Notify	libmap
+006980a8	compiler::_NLG_Call	libmap
+006980b0	compiler::ValidateScopeTableHandlers	libmap
+00698170	compiler::_ValidateEH3RN	libmap
+006986f0	compiler::_startTwoArgErrorHandling	libmap
+00698707	compiler::_startOneArgErrorHandling	libmap
+00698750	compiler::_twoToTOS	libmap
+00698765	compiler::_load_CW	libmap
+0069877c	compiler::_convertTOStoQNaN	libmap
+00698795	compiler::_fload_withFB	libmap
+006987d8	compiler::_checkTOS_withFB	libmap
+00698d60	compiler::_CIpow_pentium4	libmap
+006998c0	compiler::_d_inttype	libmap
+00699924	compiler::_powhlp	libmap
+0069a1ac	compiler::_commit	libmap
+0069a295	compiler::__crtMessageBoxA	libmap
+0069a452	compiler::strcat_s	libmap
+0069a4c3	compiler::_set_error_mode	libmap
+0069a519	compiler::_fptrap	libmap
+0069a810	compiler::has_osfxsr_set	libmap
+0069a860	compiler::_get_sse2_info	libmap
+0069a8c0	compiler::__sse2_available_init	libmap
+0069a8cd	compiler::_set_osfhnd	libmap
+0069a94a	compiler::_free_osfhnd	libmap
+0069a9cb	compiler::_get_osfhandle	libmap
+0069aa3c	compiler::__lock_fhandle	libmap
+0069aadc	compiler::_unlock_fhandle	libmap
+0069aafe	compiler::_alloc_osfhnd	libmap
+0069adad	compiler::_fcloseall	libmap
+0069ae4c	compiler::_lseeki64_nolock	libmap
+0069aecf	compiler::_lseeki64	libmap
+0069afe8	compiler::_getbuf	libmap
+0069b02c	compiler::_isatty	libmap
+0069b08a	compiler::_tsopen_nolock	libmap
+0069b899	compiler::_sopen_helper	libmap
+0069b9b3	compiler::_mbsicmp_l	libmap
+0069bbcd	compiler::_mbsicmp	libmap
+0069bbe0	compiler::_mbsnbcmp_l	libmap
+0069bd49	compiler::_mbsnbcmp	libmap
+0069bd60	compiler::_wctomb_s_l	libmap
+0069bebf	compiler::wctomb_s	libmap
+0069c41c	compiler::_fptostr	libmap
+0069c4d9	compiler::__dtold	libmap
+0069c594	compiler::_fltout2	libmap
+0069c622	compiler::_controlfp_s	libmap
+0069c68f	compiler::_raise_exc_ex	libmap
+0069c969	compiler::_raise_exc	libmap
+0069c9ab	compiler::_handle_exc	libmap
+0069cb8c	compiler::_set_errno_from_matherr	libmap
+0069ced7	compiler::_frnd	libmap
+0069cee8	compiler::_set_exp	libmap
+0069cf76	compiler::_sptype	libmap
+0069cfd1	compiler::_decomp	libmap
+0069d080	compiler::_statfp	libmap
+0069d08b	compiler::_clrfp	libmap
+0069d097	compiler::_ctrlfp	libmap
+0069d0be	compiler::_set_statfp	libmap
+0069d354	std::exception::~exception	libmap
+0069d36a	std::exception::what	libmap
+0069d42a	type_info::`scalar_deleting_destructor'	libmap
+0069d5b6	compiler::_CxxThrowException	libmap
+0069d627	compiler::__crtGetStringTypeA_stat	libmap
+0069d7df	compiler::__crtGetStringTypeA	libmap
+0069de9d	compiler::__free_lconv_num	libmap
+0069e7f9	compiler::___lc_codepage_func	libmap
+006a2ca9	compiler::_putwch_nolock	libmap
+006a2e4c	compiler::_mbtowc_l	libmap
+006a2f5f	compiler::mbtowc	libmap
+006a2f76	compiler::_ungetc_nolock	libmap
+006a39cb	charNode::getString	libmap
+006a39e6	pcharNode::length	libmap
+006a3a3e	DNameStatusNode::length	libmap
+006a3a42	DNameStatusNode::getLastChar	libmap
+006a3a5d	compiler::und_strncpy	libmap
+006a3eea	pcharNode::getLastChar	libmap
+006a3efc	pcharNode::getString	libmap
+006a3f2d	pDNameNode::length	libmap
+006a3f3c	pDNameNode::getLastChar	libmap
+006a3f4b	pDNameNode::getString	libmap
+006a3f68	DNameStatusNode::getString	libmap
+006a84ac	compiler::__ansicp	libmap
+006a84f3	compiler::__convertcp	libmap
+006a86a5	compiler::_iswctype_l	libmap
+006a879a	compiler::_getenv_helper_nolock	libmap
+006a8b91	compiler::_tsopen_nolock	libmap
+006a93a1	compiler::_wsopen_helper	libmap
+006a94bb	compiler::_wcsicmp_l	libmap
+006a95ca	compiler::_wcsicmp	libmap
+006a965b	compiler::wcsncmp	libmap
+006a9690	compiler::_getdrive	libmap
+006a97f7	compiler::_87except	libmap
+006a9900	compiler::fdiv_main_routine	libmap
+006aa0f1	compiler::_safe_fdivr	libmap
+006aaaad	compiler::_fpclass	libmap
+006aab41	compiler::_chsize_nolock	libmap
+006aadfa	compiler::_setmode_nolock	libmap
+006ad08a	compiler::$I10_OUTPUT	libmap
+006ada53	compiler::_hw_cw	libmap
+006adbbc	compiler::__hw_cw_sse2	libmap
+006ae39f	compiler::_control87	libmap
+006aec50	compiler::__initconout	libmap
+006aec6f	compiler::__termcon	libmap
+006aecb2	compiler::__crtGetStringTypeW_stat	libmap
+006aeed6	compiler::__crtGetStringTypeW	libmap
+006aef14	compiler::_mbsnbicoll_l	libmap
+006af000	compiler::_mbsnbicoll	libmap
+006af017	compiler::__wtomb_environ	libmap
+006af0ac	compiler::_towlower_l	libmap
+006af4fb	compiler::__crtCompareStringA_stat	libmap
+006af884	compiler::__crtCompareStringA	libmap
+006af8c4	compiler::_strnicoll_l	libmap
+006af9e3	compiler::findenv	libmap
+006afa30	compiler::copy_environ	libmap
+006afa8d	compiler::__crtsetenv	libmap
+006afcf5	compiler::__crtLCMapStringW_stat	libmap
+006aff56	compiler::__crtLCMapStringW	libmap
+006aff96	compiler::_strdup	libmap
+006affe6	compiler::_mbschr_l	libmap
+006b00a0	compiler::_mbschr	libmap
+00681ebb	compiler::atoi	library run
+00681ea6	compiler::_atol_l	library run
+00681a48	compiler::__security_check_cookie	libcmt before the library run
+00689501	compiler::_invoke_watson	library run
+00695fc3	compiler::write_char	library run
+00695ff6	compiler::write_multi_char	library run
+0069601a	compiler::write_string	library run
+006a3127	compiler::HeapManager::Destructor	library run
+006a3711	compiler::HeapManager::getMemory	library run
+006a394e	compiler::Replicator::operator[]	library run
+006a3dd9	compiler::Replicator::Replicator	library run
+006a3df7	compiler::Replicator::operator+=	library run
+006ab200	compiler::FOG_ClearStruct12Bytes	library run
+00681ab6	compiler::__lockexit	library run
+00681abf	compiler::__unlockexit	library run
+00681ae0	compiler::__initterm_e	library run
+00681c95	compiler::__cinit	library run
+00681df4	compiler::CRT_DoeExit_Unlock	library run
+00681e2b	compiler::__cexit	library run
+00681e49	compiler::__init_pointers	library run
+00682050	compiler::CRT_Fclose_Unlock	library run
+0068218f	compiler::CRT_Fputc_Unlock	library run
+00682197	compiler::CRT_Fputc2	library run
+006822ce	compiler::CRT_Fputc2_Unlock	library run
+00682390	compiler::CRT_Fsopen_Unlock	library run
+006824ae	compiler::__sprintf_s_l	library run
+006824cb	compiler::__snprintf_s	library run
+006824ea	compiler::__snprintf_s_l	library run
+00682526	compiler::CRT_Strcpy_S_L	library run
+00682740	compiler::_fast_error_exit	library run
+00682764	compiler::_check_managed_app	library run
+006827a5	compiler::PreWinMain	library run
+00682985	compiler::entry	library run
+00682db8	compiler::FID_conflict:__vscprintf_helper	library run
+00682e0d	compiler::FID_conflict:__vscprintf_p	library run
+00682e25	compiler::FID_conflict:__vscprintf_p_l	library run
+00682e3f	compiler::FID_conflict:__vscprintf_p	library run
+00682e57	compiler::FID_conflict:__vscprintf_p_l	library run
+00682fd0	compiler::FloatToLong	library run
+00683006	compiler::__ftol2	library run
+00683080	compiler::CRT_Floor	library run
+00683288	compiler::__snprintf_l	library run
+006832a5	compiler::_JumpToContinuation	library run
+006832d5	compiler::_CallMemberFunction0	library run
+006832dc	compiler::FID_conflict:CallMemberFunction1	library run
+006832e3	compiler::FID_conflict:CallMemberFunction1	library run
+006832ea	compiler::_UnwindNestedFrames	library run
+0068333c	compiler::FID_conflict:___CxxFrameHandler3	library run
+00683372	compiler::FID_conflict:___CxxFrameHandler3	library run
+006833a8	compiler::FID_conflict:___CxxFrameHandler3	library run
+006833f8	compiler::CRT_compiler_fn_6833f8	library run
+00683428	compiler::_CallSETranslator	library run
+006834fd	compiler::TranslatorGuardHandler	library run
+0068359a	compiler::_GetRangeOfTrysToCheck	library run
+0068360d	compiler::__CreateFrameInfo	library run
+006836a2	compiler::_CallCatchBlock2	library run
+0068381e	compiler::__onexit_Unlock	library run
+00683ce9	compiler::CRT_Realloc_Unlock	library run
+00683e7f	compiler::CRT_Malloc_Unlock	library run
+00684016	compiler::CRT_Free_Unlock	library run
+006844c1	compiler::CRT_Fwrite_Unlock	library run
+00684778	compiler::CRT_Fread_Unlock	library run
+00684999	compiler::CRT_Ftell_Unlock	library run
+00684aa5	compiler::CRT_Fseek_Unlock	library run
+00684aaf	compiler::CRT_Encode_Pointer	library run
+00684ad1	compiler::CRT_Decode_Pointer	library run
+00684bf4	compiler::FID_conflict:__sscanf_s_l	library run
+00684c15	compiler::FID_conflict:_sscanf	library run
+00684c34	compiler::FID_conflict:__sscanf_s_l	library run
+00684dd9	compiler::CRT_Fgetc_Unlock	library run
+00684e70	compiler::~type_info	library run
+00684e7e	compiler::`scalar_deleting_destructor'	library run
+00684eb1	compiler::operator==	library run
+00684f07	compiler::CRT_IsExceptionTypeOf	library run
+006855d3	compiler::CRT_Output_Unlock	library run
+006855dd	compiler::CRT_Vfprintf_L	library run
+006855fb	compiler::CRT_Vsnprintf_L	library run
+00685619	compiler::CRT_Vsnprintf_Helper	library run
+006856c7	compiler::__invoke_watson_if_error	library run
+00685ee3	compiler::CRT_Wfsopen_Unlock	library run
+00686797	compiler::__strtol_l	library run
+006869e6	compiler::__alloca_probe_8	library run
+00686a49	compiler::CRT_EH_VectorConstructorIterator	library run
+00686b1c	compiler::CRT_EH_VectorDestructorIterator	library run
+00686dd0	compiler::__isupper_l	library run
+00686e1f	compiler::_isupper	library run
+00686e48	compiler::__islower_l	library run
+00686e97	compiler::_islower	library run
+0068702f	compiler::__ispunct_l	library run
+0068707e	compiler::_ispunct	library run
+00687126	compiler::__isprint_l	library run
+0068717a	compiler::_isprint	library run
+006871a5	compiler::__isgraph_l	library run
+006871f9	compiler::_isgraph	library run
+00687224	compiler::__iscntrl_l	library run
+00687273	compiler::_iscntrl	library run
+0068762d	compiler::__ltoa	library run
+00687746	compiler::__from_strstr_to_strchr	library run
+00687828	compiler::_set_purecall_handler	library run
+0068784a	compiler::_get_purecall_handler	library run
+0068799e	compiler::__seh_longjmp_unwind@4	library run
+006879c0	compiler::__CIsqrt	library run
+006879dd	compiler::__sqrt_common	library run
+00687ac0	compiler::CRT_CILog	library run
+00687b18	compiler::__log_common	library run
+00687c10	compiler::CRT_CIPow	library run
+00687c6d	compiler::CRT_Pow_Core	library run
+00687e32	compiler::_test_whether_TOS_is_int	library run
+00687ea0	compiler::CRT_CILog10	library run
+00687ef8	compiler::__log10_common	library run
+006883f0	compiler::CRT_Fgets_Unlock	library run
+006883f8	compiler::printf	library run
+00688494	compiler::CRT_Printf_Helper	library run
+00688590	compiler::CRT_CISin	library run
+006885df	compiler::__sin_x87_fallback_entry	library run
+006885e8	compiler::__sin_common	library run
+006886c0	compiler::CRT_CICos	library run
+0068870f	compiler::__cos_x87_fallback_entry	library run
+00688718	compiler::__cos_common	library run
+006888ef	compiler::CRT_Flsall_Lock	library run
+0068891e	compiler::CRT_Flsall_Unlock	library run
+00688970	compiler::CRT_Fflush_Unlock	library run
+006889d6	compiler::___report_gsfailure	library run
+00688c2b	compiler::FlsAllocStub	library run
+00688c9a	compiler::__mtterm	library run
+00688d8d	compiler::CRT_SetTLS_Unlock	library run
+00688f31	compiler::CRT_FreeFLS_UnlockMbcp	library run
+00688f3d	compiler::CRT_FreeFLS_UnlockLocale	library run
+00688fbb	compiler::__mtinit	library run
+00689338	compiler::__mtinitlocks	library run
+00689381	compiler::__mtdeletelocks	library run
+006894bd	compiler::CRT_MtInitLockNum_Unlock	library run
+006894f7	compiler::__initp_misc_invarg	library run
+006895fd	compiler::_set_invalid_parameter_handler	library run
+0068961f	compiler::_get_invalid_parameter_handler	library run
+0068962c	compiler::CRT_InvalidParameterNoInfo	library run
+00689669	compiler::CRT_InvalidParameterNoInfoInvoke	library run
+006896f1	compiler::_set_errno	library run
+0068970c	compiler::_get_errno	library run
+00689736	compiler::_set_doserrno	library run
+00689751	compiler::_get_doserrno	library run
+0068977b	compiler::__RTC_Initialize	library run
+0068979f	compiler::atexit_invoke_callbacks	library run
+006897c3	compiler::__initp_misc_cfltcvt_tab	library run
+00689964	compiler::unexpected	library run
+006899ae	compiler::__initp_eh_hooks	library run
+006899bf	compiler::CRT_ThreadDataInit	library run
+006899c0	compiler::xcptlookup	library run
+00689b50	compiler::__CppXcptFilter	library run
+00689b6b	compiler::__initp_misc_winsig	library run
+00689b84	compiler::ctrlevent_capture	library run
+00689bff	compiler::ctrlevent_capture_finally	library run
+00689c60	compiler::__fpecode	library run
+00689c69	compiler::__pxcptinfoptrs	library run
+00689c72	compiler::signal	library run
+00689e6a	compiler::signal_finally	library run
+0068a023	compiler::CRT_Raise_Unlock	library run
+0068a05f	compiler::__initp_misc_rand_s	library run
+0068a069	compiler::rand_s	library run
+0068a16d	compiler::___getlocaleinfo	library run
+0068a2c7	compiler::__initp_misc_purevirt	library run
+0068a2d1	compiler::__initp_misc_initcrit	library run
+0068a3b0	compiler::__initp_heap_handler	library run
+0068a3ba	compiler::_set_new_handler	library run
+0068a3eb	compiler::_set_new_handler_int	library run
+0068a3f4	compiler::_query_new_handler	library run
+0068a423	compiler::strtoxq	library run
+0068a6b7	compiler::__strtoi64	library run
+0068a6e0	compiler::__strtoi64_l	library run
+0068a6fb	compiler::__strtoui64	library run
+0068a740	compiler::_fastzero_I	library run
+0068a797	compiler::__VEC_memzero	library run
+0068a83a	compiler::__set_SSE2_enable	library run
+0068a9a8	compiler::CRT_CloseFileHandle_Unlock	library run
+0068ad0c	compiler::__ioinit	library run
+0068af60	compiler::__ioterm	library run
+0068b379	compiler::CRT_OpenFile_Unlock	library run
+0068b45a	compiler::__seh_longjmp_unwind4@4	library run
+0068b48d	compiler::@_EH4_TransferToHandler@8	library run
+0068c028	compiler::FID_conflict:__vsnprintf_c_l	library run
+0068c050	compiler::__vsprintf_s_l	library run
+0068c1f6	compiler::__vsnprintf_s	library run
+0068c23b	compiler::FID_conflict:__vsnprintf_c_l	library run
+0068c2ae	compiler::__wincmdln	library run
+0068c30b	compiler::__setenvp	library run
+0068c3f0	compiler::_parse_cmdline	library run
+0068c588	compiler::__setargv	library run
+0068c641	compiler::___crtGetEnvironmentStringsA	library run
+0068c776	compiler::___heap_select	library run
+0068c7d1	compiler::__heap_init	library run
+0068c82b	compiler::CRT_Output_Printf_Wide	library run
+0068c939	compiler::_fastcopy_I	library run
+0068c9c0	compiler::__VEC_memcpy	library run
+0068caa3	compiler::__validate_param_reuseA	library run
+0068cbcc	compiler::_write_char	library run
+0068cbff	compiler::_write_multi_char	library run
+0068cc23	compiler::_write_string	library run
+0068cc7d	compiler::CRT_vscprintf_output_fn	library run
+0068dd80	compiler::__forcdecpt	library run
+0068dd8e	compiler::__cropzeros	library run
+0068e366	compiler::__cftoa	library run
+0068e645	compiler::__cftog	library run
+0068e733	compiler::__ms_p5_test_fdiv	library run
+0068eb66	compiler::`scalar_deleting_destructor'	library run
+0068eb88	compiler::___TypeMatch	library run
+0068ecee	compiler::CRT_FrameUnwindToState	library run
+0068eda2	compiler::___AdjustPointer	library run
+0068eed9	compiler::CRT_CxxFrameHandler3	library run
+0068f0e8	compiler::IsInExceptionSpec	library run
+0068f161	compiler::CallUnexpected	library run
+0068f192	compiler::Catch_All_0068f192	library run
+0068f1da	compiler::_is_exception_typeof	library run
+0068f25c	compiler::CallCatchBlock	library run
+0068f382	compiler::CRT_CallCatchBlock	library run
+0068f3f8	compiler::___BuildCatchObjectHelper	library run
+0068f577	compiler::___BuildCatchObject	library run
+0068f608	compiler::___CxxExceptionFilter	library run
+0068f74b	compiler::CatchIt	library run
+0068f7b7	compiler::FindHandlerForForeignException	library run
+0068f8a9	compiler::FindHandler	library run
+0068fc17	compiler::___InternalCxxFrameHandler	library run
+0068fd4c	compiler::CRT_ExceptionFilter	library run
+0068ff56	compiler::CRT_Msize_Unlock	library run
+00690002	compiler::___sbh_heap_init	library run
+006908eb	compiler::___sbh_heap_check	library run
+00691201	compiler::CRT_UpdateMBCInfo_Unlock	library run
+0069145d	compiler::__getmbcp	library run
+006915fa	compiler::CRT_SetMBCP_Unlock	library run
+006918af	compiler::__copytlocinfo_nolock	library run
+0069197b	compiler::CRT_UpdateLocInfo_Unlock	library run
+00691987	compiler::__configthreadlocale	library run
+006919ed	compiler::_sync_legacy_variables_lk	library run
+00691a40	compiler::__free_locale	library run
+00691acd	compiler::CRT_FreeLocale_Unlock	library run
+00691ad6	compiler::___free_locale	library run
+00691adb	compiler::__get_current_locale	library run
+00691b5a	compiler::CRT_GetCurrentLocale_Unlock	library run
+00691b63	compiler::___get_current_locale	library run
+00691b68	compiler::___init_dummy	library run
+00691b6b	compiler::__strcats	library run
+00691ba9	compiler::___lc_strtolc	library run
+00691cd2	compiler::___lc_lctostr	library run
+00691d3d	compiler::__setlocale_get_all	library run
+00691eae	compiler::__expandlocale	library run
+00692082	compiler::__setlocale_set_cat	library run
+00692378	compiler::__setlocale_nolock	library run
+00692546	compiler::__create_locale	library run
+00692639	compiler::___create_locale	library run
+0069263e	compiler::_setlocale	library run
+0069276c	compiler::CRT_SetLocale_CopyUnlock	library run
+00692778	compiler::CRT_SetLocale_UpdateUnlock	library run
+006927a9	compiler::CRT_SetLocale_ClearOwnLocale	library run
+006927ae	compiler::CRT_Lseeki64_NoLock	library run
+00692ea2	compiler::CRT_Lseeki64_Unlock	library run
+00693680	compiler::CRT_Read_Unlock	library run
+00693849	compiler::CRT_Lseek64_Unlock	library run
+006945f9	compiler::___check_float_string	library run
+00694665	compiler::__inc	library run
+00694688	compiler::__whiteout	library run
+006946ad	compiler::CRT_vscan_input_fn_6946ad	library run
+0069546e	compiler::__ftbuf	library run
+0069549d	compiler::_Type_info_dtor	library run
+00695504	compiler::CRT_TypeInfo_Dtor_Unlock	library run
+0069550d	compiler::_Name_base	library run
+006955f9	compiler::CRT_NameBase_Unlock	library run
+00695602	compiler::FID_conflict:Type_info_dtor_internal	library run
+00695669	compiler::CRT_TypeInfo_Dtor_Internal_Unlock	library run
+00695672	compiler::___unDNameHelper	library run
+006956a3	compiler::_Name_base_internal	library run
+00695785	compiler::CRT_NameBase_Internal_Unlock	library run
+006957d8	compiler::CRT_Unwind_Destructor	library run
+00695f94	compiler::__isctype	library run
+00696064	compiler::CRT_output_L_fn	library run
+00696ce7	compiler::CRT_TZSetNoLock_UnlockEnv	library run
+00697192	compiler::CRT_TZSet_UnlockTime	library run
+006971ca	compiler::CRT_GetDayLight_Unlock	library run
+0069720b	compiler::CRT_IsIndST_Unlock	library run
+00697510	compiler::__get_tzname	library run
+006975b2	compiler::CRT_GetTimeZone	library run
+006975b8	compiler::CRT_GetDayLight	library run
+006975be	compiler::CRT_GetTZName	library run
+006975c4	compiler::CRT_GetDSTBias	library run
+006975ca	compiler::__gmtime32_s	library run
+006976f7	compiler::___getgmtimebuf	library run
+00697c3c	compiler::__getcwd	library run
+00697c7c	compiler::CRT_GetCWD_Unlock	library run
+00697cc6	compiler::CRT_WGetCWD_Unlock	library run
+00697dcb	compiler::CRT_CallocImpl_Unlock	library run
+00698094	compiler::CRT_NLG_Notify1	library run
+00698618	compiler::CRT_X87_ReturnST1	library run
+00698626	compiler::CRT_X87_ReturnZero	library run
+0069862b	compiler::CRT_X87_ReturnOne	library run
+006986c6	compiler::VSRUN_SetThreadFlag	library run
+006986d9	compiler::CRT_AdjustFP	library run
+006988e0	compiler::__CIlog_pentium4	library run
+006988f8	compiler::__log_pentium4	library run
+006988fe	compiler::__log_pentium4_xmm0	library run
+00698cae	compiler::__ffexpm1	library run
+00698cf1	compiler::_isintTOS	library run
+00698d79	compiler::__pow_pentium4	library run
+00699a70	compiler::__CIlog10_pentium4	library run
+00699a88	compiler::__log10_pentium4	library run
+00699a8e	compiler::__log10_pentium4_xmm0	library run
+00699d00	compiler::FID_conflict:_vprintf_helper	library run
+00699d88	compiler::CRT_Vprintf_Helper_Unlock	library run
+00699d90	compiler::FID_conflict:__vwprintf_s_l	library run
+00699daa	compiler::FID_conflict:__vwprintf_s_l	library run
+00699dc4	compiler::FID_conflict:__vwprintf_s_l	library run
+00699e30	compiler::__CIsin_pentium4	library run
+00699e48	compiler::__sin_pentium4	library run
+00699e4e	compiler::__sin_pentium4_xmm0	library run
+0069a000	compiler::__CIcos_pentium4	library run
+0069a018	compiler::__cos_pentium4	library run
+0069a01e	compiler::__cos_pentium4_xmm0	library run
+0069a283	compiler::CRT_Fflush_NoLock_Unlock	library run
+0069a28d	compiler::CRT_FastFail	library run
+0069a509	compiler::__set_app_type	library run
+0069a513	compiler::CRT_GetAppType	library run
+0069a522	compiler::__crtGetLocaleInfoW_stat	library run
+0069a65d	compiler::___crtGetLocaleInfoW	library run
+0069a698	compiler::__crtGetLocaleInfoA_stat	library run
+0069a7d5	compiler::___crtGetLocaleInfoA	library run
+0069aad3	compiler::CRT_LockFHandle_Unlock	library run
+0069abd1	compiler::CRT_AllocOSFHnd_Unlock	library run
+0069ac8f	compiler::CRT_AllocOSFHnd_Unlock2	library run
+0069ac98	compiler::__open_osfhandle	library run
+0069ad85	compiler::CRT_OpenOSFHandle_Unlock	library run
+0069ae43	compiler::CRT_FCloseAll_Unlock	library run
+0069afde	compiler::CRT_Flush_Unlock	library run
+0069b85f	compiler::CRT_SOpen_UnlockAndClose	library run
+0069b893	compiler::CRT_SOpen_Lock	library run
+0069b937	compiler::CRT_SOpen_Validate	library run
+0069b965	compiler::FID_conflict:__sopen	library run
+0069b995	compiler::FID_conflict:__sopen_s	library run
+0069beda	compiler::__wctomb_l	library run
+0069bf29	compiler::_wctomb	library run
+0069bf59	compiler::x_ismbbtype_l	library run
+0069c117	compiler::__ismbblead	library run
+0069c152	compiler::__ismbbkana_l	library run
+0069c1b3	compiler::FID_conflict:__atoflt_l	library run
+0069c26c	compiler::__atoldbl_l	library run
+0069c326	compiler::FID_conflict:__atoflt_l	library run
+0069c68c	compiler::CRT_MatherrDefault	library run
+0069c98a	compiler::__raise_excf	library run
+0069cbd4	compiler::__errcode	library run
+0069cc01	compiler::__umatherr	library run
+0069cc9f	compiler::__handle_qnan1	library run
+0069ccf2	compiler::__handle_qnan2	library run
+0069cd51	compiler::__except1	library run
+0069ce0b	compiler::__except2	library run
+0069cf51	compiler::__set_bexp	library run
+0069d114	compiler::___get_fpsr_sse2	library run
+0069d130	compiler::___set_fpsr_sse2	library run
+0069d240	std::exception::exception	library run
+0069d2a6	std::exception::exception	library run
+0069d2fe	std::exception::operator=	library run
+0069d3b3	std::exception::CRT_Exception_Ctor	library run
+0069d3cc	std::exception::FID_conflict:bad_alloc	library run
+0069d446	std::exception::`scalar_deleting_destructor'	library run
+0069d468	std::exception::`scalar_deleting_destructor'	library run
+0069d48a	std::exception::scalar_deleting_destructor	library run
+0069d4df	compiler::__EH_prolog3_catch	library run
+0069d584	compiler::__EH_epilog3	library run
+0069d600	compiler::_ValidateRead	library run
+0069d60d	compiler::FID_conflict:ValidateRead	library run
+0069d61a	compiler::FID_conflict:ValidateRead	library run
+0069d825	compiler::___pctype_func	library run
+0069d84e	compiler::__get_lc_time	library run
+0069dc67	compiler::___free_lc_time	library run
+0069ddf7	compiler::___init_time	library run
+0069dedd	compiler::___init_numeric	library run
+0069e0d8	compiler::___free_lconv_mon	library run
+0069e161	compiler::___init_monetary	library run
+0069e425	compiler::___init_ctype	library run
+0069e7ba	compiler::____mb_cur_max_func	library run
+0069e81f	compiler::____lc_collate_cp_func	library run
+0069e845	compiler::____lc_handle_func	library run
+0069e86b	compiler::___init_collate	library run
+0069e86e	compiler::__Getdays_l	library run
+0069e975	compiler::__Getmonths_l	library run
+0069ea7c	compiler::__Gettnames_l	library run
+0069edda	compiler::FID_conflict:_store_str	library run
+0069ee30	compiler::FID_conflict:__store_num	library run
+0069eea9	compiler::CRT_StrfTime_L	library run
+0069f28f	compiler::CRT_StrfTime_Worker	library run
+0069f6ec	compiler::__Strftime_l	library run
+0069f89b	compiler::__strftime_l	library run
+0069f8d6	compiler::__Strftime	library run
+0069f8f4	compiler::_localeconv	library run
+0069f91a	compiler::_TranslateName	library run
+0069f98e	compiler::_ProcessCodePage	library run
+0069fa05	compiler::_TestDefaultCountry	library run
+0069fa23	compiler::_LcidFromHexString	library run
+0069fa55	compiler::_GetPrimaryLen	library run
+0069fa70	compiler::_CountryEnumProc@4	library run
+0069fb06	compiler::_TestDefaultLanguage	library run
+0069fb78	compiler::_LangCountryEnumProc@4	library run
+0069fd48	compiler::_LanguageEnumProc@4	library run
+0069fe33	compiler::_GetLcidFromLangCountry	library run
+0069fe98	compiler::_GetLcidFromLanguage	library run
+0069fed4	compiler::___get_qualified_locale	library run
+006a1629	compiler::_memcmp	library run
+006a2dfd	compiler::CRT_AToI64_Unlock	library run
+006a2e43	compiler::CRT_AToI_Unlock	library run
+006a30fc	compiler::CRT_Input_Unlock	library run
+006a314d	UnDecorator::getNumberOfDimensions	library run
+006a31b0	UnDecorator::getTypeEncoding	library run
+006a36f8	UnDecorator::UScore	library run
+006a37b4	DName::DName	library run
+006a38ca	DName::operator=	library run
+006a3984	DNameNode::operator+=	library run
+006a39ad	charNode::charNode	library run
+006a39c3	charNode::length	library run
+006a39c7	charNode::getLastChar	library run
+006a39ea	pDNameNode::pDNameNode	library run
+006a3a19	DNameStatusNode::DNameStatusNode	library run
+006a3aa2	UnDecorator::getDataIndirectType	library run
+006a3ad5	UnDecorator::getThisType	library run
+006a3b1c	DName::DName	library run
+006a3b72	DName::DName	library run
+006a3bd3	DName::isValid	library run
+006a3bea	DName::isEmpty	library run
+006a3bff	DName::isUDC	library run
+006a3c35	DName::length	library run
+006a3c5a	DName::getLastChar	library run
+006a3c92	DName::getString	library run
+006a3d23	DName::operator|=	library run
+006a3d58	DName::operator=	library run
+006a3e3e	DNameNode::clone	library run
+006a3e85	pcharNode::pcharNode	library run
+006a3f9b	UnDecorator::UnDecorator	library run
+006a400e	UnDecorator::getReturnType	library run
+006a404c	DName::operator+=	library run
+006a40c5	DName::operator=	library run
+006a412d	DName::doPchar	library run
+006a41d3	DName::DName	library run
+006a41f9	DName::DName	library run
+006a422a	DName::DName	library run
+006a42fa	DName::DName	library run
+006a4363	UnDecorator::DNAME_AppendSignedInt64	library run
+006a43f9	DName::operator+	library run
+006a4427	DName::operator+=	library run
+006a4489	DName::operator+=	library run
+006a4514	DName::operator=	library run
+006a4530	DName::operator=	library run
+006a455a	UnDecorator::getCallingConvention	library run
+006a4600	UnDecorator::getVCallThunkType	library run
+006a4637	DName::operator+	library run
+006a4688	DName::operator+	library run
+006a46b6	DName::operator+=	library run
+006a4720	DName::operator+=	library run
+006a478c	UnDecorator::getArgumentList	library run
+006a486c	UnDecorator::getVdispMapType	library run
+006a48bb	UnDecorator::operator+	library run
+006a48dd	UnDecorator::operator+	library run
+006a48ff	UnDecorator::operator+	library run
+006a4921	DName::operator+	library run
+006a494f	DName::operator+	library run
+006a497d	UnDecorator::getDimension	library run
+006a4abe	UnDecorator::getEnumType	library run
+006a4b92	UnDecorator::getArgumentTypes	library run
+006a4c56	UnDecorator::getThrowTypes	library run
+006a4cd4	UnDecorator::getExtendedDataIndirectType	library run
+006a4df9	UnDecorator::getArrayType	library run
+006a4f58	UnDecorator::getLexicalFrame	library run
+006a4fbf	UnDecorator::getVfTableType	library run
+006a510f	UnDecorator::getStringEncoding	library run
+006a51af	UnDecorator::getSignedDimension	library run
+006a51ff	UnDecorator::getTemplateConstant	library run
+006a54ba	UnDecorator::getPtrRefDataType	library run
+006a55a7	UnDecorator::getTemplateArgumentList	library run
+006a575f	UnDecorator::getOperatorName	library run
+006a5cce	UnDecorator::getTemplateName	library run
+006a5e21	UnDecorator::getZName	library run
+006a600b	UnDecorator::getScopedName	library run
+006a60fe	UnDecorator::getECSUDataType	library run
+006a61fe	UnDecorator::getSymbolName	library run
+006a6244	UnDecorator::getBasedType	library run
+006a62d6	UnDecorator::composeDeclaration	library run
+006a6e18	UnDecorator::getDecoratedName	library run
+006a7029	UnDecorator::getScope	library run
+006a72b4	UnDecorator::getFunctionIndirectType	library run
+006a75f5	UnDecorator::getDataIndirectType	library run
+006a7ad9	UnDecorator::operator	library run
+006a7c25	UnDecorator::getPtrRefType	library run
+006a7d8c	UnDecorator::___unDName	library run
+006a7e26	UnDecorator::CRT_UnDName_Unlock	library run
+006a7ec9	UnDecorator::CRT_UnDName_Dtor_Unlock	library run
+006a7ed2	UnDecorator::CRT_UnDName_ComposeDeclaration	library run
+006a8259	UnDecorator::getPrimaryDataType	library run
+006a8397	UnDecorator::getDataType	library run
+006a8448	UnDecorator::getExternalDataType	library run
+006a8727	compiler::_iswctype	library run
+006a881b	compiler::__getenv_s_helper	library run
+006a88ae	compiler::__dupenv_s_helper	library run
+006a89ca	compiler::CRT_UnDName_GetBasicDataType_Unlock	library run
+006a8aa2	compiler::CRT_UnDName_GetECSU_Unlock	library run
+006a8b88	compiler::CRT_UnDName_GetPtrRefType_Unlock	library run
+006a9367	compiler::CRT_SOpen_Wide_UnlockAndClose	library run
+006a939b	compiler::CRT_SOpen_Wide_Lock	library run
+006a943f	compiler::CRT_SOpen_Wide_Validate	library run
+006a946d	compiler::FID_conflict:__sopen	library run
+006a949d	compiler::__wsopen_s	library run
+006a97ee	compiler::CRT_UnDName_GetClassTemplate_Unlock	library run
+006a9eb6	compiler::__fdivp_sti_st	library run
+006a9ec9	compiler::__fdivrp_sti_st	library run
+006a9edc	compiler::__adj_fdiv_m32	library run
+006a9f28	compiler::__adj_fdiv_m64	library run
+006a9fdc	compiler::__adj_fdivr_m32	library run
+006aa028	compiler::__adj_fdivr_m64	library run
+006aa106	compiler::__fprem_common	library run
+006aa30c	compiler::__adj_fprem	library run
+006aa3be	compiler::__fprem1_common	library run
+006aa5c4	compiler::__adj_fprem1	library run
+006aa68b	compiler::__copysign	library run
+006aa6b1	compiler::__chgsign	library run
+006aa6f2	compiler::__logb	library run
+006aa7d5	compiler::__nextafter	library run
+006aacf5	compiler::__chsize_s	library run
+006aadd8	compiler::CRT_Chsize_Unlock	library run
+006aade2	compiler::__chsize	library run
+006aaefc	compiler::CRT_SOpen_ValidateFlags	library run
+006aaf30	compiler::__setmode	library run
+006ab01d	compiler::CRT_SetMode_FhUnlock	library run
+006ab0f7	compiler::__RoundMan	library run
+006ab225	compiler::__ShrMan	library run
+006ab2bd	compiler::__ld12cvt	library run
+006ab7e6	compiler::FID_conflict:__ld12tod	library run
+006abd28	compiler::FID_conflict:__ld12tod	library run
+006ac26a	compiler::__ld12told	library run
+006ac387	compiler::___ld12mul	library run
+006ac5fb	compiler::CRT_StrToD_L	library run
+006ac904	compiler::CRT_StrToLD_L	library run
+006acfc4	compiler::FID_conflict:___STRINGTOLD_L	library run
+006ad950	compiler::__set_controlfp	library run
+006adca6	compiler::__statusfp	library run
+006add6c	compiler::___statusfp_sse2	library run
+006adf66	compiler::__statusfp2	library run
+006adfbe	compiler::__clearfp	library run
+006ae095	compiler::___control87_2	library run
+006ae9ab	compiler::_xtoa_s@20	library run
+006aea86	compiler::__itoa_s	library run
+006aeaae	compiler::__ltoa_s	library run
+006aead3	compiler::__ultoa_s	library run
+006aeaeb	compiler::@x64toa_s@24	library run
+006aebe1	compiler::__i64toa_s	library run
+006aec14	compiler::__ui64toa_s	library run
+006aec31	compiler::___initconin	library run
+006aec9c	compiler::CRT_FltRnd	library run
+006af167	compiler::_ldexp	library run
+006af315	compiler::___mtold12	library run
+006af9bc	compiler::__strnicoll	library run
+006b16fe	compiler::RtlUnwind	closure: only the runtime calls it
