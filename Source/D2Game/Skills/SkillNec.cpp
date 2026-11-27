@@ -1733,7 +1733,8 @@ static D2UnitStrc * __stdcall SKILLNEC_CreateSummonAtPosition(::SGAMEDATA * pGam
       return nullptr;
     }
 
-    D2MonsterCastPetStrc sSummonParams = {};
+    D2MonsterCastPetStrc sSummonParams;
+    memset(&sSummonParams, 0, sizeof(sSummonParams));
     sSummonParams.nFlags = 9;
     sSummonParams.pPlayer = pUnit;
     sSummonParams.classId = nClassId;
