@@ -349,3 +349,76 @@ What it does settle:
   shift its phase on the bench (a line of `extern int` declarations ahead of
   its TU's code, a few counts between 0 and 63): if one count brings the
   match back, the source is right and the edit only moved the phase.
+
+## Per-TU flag sweep - done, nothing adopted
+
+Each candidate flag appended to the defaults for the whole tree (rows of
+`flags.tsv` still applied after it), built and audited against the baseline
+map, then compared TU by TU: a TU-level row would be adopted only where the
+flag gains a function and loses none. Baseline 11815 MATCH (game code).
+
+```
+experiment   gained   lost   TUs that gain
+/Ob2              0    361   none
+/GS- (all)        2    229   PlayerSave2 (+1 -0), PlayerSave (+1 -5)
+/Oi-              0    510   none
+/O1 /Oy- /Ob1     0   9269   none (D2Hell keeps its row)
+/Oy               1   6401   ErrorManager (+1 GetInstructionPointer, -16)
+/EHa              0      5   none
+```
+
+* **/Ob2 + `__declspec(noinline)`.** Not a single function of the tree
+  matches under `/Ob2` that does not match under `/Ob1`. Marking the called
+  bodies `noinline` can at best restore the `/Ob1` result, so the pair adds
+  nothing over `/Ob1` for the tree as it is; the inlining the original did do
+  is spelled out in the bodies (and in zlib's genuine sources, which keep
+  their row).
+* **/GS per TU.** The cookie census per TU (original: a call to
+  `__security_check_cookie`, 00681a48; ours: the function's code changes under
+  `/GS-`) leaves no TU to flip. Every TU that has a cookie in one of our
+  functions where the original has none also has functions whose cookie the
+  original does have: 47 such functions in 27 TUs (Storm/SReg 5, D2Game
+  PlayerSave 5, Fog/Debug 3, SUnitInactive 3, LvlTbls 3, ...). Those are
+  locals typed as byte arrays where the original had scalars or structs, not a
+  flag. The client-side modules' originals have no cookie in any TU, which
+  their `/GS-` rows already give. PlayerSave2's gain under `/GS-`
+  (SaveWaypoints, 005693e0) is of that kind: two of the TU's functions carry
+  a cookie in the original.
+* **/Oy.** GetInstructionPointer (00408090) matches only without a frame
+  pointer; the rest of Fog/Src/ErrorManager needs one. Three Fog/Engine/Application
+  module walkers (00404ab0, 00404c60, 00404dc0) and FILETOOLS_CheckIfFileExists_UTF8
+  (00404330) also omit the frame in the original. A per-function setting
+  (`#pragma optimize("y", on)` in the source), not a TU flag.
+* **/Od.** PALETTE_LoadFromFile (006009c0) is unoptimised code in the original
+  (every argument spilled, the path literal copied with `rep movsd`); under
+  `/Od` alone it goes from OUR-32 to OUR-22, the rest is its body. The other
+  seven functions of D2CMP/Pallete are optimised: again a per-function setting.
+* **/Oi-.** The original calls `memset` 1097 times and `memcpy` 141 times and
+  `strlen`/`strcmp`/`memcmp` never (always expanded); `/O2`'s intrinsics
+  already reproduce that.
+
+## /GL (LTCG) for Fog/Debug - measured, not adoptable by the oracle yet
+
+The Rich header counts 12 `Utc1400_LTCG_CPP` objects. Fog/Debug's symbol
+functions take their arguments in registers from callers in another TU
+(objects.tsv: GetModuleInfoForAddress 00401df0 and GetSourceLineForAddress
+004020d0 in EDI/ESI from Fog/Engine/Application, DEBUG_FormatAddressInfo
+00405250 in EBX). Compiled `/GL` and linked `/LTCG` (Fog/Debug and
+Fog/Engine/Application, `link /LTCG /DLL /NOENTRY /FORCE:UNRESOLVED`), VC8
+gives them exactly that convention; compiled and linked plainly, it reads them
+from the stack:
+
+```
+                              original   plain   /GL+/LTCG   (instructions incl. padding)
+GetModuleInfoForAddress       80         105     93          args in [esi]/[edi], as the original
+GetSymbolNameForAddress       111        129     116
+GetSourceLineForAddress       77         91      79
+DEBUG_FormatAddressInfo       126        144     131
+```
+
+Most of the rest of the gap in Fog/Debug is the original's C++ EH frames
+(`push -1; push handler; fs:[0]`, the `__GSHandlerCheck_EH` stubs at
+006ca575..006ca6c5), which the bodies lack. Adopting `/GL` needs the oracle to
+judge those functions from a `/LTCG`-linked image instead of from their
+object (an `/GL` object holds IL, no code); until then the convention of these
+functions cannot be reproduced per TU.

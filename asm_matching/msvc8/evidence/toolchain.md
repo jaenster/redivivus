@@ -14,7 +14,7 @@ whole-file member `Game.exe` of Blizzard's `LODPatch_114d.exe`
 |-|-|
 | Compiler | **Visual C++ 2005 SP1**, `cl.exe` 14.00.50727.762 |
 | Linker | `link.exe` 8.00, build 50727 (SP1, with the compiler) |
-| CRT | static, multithreaded (`/MT`): VS2005 SP1 `libcmt.lib` / `libcpmt.lib` |
+| CRT | static, multithreaded (`/MT`): VS2005 SP1 `libcmt.lib` / `libcpmt.lib` as updated by KB971090 (8.0.50727.4053) |
 | Platform SDK | Windows Server 2003 SP1 SDK as bundled with VS2005 (import libraries built by 7.10.4035) |
 | Whole-program optimisation | 12 objects only, compiled `/GL` |
 | Build | Release, `d:\diablo2\Diablo2\Exe\Release\Game.pdb`, linked 2016-05-31 19:02:20 UTC |
@@ -76,6 +76,42 @@ The game code confirms it independently: compiled by both builds and audited
 against the same function map, SP1 matches 41 functions that RTM does not, and
 RTM one that SP1 does not ([flags.md](flags.md)).
 
+### 2a. The libraries are SP1's as updated by KB971090 (8.0.50727.4053)
+
+SP1 is not the last word on the libraries. The 2009 ATL security update for
+VS2005 SP1 (KB971090, `vs80sp1-kb971090-x86-intl.exe`, SHA-256
+`6a3f706391989ffd6b16e23c78bdff49bccd939e02d549d38ad1deab01763d03`) replaces `libcmt.lib` and `libcpmt.lib` whole (its
+`PCW_CAB_VS_*` stream carries the files, not deltas):
+
+```
+libcmt.lib   SP1      3bc6c5b90f8507964839fd0264d8565c3b766d01f9efcad336532a11e8f06ac3   (our toolchain, drive_c/vc8/sp1/lib)
+libcmt.lib   KB971090 cbc9a9f5f706aa63deda800a01386dd0b46c121f60bb7ea28bd74e5d9399c581
+libcpmt.lib  SP1      e1b17cb213bfcf77e3c0988f8cb33ec8be143872d1c52de62c5da07ea1eb8031
+libcpmt.lib  KB971090 fe8597decade589a232c45aed8c52d939d9a26f64069cfccb3a77caf9abe4138
+```
+
+`oracle libmap` run twice on the same tree, same image, no linker map, once
+with each pair (VC8_WINEPREFIX pointed at a prefix holding the KB971090 pair):
+
+```
+                 lib-exact  lib-order  lib-similar   still unpaired in the library run
+SP1                    498         89           42   (126047 bytes paired)
+KB971090               533         82           17   (128016 bytes paired)
+```
+
+35 functions are byte-identical only to the KB971090 library, none only to
+SP1's: the lowio/stdio family (`_close`, `_read_nolock`, `_lseek_nolock`,
+`_set_osfhnd`, `_get_osfhandle`, `__lock_fhandle`, `_tsopen_nolock`, `_ioinit`,
+`_flsbuf`, `_filbuf`, `_output_l`, `_input_l`, `_setmode`, ...). The image was
+linked against the KB971090 runtime. The compiler is untouched by that update:
+our `cl.exe`, `c1xx.dll`, `c2.dll` and `link.exe` are 14.00.50727.762 / 8.00.50727.762
+(version resources; cl.exe SHA-256 `71c93ca5bddc9b2816d0e053cac2b952f926f6b9321fab6b1ab6e8603621324c`).
+
+The KB971090 pair is kept at `$VC8_TOOLCHAIN/crt-kb971090/` (with the update
+package). The shared prefix still links SP1's; switching `libmap`/the image
+link to the KB971090 pair changes only runtime rows, never the game-code
+headline (which leaves the runtime out).
+
 ## 3. The Platform SDK
 
 ```
@@ -104,7 +140,10 @@ byte-identical to `libcmt.lib` / `libcpmt.lib`: `/MT`.
   over 30 instructions, 6147 set up EBP and 1567 do not. `/O2` alone omits
   frame pointers, so some modules were evidently built `/Oy-`. Which ones is
   measured per module, not assumed (see ../README.md, "Flags").
-* **Which 12 objects are /GL.** The `Bnclient` tree has 12 translation units,
+* **Which 12 objects are /GL.** Fog/Debug is one: its symbol helpers take
+  register arguments from another TU, which `/GL` + `/LTCG` reproduces and a
+  plain compile cannot ([flags.md](flags.md), "/GL (LTCG) for Fog/Debug").
+  The `Bnclient` tree has 12 translation units,
   a suggestive coincidence, but nothing more yet: its functions taking
   arguments in registers (`CACHE_HashString` at 00518fa0: `mov ebx, eax`) do
   not single it out, because VC8 gives a `static` function a custom register
