@@ -61,7 +61,9 @@ static const char* s_szLogoFiles[4] = {
     "Data\\Local\\MacUI\\D2ELogoCarbon.pcx",
 };
 // 1.14d mac: 003e0ef8
-static const char* s_szLogoMaskFiles[4] = {
+// Not static: FLAMINGLOGO_Init reads the mask name before its SMemAlloc call, which clang only
+// keeps there when the table is not an internal never-written (so constant) array.
+const char* s_szLogoMaskFiles[4] = {
     0,
     0,
     "Data\\Local\\MacUI\\D2LogoCarbonMask.pcx",
@@ -126,13 +128,17 @@ void FLAMINGLOGO_Init(DialogRef pDialog, int nItem) {
         if (!SBmpLoadImage(szLogo, 0, s_pFrames, FLAMINGLOGO_STRIP_SIZE, &nWidth, &nHeight, &nBitDepth))
             goto close;
     }
-    if (nLogo == FLAMINGLOGO_CARBON_CLASSIC || nLogo == FLAMINGLOGO_CARBON_EXPANSION) {
+    switch (nLogo) {
+    case FLAMINGLOGO_CARBON_CLASSIC:
+    case FLAMINGLOGO_CARBON_EXPANSION: {
         const char* szMask = s_szLogoMaskFiles[nLogo];
         s_pMasks = (uint8_t*)SMemAlloc(FLAMINGLOGO_STRIP_SIZE, __FILE__, 114, 8);
         if (!SBmpLoadImage(szMask, 0, s_pMasks, FLAMINGLOGO_STRIP_SIZE, &nWidth, &nHeight, &nBitDepth)) {
             SMemFree(s_pMasks, __FILE__, 125, 0);
             s_pMasks = 0;
         }
+        break;
+    }
     }
 close:
     if (hGameArchive)

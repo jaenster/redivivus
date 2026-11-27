@@ -41,6 +41,8 @@ typedef Boolean (*MacDialogFilterProc)(DialogRef pDialog, EventRecord* pEvent, D
 
 // What Storm's modal dialog loop keeps while a dialog is up (0x10 bytes of state and the menu
 // items it disables); only the part GAMESETUP fills is laid out.
+// The item fields are volatile because the orig stores each as its own 16-bit store; plain
+// fields let clang-425 merge the first pair into one 32-bit store (MAC_BeginModalDialog).
 struct MacModalState {
     uint8_t unk00[8];
     volatile int16_t nMenu1;  // 0x08
@@ -116,8 +118,12 @@ void FUN_0003e2ab(void);
 int SMemFree(void* pMem, const char* szFile, int nLine, uint32_t dwFlags);
 // 1.14d mac: 00396200
 extern void (*g_pfnMacAbortHook)(void);
-__attribute__((noinline)) void MAC_DeactivateTSMDocument(void);
-__attribute__((noinline)) void MAC_ActivateTSMDocument(void);
+// The noinline/weak declarations below stand for unit boundaries the binary shows inside this
+// file (a global addressed directly in one function and through a non-lazy pointer in another,
+// dead arguments still passed, trivial callees not inlined); the file names are not known, so
+// the units are not split out yet. Each line names its evidence.
+__attribute__((noinline)) void MAC_DeactivateTSMDocument(void);  // orig calls it from MAC_HandleSuspendResumeEvent out of line
+__attribute__((noinline)) void MAC_ActivateTSMDocument(void);  // orig calls it from MAC_HandleSuspendResumeEvent out of line
 void MAC_ShutdownTSM(void);
 void MAC_DisposeTSMDocument(void);
 OSErr MAC_HandleTSMUpdateActiveInputArea(const AppleEvent* pAppleEvent);
@@ -126,20 +132,21 @@ OSErr MAC_HandleTSMPosToOffset(const AppleEvent* pAppleEvent, AppleEvent* pReply
 OSErr MAC_HandleTSMOffsetToPos(const AppleEvent* pAppleEvent, AppleEvent* pReply);
 static void MAC_ShowFatalErrorAndExit(const unsigned char* szMessage);
 void FUN_0019db13(void);
-__attribute__((noinline, weak)) void FUN_0019be53(int nExitCode);
-__attribute__((noinline)) void FUN_0019b290(void);
-__attribute__((noinline)) void FUN_0019b2a2(void);
-__attribute__((noinline, weak)) void FUN_0019b2b4(int nExitCode);
-__attribute__((noinline)) bool MAC_PostKeyDown(EventRecord* pEvent);
-__attribute__((noinline)) void MAC_GetDefaultDisplayMode(int* pnWidth, int* pnHeight, int* pnBitDepth);
-__attribute__((noinline)) uint8_t MAC_HandleMouseDownEvent(EventRecord* pEvent);
-__attribute__((noinline)) uint8_t MAC_HandleMouseMoved(EventRecord* pEvent);
-__attribute__((noinline)) uint8_t MAC_HandleMouseUpEvent(EventRecord* pEvent);
-__attribute__((noinline)) bool MAC_HandleUpdateEvent(EventRecord* pEvent);
-__attribute__((noinline)) bool MAC_PostKeyUp(EventRecord* pEvent);
-__attribute__((noinline)) uint8_t FUN_0019bbcd(uint32_t nCommand);
-__attribute__((noinline)) void* FUN_0019bbe8(void);
-extern int g_nMacAppInstance __attribute__((weak));
+__attribute__((noinline, weak)) void FUN_0019be53(int nExitCode);  // FUN_0019db13 still passes the unused 1: body not visible to it
+__attribute__((noinline)) void FUN_0019b290(void);  // FUN_0019be79 calls it out of line (other side of the g_nMacAppInstance unit boundary)
+__attribute__((noinline)) void FUN_0019b2a2(void);  // FUN_0019be53 calls it out of line (same boundary)
+__attribute__((noinline, weak)) void FUN_0019b2b4(int nExitCode);  // FUN_0019be53 still passes the unused code: body not visible to it
+__attribute__((noinline)) bool MAC_PostKeyDown(EventRecord* pEvent);  // MAC_SynthesizeKeyEvent calls it out of line
+__attribute__((noinline)) void MAC_GetDefaultDisplayMode(int* pnWidth, int* pnHeight, int* pnBitDepth);  // FUN_0019bed3 and FUN_0019cc81 call it out of line
+__attribute__((noinline)) uint8_t MAC_HandleMouseDownEvent(EventRecord* pEvent);  // MAC_ProcessEvents calls it out of line
+__attribute__((noinline)) uint8_t MAC_HandleMouseMoved(EventRecord* pEvent);  // MAC_TrackMouseAndModifierChanges calls it out of line
+__attribute__((noinline)) uint8_t MAC_HandleMouseUpEvent(EventRecord* pEvent);  // MAC_ProcessEvents calls it out of line
+__attribute__((noinline)) bool MAC_HandleUpdateEvent(EventRecord* pEvent);  // MAC_ProcessEvents calls it out of line
+__attribute__((noinline)) bool MAC_PostKeyUp(EventRecord* pEvent);  // MAC_SynthesizeKeyEvent calls it out of line
+__attribute__((noinline, weak)) uint8_t FUN_0019bac5(EventRecord* pEvent);  // MAC_ProcessEvents still calls this empty handler with the event: body not visible to it
+__attribute__((noinline)) uint8_t FUN_0019bbcd(uint32_t nCommand);  // MAC_HandleQuitAppleEvent calls it out of line
+__attribute__((noinline)) void* FUN_0019bbe8(void);  // FUN_0019be79 calls it out of line
+extern int g_nMacAppInstance __attribute__((weak));  // FUN_0019be53/be79 read it through a non-lazy pointer: defined in another unit
 extern uint8_t g_bMacMenuToggle;
 void FUN_0019e432(void);
 void MAC_SetWorkingDirectoryToAppFolder(void);
@@ -168,10 +175,10 @@ void MAC_WarpMouseCursorPosition(Point ptCursor);
 int FUN_002b5de2(Point* pPoint);
 bool MAC_SetCursorPos(int16_t* pnX, int16_t* pnY);
 bool MAC_GetCursorPos(int* pnX, int* pnY);
-__attribute__((noinline, weak)) bool MAC_OnApplicationDeactivate(EventRecord* pEvent);
-__attribute__((noinline, weak)) bool MAC_OnApplicationActivate(EventRecord* pEvent);
-static __attribute__((noinline)) void MAC_HandleKeyDownEvent(EventRecord* pEvent);
-static __attribute__((noinline)) uint8_t MAC_HandleSuspendResumeEvent(EventRecord* pEvent);
+__attribute__((noinline, weak)) bool MAC_OnApplicationDeactivate(EventRecord* pEvent);  // MAC_HandleSuspendResumeEvent still passes the unused event
+__attribute__((noinline, weak)) bool MAC_OnApplicationActivate(EventRecord* pEvent);  // MAC_HandleSuspendResumeEvent still passes the unused event
+static __attribute__((noinline)) void MAC_HandleKeyDownEvent(EventRecord* pEvent);  // orig: static (ecx argument), one caller, out of line
+static __attribute__((noinline)) uint8_t MAC_HandleSuspendResumeEvent(EventRecord* pEvent);  // orig: static (ecx argument), out of line
 void FUN_0019db65(void);
 static void MAC_SynthesizeKeyEvent(EventRecord* pEvent, int nKeyCode, char bPressed);
 static uint8_t MAC_HandleMenuSelection(uint32_t nMenuResult);
@@ -188,7 +195,7 @@ void MSG_PostAltF4Keys(void);
 // 1.14d mac: 002eff85
 void LOGFILE_WriteStringToFile(const char* szFormat, ...);
 // 1.14d mac: 00033f9a
-short GetApplicationInformation(void* pUnused1, short* pnVolume, uint32_t* pUnused2, uint64_t* pUnused3);
+int GetApplicationInformation(void* pName, FSSpec* pFileSpec, uint32_t* pdwSignature, uint64_t* pPSN);
 // 1.14d mac: 002ef3d4
 void SFILE_InitializeFileSystem(int nArg1, int nArg2);
 // 1.14d mac: 000136ea
@@ -224,9 +231,9 @@ BOOL InvalidateRect(void* hWnd, const void* pRect, BOOL bErase);
 
 // 1.14d mac: 0001ccd5
 int SStrPrintf(char* szDest, size_t nDestSize, const char* szFormat, ...);
-__attribute__((noinline)) void MAC_DSpShutdown(void);
-static __attribute__((noinline)) char* FUN_0019b1ec(char* szCmdLine);
-static __attribute__((noinline)) Boolean FUN_0019bed3(void);
+__attribute__((noinline)) void MAC_DSpShutdown(void);  // FUN_0019b744 calls it out of line
+static __attribute__((noinline)) char* FUN_0019b1ec(char* szCmdLine);  // orig: static (ecx argument), one caller, out of line
+static __attribute__((noinline)) Boolean FUN_0019bed3(void);  // orig: static, one caller, out of line
 static void FUN_0019b732(void);
 // 1.14d mac: 0003a8e2
 int SRegLoadString(char* szSubKey, char* szValueName, int nFlags, char* szOutBuf, uint32_t dwOutBufSize);
@@ -596,7 +603,7 @@ extern const char* gApplicationModeCommandLineArgumentArray[6];
 void MAC_ParseCommandLine(MacDisplayState* pState, const char* szCmdLine);
 Boolean FUN_0019cc81(int nOption0, int nFullScreen);
 // Weak: the callers keep their unused argument stores, as with a callee in another unit.
-int MAC_ParseCommandLineAndRun(int nInstance, int nUnused1, int nUnused2, int nUnused3) __attribute__((weak));
+int MAC_ParseCommandLineAndRun(int nInstance, int nUnused1, int nUnused2, int nUnused3) __attribute__((weak));  // FUN_0019be79 still passes the unused arguments
 
 // 1.14d mac: 0019ae9c
 // Builds the command line (the process's own, else the one saved in the registry, plus
@@ -969,7 +976,7 @@ bool MAC_PostKeyUp(EventRecord* pEvent) {
 }
 
 // 1.14d mac: 0019bac5
-int FUN_0019bac5(void) {
+uint8_t FUN_0019bac5(EventRecord* pEvent) {
     return 0;
 }
 
@@ -1008,7 +1015,7 @@ bool MAC_OnApplicationActivate(EventRecord* pEvent) {
     return bPosted;
 }
 
-__attribute__((noinline)) void FUN_0019be2c(void);
+__attribute__((noinline)) void FUN_0019be2c(void);  // MAC_HandleUpdateEvent calls it out of line
 
 // 1.14d mac: 0019bba4
 // An update event: the whole window is redrawn.
@@ -1179,11 +1186,11 @@ static Boolean FUN_0019bed3(void) {
                     } else {
                         short nErr = DSpStartup();
                         if (nErr == 0) {
-                            short nVolume;
-                            if (GetApplicationInformation(NULL, &nVolume, NULL, NULL) == 0) {
+                            FSSpec tAppSpec;
+                            if (GetApplicationInformation(NULL, &tAppSpec, NULL, NULL) == 0) {
                                 HParamBlockRec tParams;
                                 memset(&tParams, 0, sizeof(tParams));
-                                tParams.volumeParam.ioVRefNum = nVolume;
+                                tParams.volumeParam.ioVRefNum = tAppSpec.vRefNum;
                                 if (PBHGetVInfoSync(&tParams) == 0 && (tParams.volumeParam.ioVAtrb & 0x80800000) == 0) {
                                     if (GetTempPathFreeSpace() > 0x27FF) {
                                         bRequirementsMet = true;
@@ -1602,8 +1609,8 @@ void MAC_DisableMenus(void) {
 }
 
 // 1.14d mac: 005c8a44
-// Set while a modal dialog has the events.
-extern int g_bMacModalActive;
+// Set while a modal dialog has the events. Defined here: MAC_ProcessEvents addresses it directly.
+int g_bMacModalActive;
 
 static uint8_t MAC_TrackMouseAndModifierChanges(EventRecord* pEvent);
 
@@ -1619,7 +1626,7 @@ void MAC_ProcessEvents(void) {
                 if (MAC_HandleSuspendResumeEvent(&tEvent)) {
                     MAC_TrackMouseAndModifierChanges(&tEvent);
                 }
-            } else if (tEvent.what < 0x17) {
+            } else {
                 switch (tEvent.what) {
                 case mouseDown:
                     if (g_bMacModalActive == 0) {
@@ -1682,16 +1689,17 @@ void MAC_ProcessEvents(void) {
                     SetPort(pSavedPort);
                     break;
                 }
-                default:
-                    FUN_0019bac5();
                 case activateEvt:
                     break;
-                }
-            } else {
-                if (tEvent.what != kHighLevelEvent) {
-                    FUN_0019bac5();
-                } else {
+                case osEvt:
+                    MAC_HandleSuspendResumeEvent(&tEvent);
+                    break;
+                case kHighLevelEvent:
                     AEProcessAppleEvent(&tEvent);
+                    break;
+                default:
+                    FUN_0019bac5(&tEvent);
+                    break;
                 }
             }
         }
@@ -1892,30 +1900,33 @@ static FSSpec s_tResFileSpec;
 // main: process set-up, the game archives, the resource file made from the MPQ's
 // D2Resources.rsrc, the menu bar and AppleEvent handlers, then the game itself and the tear-down.
 int MAC_Main(void) {
-    ProcessSerialNumber tProcess;
-    Str255 szFatal = "\pDiablo II has encountered a serious error. Please reinstall Diablo II. (2)";
-    char szPath[256];
-    char szLang[256];
-    char szVersion[260];
-    void* hGameData = NULL;
-    void* hExpansion = NULL;
-    void* hPatch = NULL;
+    void* hGameData;
+    void* hExpansion;
+    void* hPatch;
     void* pResourceData;
     uint32_t dwResourceSize;
     short nVRefNum;
     long nDirID;
+    long nWritten;
+    ProcessSerialNumber tProcess;
     FUN_0003e2ab();
     GetCurrentProcess(&tProcess);
     TransformProcessType(&tProcess, kProcessTransformToForegroundApplication);
     MAC_SetWorkingDirectoryToAppFolder();
+    Str255 szFatal = "\pDiablo II has encountered a serious error. Please reinstall Diablo II. (2)";
     SFILE_InitializeFileSystem(0, 0);
+    hGameData = NULL;
     if (SFileOpenArchive("Diablo II Game Data", 100, 0, &hGameData)) {
         BOOL bExpansion = D2CheckExpansionGame();
+        hExpansion = NULL;
         if (bExpansion && !SFileOpenArchive("Diablo II Expansion Data", 0x96, 0, &hExpansion)) {
             goto fatal;
         }
         if (hGameData != NULL && (!bExpansion || hExpansion != NULL)) {
+            hPatch = NULL;
             SFileOpenArchive("Diablo II Patch", 200, 0, &hPatch);
+            char szPath[256];
+            char szLang[256];
             TABLES_GetLangAbbreviation(szLang, 0);
             SStrPrintf(szPath, 0x100, "Data\\Local\\MacUI\\%s\\D2Resources.rsrc", szLang);
             if (SFileLoadFile(szPath, &pResourceData, &dwResourceSize, 0, 0)) {
@@ -1927,7 +1938,7 @@ int MAC_Main(void) {
                     SFileCloseArchive(hPatch);
                 }
                 if (dwResourceSize != 0) {
-                    if (FindFolder(kOnSystemDisk, kTemporaryFolderType, true, &nVRefNum, &nDirID) == noErr) {
+                    if (FindFolder(kOnSystemDisk, kChewableItemsFolderType, true, &nVRefNum, &nDirID) == noErr) {
                         FSMakeFSSpec(nVRefNum, nDirID, "\pDiablo 2 Temporary Data", &s_tResFileSpec);
                         FSpDelete(&s_tResFileSpec);
                         FSpCreateResFile(&s_tResFileSpec, 'Doug', 'RSRC', smSystemScript);
@@ -1936,21 +1947,17 @@ int MAC_Main(void) {
                         case -49:
                         case -48:
                             MAC_ShowFatalErrorAndExit("\pDiablo II cannot be opened multiple times on one computer. (3)");
-                            goto done;
                         case -46:
                         case -44:
                             MAC_ShowFatalErrorAndExit("\pDiablo II cannot run from a locked volume. (5)");
-                            goto done;
                         case -34:
                         case -33:
                             MAC_ShowFatalErrorAndExit("\pDiablo II requires at least 40MB of free disk space. (4)");
-                            FUN_0019be53(1);
-                            return 0;
                         }
                         if (nError == 0) {
-                            nError = FSpOpenRF(&s_tResFileSpec, fsRdWrPerm, &s_nResFile);
+                            nError = FSpOpenRF(&s_tResFileSpec, fsWrPerm, &s_nResFile);
                             if (nError == 0) {
-                                long nWritten = dwResourceSize;
+                                nWritten = dwResourceSize;
                                 FSWrite(s_nResFile, &nWritten, pResourceData);
                                 bool bFailed = nWritten != (long)dwResourceSize;
                                 nError = bFailed;
@@ -1978,6 +1985,7 @@ int MAC_Main(void) {
                                         AEInstallEventHandler(kCoreEventClass, kAEOpenDocuments, MAC_HandleOpenDocumentsAppleEvent, 0, false);
                                         AEInstallEventHandler(kCoreEventClass, kAEQuitApplication, MAC_HandleQuitAppleEvent, 0, false);
                                         FUN_0019e432();
+                                        char szVersion[260];
                                         SStrPrintf(szVersion, 0x104, "v%d.%02d", 1, 14);
                                         FUN_002ee3a4("D2");
                                         FOG_InitErrorManager("Diablo II", szVersion, 1);
@@ -2004,8 +2012,6 @@ int MAC_Main(void) {
     }
 fatal:
     MAC_ShowFatalErrorAndExit(szFatal);
-done:
-    return 0;
 }
 
 // 1.14d mac: 00331f04
@@ -2175,29 +2181,34 @@ static void (*s_pfnTSMInput)(const char*, bool, int*) = (void (*)(const char*, b
 // The text services 'updt' handler: the active input area's text converted to Unicode and
 // handed to the input callback with its highlight range.
 OSErr MAC_HandleTSMUpdateActiveInputArea(const AppleEvent* pAppleEvent) {
-    char wszText[512];
-    int aHiliteRange[2];
+    // The descriptors start zeroed (not typeNull) and each has its handle cleared again right
+    // before AEGetParamDesc fills it: the asm stores both.
+    AEDesc tHiliteDesc = {0, NULL};
+    AEDesc tUpdateDesc = {0, NULL};
+    AEDesc tTextDesc = {0, NULL};
     DescType nActualType;
-    long nRefCon;
     long nFixedLength;
+    long nRefCon;
     Size nActualSize;
-    TextRange tPinRange;
-    AEDesc tTextDesc = {typeNull, NULL};
-    AEDesc tHiliteDesc = {typeNull, NULL};
-    AEDesc tUpdateDesc = {typeNull, NULL};
+    long nPinRange;
+    int aHiliteRange[2];
+    UniChar wszText[256];
     Ptr pText = NULL;
     Ptr pHiliteRanges = NULL;
     aHiliteRange[1] = 0;
     aHiliteRange[0] = 0;
-    bzero(wszText, 0x200);
+    bzero(wszText, sizeof(wszText));
     OSErr nResult = AEGetParamPtr(pAppleEvent, 'refc', typeLongInteger, &nActualType, &nRefCon, 4, &nActualSize);
     if (nResult == 0) {
+        tTextDesc.dataHandle = NULL;
         nResult = AEGetParamDesc(pAppleEvent, 'kdat', typeText, &tTextDesc);
         if (nResult == 0) {
             AEGetParamPtr(pAppleEvent, 'fixl', typeLongInteger, &nActualType, &nFixedLength, 4, &nActualSize);
+            tHiliteDesc.dataHandle = NULL;
             AEGetParamDesc(pAppleEvent, 'hrng', typeTextRangeArray, &tHiliteDesc);
+            tUpdateDesc.dataHandle = NULL;
             AEGetParamDesc(pAppleEvent, 'udng', typeTextRangeArray, &tUpdateDesc);
-            AEGetParamPtr(pAppleEvent, 'pnrg', typeTextRange, &nActualType, &tPinRange, 4, &nActualSize);
+            AEGetParamPtr(pAppleEvent, 'pnrg', typeTextRange, &nActualType, &nPinRange, 4, &nActualSize);
             Size nTextSize = AEGetDescDataSize(&tTextDesc);
             pText = NewPtr(nTextSize);
             nResult = MemError();
@@ -2223,19 +2234,13 @@ OSErr MAC_HandleTSMUpdateActiveInputArea(const AppleEvent* pAppleEvent) {
                         pRange++;
                     }
                 }
-                int nConvert = 0xFF;
-                if (nTextSize < 0x100) {
-                    nConvert = nTextSize;
-                }
-                MAC_ConvertTextToUnicode(pText, wszText, nConvert, 0x200, -0x80);
-                s_pfnTSMInput(wszText, nFixedLength == nTextSize, aHiliteRange);
+                MAC_ConvertTextToUnicode(pText, (char*)wszText, nTextSize < 0x100 ? nTextSize : 0xFF, 0x200, -0x80);
+                s_pfnTSMInput((const char*)wszText, nFixedLength == nTextSize, aHiliteRange);
                 nResult = 0;
-                goto cleanup;
             }
+            goto cleanup;
         }
     }
-    pText = NULL;
-    pHiliteRanges = NULL;
 cleanup:
     AEDisposeDesc(&tTextDesc);
     AEDisposeDesc(&tHiliteDesc);
@@ -2572,15 +2577,12 @@ void FUN_0019f18a(void) {
 // 1.14d mac: 0019f1c4
 // Makes the folder the application lives in the working directory.
 void MAC_SetWorkingDirectoryToAppFolder(void) {
-    struct {
-        short nVRefNum;
-        long nDirID;
-    } tFolder;
+    FSSpec tAppSpec;
     FSSpec tSpec;
     FSRef tRef;
     char szPath[1024];
-    GetApplicationInformation(NULL, &tFolder.nVRefNum, NULL, NULL);
-    FSMakeFSSpec(tFolder.nVRefNum, tFolder.nDirID, "\p", &tSpec);
+    GetApplicationInformation(NULL, &tAppSpec, NULL, NULL);
+    FSMakeFSSpec(tAppSpec.vRefNum, tAppSpec.parID, "\p", &tSpec);
     FSpMakeFSRef(&tSpec, &tRef);
     CFURLRef pUrl = CFURLCreateFromFSRef(NULL, &tRef);
     CFURLGetFileSystemRepresentation(pUrl, true, (UInt8*)szPath, 0x400);
