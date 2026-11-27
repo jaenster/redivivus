@@ -9738,4 +9738,11 @@ int __stdcall LAUNCHER_PollBNConnectionPump(int nFrameIndex) {
 static void * keep_004379c0 = (0 ? (MAINMENU_GetTime32(*(__time32_t * *)0), (void *)0) : (void *)0);
 static void * keep_00437a00 = (0 ? (MAINMENU_GetRealmNameIfValid(*(int *)0), (void *)0) : (void *)0);
 
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 002c7efd
+int MAINMENU_ReturnTrue() {
+    return 1;
+}
+#endif
+
 } // namespace D2Launch::MainMenus

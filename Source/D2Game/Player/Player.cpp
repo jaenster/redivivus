@@ -1218,4 +1218,16 @@ void __fastcall WEAPON_ApplyEquippedWeaponStats(D2UnitStrc * pUnit, int32_t bRes
 
 static void * keep_00534c10 = (0 ? (PLAYER_PlaceItemInBelt(*(::SGAMEDATA * *)0, *(int32_t *)0, *(D2UnitStrc * *)0, *(D2UnitStrc * *)0), (void *)0) : (void *)0);
 
+#if !defined(_WIN32) && D2_OS_MAC
+// Smallest player count the server starts a game with (0..8).
+uint32_t gnMinimumPlayerCount = 0;
+
+// 1.14d mac: 001f82b8
+void __stdcall SERVER_GAME_SetMinimumPlayerCount(uint32_t nPlayerCount) {
+    if (nPlayerCount < 9) {
+      gnMinimumPlayerCount = nPlayerCount;
+    }
+}
+#endif
+
 } // namespace D2Game::PLAYER::Player

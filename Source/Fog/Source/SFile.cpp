@@ -450,6 +450,35 @@ void __fastcall GetAndCreateSavePath(char * pBuffer, uint32_t nSize) {
 #endif
 
 #if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 002ef69a
+BOOL FOG_AppendBackslash(char * szPath, size_t nSize) {
+    if (!szPath || !nSize) {
+      return 0;
+    }
+
+    uint32_t nLength = Storm::Source::SSTR::SStrLen(szPath);
+    if (nLength && szPath[nLength - 1] == '\\') {
+      return 1;
+    }
+
+    if (nLength + 1 == nSize) {
+      return 0;
+    }
+
+    szPath[nLength] = '\\';
+    szPath[nLength + 1] = '\0';
+    return 1;
+}
+
+// 1.14d mac: 002ef740
+BOOL FOG_GetInstallPath(char * szPath, size_t nSize) {
+    if (!SFILE_GetExecutableDirectory(szPath, nSize)) {
+      return 0;
+    }
+
+    return FOG_AppendBackslash(szPath, nSize);
+}
+
 // 1.14d mac: 002ef76c
 int FOG_GetSavePath(char * szPath, size_t nSize) {
     if (FOG_GetInstallPath(szPath, nSize)) {

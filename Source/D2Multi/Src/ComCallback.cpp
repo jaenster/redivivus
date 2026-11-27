@@ -2468,4 +2468,15 @@ BOOL __fastcall COMCALLBACK_DetectCDKeyInMessage(char * szChatText, uint32_t * p
     return 1;
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 002d7520
+int __fastcall COMCALLBACK_CompareUserNames(char * szName1, char * szName2) {
+    char* pszStarA = strchr(szName1, '*');
+    char* pszStarB = strchr(szName2, '*');
+    char* pszNameB = pszStarB ? pszStarB + 1 : szName2;
+    char* pszNameA = pszStarA ? pszStarA + 1 : szName1;
+    return strcmp(pszNameA, pszNameB);
+}
+#endif
+
 } // namespace D2Multi::ComCallback

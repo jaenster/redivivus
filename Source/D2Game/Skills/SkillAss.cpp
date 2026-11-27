@@ -3015,4 +3015,11 @@ BOOL __fastcall Skills_SrvDoFunc_054_BladeShield_Activate(::SGAMEDATA * pGame, D
     return 0;
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 00248873
+void __fastcall SKILLASS_OnChargeUpStateExpire(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * pStatList) {
+    D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
+}
+#endif
+
 } // namespace D2Game::SKILLS::SkillAss

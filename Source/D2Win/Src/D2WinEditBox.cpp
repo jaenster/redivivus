@@ -130,10 +130,11 @@ char * __stdcall D2WINEDITBOX_GetClipboardText() {
     return szResult;
 }
 
+// 00431854: set by the cut menu path while it puts its own text on the scrap.
+static char gbSuppressClipboardSet = 0;
+
 // 1.14d mac: 00044f92
 BOOL __fastcall D2WINEDITBOX_SetClipboardText(char * szText) {
-    // 00431854: set by the copy-menu path while it puts its own text on the scrap.
-    static char gbSuppressClipboardSet = 0;
     BOOL bResult = 0;
     if (!gbSuppressClipboardSet) {
       ScrapRef hScrap;
@@ -143,6 +144,40 @@ BOOL __fastcall D2WINEDITBOX_SetClipboardText(char * szText) {
     }
 
     return bResult;
+}
+
+// 1.14d mac: 00045e02
+BOOL __fastcall D2WINEDITBOX_HandleMenuCommand(::D2WinEditBox * pEditBox, uint32_t nCommand) {
+    uint8_t byKeyChar;
+    if (nCommand < 0x3a6) {
+      switch (nCommand) {
+        case 0x300:
+          byKeyChar = 0x18;
+          break;
+        case 0x301:
+          byKeyChar = 3;
+          break;
+        case 0x302:
+          byKeyChar = 0x16;
+          break;
+        case 0x303: {
+          gbSuppressClipboardSet = 1;
+          BOOL bResult = D2WINEDITBOX_HandleKeyPress(pEditBox, 0x18);
+          gbSuppressClipboardSet = 0;
+          return bResult;
+        }
+        default:
+          return 0;
+      }
+    } else {
+      if (nCommand != 0x3a6) {
+        return 0;
+      }
+
+      byKeyChar = 1;
+    }
+
+    return D2WINEDITBOX_HandleKeyPress(pEditBox, byKeyChar);
 }
 #else
 #if !D2_OS_MAC

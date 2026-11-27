@@ -268,4 +268,13 @@ BOOL __fastcall SOUNDUTIL_GetFileVersionInfo(LPCSTR szText, uint32_t * pnFileVer
 }
 #endif
 
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 002ea0da
+void __fastcall SOUND_FreeAllSoundSmps(D2SoundListNodeStrc * * ppListHead) {
+    while (*ppListHead) {
+      SOUND_sD2SoundSmp_Free(ppListHead, (intptr_t)(*ppListHead)->nItemKey);
+    }
+}
+#endif
+
 } // namespace D2Sound::D2SoundUntil

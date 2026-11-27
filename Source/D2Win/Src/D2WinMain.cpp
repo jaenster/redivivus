@@ -1532,4 +1532,14 @@ void __stdcall INPUT_FormMouseHandler(D2UIMouseMsgStrc * pMsg) {
 
 static void * keep_004fa1b0 = (0 ? (Unreferenced_004fa1b0(*(POINT * *)0, *(D2ControlStrc * *)0), (void *)0) : (void *)0);
 
+#if !defined(_WIN32) && D2_OS_MAC
+// Called by D2WIN_HandleActivation on the Mac when the application is activated or deactivated.
+void * gpfnActivationCallback = nullptr;
+
+// 1.14d mac: 0004b1c7
+void __stdcall D2WINMAIN_SetActivationCallback(void * pfnCallback) {
+    gpfnActivationCallback = pfnCallback;
+}
+#endif
+
 } // namespace D2Win::Src::D2WinMain

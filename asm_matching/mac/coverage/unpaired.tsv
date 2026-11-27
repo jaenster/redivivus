@@ -17,8 +17,8 @@ addr	class	win_addr	evidence
 00048ec0	mac-only		Bzero of tooltip buffer and font-height globals; no verified win twin or inlining caller found
 000496df	shared-unpaired	004fd0f0	Wrapper calling FORMS_DestroyControl; win FORMS_DestroyD2WinImage (004fd0f0) same single call
 000496e8	shared-unpaired	004fd100	Wrapper calling FORMS_DestroyControl; win FORMS_DestroyD2WinImageEx (004fd100) same single call
-0004a28c	mac-only		Stores argument in pWndProcB global; no verified win twin found
-0004a5dd	mac-only		Stores argument in one global; no verified win twin or inlining caller found
+0004a28c	shared-unpaired	004f8fc0	win INIT_SetWndProcBGlobalPointer stores the same pWndProcB global and returns 1
+0004a5dd	shared-unpaired	004f9180	win D2WINMAIN_SetExitCallback stores gpfnExitCallback (read by MessagePump on both)
 0004b1c7	mac-only		Stores argument in one global; no verified win twin or inlining caller found
 0004bcf9	mac-only		Forwards Mac Edit-menu commands to the focused edit box, then SMsgBreakHandlerChain
 0004c43a	mac-only		SMemCopy of 0x3100 bytes from gPaletteDataBase; no verified win twin found
@@ -572,8 +572,8 @@ addr	class	win_addr	evidence
 0019a270	mac-only		Ignorelist mapping-entry node allocator with SMemAlloc; no win function of this name found
 0019a50e	mac-only		Ignorelist string-entry node allocator with SMemAlloc; no win function of this name found
 0019f900	mac-only		Unit-iteration counter callback (excludes Death/Kick modes); no win function of this name found
-001a1132	mac-only		Checks two skills via AI_BAAL_IsSkillPowerful; win name AI_CheckSpecialSkillsOnPrimeEvil not found on win
-001a116a	mac-only		Weighted roll over 16 Baal weights with unit seed; win name AI_BAAL_GetWeightedRandomIndex not found on win
+001a1132	shared-unpaired	005fc0c0	win AI_BAAL_HasPowerfulSkill: right skill then left skill through AI_BAAL_IsSkillPowerful
+001a116a	shared-unpaired	005fc130	win AI_BAAL_SelectWeightedAction: same weighted pick over the seed (count passed, 0x10 on Mac)
 001a449c	mac-only		Trivial 32-bit dereference; no win caller or twin identified
 001a6c53	mac-only		Callback dispatcher over a record with function pointer; no win twin identified
 001a6c92	mac-only		Hostility check guarded by CheckForModeZeroDeath and CANBEATTACKED; SUNIT_IsHostileTo not found by name on win
@@ -584,7 +584,7 @@ addr	class	win_addr	evidence
 001a6f65	compiler		Empty void body; no-op stub kept out of line, not a real function
 001a7678	compiler		Tail-call wrapper of ARENA_TestFlag with flag 4; compiler-generated thunk
 001a9efc	compiler		Empty void body; no-op stub kept out of line, not a real function
-001ad4fc	mac-only		Loops NET_D2GS_SERVER_Send_0xB3_SendSaveFile while CLIENT_HasSaveData for game types 1/2; win name not found on win
+001ad4fc	shared-unpaired	0052e2a0	win SendSaveFileToClient inlines the game-type check plus CLIENT_HasSaveData/Send_0xB3 loop
 001aea68	compiler		Constant return 1 with one argument; Return1 stub class like the win Return1_GameSetup helpers
 001aeb38	compiler		Constant return 1 with one argument; Return1 stub class like the win Return1_GameSetup helpers
 001aefdc	shared-unpaired	006048c0	same-name Windows function 006048c0 (NewLock); was: Storm TSExportTableSync NewLock for SGAMEDATA; no win function of this name found
@@ -597,9 +597,9 @@ addr	class	win_addr	evidence
 001b4ea1	mac-only		Task queue tail link with fp_fatal asserts; no win function of this name found
 001b4f60	mac-only		pthread_mutex_destroy over 32 task-queue mutexes (Mac pthread API); no win twin
 001b4fb0	compiler		static initialiser: 33 CRITSECT_Init calls plus ___cxa_atexit destructor registrations
-001b9abb	mac-only		Player-or-owner client lookup via SUNIT_GetClient; no win function of this name found
-001c789c	mac-only		Removes and frees an item from room and owner inventory; no win function of this name found
-001c7917	mac-only		Walks act rooms freeing expired ground items; no win function of this name found
+001b9abb	shared-unpaired	0055db80	win Unreferenced_0055db80 same player-or-owner client lookup, same SUNIT_GetClient lines 0xa44/0xa49
+001c789c	shared-unpaired	00558b90	win FreeUnusedItems inlines the room delete, collision removal, flag clear and FreeServerUnit
+001c7917	shared-unpaired	00558b90	win FreeUnusedItems: same room walk, nActionStamp expiry test, removal inlined
 001d6e83	shared-unpaired	005734c0	Win 005734c0 SetAiState confirmed (size 20, D2Game::Monster); Mac adds unit-type and monster-data null checks
 001dd3f3	mac-only		Sets Skill1 then AI-think callback; body identical to FUN_001dd468; no win twin found
 001dd468	mac-only		Sets Skill1 then AI-think callback; body identical to FUN_001dd3f3; no win twin found
@@ -608,9 +608,9 @@ addr	class	win_addr	evidence
 001fb18b	mac-only		Moves stat points into strength via STATLIST_AddUnitStat; no win function of this name found
 001fb32c	mac-only		Moves stat points into dexterity via STATLIST_AddUnitStat; no win function of this name found
 00205604	mac-only		Clears a state via ItemStats SetState; no win function of this name found
-002056d0	mac-only		NPC interact validation (act and 10-tile check); no win function of this name found
+002056d0	shared-unpaired	0054b930	win SCMD_0x2F_NpcInteract/0x30 do the same lookup, AI, act and 10 tile checks through IsOtherAct and CheckIfCoordsAreInRange
 002151c9	mac-only		Dispatches quest ids 201 and 331 to Act 2 quest 4 handlers; no win function of this name found
-002163d0	mac-only		Act switch to NPC intro lists; no win function of this name found
+002163d0	shared-unpaired	00544fa0	win QUEST_SetActNpcIntroFlags switches on the act with the same NPCINTRO lists
 00219349	shared-unpaired	005912e0	Win 005912e0 Q03_NpcGossipHandler confirmed: 96 bytes, same A1Q3 namespace and gating logic
 0021abc1	shared-unpaired	005920d0	Win 005920d0 Q04_NotifyQuestStateToPlayer confirmed: same A1Q4 gating logic
 0021dfad	shared-unpaired	00594830	Win Q05_NotifyQuestStateToPlayer at 00594830 has the same name and signature (SGAMEDATA, unit, arg), size 82
@@ -650,7 +650,7 @@ addr	class	win_addr	evidence
 00276341	shared-unpaired	005d0d70	Win SKILLPAL_AuraCallback_Redemption at 005d0d70 is the same redemption unit callback (corpse check, counter in callback args)
 002779c2	shared-unpaired	0055b720	Win PLAYERLIST_SetHostileDelay at 0055b720 has the same name and args (unit, unit2, delay) and stamps a tick count
 0027b570	mac-only		Sets the global seed counter to GetTickCount; no win twin identified
-00284da0	mac-only		Appends a message node to unit message list; no win function of this name found
+00284da0	shared-unpaired	005718c0	win UnitQueuePacket0x9E inlines the same message list append (pMsgFirst, pMsgLast)
 002b7f94	mac-only		Wide-char whitespace test via ___maskrune; no win function of this name found
 002b8570	mac-only		UTF-8 code-point counter over a length-bounded string; no win twin identified
 002b9950	compiler		returns 0, no body; placeholder stub
@@ -664,14 +664,14 @@ addr	class	win_addr	evidence
 002bc7d4	shared-unpaired	00437a70	SStrHash lookup walking gpRealmCharListCache with expiry tick; win CHARSEL_GetCachedRealmData same job
 002bcb53	mac-only		wrapper: CHARSEL_PopulateCharList(&DAT_0054a2e8) + ResetCharListUI; win 0043b490 is a different function
 002bcce5	mac-only		UI-only reset after CHARSEL_DestroySelectedChar; no Windows twin per decompile
-002bd1c3	mac-only		pure strlen name predicate; no win function named CHARSEL_IsValidSaveName
-002c0e98	mac-only		bounds-checked wrapper over MAINMENU_GetRealmCount/GetRealmName; no verified win twin
+002bd1c3	shared-unpaired	00438f40	win Unreferenced_00438f40 same length 2-15, trailing - and leading _ test
+002c0e98	shared-unpaired	00437a20	win CHARSEL_FindRealmByName inlines the index bound check and MAINMENU_GetRealmName
 002c1420	mac-only		bzero of 0xE00-byte global block; no caller
 002c1447	mac-only		stores arg in DAT_005cbfc8, returns PTR table to MAINMENU_RunFrontEnd
 002c1461	compiler		empty void body
 002c4107	shared-unpaired	00432fe0	same MCP pump: NET_MCP_CLIENT_ReadAndParsePacket, MCPSTATE_GetCharLogonSuccess, HasPeerName; win MAINMENU_PollMCPCharLogonPump
-002c56cd	mac-only		char allowlist predicate (rejects quote # % * , / < > ? backslash and DEL); no verified win twin
-002c5747	mac-only		wrapper calling MAINMENU_ValidatePasswordChangeForm then returns 1; win EDITBOX_Cb candidate 00433be0 not verified
+002c56cd	shared-unpaired	0042fde0	win MAINMENU_ValidateCharNameChar rejects the same character set
+002c5747	shared-unpaired	00433be0	win EDITBOX_Cb_MAINMENU_ValidatePasswordChangeForm calls MAINMENU_ValidatePasswordChangeForm, returns 1
 002c7bf7	shared-unpaired	00430b00	same-name Windows function 00430b00 (MAINMENU_CompareRealmNames); was: strcmp of realm-name fields of two list entries; no verified win twin
 002c7c2d	shared-unpaired	00430b50	same-name Windows function 00430b50 (MAINMENU_GetRealmName); was: realm-name getter with fp_fatal assert at line 0x115c; no verified win twin
 002c7efd	mac-only		body only returns 1; no caller, no code reference
@@ -690,19 +690,19 @@ addr	class	win_addr	evidence
 002cccba	shared-unpaired	00449d60	MCPCONNECT_ClearCharSelectBuffer: zeroes the 0x18c-byte block
 002ccd1d	shared-unpaired	00449de0	MCPCONNECT_GetD2GSGameHash: returns a 32-bit global
 002ccfd4	mac-only		builds MCP packet 0x01 (MCP_STARTUP) and sends via NET_MCP_CLIENT_Send; win twin not verified
-002cfbd1	mac-only		wrapper calling FUN_002d4627(1) and returns 1; no caller
+002cfbd1	shared-unpaired	0043e570	win CHATDLG_EnqueueClearMessage queues the clear node
 002d098a	mac-only		chat-dialog MCP pump; checks DAT_00551d8c bit 0 instead of gnMainMenuConnectFlag; win OOG_PollMCPCharLogonPump 0043dbf0 not verified
 002d1dc6	shared-unpaired	0043e4c0	same-name Windows function 0043e4c0 (CHATDLG_DisplayTimestampedMessage); was: FileTime to local date via MAC_ConvertTextToUnicode and GetDateFormat; Mac text conversion; no verified win twin
 002d269b	mac-only		chat slash-command dispatcher (/ignore, /filtermsg, /home) with Mac-named ignorelist vtable calls; win twin not verified
 002d42cf	mac-only		/r and /reply handler with Mac-style artifact fix comment; win OOGUTIL_HandleReplyCommand 00442180 not verified
-002d4558	mac-only		case-insensitive prefix compare over chat input buffer using libc ___toupper; no verified win twin
-002d45de	mac-only		copies text after first space via SStrChr; win CHATDLG_ParseCommandArgument 0043f870 candidate not verified
-002d4627	mac-only		appends 16-byte chat message node under EnterCriticalSection; win CHATDLG_EnqueueClearMessage candidate not verified
-002d471f	mac-only		callback clearing selected chat textbox line, returns 1; no verified win twin
-002d474b	mac-only		callback calling CHATDLG_UpdateSendButtonState, returns 1; no verified win twin
-002d5842	mac-only		returns address of channel-name global buffer; accessor, no verified win twin
+002d4558	shared-unpaired	0043e6e0	win someStrCompare is the same case-insensitive prefix compare (first string a parameter)
+002d45de	shared-unpaired	0043f870	win CHATDLG_ParseCommandArgument takes the text after the first space (source passed as a parameter)
+002d4627	shared-unpaired	0043e250	win StoreChatMsg allocates the same 0x10 node (line 0xc1d) and queues it under the chat critical section
+002d471f	shared-unpaired	0043dba0	win EDITBOX_Cb_D2WINTEXTBOX_SetSelectedLine clears the selected line
+002d474b	shared-unpaired	00440110	win EDITBOX_Cb_CHATDLG_UpdateChannelOkButtonState calls the same update and returns 1
+002d5842	shared-unpaired	00446cf0	win COMCALLBACK_GetCurrentChannelName returns the channel name buffer
 002d5a7a	mac-only		unlinks channel user, prints has-left message, refreshes list; win COMCALLBACK_RemoveChannelUser 004493e0 not verified
-002d5d27	mac-only		ANSI-to-wide then OOGUTIL_AppendChatText and chat textbox append; no verified win twin
+002d5d27	shared-unpaired	00447ab0	win PrintChannelText converts to wide and appends to the OOG chat and chat box
 002d7520	mac-only		strcmp of two names after skipping '*' account prefix; no verified win twin
 002d7874	mac-only		stores arg in DAT_005cd10c and returns multiplayer app-mode table; no caller
 002d788e	compiler		empty void body stub
@@ -720,7 +720,7 @@ addr	class	win_addr	evidence
 002e76e9	mac-only		returns DAT_00552e05 ^ 1; accessor, no verified win twin
 002e8f8c	shared-unpaired	00515890	Windows SOUNDSMP_SetPan at 00515890 (named in pairer neighbours); dB pan conversion then buffer SetPan
 002e9049	shared-unpaired	00515a90	Windows SOUNDSMP_SetEaxObstruction at 00515a90 under the same name; null-check then field store
-002e93bd	mac-only		queries IDirectSoundBuffer GetStatus under critical section; no verified win twin
+002e93bd	shared-unpaired	00515740	win SOUNDSMP_GetStatus same GetStatus under the sound critical section, same halt line 0x2b0
 002e9432	shared-unpaired	00515860	same-name Windows function 00515860 (SOUNDSMP_GetVolume); was: SOUNDSMP_GetVolume accessor with fp_fatal null assert; no verified win twin
 002e9470	mac-only		null-check-only helper for sample and buffer; no verified win twin
 002e95bc	mac-only		null-check-only helper for sample; no verified win twin
@@ -754,13 +754,13 @@ addr	class	win_addr	evidence
 002f33e9	mac-only		body returns 0; no caller, no code reference
 002f33ff	mac-only		body returns 0; no caller, no code reference
 002f3406	mac-only		performance counter frequency and 0x18000-byte table clear via Win32Mac shims; no verified win twin
-002f3bea	mac-only		locks each client bucket and calls QSERVER_SendToClient; no verified win twin
-002f3d19	mac-only		sets QServer field 0x8ac under lock to limit or 1; no verified win twin
-002f3d5a	mac-only		rejects closing connection then dispatches to QSERVER_SendToClientSocket or QServerNT::SendToClientLocal; no verified win twin
-002f3daa	mac-only		allocates 0x678 connection, id and hash insertion, per-address count; no verified win twin
-002f4400	mac-only		once-a-second hacklist timer decrement and expiry with LogHackList; no verified win twin
+002f3bea	shared-unpaired	006bfad0	win BroadcastToAllClients walks the same buckets under the bucket locks
+002f3d19	shared-unpaired	006be4a0	win SetPerIpConnectionLimit sets the same field under csClientLifecycle, 0 becomes 1
+002f3d5a	shared-unpaired	006bfad0	win BroadcastToAllClients inlines the closing check and the local or socket send
+002f3daa	shared-unpaired	006bfb70	win AddClient allocates the same connection (line 0x23b) and inserts it into the same hashes
+002f4400	shared-unpaired	006be700	win SweepExpiredHackEntries is the hacklist timer sweep
 002f471c	mac-only		address and mask-length list match; no verified win twin
-002f47d4	mac-only		per-IP connection count versus nPerIpConnectionLimit under lock; no verified win twin
+002f47d4	shared-unpaired	006be9f0	win IsPerIpLimitReached is the per-address connection count test
 002f5529	mac-only		stores second arg at object +0xc20; accessor, no verified win twin
 002f553b	mac-only		game token filter match of masked address; no verified win twin
 002f557e	compiler		empty void body stub

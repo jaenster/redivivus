@@ -5142,4 +5142,11 @@ static void * keep_005492a0 = (0 ? (Unreferenced_005492a0(*(D2UnitStrc * *)0, *(
 static void * keep_005492c0 = (0 ? (PLRMSG_CheckWeaponSlotEmpty(*(D2UnitStrc * *)0, *(int32_t *)0), (void *)0) : (void *)0);
 static void * keep_00549410 = (0 ? (MONSTER_FindNearbyAllyUnit(*(::SGAMEDATA * *)0, *(int32_t *)0, *(D2UnitStrc * * *)0, *(D2UnitStrc * *)0, *(DWORD *)0), (void *)0) : (void *)0);
 
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 00205604
+void __fastcall PLRMSG_ClearStateOnExpire(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * pStatList) {
+    D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
+}
+#endif
+
 } // namespace D2Game::PLAYER::PlayerMsg

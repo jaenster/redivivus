@@ -5270,8 +5270,6 @@ _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9bfb(EHExceptionRecord * pException
 // 1.14d mac: 0002c7c3
 void PATH_MakeMacPathToken(char* szOut, const unsigned char* pName, int16_t nVRefNum, int32_t nDirID, int32_t n08,
                            int32_t n0C);
-// 1.14d mac: 002ef69a
-int FOG_AppendBackslash(char* szPath, size_t nSize);
 // 1.14d mac: 0001c806
 int SStrCopy(char* szDest, const char* szSource, int nDestSize);
 // 1.14d mac: 0001ca30
@@ -5287,12 +5285,24 @@ bool FOG_MacGetBlizzardSupportPath(char* szPath, size_t nSize) {
         FSGetCatalogInfo(&tFolderRef, kFSCatInfoVolume | kFSCatInfoNodeID, &tCatalogInfo, NULL, NULL, NULL);
         PATH_MakeMacPathToken(szSupportPath, (const unsigned char*)"\pBlizzard", tCatalogInfo.volume,
                               tCatalogInfo.nodeID, 0, 0);
-        if (FOG_AppendBackslash(szSupportPath, nSize) && Fog::Source::SFile::SafeCreateDirectoryTree(szSupportPath)) {
+        if (Fog::Source::SFile::FOG_AppendBackslash(szSupportPath, nSize) && Fog::Source::SFile::SafeCreateDirectoryTree(szSupportPath)) {
             SStrCopy(szPath, szSupportPath, nSize);
             bResult = SStrLen(szPath) == SStrLen(szSupportPath);
         }
     }
     return bResult;
+}
+#endif
+
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 002ef34b
+int ERRORMANAGER_ReturnTrue() {
+    return 1;
+}
+
+// 1.14d mac: 002ef3cd
+int ERRORMANAGER_ReturnFalse() {
+    return 0;
 }
 #endif
 
