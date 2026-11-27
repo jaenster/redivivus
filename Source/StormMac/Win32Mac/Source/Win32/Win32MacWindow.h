@@ -181,18 +181,63 @@ WIN32MAC_LAYOUT(Win32MacWindow_size, sizeof(Win32MacWindow) == 0x90);
 #define WM_LBUTTONDBLCLK 0x0203
 #define WM_PARENTNOTIFY 0x0210
 
-// The message state (003972a0) as the window manager sees it: the focus, active and
-// capture windows and the "some window needs WM_PAINT" count. The queues are
-// unknown_messages.cpp's.
-struct Win32MacWndMsgState {
-    BYTE pad000[0x8D8];
-    BYTE bPaintPending;           // 0x8D8  how many windows have a pending WM_PAINT
-    BYTE pad8D9[0x914 - 0x8D9];
-    HWND hWndActive;              // 0x914
-    HWND hWndFocus;               // 0x918
-    HWND hWndCapture;             // 0x91C
+// The message state (003972a0): the two queues and the timer list of Win32_Messages.cpp, and the
+// focus, active and capture windows and the "some window needs WM_PAINT" count the window
+// manager reads. Two 40-slot rings: messages posted to windows, and input (keys, mouse) that the
+// Carbon event handlers enqueue for no window.
+#define MSGRING_SIZE 40
+
+typedef void (*TIMERPROC)(HWND hWnd, UINT uMsg, UINT nIDEvent, DWORD dwTime);
+
+struct MSG {
+    HWND hwnd;       // 0x00
+    UINT message;    // 0x04
+    WPARAM wParam;   // 0x08
+    LPARAM lParam;   // 0x0C
+    DWORD time;      // 0x10
+    POINT pt;        // 0x14
 };
-extern Win32MacWndMsgState* g_pMsgState;
+
+struct MsgRing {
+    int nHead;                  // 0x00  next to read
+    int nTail;                  // 0x04  next to write; equal to nHead when empty
+    MSG aMsgs[MSGRING_SIZE];    // 0x08
+};
+
+struct Win32MacTimer {
+    HWND hWnd;                  // 0x00
+    UINT nIDEvent;              // 0x04
+    DWORD dwLastTime;           // 0x08
+    UINT uElapse;               // 0x0C
+    TIMERPROC pfnTimerFunc;     // 0x10
+    Win32MacTimer* pNext;       // 0x14
+};
+
+struct Win32MacMsgState {
+    MsgRing tPosted;                 // 0x000  PostMessage
+    MsgRing tInput;                  // 0x468  key and mouse input
+    int nExitCode;                   // 0x8D0  PostQuitMessage
+    BOOL bQuit;                      // 0x8D4
+    BYTE bPaintPending;              // 0x8D8  some window needs WM_PAINT
+    BYTE pad8D9[3];                  // 0x8D9
+    Win32MacTimer* pTimers;          // 0x8DC
+    BOOL bMouseMovePending;          // 0x8E0
+    WPARAM wMouseMoveWParam;         // 0x8E4
+    LPARAM lMouseMoveLParam;         // 0x8E8
+    BYTE pad8EC[0x900 - 0x8EC];
+    UINT uLastClickMsg;              // 0x900  the last WM_LBUTTONDOWN, for double-clicks
+    DWORD dwLastClickTime;           // 0x904
+    LONG nLastClickX;                // 0x908  screen
+    LONG nLastClickY;                // 0x90C
+    HWND hWndLastClick;              // 0x910  NULL after a double-click
+    HWND hWndActive;                 // 0x914  GetActiveWindow, SetActiveWindow
+    HWND hWndFocus;                  // 0x918
+    HWND hWndCapture;                // 0x91C
+};
+WIN32MAC_LAYOUT(Win32MacMsgState_input, offsetof(Win32MacMsgState, tInput) == 0x468);
+WIN32MAC_LAYOUT(Win32MacMsgState_timers, offsetof(Win32MacMsgState, pTimers) == 0x8DC);
+WIN32MAC_LAYOUT(Win32MacMsgState_capture, offsetof(Win32MacMsgState, hWndCapture) == 0x91C);
+extern Win32MacMsgState* g_pMsgState;
 // The two message rings are at 0x000 and 0x468 of the state.
 void Msg_RemoveMsgsForHWnd(void* pRing, HWND hWnd);
 #define MSGSTATE_INPUT_RING(pState) ((void*)((BYTE*)(pState) + 0x468))

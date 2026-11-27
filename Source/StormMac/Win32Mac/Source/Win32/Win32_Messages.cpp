@@ -8,112 +8,25 @@
 //
 // The message pump (Msg_GetPendingMessage) also makes the messages nothing queues:
 // WM_QUIT, the pending mouse move, WM_PAINT for a window that needs it, and WM_TIMER.
-#include "Win32Mac.h"
+#include "Win32MacWindow.h"
 
 #if !defined(_WIN32) && D2_OS_MAC
 
 #include <Carbon/Carbon.h>
 #include <string.h>
 
-#define WM_PAINT 0x000F
 #define WM_QUIT 0x0012
 #define WM_ACTIVATEAPP 0x001C
 #define WM_NCMOUSEMOVE 0x00A0
-#define WM_KEYDOWN 0x0100
 #define WM_KEYUP 0x0101
-#define WM_SYSKEYDOWN 0x0104
 #define WM_SYSKEYUP 0x0105
 #define WM_TIMER 0x0113
-#define WM_MOUSEMOVE 0x0200
-#define WM_LBUTTONDOWN 0x0201
-#define WM_LBUTTONDBLCLK 0x0203
 #define WM_MOUSEWHEEL 0x020A
 
 #define PM_REMOVE 0x0001
 #define CS_DBLCLKS 0x0008
 #define VK_CAPITAL 0x14
 #define VK_MENU 0x12
-
-#define MSGRING_SIZE 40
-
-struct Win32MacWindow;
-typedef Win32MacWindow* HWND;
-typedef uint32_t WPARAM;
-typedef int32_t LPARAM;
-typedef LONG (*WNDPROC)(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
-typedef void (*TIMERPROC)(HWND hWnd, UINT uMsg, UINT nIDEvent, DWORD dwTime);
-
-struct Win32MacWindowClass {
-    BYTE pad00[0x08];
-    UINT style;          // 0x08  CS_*
-    WNDPROC pfnWndProc;  // 0x0C
-};
-
-struct Win32MacWindow {
-    Win32MacWindowClass* pClass;  // 0x00
-    BYTE pad04[0x0C - 0x04];
-    WNDPROC pfnWndProc;           // 0x0C  NULL: the class's
-    BYTE pad10[0x54 - 0x10];
-    Win32MacWindow* pFirstChild;  // 0x54
-    Win32MacWindow* pNextSibling; // 0x58
-    BYTE pad5C[0x74 - 0x5C];
-    DWORD dwNeedsPaint;           // 0x74  nonzero: the pump sends it WM_PAINT
-};
-WIN32MAC_LAYOUT(Win32MacWindow_paint, offsetof(Win32MacWindow, dwNeedsPaint) == 0x74);
-
-struct POINT {
-    LONG x;
-    LONG y;
-};
-
-struct MSG {
-    HWND hwnd;       // 0x00
-    UINT message;    // 0x04
-    WPARAM wParam;   // 0x08
-    LPARAM lParam;   // 0x0C
-    DWORD time;      // 0x10
-    POINT pt;        // 0x14
-};
-
-struct MsgRing {
-    int nHead;                  // 0x00  next to read
-    int nTail;                  // 0x04  next to write; equal to nHead when empty
-    MSG aMsgs[MSGRING_SIZE];    // 0x08
-};
-
-struct Win32MacTimer {
-    HWND hWnd;                  // 0x00
-    UINT nIDEvent;              // 0x04
-    DWORD dwLastTime;           // 0x08
-    UINT uElapse;               // 0x0C
-    TIMERPROC pfnTimerFunc;     // 0x10
-    Win32MacTimer* pNext;       // 0x14
-};
-
-struct Win32MacMsgState {
-    MsgRing tPosted;                 // 0x000  PostMessage
-    MsgRing tInput;                  // 0x468  key and mouse input
-    int nExitCode;                   // 0x8D0  PostQuitMessage
-    BOOL bQuit;                      // 0x8D4
-    BYTE bPaintPending;              // 0x8D8  some window needs WM_PAINT
-    BYTE pad8D9[3];                  // 0x8D9
-    Win32MacTimer* pTimers;          // 0x8DC
-    BOOL bMouseMovePending;          // 0x8E0
-    WPARAM wMouseMoveWParam;         // 0x8E4
-    LPARAM lMouseMoveLParam;         // 0x8E8
-    BYTE pad8EC[0x900 - 0x8EC];
-    UINT uLastClickMsg;              // 0x900  the last WM_LBUTTONDOWN, for double-clicks
-    DWORD dwLastClickTime;           // 0x904
-    LONG nLastClickX;                // 0x908  screen
-    LONG nLastClickY;                // 0x90C
-    HWND hWndLastClick;              // 0x910  NULL after a double-click
-    HWND hWndActive;                 // 0x914  GetActiveWindow, SetActiveWindow
-    HWND hWndFocus;                  // 0x918
-    HWND hWndCapture;                // 0x91C
-};
-WIN32MAC_LAYOUT(Win32MacMsgState_input, offsetof(Win32MacMsgState, tInput) == 0x468);
-WIN32MAC_LAYOUT(Win32MacMsgState_timers, offsetof(Win32MacMsgState, pTimers) == 0x8DC);
-WIN32MAC_LAYOUT(Win32MacMsgState_capture, offsetof(Win32MacMsgState, hWndCapture) == 0x91C);
 
 // 1.14d mac: 003f1134
 // The last id SetTimer made up; they count down from -1.
@@ -130,7 +43,7 @@ Win32MacMsgState* g_pMsgState = &s_tMsgState;
 // 1.14d mac: 00030049
 BOOL IsWindow(HWND hWnd);
 // 1.14d mac: 0002ffee
-LONG CallWindowProc(WNDPROC pfnWndProc, HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+LRESULT CallWindowProc(WNDPROC pfnWndProc, HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 // 1.14d mac: 0002ffdd
 HWND GetDesktopWindow(void);
@@ -361,7 +274,7 @@ BOOL Msg_GetPendingMessage(MSG* pMsg, BOOL bRemove, UINT nMsgFilterMin, UINT nMs
 // 1.14d mac: 0002934e
 // Depth first, the window itself before its children.
 static HWND Wnd_FindWindowNeedingPaint(HWND hWnd) {
-    if (hWnd->dwNeedsPaint != 0) {
+    if (hWnd->nNeedsPaint != 0) {
         return hWnd;
     }
     for (HWND hChild = hWnd->pFirstChild; hChild != NULL; hChild = hChild->pNextSibling) {
@@ -479,7 +392,7 @@ BOOL PostMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
 // 1.14d mac: 000295f5
 // Straight to the window's procedure, or its class's.
-LONG SendMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+LRESULT SendMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     if (hWnd == NULL) {
         return 0;
     }

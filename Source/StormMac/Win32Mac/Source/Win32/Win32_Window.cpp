@@ -736,7 +736,7 @@ BOOL DestroyWindow(HWND hWnd) {
         Wnd_SendParentNotify(hWnd, 2, hWnd->n08, (LPARAM)hWnd);
     }
     ShowWindow(hWnd, 0);
-    Win32MacWndMsgState* pState = g_pMsgState;
+    Win32MacMsgState* pState = g_pMsgState;
     Msg_RemoveMsgsForHWnd(pState, hWnd);
     Msg_RemoveMsgsForHWnd(MSGSTATE_INPUT_RING(pState), hWnd);
     if (pState->hWndFocus == hWnd) {
@@ -815,7 +815,7 @@ BOOL ShowWindow(HWND hWnd, UINT nCmdShow) {
 
 // 1.14d mac: 000304b5
 HWND SetFocus(HWND hWnd) {
-    Win32MacWndMsgState* pState = g_pMsgState;
+    Win32MacMsgState* pState = g_pMsgState;
     HWND hOldFocus = pState->hWndFocus;
     HWND hPrev = 0;
     if (hOldFocus != 0) {
@@ -871,7 +871,7 @@ HWND GetFocus(void) {
 
 // 1.14d mac: 000305f6
 HWND SetActiveWindow(HWND hWnd) {
-    Win32MacWndMsgState* pState = g_pMsgState;
+    Win32MacMsgState* pState = g_pMsgState;
     HWND hOldActive = pState->hWndActive;
     HWND hPrev = 0;
     if (hOldActive != 0) {
@@ -1089,7 +1089,7 @@ HWND GetCapture(void) {
 
 // 1.14d mac: 00030c00
 HWND SetCapture(HWND hWnd) {
-    Win32MacWndMsgState* pState = g_pMsgState;
+    Win32MacMsgState* pState = g_pMsgState;
     HWND hPrev = 0;
     if (pState != 0) {
         hPrev = pState->hWndCapture;
@@ -1103,7 +1103,7 @@ HWND SetCapture(HWND hWnd) {
 
 // 1.14d mac: 00030c56
 BOOL ReleaseCapture(void) {
-    Win32MacWndMsgState* pState = g_pMsgState;
+    Win32MacMsgState* pState = g_pMsgState;
     if (pState == 0) {
         return 0;
     }
@@ -1513,7 +1513,7 @@ BOOL SetWindowPos(HWND hWnd, HWND hWndInsertAfter, int nX, int nY, int cx, int c
         }
     }
     UINT nNoActivate = nFlags | SWP_NOACTIVATE;
-    Win32MacWndMsgState* pState = g_pMsgState;
+    Win32MacMsgState* pState = g_pMsgState;
     if (hWnd == pState->hWndActive) {
         nFlags = nNoActivate;
     }
