@@ -16,6 +16,10 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Launch/D2LaunchRoot.h"
 #include "Source/Game/Main.data.h"
+#if !defined(_WIN32) && D2_OS_MAC
+#include "Source/MacSpecific/Source/MacShell/MacShell.h"
+#include <Carbon/Carbon.h>
+#endif
 #if D2_TARGET_CLIENT
 #elif D2_TARGET_SERVER
 #include "Redivivus/Server/ServerHost.h"
@@ -1018,14 +1022,22 @@ void __stdcall SystemSurvey_WriteProductLanugageToLocaleFile() {
     FILE* pLocaleFile;
     BOOL bIsExpansion;
     D2Lang::StrTable::strtable::TABLES_GetLangAbbreviation((char*)&langInfo, 3);
+#if !defined(_WIN32) && D2_OS_MAC
+    int bAppDataPathOk = FOG_MacGetBlizzardSupportPath(szLocaleFilePath, 0x104);
+#else
     int bAppDataPathOk = Fog::Source::SFile::SFILE_GetBlizzardAppDataPath(szLocaleFilePath, 0x104);
+#endif
     if (bAppDataPathOk) {
       Storm::Source::SSTR::SStrPack(szLocaleFilePath, "System Survey\\ProductData\\", 0x104);
       szBufferOutput = szLocaleFilePath + Storm::Source::SSTR::SStrLen(szLocaleFilePath);
       const int32_t nRemaining = (int32_t)(szLocaleFilePath + sizeof(szLocaleFilePath) - szBufferOutput);
       Storm::Source::SSTR::SStrCopy(szBufferOutput, "D2DV\\locale", nRemaining);
       Fog::Source::SFile::SafeCreateDirectoryTree(szLocaleFilePath);
+#if !defined(_WIN32) && D2_OS_MAC
+      pLocaleFile = FOpenResolveMacPath(szLocaleFilePath, "w");
+#else
       pLocaleFile = fopen(szLocaleFilePath, "w");
+#endif
       if (pLocaleFile) {
         fputc(langInfo >> 0x18, pLocaleFile);
         fputc(langInfo >> 0x10 & 0xff, pLocaleFile);
@@ -1038,7 +1050,11 @@ void __stdcall SystemSurvey_WriteProductLanugageToLocaleFile() {
       if (bIsExpansion) {
         Storm::Source::SSTR::SStrCopy(szBufferOutput, "D2XP\\locale", nRemaining);
         Fog::Source::SFile::SafeCreateDirectoryTree(szLocaleFilePath);
+#if !defined(_WIN32) && D2_OS_MAC
+        pLocaleFile = FOpenResolveMacPath(szLocaleFilePath, "w");
+#else
         pLocaleFile = fopen(szLocaleFilePath, "w");
+#endif
         if (pLocaleFile) {
           fputc(langInfo >> 0x18, pLocaleFile);
           fputc(langInfo >> 0x10 & 0xff, pLocaleFile);
@@ -1049,12 +1065,21 @@ void __stdcall SystemSurvey_WriteProductLanugageToLocaleFile() {
       }
     }
 
+#if !defined(_WIN32) && D2_OS_MAC
+    if (MAC_GetSharedSupportPath(szExePathBuf, 0x400)) {
+      Storm::Source::SSTR::SStrPack(szExePathBuf, "/SystemSurvey", 0x400);
+      if (MACSEC_IsBlizzardSigned(szExePathBuf) == 1) {
+        MAC_SpawnProcess(szExePathBuf);
+      }
+    }
+#else
     Fog::Source::SFile::SFILE_GetExecutableDirectory(szExePathBuf, 0x400);
     Storm::Source::SSTR::SStrPack(szExePathBuf, "SystemSurvey.exe", 0x400);
     char bSignatureValid = D2Hell::D2FILE_VerifyFileSignature(szExePathBuf);
     if (bSignatureValid != '\0') {
       D2Hell::D2FILE_CreateProcess(szExePathBuf);
     }
+#endif
 }
 
 // Main app init. Client path loads MPQ data/media, sets renderer/window, optional keyhook, sound/gamma/vsync, then loops ApplicationRunCurrentMode until exit. On exit unloads MPQs and cleans up.
@@ -1089,10 +1114,21 @@ int __fastcall ApplicationMain(HINSTANCE hInstance, D2IniConfigStrc * pD2IniData
     if (geModState != APPMODE_server) {
 #if D2_TARGET_CLIENT
       bMpqLoaded = D2Win::Src::D2WinArchive::MPQ_LoadAllDataMpqFiles();
+#if !defined(_WIN32) && D2_OS_MAC
+      if (!bMpqLoaded || (bMpqLoaded = D2Win::Src::D2WinArchive::MPQ_LoadAllMediaMpqFiles((::fpRequiredUserAction)0, (::fpRequiredUserAction)0, 0, pD2IniData) , !bMpqLoaded)) {
+        Str255 szMpqError;
+        GetIndString(szMpqError, 200, 0xd);
+        ParamText(szMpqError, "\p", "\p", "\p");
+        StopAlert(0x211, 0);
+        D2Win::Src::D2WinArchive::MPQ_UnloadAllDataMpqFiles();
+        return 0;
+      }
+#else
       if (!bMpqLoaded || (bMpqLoaded = D2Win::Src::D2WinArchive::MPQ_LoadAllMediaMpqFiles((::fpRequiredUserAction)D2Win::Src::D2WinArchive::MessageBoxA_InsertPlayDisc, (::fpRequiredUserAction)D2Win::Src::D2WinArchive::MessageBoxA_InsertExpansionDisc, 0, pD2IniData) , !bMpqLoaded)) {
         D2Win::Src::D2WinArchive::MPQ_UnloadAllDataMpqFiles();
         return 0;
       }
+#endif
 
       bMpqLoaded = Fog::D2CheckExpansionGame();
       *(BOOL*)pD2IniData->bD2ExpMpqExistsOrLanugageCode = bMpqLoaded;
@@ -1136,8 +1172,14 @@ int __fastcall ApplicationMain(HINSTANCE hInstance, D2IniConfigStrc * pD2IniData
       HWND hWnd;
       bMpqLoaded = D2Win::Src::D2WinMain::D2GFX_PreSetupBeforeCreatingWindow(hInstance, eD2ApplicationModeAndRenderer, bWindowed, (uint32_t)!pD2IniData->bNOCOMPRESS);
       if (!bMpqLoaded) {
+#if !defined(_WIN32) && D2_OS_MAC
+        MAC_ResetVideoSettingsAndExit();
+#endif
         return 0;
       }
+#if !defined(_WIN32) && D2_OS_MAC
+      MAC_ApplyDisplayModuleSettings();
+#endif
       if (pD2IniData->bPERSPECTIVE && (int32_t)RENDERED_DirectDraw < (int32_t)eD2ApplicationModeAndRenderer) {
         D2gfx::D2GFX::D2GFX_SetPerspective(1);
       }
@@ -1145,8 +1187,12 @@ int __fastcall ApplicationMain(HINSTANCE hInstance, D2IniConfigStrc * pD2IniData
       bMpqLoaded = D2Win::D2GFX::CreateWindowWithChecks(bWindowed, bExpansionMode ? 2 : 0);
       if (!bMpqLoaded) {
         D2gfx::D2GFX::D2GFX_Release();
+#if !defined(_WIN32) && D2_OS_MAC
+        MAC_ResetVideoSettingsAndExit();
+#endif
         return 0;
       }
+#if defined(_WIN32) || !D2_OS_MAC
       if (gbEnableKeyhookDll) {
         /* LPCSTR lpLibFileName for LoadLibraryA */ ghKeyhookDll = LoadLibraryA("Keyhook.dll");
       }
@@ -1157,6 +1203,7 @@ int __fastcall ApplicationMain(HINSTANCE hInstance, D2IniConfigStrc * pD2IniData
           ((intptr_t (__stdcall *)(HWND))pfnKeyhook)(hWnd);
         }
       }
+#endif
 #elif D2_TARGET_SERVER
 #else
 #error "Main.cpp: define exactly one of D2_TARGET_CLIENT or D2_TARGET_SERVER"
@@ -1166,6 +1213,9 @@ int __fastcall ApplicationMain(HINSTANCE hInstance, D2IniConfigStrc * pD2IniData
     } else {
       bWindowCreated = false;
     }
+#if !defined(_WIN32) && D2_OS_MAC
+    MAC_EnableMenus();
+#endif
 #if D2_TARGET_CLIENT
     if (pD2IniData->bQUALITY) {
       D2gfx::D2GFX::D2GFX_ToggleLowQuality();
@@ -1240,7 +1290,7 @@ int __fastcall ApplicationMain(HINSTANCE hInstance, D2IniConfigStrc * pD2IniData
 #else
 #error "Main.cpp: define exactly one of D2_TARGET_CLIENT or D2_TARGET_SERVER"
 #endif
-#if D2_TARGET_CLIENT
+#if D2_TARGET_CLIENT && (defined(_WIN32) || !D2_OS_MAC)
     if (ghKeyhookDll) {
       /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pfnKeyhook = GetProcAddress(ghKeyhookDll, "UninstallKeyboardHook");
       if (pfnKeyhook) {

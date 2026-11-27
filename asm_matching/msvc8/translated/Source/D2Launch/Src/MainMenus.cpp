@@ -27,6 +27,9 @@
 #include "Source/D2Win/D2WinScrollbar.h"
 #include "Source/D2Win/D2WinTimer.h"
 #include "Redivivus/Lua/d2_lua_hooks.h"
+#if !defined(_WIN32) && D2_OS_MAC
+#include "Source/MacSpecific/Source/MacShell/MacShell.h"
+#endif
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -6002,6 +6005,9 @@ BOOL __stdcall MAINMENU_ShowCinematicsMenu(D2ControlMsg * pControlMsg) {
 
 void __stdcall GetAndDispatchAllPossible() {
     tagMSG msg;
+#if !defined(_WIN32) && D2_OS_MAC
+    MAC_ProcessEvents();
+#endif
     while (PeekMessageA(&msg, (HWND)0x0, 0, 0, 1)) {
       switch (msg.message) {
         case 0x12:

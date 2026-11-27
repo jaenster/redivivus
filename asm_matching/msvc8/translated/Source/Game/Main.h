@@ -25,7 +25,7 @@ typedef long LSTATUS;
 
 typedef struct SC_HANDLE__ * SC_HANDLE;
 
-typedef _SERVICE_TABLE_ENTRYA SERVICE_TABLE_ENTRYA;
+typedef struct _SERVICE_TABLE_ENTRYA SERVICE_TABLE_ENTRYA;
 
 #endif // _WIN32
 

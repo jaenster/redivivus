@@ -54,6 +54,9 @@
 #include "Source/D2Client/Engine.h"
 #include "Source/D2Client/Game/Game.data.h"
 #include "Source/D2Client/Game/Server.h"
+#if !defined(_WIN32) && D2_OS_MAC
+#include "Source/MacSpecific/Source/MacShell/MacShell.h"
+#endif
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -2769,6 +2772,9 @@ static uint32_t gdwHostGameThreadId; D2_STATIC_GUARD_BSS(gdwHostGameThreadId, "D
     GAME_InitClientSide();
     bResult = Record::IsNotRecording();
     if (bResult || (bResult = Record::IsRecording() , bResult != 0)) {
+#if !defined(_WIN32) && D2_OS_MAC
+      MAC_ProcessEvents();
+#endif
       do {
         /* UINT wRemoveMsg for PeekMessageA */ /* UINT wMsgFilterMax for PeekMessageA */ /* UINT wMsgFilterMin for PeekMessageA */ /* HWND hWnd for PeekMessageA */ /* LPMSG lpMsg for PeekMessageA */ bResult = PeekMessageA(&sMsg, (HWND)0x0, 0, 0, 1);
       } while (bResult);
