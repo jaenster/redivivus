@@ -439,24 +439,19 @@ addr	name	reason_class	detail
 00033b7c	_itoa	regalloc	6/43(orig) 37(ours): ours 'mov ecx, dword ptr [ebp + 0x8]' orig 'mov eax, dword ptr [ebp + 0x8]'
 00033bd9	_ui64toa	stack-layout	5/51(orig) 50(ours): ours 'sub esp, 0x2c' orig 'sub esp, 0x1c'
 00033c5f	_ultoa	regalloc	6/36(orig) 31(ours): ours 'mov esi, dword ptr [ebp + 0x10]' orig 'mov edi, dword ptr [ebp + 0x10]'
-00033cef	GetFileTypeAndCreatorForPath	wrong	tag constants differ: orig ladder compares 0x4c4f46 and 0x54656d70 ('Temp'), ours 0x4c4f47 and 0x576d7071; the type tables differ
-00033f9a	GetApplicationInformation	semantic-guess	same calls; orig copies the GetProcessInformation result with mov si,ax before test and uses jne, ours tests ax directly with je/jmp
+00033cef	GetFileTypeAndCreatorForPath	regalloc	extension and creator switches match the original cases; orig keeps the result 'Temp' in eax from entry, ext/index in ebx/esi and tail-shares the War3/FrTh check, ours allocates edi/esi and orders blocks differently
 0003411f	LaunchURL	stack-layout	buffers sit at ebp-0x154 in orig and ebp-0x110 in ours (frame 0x16c vs 0x170); orig calls __memmove_chk where ours calls memmove
 00034519	fp_fatal	data-guess	orig loads the hook global once (mov eax,[PIC void]) and calls it; ours loads through &_g_pfnFatalExitHook and dereferences again, so the global's name and type are guessed
 00034556	GetVolumeInfoNoName	crt-idiom	orig calls ___memmove_chk with object size 0x100 (fortify wrapper), ours calls plain _memcpy for the same copy
-000346e7	GetDirectoryID	wrong	orig branches on the bit from [ebp-0x52] (je selects [ebp-0xc], else [ebp-0x40]); ours has no branch and always stores [ebp-0x40]
 000347e7	MacCopyMachineName	pic-ref	orig leas three string literals s_szLogoMaskFiles+1d5c/1d6c/1d7c; ours leas unresolved [PIC ?] data with the same version-range control flow
-0003494a	SaveFSSpecFromMem	wrong	at the DateToSeconds site orig calls _DateToSeconds while ours calls _memcpy; ours calls DateToSeconds at a different site; bswap and 0x3f3f3f3f fills differ
-00034f87	SaveFileFromMemCreateDirs	semantic-guess	same calls; bool arg tested as cmp byte vs mov+test, and FindFolder error path uses movsx/jmp layout instead of movzx/jne
-0003513f	SaveWinPathFileFromMem	semantic-guess	same calls; bool arg tested as cmp byte vs mov+test, and FindFolder error path uses movsx/jmp layout instead of movzx/jne
-00035351	STORM_IsCDVolume	wrong	ours tests movsx word against 0x80800000 (bit 15 only) where orig tests word against 0x8080; ours imuls a different word (-0x266) where orig uses dword at -0x268
+0003494a	SaveFSSpecFromMem	stack-layout	orig frame 0x1fc vs ours 0x18c; orig tests bParseTrailer==1 first and keeps a different live set across the trailer parse and the CInfoPBRec update (379 insns); needs a full asm-driven rewrite
+00034f87	SaveFileFromMemCreateDirs	sched	same control flow and frame layout; orig loads bUseTempFolder with mov cl + test cl,cl where ours emits cmp byte [mem],0, and keeps nResult in cx (mov cx,ax) where ours widens to ecx
+0003513f	SaveWinPathFileFromMem	sched	same control flow and frame layout; orig loads bUseTempFolder with mov al + test al,al where ours emits cmp byte [mem],0, and keeps nResult in cx where ours widens with movsx
 000354bd	StormMacInit	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
-000354f4	MyRuntimeTerminate	semantic-guess	orig tail-jumps to Mem_Nop after the destroy calls; ours jumps to a local epilogue label; same call sequence
-0003555c	Dlg_DisableMenusForModal	semantic-guess	same callees in same order; orig uses inc/xor and movzx word at +0xa, ours uses lea +/-1, mov 2 and movsx word; loop structure differs
-000356df	Dlg_UpdateEditMenu	wrong	call-target counts differ: orig has 4 EnableMenuItem and 3 DisableMenuItem, ours 3 and 4; the last menu call is Enable in orig and Disable in ours
-000358fe	Dlg_RestoreMenus	semantic-guess	same callees in same order; 16-bit field at +0xa read via 32-bit high-word arithmetic (lea 0x10000, sar 16) in ours; frame 0x10 larger
-000359e3	Dlg_ModalDialogLoop	wrong	orig calls _MenuSelect and _GetGrayRgn where ours calls _SysBeep, _GetDialogTextEditHandle, _TickCount and _Delay, plus ours-only _HiliteMenu
-00035f34	Dlg_HandleEditMenuCommand	wrong	ours calls _TEToScrap an extra time after _DialogCut and has one fewer _GetDialogKeyboardFocusItem call than orig
+0003555c	Dlg_DisableMenusForModal	regalloc	same calls and control flow; orig keeps the 16-bit item counter as inc/cmp di,si where clang425 strength-reduces to lea [edi-1]/[edi+1] with movsx
+000356df	Dlg_UpdateEditMenu	regalloc	same calls; orig derives the saved-bit flag with setns and spills bAnyEnabled as a byte, ours folds it into shr/sete and cmp
+000358fe	Dlg_RestoreMenus	regalloc	same calls and control flow; frame 0xc vs ours 0x1c: loop counters are 16-bit in the orig, widened and spilled in ours
+000359e3	Dlg_ModalDialogLoop	stack-layout	same call sequence and control flow; orig copies EventRecord.where into Point temporaries before FindWindow/MenuSelect/DragWindow (frame 0x7c vs ours 0x6c) and orders the case blocks differently
 00036035	SDrawDestroy	data-guess	orig stores byte to g_dwDriverPitch and g_dwDriverWidth, ours stores dword; orig calls Storm_ReturnTrue where ours calls SDRAW_AlwaysTrue
 000360c2	PathToFSSpecCreateDirs	crt-idiom	orig uses fortify _chk wrappers (___strncpy_chk, ___memcpy_chk) with object sizes 0x40/0xff, ours plain strncpy/memcpy; local buffer offset also differs
 0003645d	AllocateMemFile2	sched	14/77(orig) 76(ours): ours 'jle #69' orig 'jle #70'
@@ -517,47 +512,36 @@ addr	name	reason_class	detail
 0003e0a0	_GLOBAL__I_a	pic-ref	Static init stores hit s_pSharedPrefsURL-offsets in orig but SREG_GetUserPrefsFolder-offsets in ours; atexit dtor and vtable addresses taken as lea fn in orig vs mov of &sym in ours.
 0003e294	StormMacRuntime::~StormMacRuntime[D1]	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
 0003e2d0	_GLOBAL__I_a	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
-0019a59a	MAC_ShowAboutDialog	wrong	Orig calls FUN_0019a89c and reads g_pHostHooks before the modal dialog, ours has neither; ours calls Dlg_ModalDialog and ShowWindow where orig calls MAC_ModalDialog and _ShowWindow.
+0019a59a	MAC_ShowAboutDialog	regalloc	same call sequence; orig keeps the dialog item pointer in ebx and the new text buffer in a register where ours spills esi to [ebp-0x234] and reloads it
 0019a89c	FUN_0019a89c	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
 0019aad0	MAC_PromptForGameDisc	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
-0019ad14	MAC_GameDiscDialogFilterProc	semantic-guess	Same calls; orig tests ax==0 first and ours tests ax==7 first, same final condition; seta vs setb with swapped cmp operands.
 0019ae9c	MAC_ParseCommandLineAndRun	pic-ref	Orig reads strings and tables through unresolved lea [R+K] offsets where ours uses named PIC strings CmdLine UseCmdLine Diablo II; local buffer is ebp-0xb14 in orig vs ebp-0x114 in ours.
-0019b1ec	FUN_0019b1ec	semantic-guess	Same strlen and strtok calls; orig uses cmove for the scan step where ours branches, and ours has an extra push (frame 0xc vs 0x10 locals).
-0019b2d9	MAC_IsMousePointInGameScreen	semantic-guess	Same calls; orig compares s_bEventsEnabled to 1 with cmp and ours tests it non-zero with test al,al, equivalent for a bool.
+0019b2d9	MAC_IsMousePointInGameScreen	pic-ref	same tests in the same order; orig reads s_bEventsEnabled with cmp byte,1 (a global stored from other units) where ours, seeing every store in this unit, shrinks it to a bool and tests al
 0019b33e	MAC_HandleMouseCarbonEvent	stack-layout	Same calls and sequence; local offsets shift (ebp-0x1c vs ebp-0x10, spill -0x24 vs -0x14), and one je/jne sense flips with the two calls swapped in layout.
-0019b51a	FUN_0019b51a	wrong	Mouse message constants differ: orig uses 0x201/0x207/0x20b, ours 0x202/0x208/0x20c (up vs down codes); loop bound 4 vs 3 and s_bCommandClick write sequence differ.
-0019b636	FUN_0019b636	semantic-guess	Orig guards a function-local static init with __cxa_guard_acquire and __cxa_guard_release, ours initialises it without guard calls; same string copies and calls.
+0019b51a	FUN_0019b51a	sched	same message dispatch; orig reads the right button's state before storing the command-click flag and merges both emulation paths into one test, ours keeps the flag test as cmp/je and a different block order
+0019b636	FUN_0019b636	pic-ref	instruction-identical; the compare names the function-local static and its guard from the orig's overlapping bss tags (g_bMacExiting+N), ours by the local symbols, and cannot pair them
 0019b795	FUN_0019b795	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
 0019b813	MAC_PostMouseMessage	stack-layout	Ours adds a stack-protector canary (___stack_chk_guard, ___stack_chk_fail) with frame 0x4c vs orig 0x5c without canary; some data refs are also attributed to FUN_0019bbe8 offsets.
 0019bacc	MAC_OnApplicationDeactivate	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
 0019bb55	MAC_OnApplicationActivate	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
 0019bbe8	FUN_0019bbe8	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
-0019bc4b	MAC_HandleMenuCommand	wrong	Orig calls GetActiveWindow repeatedly in a switch; ours calls GetFocus and PostMessage (orig has no PostMessage) and g_bMacDisplayMismatch writes differ.
-0019be53	FUN_0019be53	wrong	Orig calls FUN_0019b2a2, sets g_nMacAppInstance to 0 and tail-jumps to FUN_0019b2b4; ours sets s_bEventsEnabled, g_bMacQuitRequested and g_nMacMainThread and returns without those calls.
-0019be79	FUN_0019be79	wrong	Orig calls FUN_0019b290, FUN_0019b2a2 and FUN_0019b2b4 which ours does not call; ours sets s_bEventsEnabled and g_bMacQuitRequested flags instead.
-0019bed3	FUN_0019bed3	wrong	Orig calls MAC_GetDefaultDisplayMode and stores its result in locals (ebp-0x304..-0x2fc) with EH terminate and Unwind_Resume; ours omits the call and zeroes locals with xmm stores.
-0019cc81	FUN_0019cc81	wrong	orig calls MAC_GetDefaultDisplayMode twice and MACCURSOR_RegisterGuardProc; ours skips them, calls FUN_00036d8b and stores hardcoded 0x258/0x320 dimensions
-0019cdd3	MAC_SetCursorPos	semantic-guess	same callees; ours builds the bool result with test/setne and an extra push esi where orig uses a branch to mov 1 or xor
-0019ce1b	MAC_GetCursorPos	semantic-guess	same callees; bool return built by setne in ours versus jmp/mov 1/xor branch in orig
-0019cf88	MAC_ProcessEvents	wrong	orig calls MAC_HandleMouseDownEvent, MAC_HandleMouseUpEvent, MAC_PostKeyUp, MAC_HandleUpdateEvent and g_bMacModalActive checks; ours calls MSG_PostKeyMessage, FUN_0019be2c, FUN_0019db65 and checks s_bEventsEnabled with a 0x5dc constant
-0019d248	MAC_TrackMouseAndModifierChanges	wrong	orig calls MAC_HandleMouseMoved on the mouse-move path; ours calls MAC_PostMouseMessage with constant 0x200 instead
-0019d3c2	MAC_HandleSuspendResumeEvent	wrong	orig calls MAC_ActivateTSMDocument and MAC_DeactivateTSMDocument; ours calls _ActivateTSMDocument and _DeactivateTSMDocument behind an added s_hTSMDocument null test
-0019d42b	MAC_HandleKeyDownEvent	wrong	orig calls MAC_PostKeyDown on the key-down path; ours calls MSG_PostKeyMessage and adds an s_bEventsEnabled check
-0019d4d3	MAC_CheckRequiredAppleEventParams	wrong	orig compares the AEGetAttributePtr result with 0xf95b; ours compares with 0xf94d and tests ax for zero
-0019d537	MAC_HandleQuitAppleEvent	wrong	orig calls FUN_0019bbcd and an indirect call through a function-pointer global after the required-params check; ours calls MSG_PostAltF4Keys instead
-0019d582	MAC_Main	wrong	orig calls FUN_0019be79, FUN_0019b744 and MAC_ShutdownTSM; ours calls FUN_0019bbe8, MAC_ParseCommandLineAndRun, MAC_DSpShutdown, MAC_DisposeTSMDocument and _SetScriptManagerVariable with different globals
-0019db13	FUN_0019db13	wrong	orig stores constant 1 as the argument to FUN_0019be53; ours calls it with no argument stored
-0019dba3	MAC_HandleMenuSelection	wrong	orig calls FUN_0019bbcd for the default menu command; ours calls MAC_HandleMenuCommand and uses a different case bound and jump table
-0019dcd4	MAC_SynthesizeKeyEvent	wrong	orig calls MAC_PostKeyDown and MAC_PostKeyUp; ours calls MSG_PostKeyMessage only, with an s_bEventsEnabled check
+0019bc4b	MAC_HandleMenuCommand	sched	same per-case PostMessage calls; orig reaches g_bMacDisplayMismatch directly (defined in its unit) while FUN_0019cb40/0019cf50 reach it through a PIC pointer, so one declaration cannot match all three; ours also re-zeroes bl once more on the >0x80 path
+0019bed3	FUN_0019bed3	eh	orig is compiled with exception tables: 63 extra insns of landing pads (__ZSt9terminatev, __Unwind_Resume) around the display-mode and C++ object calls, which ours does not emit
+0019cc81	FUN_0019cc81	stack-layout	same 90 insns and call sequence; orig stores the display request fields (byFlags=2 first) into a different frame order, [ebp-0x54] vs ours [ebp-0x10]
+0019cf88	MAC_ProcessEvents	inline	orig keeps MAC_HandleMouseDownEvent/UpEvent/UpdateEvent and the key handlers as calls; 6 insns fewer in ours: ours still inlines a small handler and orders the event switch cases differently
+0019d248	MAC_TrackMouseAndModifierChanges	stack-layout	orig zeroes the synthesised EventRecord as two dwords and a word ([ebp-0x1c]/[ebp-0x18]/[ebp-0x14]) and reads where as two word loads; ours memsets only 6 bytes and loads where as one dword
+0019d42b	MAC_HandleKeyDownEvent	sched	same calls; orig repeats test ah,1 on the modifiers word at each use where ours hoists and ecx = eax & 0x100 once
+0019d582	MAC_Main	wrong	MAC_Main not rewritten from the asm: orig calls FUN_0019b744 and MAC_ShutdownTSM where ours calls MAC_DSpShutdown and the display teardown directly; 289 vs 294 insns, diverges at insn 9 (global pointer load)
+0019dba3	MAC_HandleMenuSelection	regalloc	same switch and callees; orig keeps the menu in eax and the item in ecx with cx compares, ours swaps them (72 vs 75 insns)
 0019dd0c	MAC_CountMultiByteChars	sched	same instructions in a different order
 0019dd84	MAC_HandleTSMOffsetToPos	stack-layout	same instructions; frame size or local offsets differ
 0019dea7	MAC_HandleTSMPosToOffset	stack-layout	same instructions; frame size or local offsets differ
-0019df93	MAC_HandleTSMUpdateActiveInputArea	wrong	ours calls _AEGetDescDataSize, _NewPtr and _MemError which orig lacks; orig calls _DisposePtr twice where ours does not, and the indirect callee global differs
+0019df93	MAC_HandleTSMUpdateActiveInputArea	wrong	MAC_HandleTSMUpdateActiveInputArea not rewritten from the asm: orig reads a global through a PIC pointer where ours reads s_nTECScript directly, and its frame is 0x26c vs 0x27c; same 209 insns
 0019e2fb	MAC_ConvertTextToUnicode	stack-layout	same instructions; frame size or local offsets differ
-0019e432	FUN_0019e432	wrong	orig makes 2 AEInstallEventHandler calls plus 4 cxa_guard pairs; ours makes 4 AEInstallEventHandler calls and no guards, so the handler set differs
+0019e432	FUN_0019e432	pic-ref	instruction-identical; the compare resolves the four function-local statics and their guards from the orig bss tags, ours by local symbols
 0019e64a	MAC_SetTSMInputCallback	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
 0019e764	MAC_ConvertUnicodeToText	stack-layout	same instructions; frame size or local offsets differ
-0019e8a1	MAC_ParseCommandLine	wrong	"same callees but the separator test differs: orig looks up g_aMacSwitches with bound 0x100 and cmp 0x4, ours uses literal "" \t\n:"" with cmp 0x3 and bound 0xff"
+0019e8a1	MAC_ParseCommandLine	sched	same callees and 216 vs 217 insns; the g_aMacSwitches lookup bound (0x100) and the cmp 4 separator test are scheduled differently and the epilogue pops eax
 0019f18a	FUN_0019f18a	sched	same instructions in a different order
 0019f1c4	MAC_SetWorkingDirectoryToAppFolder	stack-layout	same instructions; frame size or local offsets differ
 0019f2b6	FLAMINGLOGO_Init	wrong	same callees but orig writes globals s_dwNextTick, s_hCTable, s_hMaskCTable while ours writes fields at +0x946, +0x94a, +0x94e and or's 0x2 into a flag
@@ -577,31 +561,29 @@ addr	name	reason_class	detail
 002b1913	PALETTE_InitColorLookupTables	sched	same instructions in a different order
 002b1a44	FUN_002b1a44	crt-idiom	orig is an unrolled per-row copy with cascading cmp/ja and dec-counter chains (Duff-style); ours is a compact loop over g_anTileRowDest/Src/Width
 002b1ca9	FUN_002b1ca9	crt-idiom	orig is a fully unrolled copy (about 357 extra add-based offset steps); ours is a loop over g_anTileRow tables with shade lookup
-002b224c	FUN_002b224c	semantic-guess	same operation set but orig combines bytes with movzx loads while ours uses plain byte moves and or, so the byte-combine structure is built differently
+002b224c	FUN_002b224c	sched	same operation set and clip checks; orig combines pixel bytes with movzx loads where ours uses plain byte moves and or (frame 0x1c vs 0x18)
 002b24c4	FUN_002b24c4	pic-ref	orig indexes g_abShiftTables while ours indexes g_abMacShadeTable with a different lea/displacement; the table symbol resolves differently
-002b2a08	FUN_002b2a08	semantic-guess	same callees and clip checks; orig uses cmovg and ja/jge polarity while ours uses cmovle and jbe/jle, so the branch structure differs
+002b2a08	FUN_002b2a08	sched	same callees and clip checks; orig uses cmovg and ja/jge polarity where ours uses cmovle and jbe/jle
 002b2da8	FUN_002b2da8	pic-ref	orig reads g_abShiftTables and shifts with sar cl; ours reads g_abMacShadeTable and masks the count with and 0x1f, so the table global differs
 002b35e9	FUN_002b35e9	data-guess	orig writes g_anClip+0xc as a byte and reads an unresolved [PIC ?] global; ours writes it as a dword, adds a g_anClip+0x20 store and reads _g_nMacScreenSide
-002b36b6	FUN_002b36b6	semantic-guess	same 732-iteration store loop; orig counts esi down from 0x2dc with dec, ours counts up from 0xfffffd24 with inc
+002b36b6	FUN_002b36b6	sched	instruction-identical except the loop counter: orig counts esi down from 0x2dc with dec/jne, ours strength-reduces to a count-up from -0x2dc with inc/jne
 002b36e8	fpDrawVisTile	data-guess	first divergence is g_anRowOffsets-1c read as a byte (mov dl, byte ptr) in orig and as a dword in ours; ours also uses branch form where orig uses setcc
 002b38f3	FUN_002b38f3	data-guess	orig reads g_anRowOffsets-1c as a byte with setcc results; ours reads it as a dword with a branch chain, the same size guess as fpDrawVisTile
 002b3a14	fpDrawWallTile	pic-ref	same callees; orig and ours index the same row table at different displacements (0x29453a vs 0x1176) and call the helpers in a different order
-002b3be5	fpDrawBlendedVisTile	wrong	orig loads g_ppPaletteTables and tests al against -0x40 (jb); ours loads _g_ppBlendTables and tests against -0x41 (ja)
-002b3e8b	fpDrawRoofTile	wrong	orig reads g_ppPaletteTables and g_anRowOffsets; ours reads _g_ppBlendTables and g_abLightGrid at other offsets, with cmp -0x41 vs -0x40
-002b4270	FUN_002b4270	wrong	orig indexes g_abShiftTables with movzx byte of [ebp+0x10]; ours indexes g_abMacShadeTable with a 32-bit mov of the same argument
+002b3be5	fpDrawBlendedVisTile	wrong	fpDrawBlendedVisTile not rewritten from the asm: orig reads g_ppPaletteTables and tests al against -0x40 (jb) where ours reads _g_ppBlendTables; 219 vs 223 insns
+002b3e8b	fpDrawRoofTile	wrong	fpDrawRoofTile not rewritten from the asm: orig reads g_ppPaletteTables and g_anRowOffsets where ours reads _g_ppBlendTables and g_abLightGrid at other offsets; frame 0x4c vs 0x5c
 002b42cf	FUN_002b42cf	sched	same instructions in a different order
-002b4354	FUN_002b4354	wrong	orig uses g_abShiftTables with shl 8 and shr 3; ours uses g_abMacShadeTable, g_anTileRowDest/Src/Width and an and 0x1f00 mask
-002b44c2	FUN_002b44c2	wrong	orig indexes g_abShiftTables; ours uses g_abMacShadeTable, g_anTileRow* and g_abLightGrid, so the loop body differs
-002b4696	fpDrawGroundTile	wrong	side-effecting callees are reordered (orig calls FUN_002b42cf first, ours calls FUN_002b44c2 first), and g_anClip compares are reversed into setge/branch form
-002b4b72	D2GFX_SwitchModule	wrong	orig compares renderer mode with 2 and calls through RENDERER_CurrentRender +0xc; ours compares with 1 and calls RENDERER_CurrentRenderedFunctions +0x8/+0x10
-002b603a	MACGFX_EnumerateDisplayModes	semantic-guess	same API call sequence; orig extracts flags with and 0xffff0001 and imul 0xc, ours uses movsd of s_anTargetWidth/Height and a different mask structure
+002b4354	FUN_002b4354	wrong	FUN_002b4354 not rewritten from the asm: orig computes nLight>>3 first, keeps the surface as a pointer (g_pSurface->nPitch via a PIC pointer load) and caches clip rows in locals; 121 vs 133 insns
+002b44c2	FUN_002b44c2	wrong	FUN_002b44c2 not rewritten from the asm: same shift-table fix as 002b4354 applied, the row loop still differs (orig frame 0x5c vs ours 0x6c, 155 vs 160 insns)
+002b4696	fpDrawGroundTile	wrong	fpDrawGroundTile not rewritten from the asm: orig calls FUN_002b42cf before FUN_002b44c2 and reads g_anClip differently; 220 vs 212 insns
+002b4b72	D2GFX_SwitchModule	wrong	D2GFX_SwitchModule not rewritten from the asm: orig compares the renderer mode with 2 and calls through RENDERER_CurrentRender +0xc, ours compares with 1; 99 vs 100 insns
+002b603a	MACGFX_EnumerateDisplayModes	wrong	MACGFX_EnumerateDisplayModes not rewritten from the asm: orig extracts flags with and 0xffff0001 and imul 0xc, ours uses movsd of s_anTargetWidth; 352 vs 316 insns
 002b652b	MACGFX_CompareDisplayModes	regalloc	same instructions modulo register choice
 002b692a	FUN_002b692a	noobj	Source/D2Hell/D2HellRoot.cpp is not built by d2_mac_objs
-002b712c	TSLINK_NextLink	semantic-guess	same logic on the same inputs; orig builds the result with sete/movzx/or, ours uses jne/jns branches
-002b7162	FUN_002b7162	semantic-guess	same TSLINK_Unlink call and same tests; ours uses setne/test al,1 where orig uses and 1, sete and movzx
+002b7162	FUN_002b7162	sched	same loop; orig loads *pList into ecx and adds pNode, ours folds it into add eax,[esi] (33 vs 32 insns)
 002b71b0	TSLIST_InitFaultHandlerList	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
-002b721d	MACSEC_GetSigningOrganizationName	wrong	ours stores 0x15 to a stack slot and compares against different constants (orig stores 0xa and compares 0xa/0xb); ours has an unresolved lea [PIC ?] where orig names s_szLogoMaskFiles and _kSecPropertyKeyValue
-002b7733	MACSEC_CheckCodeSignature	wrong	orig has a cmp against 0xfffefa0b (OSStatus special case) and sets flags 1/3; ours lacks that comparison and builds flags with shl 2 and or 0x10
+002b721d	MACSEC_GetSigningOrganizationName	wrong	MACSEC_GetSigningOrganizationName not rewritten from the asm: orig stores 0xa to a stack slot and compares against 0xa/0x.. constants where ours stores 0x15; 352 vs 343 insns
+002b7733	MACSEC_CheckCodeSignature	regalloc	status switch now matches the asm (0, 0x8001212a/0x80012436, 0xfffefa1b/0b, 0xfffefa0a); orig keeps the result in esi and the URL in edi, ours swaps them and sinks the initial 4
 002de2da	COGLTEXTURES_Construct	eh	orig has a landing pad calling _CD2Textures_D2 and __Unwind_Resume after CD2TEXTURES_Construct; ours has none
 002de374	_COGLTextures_D0	inline	orig _COGLTextures_D0 calls out-of-line _COGLTextures_D2; ours inlines CD2TEXTURES_Flush and _CD2Textures_D2 with a vtable store
 002de38e	_COGLTextures	inline	orig tail-jumps to _COGLTextures_D2; ours inlines CD2TEXTURES_Flush and the vtable store, then jmp _CD2Textures_D2

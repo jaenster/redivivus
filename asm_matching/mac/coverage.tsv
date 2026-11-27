@@ -1024,7 +1024,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 000354f4	Storm::Source::MyRuntimeTerminate	81	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_appinfo.cpp	no		
 00035545	Storm::Source::SSystem::StormGetInstance	23	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_appinfo.cpp	no	0041bef0	
 0003555c	Storm::Dlg_DisableMenusForModal	387	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/unknown_dialog.cpp	no		regalloc
-000356df	Storm::Dlg_UpdateEditMenu	543	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/unknown_dialog.cpp	no		wrong
+000356df	Storm::Dlg_UpdateEditMenu	543	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/unknown_dialog.cpp	no		regalloc
 000358fe	Storm::Dlg_RestoreMenus	229	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/unknown_dialog.cpp	no		regalloc
 000359e3	Storm::Dlg_ModalDialogLoop	1258	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	nonmatch	Source/StormMac/unknown_dialog.cpp	no		stack-layout
 00035ef1	Storm::Dlg_ModalDialog	67	StormMac/Storm Mac/?	unit	Source/StormMac/?	blizzard-mac	match	Source/StormMac/unknown_dialog.cpp	no		
@@ -1418,7 +1418,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 002b678f	D2FILE_ReadFile	249	Bnclient/BNetGW.cpp|D2Hell/SRC/Archive.cpp	between	Source/Bnclient/BNetGW.cpp|Source/D2Hell/SRC/Archive.cpp	shared	missing		-	00516f85	
 002b6888	Bnclient::D2Hell::Archive::D2FILE_AllocAndLoadD2File	162	D2Hell/SRC/Archive.cpp	__FILE__	Source/D2Hell/SRC/Archive.cpp	shared	missing		-	00517079	
 002b692a	Bnclient::D2Hell::Archive::FUN_002b692a	213	Bnclient/D2Hell/SRC/Archive.cpp	file-map	Source/Bnclient/D2Hell/SRC/Archive.cpp	blizzard-mac	body	Source/D2Hell/D2HellRoot.cpp	no		noobj
-002b69ff	Fog::Archive::ARCHIVE_LoadMPQ	1129	D2Hell/SRC/Archive.cpp	__FILE__	Source/D2Hell/SRC/Archive.cpp	shared	missing		-	00517332	
+002b69ff	Fog::Archive::ARCHIVE_LoadMPQ	1129	D2Hell/SRC/Archive.cpp	__FILE__	Source/D2Hell/SRC/Archive.cpp	shared	body	Source/D2Hell/D2HellRoot.cpp	no	00517332	
 002b6e68	Fog::Archive::ARCHIVE_FreeMpqFile	78	D2Hell/SRC/Archive.cpp	__FILE__	Source/D2Hell/SRC/Archive.cpp	shared	missing		-	005173ac	
 002b6eb6	D2MEM_FindLowestSetBit	37	D2Hell/SRC/Archive.cpp|?	between	Source/D2Hell/SRC/Archive.cpp|?	shared	missing		-	00517abb	
 002b6edb	Storm::Source::SFile::CRC32_Calculate	97	D2Hell/SRC/Archive.cpp|?	between	Source/D2Hell/SRC/Archive.cpp|?	shared	missing		-	006c99f6	
