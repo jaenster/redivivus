@@ -13,6 +13,7 @@ extern "C" {
 void GetPort(GrafPtr* pPort);
 void SetPort(GrafPtr pPort);
 void LocalToGlobal(Point* pPoint);
+Rect* GetRegionBounds(RgnHandle hRegion, Rect* pBounds);
 void GetForeColor(RGBColor* pColor);
 void GetBackColor(RGBColor* pColor);
 void RGBForeColor(const RGBColor* pColor);

@@ -87,6 +87,35 @@ struct MacAppProcs {
 };
 // 1.14d mac: 00397abc
 extern MacAppProcs* g_pMacAppProcs;
+// 1.14d mac: 00036d19
+bool MACDISPLAY_SelectDriver(int nDriver);
+// 1.14d mac: 00036d8b
+void FUN_00036d8b(Boolean (*pfnCallback)(Boolean));
+// 1.14d mac: 00036d9f
+void MACCURSOR_RegisterSetCursorPosProc(bool (*pfnSetCursorPos)(int16_t*, int16_t*));
+// 1.14d mac: 00036db3
+void MACCURSOR_RegisterGetCursorPosProc(bool (*pfnGetCursorPos)(int*, int*));
+// 1.14d mac: 00036830
+void MACCURSOR_ShowDisplayCursor(void);
+// 1.14d mac: 00036847
+void FUN_00036847(void);
+// 1.14d mac: 00036ff5
+void FUN_00036ff5(void);
+// 1.14d mac: 0001e550
+void FPSetMessageBoxCallback(void (*pfnCallback)(void));
+// 1.14d mac: 0001e9bb
+void MAC_GetGlobalMouse(Point* pPoint);
+// 1.14d mac: 0001e9c4
+void MAC_WarpMouseCursorPosition(uint32_t ptCursor);
+// 1.14d mac: 002b5de2
+// Converts a game point to global coordinates; 0 without a renderer.
+int FUN_002b5de2(Point* pPoint);
+bool MAC_SetCursorPos(int16_t* pnX, int16_t* pnY);
+bool MAC_GetCursorPos(int* pnX, int* pnY);
+uint8_t MAC_HandleKeyDownEvent(EventRecord* pEvent);
+uint8_t MAC_HandleSuspendResumeEvent(EventRecord* pEvent);
+void FUN_0019db65(void);
+void MAC_SynthesizeKeyEvent(uint32_t nPressed, uint32_t nKeyCode, EventRecord* pEvent, char cPressed);
 // 1.14d mac: 0002a6a3
 uint32_t GetTempPathFreeSpace(void);
 // 1.14d mac: 00030cb2
@@ -169,7 +198,7 @@ int D2GFX_GetScreenSize(int* pnWidth, int* pnHeight);
 uint8_t FUN_002b5da4(EventRecord* pEvent);
 // 1.14d mac: 002b5dc3
 // Converts a point to the renderer's coordinates; 0 without a renderer.
-uint8_t FUN_002b5dc3(Point* pPoint);
+int FUN_002b5dc3(Point* pPoint);
 // 1.14d mac: 0019ebbe
 int ApplicationMain(int nInstance, void* pDisplayState, int nMode);
 
@@ -810,7 +839,7 @@ static uint8_t MAC_PostMouseMessage(uint32_t nMessage, uint32_t nWParamHigh, uin
     if (nX < aWindowRect[2] && aWindowRect[0] <= nX) {
         bInWindow = (short)nPoint < aWindowRect[3] && aWindowRect[1] <= (short)nPoint;
     }
-    if (s_bEventsEnabled && FUN_002b5dc3(&ptMouse)) {
+    if (s_bEventsEnabled && (uint8_t)FUN_002b5dc3(&ptMouse)) {
         D2GFX_GetScreenSize(&nScreenWidth, &nScreenHeight);
         if (ptMouse.h < 0) {
             ptMouse.h = 0;
@@ -1383,6 +1412,272 @@ void FUN_0019cf50(void) {
     s_bSkipRendererIdleWait = true;
     FUN_0019cb40(1);
     s_bSkipRendererIdleWait = false;
+}
+
+// The two display set-up records the application's display hook takes (their meaning is
+// the renderer's; only the fields the shell fills are named).
+struct MacDisplayRequest {
+    int32_t nWidth;
+    int32_t nHeight;
+    int32_t nPitch;
+    int32_t nBitsPerPixel;
+    uint8_t byDepth;
+    uint8_t byFlags;
+};
+struct MacDisplayLimits {
+    int32_t nWidth;
+    int32_t nHeight;
+    int32_t nPitch;
+    int32_t nMaxBitsPerPixel;
+    int32_t nDepth;
+    int32_t nFlags;
+};
+
+// 1.14d mac: 00536c54
+// The display module the set-up chose (the first output of MACGFX_EnumerateDisplayModes).
+static int s_nDisplayModule;
+
+// 1.14d mac: 00331dfa
+extern const char g_szMacDisplayName[];
+
+// 1.14d mac: 0019cc81
+// Brings the process to the front and sets the display up through the application's display
+// hook; the cursor and display-state callbacks go to Storm and the cursor module. False (and
+// DrawSprocket shut down again) when the display is not available.
+Boolean FUN_0019cc81(int nDisplayModule, int nUnused) {
+    ProcessSerialNumber tProcess;
+    int nOptionWidth;
+    int nOptionHeight;
+    int nOptionDepth;
+    tProcess.highLongOfPSN = 0;
+    tProcess.lowLongOfPSN = kCurrentProcess;
+    SetFrontProcess(&tProcess);
+    MAC_GetDefaultDisplayMode(&nOptionWidth, &nOptionHeight, &nOptionDepth);
+    s_nDisplayModule = nDisplayModule;
+    if (MACDISPLAY_SelectDriver(0)) {
+        ((void (*)(void*, void*, void*))g_pMacAppProcs->apfn[49])((void*)FUN_00036ff5, (void*)MACCURSOR_ShowDisplayCursor,
+                                                                   (void*)FUN_00036847);
+        int nWidth;
+        int nHeight;
+        int nBitDepth;
+        MAC_GetDefaultDisplayMode(&nWidth, &nHeight, &nBitDepth);
+        MacDisplayRequest tRequest;
+        tRequest.nWidth = nWidth;
+        tRequest.nHeight = nHeight;
+        tRequest.nPitch = nWidth;
+        tRequest.nBitsPerPixel = 8;
+        tRequest.byDepth = (uint8_t)nBitDepth;
+        tRequest.byFlags = 2;
+        MacDisplayLimits tLimits;
+        tLimits.nWidth = nWidth;
+        tLimits.nHeight = nHeight;
+        tLimits.nPitch = nWidth;
+        tLimits.nMaxBitsPerPixel = 0x20;
+        tLimits.nDepth = nBitDepth;
+        tLimits.nFlags = 0;
+        if (((char (*)(void*, void*, int, const char*))g_pMacAppProcs->apfn[13])(&tRequest, &tLimits, s_nDisplayModule,
+                                                                                 g_szMacDisplayName) == 1) {
+            FPSetMessageBoxCallback(FUN_0019cf50);
+            FUN_00036d8b(FUN_0019cb40);
+            MACCURSOR_RegisterSetCursorPosProc(MAC_SetCursorPos);
+            MACCURSOR_RegisterGetCursorPosProc(MAC_GetCursorPos);
+            return 1;
+        }
+    }
+    DSpShutdown();
+    return 0;
+}
+
+// 1.14d mac: 0019cdd3
+// Warps the cursor to a game position; false without a renderer.
+bool MAC_SetCursorPos(int16_t* pnX, int16_t* pnY) {
+    Point ptCursor;
+    ptCursor.h = *pnX;
+    ptCursor.v = *pnY;
+    int bConverted = FUN_002b5de2(&ptCursor);
+    if (bConverted != 0) {
+        MAC_WarpMouseCursorPosition(*(uint32_t*)&ptCursor);
+    }
+    return bConverted != 0;
+}
+
+// 1.14d mac: 0019ce1b
+// The cursor position in game coordinates; false without a renderer.
+bool MAC_GetCursorPos(int* pnX, int* pnY) {
+    Point ptCursor;
+    MAC_GetGlobalMouse(&ptCursor);
+    int bConverted = FUN_002b5dc3(&ptCursor);
+    if (bConverted != 0) {
+        *pnX = ptCursor.h;
+        *pnY = ptCursor.v;
+    }
+    return bConverted != 0;
+}
+
+// 1.14d mac: 0019ce5a
+void MAC_EnableMenus(void) {
+    EnableMenuItem(GetMenuHandle(0x81), 0);
+    EnableMenuItem(GetMenuHandle(0x82), 0);
+    EnableMenuItem(GetMenuHandle(0x83), 0);
+    EnableMenuItem(GetMenuHandle(0x84), 0);
+}
+
+// 1.14d mac: 0019ced5
+void MAC_DisableMenus(void) {
+    DisableMenuItem(GetMenuHandle(0x81), 0);
+    DisableMenuItem(GetMenuHandle(0x82), 0);
+    DisableMenuItem(GetMenuHandle(0x83), 0);
+    DisableMenuItem(GetMenuHandle(0x84), 0);
+}
+
+// 1.14d mac: 005c8a44
+// Set while a modal dialog has the events.
+extern int g_bMacModalActive;
+
+uint8_t MAC_TrackMouseAndModifierChanges(EventRecord* pEvent);
+
+// 1.14d mac: 0019cf88
+// Takes events until a null event comes: mouse, keys, updates, the menu bar, window drags and
+// AppleEvents.
+void MAC_ProcessEvents(void) {
+    EventRecord tEvent;
+    do {
+        WaitNextEvent(everyEvent, &tEvent, 0, NULL);
+        if (!MAC_TrackMouseAndModifierChanges(&tEvent)) {
+            if (tEvent.what == osEvt) {
+                if (MAC_HandleSuspendResumeEvent(&tEvent)) {
+                    MAC_TrackMouseAndModifierChanges(&tEvent);
+                }
+            } else if (tEvent.what < 0x17) {
+                switch (tEvent.what) {
+                case mouseDown:
+                    if (g_bMacModalActive == 0) {
+                        WindowRef pWindow;
+                        short nPart = FindWindow(tEvent.where, &pWindow);
+                        WindowRef pClicked = pWindow;
+                        switch (nPart) {
+                        case 0:
+                        case 3:
+                            goto mouseInGame;
+                        case 1:
+                            FUN_0019db65();
+                            MAC_HandleMenuCommand(MenuSelect(tEvent.where));
+                            break;
+                        case 4: {
+                            Rect rcBounds;
+                            GetRegionBounds(GetGrayRgn(), &rcBounds);
+                            Point ptOrigin = {0, 0};
+                            DragWindow(pClicked, tEvent.where, &rcBounds);
+                            GrafPtr pSavedPort;
+                            GetPort(&pSavedPort);
+                            SetPortWindowPort(pClicked);
+                            LocalToGlobal(&ptOrigin);
+                            SetPort(pSavedPort);
+                            ptOrigin.h = (ptOrigin.h + 3) & 0xFFF8;
+                            MoveWindow(pClicked, ptOrigin.h, ptOrigin.v, false);
+                            break;
+                        }
+                        case 7:
+                        case 8:
+                            if (TrackBox(pWindow, tEvent.where, nPart)) {
+                                FUN_0019bbcd(0x81);
+                            }
+                        }
+                    } else {
+                    mouseInGame:
+                        MAC_HandleMouseDownEvent(&tEvent);
+                    }
+                    break;
+                case mouseUp:
+                    MAC_HandleMouseUpEvent(&tEvent);
+                    break;
+                case keyDown:
+                case autoKey:
+                    MAC_HandleKeyDownEvent(&tEvent);
+                    break;
+                case keyUp:
+                    MAC_PostKeyUp(&tEvent);
+                    break;
+                case updateEvt: {
+                    GrafPtr pSavedPort;
+                    GetPort(&pSavedPort);
+                    WindowRef pUpdated = (WindowRef)tEvent.message;
+                    SetPortWindowPort(pUpdated);
+                    BeginUpdate(pUpdated);
+                    if (g_bMacModalActive == 0) {
+                        MAC_HandleUpdateEvent(&tEvent);
+                    }
+                    EndUpdate(pUpdated);
+                    SetPort(pSavedPort);
+                    break;
+                }
+                default:
+                    FUN_0019bac5();
+                case activateEvt:
+                    break;
+                }
+            } else {
+                if (tEvent.what != kHighLevelEvent) {
+                    FUN_0019bac5();
+                } else {
+                    AEProcessAppleEvent(&tEvent);
+                }
+            }
+        }
+        FUN_0019b795();
+    } while (tEvent.what != nullEvent);
+}
+
+// 1.14d mac: 003b8d80
+// The mouse position of the last event.
+static Point s_ptLastMouse;
+// 1.14d mac: 00536ca4
+// The modifier keys of the last event.
+static uint16_t s_wLastModifiers;
+
+// 1.14d mac: 0019d248
+// A position change is a WM_MOUSEMOVE; every modifier key that changed is synthesised as a
+// key event. True when the renderer took the event itself.
+uint8_t MAC_TrackMouseAndModifierChanges(EventRecord* pEvent) {
+    uint8_t bHandled = FUN_0019b74d(pEvent);
+    if (!bHandled && pEvent->what < 0x10 && ((0x81FFu >> (pEvent->what & 0x1F)) & 1)) {
+        if (s_ptLastMouse.v != pEvent->where.v || s_ptLastMouse.h != pEvent->where.h) {
+            MAC_HandleMouseMoved(pEvent);
+            s_ptLastMouse = pEvent->where;
+        }
+        uint16_t wModifiers = pEvent->modifiers;
+        if (s_wLastModifiers != wModifiers) {
+            EventRecord tSynth;
+            memset(&tSynth, 0, 6);
+            tSynth.message = 0;
+            tSynth.when = pEvent->when;
+            tSynth.where = pEvent->where;
+            tSynth.modifiers = wModifiers;
+            s_wLastModifiers ^= wModifiers;
+            if (s_wLastModifiers & 0x100) {
+                uint32_t nPressed = pEvent->modifiers & 1;
+                MAC_SynthesizeKeyEvent(nPressed, 0x37, &tSynth, (char)nPressed);
+            }
+            if (s_wLastModifiers & 0x200) {
+                uint32_t nPressed = (pEvent->modifiers >> 9) & 1;
+                MAC_SynthesizeKeyEvent(nPressed, 0x38, &tSynth, (char)nPressed);
+            }
+            if (s_wLastModifiers & 0x400) {
+                uint32_t nPressed = (pEvent->modifiers >> 10) & 1;
+                MAC_SynthesizeKeyEvent(nPressed, 0x39, &tSynth, (char)nPressed);
+            }
+            if (s_wLastModifiers & 0x800) {
+                uint32_t nPressed = (pEvent->modifiers >> 11) & 1;
+                MAC_SynthesizeKeyEvent(nPressed, 0x3A, &tSynth, (char)nPressed);
+            }
+            if (s_wLastModifiers & 0x1000) {
+                uint32_t nPressed = (pEvent->modifiers >> 12) & 1;
+                MAC_SynthesizeKeyEvent(nPressed, 0x3B, &tSynth, (char)nPressed);
+            }
+            s_wLastModifiers = pEvent->modifiers;
+        }
+    }
+    return bHandled;
 }
 
 #endif  // D2_OS_MAC
