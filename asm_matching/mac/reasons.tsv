@@ -578,3 +578,16 @@ addr	name	reason_class	detail
 001dd468	MONMODE_EnterSkill1AndThink2	stack-layout	identical to 001dd3f3: same calls, different frame size and save order
 002d7ffc	EDITBOX_Cb_OOGUTIL_FilterGameNameChar	regalloc	ours narrows the key to a byte (cmp cl) where the original sign-extends it into edx first
 002f70c5	QSERVER_WaitLoopMac	unverified-ref	instruction-identical apart from two call targets cmp cannot name on our side: GetLastError (not reconstructed in Win32Mac yet) and FOG_GetFramePointer (ours calls GetInstructionPointer)
+000ab26f	D2Client::LOADER_IsNamedVolumeMounted	stack-layout	stack protector guard load and local ordering differ in the Carbon volume walk (68 vs 69 insns)
+000aa68a	D2Client::Engine::LOADER_InsertDiscGameLoopCallback	sched	Windows-shared loop body: the volume-name select is scheduled before the null test in the original
+0006328d	D2Client::FUN_0006328d	pic-ref	the global is a file-local static here; the original reaches it by a PIC load through call $+5
+000632b2	D2Client::FUN_000632b2	regalloc	argument copied through ecx in the original, compared in place here
+0006e5b3	D2Client::FUN_0006e5b3	pic-ref	the global is a file-local static here; the original reaches it by a PIC load through call $+5
+000723b4	D2Client::FUN_000723b4	unverified-ref	tail call to the esc-menu function: the original jumps to its named target, ours to a local label
+000749e3	D2Client::FUN_000749e3	pic-ref	the global is a file-local static here; the original reaches it by a PIC load through call $+5
+000749f5	D2Client::FUN_000749f5	pic-ref	the global is a file-local static here; the original reaches it by a PIC load through call $+5
+0005e6ac	D2Client::CLIENT_SetRendererMode	data-guess	the second global is the renderer-mode global's neighbour in the original; ours stores the paired CurrentRendingEngine
+000726d6	D2Client::SGAMEDATA_FreeElementBlock	regalloc	loop temporaries land in other stack slots (ebp-0x10 vs ebp-0x14)
+00095dd8	D2Client::FUN_00095dd8	regalloc	callee-saved register choice differs from the first push (edi vs ebx)
+000ed666	D2Client::FUN_000ed666	data-guess	memset length 0x3c5 in the original; sizeof the grid region (0x3c8) here so the size is not a raw literal
+0004bcf9	D2Win::D2WIN_HandleEditMenuCommand	regalloc	scratch register for the saved pointer is edx here, ecx in the original
