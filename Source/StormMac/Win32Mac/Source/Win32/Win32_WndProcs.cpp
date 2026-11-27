@@ -349,6 +349,7 @@ LRESULT Proc_StaticWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 void Proc_RegisterBuiltInClasses(int hInstance) {
     WNDCLASSEX tClass;
 
+    memset(&tClass, 0, sizeof(tClass));
     tClass.cbSize = sizeof(WNDCLASSEX);
     tClass.style = 0x10000000;
     tClass.lpfnWndProc = Proc_DesktopWndProc;
@@ -363,28 +364,64 @@ void Proc_RegisterBuiltInClasses(int hInstance) {
     tClass.hIconSm = 0;
     RegisterClassEx(&tClass);
 
+    memset(&tClass, 0, sizeof(tClass));
     tClass.cbSize = sizeof(WNDCLASSEX);
     tClass.style = 8;
     tClass.lpfnWndProc = Proc_ButtonWndProc;
+    tClass.cbClsExtra = 0;
+    tClass.cbWndExtra = 0;
+    tClass.hInstance = hInstance;
+    tClass.hIcon = 0;
+    tClass.hCursor = 0;
+    tClass.hbrBackground = 0;
+    tClass.lpszMenuName = "";
     tClass.lpszClassName = "Button";
+    tClass.hIconSm = 0;
     RegisterClassEx(&tClass);
 
+    memset(&tClass, 0, sizeof(tClass));
     tClass.cbSize = sizeof(WNDCLASSEX);
     tClass.style = 0;
     tClass.lpfnWndProc = Proc_StaticWndProc;
+    tClass.cbClsExtra = 0;
+    tClass.cbWndExtra = 0;
+    tClass.hInstance = hInstance;
+    tClass.hIcon = 0;
+    tClass.hCursor = 0;
+    tClass.hbrBackground = 0;
+    tClass.lpszMenuName = "";
     tClass.lpszClassName = "Static";
+    tClass.hIconSm = 0;
     RegisterClassEx(&tClass);
 
+    memset(&tClass, 0, sizeof(tClass));
     tClass.cbSize = sizeof(WNDCLASSEX);
     tClass.style = 8;
     tClass.lpfnWndProc = ListBox_WndProc;
+    tClass.cbClsExtra = 0;
+    tClass.cbWndExtra = 0;
+    tClass.hInstance = hInstance;
+    tClass.hIcon = 0;
+    tClass.hCursor = 0;
+    tClass.hbrBackground = 0;
+    tClass.lpszMenuName = "";
     tClass.lpszClassName = "Listbox";
+    tClass.hIconSm = 0;
     RegisterClassEx(&tClass);
 
+    memset(&tClass, 0, sizeof(tClass));
     tClass.cbSize = sizeof(WNDCLASSEX);
     tClass.style = 8;
     tClass.lpfnWndProc = Edit_WndProc;
+    tClass.cbClsExtra = 0;
+    tClass.cbWndExtra = 0;
+    tClass.hInstance = hInstance;
+    tClass.hIcon = 0;
+    tClass.hCursor = 0;
+    tClass.hbrBackground = 0;
+    tClass.lpszMenuName = "";
     tClass.lpszClassName = "Edit";
+    tClass.hIconSm = 0;
     RegisterClassEx(&tClass);
 }
 
