@@ -19,6 +19,7 @@
 #include <pthread.h>
 #include <stdlib.h>
 
+#include <QuickTime/QuickTime.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -86,6 +87,44 @@ struct MacAppProcs {
 };
 // 1.14d mac: 00397abc
 extern MacAppProcs* g_pMacAppProcs;
+// 1.14d mac: 0002a6a3
+uint32_t GetTempPathFreeSpace(void);
+// 1.14d mac: 00030cb2
+void* GetActiveWindow(void);
+// 1.14d mac: 000305a7
+void* GetFocus(void);
+// 1.14d mac: 0002956e
+BOOL PostMessage(void* hWnd, uint32_t nMessage, uint32_t nWParam, uint32_t nLParam);
+// 1.14d mac: 000298e3
+void MSG_PostAltF4Keys(void);
+// 1.14d mac: 002eff85
+void LOGFILE_WriteStringToFile(const char* szFormat, ...);
+// 1.14d mac: 00033f9a
+short GetApplicationInformation(void* pUnused1, short* pnVolume, uint32_t* pUnused2, uint64_t* pUnused3);
+// 1.14d mac: 002ef3d4
+void SFILE_InitializeFileSystem(int nArg1, int nArg2);
+// 1.14d mac: 000136ea
+int SFileFileExistsEx(void* hArchive, const char* szFileName, uint32_t dwSearchScope);
+// 1.14d mac: 00014226
+int SFileOpenArchive(const char* szArchiveName, int nPriority, uint32_t dwFlags, void** phArchive);
+// 1.14d mac: 0001239c
+int SFileCloseArchive(void* hArchive);
+// 1.14d mac: 0001e564
+int FPMessageBox(const char* szText, const char* szCaption, uint32_t dwType);
+// 1.14d mac: 00304096
+void BINK_SetMemory(void* (*pfnAlloc)(size_t), void (*pfnFree)(void*));
+// 1.14d mac: 0005ad4d
+void BNMESSQUEUE_Shutdown(void);
+// The Battle.net client's callback table; only the two slots GAMESETUP calls are laid out.
+struct BNetClientCallbacks {
+    void (*pfnSetLoggingFlag)(void* pFlag);
+    uint8_t unk04[0x90];
+    int (*pfnDecodeCDKeys)(void);
+};
+// 1.14d mac: 0005ad31
+BNetClientCallbacks* BNCLIENT_GetCallbacks(void);
+// 1.14d mac: 0019ced5
+void MAC_DisableMenus(void);
 // 1.14d mac: 000298b2
 void MSG_PostKeyMessage(int bKeyDown, uint8_t byKeyCode, uint8_t byChar);
 // 1.14d mac: 0002a16f
@@ -99,6 +138,8 @@ BOOL InvalidateRect(void* hWnd, const void* pRect, BOOL bErase);
 int SStrPrintf(char* szDest, size_t nDestSize, const char* szFormat, ...);
 __attribute__((noinline)) void MAC_DSpShutdown(void);
 static char* FUN_0019b1ec(char* szCmdLine);
+static __attribute__((noinline)) Boolean FUN_0019bed3(void);
+static void FUN_0019b732(void);
 // 1.14d mac: 0003a8e2
 int SRegLoadString(char* szSubKey, char* szValueName, int nFlags, char* szOutBuf, uint32_t dwOutBufSize);
 // 1.14d mac: 0003a9a0
@@ -135,6 +176,11 @@ int ApplicationMain(int nInstance, void* pDisplayState, int nMode);
 #include "Source/StormMac/H/stpl.h"
 
 extern "C" OSStatus DSpShutdown(void);
+extern "C" OSStatus DSpStartup(void);
+extern "C" uint32_t DSpGetVersion(void);
+void* GAMESETUP_Alloc(size_t nSize);
+void GAMESETUP_Free(void* pMemory);
+int FUN_0019c7d9(void);
 
 // 1.14d mac: 0003ad51
 int SRegDeleteValue(const char* szKeyName, const char* szValueName, uint32_t dwFlags);
@@ -428,7 +474,7 @@ Boolean MAC_GameDiscDialogFilterProc(DialogRef pDialog, EventRecord* pEvent, Dia
 // The shell's input state: the Carbon handlers and the Storm callbacks work on these.
 // 1.14d mac: 005c865c
 // The application instance ApplicationMain was handed.
-static int g_nMacAppInstance;
+int g_nMacAppInstance;
 // 1.14d mac: 005c8a30
 // The application mode ("-client", "-server", ...) the command line named; the engine default until then.
 int g_nMacAppMode;
@@ -448,9 +494,7 @@ static char s_szCmdLine[1024];
 // Set while the Carbon handlers may post: mouse and key messages, activation, updates.
 static uint8_t s_bEventsEnabled;
 // 1.14d mac: 00536c29
-static bool s_bExiting;
-// 1.14d mac: 00536c2c
-static OSStatus (*s_pfnMouseHandler)(EventHandlerCallRef, EventRef, void*);
+bool g_bMacExiting;
 // 1.14d mac: 00536c37
 // Pressed state of the mouse buttons 0..5 (1 left, 2 right, 3 middle, 4 and 5 the extra ones).
 static bool s_abMouseButtons[6];
@@ -690,10 +734,27 @@ static uint8_t FUN_0019b51a(uint32_t nButton, bool bPressed, uint16_t nModifiers
     return MAC_PostMouseMessage(nMessage, nWParamHigh, nModifiers, ptMouse);
 }
 
+// 1.14d mac: 0019b636
+// Starts the shell: Storm's exit handler, the Carbon mouse handler for the wheel and the
+// extra buttons, the system and archive checks; on success the heap is purged and compacted.
+bool FUN_0019b636(void) {
+    PROCESS_SetExitHandler(FUN_0019b732);
+    static EventHandlerUPP s_pfnMouseHandler = MAC_HandleMouseCarbonEvent;
+    EventTypeSpec aEvents[3] = {{kEventClassMouse, kEventMouseDown}, {kEventClassMouse, kEventMouseUp}, {kEventClassMouse, kEventMouseWheelMoved}};
+    InstallEventHandler(GetApplicationEventTarget(), s_pfnMouseHandler, 3, aEvents, NULL, NULL);
+    Boolean bResult = FUN_0019bed3();
+    if (bResult) {
+        PurgeMem(0x7FFFFFF0);
+        CompactMem(0x7FFFFFF0);
+        g_nMacMainThread = GetCurrentThreadId();
+    }
+    return bResult != 0;
+}
+
 // 1.14d mac: 0019b732
 // Storm's exit handler: the run is over.
 static void FUN_0019b732(void) {
-    s_bExiting = true;
+    g_bMacExiting = true;
 }
 
 // 1.14d mac: 0019b744
@@ -879,6 +940,277 @@ uint8_t FUN_0019bbcd(uint32_t nCommand) {
 void* FUN_0019bbe8(void) {
     static void* s_hModule = GetModuleHandle(NULL);
     return s_hModule;
+}
+
+// 1.14d mac: 0019bc4b
+// A menu item: the edit commands go to the focused window as WM_CUT/COPY/PASTE/CLEAR (and the
+// two Storm-specific ones), quit sets the display flag, Alt-F4 is posted for the close item.
+uint8_t MAC_HandleMenuCommand(uint32_t nCommand) {
+    void* hWnd;
+    uint32_t nMessage;
+    if (nCommand < 0x81) {
+        switch (nCommand) {
+        case 4:
+            hWnd = GetActiveWindow();
+            if (hWnd == NULL) {
+                return 0;
+            }
+            nMessage = 0x3A2;
+            break;
+        default:
+            return 0;
+        case 7:
+            MSG_PostAltF4Keys();
+            return 1;
+        case 9:
+            hWnd = GetFocus();
+            if (hWnd == NULL && (hWnd = GetActiveWindow()) == NULL) {
+                return 0;
+            }
+            nMessage = 0x300;
+            break;
+        case 10:
+            hWnd = GetFocus();
+            if (hWnd == NULL && (hWnd = GetActiveWindow()) == NULL) {
+                return 0;
+            }
+            nMessage = 0x301;
+            break;
+        case 11:
+            hWnd = GetFocus();
+            if (hWnd == NULL && (hWnd = GetActiveWindow()) == NULL) {
+                return 0;
+            }
+            nMessage = 0x302;
+            break;
+        case 12:
+            hWnd = GetFocus();
+            if (hWnd == NULL && (hWnd = GetActiveWindow()) == NULL) {
+                return 0;
+            }
+            nMessage = 0x303;
+            break;
+        case 13:
+            hWnd = GetFocus();
+            if (hWnd == NULL && (hWnd = GetActiveWindow()) == NULL) {
+                return 0;
+            }
+            nMessage = 0x3A6;
+        }
+        PostMessage(hWnd, nMessage, 0, 0);
+    } else {
+        if (nCommand != 0x81) {
+            return 0;
+        }
+        g_bMacDisplayMismatch = 1;
+    }
+    return 1;
+}
+
+// 1.14d mac: 0019be00
+// The display mode the set-up assumes before the game has chosen one.
+void MAC_GetDefaultDisplayMode(int* pnWidth, int* pnHeight, int* pnBitDepth) {
+    if (pnWidth != NULL) {
+        *pnWidth = 800;
+    }
+    if (pnHeight != NULL) {
+        *pnHeight = 600;
+    }
+    if (pnBitDepth != NULL) {
+        *pnBitDepth = 8;
+    }
+}
+
+// 1.14d mac: 0019be2c
+void FUN_0019be2c(void) {
+    InvalidateRect(NULL, NULL, 1);
+}
+
+
+// 1.14d mac: 0019be53
+void FUN_0019be53(int nExitCode) {
+    FUN_0019b2a2();
+    g_nMacAppInstance = 0;
+    FUN_0019b2b4(nExitCode);
+}
+
+// 1.14d mac: 0019be79
+// Runs the game: the handlers on, the command line parsed and the application run, then the
+// handlers off again.
+void FUN_0019be79(void) {
+    FUN_0019b290();
+    int nExitCode = MAC_ParseCommandLineAndRun((int)FUN_0019bbe8());
+    FUN_0019b2a2();
+    g_nMacAppInstance = 0;
+    FUN_0019b2b4(nExitCode);
+}
+
+// 1.14d mac: 0019bed3
+// Checks the system (OS version, memory, threads, Sound Manager, DrawSprocket, disk space),
+// then the game archives and the CD key, and asks for the game disc. 1 when the game may start.
+static Boolean FUN_0019bed3(void) {
+    int nWidth;
+    int nHeight;
+    int nBitDepth;
+    Str255 szError = {0};
+    long nResponse;
+    bool bRequirementsMet;
+    MAC_GetDefaultDisplayMode(&nWidth, &nHeight, &nBitDepth);
+    if (Gestalt(gestaltSystemVersion, &nResponse) == 0 && (nResponse & 0xFFFF) > 0x80F) {
+        if ((nResponse & 0xFFFF) < 0x1012) {
+            bRequirementsMet = false;
+            if ((nResponse & 0xFFFF) < 0x1000) {
+                GetIndString(szError, 201, 1);
+            } else {
+                GetIndString(szError, 201, 2);
+            }
+        } else if (Gestalt(gestaltPhysicalRAMSize, &nResponse) == 0 && (uint32_t)nResponse > 0x3FFFFFF) {
+            if (Gestalt(gestaltThreadMgrAttr, &nResponse) == 0 && (nResponse & 5) == 5) {
+                NumVersion tSndVersion = SndSoundManagerVersion();
+                if ((*(uint32_t*)&tSndVersion >> 16) < 0x310) {
+                    bRequirementsMet = false;
+                    GetIndString(szError, 200, 4);
+                } else {
+                    uint32_t nDSpVersion = DSpGetVersion();
+                    if ((nDSpVersion >> 16) < 0x173) {
+                        LOGFILE_WriteStringToFile("CheckSystemRequirements: *** DSpGetVersion returned %.4x.", nDSpVersion >> 16);
+                        bRequirementsMet = false;
+                        GetIndString(szError, 200, 6);
+                    } else {
+                        short nErr = DSpStartup();
+                        if (nErr == 0) {
+                            short nVolume;
+                            if (GetApplicationInformation(NULL, &nVolume, NULL, NULL) == 0) {
+                                HParamBlockRec tParams;
+                                memset(&tParams, 0, sizeof(tParams));
+                                tParams.volumeParam.ioVRefNum = nVolume;
+                                if (PBHGetVInfoSync(&tParams) == 0 && (tParams.volumeParam.ioVAtrb & 0x80800000) == 0) {
+                                    if (GetTempPathFreeSpace() > 0x27FF) {
+                                        bRequirementsMet = true;
+                                        if ((uint32_t)(tParams.volumeParam.ioVFrBlk * tParams.volumeParam.ioVAlBlkSiz) < 0x2800) {
+                                            bRequirementsMet = false;
+                                            GetIndString(szError, 200, 10);
+                                        }
+                                    } else {
+                                        bRequirementsMet = false;
+                                        GetIndString(szError, 200, 9);
+                                    }
+                                } else {
+                                    bRequirementsMet = false;
+                                    GetIndString(szError, 200, 8);
+                                }
+                            } else {
+                                bRequirementsMet = false;
+                                GetIndString(szError, 200, 13);
+                            }
+                        } else {
+                            LOGFILE_WriteStringToFile("CheckSystemRequirements: *** DSpStartup returned %d.", (int)nErr);
+                            bRequirementsMet = false;
+                            GetIndString(szError, 200, 6);
+                        }
+                    }
+                }
+            } else {
+                bRequirementsMet = false;
+                GetIndString(szError, 200, 3);
+            }
+        } else {
+            bRequirementsMet = false;
+            GetIndString(szError, 200, 11);
+        }
+    } else {
+        bRequirementsMet = false;
+        GetIndString(szError, 200, 1);
+    }
+    if (szError[0] != '\0') {
+        ParamText(szError, "\p", "\p", "\p");
+        StopAlert(0x211, NULL);
+    }
+    if (!bRequirementsMet) {
+        return 0;
+    }
+    EnterMovies();
+    SFILE_InitializeFileSystem(0, 0);
+    void* hSounds = NULL;
+    void* hExpansion = NULL;
+    void* hPatch = NULL;
+    void* hGraphics = NULL;
+    void* hGameData = NULL;
+    BOOL bExpansion = D2CheckExpansionGame();
+    const char* szReason;
+    if (!SFileOpenArchive("Diablo II Sounds", 0, 0, &hSounds)) {
+        szReason = "missing Diablo II Sounds";
+    fail:
+        LOGFILE_WriteStringToFile("CheckCDKey: *** Failed: %s.", szReason);
+        GetIndString(szError, 200, 13);
+        ParamText(szError, "\p", "\p", "\p");
+        StopAlert(0x211, NULL);
+    } else {
+        if (bExpansion) {
+            if (!SFileOpenArchive("Diablo II Expansion Data", 0, 0, &hExpansion)) {
+                szReason = "missing Diablo II Expansion Data";
+                goto fail;
+            }
+            if (!SFileOpenArchive("Diablo II Graphics", 0, 0, &hGraphics)) {
+                szReason = "missing Diablo II Graphics";
+                goto fail;
+            }
+        }
+        SFileOpenArchive("Diablo II Patch", 0, 0, &hPatch);
+        SFileOpenArchive("Diablo II Game Data", 0, 0, &hGameData);
+        BNetClientCallbacks* pCallbacks = BNCLIENT_GetCallbacks();
+        *(BOOL*)&g_tMacDisplayState = bExpansion;
+        pCallbacks->pfnSetLoggingFlag(&g_tMacDisplayState);
+        if (!pCallbacks->pfnDecodeCDKeys()) {
+            szReason = "invalid or missing CD-key";
+            goto fail;
+        }
+        BNMESSQUEUE_Shutdown();
+        SFileCloseArchive(hSounds);
+        if (hExpansion != NULL) {
+            SFileCloseArchive(hExpansion);
+        }
+        if (hPatch != NULL) {
+            SFileCloseArchive(hPatch);
+        }
+        if (hGraphics != NULL) {
+            SFileCloseArchive(hGraphics);
+        }
+        if (hGameData != NULL) {
+            SFileCloseArchive(hGameData);
+        }
+        BINK_SetMemory((void* (*)(size_t))GAMESETUP_Alloc, GAMESETUP_Free);
+        g_nMacAppMode = 4;
+        g_tMacDisplayState.b0B = 1;
+        *(void**)((char*)&g_tMacDisplayState + 0x211) = (void*)FUN_0019c7d9;
+        MAC_DisableMenus();
+        if (MAC_PromptForGameDisc()) {
+            BOOL bGameExpansion = D2CheckExpansionGame();
+            void* hPatchArchive = NULL;
+            const char* szText;
+            if (!SFileOpenArchive("Diablo II Patch", 0, 0, &hPatchArchive)) {
+                szText = "The file \"Diablo II Patch\" cannot be opened.";
+            } else {
+                int nHasMarker = SFileFileExistsEx(hPatchArchive, "Data\\IAmExpansion", 0);
+                SFileCloseArchive(hPatchArchive);
+                if (bGameExpansion == (nHasMarker == 1)) {
+                    return 1;
+                }
+                szText = "An incompatible Diablo II Patch data file has been detected. You have classic Diablo II installed, "
+                         "but the patch data is for use with Diablo II: Lord of Destruction.";
+                if (bGameExpansion) {
+                    szText = "An incompatible Diablo II Patch data file has been detected. You have Diablo II: Lord of "
+                             "Destruction installed, but the patch data is for use with classic Diablo II.";
+                }
+            }
+            LOGFILE_WriteStringToFile("PatchMPQMatchesGameType: *** %s.", szText);
+            GetIndString(szError, 200, 13);
+            char szErrorText[256];
+            CopyPascalStringToC(szError, szErrorText);
+            FPMessageBox(szText, szErrorText, 0x20000010);
+        }
+    }
+    return 0;
 }
 
 // 1.14d mac: 0019c760
