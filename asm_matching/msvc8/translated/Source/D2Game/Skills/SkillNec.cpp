@@ -502,7 +502,8 @@ BOOL __fastcall Skills_SrvDoFunc_030_CastCurseAoE(::SGAMEDATA * pGame, D2UnitStr
       nDuration = SKILLNEC_ApplyCurseDifficultyDivisor(pGame->nDifficulty, nDuration);
     }
 
-    D2NecroSkillArgStrc sNecroArg = {0};
+    D2NecroSkillArgStrc sNecroArg;
+    memset(&sNecroArg, 0, sizeof(sNecroArg));
     sNecroArg.pGame = pGame;
     sNecroArg.pUnit = pUnit;
     sNecroArg.bRegisterExpireCallback = bIsReviveOrSkel;
@@ -1429,7 +1430,8 @@ BOOL __fastcall Skills_SrvDoFunc_057_IronGolem(::SGAMEDATA * pGame, D2UnitStrc *
       byPetType = 0;
     }
 
-    D2MonsterCastPetStrc sPetCastParams = {0};
+    D2MonsterCastPetStrc sPetCastParams;
+    memset(&sPetCastParams, 0, sizeof(sPetCastParams));
     sPetCastParams.pPlayer = pUnit;
     sPetCastParams.classId = nClassId;
     sPetCastParams.nFunctionId = 0;
@@ -1651,7 +1653,8 @@ BOOL __fastcall Skills_SrvDoFunc_060_SummonBoneWall(::SGAMEDATA * pGame, D2UnitS
       byPetType = 0;
     }
 
-    D2MonsterCastPetStrc sCastPetArgs = {0};
+    D2MonsterCastPetStrc sCastPetArgs;
+    memset(&sCastPetArgs, 0, sizeof(sCastPetArgs));
     sCastPetArgs.classId = nClassId;
     sCastPetArgs.nFunctionId = 0;
     sCastPetArgs.nFlags = 9;
@@ -1673,7 +1676,7 @@ BOOL __fastcall Skills_SrvDoFunc_060_SummonBoneWall(::SGAMEDATA * pGame, D2UnitS
     nX = D2Common::Units::GetXPosFromDynamicPathUnit(pWall);
     nY = D2Common::Units::GetYPosFromDynamicPathUnit(pWall);
     if (!D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pTargetRoom)) {
-      nLength = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl) / 2;
+      nLength = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[1], eSkill, nSkillLvl) / 2;
       if (nLength > 1 && pSkillsTxt->srvmissile[1] >= 0 && (int)pSkillsTxt->srvmissile[1] < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
         memset(&sSkillArg, 0, sizeof(sSkillArg));
         sSkillArg.nFlags = 0x21;
@@ -1733,7 +1736,8 @@ static D2UnitStrc * __stdcall SKILLNEC_CreateSummonAtPosition(::SGAMEDATA * pGam
       return nullptr;
     }
 
-    D2MonsterCastPetStrc sSummonParams = {0};
+    D2MonsterCastPetStrc sSummonParams;
+    memset(&sSummonParams, 0, sizeof(sSummonParams));
     sSummonParams.nFlags = 9;
     sSummonParams.pPlayer = pUnit;
     sSummonParams.classId = nClassId;
