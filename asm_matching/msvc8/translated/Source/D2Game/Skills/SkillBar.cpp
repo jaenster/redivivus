@@ -1521,10 +1521,8 @@ static BOOL __stdcall SKILLBAR_UpdateLeap(::SGAMEDATA * pGame, D2SkillStrc * pSk
 
 // Server do-func for Barbarian Leap Attack (skill 77). On the outbound leap (flag 0x80 set, 0x100 clear) delegates to SKILL_InitTransportPath. On arrival (flag 0x100 set), calls SKILLBAR_ArriveAtChargeTarget; if arrived and unit is a player, triggers ENDANIM event then applies AoE melee damage (calc[0] radius, hit class 9) via SKILLS_ApplyAreaDamage. Monster casters only reset skill flags.
 BOOL __fastcall Skills_SrvDoFunc_077_Leap(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    BOOL bArrived;
-    D2DamageStrc sDamage;
-    D2SkillsTxt* pDVar1 = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
-    if (!pDVar1) {
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
       return 0;
     }
 
@@ -1539,23 +1537,22 @@ BOOL __fastcall Skills_SrvDoFunc_077_Leap(::SGAMEDATA * pGame, D2UnitStrc * pUni
       eUnitType = pUnit->eUnitType;
     }
 
+    BOOL bIsMonster = eUnitType == UNIT_MONSTER;
     uint32_t nFlags = D2Common::Skills::SKILL_GetFlags(pSkill);
     if (nFlags & 0x100) {
-      int32_t nAoeRange;
-      bArrived = SKILLBAR_UpdateLeap(pGame, pSkill, pUnit);
-      if (bArrived && eUnitType != UNIT_MONSTER) {
+      if (SKILLBAR_UpdateLeap(pGame, pSkill, pUnit) && !bIsMonster) {
+        D2DamageStrc sDamage;
         memset(&sDamage, 0, sizeof(sDamage));
         sDamage.wResultFlags = 9;
-        nAoeRange = D2Common::Skills::D2GetSkillCalc(pUnit, pDVar1->calc[0], eSkill, nSkillLvl);
+        int32_t nAoeRange = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl); // steer-ok: the original computes the area range before pushing the damage arguments
         SkillsServer::SKILLS_ApplyAreaDamage(pGame, pUnit, 0, 0, nAoeRange, &sDamage, 0);
         return 1;
       }
     } else {
       if (nFlags & 0x80) {
-        bArrived = SKILL_InitTransportPath(pGame, pUnit, pSkill);
-        return bArrived;
+        return SKILL_InitTransportPath(pGame, pUnit, pSkill);
       }
-      if (eUnitType != UNIT_MONSTER) {
+      if (!bIsMonster) {
         D2Common::Skills::SKILL_SetFlags(pSkill, 0);
       }
     }
@@ -1643,12 +1640,7 @@ BOOL __fastcall SKILLBAR_SrvStFn41_LeapAttack(::SGAMEDATA * pGame, D2UnitStrc * 
 
 // Server-side hit cycle for the Whirlwind skill. Acquires the next target in the spin arc via SKILLBAR_AcquireNextTarget, performs a to-hit check, and if it lands: calculates and applies physical + elemental damage, removes any stun state list from the target, and applies the skill's server overlay. Returns 1 if a target was hit, 0 if no valid target or skill entry found.
 static BOOL __stdcall SKILLBAR_WhirlwindHitCycle(::SGAMEDATA * pGame, eD2Skills eSkill, int32_t nSkillLvl, D2UnitStrc * pUnit) {
-    D2DamageStrc sDamage;
-    short int nHitOverlayId;
-    D2SkillsTxt* pSkillsTxt = nullptr;
-    if ((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
-      pSkillsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
-    }
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -1663,11 +1655,11 @@ static BOOL __stdcall SKILLBAR_WhirlwindHitCycle(::SGAMEDATA * pGame, eD2Skills 
       return 0;
     }
 
+    D2DamageStrc sDamage;
     memset(&sDamage, 0, sizeof(sDamage));
-    uint16_t uVar1 = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl), 0);
-    if (uVar1 & 1) {
-      D2StatListExStrc* pStatList;
-      sDamage.wResultFlags = uVar1 | 8;
+    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl), 0);
+    if (sDamage.wResultFlags & 1) {
+      sDamage.wResultFlags |= 8;
       sDamage.dwHitClass = D2Common::Units::GetHitClassForPlayerOrMonster(pUnit);
       sDamage.dwHitFlags |= 0x20;
       sDamage.dwEnDmgPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
@@ -1679,19 +1671,19 @@ static BOOL __stdcall SKILLBAR_WhirlwindHitCycle(::SGAMEDATA * pGame, eD2Skills 
       }
 
       SkillsServer::SetDamageOnEvent(pUnit, &sDamage, eSkill, nSkillLvl);
-      *(uint8_t*)(char*)&eSkill = pSkillsTxt->SrcDam;
-      if ((uint8_t)eSkill == SKILL_Attack) {
-        *(uint8_t*)(char*)&eSkill = SKILL_AxeMastery;
+      uint8_t nSrcDam = pSkillsTxt->SrcDam;
+      if (nSrcDam == SKILL_Attack) {
+        nSrcDam = SKILL_AxeMastery;
       }
 
-      UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pTarget, &sDamage, (uint8_t)eSkill);
+      UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pTarget, &sDamage, nSrcDam);
       UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pTarget, 0);
-      nHitOverlayId = pSkillsTxt->srvoverlay;
+      short nHitOverlayId = pSkillsTxt->srvoverlay;
       if (nHitOverlayId > 0 && (int)nHitOverlayId <= D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize) {
         D2Common::Units::SetOverlay(pTarget, (int)nHitOverlayId, 0);
       }
 
-      pStatList = D2Common::Stats::StatsEx::GetStatsByState(pTarget, STATE_stunned);
+      D2StatListExStrc* pStatList = D2Common::Stats::StatsEx::GetStatsByState(pTarget, STATE_stunned);
       if (pStatList) {
         D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pTarget, pStatList);
         D2Common::Stats::StatsEx::FreeStatList(&pStatList->sStatList);
