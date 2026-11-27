@@ -22,6 +22,15 @@
 #define FOG_ADDR_FMT "%08X"
 #define FOG_ADDR_FMT_L "%08lX"
 #endif
+
+// The clamps use the Windows SDK min/max macros, as windef.h defines them for VC8.
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
 static_assert(sizeof(void*) != 4 || sizeof(D2FogModuleNodeStrc) == 0x210, "module nodes are cleared whole: 0x210 bytes on 32-bit");
 static_assert(sizeof(void*) != 4 || offsetof(D2CrashDumpRecordStrc, aData) == 0x10, "a crash dump record is a 0x10-byte header plus its dwords");
 static_assert(sizeof(void*) != 4 || sizeof(D2ImagehlpSymbol64BufStrc) == 0x420, "IMAGEHLP_SYMBOL64 with its 0x400 name buffer");
@@ -1859,60 +1868,45 @@ static char * BuildSymbolSearchPath(char * szSearchPath) {
 // Maps a code address to its module path, 1-based PE section index and offset within that section;
 // "unknown" and 0/0 when the address is not in a mapped image.
 static void __stdcall GetLogicalAddress(void * pAddress, char * szModulePath, int * pnSectionIndex, uint32_t * ppSectionOffset, int nBufferSize) {
-    _MEMORY_BASIC_INFORMATION _Stack_20;
-    uint32_t nSectionEnd;
     Storm::Source::SSTR::SStrCopy(szModulePath, "unknown", nBufferSize);
-    /* SIZE_T dwLength for VirtualQuery */ /* PMEMORY_BASIC_INFORMATION lpBuffer for VirtualQuery */ *pnSectionIndex = 0;
-    /* LPCVOID lpAddress for VirtualQuery */ *ppSectionOffset = 0;
-    SIZE_T nVQueryResult = VirtualQuery(pAddress, &_Stack_20, 0x1c);
-    if (!nVQueryResult) {
+    *pnSectionIndex = 0;
+    *ppSectionOffset = 0;
+    _MEMORY_BASIC_INFORMATION sMemoryInfo;
+    if (!VirtualQuery(pAddress, &sMemoryInfo, 0x1c)) {
       return;
     }
-    if (!_Stack_20.AllocationBase) {
-      /* LPCSTR lpModuleName for GetModuleHandleA */ _Stack_20.AllocationBase = GetModuleHandleA((LPCSTR)0x0);
+
+    HMODULE hModule = (HMODULE)sMemoryInfo.AllocationBase;
+    if (!hModule) {
+      hModule = GetModuleHandleA(nullptr);
     }
 
-    DWORD nModuleNameLen = GetModuleFileNameA((HMODULE)_Stack_20.AllocationBase, szModulePath, nBufferSize);
-    if (!nModuleNameLen) {
+    if (!GetModuleFileNameA(hModule, szModulePath, nBufferSize)) {
       Storm::Source::SSTR::SStrCopy(szModulePath, "unknown", nBufferSize);
       return;
     }
-    if (!(_Stack_20.AllocationBase && ((IMAGE_DOS_HEADER*)_Stack_20.AllocationBase)->e_magic == 0x5a4d && ((IMAGE_DOS_HEADER*)_Stack_20.AllocationBase)->e_lfanew)) {
+
+    IMAGE_DOS_HEADER* pDosHeader = (IMAGE_DOS_HEADER*)hModule;
+    if (!pDosHeader || pDosHeader->e_magic != 0x5a4d || !pDosHeader->e_lfanew) {
       return;
     }
 
-    IMAGE_NT_HEADERS* pNtHeader = (IMAGE_NT_HEADERS*)((char*)_Stack_20.AllocationBase + ((IMAGE_DOS_HEADER*)_Stack_20.AllocationBase)->e_lfanew);
+    IMAGE_NT_HEADERS* pNtHeader = (IMAGE_NT_HEADERS*)((char*)hModule + pDosHeader->e_lfanew);
     if (pNtHeader->Signature != 0x4550) {
       return;
     }
 
-    uint32_t nSectionVSize = (uint32_t)((intptr_t)pAddress - (intptr_t)_Stack_20.AllocationBase);
-    uint32_t* pSectionHeader = (uint32_t*)((uint32_t)pNtHeader->FileHeader.SizeOfOptionalHeader + (char*)pNtHeader);
-    uint32_t nSectionIdx = 0;
-    if (pNtHeader->FileHeader.NumberOfSections <= 0) {
-      return;
-    }
-
-    while (true) {
-      uint32_t nSectionRawSize;
-      nSectionRawSize = pSectionHeader[10];
-      nSectionEnd = pSectionHeader[9];
-      if (nSectionRawSize <= pSectionHeader[8]) {
-        nSectionRawSize = pSectionHeader[8];
-      }
-      if (nSectionVSize >= nSectionEnd && nSectionVSize <= nSectionRawSize + nSectionEnd) {
-        break;
-      }
-
-      nSectionIdx++;
-      pSectionHeader += 10;
-      if (nSectionIdx >= pNtHeader->FileHeader.NumberOfSections) {
+    IMAGE_SECTION_HEADER* pSection = IMAGE_FIRST_SECTION(pNtHeader);
+    uint32_t nRva = (uint32_t)((char*)pAddress - (char*)hModule);
+    for (uint32_t i = 0; i < pNtHeader->FileHeader.NumberOfSections; i++, pSection++) {
+      uint32_t nSectionStart = pSection->VirtualAddress;
+      uint32_t nSectionEnd = nSectionStart + max(pSection->SizeOfRawData, pSection->Misc.VirtualSize);
+      if (nRva >= nSectionStart && nRva <= nSectionEnd) {
+        *pnSectionIndex = i + 1;
+        *ppSectionOffset = nRva - nSectionStart;
         return;
       }
     }
-
-    *pnSectionIndex = nSectionIdx + 1;
-    *ppSectionOffset = nSectionVSize - nSectionEnd;
 }
 
 // @sourcefile .\Src\Exceptions.cpp
