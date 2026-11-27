@@ -4031,22 +4031,7 @@ void __fastcall UNITSND_PlayPlayerSound(D2UnitStrc * pUnit, uint16_t nAnimModePa
 
 // Client-side dispatcher that plays a contextual voice/ambience sound for a unit (mercenary/NPC/player) identified by GUID+type. Switches on a sound command (low 16 bits): quest-instruction lines, skill cast sound (from the unit's modifier-skill state via STATE_evade statlist), find-item/guardian/jade barks, taunt (from MonSounds.txt), flee sound, NPC greeting (cmd 0x12, SOUND_SelectNpcGreetingSound), durability-break cursor sound, and class-specific (Necromancer/other 0x10f) action grunts whose sound id is then surfaced as overhead text. Falls through to UNITSND_PlayPlayerSound for player units. No-op if the unit can't be resolved.
 void __fastcall UNITSND_PlaySoundForMercenary(int32_t nUnitGUID, uint8_t eUnitType, int32_t nSoundCmd) {
-    int nSoundChannel;
-    D2StatListExStrc* pStatList;
-    eD2Skills eSkill;
-    D2SkillStrc* pDVar1;
-    D2SkillsTxt* pSkillsTxtLine;
-    DWORD nMercClassId;
-    eD2UnitType eMercUnitType;
-    D2MonSoundsTxt* pMonSoundsLine;
-    D2UnitStrc* pLocalPlayer;
-    eD2Sounds eGreetingSound;
-    uint32_t nPlayedSoundId;
-    int32_t bStopChannels;
-    int32_t nDelay;
-    int32_t nReserved;
-    D2UnitStrc* pMercUnit;
-    pMercUnit = CUnit::UNITS_FindClientSideUnit(nUnitGUID, (eD2UnitType)eUnitType);
+    D2UnitStrc* pMercUnit = CUnit::UNITS_FindClientSideUnit(nUnitGUID, (eD2UnitType)eUnitType);
     if (!pMercUnit) {
       return;
     }
@@ -4054,132 +4039,101 @@ void __fastcall UNITSND_PlaySoundForMercenary(int32_t nUnitGUID, uint8_t eUnitTy
     switch ((uint16_t)nSoundCmd) {
       case 0x5a:
         Sound::SOUND_PlaySound(0x111b, pMercUnit, 0, 0, 0);
-      return;
+        return;
       case 10:
-        nSoundChannel = Sound::SOUND_PlaySound(SOUND_AKARA_ACT1_Q4_INSTRUCTIONS, pMercUnit, 0, 0, 0);
-      Sound::SOUND_SetChannelPriority(nSoundChannel, 0x78);
-      return;
+        Sound::SOUND_SetChannelPriority(Sound::SOUND_PlaySound(SOUND_AKARA_ACT1_Q4_INSTRUCTIONS, pMercUnit, 0, 0, 0), 0x78);
+        return;
       default:
-        goto forward_to_player_sound;
+        break;
       case 0x5d:
         Sound::SOUND_PlaySound(SOUND_PALADIN_ACT2_FIND_RADAMENT, pMercUnit, 0, 0, 0);
-      return;
-      case 0xc:
-        pStatList = D2Common::Stats::StatsEx::GetStatsByState(pMercUnit, STATE_evade);
-      if (!pStatList) {
         return;
-      }
+      case 0xc: {
+        D2StatListExStrc* pStatList = D2Common::Stats::StatsEx::GetStatsByState(pMercUnit, STATE_evade);
+        if (!pStatList) {
+          return;
+        }
 
-      eSkill = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_modifierlist_skill, 0);
-      pDVar1 = D2Common::Skills::SKILLS_GetSkillByEnum(pMercUnit, eSkill);
-      if (!pDVar1) {
-        return;
-      }
+        eD2Skills eSkill = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_modifierlist_skill, 0);
+        if (!D2Common::Skills::SKILLS_GetSkillByEnum(pMercUnit, eSkill)) {
+          return;
+        }
 
-      pSkillsTxtLine = D2Common::Skills::TXT_Skills_GetLine(eSkill);
-      if (!pSkillsTxtLine) {
-        return;
-      }
-      if (pSkillsTxtLine->stsound <= 0) {
-        return;
-      }
+        D2SkillsTxt* pSkillsTxtLine = D2Common::Skills::TXT_Skills_GetLine(eSkill);
+        if (!pSkillsTxtLine || pSkillsTxtLine->stsound <= 0) {
+          return;
+        }
 
-      Sound::SOUND_PlaySound((int)pSkillsTxtLine->stsound, pMercUnit, 0, 0, 0);
-      return;
+        Sound::SOUND_PlaySound(pSkillsTxtLine->stsound, pMercUnit, 0, 0, 0);
+        return;
+      }
       case 0x54:
-        nMercClassId = GetSndUnitClassId(pMercUnit);
-      if (nMercClassId == 0x10f) {
-        Sound::SOUND_PlaySound(0x1207, pMercUnit, 0, 0, 0);
-        nPlayedSoundId = 0x1207;
-      } else {
-        Sound::SOUND_PlaySound(0x1211, pMercUnit, 0, 0, 0);
-        nPlayedSoundId = 0x1211;
-      }
-
-      break;
+        if (GetSndUnitClassId(pMercUnit) == 0x10f) {
+          Sound::SOUND_PlaySound(0x1207, pMercUnit, 0, 0, 0);
+          UI::Text::TEXT_SetUnitOverheadFromSoundTable(pMercUnit, 0x1207);
+        } else {
+          Sound::SOUND_PlaySound(0x1211, pMercUnit, 0, 0, 0);
+          UI::Text::TEXT_SetUnitOverheadFromSoundTable(pMercUnit, 0x1211);
+        }
+        break;
       case 0x55:
-        nMercClassId = GetSndUnitClassId(pMercUnit);
-      if (nMercClassId == 0x10f) {
-        Sound::SOUND_PlaySound(0x1204, pMercUnit, 0, 0, 0);
-        nPlayedSoundId = 0x1204;
-      } else {
-        Sound::SOUND_PlaySound(0x1208, pMercUnit, 0, 0, 0);
-        nPlayedSoundId = 0x1208;
-      }
-
-      break;
+        if (GetSndUnitClassId(pMercUnit) == 0x10f) {
+          Sound::SOUND_PlaySound(0x1204, pMercUnit, 0, 0, 0);
+          UI::Text::TEXT_SetUnitOverheadFromSoundTable(pMercUnit, 0x1204);
+        } else {
+          Sound::SOUND_PlaySound(0x1208, pMercUnit, 0, 0, 0);
+          UI::Text::TEXT_SetUnitOverheadFromSoundTable(pMercUnit, 0x1208);
+        }
+        break;
       case 0x56:
-        nMercClassId = GetSndUnitClassId(pMercUnit);
-      if (nMercClassId == 0x10f) {
-        Sound::SOUND_PlaySound(0x1205, pMercUnit, 0, 0, 0);
-        nPlayedSoundId = 0x1205;
-      } else {
-        Sound::SOUND_PlaySound(0x120b, pMercUnit, 0, 0, 0);
-        nPlayedSoundId = 0x120b;
-      }
-
-      break;
+        if (GetSndUnitClassId(pMercUnit) == 0x10f) {
+          Sound::SOUND_PlaySound(0x1205, pMercUnit, 0, 0, 0);
+          UI::Text::TEXT_SetUnitOverheadFromSoundTable(pMercUnit, 0x1205);
+        } else {
+          Sound::SOUND_PlaySound(0x120b, pMercUnit, 0, 0, 0);
+          UI::Text::TEXT_SetUnitOverheadFromSoundTable(pMercUnit, 0x120b);
+        }
+        break;
       case 0x57:
-        nMercClassId = GetSndUnitClassId(pMercUnit);
-      if (nMercClassId == 0x10f) {
-        Sound::SOUND_PlaySound(0x1206, pMercUnit, 0, 0, 0);
-        nPlayedSoundId = 0x1206;
-      } else {
-        Sound::SOUND_PlaySound(0x120e, pMercUnit, 0, 0, 0);
-        nPlayedSoundId = 0x120e;
-      }
-
-      break;
+        if (GetSndUnitClassId(pMercUnit) == 0x10f) {
+          Sound::SOUND_PlaySound(0x1206, pMercUnit, 0, 0, 0);
+          UI::Text::TEXT_SetUnitOverheadFromSoundTable(pMercUnit, 0x1206);
+        } else {
+          Sound::SOUND_PlaySound(0x120e, pMercUnit, 0, 0, 0);
+          UI::Text::TEXT_SetUnitOverheadFromSoundTable(pMercUnit, 0x120e);
+        }
+        break;
       case 0xf:
-        nMercClassId = GetSndUnitClassId(pMercUnit);
-      if (nMercClassId != 0x10f) {
+        if (GetSndUnitClassId(pMercUnit) == 0x10f) {
+          Sound::SOUND_PlaySound(0x10c2, pMercUnit, 0, 0, 0);
+        }
         return;
-      }
-
-      Sound::SOUND_PlaySound(0x10c2, pMercUnit, 0, 0, 0);
-      return;
       case 0x10:
-        eMercUnitType = GetSndUnitType(pMercUnit);
-      if (eMercUnitType != UNIT_MONSTER) {
+        if (GetSndUnitType(pMercUnit) == UNIT_MONSTER) {
+          D2MonSoundsTxt* pMonSoundsLine = TxtGetSoundIdLineFromUnit(pMercUnit);
+          Sound::SOUND_PlaySound(!pMonSoundsLine ? SOUND_NONE : pMonSoundsLine->Taunt, pMercUnit, 0, 0, 0);
+        }
         return;
-      }
-
-      pMonSoundsLine = TxtGetSoundIdLineFromUnit(pMercUnit);
-      if (!pMonSoundsLine) {
-        Sound::SOUND_PlaySound(SOUND_NONE, pMercUnit, 0, 0, 0);
-        return;
-      }
-
-      Sound::SOUND_PlaySound(pMonSoundsLine->Taunt, pMercUnit, 0, 0, 0);
-      return;
       case 0x11:
         UNITSND_PlayFleeSound(pMercUnit);
-      return;
+        return;
       case 0x12:
-        nDelay = 0;
-      bStopChannels = 1;
-      nReserved = 0;
-      pLocalPlayer = Player::GetPlayerUnit_UI();
-      eGreetingSound = GAME::Sound::SOUND_SelectNpcGreetingSound(pMercUnit, 1);
-      Sound::SOUND_PlaySound(eGreetingSound, pLocalPlayer, nReserved, bStopChannels, nDelay);
-      return;
+        Sound::SOUND_PlaySound(GAME::Sound::SOUND_SelectNpcGreetingSound(pMercUnit, 1), Player::GetPlayerUnit_UI(), 0, 1, 0);
+        return;
       case 0xd:
         Sound::SOUND_PlaySound(SOUND_SORCERESS_ACT3_FIND_GUARDIAN, pMercUnit, 0, 0, 0);
-      return;
+        return;
       case 0xe:
         Sound::SOUND_PlaySound(SOUND_SORCERESS_ACT3_FIND_JADE, pMercUnit, 0, 0, 0);
-      return;
+        return;
       case 0x5c:
         GAME::Wall2::WALL2_UpdateScheduledSound(0x19, 1);
-      return;
+        return;
       case 0x5b:
-        nDelay = 0;
-      Sound::SOUND_PlaySound(SOUND_CURSOR_DURABILITY_BREAK, Player::GetPlayerUnit_UI(), 0, 0, nDelay);
-      return;
+        Sound::SOUND_PlaySound(SOUND_CURSOR_DURABILITY_BREAK, Player::GetPlayerUnit_UI(), 0, 0, 0);
+        return;
     }
 
-    UI::Text::TEXT_SetUnitOverheadFromSoundTable(pMercUnit, nPlayedSoundId);
-    forward_to_player_sound:
     if (pMercUnit->eUnitType == UNIT_PLAYER) {
       UNITSND_PlayPlayerSound(pMercUnit, (uint16_t)nSoundCmd);
     }
