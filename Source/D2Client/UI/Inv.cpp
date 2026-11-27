@@ -10318,38 +10318,20 @@ void __stdcall ClickItemHandler(D2UIMouseMsgStrc * pMsg) {
 }
 
 void __stdcall INPUT_InventoryRightClick(D2UIMouseMsgStrc * pMsg) {
-    uint32_t bIsPlayerDead;
-    int nItemType;
-    BOOL bExitFlag;
-    bExitFlag = GAME::Game::GAMEDATA_GetExitFlag3();
-    if (bExitFlag || (bIsPlayerDead = UNIT::Player::IsPlayerDead() , bIsPlayerDead != 0)) {
+    if (GAME::Game::GAMEDATA_GetExitFlag3() || UNIT::Player::IsPlayerDead()) {
       pMsg->bHandled = 0;
       return;
     }
 
-    int32_t nMouseY;
-    nMouseY = (int32_t)pMsg->uLParam.sMousePos.nMouseY;
-    int32_t nMouseX;
-    nMouseX = (int32_t)pMsg->uLParam.sMousePos.nMouseX;
-    D2UnitStrc* pPlayerUnit_lcl;
-    pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
+    int32_t nMouseY = pMsg->uLParam.sMousePos.nMouseY;
+    int32_t nMouseX = pMsg->uLParam.sMousePos.nMouseX;
+    D2UnitStrc* pPlayerUnit = UNIT::Player::GetPlayerUnit_UI();
     InitializeiInventoryPages();
-    D2InventoryStrc* pInventory;
-    pInventory = pPlayerUnit_lcl->pInventory;
-    bExitFlag = Panel::PANEL_CalculateBeltSlotIndex(pMsg);
-    if (bExitFlag) {
+    D2InventoryStrc* pInventory = pPlayerUnit->pInventory;
+    if (Panel::PANEL_CalculateBeltSlotIndex(pMsg)) {
       return;
     }
-    if (nMouseX < pInventoryScreenCoordinates.nLeft) {
-      return;
-    }
-    if (nMouseX >= pInventoryScreenCoordinates.nRight) {
-      return;
-    }
-    if (nMouseY < pInventoryScreenCoordinates.nTop) {
-      return;
-    }
-    if (nMouseY > pInventoryScreenCoordinates.nBottom) {
+    if (nMouseX < pInventoryScreenCoordinates.nLeft || nMouseX >= pInventoryScreenCoordinates.nRight || nMouseY < pInventoryScreenCoordinates.nTop || nMouseY > pInventoryScreenCoordinates.nBottom) {
       return;
     }
 
@@ -10357,48 +10339,35 @@ void __stdcall INPUT_InventoryRightClick(D2UIMouseMsgStrc * pMsg) {
     pMsg->dwResult = 0;
     if (nMouseX < pInventoryGridScreenCoordinated.nPixelLeft || nMouseX > pInventoryGridScreenCoordinated.nRight || nMouseY < pInventoryGridScreenCoordinated.nTop || nMouseY > pInventoryGridScreenCoordinated.nBottom) {
       pMsg->bHandled = 0;
-    } else {
-      int32_t iVar1;
-      iVar1 = ClickItemRight(nMouseX, nMouseY, '\0', pPlayerUnit_lcl, pInventory);
-      if (iVar1) {
-        goto resume_shop_and_consume;
+    } else if (ClickItemRight(nMouseX, nMouseY, '\0', pPlayerUnit, pInventory)) {
+      if (g_nCurrentInventoryPage - 2U <= 2) {
+        INV_EnterShopMode();
       }
+
+      Storm::SMsgBreakHandlerChain(pMsg);
+      return;
     }
-    if (!g_nCurrentInventoryPage) {
-      nItemType = Cursor::GetItemType();
-      if (nItemType == 6) {
+    if (g_nCurrentInventoryPage) {
+      if (Cursor::GetItemType() == 6) {
         ui::UI_DropCursorItemOnGround();
+        Storm::SMsgBreakHandlerChain(pMsg);
         return;
       }
-
-      nItemType = Cursor::GetItemType();
-      if (nItemType != 8) {
+      if (Cursor::GetItemType() == 8) {
+        GAME::Msg::NET_D2GS_CLIENT_Send_INT(0x4c, -1);
+        Storm::SMsgBreakHandlerChain(pMsg);
         return;
       }
+      if (g_nCurrentInventoryPage - 2U <= 2) {
+        INV_EnterShopMode();
+      }
 
-      GAME::Msg::NET_D2GS_CLIENT_Send_INT(0x4c, -1);
-      return;
-    }
-
-    nItemType = Cursor::GetItemType();
-    if (nItemType == 6) {
+      Storm::SMsgBreakHandlerChain(pMsg);
+    } else if (Cursor::GetItemType() == 6) {
       ui::UI_DropCursorItemOnGround();
-      Storm::SMsgBreakHandlerChain(pMsg);
-      return;
-    }
-
-    nItemType = Cursor::GetItemType();
-    if (nItemType == 8) {
+    } else if (Cursor::GetItemType() == 8) {
       GAME::Msg::NET_D2GS_CLIENT_Send_INT(0x4c, -1);
-      Storm::SMsgBreakHandlerChain(pMsg);
-      return;
     }
-
-    resume_shop_and_consume:
-    if (g_nCurrentInventoryPage - 2U < 3) {
-      INV_EnterShopMode();
-    }
-    Storm::SMsgBreakHandlerChain(pMsg);
 }
 
 void __stdcall SelectDefaultTabForNPC() {
