@@ -1462,36 +1462,35 @@ static void __stdcall SKILLASS_FillKickDamage(::SGAMEDATA * pGame, D2DamageStrc 
 
 static void __stdcall D2CalcKickDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2SkillsTxt * pSkillTxt, int32_t nSkillLvl, BOOL bKickCheck, D2UnitStrc * pAttacker, eD2Skills eSkill) {
     D2DamageStrc sDamage;
-    uint32_t nToHit = D2Common::Skills::SKILLS_CalcToHit(pAttacker, eSkill, nSkillLvl);
-    int nProgToHit = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pAttacker, UNITSTAT_progressive_tohit, 0);
+    int nToHit = D2Common::Skills::SKILLS_CalcToHit(pAttacker, eSkill, nSkillLvl) + D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pAttacker, UNITSTAT_progressive_tohit, 0);
     memset(&sDamage, 0, sizeof(sDamage));
-    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pAttacker, pUnit, nToHit + nProgToHit, 0);
+    sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pAttacker, pUnit, nToHit, 0);
     if (sDamage.wResultFlags & 1U) {
-      D2SkillsTxt* pSkillTxtKick;
       if (bKickCheck) {
         sDamage.wResultFlags |= 0xc;
       }
 
-      int dwEnDmgPctValue;
-      if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || (pSkillTxtKick = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill , !pSkillTxtKick)) {
-        dwEnDmgPctValue = 0;
+      D2SkillsTxt* pKickTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+      int nEnDmgPct;
+      if (!pKickTxt) {
+        nEnDmgPct = 0;
       } else if (nSkillLvl <= 0) {
-        dwEnDmgPctValue = 0;
+        nEnDmgPct = 0;
       } else {
-        dwEnDmgPctValue = (nSkillLvl - 1) * pSkillTxtKick->Param[1] + pSkillTxtKick->Param[0];
+        nEnDmgPct = (nSkillLvl - 1) * pKickTxt->Param[1] + pKickTxt->Param[0];
       }
 
-      sDamage.dwEnDmgPct = dwEnDmgPctValue;
+      sDamage.dwEnDmgPct = nEnDmgPct;
       SKILLASS_FillKickDamage(pGame, &sDamage, pUnit, eSkill, nSkillLvl, pAttacker);
     }
 
-    *(uint8_t*)(char*)&nSkillLvl = pSkillTxt->SrcDam;
     sDamage.dwHitClass = 1;
-    if (!(uint8_t)nSkillLvl) {
-      *(uint8_t*)(char*)&nSkillLvl = 0x80;
+    uint8_t nSrcDam = pSkillTxt->SrcDam;
+    if (!nSrcDam) {
+      nSrcDam = 0x80;
     }
 
-    UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pAttacker, pUnit, &sDamage, (uint8_t)nSkillLvl);
+    UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pAttacker, pUnit, &sDamage, nSrcDam);
 }
 
 BOOL __fastcall SKILLASS_SrvStFn24_DragonTalon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
