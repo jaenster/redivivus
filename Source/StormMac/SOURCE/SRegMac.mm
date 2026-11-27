@@ -252,9 +252,7 @@ int SRegLoadString(char* szSubKey, char* szValueName, int nFlags, char* szOutBuf
 int SRegLoadValue(char* szSubKey, char* szValueName, int nFlags, int32_t* pnValue) {
     char szKeyPath[SREG_PATH_MAX];
     char szPrefsPath[SREG_PATH_MAX];
-    char cValueName = *szValueName;
-    char cSubKey = *szSubKey;
-    if (pnValue == NULL || cValueName == '\0' || szValueName == NULL || cSubKey == '\0' || szSubKey == NULL) {
+    if (pnValue == NULL || *szValueName == '\0' || szValueName == NULL || *szSubKey == '\0' || szSubKey == NULL) {
         SErrSetLastError(0x57);
         return 0;
     }
@@ -303,9 +301,7 @@ int SRegSaveData(char* szSubKey, const char* szValueName, uint32_t dwFlags, uint
 int SRegSaveString(char* szSubKey, const char* szValueName, int nFlags, char* szValue) {
     char szKeyPath[SREG_PATH_MAX];
     char szPrefsPath[SREG_PATH_MAX];
-    char cValueName = *szValueName;
-    char cSubKey = *szSubKey;
-    if (szValue == NULL || cValueName == '\0' || szValueName == NULL || cSubKey == '\0' || szSubKey == NULL) {
+    if (szValue == NULL || *szValueName == '\0' || szValueName == NULL || *szSubKey == '\0' || szSubKey == NULL) {
         SErrSetLastError(0x57);
         return 0;
     }
@@ -520,7 +516,7 @@ static void SREG_WriteEscapedData(FILE* pFile, const uint8_t* pData, int nCount)
 void SREG_Destroy() {
     SREG_FlushPrefsFiles();
     RegistryEntry* pEntry = s_tRegistry.m_fulllist.Head();
-    while (pEntry) {
+    while (!TSLink<RegistryEntry>::IsTerminator(pEntry)) {
         RegistryEntry* pNext = s_tRegistry.m_fulllist.Next(pEntry);
         s_tRegistry.DeleteNode(pEntry);
         pEntry = pNext;
