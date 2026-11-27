@@ -3051,8 +3051,10 @@ struct D2SoundSmpStrc {
     /* 0x00 */ struct IDirectSoundBuffer * pDSBuffer; // IDirectSoundBuffer
     /* 0x04 */ uint32_t nBufSize; // total DirectSound buffer size in bytes
     /* 0x08 */ uint32_t nHalfBufSize; // half buffer size
+#if !(!defined(_WIN32) && D2_OS_MAC)  // the 1.14d Mac sample has no 3D buffer and no EAX set: 0x58 bytes, pPcmData at +0x0C
     /* 0x0C */ struct IDirectSound3DBuffer * pDS3DBuffer; // IDirectSound3DBuffer (stereo only)
     /* 0x10 */ struct IKsPropertySet * pEaxInterface; // IKsPropertySet (EAX), QI'd from pDS3DBuffer
+#endif
     /* 0x14 */ uint8_t * pPcmData; // pointer to PCM source data
     /* 0x18 */ uint32_t nPcmSize; // PCM data size in bytes
     /* 0x1C */ int32_t bIsPlaying; // non-zero if buffer is currently playing
