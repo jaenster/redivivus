@@ -191,12 +191,15 @@ static void WriteErrorLog(const char* pszText) __attribute__((noinline));
 // 1.14d mac: 0000ffaa
 int SErrDisplayError(uint32_t nErrorCode, const char* pStackTrace, int32_t nTraceFlags, const char* pCustomMsg,
                      int32_t nMessageFlags, UINT nExitCode) {
-    char szFullMessage[2048];
-    char szErrorText[256];
-    char szModuleName[260];
     char szModuleFile[260];
-    char szFindData[0x140];
-    char szFindName[280];
+    char szModuleName[260];
+    char szErrorText[256];
+    char szFullMessage[2048];
+    struct {  // WIN32_FIND_DATA
+        char abHeader[0x2c];
+        char szFileName[260];
+        char szAlternate[16];
+    } tFindData;
     char szCallbackTitle[260];
 
     if (gbSuppressErrors != 0 || gbSSystemErrorDialogActive) {
@@ -208,12 +211,12 @@ int SErrDisplayError(uint32_t nErrorCode, const char* pStackTrace, int32_t nTrac
     szModuleFile[0] = '\0';
     szModuleName[0] = '\0';
     GetModuleFileName(0, szModuleFile, 0x104);
-    bzero(szFindData, sizeof(szFindData));
-    HANDLE hFind = FindFirstFile(szModuleFile, szFindData);
+    bzero(&tFindData, sizeof(tFindData));
+    HANDLE hFind = FindFirstFile(szModuleFile, (char*)&tFindData);
     if (hFind != 0) {
         FindClose(hFind);
     }
-    SStrCopy(szModuleName, szFindName, 0x104);
+    SStrCopy(szModuleName, tFindData.szFileName, 0x104);
     if (SStrChrR(szModuleName, '.') != NULL) {
         *SStrChrR(szModuleName, '.') = '\0';
     }
@@ -227,12 +230,14 @@ int SErrDisplayError(uint32_t nErrorCode, const char* pStackTrace, int32_t nTrac
         SStrPrintf(szErrorText, 0x100, SERR_GetString(0), nErrorCode & 0xffff, nErrorCode);
     }
     char* pCursor;
+    bool bHasTrace;
     if (pStackTrace == NULL) {
         pCursor = szFullMessage;
+        bHasTrace = false;
     } else {
         pCursor = szFullMessage + SStrCopy(szFullMessage, pStackTrace, 0x800);
+        bHasTrace = true;
     }
-    bool bHasTrace = pStackTrace != NULL;
     if (0 < nTraceFlags) {
         SStrPrintf(pCursor, szErrorText - pCursor, "(%u)", nTraceFlags);
         pCursor += SStrLen(pCursor);
