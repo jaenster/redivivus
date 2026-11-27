@@ -897,7 +897,6 @@ int32_t __stdcall STATLIST_GetStatByState(D2StatListExStrc * pStatList, eD2UnitS
 
 // Sets or clears a state bit (eState) in pUnit's StatsEx state flags array. On change, marks the dirty-change word and checks the States.txt disguise field: sets/clears UNITFLAGEX_ISSHAPESHIFTED on the unit accordingly.
 void __stdcall STATLIST_SetUnitState(D2UnitStrc * pUnit, eD2States eState, int32_t bSet) {
-    D2StatesTxt* pStatesTxtLine;
     if (!pUnit) {
       return;
     }
@@ -907,16 +906,13 @@ void __stdcall STATLIST_SetUnitState(D2UnitStrc * pUnit, eD2States eState, int32
       return;
     }
 
-    eD2States eStateBit = eState & STATE_venomclaws;
-    uint32_t dwBitMaskSet = Fog::BitBuffer::gadwBitMasks[eStateBit];
-    int nFlagsWordIdx = (int)eState >> 5;
-    uint32_t dwPrevFlags = pStatsEx->pStateFlags[nFlagsWordIdx];
+    uint32_t dwWasSet = pStatsEx->pStateFlags[(int)eState >> 5] & Fog::BitBuffer::gadwBitMasks[eState & 0x1f];
     if (bSet) {
-      pStatsEx->pStateFlags[nFlagsWordIdx] |= dwBitMaskSet;
+      pStatsEx->pStateFlags[(int)eState >> 5] |= Fog::BitBuffer::gadwBitMasks[eState & 0x1f];
     } else {
-      pStatsEx->pStateFlags[nFlagsWordIdx] &= Fog::BitBuffer::gadwInvBitMasks[eStateBit];
+      pStatsEx->pStateFlags[(int)eState >> 5] &= Fog::BitBuffer::gadwInvBitMasks[eState & 0x1f];
     }
-    if (!(dwPrevFlags & dwBitMaskSet)) {
+    if (!dwWasSet) {
       if (!bSet) {
         return;
       }
@@ -924,25 +920,17 @@ void __stdcall STATLIST_SetUnitState(D2UnitStrc * pUnit, eD2States eState, int32
       return;
     }
 
-    int nStatesSize = ITEMS::Items::sgptDataTable->nTxtStatesSize + 0x1f;
-    pStatsEx->pStateFlags[nStatesSize / 32 + nFlagsWordIdx] |= Fog::BitBuffer::gadwBitMasks[eStateBit];
-    pStatesTxtLine = DATATBLS::DataTbls::TXT_States_GetLine(eState);
+    pStatsEx->pStateFlags[(ITEMS::Items::sgptDataTable->nTxtStatesSize + 0x1f) / 32 + ((int)eState >> 5)] |= Fog::BitBuffer::gadwBitMasks[eState & 0x1f];
+    D2StatesTxt* pStatesTxtLine = DATATBLS::DataTbls::TXT_States_GetLine(eState);
     if (!pStatesTxtLine) {
       return;
     }
     if (bSet) {
       if (pStatesTxtLine->aFlagBytes[2] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
         pUnit->eUnitFlagsEx |= UNITFLAGEX_ISSHAPESHIFTED;
-        return;
       }
-    } else {
-      BOOL BVar1;
-      if (pStatesTxtLine->aFlagBytes[2] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
-        BVar1 = DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x10);
-        if (!BVar1) {
-          pUnit->eUnitFlagsEx &= ~UNITFLAGEX_ISSHAPESHIFTED;
-        }
-      }
+    } else if (pStatesTxtLine->aFlagBytes[2] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0] && !DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x10)) {
+      pUnit->eUnitFlagsEx &= ~UNITFLAGEX_ISSHAPESHIFTED;
     }
 }
 

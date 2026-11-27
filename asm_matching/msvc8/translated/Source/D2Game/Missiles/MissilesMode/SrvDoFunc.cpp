@@ -151,8 +151,6 @@ int32_t __fastcall fpMissileSrvDoFuncData_MonsterOnly(D2UnitStrc * pUnit, D2Miss
 }
 
 int32_t __fastcall fpMissileSrvDoFuncData_PlayerOrAllyMonster(D2UnitStrc * pUnit, D2MissileSrvCollideCtxStrc * pCtx) {
-    int32_t nUnitAlignment;
-    BOOL bHitResult;
     if (!(pCtx && pCtx->pMissileTxt)) {
       return 0;
     }
@@ -164,23 +162,17 @@ int32_t __fastcall fpMissileSrvDoFuncData_PlayerOrAllyMonster(D2UnitStrc * pUnit
 
     switch (eUnitType) {
       case UNIT_PLAYER:
-        {
-          bHitResult = fpMissileDoSrvFuncHandler(pCtx->pGame, pCtx->pMissile, pCtx->pOwner, pCtx->pMissileTxt, pUnit);
-          return (uint32_t)(bHitResult != 0);
-        }
+        break;
       case UNIT_MONSTER:
-        {
-          nUnitAlignment = D2Common::Stats::StatsEx::STATSEX_GetAlignment(pUnit);
-          if (nUnitAlignment == 2) {
-            bHitResult = fpMissileDoSrvFuncHandler(pCtx->pGame, pCtx->pMissile, pCtx->pOwner, pCtx->pMissileTxt, pUnit);
-            return (uint32_t)(bHitResult != 0);
-          }
-
-          break;
+        if (D2Common::Stats::StatsEx::STATSEX_GetAlignment(pUnit) != 2) {
+          return 0;
         }
+        break;
+      default:
+        return 0;
     }
 
-    return 0;
+    return fpMissileDoSrvFuncHandler(pCtx->pGame, pCtx->pMissile, pCtx->pOwner, pCtx->pMissileTxt, pUnit) != 0;
 }
 
 int32_t __fastcall fpMissileSrvDoFuncData_PlayerOrMonster(D2UnitStrc * pUnit, D2MissileSrvCollideCtxStrc * pCtx) {
