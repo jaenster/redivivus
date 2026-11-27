@@ -60,14 +60,14 @@ void* operator new(size_t nSize) {
 }
 
 // 1.14d mac: 00009632
-void operator delete(void* pMem) throw() {
+void operator delete(void* pMem) noexcept {
     if (pMem != NULL) {
         SMemFree(pMem, STORM_FILE, 40, 0);
     }
 }
 
 // 1.14d mac: 00009671
-void operator delete[](void* pMem) throw() {
+void operator delete[](void* pMem) noexcept {
     if (pMem != NULL) {
         SMemFree(pMem, STORM_FILE, 46, 0);
     }
@@ -100,72 +100,72 @@ BOOL StormDestroy(void) {
 
 // The system option values, 1.14d mac 00554df8..00554e08.
 // 1.14d mac: 00554dfc
-static uint32_t s_dwSystemOption1;
+uint32_t s_dwSystemOption1;
 // 1.14d mac: 00554e00
-static uint32_t s_dwSystemOption2;
+uint32_t s_dwSystemOption2;
 // 1.14d mac: 00554df8
-static uint32_t s_dwSystemOption3;
+uint32_t s_dwSystemOption3;
 // 1.14d mac: 00554e04
-static uint32_t s_dwSystemOption4;
+uint32_t s_dwSystemOption4;
 // 1.14d mac: 00554e08
-static uint32_t s_dwSystemOption5;
+uint32_t s_dwSystemOption5;
 
 // 1.14d mac: 0000973c
 BOOL SSYSTEM_SetSystemOption(uint32_t nOptionId, uint32_t* pValue, int32_t nValueSize) {
     SErrSetLastError(0x57);
     BOOL bResult = 0;
     if (pValue != NULL) {
-        uint32_t dwOption2 = s_dwSystemOption2;
         switch (nOptionId) {
         case 1:
             if (nValueSize != 4) {
-                return 0;
+                return bResult;
             }
             s_dwSystemOption1 = *pValue;
             break;
         case 2:
             if (nValueSize != 4) {
-                return 0;
+                return bResult;
             }
-            dwOption2 = *pValue;
-            if (dwOption2 == 0) {
-                return 0;
-            }
-            // only a power of two
-            if (((dwOption2 - 1) ^ dwOption2) != dwOption2 * 2 - 1) {
-                return 0;
+            {
+                uint32_t dwOption2 = *pValue;
+                if (dwOption2 == 0) {
+                    return bResult;
+                }
+                // only a power of two
+                if (((dwOption2 - 1) ^ dwOption2) != dwOption2 * 2 - 1) {
+                    return bResult;
+                }
+                s_dwSystemOption2 = dwOption2;
             }
             break;
         case 3:
             if (nValueSize != 4) {
-                return 0;
+                return bResult;
             }
             s_dwSystemOption3 = *pValue;
             break;
         case 4:
             if (nValueSize != 4) {
-                return 0;
+                return bResult;
             }
             s_dwSystemOption4 = *pValue;
             break;
         case 5:
             if (nValueSize != 4) {
-                return 0;
+                return bResult;
             }
             s_dwSystemOption5 = *pValue;
             break;
         case 6: {
             if (nValueSize != 8) {
-                return 0;
+                return bResult;
             }
             uint32_t nFirst = pValue[0];
             uint32_t nSecond = pValue[1];
             SSYSTEM_SetOption6(&nFirst, &nSecond);
-            dwOption2 = s_dwSystemOption2;
             break;
         }
         }
-        s_dwSystemOption2 = dwOption2;
         SErrSetLastError(0);
         bResult = 1;
     }

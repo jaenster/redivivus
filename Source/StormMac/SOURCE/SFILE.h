@@ -11,7 +11,9 @@
 
 #if !defined(_WIN32) && D2_OS_MAC
 
+#pragma GCC visibility push(hidden)
 #include "Source/StormMac/H/stpl.h"
+#pragma GCC visibility pop
 #include "Source/StormMac/Win32Mac/Source/Win32/Win32Mac.h"
 
 struct D2MPQFileStrc;

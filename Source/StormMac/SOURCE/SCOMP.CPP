@@ -5,7 +5,9 @@
 // The file runs from the Huffman tree routines, which follow SCODE's static initialiser
 // (0000eab0), to its own static initialiser (0000fe80).
 #include "../Win32Mac/Source/Win32/Win32Mac.h"
+#pragma GCC visibility push(hidden)
 #include "../H/stpl.h"
+#pragma GCC visibility pop
 
 #if !defined(_WIN32) && D2_OS_MAC
 

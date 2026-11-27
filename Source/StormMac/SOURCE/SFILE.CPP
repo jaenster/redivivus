@@ -221,8 +221,9 @@ BOOL SFileDdaEnd(D2MPQFileStrc* pFile) {
     SFILE_LOCK();
     D2StormAudioStreamRec* pStream = s_tStreamList.Head();
     while (pStream != NULL) {
+        D2MPQFileStrc* pStreamFile = pStream->pMpqFile;
         D2StormAudioStreamRec* pNextStream = s_tStreamList.Next(pStream);
-        if (pStream->pMpqFile == pFile) {
+        if (pStreamFile == pFile) {
             if (s_pCurrentRequest != NULL && s_pCurrentRequest->pStream != NULL &&
                 s_pCurrentRequest->pStream == pStream->pStream) {
                 s_pCurrentRequest->pStream = NULL;
@@ -255,8 +256,15 @@ DWORD SFileSetFilePointer(D2MPQFileStrc* pMPQFile, int32_t nDistanceToMove, int*
     uint32_t nFileSize;
     if (dwMoveMethod == 0) {
         pMPQFile->nFilePos = nDistanceToMove;
-    } else if (dwMoveMethod == 1 || dwMoveMethod == 2) {
-        nFileSize = dwMoveMethod == 1 ? pMPQFile->nFilePos : pMPQFile->pBlockEntry->dwFileSize;
+    } else {
+        if (dwMoveMethod == 1) {
+            nFileSize = pMPQFile->nFilePos;
+        } else if (dwMoveMethod == 2) {
+            nFileSize = pMPQFile->pBlockEntry->dwFileSize;
+        } else {
+            nDistanceToMove = pMPQFile->nFilePos;
+            goto seeked;
+        }
         if (nDistanceToMove < 0 && nFileSize < (uint32_t)-nDistanceToMove) {
             pMPQFile->nFilePos = 0;
             nDistanceToMove = 0;
@@ -264,9 +272,8 @@ DWORD SFileSetFilePointer(D2MPQFileStrc* pMPQFile, int32_t nDistanceToMove, int*
             nDistanceToMove += nFileSize;
             pMPQFile->nFilePos = nDistanceToMove;
         }
-    } else {
-        nDistanceToMove = pMPQFile->nFilePos;
     }
+seeked:
     uint32_t nLast = pMPQFile->pBlockEntry->dwFileSize - 1;
     if ((uint32_t)nDistanceToMove < nLast) {
         nLast = nDistanceToMove;
@@ -391,7 +398,7 @@ SFILE_STATIC int32_t SFILE_GetStreamPosition(D2StormAudioStreamRec* pStream) {
             nWrap = 0;
         }
         uint32_t nValidBytes = (pStream->nBytePos - nAhead) + nWrap;
-        if (pStream->nDataChunkSize <= nValidBytes) {
+        if (nValidBytes >= pStream->nDataChunkSize) {
             nValidBytes = pStream->nDataChunkSize;
         }
         pStream->nCurrentPos = nValidBytes;
@@ -475,7 +482,7 @@ void SFileEnableSeekOptimization(BOOL bEnable) {
 }
 
 SFILE_STATIC void SFILE_ConvertRelativePathName(const char* szFileName, char* szOutPath, int32_t bStripDir);
-SFILE_STATIC uint32_t SFILE_FindFileOnDisk(const char* szFileName, uint8_t bSearchFlags, char* szOutPath);
+SFILE_STATIC uint32_t SFILE_FindFileOnDisk(const char* szFileName, uint32_t dwFlags, char* szOutPath);
 SFILE_STATIC D2MPQBlockEntryStrc* GetFileBlockEntry(D2ArchiveStrc* pArchive, const char* szFileName, uint32_t dwFlags,
                                               D2ArchiveStrc** ppArchiveOut);
 SFILE_STATIC int SFILE_GetHashTableIndex(uint32_t nUnused, const char* szFileName, D2ArchiveStrc* pArchive,
@@ -485,13 +492,13 @@ SFILE_STATIC int SFILE_GetHashTableIndex(uint32_t nUnused, const char* szFileNam
 int SFileFileExistsEx(D2ArchiveStrc* pArchive, const char* szFileName, uint32_t dwFlags) {
     char szDiskPath[260];
     int nResult;
-    if (szFileName == NULL || *szFileName == '\0') {
+    if (*szFileName == '\0' || szFileName == NULL) {
         SErrSetLastError(0x57);
         return 0;
     }
     SFILE_LOCK();
     SFILE_InitCryptTable();
-    if ((dwFlags & 3) == 0 || SFILE_FindFileOnDisk(szFileName, (uint8_t)dwFlags, szDiskPath) == 0) {
+    if ((dwFlags & 3) == 0 || SFILE_FindFileOnDisk(szFileName, dwFlags, szDiskPath) == 0) {
         nResult = GetFileBlockEntry(pArchive, szFileName, dwFlags, NULL) != NULL;
     } else {
         nResult = 2;
@@ -521,28 +528,30 @@ SFILE_STATIC void SFILE_InitCryptTable(void) {
 }
 
 // 1.14d mac: 0001387f
-SFILE_STATIC uint32_t SFILE_FindFileOnDisk(const char* szFileName, uint8_t bSearchFlags, char* szOutPath) {
-    if ((bSearchFlags & 3) == 0) {
-        return 0;
-    }
-    if (bSearchFlags & 2) {
-        SFILE_ConvertRelativePathName(szFileName, szOutPath, 1);
-        uint32_t dwAttributes = GetFileAttributes(szOutPath);
-        if (((dwAttributes >> 4) & 1) == 0) {
-            return ((dwAttributes >> 4) & 1) ^ 1;
+SFILE_STATIC uint32_t SFILE_FindFileOnDisk(const char* szFileName, uint32_t dwFlags, char* szOutPath) {
+    uint32_t nFound = 0;
+    if ((dwFlags & 3) != 0) {
+        if (dwFlags & 2) {
+            SFILE_ConvertRelativePathName(szFileName, szOutPath, 1);
+            uint32_t dwAttributes = GetFileAttributes(szOutPath) >> 4;
+            uint32_t nIsDirectory = dwAttributes & 1;
+            if ((dwAttributes & 1) == 0) {
+                nFound = nIsDirectory ^ 1;
+                goto done;
+            }
+        }
+        if (dwFlags & 1) {
+            if (*szFileName == '\\' || strstr(szFileName, ":\\") != NULL || strstr(szFileName, "\\\\") != NULL) {
+                SStrCopy(szOutPath, szFileName, 0x104);
+            } else {
+                SFILE_ConvertRelativePathName(szFileName, szOutPath, 0);
+            }
+            nFound = ((GetFileAttributes(szOutPath) >> 4) & 1) ^ 1;
         }
     }
-    if (bSearchFlags & 1) {
-        if (*szFileName == '\\' || strstr(szFileName, ":\\") != NULL || strstr(szFileName, "\\\\") != NULL) {
-            SStrCopy(szOutPath, szFileName, 0x104);
-        } else {
-            SFILE_ConvertRelativePathName(szFileName, szOutPath, 0);
-        }
-        return (GetFileAttributes(szOutPath) >> 4 & 1) ^ 1;
-    }
-    return 0;
+done:
+    return nFound;
 }
-
 
 // 1.14d mac: 00013955
 // The block table entry of a file in the given archive, or in the first open archive that has it.
@@ -704,13 +713,13 @@ SFILE_STATIC void SFILE_ConvertRelativePathName(const char* szFileName, char* sz
 
 // 1.14d mac: 00014d7d
 SFILE_STATIC void SFILE_Decrypt(uint32_t* pData, uint32_t nByteLen, uint32_t nSeed) {
-    uint32_t* pTable = s_pCryptTable;
     uint32_t nKey = 0xEEEEEEEE;
+    uint32_t* pTable = s_pCryptTable;
     for (uint32_t nCount = nByteLen >> 2; nCount != 0; nCount--) {
         nKey += pTable[0x400 + (nSeed & 0xff)];
         uint32_t nDecrypted = (nKey + nSeed) ^ *pData;
         *pData++ = nDecrypted;
-        nKey = nDecrypted + 3 + nKey * 0x21;
+        nKey = nDecrypted + 3 + (nKey << 5) + nKey;
         nSeed = ((~nSeed) << 0x15) + 0x11111111 | (nSeed >> 0xb);
     }
 }
@@ -1051,7 +1060,7 @@ int SFileOpenFileEx(D2ArchiveStrc* hArchive, const char* szFileName, uint32_t dw
             SFILE_InitCryptTable();
             bool bFromArchive = true;
             if ((dwFlags & 3) != 0) {
-                if (SFILE_FindFileOnDisk(szFileName, (uint8_t)dwFlags, szDiskPath) == 0) {
+                if (SFILE_FindFileOnDisk(szFileName, dwFlags, szDiskPath) == 0) {
                     bFromArchive = true;
                 } else {
                     HANDLE hDisk = CreateFile(szDiskPath, 0x80000000, 1, 0, 3, 0x8000000, 0);

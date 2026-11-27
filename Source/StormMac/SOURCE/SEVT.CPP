@@ -6,6 +6,9 @@
 // The file starts at SEvtBreakHandlerChain, after SERR.CPP's static initialiser
 // (00011040), and ends with its own at 00011f70; SFILE.CPP follows.
 #include "../Win32Mac/Source/Win32/Win32Mac.h"
+#pragma GCC visibility push(hidden)
+#include "../H/stpl.h"
+#pragma GCC visibility pop
 
 #if !defined(_WIN32) && D2_OS_MAC
 
@@ -18,7 +21,7 @@ LONG InterlockedIncrement(LPLONG pnValue);
 LONG InterlockedDecrement(LPLONG pnValue);
 // Out of line in SFILE.CPP's neighbourhood.
 void CRITSECT_Init(pthread_mutex_t* pMutex);
-void CRITSECT_Destroy(void* pMutex);
+void CRITSECT_Destroy(pthread_mutex_t* pMutex) __attribute__((visibility("hidden")));
 
 extern "C" int __cxa_atexit(void (*pfnDestructor)(void*), void* pObject, void* pDso);
 extern "C" void* __dso_handle;
@@ -26,134 +29,6 @@ extern "C" void* __dso_handle;
 #define SEVT_FILE "/Users/bclemetson/dev/diablo2/Diablo2/Source/DiabloAll/../../../StormMac/Storm Mac/SOURCE/SEVT.CPP"
 
 typedef void (*pfnSEvtHandler)(void* pData);
-
-// ---- the intrusive list the break commands are kept on ----
-
-struct TSLink {
-    TSLink* pPrev;
-    uintptr_t nNext;
-};
-
-struct TSList {
-    int nLinkOffset;
-    TSLink tTerminator;
-};
-
-static inline bool IsListEnd(uintptr_t nNext) {
-    return nNext == 0 || (nNext & 1) != 0;
-}
-
-// 1.14d mac: 00011e76
-// TSLink::NextLink
-static TSLink* TSLINK_NextLink(TSLink* pLink, int nLinkOffset) {
-    uintptr_t nNext = pLink->nNext;
-    if (IsListEnd(nNext)) {
-        return (TSLink*)(nNext & 0xfffffffe);
-    }
-    if (nLinkOffset < 0) {
-        nLinkOffset = (int)((intptr_t)pLink - *(intptr_t*)((char*)pLink->pPrev + 4));
-    }
-    return (TSLink*)(nNext + nLinkOffset);
-}
-
-// 1.14d mac: 00011e36
-// TSLink::Unlink
-static void TSLINK_Unlink(TSLink* pLink) {
-    TSLink* pPrev = pLink->pPrev;
-    if (pPrev != NULL) {
-        TSLink* pNextLink = TSLINK_NextLink(pLink, -1);
-        pNextLink->pPrev = pPrev;
-        pLink->pPrev->nNext = pLink->nNext;
-        pLink->pPrev = NULL;
-        pLink->nNext = 0;
-    }
-}
-
-// 1.14d mac: 00011eac
-// TSList::LinkNode: after (1) or before (2) a node, or the list's end.
-static void TSLIST_LinkNode(TSList* pList, TSLink* pNode, int nLinkType, TSLink* pRelativeLink) {
-    TSLink* pLink = pNode;
-    if (pNode == NULL) {
-        pLink = &pList->tTerminator;
-    }
-    if (pLink->pPrev != NULL) {
-        TSLINK_Unlink(pLink);
-    }
-    TSLink* pRelative = &pList->tTerminator;
-    if (pRelativeLink != NULL) {
-        pRelative = pRelativeLink;
-    }
-    if (nLinkType == 2) {
-        TSLink* pPrev = pRelative->pPrev;
-        pLink->pPrev = pPrev;
-        pLink->nNext = pPrev->nNext;
-        pPrev->nNext = (uintptr_t)pNode;
-        pRelative->pPrev = pLink;
-    } else if (nLinkType == 1) {
-        pLink->pPrev = pRelative;
-        pLink->nNext = pRelative->nNext;
-        TSLink* pNextLink = TSLINK_NextLink(pRelative, pList->nLinkOffset);
-        pNextLink->pPrev = pLink;
-        pRelative->nNext = (uintptr_t)pNode;
-    }
-}
-
-// 1.14d mac: 00011f20
-// TSList::UnlinkAll
-static void TSLIST_UnlinkAll(TSList* pList) {
-    TSLink* pLink = (TSLink*)pList->tTerminator.nNext;
-    while (true) {
-        if (IsListEnd((uintptr_t)pLink)) {
-            pLink = NULL;
-        }
-        if (pLink == NULL) {
-            break;
-        }
-        TSLINK_Unlink(pLink);
-        pLink = (TSLink*)pList->tTerminator.nNext;
-    }
-}
-
-// 1.14d mac: 00011d2e
-// TSList::~TSList
-static void TSLIST_Destructor(void* pList) {
-    TSLIST_UnlinkAll((TSList*)pList);
-    TSLINK_Unlink(&((TSList*)pList)->tTerminator);
-}
-
-// 1.14d mac: 00011d50
-// TSList::NewNode for a node of 0xc bytes plus nExtraBytes.
-static TSLink* TSLIST_NewNode(TSList* pList, int nLinkType, int nExtraBytes, uint32_t dwAllocFlags) {
-    TSLink* pAlloc = (TSLink*)SMemAlloc(nExtraBytes + 0xc, "", -2, dwAllocFlags | 8);
-    TSLink* pNode = NULL;
-    if (pAlloc != NULL) {
-        pAlloc->pPrev = NULL;
-        pAlloc->nNext = 0;
-        pNode = pAlloc;
-    }
-    if (nLinkType != 0) {
-        TSLIST_LinkNode(pList, pNode, nLinkType, NULL);
-    }
-    return pNode;
-}
-
-// 1.14d mac: 00011dc6
-// Unlinks and frees a node, returning the node after it (or null).
-static TSLink* LINKEDLIST_UnlinkFreeAndGetCount(TSList* pList, TSLink* pNode) {
-    TSLink* pLinkSlot = &pList->tTerminator;
-    if (pNode != NULL) {
-        pLinkSlot = pNode;
-    }
-    uintptr_t nNext = pLinkSlot->nNext;
-    TSLINK_Unlink(pNode);
-    TSLINK_Unlink(pNode);
-    TSLink* pResult = NULL;
-    if (nNext != 0 && (nNext & 1) == 0) {
-        pResult = (TSLink*)nNext;
-    }
-    SMemFree(pNode, "", -2, 0);
-    return pResult;
-}
 
 // ---- the event tables ----
 
@@ -182,16 +57,26 @@ struct SEvtType {
     SEvtType* pNext;              // 0x10
 };
 
+// The event critical section: made by the static initialiser, which registers its destructor
+// straight from Storm's own CRITSECT_Destroy.
+class SEvtCritSect : public pthread_mutex_t {
+public:
+    SEvtCritSect() {
+        CRITSECT_Init(this);
+        __cxa_atexit((void (*)(void*))CRITSECT_Destroy, this, &__dso_handle);
+    }
+};
+
 // A request to stop the handler chain being dispatched for pData.
-struct SEvtBreakCommand {
-    TSLink tLink;
+struct SEvtBreakCommand : TSLinkedNode<SEvtBreakCommand> {
     void* pData;  // 0x08
 };
 
 // 1.14d mac: 003f04b4
-static TSList s_tBreakCommands;
+static TSExplicitList<SEvtBreakCommand, 0> s_tBreakCommands;
+// 1.14d mac: 003f04c0
 // The event critical section (named lpCriticalSection_0077930c in the Mac database).
-static pthread_mutex_t s_tEventMutex;
+static SEvtCritSect s_tEventMutex;
 // 1.14d mac: 003f04ec
 static uint32_t s_nTypeBuckets;
 // 1.14d mac: 003f04f0
@@ -220,7 +105,7 @@ static SEvtType* SEVT_FindType(uint32_t dwEventId, uint32_t dwSubId) {
 // 1.14d mac: 000110bc
 BOOL SEvtBreakHandlerChain(void* pData) {
     pthread_mutex_lock(&s_tEventMutex);
-    SEvtBreakCommand* pCommand = (SEvtBreakCommand*)TSLIST_NewNode(&s_tBreakCommands, 2, 0, 0);
+    SEvtBreakCommand* pCommand = s_tBreakCommands.NewNode(STORM_LIST_LINK_BEFORE, 0, 0);
     pCommand->pData = pData;
     pthread_mutex_unlock(&s_tEventMutex);
     return 1;
@@ -235,7 +120,7 @@ static void SEVT_DeleteIdHashTable(SEvtHandlerTable* pTable) {
             SEvtHandler* pHandler = ppBuckets[nBucket];
             while (pHandler != NULL) {
                 ppBuckets[nBucket] = pHandler->pNext;
-                operator delete(pHandler);
+                delete pHandler;
                 ppBuckets = pTable->ppBuckets;
                 pHandler = ppBuckets[nBucket];
             }
@@ -243,7 +128,7 @@ static void SEVT_DeleteIdHashTable(SEvtHandlerTable* pTable) {
         }
     }
     SMemFree(ppBuckets, SEVT_FILE, 0x5d, 0);
-    operator delete(pTable);
+    delete pTable;
 }
 
 // 1.14d mac: 00011118
@@ -264,7 +149,7 @@ BOOL SEvtDestroy(void) {
                     pTable = pType->pHandlers;
                 }
                 ppTypes[nBucket] = pType->pNext;
-                operator delete(pType);
+                delete pType;
                 ppTypes = s_ppTypes;
                 nBucketCount = s_nTypeBuckets;
                 pType = s_ppTypes[nBucket];
@@ -273,7 +158,7 @@ BOOL SEvtDestroy(void) {
         } while (nBucket < nBucketCount);
     }
     if (ppTypes != NULL) {
-        operator delete(ppTypes);
+        delete ppTypes;
     }
     s_ppTypes = NULL;
     s_nTypeBuckets = 0;
@@ -295,21 +180,18 @@ BOOL SEvtDispatch(uint32_t dwEventId, uint32_t dwSubId, uint32_t dwKey, void* pD
     SEvtHandler* pNextHandler;
     do {
         pthread_mutex_lock(&s_tEventMutex);
-        SEvtBreakCommand* pBreak = (SEvtBreakCommand*)s_tBreakCommands.tTerminator.nNext;
-        if (IsListEnd((uintptr_t)pBreak)) {
-            pBreak = NULL;
-        }
+        SEvtBreakCommand* pBreak = s_tBreakCommands.Head();
         bool bBreak = false;
         if (pBreak != NULL) {
             do {
                 if (pBreak->pData == pData) {
                     bBreak = true;
-                    LINKEDLIST_UnlinkFreeAndGetCount(&s_tBreakCommands, &pBreak->tLink);
+                    s_tBreakCommands.DeleteNode(pBreak);
                     pBreak = NULL;
                 } else {
-                    pBreak = (SEvtBreakCommand*)pBreak->tLink.nNext;
+                    pBreak = s_tBreakCommands.Next(pBreak);
                 }
-            } while (pBreak != NULL && ((uintptr_t)pBreak & 1) == 0);
+            } while (pBreak != NULL);
             if (bBreak) {
                 pthread_mutex_unlock(&s_tEventMutex);
                 break;
@@ -362,18 +244,14 @@ BOOL SEvtDispatch(uint32_t dwEventId, uint32_t dwSubId, uint32_t dwKey, void* pD
         pHandler = pNextHandler;
     } while (pNextHandler != NULL);
     InterlockedDecrement(&s_nDispatchDepth);
-    SEvtBreakCommand* pQueued = (SEvtBreakCommand*)s_tBreakCommands.tTerminator.nNext;
-    if (pQueued != NULL && ((uintptr_t)pQueued & 1) == 0) {
+    if (s_tBreakCommands.Head() != NULL) {
         pthread_mutex_lock(&s_tEventMutex);
-        SEvtBreakCommand* pNode = NULL;
-        if (s_tBreakCommands.tTerminator.nNext != 0 && (s_tBreakCommands.tTerminator.nNext & 1) == 0) {
-            pNode = (SEvtBreakCommand*)s_tBreakCommands.tTerminator.nNext;
-        }
-        while (pNode != NULL && ((uintptr_t)pNode & 1) == 0) {
+        SEvtBreakCommand* pNode = s_tBreakCommands.Head();
+        while (pNode != NULL) {
             if (pNode->pData == pData) {
-                pNode = (SEvtBreakCommand*)LINKEDLIST_UnlinkFreeAndGetCount(&s_tBreakCommands, &pNode->tLink);
+                pNode = s_tBreakCommands.DeleteNode(pNode);
             } else {
-                pNode = (SEvtBreakCommand*)pNode->tLink.nNext;
+                pNode = s_tBreakCommands.Next(pNode);
             }
         }
         pthread_mutex_unlock(&s_tEventMutex);
@@ -397,7 +275,7 @@ BOOL SEvtUnregisterType(uint32_t nEventId, uint32_t nSubId) {
         while (*ppLink != NULL) {
             if (*ppLink == pType) {
                 *ppLink = pType->pNext;
-                operator delete(pType);
+                delete pType;
                 s_nTypes--;
                 break;
             }
@@ -572,7 +450,7 @@ BOOL SEvtUnregisterHandler(uint32_t dwType, uint32_t dwSubType, uint32_t dwId, p
             while (pHandler != NULL) {
                 if (pHandler->dwKey == dwId && (pfnHandler == NULL || pHandler->pfnHandler == pfnHandler)) {
                     *ppLink = pHandler->pNext;
-                    operator delete(pHandler);
+                    delete pHandler;
                     pHandler = *ppLink;
                     s_bTablesChanged = 1;
                     pType->pHandlers->nHandlers--;
@@ -588,15 +466,21 @@ BOOL SEvtUnregisterHandler(uint32_t dwType, uint32_t dwSubType, uint32_t dwId, p
     return bResult;
 }
 
-// 1.14d mac: 00011f70
-// The static initialiser: the break-command list and the event mutex, destroyed at exit.
-void SEVT_InitStatics(void) {
-    s_tBreakCommands.nLinkOffset = 0;
-    s_tBreakCommands.tTerminator.pPrev = &s_tBreakCommands.tTerminator;
-    s_tBreakCommands.tTerminator.nNext = (uintptr_t)&s_tBreakCommands.tTerminator | 1;
-    __cxa_atexit(TSLIST_Destructor, &s_tBreakCommands, &__dso_handle);
-    CRITSECT_Init(&s_tEventMutex);
-    __cxa_atexit(CRITSECT_Destroy, &s_tEventMutex, &__dso_handle);
-}
+template void TSLink<SEvtBreakCommand>::Unlink();
+template TSLink<SEvtBreakCommand>* TSLink<SEvtBreakCommand>::NextLink(int);
+template void TSExplicitList<SEvtBreakCommand, 0>::UnlinkAll();
+template void TSExplicitList<SEvtBreakCommand, 0>::LinkNode(SEvtBreakCommand*, uint32_t, SEvtBreakCommand*);
+template SEvtBreakCommand* TSExplicitList<SEvtBreakCommand, 0>::NewNode(uint32_t, uint32_t, uint32_t);
+template SEvtBreakCommand* TSExplicitList<SEvtBreakCommand, 0>::DeleteNode(SEvtBreakCommand*);
+template TSExplicitList<SEvtBreakCommand, 0>::~TSExplicitList();
+
+// 1.14d mac: 00011d2e TSExplicitList<SEvtBreakCommand,0>::~TSExplicitList[D2]
+// 1.14d mac: 00011d50 TSExplicitList<SEvtBreakCommand,0>::NewNode
+// 1.14d mac: 00011dc6 TSExplicitList<SEvtBreakCommand,0>::DeleteNode
+// 1.14d mac: 00011e36 TSLink<SEvtBreakCommand>::Unlink
+// 1.14d mac: 00011e76 TSLink<SEvtBreakCommand>::NextLink
+// 1.14d mac: 00011eac TSExplicitList<SEvtBreakCommand,0>::LinkNode
+// 1.14d mac: 00011f20 TSExplicitList<SEvtBreakCommand,0>::UnlinkAll
+// 1.14d mac: 00011f70 _GLOBAL__I_a
 
 #endif  // D2_OS_MAC

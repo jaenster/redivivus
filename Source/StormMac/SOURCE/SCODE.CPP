@@ -6,7 +6,9 @@
 // list type the file instantiates (the streams, the blocks); the instantiations are
 // tagged at the file's end.
 #include "../Win32Mac/Source/Win32/Win32Mac.h"
+#pragma GCC visibility push(hidden)
 #include "../H/stpl.h"
+#pragma GCC visibility pop
 
 #if !defined(_WIN32) && D2_OS_MAC
 
