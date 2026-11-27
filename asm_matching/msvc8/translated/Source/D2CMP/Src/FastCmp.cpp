@@ -12,6 +12,14 @@
 #include "Source/D2CMP/Src/FastCmp.data.h"
 #include "Source/D2Headers/D2Arch.h"
 
+// The clamps use the Windows SDK min/max macros, as windef.h defines them for VC8.
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 #ifndef D2_ALLOC_AT
@@ -1577,86 +1585,55 @@ void __fastcall FASTCMP_DecompressRLEWithEffect(int32_t nStride) {
 }
 
 void __stdcall DRAW_DebugFillRect(uint8_t * nRowStart, int32_t nRowStride) {
-    uint8_t* pbPixel;
-    int nMaxRow;
-    int nMinRow2;
-    uint32_t* pEffectOffset;
-    int nMinRow = 0;
-    int nWorkspaceOffset = 0;
-    uint8_t* nRowBase = nRowStart;
-    do {
-      nMaxRow = gnFastCmpEffectMapMinRow[nMinRow];
-      pbPixel = nRowBase + gnFastCmpEffectMapMaxRow[nMinRow];
-      if (nMaxRow >= 0x29) {
-        nMaxRow = 0x29;
-      }
-      if (pbPixel < nRowBase + nMaxRow) {
-        pEffectOffset = gaFastCmpEffectPixelOffsetTable + gnFastCmpEffectMapMaxRow[nMinRow] + nWorkspaceOffset;
-        do {
-          *pbPixel = pbPixel[*pEffectOffset];
-          pbPixel++;
-          pEffectOffset++;
-        } while (pbPixel < nRowBase + nMaxRow);
+    uint8_t* pRow = nRowStart;
+    int nTableRow = 0;
+    for (int i = 0; i < 40; i++) {
+      int nOffset = gnFastCmpEffectMapMaxRow[i] + nTableRow;
+      uint8_t* pbPixel = pRow + gnFastCmpEffectMapMaxRow[i];
+      uint8_t* pEnd = pRow + min(gnFastCmpEffectMapMinRow[i], 0x29);
+      while (pbPixel < pEnd) {
+        *pbPixel = pbPixel[gaFastCmpEffectPixelOffsetTable[nOffset]];
+        pbPixel++;
+        nOffset++;
       }
 
-      nMaxRow = gnFastCmpEffectMapMaxRow[nMinRow];
-      pbPixel = nRowBase + gnFastCmpEffectMapMinRow[nMinRow];
-      if (nMaxRow < 0x28) {
-        nMaxRow = 0x28;
-      }
-      if (pbPixel > nRowBase + nMaxRow) {
-        pEffectOffset = gaFastCmpEffectPixelOffsetTable + gnFastCmpEffectMapMinRow[nMinRow] + nWorkspaceOffset;
-        do {
-          *pbPixel = pbPixel[*pEffectOffset];
-          pbPixel--;
-          pEffectOffset--;
-        } while (pbPixel > nRowBase + nMaxRow);
+      nOffset = gnFastCmpEffectMapMinRow[i] + nTableRow;
+      pbPixel = pRow + gnFastCmpEffectMapMinRow[i];
+      pEnd = pRow + max(0x28, gnFastCmpEffectMapMaxRow[i]);
+      while (pbPixel > pEnd) {
+        *pbPixel = pbPixel[gaFastCmpEffectPixelOffsetTable[nOffset]];
+        pbPixel--;
+        nOffset--;
       }
 
-      nWorkspaceOffset += 0x50;
-      nRowBase += nRowStride;
-      nMinRow++;
-    } while (nMinRow < 40);
+      nTableRow += 0x50;
+      pRow += nRowStride;
+    }
 
-    uint8_t* pRowPtr = nRowStart + nRowStride * 0x4f;
-    nWorkspaceOffset = 0x18b0;
-    nMaxRow = 0;
-    do {
-      int iVar1;
-      iVar1 = *(int*)((char*)gnFastCmpEffectMapMaxRow + (nMaxRow + 0x13c));
-      nMinRow2 = *(int*)((char*)gnFastCmpEffectMapMinRow + (nMaxRow + 0x13c));
-      pbPixel = pRowPtr + iVar1;
-      if (nMinRow2 >= 0x29) {
-        nMinRow2 = 0x29;
-      }
-      if (pbPixel < pRowPtr + nMinRow2) {
-        pEffectOffset = gaFastCmpEffectPixelOffsetTable + (iVar1 + nWorkspaceOffset);
-        do {
-          *pbPixel = pbPixel[*pEffectOffset];
-          pbPixel++;
-          pEffectOffset++;
-        } while (pbPixel < pRowPtr + nMinRow2);
+    pRow = nRowStart + nRowStride * 0x4f;
+    nTableRow = 0x18b0;
+    for (int i = 0x4f; i >= 40; i--) {
+      int nOffset = gnFastCmpEffectMapMaxRow[i] + nTableRow;
+      uint8_t* pbPixel = pRow + gnFastCmpEffectMapMaxRow[i];
+      uint8_t* pEnd = pRow + min(gnFastCmpEffectMapMinRow[i], 0x29);
+      while (pbPixel < pEnd) {
+        *pbPixel = pbPixel[gaFastCmpEffectPixelOffsetTable[nOffset]];
+        pbPixel++;
+        nOffset++;
       }
 
-      iVar1 = *(int*)((char*)gnFastCmpEffectMapMinRow + (nMaxRow + 0x13c));
-      nMinRow2 = *(int*)((char*)gnFastCmpEffectMapMaxRow + (nMaxRow + 0x13c));
-      pbPixel = pRowPtr + iVar1;
-      if (nMinRow2 < 0x28) {
-        nMinRow2 = 0x28;
-      }
-      if (pbPixel > pRowPtr + nMinRow2) {
-        pEffectOffset = gaFastCmpEffectPixelOffsetTable + (iVar1 + nWorkspaceOffset);
-        do {
-          *pbPixel = pbPixel[*pEffectOffset];
-          pbPixel--;
-          pEffectOffset--;
-        } while (pbPixel > pRowPtr + nMinRow2);
+      nOffset = gnFastCmpEffectMapMinRow[i] + nTableRow;
+      pbPixel = pRow + gnFastCmpEffectMapMinRow[i];
+      pEnd = pRow + max(0x28, gnFastCmpEffectMapMaxRow[i]);
+      while (pbPixel > pEnd) {
+        *pbPixel = pbPixel[gaFastCmpEffectPixelOffsetTable[nOffset]];
+        pbPixel--;
+        nOffset--;
       }
 
-      nWorkspaceOffset += -0x50;
-      pRowPtr += -nRowStride;
-      nMaxRow += -4;
-    } while (nMaxRow >= -0x9c);
+      nTableRow -= 0x50;
+      pRow -= nRowStride;
+    }
 }
 
 void __fastcall FASTCMP_DecompressRLEWithAlpha(DC6Block * pFrameBlock, BYTE * pDst, int32_t nDrawX, int32_t nClipLeft, int32_t nClipRight, uint32_t nDstPitch, int32_t nSkipRows, int32_t nRowCount, BYTE * pBlendTable, uint8_t byBlendColor) {
