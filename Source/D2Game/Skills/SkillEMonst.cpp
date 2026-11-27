@@ -561,25 +561,30 @@ static void __stdcall SKILLEMONST_ApplyAuraBuff(D2UnitStrc * pUnit, D2UnitStrc *
     SkillDruid::D2SetAurastatsFromSkills(pUnit, pStatList, pSkillRecord, eSkill, nSkillLvl);
 }
 
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
+
 // Transforms a target monster into a new class derived from the skill's summon monster class (difficulty-scaled). Calls MONSTER_TransformMonsterClass, reattaches AI, fires lifecycle transition, applies STATE_changeclass, attaches a stat list (UNITSTAT_shortparam1 = new class id), and initialises sumumod umod slots on the target.
 static void __stdcall SKILLEMONST_TransformMonsterClass(D2UnitStrc * pUnit, DWORD dwParam, ::SGAMEDATA * pGame, D2UnitStrc * pUnit2, int32_t nSkillId) {
-    D2AiGeneralStrc* pMonsterAiGeneral;
-    eD2UnitType eUnitType;
-    D2ModeChangeStrc sMonsterKill;
-    int32_t nDifficulty;
     D2SkillsTxt* pSkillRecord = nSkillId >= 0 && nSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;
     if (!pSkillRecord) {
       return;
     }
 
     int32_t nNewClassId = SkillsServer::SKILLS_GetSummonMonsterClassId(pUnit, 0, nSkillId, dwParam, (int*)&dwParam, nullptr, nullptr);
-    if (!(nNewClassId >= 0 && pUnit2 && pUnit2->eUnitType == UNIT_MONSTER)) {
+    if (nNewClassId < 0 || GetTypeInline(pUnit2) != UNIT_MONSTER) {
       return;
     }
 
-    D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(pUnit2->nClassId, nullptr, &nDifficulty);
+    int32_t nDifficulty;
+    D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(GetClassIdInline(pUnit2), nullptr, &nDifficulty);
     DWORD nUpgradedClassId = D2Common::Monsters::MONSTERS::MONSTER_GetMonsterClassByDifficulty(nNewClassId, nDifficulty);
     Monster::MONSTER_TransformMonsterClass(pGame, pUnit2, nUpgradedClassId, dwParam);
+    D2AiGeneralStrc* pMonsterAiGeneral;
     if (pUnit2->eUnitType == UNIT_MONSTER && pUnit2->pUnitData.pUnitDataMonster) {
       pMonsterAiGeneral = pUnit2->pUnitData.pUnitDataMonster->pAiGeneral;
     } else {
@@ -587,30 +592,22 @@ static void __stdcall SKILLEMONST_TransformMonsterClass(D2UnitStrc * pUnit, DWOR
     }
 
     Monster::AI::AttachCorrectAiFunctionToMonster(pGame, pUnit2, pMonsterAiGeneral, 0xf);
+    D2ModeChangeStrc sMonsterKill;
     Monster::MonsterMode::MONMODE_InitModeChange(pUnit2, dwParam, &sMonsterKill);
     Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sMonsterKill, 1);
     D2Common::DATATBLS::ItemStats::SetState(pUnit2, STATE_changeclass, 1);
-    if (!pUnit) {
-      nNewClassId = -1;
-      eUnitType = UNIT_COUNT;
-    } else {
-      nNewClassId = pUnit->nUnitGUID;
-      eUnitType = pUnit->eUnitType;
-    }
-
-    D2StatListExStrc* pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 0, 0, eUnitType, nNewClassId);
+    D2StatListExStrc* pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 0, 0, !pUnit ? UNIT_COUNT : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID);
     if (pStatsEx) {
       D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit2, pStatsEx, 1);
       D2Common::Stats::StatsEx::SetState(pStatsEx, STATE_changeclass);
       D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_shortparam1, nUpgradedClassId, 0);
     }
 
-    short int sSumumod = pSkillRecord->sumumod;
-    if (!(sSumumod > 0 && sSumumod < 0x2b)) {
+    if (pSkillRecord->sumumod <= 0 || pSkillRecord->sumumod >= 0x2b) {
       return;
     }
 
-    Monsters::InitUmods(pGame, pUnit2, (int)sSumumod, 0);
+    Monsters::InitUmods(pGame, pUnit2, pSkillRecord->sumumod, 0);
 }
 
 // SrvDoFunc 131: on a living monster target with base id 0x1C5, rolls a random percent against calc[0] and, if the target lacks auratargetstate, calls SKILLEMONST_TransformMonsterClass; otherwise falls through to SKILLEMONST_ApplyAuraBuff. Returns FALSE if target is dead or skill record invalid.
