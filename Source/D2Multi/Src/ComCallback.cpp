@@ -2521,7 +2521,7 @@ BOOL __fastcall COMCALLBACK_RemoveUserFromChannelList(uint32_t dwCbArg1, uint32_
 
     gnChannelUserCount--;
     sprintf(szTitle, "%s (%d)", gszCurrentChannelName, gnChannelUserCount);
-    memset(wszTitle, 0, 0x480);
+    memset(wszTitle, 0, sizeof(wszTitle));
     D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszTitle, szTitle, 0x240);
     ChatDlg::FORMS_DisplayBattleNetNews(wszTitle);
     COMCALLBACK_ScrollChannelUserList(0);

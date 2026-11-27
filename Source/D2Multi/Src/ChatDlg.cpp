@@ -4736,7 +4736,7 @@ static BOOL __fastcall CHATDLG_HandleReplyCommand(char * szCommand) {
     if (!gszOogReplyCommandBuffer[0]) {
       memset(wszNobody, 0, sizeof(wszNobody));
       strcpy(szNobody, "Nobody to reply to!");
-      D2Lang::UTF8_ConvertToWideChar(wszNobody, szNobody, 0x100);
+      D2Lang::UTF8_ConvertToWideChar(wszNobody, szNobody, _countof(wszNobody));
       pwszText = wszNobody;
     } else {
       sprintf(szCommandPrefix, "%s ", szCommand);
@@ -4762,9 +4762,9 @@ static BOOL __fastcall CHATDLG_HandleReplyCommand(char * szCommand) {
         pToken = strtok(nullptr, szDelimiter);
       }
 
-      memset(wszUsage, 0, 0x200);
+      memset(wszUsage, 0, sizeof(wszNobody));
       sprintf(szUsage, "Correct usage is: %s (message)", szCommand);
-      D2Lang::UTF8_ConvertToWideChar(wszUsage, szUsage, 0x100);
+      D2Lang::UTF8_ConvertToWideChar(wszUsage, szUsage, _countof(wszNobody));
       pwszText = wszUsage;
     }
 
@@ -4779,7 +4779,7 @@ static BOOL __fastcall CHATDLG_HandleReplyCommand(char * szCommand) {
 void CHATDLG_ProcessChatInput() {
     uint16_t wszIgnoreResult[520];
     uint16_t wszIgnoreFormat[520];
-    uint16_t wszNotify[259];
+    uint16_t wszNotify[256];
     uint16_t wszName[34];
     char szNotify[256];
     char szName[17];
@@ -4801,8 +4801,8 @@ void CHATDLG_ProcessChatInput() {
       memmove(gaChatDlgHistoryBuffer + 1, gaChatDlgHistoryBuffer, sizeof(gaChatDlgHistoryBuffer) - sizeof(gaChatDlgHistoryBuffer[0]));
       strcpy((char*)gaChatDlgHistoryBuffer, szInput);
       gnChatHistoryEntryCount++;
-      if (gnChatHistoryEntryCount > 10) {
-        gnChatHistoryEntryCount = 10;
+      if (gnChatHistoryEntryCount > (int)_countof(gaChatDlgHistoryBuffer)) {
+        gnChatHistoryEntryCount = _countof(gaChatDlgHistoryBuffer);
       }
 
       if (!CHATDLG_HandleReplyCommand("/r") && !CHATDLG_HandleReplyCommand("/reply")) {
@@ -4813,14 +4813,14 @@ void CHATDLG_ProcessChatInput() {
 
           uint32_t bWasEnabled = gnNotifyEnabled;
           gnNotifyEnabled = gnNotifyEnabled == 0;
-          memset(wszNotify, 0, 0x200);
+          memset(wszNotify, 0, sizeof(wszNotify));
           if (bWasEnabled == 0) {
             strcpy(szNotify, "Player entering/leaving notifications are enabled.");
           } else {
             strcpy(szNotify, "Player entering/leaving notifications are disabled.");
           }
 
-          D2Lang::UTF8_ConvertToWideChar(wszNotify, szNotify, 0x200);
+          D2Lang::UTF8_ConvertToWideChar(wszNotify, szNotify, sizeof(szNotify) + sizeof(szNotify));
           pwszText = wszNotify;
         } else if (CHATDLG_CompareInputPrefix("/ignorepersist") == 0) {
           ::IgnoreList* pIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
@@ -4832,49 +4832,49 @@ void CHATDLG_ProcessChatInput() {
           nPersistent = pIgnoreList->_vfptr->GetPersistentSetting(pIgnoreList);
           pwszText = D2Lang::StrTable::strtable::GetLocaleString(nPersistent == 0 ? 0x2ba2 : 0x2ba1);
         } else if (CHATDLG_CompareInputPrefix("/ignore ") == 0 || CHATDLG_CompareInputPrefix("/squelch ") == 0) {
-          memset(wszIgnoreFormat, 0, 0x410);
-          memset(wszIgnoreResult, 0, 0x410);
+          memset(wszIgnoreFormat, 0, sizeof(wszIgnoreFormat));
+          memset(wszIgnoreResult, 0, sizeof(wszIgnoreResult));
           memset(wszName, 0, sizeof(wszName));
-          CHATDLG_GetInputArgument(szName, 0x11);
+          CHATDLG_GetInputArgument(szName, sizeof(szName));
           if (Storm::Source::SSTR::SStrCmpI(szName, OOGUtilities::D2IniData_multiplayer->szLastBnetAccount, 0x7fffffff) == 0) {
             goto scroll_to_end;
           }
 
-          D2Lang::UTF8_ConvertToWideChar(wszName, szName, 0x22);
+          D2Lang::UTF8_ConvertToWideChar(wszName, szName, _countof(wszName));
           ::IgnoreList* pIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
           int32_t nAdded = pIgnoreList->_vfptr->AddByPattern(pIgnoreList, szName);
           uint16_t* pwszFormat = D2Lang::StrTable::strtable::GetLocaleString(nAdded == 0 ? 0x2ba4 : 0x2ba3);
-          D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x208, wszIgnoreFormat, pwszFormat, wszName);
+          D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(_countof(wszIgnoreFormat), wszIgnoreFormat, pwszFormat, wszName);
           D2Lang::Unicode::UNISYS::AppendToBuffer(wszIgnoreResult, wszIgnoreFormat);
           pwszText = wszIgnoreResult;
         } else if (CHATDLG_CompareInputPrefix("/unignore ") == 0 || CHATDLG_CompareInputPrefix("/unsquelch ") == 0) {
-          memset(wszIgnoreFormat, 0, 0x410);
-          memset(wszIgnoreResult, 0, 0x410);
+          memset(wszIgnoreFormat, 0, sizeof(wszIgnoreFormat));
+          memset(wszIgnoreResult, 0, sizeof(wszIgnoreResult));
           memset(wszName, 0, sizeof(wszName));
-          CHATDLG_GetInputArgument(szName, 0x11);
-          D2Lang::UTF8_ConvertToWideChar(wszName, szName, 0x22);
+          CHATDLG_GetInputArgument(szName, sizeof(szName));
+          D2Lang::UTF8_ConvertToWideChar(wszName, szName, _countof(wszName));
           ::IgnoreList* pIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
           int32_t nRemoved = pIgnoreList->_vfptr->RemoveByPattern(pIgnoreList, szName);
           uint16_t* pwszFormat = D2Lang::StrTable::strtable::GetLocaleString(nRemoved == 0 ? 0x2ba6 : 0x2ba5);
-          D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x208, wszIgnoreFormat, pwszFormat, wszName);
+          D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(_countof(wszIgnoreFormat), wszIgnoreFormat, pwszFormat, wszName);
           D2Lang::Unicode::UNISYS::AppendToBuffer(wszIgnoreResult, wszIgnoreFormat);
           pwszText = wszIgnoreResult;
         } else if (CHATDLG_CompareInputPrefix("/filtermsg ") == 0) {
-          CHATDLG_GetInputArgument((char*)aszAccountName, 0x104);
+          CHATDLG_GetInputArgument((char*)aszAccountName, sizeof(aszAccountName));
           ::IgnoreList* pIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
           int32_t nAdded = pIgnoreList->_vfptr->AddByAccountName(pIgnoreList, (char*)aszAccountName);
           pwszText = D2Lang::StrTable::strtable::GetLocaleString(nAdded == 0 ? 0x2ba8 : 0x2ba7);
         } else if (CHATDLG_CompareInputPrefix("/unfiltermsg ") == 0) {
-          CHATDLG_GetInputArgument((char*)aszAccountName, 0x104);
+          CHATDLG_GetInputArgument((char*)aszAccountName, sizeof(aszAccountName));
           ::IgnoreList* pIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
           int32_t nRemoved = pIgnoreList->_vfptr->RemoveByAccountName(pIgnoreList, (char*)aszAccountName);
           pwszText = D2Lang::StrTable::strtable::GetLocaleString(nRemoved == 0 ? 0x2baa : 0x2ba9);
         } else {
           if (CHATDLG_CompareInputPrefix("/homechannel ") == 0 || CHATDLG_CompareInputPrefix("/defaultchannel ") == 0 || CHATDLG_CompareInputPrefix("/home ") == 0) {
-            CHATDLG_GetInputArgument(szChannelName, 0x20);
+            CHATDLG_GetInputArgument(szChannelName, sizeof(szChannelName));
             Storm::Source::SReg::SRegSaveString("Diablo II", "Default Channel", 0, szChannelName);
           } else if (CHATDLG_CompareInputPrefix("/home") == 0) {
-            if (Storm::Source::SReg::SRegLoadString("Diablo II", "Default Channel", 0, szChannelName, 0x20)) {
+            if (Storm::Source::SReg::SRegLoadString("Diablo II", "Default Channel", 0, szChannelName, sizeof(szChannelName))) {
               pNetworkUnknown->pfnSendJoinChannel(szChannelName, 0, 0);
               OOGUtilities::OOGUTIL_JoinChannelAndDestroyForms(szChannelName);
             }
