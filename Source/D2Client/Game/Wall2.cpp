@@ -1023,51 +1023,51 @@ static void __stdcall WALL2_AddLowerWallTile(D2Wall2DrawListStrc * pDrawList, D2
 
 // Adds a roof tile (DT1 tile type 0xf) to the wall2 draw list: takes a slot (max 3000), entry type 1, world X/Y from the room origin plus tile offsets *5*8, sets pass-mask bit 1, and inserts it into the cell's pRoofPassList sorted by tile flags bits 14..16.
 static void __stdcall WALL2_AddRoofTile(D2Wall2DrawListStrc * pDrawList, D2Wall2CellStrc * pWall2Cell, D2RoomStrc * pRoom, D2DrlgTileDataStrc * pTileData) {
-    D2DrlgRoomCoordsStrc roomCoords;
     uint32_t nEntryIdx = pDrawList->nWall2EntryCount;
     pDrawList->nWall2EntryCount = nEntryIdx + 1;
     if (nEntryIdx >= 3000) {
       return;
     }
 
-    D2Wall2DrawEntryStrc* pDVar1 = pDrawList->aWall2Entries + nEntryIdx;
-    pDVar1->dwType = 1;
-    pDVar1->pData = pTileData;
-    pDVar1->pNext = 0;
-    D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &roomCoords);
-    pDVar1->nX = (roomCoords.dwXStart + pTileData->nPosX * 5) * 8;
-    pDVar1->nY = (roomCoords.dwYStart + pTileData->nPosY * 5) * 8;
+    D2Wall2DrawEntryStrc* pEntry = pDrawList->aWall2Entries + nEntryIdx;
+    pEntry->dwType = 1;
+    pEntry->pData = pTileData;
+    pEntry->pNext = 0;
+    {
+      D2DrlgRoomCoordsStrc roomCoords;
+      D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &roomCoords);
+      pEntry->nX = (roomCoords.dwXStart + pTileData->nPosX * 5) * 8;
+      pEntry->nY = (roomCoords.dwYStart + pTileData->nPosY * 5) * 8;
+    }
     pDrawList->dwWall2PassMask |= Fog::BitBuffer::gadwBitMasks[1];
     D2Wall2DrawEntryStrc* pCurNode = pWall2Cell->pRoofPassList;
     if (!pCurNode) {
-      pWall2Cell->pRoofPassList = pDVar1;
+      pWall2Cell->pRoofPassList = pEntry;
       return;
     }
 
     D2Wall2DrawEntryStrc* pPrevNode = 0;
-    int32_t nLayer = (int32_t)((uint32_t)((D2DrlgTileDataStrc*)pDVar1->pData)->nFlags >> 0xe & 7);
-    D2Wall2DrawEntryStrc* pNextNode;
-    while ((pNextNode = pCurNode->pNext) != 0) {
+    int32_t nLayer = (int32_t)((uint32_t)((D2DrlgTileDataStrc*)pEntry->pData)->nFlags >> 0xe & 7);
+    for (; pCurNode->pNext; pCurNode = pCurNode->pNext) {
       if (nLayer < (int32_t)((uint32_t)((D2DrlgTileDataStrc*)pCurNode->pData)->nFlags >> 0xe & 7)) {
-        pDVar1->pNext = pCurNode;
+        pEntry->pNext = pCurNode;
         if (pPrevNode) {
-          pPrevNode->pNext = pDVar1;
+          pPrevNode->pNext = pEntry;
         } else {
-          pWall2Cell->pRoofPassList = pDVar1;
+          pWall2Cell->pRoofPassList = pEntry;
         }
 
         break;
       }
 
       pPrevNode = pCurNode;
-      pCurNode = pNextNode;
     }
 
     if (pCurNode->pNext) {
       return;
     }
 
-    pCurNode->pNext = pDVar1;
+    pCurNode->pNext = pEntry;
 }
 
 // Appends a tile to the cell's pShadowPassList and sets pass-mask bit 3. Called for every tile from DRLGROOM_GetRoofTilesFromRoom and for wall tiles whose flags bits 14..16 are clear.
