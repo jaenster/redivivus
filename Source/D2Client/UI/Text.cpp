@@ -3108,106 +3108,81 @@ int Unreferenced_0049e390() {
 }
 
 void __fastcall TEXT_PrintGameString(uint16_t * wMessage, uint8_t nColor) {
-    D2TextLineStrc* pDVar2;
-    ::IgnoreList* ppIgnoreList;
-    char szUtf8[256];
-    uint32_t nWrapCount;
-    ScreenMessage_t** ppNextLink;
-    ScreenMessage_t* pTailMsg;
-    int nLineIdx = 0;
-    uint8_t byColor = nColor;
     ScreenMessage_t* pNewMsg = D2_NEW_AT(ScreenMessage_t, ".\\UI\\text.cpp", 0xd46);
-    memset(pNewMsg->apwszLines, 0, 6 * sizeof(pNewMsg->apwszLines[0]));
-    *(uint32_t*)&pNewMsg->nLineCount = 0;
-    *(uint32_t*)((intptr_t)&pNewMsg->color + 2) = 0;
-    *(uint32_t*)((intptr_t)&pNewMsg->dwMessageExpiration + 2) = 0;
-    pNewMsg->pNext = 0;
-    DWORD dwNow = GetTickCount();
-    pNewMsg->dwMessageExpiration = dwNow + 10000;
-    int32_t nLine = D2Win::Src::D2WinFont::SetAndReturnLastFont(0xd);
-    D2TextLineStrc* pNewMessage = D2Win::Src::D2WinFont::D2WINFONT_WordWrapString(wMessage, (int*)&nWrapCount, ui::ScreenSizeX - 0x46);
+    memset(pNewMsg, 0, 0x24);
+    pNewMsg->pNext = nullptr;
+    pNewMsg->dwMessageExpiration = GetTickCount() + 10000;
+    int32_t nPrevFont = D2Win::Src::D2WinFont::SetAndReturnLastFont(0xd);
+    uint32_t nWrapCount;
+    D2TextLineStrc* pLine = D2Win::Src::D2WinFont::D2WINFONT_WordWrapString(wMessage, (int*)&nWrapCount, ui::ScreenSizeX - 0x46);
     uint32_t nLineCount = nWrapCount;
     if (nWrapCount > 6) {
       nLineCount = 6;
     }
 
     pNewMsg->nLineCount = (uint16_t)nLineCount;
-    if ((int)nWrapCount > 0) {
-      do {
-        if (nLineIdx < (int)(uint32_t)pNewMsg->nLineCount) {
-          pNewMsg->apwszLines[nLineIdx] = pNewMessage->wszLine;
-        } else {
-          D2_FREE_AT(pNewMessage->wszLine, ".\\UI\\text.cpp", 0xd5a);
-        }
-
-        pDVar2 = pNewMessage->pNext;
-        D2_FREE_AT(pNewMessage, ".\\UI\\text.cpp", 0xd5d);
-        nLineIdx++;
-        pNewMessage = pDVar2;
-      } while (nLineIdx < (int)nWrapCount);
-    }
-
-    pNewMsg->color = (uint32_t)byColor;
-    ScreenMessage_t* pIterMsg = pNewMsg;
-    if (ScreenMessagesMaybe.pHead) {
-      nLineCount = 0;
-      ppNextLink = &ScreenMessagesMaybe.pHead->pNext;
-      pIterMsg = ScreenMessagesMaybe.pHead->pNext;
-      pTailMsg = ScreenMessagesMaybe.pHead;
-      while (pIterMsg) {
-        pTailMsg = *ppNextLink;
-        ppNextLink = &pTailMsg->pNext;
-        nLineCount++;
-        pIterMsg = *ppNextLink;
+    for (int i = 0; i < (int)nWrapCount; i++) {
+      if (i < pNewMsg->nLineCount) {
+        pNewMsg->apwszLines[i] = pLine->wszLine;
+      } else {
+        D2_FREE_AT(pLine->wszLine, ".\\UI\\text.cpp", 0xd5a);
       }
 
-      if ((uint16_t)nLineCount != ScreenMessagesMaybe.nCount - 1) {
+      D2TextLineStrc* pNextLine = pLine->pNext;
+      D2_FREE_AT(pLine, ".\\UI\\text.cpp", 0xd5d);
+      pLine = pNextLine;
+    }
+
+    pNewMsg->color = nColor;
+    if (ScreenMessagesMaybe.pHead) {
+      uint16_t nQueued = 0;
+      ScreenMessage_t* pTailMsg = ScreenMessagesMaybe.pHead;
+      while (pTailMsg->pNext) {
+        pTailMsg = pTailMsg->pNext;
+        nQueued++;
+      }
+      if (nQueued != ScreenMessagesMaybe.nCount - 1) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd6c);
         exit(-1);
       }
 
       pTailMsg->pNext = pNewMsg;
-      pIterMsg = ScreenMessagesMaybe.pHead;
+    } else {
+      ScreenMessagesMaybe.pHead = pNewMsg;
     }
 
-    ScreenMessagesMaybe.pHead = pIterMsg;
     if (pNewMsg->color == 4 && pNewMsg->nLineCount == 1) {
-      szUtf8[0] = '\0';
-      memset(szUtf8 + 1, 0, 0xff);
+      char szUtf8[256] = "";
       D2Lang::WideCharToUTF8(szUtf8, pNewMsg->apwszLines[0], 0x100);
-      ppIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
-      ppIgnoreList->_vfptr->AddAccountMapping(ppIgnoreList, szUtf8, 0x100);
+      ::IgnoreList* pIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
+      pIgnoreList->_vfptr->AddAccountMapping(pIgnoreList, szUtf8, 0x100);
     }
 
     TEXT_InsertScreenMessage(pNewMsg);
-    uint16_t nPrevChatCount = ScreenMessagesMaybe.nCount;
-    pNewMsg = ScreenMessagesMaybe.pHead;
     ScreenMessagesMaybe.nCount++;
-    nLineIdx = 0;
-    pIterMsg = ScreenMessagesMaybe.pHead;
+    int nTotalLines = 0;
+    ScreenMessage_t* pMsg = ScreenMessagesMaybe.pHead;
     if (ScreenMessagesMaybe.pHead) {
-      ScreenMessage_t** ppSVar1;
       do {
-        ppSVar1 = &pIterMsg->pNext;
-        nLineIdx += (uint32_t)pIterMsg->nLineCount;
-        pIterMsg = *ppSVar1;
-      } while (*ppSVar1);
+        nTotalLines += pMsg->nLineCount;
+        pMsg = pMsg->pNext;
+      } while (pMsg);
 
-      if (nLineIdx > 0x12) {
-        ScreenMessagesMaybe.pHead = ScreenMessagesMaybe.pHead->pNext;
-        ScreenMessagesMaybe.nCount = nPrevChatCount;
-        TEXT_FreeScreenMessage(pNewMsg);
+      if (nTotalLines > 0x12) {
+        ScreenMessage_t* pOldestMsg = ScreenMessagesMaybe.pHead;
+        ScreenMessagesMaybe.pHead = pOldestMsg->pNext;
+        ScreenMessagesMaybe.nCount--;
+        TEXT_FreeScreenMessage(pOldestMsg);
       }
     }
 
     Sound::SOUND_PlaySound(SOUND_CURSOR_SWITCH, nullptr, 0, 0, 0);
-    BOOL bMsgLogOpen = ui::GetUIFlag(UI_MSGLOG);
-    if (bMsgLogOpen && gpTextMessageLogHead) {
+    if (ui::GetUIFlag(UI_MSGLOG) && gpTextMessageLogHead) {
       gpTextMessageLogHead->pVtable->Clear(gpTextMessageLogHead);
       TEXT_DrawAllMessageLog();
     }
 
-    D2Win::Src::D2WinFont::SetAndReturnLastFont(nLine);
+    D2Win::Src::D2WinFont::SetAndReturnLastFont(nPrevFont);
 }
 
 void __fastcall TEXT_PrintPartyMessage(uint16_t * wszText, uint8_t byColor) {
