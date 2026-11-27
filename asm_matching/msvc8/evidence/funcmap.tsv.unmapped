@@ -296,7 +296,6 @@ Source/D2Common/Path/Path	UD2PathPointStrc::$d2_bits_of::operator?	2 insns
 Source/D2Common/Path/Path	UD2PathPointStrc::$d2_bits_as::operator?	3 insns
 Source/D2Common/Path/Path	D2Common::Units::GetXPosFromDynamicPathUnitInline	18 insns
 Source/D2Common/Path/Path	D2Common::Units::GetYPosFromDynamicPathUnitInline	18 insns
-Source/D2Common/Path/PathWF	UD2PathPointStrc::$d2_bits_of::operator?	2 insns
 Source/D2Common/Path/PathWF	D2DrlgPathScannerStrc::D2DrlgPathScannerStrc	2 insns
 Source/D2Common/Path/Step	D2Common::PATH::Path::FlagBit_D2UnitStrc_eUnitFlags_21	7 insns
 Source/D2Common/Seed	UD2SeedStrc::$D2_SeedRoll::operator?	14 insns
@@ -497,6 +496,7 @@ Source/D2Game/Player/PlayerModes	_allmul	20 insns
 Source/D2Game/Player/PlayerModes	D2Game::PLAYER::PlayerModes::PLRMODES_CanInterruptCurrentMode_Extern	10 insns
 Source/D2Game/Player/PlayerModes	D2Game::PLAYER::PlayerModes::GetAnimModeInline	6 insns
 Source/D2Game/Player/PlayerModes	D2Game::PLAYER::PlayerModes::GetClassIdInline	6 insns
+Source/D2Game/Player/PlayerModes	D2Game::PLAYER::PlayerModes::GetGUIDInline	6 insns
 Source/D2Game/Player/PlayerModes	D2Game::PLAYER::PlayerModes::FlagBit_D2UnitStrc_eUnitFlagsEx_16	6 insns
 Source/D2Game/Player/PlayerModes	D2Game::PLAYER::PlayerModes::FlagBit_D2UnitStrc_eUnitFlagsEx_11	7 insns
 Source/D2Game/Player/PlayerModes	D2Game::PLAYER::PlayerModes::FlagBit_D2UnitStrc_eUnitFlags_10	7 insns
@@ -749,6 +749,7 @@ Source/D2Game/Unit/SUnitInactive	D2_StormNextLink	12 insns
 Source/D2Game/Unit/SUnitInactive	D2Game::UNIT::SUnitInactive::FlagBit_D2UnitStrc_eUnitFlags_26	7 insns
 Source/D2Game/Unit/SUnitInactive	D2Game::UNIT::SUnitInactive::FlagBit_D2UnitStrc_eUnitFlags_17	7 insns
 Source/D2Game/Unit/SUnitInactive	D2Game::UNIT::SUnitInactive::FlagBit_D2UnitStrc_eUnitFlags_9	7 insns
+Source/D2Game/Unit/SUnitInactive	D2Game::UNIT::SUnitInactive::FlagBit_D2UnitStrc_eUnitFlags_31	6 insns
 Source/D2Game/Unit/SUnitInactive	UD2SeedStrc::$D2_SeedRoll::operator?	14 insns
 Source/D2Game/Unit/SUnitMsg	D2_StormNextLink	12 insns
 Source/D2Game/Unit/SUnitMsg	D2Game::UNIT::SUnitMsg::GetClassIdInline	6 insns

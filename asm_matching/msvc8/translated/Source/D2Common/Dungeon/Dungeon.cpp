@@ -3680,18 +3680,31 @@ static int32_t DRLGPATH_ExtractPathFromResult(D2PathTypeArg * nPathCtx, D2DrlgRo
 int32_t __fastcall DRLGPATH_FindPathAStar(D2DrlgRoomCoordsStrc * pRoomCoords, int, D2PathTypeArg * pPathTypeArg) {
     uint32_t nInitCostClamped;
     D2DrlgRoomAStarNodeStrc* pFoundNode;
-    D2DrlgAStarContextStrc* pDVar1;
     D2DrlgAStarContextStrc sAStarCtx;
     D2DrlgRoomAStarNodeStrc sStartNode;
     int nCostMax;
     int32_t nErrorLine;
-    short int nHCost;
     if (pRoomCoords->dwXSize * pRoomCoords->dwYSize > 50000) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x171);
       exit(-1);
     }
 
     memset(sAStarCtx.aGridCells, 0, (pRoomCoords->dwXSize + 6) * (pRoomCoords->dwYSize + 6) * 4);
+    sAStarCtx.nWidth = (uint16_t)pRoomCoords->dwXSize;
+    sAStarCtx.nMinY = (uint16_t)pRoomCoords->dwYStart;
+    sAStarCtx.nHeight = (uint16_t)pRoomCoords->dwYSize;
+    sAStarCtx.nMinX = (uint16_t)pRoomCoords->dwXStart;
+    sAStarCtx.nMaxX = sAStarCtx.nWidth + sAStarCtx.nMinX;
+    sAStarCtx.nGridStride = sAStarCtx.nWidth + 6;
+    sAStarCtx.nGridOffsetX = 3 - sAStarCtx.nMinX;
+    sAStarCtx.nMaxY = sAStarCtx.nHeight + sAStarCtx.nMinY;
+    sAStarCtx.nGridOffsetY = 3 - sAStarCtx.nMinY;
+    sAStarCtx.bRandomizeDirection = FALSE;
+    if (pPathTypeArg->ePathType == 0x10) {
+      sAStarCtx.bRandomizeDirection = TRUE;
+      sAStarCtx.pSeed = &pPathTypeArg->pDynamicPath->pOwner->sSeed;
+    }
+
     *(uint32_t*)&sStartNode.nX = pPathTypeArg->tStartCoord;
     D2PathPointStrc nPackedTo = pPathTypeArg->tTargetCoord;
     int nPathLength = (uint16_t)(uint32_t)d2_bits_of(nPackedTo) - (uint16_t)*(uint32_t*)&sStartNode.nX;
@@ -3718,8 +3731,11 @@ int32_t __fastcall DRLGPATH_FindPathAStar(D2DrlgRoomCoordsStrc * pRoomCoords, in
     sStartNode.nDirection = nCostLimit & 7;
     sStartNode.pNext = 0;
     sStartNode.pParent = 0;
+    memset(&sAStarCtx.aNodes[0], 0, sizeof(sAStarCtx.aNodes[0]));
+    sAStarCtx.pOpenListHead = sAStarCtx.aNodes;
     nCostLimit = (uint32_t)(short int)wInitialHCost;
     sStartNode.pSeedPtr = gnDrlgLevelSeed;
+    sAStarCtx.nNodeCount = 1;
     if (pPathTypeArg->ePathType) {
       nCostMax = nCostLimit;
       if (pPathTypeArg->ePathType == 0x10) {
@@ -3741,14 +3757,7 @@ int32_t __fastcall DRLGPATH_FindPathAStar(D2DrlgRoomCoordsStrc * pRoomCoords, in
     }
 
     do {
-      pFoundNode = &sStartNode;
-      pDVar1 = &sAStarCtx;
-      for (nPathLength = 7; pDVar1 = (D2DrlgAStarContextStrc*)pDVar1->aNodes , nPathLength != 0; nPathLength--) {
-        nHCost = pFoundNode->nHCost;
-        ((D2DrlgRoomAStarNodeStrc*)pDVar1)->nFCost = pFoundNode->nFCost;
-        ((D2DrlgRoomAStarNodeStrc*)pDVar1)->nHCost = nHCost;
-        pFoundNode = (D2DrlgRoomAStarNodeStrc*)&pFoundNode->nGCost;
-      }
+      *sAStarCtx.pOpenListHead = sStartNode;
 
       pFoundNode = DRLGPATH_AStarExpandNode(nCostLimit, pPathTypeArg, &sAStarCtx);
       nCostLimit += 5;

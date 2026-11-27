@@ -651,7 +651,7 @@ D2ClientSoundChannelStrc * __fastcall SOUND_PlaySoundWithPanning(D2SoundChannelS
 
     pPlayingChannel->dwLastEaxObstruction = 0.0;
     pPlayingChannel->nLastVolume = -1;
-    memset(&pPlayingChannel->dwLastPosX, 0, 3 * sizeof(float));
+    memset(&pPlayingChannel->dwLastPosX, 0, offsetof(D2ClientSoundChannelStrc, nLastVolume) - offsetof(D2ClientSoundChannelStrc, dwLastPosX));
     SOUND_UpdateChannelParams(pPlayingChannel);
     D2SoundChannelStrc* pSoundDescBackup = pSoundDesc;
     if (!pSoundTxt->Stream) {

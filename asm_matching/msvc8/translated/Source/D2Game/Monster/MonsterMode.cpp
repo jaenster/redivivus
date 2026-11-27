@@ -386,7 +386,7 @@ static void __stdcall MONSTERMODE_OnDeath(uint8_t nDirection, ::SGAMEDATA * pGam
     MONSTER_RemoveAiAndRegenTimers(pGame, pUnit);
 }
 
-void __stdcall SERVER_ITEM_DecideDrops(::SGAMEDATA * pGame, D2UnitStrc * pUnit, BOOL bIsItemFindDrop, D2ObjectOperateFnArg * pUnitKill) {
+void __stdcall SERVER_ITEM_DecideDrops(::SGAMEDATA * pGame, D2UnitStrc * pUnit, BOOL bIsItemFindDrop, D2ModeChangeStrc * pUnitKill) {
     BOOL _bHasCurseState;
     bool bQuestStateCheck;
     eD2LevelId nLevelId;
@@ -451,7 +451,7 @@ void __stdcall SERVER_ITEM_DecideDrops(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
           }
         }
         if (pMonStats->TCQuestId > '\0' && (uint16_t)pMonStats->TreasureClass[nDifficulty].TreasureClass4 > 0 && pUnitKill) {
-          pAttacker = pUnitKill->pAttacker;
+          pAttacker = pUnitKill->pTargetUnit;
           if (pAttacker) {
             if (pAttacker->eUnitType != UNIT_PLAYER) {
               pEffectiveAttacker = Ai::AiGeneral::GetOwnerUnit(pAttacker);
@@ -486,7 +486,7 @@ void __stdcall SERVER_ITEM_DecideDrops(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
           }
         }
 
-        ITEMS::Items::Drop::SERVER_ITEM_RollItemAndGetTreasureClass(pGame, pUnit, pUnitKill->pAttacker, nSelectedTC_00, QUALITY_INVALID, nVictimLevel, bIsItemFindDrop, nullptr, nullptr, 0);
+        ITEMS::Items::Drop::SERVER_ITEM_RollItemAndGetTreasureClass(pGame, pUnit, pUnitKill->pTargetUnit, nSelectedTC_00, QUALITY_INVALID, nVictimLevel, bIsItemFindDrop, nullptr, nullptr, 0);
         return;
       }
     }
@@ -500,12 +500,12 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_17(D2UnitStrc * p) 
     return p->eUnitFlags >> 17 & 1;
 }
 
-// Drops the dead monster's treasure: validates the victim unit from pUnitKill->sArg.pVictim, skips units with flag bit 0x11 set and classId 0x158 (bonewall), checks COLLISION_ITEMS at the victim's position, then calls SERVER_ITEM_DecideDrops. Called once from MONSTER_OnDeathDispatch (0x005a7027).
-void __fastcall MONSTERMODE_TryDropTreasure(::SGAMEDATA * pGame, D2ObjectOperateFnArg * pUnitKill, uint32_t dwParam) {
+// Drops the dead monster's treasure: validates the victim unit from pUnitKill->pUnit, skips units with flag bit 0x11 set and classId 0x158 (bonewall), checks COLLISION_ITEMS at the victim's position, then calls SERVER_ITEM_DecideDrops. Called once from MONSTER_OnDeathDispatch (0x005a7027).
+void __fastcall MONSTERMODE_TryDropTreasure(::SGAMEDATA * pGame, D2ModeChangeStrc * pUnitKill, uint32_t dwParam) {
     D2RoomStrc* pFreeCoordRoom;
     D2MonStatsTxt* pVictimMonStats;
     eCollisionFlags eCollisionFlag;
-    D2UnitStrc* pVictim = pUnitKill->sArg.pVictim;
+    D2UnitStrc* pVictim = pUnitKill->pUnit;
     if (!pVictim) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x1ed);
       exit(-1);
@@ -975,7 +975,7 @@ BOOL __fastcall MONSTER_OnDeathDispatch(::SGAMEDATA * pGame, D2ModeChangeStrc * 
     D2UnitStrc* pVictim = pMonsterKill->pUnit;
     UNIT::SUnit::FreeCombatAndChangeAnimMode(pGame, pVictim, 0);
     MONSTERMODE_OnDeath(pMonsterKill->nAnimatedMode1, pGame, pVictim);
-    MONSTERMODE_TryDropTreasure(pGame, (D2ObjectOperateFnArg*)pMonsterKill, 0);
+    MONSTERMODE_TryDropTreasure(pGame, pMonsterKill, 0);
     MonsterRegion::IncreaseMonKillCount(pGame->pMonsterRegion, pVictim);
     if (!pVictim) {
       nClassId = -1;

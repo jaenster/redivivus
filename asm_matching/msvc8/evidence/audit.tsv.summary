@@ -1,27 +1,27 @@
-tree 8e92de8bb-dirty; compiler sp1; flags /O2 /Oy- /Ob1 /EHsc /GS /MT /W1 /D WIN32 /D NDEBUG /D _WINDOWS /D D2_OS_WIN=1 /D D2_ARCH_X86=1 /D D2_TARGET_CLIENT=1; Source/D2Client/ /GS-; Source/D2DDraw/ /GS-; Source/D2Direct3D/ /GS-; Source/D2Gdi/ /GS-; Source/D2Glide/ /GS-; Source/D2Launch/ /GS-; Source/D2Launch/Engine/ ; Source/D2MCPClient/ /GS-; Source/D2Multi/ /GS-; Source/D2Sound/ /GS-; Source/D2Win/ /GS-; Source/D2gfx/ /GS-; Source/D2Hell/ /Y- /O1 /Oy- /Ob1; 3rdparty/crashy/ /Y- /DWINSOCK_API_LINKAGE=DECLSPEC_IMPORT; Source/Storm/3rdparty/zlib/ /Y- /Ob2
-Without the C runtime: 12042 of 14900 functions MATCH (80.82%), 1468819 of 2612801 bytes (56.22%)
+tree ab6f6661-dirty; compiler sp1; flags /O2 /Oy- /Ob1 /EHsc /GS /MT /W1 /D WIN32 /D NDEBUG /D _WINDOWS /D D2_OS_WIN=1 /D D2_ARCH_X86=1 /D D2_TARGET_CLIENT=1; Source/D2Client/ /GS-; Source/D2DDraw/ /GS-; Source/D2Direct3D/ /GS-; Source/D2Gdi/ /GS-; Source/D2Glide/ /GS-; Source/D2Launch/ /GS-; Source/D2Launch/Engine/ ; Source/D2MCPClient/ /GS-; Source/D2Multi/ /GS-; Source/D2Sound/ /GS-; Source/D2Win/ /GS-; Source/D2gfx/ /GS-; Source/D2Hell/ /Y- /O1 /Oy- /Ob1; 3rdparty/crashy/ /Y- /DWINSOCK_API_LINKAGE=DECLSPEC_IMPORT; Source/Storm/3rdparty/zlib/ /Y- /Ob2
+Without the C runtime: 12091 of 14900 functions MATCH (81.15%), 1480392 of 2612801 bytes (56.66%)
   runtime left out: 987 functions (145381 bytes): libmap pairs, the library run 00681a48..006b00b3, import thunks, runtime.tsv
   prebuilt library left out: 16 functions (4397 bytes): byte-identical to the prebuilt library objects in prebuilt.tsv
   compiler EH code left out: 117 functions (2245 bytes): __ehhandler stubs and the unwind funclets their FuncInfo names
 byte kinds of the headline total: 2612801 bytes
-  kind whole       1468819  56.22% functions that compile to the original bytes (MATCH)
-  kind ident        656293  25.12% already right, but the function still differs elsewhere
-  kind operand      224622   8.60% same instruction, other registers or offsets
-  kind differ       229889   8.80% instructions with no matching partner
-  kind noncode       18703   0.72% switch tables and padding in functions that still differ
-  kind uncompared    14475   0.55% original functions with no counterpart compared
+  kind whole       1480392  56.66% functions that compile to the original bytes (MATCH)
+  kind ident        648264  24.81% already right, but the function still differs elsewhere
+  kind operand      222870   8.53% same instruction, other registers or offsets
+  kind differ       228149   8.73% instructions with no matching partner
+  kind noncode       18509   0.71% switch tables and padding in functions that still differ
+  kind uncompared    14617   0.56% original functions with no counterpart compared
 whole binary:
 original functions: 16020 (2764824 bytes of code)
-mapped and compared: 15239
-  MATCH              12642
-  REF_DIFF               3
-  INSN_MATCH            96
-  INSN_COUNT_MATCH     370
-  OUR+-N              2128
-  QUARANTINE             0
+mapped and compared: 15192
+  MATCH              12653
+  REF_DIFF               1
+  INSN_MATCH            95
+  INSN_COUNT_MATCH     351
+  OUR+-N              2091
+  QUARANTINE             1
   MISSING                0
-matched code: 1570796 bytes (56.81% of the original)
-  of which the statically linked runtime (libmap.tsv): 676 compared (131358 bytes), 597 MATCH (101938 bytes)
-pairings by funcmap tier: sourcemap 14530, lib-exact 510, lib-order 93, lib-similar 41, lib-votes 32, exact 17, votes 7, bracket 5, calls 3, align 1
-globals seen at aligned instructions: 3228, of which consistent 3173 (datamap.tsv)
+matched code: 1578662 bytes (57.10% of the original)
+  of which the statically linked runtime (libmap.tsv): 629 compared (126047 bytes), 559 MATCH (98231 bytes)
+pairings by funcmap tier: sourcemap 14530, lib-exact 498, lib-order 89, lib-similar 42, exact 17, votes 7, bracket 5, calls 3, align 1
+globals seen at aligned instructions: 3218, of which consistent 3168 (datamap.tsv)
 self-check, names carrying their own address: 895 agree, 0 elsewhere

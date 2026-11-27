@@ -457,7 +457,7 @@ void * __fastcall ReallocTrackedAllocation(D2PoolManagerStrc * pManager, void * 
 
     void* pNewAlloc = realloc(pAllocBase, nNewSize + sizeof(D2PoolOverflowHeader));
     if (!pNewAlloc) {
-      OutOfMemoryHandler("Unable to allocate free block of %s", nNewSize);
+      OutOfMemoryHandler("Unable to allocate free block of %d", nNewSize);
       Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), 0x421);
       exit(-1);
     }

@@ -880,7 +880,7 @@ void WriteCmpData(TCmpStruct * pCmp) {
         if (__frame0.nPassCount != 1) {
           SortBuffer(pCmp, (uint8_t*)((char*)pbWindowCursor - nDictSizeBytes), pbWindowEnd + 1);
         } else {
-          SortBuffer(pCmp, (uint8_t*)((char*)pbWindowCursor + (0x204 - nDictSizeBytes)), pbWindowEnd + 1);
+          SortBuffer(pCmp, (uint8_t*)((char*)pbWindowCursor + 0x204 - nDictSizeBytes), pbWindowEnd + 1);
           __frame0.nPassCount++;
         }
       } else {

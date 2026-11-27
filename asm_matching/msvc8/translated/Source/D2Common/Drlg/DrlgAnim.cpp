@@ -179,7 +179,7 @@ void __fastcall DRLGANIM_AllocAnimatedTiles(D2DrlgGridStrc * pGrids, D2RoomExStr
             pTileEntryPtr = &pTileIter->pTileLibraryEntry;
             nMatchCount = D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetTileCount(pTileIter->pTileLibraryEntry);
             if (nMatchCount & 0x100) {
-              nCellGridFlags = DrlgGrid::GetGridFlags(pGridsCtx + (((uint32_t)pTileIter->nFlags >> 0xe & 7) - 1), pTileIter->nPosX, pTileIter->nPosY);
+              nCellGridFlags = DrlgGrid::GetGridFlags(pGridsCtx + ((int)((uint32_t)pTileIter->nFlags >> 0xe & 7) - 1), pTileIter->nPosX, pTileIter->nPosY);
               if (nCellGridFlags) {
                 nOrientation = (uint8_t)(nCellGridFlags >> 0x14) & 0x3f;
                 nIndex = nCellGridFlags >> 8;

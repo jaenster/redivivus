@@ -300,7 +300,7 @@ float __fastcall SOUND_CalculateUnitDistance(int32_t pThis, int, D2UnitStrc * pU
 
 static void SOUND_Calculate3DPosition(float * pfPosition, D2SoundChannelStrc * pChannel) {
     if (pChannel && pfPosition) {
-      memcpy(&pChannel->fPosX, pfPosition, sizeof(float) * 3);
+      memcpy(&pChannel->fPosX, pfPosition, offsetof(D2SoundChannelStrc, fPanResult) - offsetof(D2SoundChannelStrc, fPosX));
       float fPanX = SOUND_CalculatePanning(pfPosition[0], -2000.0, 2000.0);
       float fPanY = SOUND_CalculatePanning(pfPosition[1], -2000.0, 2000.0);
       pChannel->fPanResult = _Utils::CalculateHypotenusePowered(fPanX, fPanY);

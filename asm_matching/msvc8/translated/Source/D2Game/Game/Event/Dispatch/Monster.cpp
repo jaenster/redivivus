@@ -179,7 +179,7 @@ void __fastcall BarbFindItemSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Uni
     D2ModeChangeStrc sModeChange;
     sModeChange.pTargetUnit = pAttacker;
     sModeChange.pUnit = pUnit;
-    D2Game::Monster::MonsterMode::SERVER_ITEM_DecideDrops(pGame, pUnit, 1, (D2ObjectOperateFnArg*)&sModeChange);
+    D2Game::Monster::MonsterMode::SERVER_ITEM_DecideDrops(pGame, pUnit, 1, &sModeChange);
 }
 
 // END-OF-FRAME AI DISPATCHER:
