@@ -450,23 +450,19 @@ BYTE * __fastcall RENDERER_WINDOWED_GetPalettePointer(int nDrawMode, uint32_t * 
 
 // Windowed GDI renderer helper functions - DIB section allocation, palette conversion, line drawing (Bresenham), crop rect calculation, Smacker video blitting
 void __fastcall RENDERER_WINDOWED_UpdateScaleFactor(int nParam) {
-    RENDERER_WINDOWED_nScaleOffsetY = 0;
     switch (nParam) {
       case 0:
-        {
-          RENDERER_WINDOWED_nScaleWidth = 0x280;
-          return;
-        }
+        RENDERER_WINDOWED_nScaleWidth = 0x280;
+        RENDERER_WINDOWED_nScaleOffsetY = 0;
+        break;
       case 3:
-        {
-          RENDERER_WINDOWED_nScaleWidth = 0x540;
-          return;
-        }
+        RENDERER_WINDOWED_nScaleWidth = 0x540;
+        RENDERER_WINDOWED_nScaleOffsetY = 0;
+        break;
       default:
-        {
-          RENDERER_WINDOWED_nScaleWidth = 800;
-          return;
-        }
+        RENDERER_WINDOWED_nScaleWidth = 800;
+        RENDERER_WINDOWED_nScaleOffsetY = 0;
+        break;
     }
 }
 
