@@ -1955,102 +1955,50 @@ void __fastcall SUNITNPC_ProcessRepair(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 // @sourcefile .\UNIT\SUNITNPC.CPP
 // 1.14d mac: 00289859
 void __fastcall SUNITNPC_HandleIdentify(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nNpcGUID) {
-    int32_t nUnidentifiedCount;
-    int32_t nPlayerGold;
-    BOOL BVar6;
-    D2UnitStrc* pFirstItem;
-    D2UnitStrc* pNextItem;
-    D2ClientStrc* pClient;
-    uint8_t bResult;
-    int32_t nNpcGUIDResult;
-    uint8_t nTransactionResult;
-    uint32_t nNpcClassId;
-    int32_t nSourceLine;
-    D2UnitStrc* pInteractedNpc;
-    pInteractedNpc = SUnit::GetInteractedNpc(pGame, pUnit);
-    D2UnitStrc* pNpc;
-    pNpc = SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, nNpcGUID);
+    D2UnitStrc* pInteractedNpc = SUnit::GetInteractedNpc(pGame, pUnit);
+    D2UnitStrc* pNpc = SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, nNpcGUID);
     if (!pNpc || pInteractedNpc != pNpc) {
-      bResult = 0;
-      nNpcGUIDResult = -1;
-      nPlayerGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
-      nTransactionResult = 9;
-      nSourceLine = 0xa6d;
-    } else {
-      eInventoryPage eItemPage;
-      nNpcClassId = pNpc->nClassId;
-      if (nNpcClassId <= 0x109) {
-        if (nNpcClassId != 0x109) {
-          if (nNpcClassId < 0xf4) {
-            return;
-          }
-          if (nNpcClassId > 0xf6) {
-            return;
-          }
-        }
-      } else if (nNpcClassId != 0x208) {
-        return;
-      }
-
-      nUnidentifiedCount = D2Common::ITEMS::Items::PLAYER_GetUnidentifiedItemsCount(pUnit);
-      if (!nUnidentifiedCount) {
-        nNpcGUIDResult = -1;
-        nPlayerGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
-        bResult = (uint8_t)nUnidentifiedCount;
-        nTransactionResult = 9;
-        nSourceLine = 0xa81;
-      } else {
-        BVar6 = D2Common::QuestRecord::GetQuestState(Quests::QUESTS::GetQuestBitBufferInline(pGame, pUnit), QUEST_TheSearchForCain, QUESTSTATE_Completed);
-        if (BVar6 != 1) {
-          BVar6 = D2Common::QuestRecord::GetQuestState(Quests::QUESTS::GetQuestBitBufferInline(pGame, pUnit), QUEST_TheSearchForCain, QUESTSTATE_RewardAwaits);
-          if (BVar6 != 1) {
-            BVar6 = CheckIfPlayerCanAffordCost(pGame, pUnit, nUnidentifiedCount * 100);
-            if (!BVar6) {
-              nNpcGUIDResult = -1;
-              nPlayerGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
-              bResult = (uint8_t)BVar6;
-              nTransactionResult = 0xc;
-              nSourceLine = 0xa90;
-              goto send_transaction_result;
-            }
-          }
-        }
-
-        pFirstItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pUnit->pInventory);
-        while (pFirstItem) {
-          pNextItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pFirstItem);
-          nSourceLine = D2Common::INVENTORY::Inventory::ITEM_GetItemData_eD2InventoryGridType(pFirstItem);
-          pInteractedNpc = D2Common::INVENTORY::Inventory::GetCarriedItem(pFirstItem);
-          pFirstItem = pNextItem;
-          if (nSourceLine != 1) {
-            if (nSourceLine == 3) {
-              identify_item:
-              BVar6 = D2Common::ITEMS::Items::CheckItemFlag(pInteractedNpc, ITEMFLAG_IDENTIFIED, 0xaa1, ".\\UNIT\\SUNITNPC.CPP");
-              if (!BVar6) {
-                ITEMS::ItemMode::ITEMMODE_IdentifyItem(pGame, pUnit, pInteractedNpc);
-              }
-            }
-
-            continue;
-          }
-
-          eItemPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pInteractedNpc);
-          if (eItemPage == INVPAGE_INVENTORY || (eItemPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pInteractedNpc) , eItemPage == INVPAGE_CUBE)) {
-            goto identify_item;
-          }
-        }
-
-        bResult = 0;
-        nNpcGUIDResult = -1;
-        nPlayerGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
-        nTransactionResult = 3;
-        nSourceLine = 0xaaa;
-      }
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x2A_NpcTransaction(SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUNITNPC.CPP", 0xa6d), 0x2a, 9, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0), -1, 0);
+      return;
     }
 
-    send_transaction_result:
-    pClient = SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUNITNPC.CPP", nSourceLine);
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x2A_NpcTransaction(pClient, 0x2a, nTransactionResult, nPlayerGold, nNpcGUIDResult, bResult);
+    switch ((uint32_t)pNpc->nClassId) {
+      case 0xf4:
+      case 0xf5:
+      case 0xf6:
+      case 0x109:
+      case 0x208:
+        break;
+      default:
+        return;
+    }
+
+    int nUnidentifiedCount = D2Common::ITEMS::Items::PLAYER_GetUnidentifiedItemsCount(pUnit);
+    if (!nUnidentifiedCount) {
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x2A_NpcTransaction(SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUNITNPC.CPP", 0xa81), 0x2a, 9, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0), -1, 0);
+      return;
+    }
+
+    if (D2Common::QuestRecord::GetQuestState(Quests::QUESTS::GetQuestBitBufferInline(pGame, pUnit), QUEST_TheSearchForCain, QUESTSTATE_Completed) != 1 && D2Common::QuestRecord::GetQuestState(Quests::QUESTS::GetQuestBitBufferInline(pGame, pUnit), QUEST_TheSearchForCain, QUESTSTATE_RewardAwaits) != 1 && !CheckIfPlayerCanAffordCost(pGame, pUnit, nUnidentifiedCount * 100)) {
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x2A_NpcTransaction(SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUNITNPC.CPP", 0xa90), 0x2a, 0xc, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0), -1, 0);
+      return;
+    }
+
+    D2UnitStrc* pInvItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pUnit->pInventory);
+    while (pInvItem) {
+      D2UnitStrc* pNextItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pInvItem);
+      int nGridType = D2Common::INVENTORY::Inventory::ITEM_GetItemData_eD2InventoryGridType(pInvItem);
+      D2UnitStrc* pItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pInvItem);
+      if ((nGridType == INVENTORY_GRID_TYPE_INVENTORY && (D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pItem) == INVPAGE_INVENTORY || D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pItem) == INVPAGE_CUBE)) || nGridType == INVENTORY_GRID_TYPE_BODYLOC) {
+        if (!D2Common::ITEMS::Items::CheckItemFlag(pItem, ITEMFLAG_IDENTIFIED, 0xaa1, ".\\UNIT\\SUNITNPC.CPP")) {
+          ITEMS::ItemMode::ITEMMODE_IdentifyItem(pGame, pUnit, pItem);
+        }
+      }
+
+      pInvItem = pNextItem;
+    }
+
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x2A_NpcTransaction(SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUNITNPC.CPP", 0xaaa), 0x2a, 3, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0), -1, 0);
 }
 
 static BOOL __stdcall UnitHasItemInInventory(int32_t guid, D2UnitStrc * pUnit) {
