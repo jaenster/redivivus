@@ -39,11 +39,11 @@ enum {
 
 // BinkOpen, BinkClose, BinkDoFrame, BinkNextFrame, BinkWait, BinkCopyToBuffer and
 // BinkSetSoundSystem are declared for every target by Source/D2Headers/d2_platform.h (void *
-// handles, __stdcall, which PowerPC ignores). The Mac adds these three.
+// handles; on the Mac it spells __stdcall away). The Mac adds these three.
 extern "C" {
-__stdcall int32_t BinkGetRects(void * pBink, uint32_t flags);
-__stdcall uint32_t BinkGDSurfaceType(GDHandle device);
-__stdcall void * BinkOpenSoundManager(uint32_t param);
+int32_t BinkGetRects(void * pBink, uint32_t flags);
+uint32_t BinkGDSurfaceType(GDHandle device);
+void * BinkOpenSoundManager(uint32_t param);
 }
 
 // Smacker, the fields the D2SmackerContextStrc users read (the published Smack layout).

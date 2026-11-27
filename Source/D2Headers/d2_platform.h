@@ -49,6 +49,13 @@ extern "C" void* _AddressOfReturnAddress(void);
 
 #include <cstdint>
 #include <cstddef>
+// The Mac keeps its own C library's FILE (struct __sFILE) and has no errno_t.
+#if !defined(_WIN32) && D2_OS_MAC
+#  ifndef _FILE_DEFINED
+#    define _FILE_DEFINED 1
+#  endif
+typedef int errno_t;
+#endif
 // MSVC CRT stream layout (what Ghidra models and what D2 indexes into).
 // Claimed before <cstdio> so a UCRT toolchain cannot substitute its opaque
 // one-member _iobuf; FILE stays `struct _iobuf`, so the CRT calls still fit.
@@ -284,6 +291,18 @@ static inline int WideCharToMultiByte(UINT cp, DWORD flags, const uint16_t* src,
   return WideCharToMultiByte(cp, flags, (LPCWCH)src, srcLen, dst, dstLen, dflt, usedDflt);
 }
 #else
+
+#if D2_OS_MAC
+// The Mac has the one calling convention: the shared code's Windows conventions are
+// spelled away, as the 1.14d Mac build passes every argument on the stack.
+#  define __cdecl
+#  define __stdcall
+#  define __fastcall
+#  define __thiscall
+#endif
+#ifndef _countof
+#  define _countof(a) (sizeof(a) / sizeof((a)[0]))
+#endif
 
 // Scalar types
 typedef int BOOL;

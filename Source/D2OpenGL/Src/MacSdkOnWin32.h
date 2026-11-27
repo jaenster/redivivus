@@ -6,12 +6,117 @@
 // types are; and its calls into those frameworks, the Mac libc and the Mac-only
 // Storm helpers, in namespace D2OpenGL, where an unqualified call from the module
 // finds them before any Win32 function of the same name (ShowWindow, SetRect).
-// Windows-only; the window is the game's (D2GFX GetHwnd), never one of our own.
+// On Windows the window is the game's (D2GFX GetHwnd), never one of our own. The Mac
+// build takes the first branch below: the 10.7 SDK itself.
 //
 // A structure the Mac returns in memory keeps the i386 Darwin convention the
 // decompile shows: the result pointer is the first argument, and is returned.
 
 #pragma once
+
+#include "Source/D2Headers/D2Arch.h"
+
+#if !defined(_WIN32) && D2_OS_MAC
+
+// On the Mac the renderer calls the real frameworks. What stays here: the calls whose
+// shape in the decompile differs from the 10.7 SDK's (a structure returned through a
+// leading result pointer, a const-less result), as inline forwarders in namespace
+// D2OpenGL that hide the SDK's name; and the Mac Storm, MacSpecific and Bink entry
+// points the renderer calls, which no SDK header declares.
+
+#include <cstdint>
+#include <cstddef>
+#include <pthread.h>
+#include <string.h>
+#include <Carbon/Carbon.h>
+#include <AGL/agl.h>
+#include <OpenGL/gl.h>
+#include <OpenGL/glext.h>
+#include <OpenGL/glu.h>
+#include "Source/MacSpecific/Source/MacShell/QuickDrawMac.h"
+
+typedef int64_t __guard;
+
+struct D2TileLibraryEntryStrc;
+
+// The Bink the Mac links statically; the module keeps a movie as a BINK pointer.
+struct BINK { uint32_t Width, Height, Frames, FrameNum; };
+typedef BINK *HBINK;
+typedef void *BINKSNDSYSOPEN(uint32_t dwParam);
+
+extern "C" {
+extern uintptr_t __stack_chk_guard;
+void __stack_chk_fail(void) __attribute__((noreturn));
+void __bzero(void *pDest, size_t nSize);
+int __cxa_guard_acquire(__guard *pGuard);
+void __cxa_guard_release(__guard *pGuard);
+void __cxa_pure_virtual(void);
+}
+
+namespace D2OpenGL {
+
+inline CGRect *CGDisplayBounds(CGRect *pResult, CGDirectDisplayID nDisplay)
+{
+    *pResult = ::CGDisplayBounds(nDisplay);
+    return pResult;
+}
+inline CGRect *CGContextConvertRectToUserSpace(CGRect *pResult, CGContextRef hContext, CGRect rect)
+{
+    *pResult = ::CGContextConvertRectToUserSpace(hContext, rect);
+    return pResult;
+}
+inline GLubyte *glGetString(GLenum eName)
+{
+    return (GLubyte *)::glGetString(eName);
+}
+inline GLubyte *aglErrorString(GLenum nError)
+{
+    return (GLubyte *)::aglErrorString(nError);
+}
+
+// ---- Mac Storm and MacSpecific helpers the renderer calls
+
+// Storm fp_fatal: every renderer halt is fp_fatal("... %08x line %d", address, line)
+void fp_fatal(char *szFormat, ...);
+void MAC_WarpMouseCursorPosition(uint32_t ptPosition);
+void HANDLE_GetFileRefNum(void *hFile, int16_t *pRefNum);
+int16_t FilepathToFSSpec(void *pSpec, const void *szPath, int nFlags);
+// BinkOpen on the file HANDLE_GetFileRefNum last saw; the Mac passes the HFS refnum
+void *BinkOpenRefNum(void *pRefNum, uint32_t dwFlags);
+void MACCURSOR_InitCursor(void);
+void MACCURSOR_ShowDisplayCursor(void);
+void MACCURSOR_HideDisplayCursor(void);
+void MACCURSOR_SetCursorProcs(void);
+void MACCURSOR_RestoreCursor(void);
+CGDisplayModeRef MACDISPLAY_FindBestDisplayMode(CGDirectDisplayID nDisplay, uint32_t nWidth, uint32_t nHeight, uint32_t nBits,
+                                                uint32_t nRefreshHz, uint8_t bStretched, uint8_t bAcceptClosest);
+void MACDISPLAY_SetGammaRamp(CGDirectDisplayID nDisplay, int nGamma, int nContrast);
+void MACDISPLAY_RestoreGammaRamp(CGDirectDisplayID nDisplay);
+void MAC_SettleWait(void);
+int MAC_GetBinkSurfaceType(CGDirectDisplayID nDisplay);
+void MAC_OnWindowZoom(void);
+// Storm's Win32 layer on the Mac: the Win32 calls, with its own handle types
+int CloseHandle(void *hObject);
+intptr_t SendMessageA(void *hWnd, uint32_t nMsg, uintptr_t wParam, intptr_t lParam);
+int SetRect(void *pRect, int nLeft, int nTop, int nRight, int nBottom);
+// Mac 00134d0f: loads a tile's sprite into the cache.
+int SPRITECACHE_EnsureSpriteLoaded(::D2TileLibraryEntryStrc *pTile);
+using ::BinkOpenDirectSound;
+using ::__stack_chk_guard;
+using ::__stack_chk_fail;
+using ::__bzero;
+using ::__cxa_guard_acquire;
+using ::__cxa_guard_release;
+using ::__cxa_pure_virtual;
+using ::kCGColorBlack;
+using ::CGPointZero;
+// The Mac application's procedure table
+extern void *PTR_DAT_00397abc;
+
+}  // namespace D2OpenGL
+
+#else  // the renderer on Win32 and WGL
+
 
 #include <cstdint>
 #include <cstddef>
@@ -221,3 +326,5 @@ using ::BinkOpenDirectSound;
 extern void *PTR_DAT_00397abc;
 
 }  // namespace D2OpenGL
+
+#endif  // !defined(_WIN32) && D2_OS_MAC

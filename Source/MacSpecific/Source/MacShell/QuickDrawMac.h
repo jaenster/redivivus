@@ -1,4 +1,4 @@
-// The QuickDraw calls the Mac shell makes. The 10.7 SDK's headers no longer declare
+// The QuickDraw and Display Manager calls the Mac shell and the OpenGL renderer make. The 10.7 SDK's headers no longer declare
 // QuickDraw (the library still exports it, and the 1.14d binary imports it), so the
 // prototypes are written out here from the 10.6 SDK's QuickDraw.h. Not an original header.
 #pragma once
@@ -29,6 +29,9 @@ void CopyDeepMask(const BitMap* pSrc, const BitMap* pMask, const BitMap* pDst, c
 CTabHandle GetCTable(short nCTableId);
 void DisposeCTable(CTabHandle hCTable);
 void DisposeGWorld(GWorldPtr pWorld);
+GDHandle GetMainDevice(void);
+GDHandle DMGetFirstScreenDevice(Boolean bActiveOnly);
+GDHandle DMGetNextScreenDevice(GDHandle hDevice, Boolean bActiveOnly);
 }
 
 enum {

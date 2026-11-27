@@ -251,9 +251,9 @@ typedef void (__fastcall *fpUpdateScaleFactor)(int nScaleFactor);
 // Data types
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
 
-typedef _devicemodeA DEVMODEA;
+typedef struct _devicemodeA DEVMODEA;
 
-typedef tagWNDCLASSA WNDCLASSA;
+typedef struct tagWNDCLASSA WNDCLASSA;
 
 D2_PACKED_BEGIN struct __attribute__((packed)) _AppBarData {
     /* 0x00 */ DWORD cbSize;
