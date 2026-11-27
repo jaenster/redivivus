@@ -640,8 +640,8 @@ D2UnitStrc * __fastcall SpawnMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, in
         eRoomLevelId = D2Common::DUNGEON::Dungeon::GetLevelIdFromPopulatedRoom(pRoom);
       pGame2 = pGameLocal;
       pMonsterRegion = Monster::MonsterRegion::ReturnMonsterRegionEntryForLevel(pGameLocal->pMonsterRegion, eRoomLevelId);
-      dwClassId = SKILLS::SkillItem::MONREGION_RollRandomMonsterType(pGame2, pMonsterRegion, pRoom, (D2MonStatsTxt**)&nX, 0, 1);
-      if (!nX) {
+      dwClassId = SKILLS::SkillItem::MONREGION_RollRandomMonsterType(pGame2, pMonsterRegion, pRoom, &pMonStatCheck, 0, 1);
+      if (!pMonStatCheck) {
         return nullptr;
       }
 

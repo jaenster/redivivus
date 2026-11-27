@@ -1317,8 +1317,9 @@ BOOL __fastcall UNITS_CheckSkillTargetAlignment(::SGAMEDATA * pGameStrc, D2UnitS
     if (pUnit && pTarget && (GetTypeInline(pUnit) == UNIT_PLAYER || GetTypeInline(pTarget) == UNIT_MONSTER)) {
       D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? &D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkill] : nullptr;
       if (pSkillsTxt && pSkillsTxt->aFlagBytes[3] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+        // The owner type is written as an int into the low half of the pTarget slot; test only that half.
         Ai::AiGeneral::AIGENERAL_GetOwnerData(pTarget, &eSkill, (int*)&pTarget);
-        if (!pTarget && eSkill == GetGUIDInline(pUnit)) {
+        if (!(int)(intptr_t)pTarget && eSkill == GetGUIDInline(pUnit)) {
           return 1;
         }
       }

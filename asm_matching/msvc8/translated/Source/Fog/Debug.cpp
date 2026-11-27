@@ -2570,27 +2570,21 @@ void __fastcall TriggerManualStackDump(char * szCategory) {
       uint8_t* pContextEsp;
       uint32_t dwContextEip;
       uint8_t* pContextEbp;
-      uint8_t context[716];
+      CONTEXT context;
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 732, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
     __frame0.szCategorySpill = szCategory;
-    memset(__frame0.context, 0, sizeof(__frame0.context));
+    memset(&__frame0.context, 0, sizeof(__frame0.context));
     __frame0.pContextEsp = (uint8_t*)&__frame0.szCategorySpill;
-    *(uint32_t*)((char*)&__frame0.context + 196) = (uint32_t)(uintptr_t)&__frame0.szCategorySpill;
-    __frame0.context[0] = 7;
-    __frame0.context[1] = 0;
-    __frame0.context[2] = 1;
-    __frame0.context[3] = 0;
+    D2_CONTEXT_FIELD(__frame0.context, Esp) = (uintptr_t)&__frame0.szCategorySpill;
+    __frame0.context.ContextFlags = CONTEXT_FULL;
     __frame0.dwContextEip = 0x40d80e;
-    __frame0.context[0xb8] = 0xe;
-    __frame0.context[0xb9] = 0xd8;
-    __frame0.context[0xba] = 0x40;
-    __frame0.context[0xbb] = 0;
+    D2_CONTEXT_FIELD(__frame0.context, Eip) = 0x40d80e;
     __frame0.pContextEbp = (uint8_t*)__builtin_frame_address(0);
-    *(uint32_t*)((char*)&__frame0.context + 180) = (uint32_t)(uintptr_t)(uint8_t*)__builtin_frame_address(0);
+    D2_CONTEXT_FIELD(__frame0.context, Ebp) = (uintptr_t)__builtin_frame_address(0);
     HANDLE hThread = GetCurrentThread();
-    QuickStackWalkWithSymbols(__frame0.szCategorySpill, hThread, (CONTEXT*)__frame0.context);
+    QuickStackWalkWithSymbols(__frame0.szCategorySpill, hThread, &__frame0.context);
 }
 
 // compiler-generated C++ EH handler; its frame is never registered with the OS

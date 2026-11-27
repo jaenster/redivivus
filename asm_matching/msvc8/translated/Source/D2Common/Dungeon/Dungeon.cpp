@@ -3669,7 +3669,7 @@ static int32_t DRLGPATH_ExtractPathFromResult(D2PathTypeArg * nPathCtx, D2DrlgRo
     } while (pParentNode);
 
     if (nWaypointCount >= 0x2 && nWaypointCount <= 0x4d) {
-      memcpy(pWaypointDst, (D2PathPointStrc**)(aWaypointStack + 78) - nWaypointCount, nWaypointCount * sizeof(D2PathPointStrc));
+      memcpy(pWaypointDst, (D2PathPointStrc*)(aWaypointStack + 78) - nWaypointCount, nWaypointCount * sizeof(D2PathPointStrc));
       return nWaypointCount;
     }
 

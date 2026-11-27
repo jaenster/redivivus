@@ -25,9 +25,6 @@
 #include "Source/D2Client/UI/Dialog.data.h"
 #include "Source/D2Client/UI/Help.data.h"
 
-// Steps and field distances inside aStringData, in int32_t units; the record holds a pointer, so both differ on x64.
-#define DIALOG_STRING_STRIDE (int)(sizeof(D2DialogStringData) / sizeof(int32_t))
-#define DIALOG_STRING_DELTA(from, to) ((int)(offsetof(D2DialogStringData, to) - offsetof(D2DialogStringData, from)) / (int)sizeof(int32_t))
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -178,21 +175,21 @@ static int32_t DIALOG_HandleMouseUpEvent(D2DialogStrc * pDialog, D2UIMouseMsgStr
       return -1;
     }
 
-    int32_t* pEntry = &pDialog->aStringData[0].nYPos;
+    D2DialogStringData* pEntry = &pDialog->aStringData[0];
     do {
-      if (pEntry[DIALOG_STRING_DELTA(nYPos, nCallbackParam)] == 1) {
+      if (pEntry->nCallbackParam == 1) {
         nEntryY = pDialog->pCoords2.x;
         if ((int)nMouseX > nEntryY + 0xf && (int)nMouseX < pDialog->nBackgroundWidth - 0xf + nEntryY) {
-          nEntryY = pDialog->pCoords2.y + *pEntry + nScrollOffset;
+          nEntryY = pDialog->pCoords2.y + pEntry->nYPos + nScrollOffset;
           if (uMouseY > nEntryY - 0xb && uMouseY < nEntryY + 4) {
             return nItemIndex;
           }
         }
       }
 
-      nScrollOffset += *pEntry;
+      nScrollOffset += pEntry->nYPos;
       nItemIndex++;
-      pEntry += DIALOG_STRING_STRIDE;
+      pEntry++;
     } while (nItemIndex < pDialog->nSubCounter);
 
     return -1;
@@ -979,7 +976,6 @@ void __fastcall DIALOG_DrawBackground(D2DialogStrc * pDialog) {
     static int32_t gnDialogBackgroundFrame; D2_STATIC_GUARD_BSS(gnDialogBackgroundFrame, "D2Client::UI::Dialog::DIALOG_DrawBackground::gnDialogBackgroundFrame");
 
     int nBottom;
-    int32_t* piStringData;
     D2GfxDataStrc sGfxData;
     RECT sBgRect;
     int32_t nPrevFont;
@@ -1025,12 +1021,11 @@ void __fastcall DIALOG_DrawBackground(D2DialogStrc * pDialog) {
       nYAccum = 0;
       nStringIdx = 0;
       if (pDialog->nSubCounter > 0) {
-        piStringData = &pDialog->aStringData[0].nFont;
         do {
-          nFont = piStringData[1];
-          D2Win::Src::D2WinFont::SetAndReturnLastFont(*piStringData);
-          nColor_lcl = pDialog->pCoords2.y + nYAccum + piStringData[-4];
-          nBottom = piStringData[-3] + pDialog->pCoords2.x;
+          nFont = pDialog->aStringData[nStringIdx].nLineType;
+          D2Win::Src::D2WinFont::SetAndReturnLastFont(pDialog->aStringData[nStringIdx].nFont);
+          nColor_lcl = pDialog->pCoords2.y + nYAccum + pDialog->aStringData[nStringIdx].nYPos;
+          nBottom = pDialog->aStringData[nStringIdx].nXOffset + pDialog->pCoords2.x;
           if (pDialog->nSelectedLine == nStringIdx) {
             if (pDialog->nHighlightStyle == 1) {
               nFont = 3;
@@ -1039,15 +1034,14 @@ void __fastcall DIALOG_DrawBackground(D2DialogStrc * pDialog) {
               sGfxData.pDC6 = ui::UI_GetCursorIconDC6();
               sGfxData.nFrameNumber = gnDialogBackgroundFrame % 7;
               D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nBottom - 0x18, nColor_lcl + 4, -1, DRAW_SOLID, nullptr);
-              D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, piStringData[-2] + 2 + nBottom, nColor_lcl + 4, -1, DRAW_SOLID, nullptr);
+              D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, pDialog->aStringData[nStringIdx].nTextWidth + 2 + nBottom, nColor_lcl + 4, -1, DRAW_SOLID, nullptr);
               gnDialogBackgroundFrame++;
             }
           }
 
-          D2Win::Src::D2WinFont::DRAW_text((uint16_t*)(piStringData - 0x40), nBottom, nColor_lcl, nFont, 0);
-          nYAccum += piStringData[-4];
+          D2Win::Src::D2WinFont::DRAW_text(pDialog->aStringData[nStringIdx].szString, nBottom, nColor_lcl, nFont, 0);
+          nYAccum += pDialog->aStringData[nStringIdx].nYPos;
           nStringIdx++;
-          piStringData += DIALOG_STRING_STRIDE;
         } while (nStringIdx < pDialog->nSubCounter);
       }
 
@@ -1057,7 +1051,6 @@ void __fastcall DIALOG_DrawBackground(D2DialogStrc * pDialog) {
 }
 
 void __fastcall DIALOG_SetSelectedLine(D2DialogStrc * pDialog, int32_t nSubIndex) {
-    int32_t* piStringEntryPtr;
     if (!pDialog) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4e7);
       exit(-1);
@@ -1076,10 +1069,9 @@ void __fastcall DIALOG_SetSelectedLine(D2DialogStrc * pDialog, int32_t nSubIndex
 
       iSubIndex = 0;
       if (pDialog->nSubCounter > 0) {
-        piStringEntryPtr = &pDialog->aStringData[0].nCallbackParam;
         do {
           if (nSubIndex == iSubIndex) {
-            if (!*piStringEntryPtr) {
+            if (!pDialog->aStringData[iSubIndex].nCallbackParam) {
               Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x50f);
               exit(-1);
             }
@@ -1089,7 +1081,6 @@ void __fastcall DIALOG_SetSelectedLine(D2DialogStrc * pDialog, int32_t nSubIndex
           }
 
           iSubIndex++;
-          piStringEntryPtr += DIALOG_STRING_STRIDE;
         } while (iSubIndex < pDialog->nSubCounter);
       }
 
@@ -1126,7 +1117,6 @@ static void DIALOG_CenterStringLine(D2DialogStrc * pDialog, int32_t nIndex) {
 void __fastcall DIALOG_RecalculateLayout(D2DialogStrc * pDialog) {
     int32_t nFont;
     int nXOrigin;
-    int32_t* piStringEntry;
     int nBackgroundWidth;
     int nLineCount;
     int nNonClickableCount;
@@ -1145,19 +1135,17 @@ void __fastcall DIALOG_RecalculateLayout(D2DialogStrc * pDialog) {
       nLineCount = 0;
       nBoxWidth = 0;
       if (pDialog->nSubCounter > 0) {
-        piStringEntry = &pDialog->aStringData[0].nCallbackParam;
         do {
-          nTextWidth = D2Win::Src::D2WinFont::DRAW_text0((uint16_t*)(piStringEntry + DIALOG_STRING_DELTA(nCallbackParam, szString)));
+          nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(pDialog->aStringData[nLineCount].szString);
           if (nTextWidth > nMaxTextWidth) {
             nMaxTextWidth = nTextWidth;
           }
-          if (!*piStringEntry) {
+          if (!pDialog->aStringData[nLineCount].nCallbackParam) {
             nNonClickableCount++;
           }
 
-          nHeight += piStringEntry[DIALOG_STRING_DELTA(nCallbackParam, nYPos)];
+          nHeight += pDialog->aStringData[nLineCount].nYPos;
           nLineCount++;
-          piStringEntry += DIALOG_STRING_STRIDE;
           nBoxWidth = nMaxTextWidth;
         } while (nLineCount < pDialog->nSubCounter);
       }

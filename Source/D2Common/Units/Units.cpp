@@ -2328,8 +2328,9 @@ int32_t __stdcall GetMeleeRange(D2UnitStrc * pUnit) {
           if (pMonStats2) {
             int nMeleeRng = pMonStats2->MeleeRng;
             if (nMeleeRng == 0xff) {
+              // The weapon class is written as a uint32_t into the low half of the pUnit slot; compare only that half.
               COMPOSIT::Composit::COMPOSIT_GetWeaponClassWithTransform(pUnit_00, pUnit_00->pInventory, (uint32_t*)&pUnit, -1, 1);
-              return pUnit == (D2UnitStrc*)0x6 ? 0x2 : 0;
+              return (uint32_t)(uintptr_t)pUnit == 0x6 ? 0x2 : 0;
             }
 
             return nMeleeRng;

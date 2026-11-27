@@ -1211,7 +1211,10 @@ BOOL __fastcall OBJOP_A1Q4_ActivateCairnStone(D2ObjectOperateFnArg * pOperation)
     struct __frame0_t {
       D2RoomStrc** ppRoomList;
       D2QuestDataStrc* pQuestData;
-      D2UnitStrc* pExistingPortal;
+      union {
+        D2UnitStrc* pExistingPortal;
+        int nNumRooms; // the slot is reused for the adjacent-room count
+      };
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 12, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
@@ -1223,7 +1226,7 @@ BOOL __fastcall OBJOP_A1Q4_ActivateCairnStone(D2ObjectOperateFnArg * pOperation)
     D2UnitStrc* pMissileRoom;
     bool bQuestState;
     D2RoomStrc*** pppRoomList;
-    D2UnitStrc** pNumRooms;
+    int* pNumRooms;
     POINT ptStonePos;
     D2UnitStrc* pMissileUnit;
     D2UnitStrc* pRoomUnitIter;
@@ -1367,12 +1370,12 @@ BOOL __fastcall OBJOP_A1Q4_ActivateCairnStone(D2ObjectOperateFnArg * pOperation)
     } while (nStoneClassId < 5);
 
     if (!ptStonePos.x) {
-      pNumRooms = &__frame0.pExistingPortal;
+      pNumRooms = &__frame0.nNumRooms;
       pppRoomList = &__frame0.ppRoomList;
-      D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(D2Common::Units::UNITS_GetRoom(pOperation->sArg.pVictim), pppRoomList, (int*)pNumRooms);
+      D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(D2Common::Units::UNITS_GetRoom(pOperation->sArg.pVictim), pppRoomList, pNumRooms);
       pRoomListEnd = 0;
-      pMissileRoom = __frame0.pExistingPortal;
-      if ((uintptr_t)__frame0.pExistingPortal > 0) {
+      pMissileRoom = (D2UnitStrc*)(intptr_t)__frame0.nNumRooms;
+      if ((uint32_t)__frame0.nNumRooms > 0) {
         do {
           pMissileUnit = __frame0.ppRoomList[(intptr_t)pRoomListEnd]->pUnitList;
           do {
@@ -1385,8 +1388,8 @@ BOOL __fastcall OBJOP_A1Q4_ActivateCairnStone(D2ObjectOperateFnArg * pOperation)
           } while (pRoomUnitIter->eUnitType != UNIT_OBJECT || pRoomUnitIter->nClassId != 0x15);
 
           D2Common::Units::GetCoords(pRoomUnitIter, &ptStonePos);
-          pRoomListEnd = __frame0.pExistingPortal;
-          pMissileRoom = __frame0.pExistingPortal;
+          pRoomListEnd = (D2UnitStrc*)(intptr_t)__frame0.nNumRooms;
+          pMissileRoom = (D2UnitStrc*)(intptr_t)__frame0.nNumRooms;
           next_room:
           pRoomListEnd = (D2UnitStrc*)((intptr_t)&pRoomListEnd->eUnitType + 1);
         } while (pRoomListEnd < pMissileRoom);

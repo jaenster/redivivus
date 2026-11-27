@@ -5531,8 +5531,9 @@ uint32_t __stdcall ITEM_CanBeRepaired(D2UnitStrc * pUnit) {
       return 0;
     }
 
-    BOOL nCheckResult = ITEMS_CheckChargedSkillFullyCharged(pUnit, (BOOL*)&pUnit);
-    if (!(!nCheckResult || pUnit)) {
+    BOOL bFullyCharged;
+    BOOL nCheckResult = ITEMS_CheckChargedSkillFullyCharged(pUnit, &bFullyCharged);
+    if (!(!nCheckResult || bFullyCharged)) {
       return 1;
     }
 

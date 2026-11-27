@@ -43,6 +43,8 @@
 #include "Source/D2Common/D2MonStatsTxt.h"
 #include "Source/D2Client/Unit/PlrSkills.h"
 #include "Source/D2Common/Skills/Skills.h"
+#include "Source/D2Client/UI/Draw.h"
+#include "Source/D2Common/D2TileLibraryEntryStrc.h"
 #include "Source/D2Common/Stats/StatsEx.h"
 #include "Source/D2Client/UI/Draw.h"
 #include "Source/D2Client/Unit/UnitMode.h"
@@ -161,6 +163,18 @@ static int  g_aSeen[32];
 static int  g_nSeen = 0;
 
 // Depth-limited so a cyclic tree cannot hang the game thread while it is being counted.
+// A wall2 cell's draw list, named by the list's x86 offset in D2Wall2CellStrc.
+static const D2Wall2DrawEntryStrc* D2ControlWall2List(const D2Wall2CellStrc* pCell, int nSlot) {
+    switch (nSlot) {
+        case 0x10: return pCell->pShadowPassList;
+        case 0x14: return pCell->pWallList;
+        case 0x18: return pCell->pUnitBelowList;
+        case 0x1c: return pCell->pRoofPassList;
+        case 0x20: return pCell->pUnderFloorList;
+    }
+    return nullptr;
+}
+
 static int AmapCount(D2AutomapCellStrc* pCell, int nDepth, int* pnMaxDepth) {
     if (!pCell || nDepth > 4096 || IsBadReadPtr(pCell, sizeof(D2AutomapCellStrc))) return 0;
     if (nDepth > *pnMaxDepth) *pnMaxDepth = nDepth;
@@ -470,19 +484,22 @@ static void HandleLine(char* line, char* reply, int replyMax) {
     //   dt <off> <len>           bytes at &sgtDataTable + off  (the whole data-table struct)
     //   sym <name>               address of a named global in THIS build
     if (!strncmp(line, "hex ", 4) || !strncmp(line, "dt ", 3) || !strncmp(line, "dt", 2)) {
-        unsigned long addr = 0; int len = 64, off = 0;
+        uintptr_t addr = 0; int len = 64, off = 0;
         if (!strncmp(line, "hex ", 4)) {
-            if (sscanf(line, "hex %lx %d", &addr, &len) < 1) { lstrcpynA(reply, "{\"err\":\"hex <hexaddr> [len]\"}", replyMax); return; }
+            unsigned long long nHexAddr = 0;
+            int nHexArgs = sscanf(line, "hex %llx %d", &nHexAddr, &len);
+            addr = (uintptr_t)nHexAddr;
+            if (nHexArgs < 1) { lstrcpynA(reply, "{\"err\":\"hex <hexaddr> [len]\"}", replyMax); return; }
         } else {
             sscanf(line, "dt %d %d", &off, &len);
             if (len <= 0) len = 64;
-            addr = (unsigned long)(uintptr_t)&D2Common::DATATBLS::MonsterTbls::sgtDataTable + off;
+            addr = (uintptr_t)&D2Common::DATATBLS::MonsterTbls::sgtDataTable + off;
         }
         if (len < 1) len = 1;
         if (len > 1024) len = 1024;
         static char hxOut[3200];
         if (IsBadReadPtr((void*)addr, len)) { lstrcpynA(reply, "{\"err\":\"unreadable\"}", replyMax); return; }
-        int u = wsprintfA(hxOut, "{\"addr\":\"0x%X\",\"len\":%d,\"hex\":\"", (unsigned)addr, len);
+        int u = snprintf(hxOut, sizeof(hxOut), "{\"addr\":\"0x%llX\",\"len\":%d,\"hex\":\"", (unsigned long long)addr, len);
         const unsigned char* p = (const unsigned char*)addr;
         static const char* kHex = "0123456789abcdef";
         for (int i = 0; i < len; i++) { hxOut[u++] = kHex[p[i] >> 4]; hxOut[u++] = kHex[p[i] & 15]; }
@@ -641,36 +658,36 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         if (!pView) { lstrcpynA(reply, "{\"err\":\"no game view\"}", replyMax); return; }
         int nCells = (int)pView->sWall2.nWall2GridDim * (int)pView->sWall2.nWall2GridDim;
         if (nCells < 0 || nCells > 65536) nCells = 0;
-        // cell+0x14 is the list dWallPass walks. node+0xc is the D2DrawWallStrc, whose
-        // +0x18 is the DT1 library entry; the entry's +0x00 is nDirection and +0x14 the
-        // orientation. Reading the node or the wall struct directly gives world coords.
+        // The slot names a cell list by its x86 offset: 0x10 shadow pass, 0x14 the walls
+        // dWallPass walks (default), 0x18 units below, 0x1c roofs, 0x20 under-floor. Each
+        // node's pData is the tile's D2DrawWallStrc, whose pTileEntry is the DT1 entry.
         int kSlot = 0x14;
         sscanf(line, "walldir %x", &kSlot);
         int aDir[17] = { 0 }, aOri[17] = { 0 }, nNodes = 0, nBadTile = 0, nDrawn = 0;
         int nZeroBlk = 0, nMaxBlk = 0, nNoLru = 0;
-        const unsigned char* pGrid = (const unsigned char*)pView->sWall2.pWall2;
-        if (pGrid && !IsBadReadPtr(pGrid, (UINT_PTR)nCells * 0x24)) {
+        const D2Wall2CellStrc* pGrid = pView->sWall2.pWall2;
+        if (pGrid && !IsBadReadPtr(pGrid, (UINT_PTR)nCells * sizeof(D2Wall2CellStrc))) {
             for (int i = 0; i < nCells; i++) {
-                int nNode = *(const int*)(pGrid + (size_t)i * 0x24 + kSlot);
-                for (int guard = 0; nNode && guard < 4096; guard++) {
-                    if (IsBadReadPtr((const void*)nNode, 0x14)) break;
-                    int nWall = *(const int*)(nNode + 0xc);
-                    if (nWall && !IsBadReadPtr((const void*)nWall, 0x30)) {
-                        unsigned nFlags = *(const unsigned*)(nWall + 0x14);
+                const D2Wall2DrawEntryStrc* pNode = D2ControlWall2List(&pGrid[i], kSlot);
+                for (int guard = 0; pNode && guard < 4096; guard++) {
+                    if (IsBadReadPtr(pNode, sizeof(*pNode))) break;
+                    const D2DrawWallStrc* pWall = (const D2DrawWallStrc*)pNode->pData;
+                    if (pWall && !IsBadReadPtr(pWall, sizeof(*pWall))) {
+                        unsigned nFlags = pWall->nDrawFlags;
                         if (!(nFlags & 0x408) && (nFlags & 0x1c000)) nDrawn++;
-                        int nEntry = *(const int*)(nWall + 0x18);
-                        if (nEntry && !IsBadReadPtr((const void*)nEntry, 0x60)) {
-                            int d = *(const int*)nEntry;
-                            int o = *(const int*)(nEntry + 0x14);
+                        const D2TileLibraryEntryStrc* pEntry = pWall->pTileEntry;
+                        if (pEntry && !IsBadReadPtr(pEntry, sizeof(*pEntry))) {
+                            int d = pEntry->nDirection;
+                            int o = pEntry->nOrientation;
                             aDir[(d >= 0 && d < 16) ? d : 16]++;
                             aOri[(o >= 0 && o < 16) ? o : 16]++;
-                            // +0x50 is the DT1 block count. DrawWallTile bails before writing
+                            // nSubTiles is the DT1 block count. DrawWallTile bails before writing
                             // a single pixel when SPRITECACHE_AllocEntry sees it as 0, so a
                             // zero here is a wall that is not black but absent.
-                            int nBlocks = *(const int*)(nEntry + 0x50);
+                            int nBlocks = pEntry->nSubTiles;
                             if (!nBlocks) nZeroBlk++;
                             if (nBlocks > nMaxBlk) nMaxBlk = nBlocks;
-                            if (!*(const int*)(nEntry + 0x5c)) nNoLru++;
+                            if (!pEntry->pLruNode) nNoLru++;
                         } else {
                             nBadTile++;
                         }
@@ -678,7 +695,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
                         nBadTile++;
                     }
                     nNodes++;
-                    nNode = *(const int*)(nNode + 0x10);
+                    pNode = pNode->pNext;
                 }
             }
         }
@@ -705,16 +722,16 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         if (!pView) { lstrcpynA(reply, "{\"err\":\"no game view\"}", replyMax); return; }
         int nCells = (int)pView->sWall2.nWall2GridDim * (int)pView->sWall2.nWall2GridDim;
         if (nCells < 0 || nCells > 65536) nCells = 0;
-        const unsigned char* pGrid = (const unsigned char*)pView->sWall2.pWall2;
+        const D2Wall2CellStrc* pGrid = pView->sWall2.pWall2;
         int u = wsprintfA(lo, "{\"samples\":[");
         int n = 0, nZero = 0, nLit = 0;
-        if (pGrid && !IsBadReadPtr(pGrid, (UINT_PTR)nCells * 0x24)) {
+        if (pGrid && !IsBadReadPtr(pGrid, (UINT_PTR)nCells * sizeof(D2Wall2CellStrc))) {
             for (int i = 0; i < nCells && u < (int)sizeof(lo) - 120; i++) {
-                int nNode = *(const int*)(pGrid + (size_t)i * 0x24 + 0x14);
-                for (int g = 0; nNode && g < 64; g++) {
-                    if (IsBadReadPtr((const void*)nNode, 0x14)) break;
-                    int wx = *(const int*)(nNode + 4);
-                    int wy = *(const int*)(nNode + 8);
+                const D2Wall2DrawEntryStrc* pNode = pGrid[i].pWallList;
+                for (int g = 0; pNode && g < 64; g++) {
+                    if (IsBadReadPtr(pNode, sizeof(*pNode))) break;
+                    int wx = pNode->nX;
+                    int wy = pNode->nY;
                     uint32_t packed = 0; byte r = 0, gg = 0, b = 0;
                     D2Client::GAME::View::DRAW_CoordIsInCoord(wx, wy, (byte*)&packed, &r, &gg, &b);
                     byte inten = (byte)packed;
@@ -724,7 +741,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
                                        n ? "," : "", wx, wy, (int)inten, (int)r, (int)gg, (int)b);
                     }
                     n++;
-                    nNode = *(const int*)(nNode + 0x10);
+                    pNode = pNode->pNext;
                 }
             }
         }
@@ -2611,9 +2628,9 @@ extern "C" void D2CONTROL_Pump(void) {
             D2ProbeArmClipHwbpSelf();
         } else if (a.kind == 2) {
             D2UnitStrc* pTarget = nullptr;
-            void* apT[2] = { (void*)D2Client::UNIT::CUnit::ClientSideUnitHashTables, (void*)D2Client::UNIT::CUnit::ServerSideUnitHashTables };
-            for (int t = 0; t < 2 && !pTarget; t++) {
-                D2UnitStrc** ppT = (D2UnitStrc**)((char*)apT[t] + (int)a.wp * 0x200);
+            D2UnitStrc* (*apT[2])[128] = { D2Client::UNIT::CUnit::ClientSideUnitHashTables, D2Client::UNIT::CUnit::ServerSideUnitHashTables };
+            for (int t = 0; t < 2 && !pTarget && (size_t)a.wp < D2C_COUNTOF(D2Client::UNIT::CUnit::ClientSideUnitHashTables); t++) {
+                D2UnitStrc** ppT = apT[t][(int)a.wp];
                 for (int b = 0; b < 128 && !pTarget; b++)
                     for (D2UnitStrc* p = ppT[b]; p; p = p->pListNext)
                         if (p->nUnitGUID == (int)a.lp) { pTarget = p; break; }

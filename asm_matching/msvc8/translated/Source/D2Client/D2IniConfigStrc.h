@@ -177,7 +177,7 @@ typedef int (__fastcall *fnSendLogonRequest)(char * szUser, char * szPass);
 #endif
 #ifndef RECON_FPTD_fnSendNewsInfo
 #define RECON_FPTD_fnSendNewsInfo
-typedef int (__fastcall *fnSendNewsInfo)(uint32_t dw1, uint32_t dw2);
+typedef int (__fastcall *fnSendNewsInfo)(void (__fastcall * pfnNewsEntry)(uint32_t dwEntryId, char * szMessage), void (__stdcall * pfnNewsDone)());
 #endif
 #ifndef RECON_FPTD_fnSendNotifyJoin
 #define RECON_FPTD_fnSendNotifyJoin
@@ -282,7 +282,7 @@ struct D2BNetClientCallbacksStrc {
     /* 0x9C */ int (__fastcall *pfnSendChangePasswordRequest)(char *, char *, char *);
     /* 0xA0 */ BOOL (__fastcall *pfnWaitForChangePasswordResponse)(uint32_t *);
     /* 0xA4 */ char * (__fastcall *pfnSendQueryAdURL)(uint32_t);
-    /* 0xA8 */ int (__fastcall *pfnSendNewsInfo)(uint32_t, uint32_t);
+    /* 0xA8 */ int (__fastcall *pfnSendNewsInfo)(void (__fastcall *)(uint32_t, char *), void (__stdcall *)());
     /* 0xAC */ BOOL (__stdcall *pfnNewsShutdown)();
     /* 0xB0 */ char (__stdcall *pfnGetProtocolVersionChar)();
     /* 0xB4 */ DWORD (__stdcall *pfnIsEmailRequested)();

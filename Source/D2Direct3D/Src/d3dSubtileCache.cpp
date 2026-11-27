@@ -291,13 +291,13 @@ void __fastcall D3DSUBTILE_Free(D3DSubtileCacheStrc * pCache, BOOL bInvalidateAl
         pComIface = *(IUnknown**)&pNode->pTexture;
         if (pComIface) {
           pComIface->Release();
-          *(uint32_t*)&pNode->pTexture = 0;
+          pNode->pTexture = nullptr;
         }
 
         pComIface2 = *(IUnknown**)&pNode->pSurface;
         if (pComIface2) {
           pComIface2->Release();
-          *(uint32_t*)&pNode->pSurface = 0;
+          pNode->pSurface = nullptr;
         }
       }
       if (bInvalidateAll) {

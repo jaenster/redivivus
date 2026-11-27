@@ -2184,10 +2184,10 @@ int32_t __fastcall DRLGPLACE_ACT1_ValidatePlacementList1(D2DrlgLevelPlacementStr
               return 0;
             }
 
-            pLevelDataEntryPtr += 4;
+            pLevelDataEntryPtr = (int*)((D2DrlgLevelDataEntry*)pLevelDataEntryPtr + 1);
             i++;
             pCurrentDirPtr++;
-          } while ((intptr_t)pLevelDataEntryPtr < (intptr_t)((char*)&ACT1_D2DrlgLevelData2 + 8));
+          } while ((intptr_t)pLevelDataEntryPtr < (intptr_t)&ACT1_D2DrlgLevelData1.aEntry[15].nNodeLevelEntryIdPrev);
 
           break;
         }
@@ -3419,7 +3419,7 @@ BOOL __fastcall DRLGOUTROOM_FindPathBetweenExits(D2DrlgLevelStrc * pLevel, int32
     sPathPool.aNodes[0].nDirStepCount = 0;
     sPathPool.aNodes[0].pDirDelta = 0;
     sPathPool.aNodes[0].nDirection = '\0';
-    d2_store24((char*)&sPathPool.aNodes[0] + 29, 0);
+    d2_store24(&sPathPool.aNodes[0].field_0x1d, 0);
     sPathPool.aNodes[0].pParent = 0;
     sPathPool.aNodes[0].pChild = 0;
     sPathPool.pHead = sPathPool.aNodes;

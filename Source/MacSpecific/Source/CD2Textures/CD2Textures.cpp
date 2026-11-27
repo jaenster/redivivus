@@ -25,7 +25,6 @@ namespace D2OpenGL::CD2Textures {
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
 // 1.14d mac: 002b0e04
 void CD2TEXTURES_Construct(::CD2Textures * pThis, int nMaxWidth, int nMaxHeight, int nTextureOverhead, int nMemoryBudget) {
-    int nOffset;
     pThis->vptr = &CD2TexturesVtable_003e26d8;
     pThis->nMaxWidth = nMaxWidth;
     pThis->nMaxHeight = nMaxHeight;
@@ -47,14 +46,11 @@ void CD2TEXTURES_Construct(::CD2Textures * pThis, int nMaxWidth, int nMaxHeight,
     if (1 < nLastIndex) {
       int iVar2;
       iVar2 = 1;
-      nOffset = 0;
       do {
-        *(int*)&pDVar1[iVar2].pPrev = (uintptr_t)&pDVar1->nId + nOffset;
-        *(int*)&pThis->pNodes[iVar2].pNext = (uintptr_t)&pThis->pNodes[2].nId + nOffset;
+        pDVar1[iVar2].pPrev = &pDVar1[iVar2 - 1];
+        pDVar1[iVar2].pNext = &pDVar1[iVar2 + 1];
         iVar2++;
-        pDVar1 = pThis->pNodes;
         pDVar1[iVar2 - 1].nId = iVar2;
-        nOffset += 0x30;
       } while (iVar2 < nLastIndex);
     }
 
@@ -399,7 +395,6 @@ D2TextureNodeStrc * CD2TEXTURES_ListRemove(::CD2Textures * pThis, D2TextureNodeS
       fp_fatal("Unrecoverable internal error %08x line %d", pvVar3, 0x394);
     }
 
-    int* pNextLink = (int*)&pDVar1[nIndex].pNext;
     if (!pDVar1[nIndex].pPrev) {
       *ppHead = pDVar1[nIndex].pNext;
     } else {
@@ -407,13 +402,13 @@ D2TextureNodeStrc * CD2TEXTURES_ListRemove(::CD2Textures * pThis, D2TextureNodeS
     }
 
     D2TextureNodeStrc* pDVar2 = pDVar1[nIndex].pPrev;
-    if (!*pNextLink) {
+    if (!pDVar1[nIndex].pNext) {
       *ppTail = pDVar2;
     } else {
-      *(D2TextureNodeStrc**)(*pNextLink + 0x2c) = (D2TextureNodeStrc*)pDVar2;
+      pDVar1[nIndex].pNext->pPrev = pDVar2;
     }
 
-    *pNextLink = 0;
+    pDVar1[nIndex].pNext = 0;
     pDVar1[nIndex].pPrev = 0;
     return pEntry;
 }
@@ -444,58 +439,39 @@ int GetFreeMemory(::CD2Textures * pThis, bool bExcludeReserve) {
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
 // 1.14d mac: 002b1718
 void CD2TEXTURES_GrowEntries(::CD2Textures * pThis) {
-    int iVar2;
-    int iVar3;
-    D2TextureNodeStrc* pDVar4;
-    int iVar5 = pThis->nNodeCount;
-    pThis->nNodeCount = iVar5 + 0x400;
-    size_t nAllocSize = (iVar5 + 0x400) * 0x30;
-    ::CD2Textures* pDest = (::CD2Textures*)D2_ALLOC_AT(nAllocSize, "/Users/bclemetson/dev/diablo2/Diablo2/Source/DiabloAll/../MacSpecific/Source/CD2Textures/CD2Textures.cpp", 0x295);
-    Storm::Source::SMem::SMemZero(pDest, nAllocSize);
-    ::CD2Textures* pThis_00 = pDest;
-    Storm::Source::SMem::SMemCopy(pDest, pThis->pNodes, iVar5 * 0x30);
+    int nOldCount = pThis->nNodeCount;
+    pThis->nNodeCount = nOldCount + 0x400;
+    size_t nAllocSize = (nOldCount + 0x400) * sizeof(D2TextureNodeStrc);
+    D2TextureNodeStrc* pNewNodes = (D2TextureNodeStrc*)D2_ALLOC_AT(nAllocSize, "/Users/bclemetson/dev/diablo2/Diablo2/Source/DiabloAll/../MacSpecific/Source/CD2Textures/CD2Textures.cpp", 0x295);
+    Storm::Source::SMem::SMemZero(pNewNodes, nAllocSize);
+    Storm::Source::SMem::SMemCopy(pNewNodes, pThis->pNodes, nOldCount * sizeof(D2TextureNodeStrc));
+    // Every list link is rebased onto the new block by the 1-based node id.
     if (pThis->pFreeHead) {
-      iVar3 = pThis->pFreeTail->nId;
-      pThis->pFreeHead = (D2TextureNodeStrc*)(pDest->field_0x20 + pThis->pFreeHead->nId * 0xc - 0x14);
-      pThis->pFreeTail = (D2TextureNodeStrc*)(pDest->field_0x20 + iVar3 * 0xc - 0x14);
+      int nTailId = pThis->pFreeTail->nId;
+      pThis->pFreeHead = &pNewNodes[pThis->pFreeHead->nId - 1];
+      pThis->pFreeTail = &pNewNodes[nTailId - 1];
     }
     if (pThis->pUsedHead) {
-      iVar3 = pThis->pUsedTail->nId;
-      pThis->pUsedHead = (D2TextureNodeStrc*)(pDest->field_0x20 + pThis->pUsedHead->nId * 0xc - 0x14);
-      pThis->pUsedTail = (D2TextureNodeStrc*)(pDest->field_0x20 + iVar3 * 0xc - 0x14);
+      int nTailId = pThis->pUsedTail->nId;
+      pThis->pUsedHead = &pNewNodes[pThis->pUsedHead->nId - 1];
+      pThis->pUsedTail = &pNewNodes[nTailId - 1];
     }
-    if (0 < iVar5) {
-      int* piVar1;
-      iVar2 = 0x2c;
-      iVar3 = iVar5;
-      do {
-        pDVar4 = pThis->pNodes;
-        piVar1 = *(int**)((uintptr_t)&pDVar4->nId + iVar2);
-        if (piVar1) {
-          *(int**)((char*)pDest->field_0x20 + iVar2 - 0x20) = pDest->field_0x20 + *piVar1 * 0xc - 0x14;
-        }
-
-        piVar1 = *(int**)((char*)pDVar4 + iVar2 - 4);
-        if (piVar1) {
-          *(int**)((char*)pDest->field_0x20 + iVar2 - 0x24) = pDest->field_0x20 + *piVar1 * 0xc - 0x14;
-        }
-
-        iVar2 += 0x30;
-        iVar3--;
-      } while (iVar3);
+    for (int i = 0; i < nOldCount; i++) {
+      D2TextureNodeStrc* pOld = &pThis->pNodes[i];
+      if (pOld->pPrev) {
+        pNewNodes[i].pPrev = &pNewNodes[pOld->pPrev->nId - 1];
+      }
+      if (pOld->pNext) {
+        pNewNodes[i].pNext = &pNewNodes[pOld->pNext->nId - 1];
+      }
     }
-    if (iVar5 < pThis->nNodeCount) {
-      pDVar4 = (D2TextureNodeStrc*)(pDest->field_0x20 + iVar5 * 0xc - 8);
-      do {
-        iVar5++;
-        pDVar4->nId = iVar5;
-        CD2TEXTURES_ListAppend(pThis_00, &pThis->pFreeHead, &pThis->pFreeTail, pDVar4);
-        pDVar4++;
-      } while (iVar5 < pThis->nNodeCount);
+    for (int i = nOldCount; i < pThis->nNodeCount; i++) {
+      pNewNodes[i].nId = i + 1;
+      CD2TEXTURES_ListAppend(pThis, &pThis->pFreeHead, &pThis->pFreeTail, &pNewNodes[i]);
     }
 
     D2_FREE_AT(pThis->pNodes, "/Users/bclemetson/dev/diablo2/Diablo2/Source/DiabloAll/../MacSpecific/Source/CD2Textures/CD2Textures.cpp", 0x2c8);
-    pThis->pNodes = (D2TextureNodeStrc*)pDest;
+    pThis->pNodes = pNewNodes;
 }
 
 } // namespace D2OpenGL::CD2Textures

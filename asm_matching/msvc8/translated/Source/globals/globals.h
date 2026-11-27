@@ -468,7 +468,7 @@ typedef int (__fastcall *fnSendChangePassword)(char * szUser, char * szOld, char
 typedef int (__fastcall *fnSendClickAd)(uint32_t dwAdId, int nParam);
 typedef int (__fastcall *fnSendCreateAccount)(char * szUser, char * szPass);
 typedef int (__fastcall *fnSendLogonRequest)(char * szUser, char * szPass);
-typedef int (__fastcall *fnSendNewsInfo)(uint32_t dw1, uint32_t dw2);
+typedef int (__fastcall *fnSendNewsInfo)(void (__fastcall * pfnNewsEntry)(uint32_t dwEntryId, char * szMessage), void (__stdcall * pfnNewsDone)());
 typedef int (__fastcall *fpMissileSrvDoFuncData)(D2UnitStrc * pUnit, void * pContext);
 typedef int (__fastcall *pfnSkillCalcOp)(int32_t nOperand1, int32_t nOperand2, uint32_t nOperand3, void * pContext);
 typedef int (__fastcall *pfnTextScrollComplete)(void * pUserParam, uint32_t nReason, int bDismissed);

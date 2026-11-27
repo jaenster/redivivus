@@ -489,8 +489,10 @@ void __fastcall FreeAndResetAiSub(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Uni
             pPrevSubAi->pNext = pSubAi->pNext;
           }
 
-          _bHasInteractInfo = UNIT::SUnit::GetInteractInfo(pUnit, (eD2UnitType*)&pMonsterAi, (uint32_t*)&pMonster);
-          if (_bHasInteractInfo && pMonsterAi == (D2MonsterAiStrc*)0x1) {
+          eD2UnitType eInteractType;
+          uint32_t nInteractGUID;
+          _bHasInteractInfo = UNIT::SUnit::GetInteractInfo(pUnit, &eInteractType, &nInteractGUID);
+          if (_bHasInteractInfo && eInteractType == UNIT_MONSTER) {
             UNIT::SUnit::ClearInteractInfo(pUnit);
           }
 

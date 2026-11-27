@@ -543,14 +543,14 @@ static void __stdcall CLIENT_AddUnitToProximitySortedList(int32_t nX, D2UnitStrc
       pClient->nPacketBuffer.nCount = nFreeSlot + 1;
     }
     if (!nPrevSlot && pnManhattanDist < pNodes->nDistance) {
-      uint32_t* pSlotEntry;
+      D2UnitProximityNodeStrc* pSlotEntry;
       switch (pClient->nPacketBuffer.nCount) {
         default:
           {
-            pSlotEntry = (uint32_t*)&pNodes[nFreeSlot].pUnit;
-            pSlotEntry[2] = pNodes->nNext;
-            *pSlotEntry = (uint32_t)(uintptr_t)pNodes->pUnit;
-            pSlotEntry[1] = pNodes->nDistance;
+            pSlotEntry = &pNodes[nFreeSlot];
+            pSlotEntry->nNext = pNodes->nNext;
+            pSlotEntry->pUnit = pNodes->pUnit;
+            pSlotEntry->nDistance = pNodes->nDistance;
           }
         case 1:
           {

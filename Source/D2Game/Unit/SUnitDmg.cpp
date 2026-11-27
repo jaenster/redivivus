@@ -1329,7 +1329,7 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
 
     uint32_t nMercType;
     BOOL BVar1;
-    uint32_t* pResistTableIter;
+    D2ResistTableEntry* pResistTableIter;
     D2DamageContext dmgCtx;
     D2DamageStrc* pDmg;
     pDmg = pBypassFlags;
@@ -1373,11 +1373,11 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
     int32_t nXpMultiplier = DAMAGE_CalculateExperienceMultiplier(&dmgCtx);
     if (nXpMultiplier != 100) {
       int32_t nResistScaled;
-      pResistTableIter = (uint32_t*)gaDefenseReductionTable;
+      pResistTableIter = gaDefenseReductionTable;
       pBypassFlags = (D2DamageStrc*)0xc;
       do {
-        if (pResistTableIter[8]) {
-          nMercType = *pResistTableIter;
+        if (pResistTableIter->nEnabled) {
+          nMercType = pResistTableIter->nDamageFieldOffset;
           nResistScaled = *(int32_t*)((intptr_t)&pDmg->dwHitFlags + nMercType);
           if (nResistScaled > 0) {
             nResistScaled = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nResistScaled, nXpMultiplier, 100);
@@ -1385,7 +1385,7 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
           }
         }
 
-        pResistTableIter += 0xb;
+        pResistTableIter++;
         pBypassFlags = (D2DamageStrc*)((intptr_t)&pBypassFlags[-1].nOverlay + 3);
       } while (pBypassFlags);
     }

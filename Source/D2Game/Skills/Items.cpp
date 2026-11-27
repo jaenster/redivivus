@@ -1436,15 +1436,14 @@ BOOL __stdcall ITEMMOD_GenerateLegacySetItem(D2UnitStrc * pItem) {
     D2SetsTxt* pDVar2 = D2Common::ITEMS::Items::sgptDataTable->pTxtSets;
     uint32_t nSetCount = 0;
     if (D2Common::ITEMS::Items::sgptDataTable->nTxtSetsSize > 0) {
-      short int* pSetVersion;
-      pSetVersion = &pDVar2->version;
+      D2SetsTxt* pSet = pDVar2;
       do {
-        if ((uint16_t)*pSetVersion >= 100) {
+        if ((uint16_t)pSet->version >= 100) {
           break;
         }
 
         nSetCount++;
-        pSetVersion += 0x94;
+        pSet++;
       } while ((int)nSetCount < D2Common::ITEMS::Items::sgptDataTable->nTxtSetsSize);
     }
 

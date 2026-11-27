@@ -4488,10 +4488,10 @@ void __fastcall SCOMP_HuffmanCompress(uint8_t * pBitStreamCtx, uint32_t * pnByte
 // @blizzard HuffmanDecompress (SCOMP.CPP)
 void __fastcall SCOMP_HuffmanDecompress(uint8_t * pDst, int * pnDstSize, uint32_t * pBitStreamCtx, uint32_t dwFlags, void * pvParam) {
     D2HuffmanContextStrc aHuffCtx;
-    int sListHead[3];
-    vc8_thiscall(LINKEDLIST_Unlink)((D2BitStreamReaderStrc*)sListHead, pBitStreamCtx);
+    D2BitStreamReaderStrc sListHead;
+    vc8_thiscall(LINKEDLIST_Unlink)(&sListHead, pBitStreamCtx);
     HUFFMAN_ConstructorWithTable(&aHuffCtx);
-    int pBytesWritten = vc8_thiscall(HUFFMAN_DecompressBlock)(&aHuffCtx, pDst, *pnDstSize, (D2BitStreamReaderStrc*)sListHead);
+    int pBytesWritten = vc8_thiscall(HUFFMAN_DecompressBlock)(&aHuffCtx, pDst, *pnDstSize, &sListHead);
     *pnDstSize = pBytesWritten;
     COMPRESS_DestroyEncoderContext((D2CompressEncoderStrc*)&aHuffCtx);
 }

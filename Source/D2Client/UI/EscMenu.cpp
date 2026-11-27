@@ -58885,14 +58885,14 @@ static int32_t ESCMENU_GetItemIndexFromMouseY(int32_t nParam) {
       return nFoundIndex;
     }
 
-    int* pItemYPosition = &gpEscMenuCurrentTable->nYPosition;
+    D2EscMenuItemStrc* pItem = gpEscMenuCurrentTable;
     do {
-      if (*pItemYPosition && nParam >= *pItemYPosition + nMenuItemCount) {
+      if (pItem->nYPosition && nParam >= pItem->nYPosition + nMenuItemCount) {
         nFoundIndex = nMenuCenterY;
       }
 
       nMenuCenterY++;
-      pItemYPosition += sizeof(D2EscMenuItemStrc) / sizeof(int);
+      pItem++;
     } while (nMenuCenterY < nMenuItemCount);
 
     if (nFoundIndex < 0) {
@@ -59209,12 +59209,10 @@ void __stdcall INPUT_EscMenuExecuteSelection(D2UIMouseMsgStrc * pMsg) {
 void __fastcall ESCMENU_LoadLocalizedImages(int * pMenuHeader, D2EscMenuItemStrc * pMenuTable) {
     BOOL bIsExpansion;
     DC6* pLoadedDC6;
-    int nTableOffset;
     uint32_t nSubImageIndex;
     char* pSubImagePath;
     char szImagePath[260];
     int nItemIndex;
-    int nSubImageOffset;
     char szLangAbbrev[4];
     uint32_t nSubImageCount;
     if (!pMenuHeader) {
@@ -59235,7 +59233,6 @@ void __fastcall ESCMENU_LoadLocalizedImages(int * pMenuHeader, D2EscMenuItemStrc
       return;
     }
 
-    nSubImageOffset = offsetof(D2EscMenuItemStrc, pDC6SubImages) / sizeof(DC6*);
     do {
       if (!pMenuTable[nItemIndex].nExpansionOnly || (bIsExpansion = Fog::D2CheckExpansionGame() , bIsExpansion != 0)) {
         if (pMenuTable[nItemIndex].szLocalizedImagePath[0] != '\0') {
@@ -59261,9 +59258,8 @@ void __fastcall ESCMENU_LoadLocalizedImages(int * pMenuHeader, D2EscMenuItemStrc
 
                 sprintf(szImagePath, "%s\\UI\\%s\\%s", "DATA\\LOCAL", szLangAbbrev, pSubImagePath);
                 pLoadedDC6 = Core::Archive::IMAGE_LoadDC6Ex(szImagePath, 0);
-                nTableOffset = nSubImageOffset + nSubImageIndex;
+                pMenuTable[nItemIndex].pDC6SubImages[nSubImageIndex] = pLoadedDC6;
                 nSubImageIndex++;
-                *(DC6**)(pMenuTable->szLocalizedImagePath + (nTableOffset * sizeof(DC6*) - offsetof(D2EscMenuItemStrc, szLocalizedImagePath))) = (DC6*)pLoadedDC6;
                 pSubImagePath += 0x104;
               } while (nSubImageIndex < (uint32_t)pMenuTable[nItemIndex].nSubImageCount);
             }
@@ -59274,7 +59270,6 @@ void __fastcall ESCMENU_LoadLocalizedImages(int * pMenuHeader, D2EscMenuItemStrc
         }
       }
 
-      nSubImageOffset += sizeof(D2EscMenuItemStrc) / sizeof(DC6*);
       nItemIndex++;
     } while (nItemIndex < *pMenuHeader);
 

@@ -239,7 +239,7 @@ void __fastcall GAME_ReplayRecordedWindowMessage(D2GameRecordEntryStrc * pIndex)
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
       BOOL nOutResult1;
-      int32_t nOutResult2;
+      LRESULT nOutResult2;
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
@@ -251,9 +251,9 @@ void __fastcall GAME_ReplayRecordedWindowMessage(D2GameRecordEntryStrc * pIndex)
       exit(-1);
     }
 
-    int32_t* pOutResult2 = &__frame0.nOutResult2;
+    LRESULT* pOutResult2 = &__frame0.nOutResult2;
     BOOL* pOutResult1 = &__frame0.nOutResult1;
-    Storm::WindowHandle::SMsgDispatchMessage(D2gfx::D2GFX::GetHwnd(), pIndex->uMsg, pIndex->wParam, pIndex->lParam, pOutResult1, (LRESULT*)pOutResult2);
+    Storm::WindowHandle::SMsgDispatchMessage(D2gfx::D2GFX::GetHwnd(), pIndex->uMsg, pIndex->wParam, pIndex->lParam, pOutResult1, pOutResult2);
 }
 
 void __stdcall SetupRecording() {

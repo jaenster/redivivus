@@ -23,7 +23,7 @@ namespace D2Glide::glFloorCache {
 // @sourcefile .\Src\glFloorCache.cpp
 int __fastcall GLFLOOR_Initialize(GlFloorCacheStrc * pCache, int nVramStart, int nVramEnd, uint32_t dwFloorSize) {
     GlFloorCacheNodeStrc* pNode;
-    uint32_t* pVramAddr;
+    GlFloorCacheNodeStrc* pVramAddr;
     uint32_t nEntryCount = (uint32_t)(nVramEnd - nVramStart) / dwFloorSize;
     pCache->dwEntrySize = dwFloorSize;
     size_t nAllocSize = nEntryCount * 0x14;
@@ -64,9 +64,9 @@ int __fastcall GLFLOOR_Initialize(GlFloorCacheStrc * pCache, int nVramStart, int
     if (!gbGlideIsDebugBuild) {
       nVramAddr = 1;
       if (1 < (int)(pCache->nMaxEntries - 1)) {
-        pVramAddr = &pNodes[1].dwAddress;
+        pVramAddr = &pNodes[1];
         do {
-          if (*pVramAddr < 0x200000 && pCache->dwEntrySize + *pVramAddr > 0x200000) {
+          if (pVramAddr->dwAddress < 0x200000 && pCache->dwEntrySize + pVramAddr->dwAddress > 0x200000) {
             pNodes[nVramAddr - 1].pNext = pNodes + (nVramAddr + 1);
             pCache->pNodes[nVramAddr + 1].pPrev = pCache->pNodes + (nVramAddr - 1);
             pCache->pNodes[nVramAddr].pPrev = 0;
@@ -76,7 +76,7 @@ int __fastcall GLFLOOR_Initialize(GlFloorCacheStrc * pCache, int nVramStart, int
           }
 
           nVramAddr++;
-          pVramAddr += 5;
+          pVramAddr++;
         } while (nVramAddr < (int)(pCache->nMaxEntries - 1));
       }
 

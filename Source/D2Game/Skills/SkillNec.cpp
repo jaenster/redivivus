@@ -1079,10 +1079,10 @@ BOOL __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * pUni
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pSummon, UNITSTAT_maxhp, nMaxHp + nHpBonus, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pSummon, UNITSTAT_hitpoints, nMaxHp + nHpBonus, 0);
     short int* pSumSkillCursor = pSkillsTxt->sumskill;
-    pSummonStatList = (D2UnitStrc*)pSkillsTxt->sumskcalc;
+    int* pSumSkillCalc = pSkillsTxt->sumskcalc;
     for (iStatLoop = 0; iStatLoop < 5; iStatLoop++) {
       if (*pSumSkillCursor > 0 && (int)*pSumSkillCursor < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
-        nStatCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSummonStatList->eUnitType, eSkill, nSkillLvl);
+        nStatCalc = D2Common::Skills::D2GetSkillCalc(pUnit, *pSumSkillCalc, eSkill, nSkillLvl);
         if (nStatCalc > 0) {
           eSummonSkill = (eD2Skills)*pSumSkillCursor;
           if ((int)eSummonSkill >= 0 && (int)eSummonSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
@@ -1097,7 +1097,7 @@ BOOL __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * pUni
         }
       }
 
-      pSummonStatList = (D2UnitStrc*)&pSummonStatList->nClassId;
+      pSumSkillCalc++;
       pSumSkillCursor++;
     }
 

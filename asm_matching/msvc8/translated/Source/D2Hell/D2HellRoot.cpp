@@ -975,16 +975,16 @@ bool __fastcall D2FILE_GetSignerOrganization(LPCSTR szFilePath, LPSTR szOrgOut, 
 
     local_8 = (uint8_t*)-2;
     {
-      /* __finally block 00517df5 D2FILE_CleanupCryptHandles, on its parent locals */ if (*(DWORD*)&hMsgInfo) {
+      /* __finally block 00517df5 D2FILE_CleanupCryptHandles, on its parent locals */ if (hMsgInfo) {
         /* HLOCAL hMem for LocalFree */ LocalFree(hMsgInfo);
       }
-      if (*(DWORD*)&pCertContext) {
+      if (pCertContext) {
         /* PCCERT_CONTEXT pCertContext for CertFreeCertificateContext */ CertFreeCertificateContext(pCertContext);
       }
-      if (*(DWORD*)&hCertStore) {
+      if (hCertStore) {
         /* DWORD dwFlags for CertCloseStore */ /* HCERTSTORE hCertStore for CertCloseStore */ CertCloseStore(hCertStore, 0);
       }
-      if (*(DWORD*)&hCryptMsg) {
+      if (hCryptMsg) {
         /* HCRYPTMSG hCryptMsg for CryptMsgClose */ CryptMsgClose(hCryptMsg);
       }
     }

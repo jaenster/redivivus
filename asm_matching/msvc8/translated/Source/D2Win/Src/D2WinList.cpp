@@ -458,6 +458,15 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
     return 0;
 }
 
+// One row of the item table a list control is built from; the table ends at a row whose nStringId is 0.
+struct D2WinListItemDefStrc {
+    int32_t nStringId;
+    int32_t nFlags;
+    int32_t nUserData;
+    fpListEntryCallback pfnOnActivate;
+};
+static_assert(sizeof(void*) != 4 || sizeof(D2WinListItemDefStrc) == 0x10, "list item table rows are 0x10 bytes on 32-bit");
+
 ::D2WinList * __fastcall D2WinList(int32_t nPosX, int32_t nPosY, int32_t nSizeX, int32_t nSizeY, int * pnItemArray, int * pnFontType) {
     // Static local variables (originally global data)
     static int INT_ARRAY_006dd024[14] = {
@@ -516,12 +525,11 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
     pList->sEntriesControl.nSelectedIndex = -1;
     pList->sEntriesControl.nMaxVisibleIndex = nSizeY / (pList->sEntriesControl.nFontHeight + (eFontType >> 2) * 2) - 1;
     D2WinFont::SetAndReturnLastFont(*pnFontType);
-    int* pnCursor;
-    if (*pnItemArray) {
-      pnCursor = pnItemArray + 1;
+    const D2WinListItemDefStrc* pItemDef = (const D2WinListItemDefStrc*)pnItemArray;
+    if (pItemDef->nStringId) {
       do {
         pNewEntry = D2_NEW_AT(D2WinListEntry, ".\\Src\\D2WinList.cpp", 0x56);
-        wszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(*(uint16_t*)(pnCursor - 1));
+        wszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString((uint16_t)pItemDef->nStringId);
         nStrLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszLocaleStr);
         if (nStrLen >= 0x100) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x58);
@@ -529,20 +537,21 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
         }
 
         D2Lang::Unicode::UNISYS::STRING_CopyWideString(pNewEntry->wszText, wszLocaleStr);
-        D2WinFont::TEXT_CalcTextDimensions(wszLocaleStr, (int*)&nPnFontType, (int*)&pnItemArray);
+        int nTextHeight;
+        D2WinFont::TEXT_CalcTextDimensions(wszLocaleStr, (int*)&nPnFontType, &nTextHeight);
         nPnFontType += 8;
         if (nPnFontType > pList->sEntriesControl.nMaxTextWidth) {
           pList->sEntriesControl.nMaxTextWidth = nPnFontType;
         }
 
         pNewEntry->nTextWidth = nPnFontType;
-        pNewEntry->pfnOnActivate = (fpListEntryCallback)pnCursor[2];
+        pNewEntry->pfnOnActivate = pItemDef->pfnOnActivate;
         pNewEntry->nLeft = 0;
         pNewEntry->nRight = 0;
         pNewEntry->nTop = 0;
         pNewEntry->nBottom = 0;
-        pNewEntry->bItemFlags = (uint8_t)*pnCursor;
-        pNewEntry->nUserData = pnCursor[1];
+        pNewEntry->bItemFlags = (uint8_t)pItemDef->nFlags;
+        pNewEntry->nUserData = pItemDef->nUserData;
         pNewEntry->pNext = 0;
         pTailEntry = pList->sEntriesControl.pFirstEntry;
         if (pTailEntry) {
@@ -557,9 +566,8 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
 
         pItemCountPtr = &pList->sEntriesControl.nItemCount;
         (*pItemCountPtr)++;
-        pItemCountPtr = pnCursor + 3;
-        pnCursor += 4;
-      } while (*pItemCountPtr);
+        pItemDef++;
+      } while (pItemDef->nStringId);
     }
 
     D2WinFont::SetAndReturnLastFont(1);

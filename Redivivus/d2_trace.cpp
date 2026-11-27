@@ -105,7 +105,7 @@ extern "C" void D2TRACE_WatchWrite(void* pAddress) {
     ctx.ContextFlags = CONTEXT_DEBUG_REGISTERS;
     HANDLE hThread = GetCurrentThread();
     if (!GetThreadContext(hThread, &ctx)) return;
-    ctx.Dr0 = (DWORD)(UINT_PTR)pAddress;
+    ctx.Dr0 = (DWORD_PTR)pAddress;
     // L0 arms DR0; RW0=01 (write) and LEN0=11 (four bytes) live at bits 16-19.
     ctx.Dr7 = (ctx.Dr7 & ~0xF0000UL) | 0xD0000UL | 1UL;
     ctx.ContextFlags = CONTEXT_DEBUG_REGISTERS;

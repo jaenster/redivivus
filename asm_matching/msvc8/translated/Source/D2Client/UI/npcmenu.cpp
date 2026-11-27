@@ -5497,7 +5497,7 @@ void __stdcall NPCMENU_CloseAndResetAll() {
 }
 
 void __fastcall NPCMENU_HandlePlayerInteractionEnd(D2UnitStrc * pUnit) {
-    bool* pCurrentSpeech;
+    D2NPCSpeechStrc* pCurrentSpeech;
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
     if (pUnit != pPlayer) {
       return;
@@ -5505,22 +5505,22 @@ void __fastcall NPCMENU_HandlePlayerInteractionEnd(D2UnitStrc * pUnit) {
 
     int nSpeechEntryIdx = 0;
     if (D2NPCSpeechCount > 0) {
-      pCurrentSpeech = &D2NPCSpeech[0].field5_0x11;
+      pCurrentSpeech = D2NPCSpeech;
       do {
-        if (*pCurrentSpeech == 1) {
-          *pCurrentSpeech = false;
+        if (pCurrentSpeech->field5_0x11 == 1) {
+          pCurrentSpeech->field5_0x11 = false;
           pPlayer = UNIT::Player::GetPlayerUnit_UI();
           if (!pPlayer) {
             Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xfab);
             exit(-1);
           }
 
-          NPCMENU_SelectRandomDialogOption((D2NPCSpeechStrc*)(pCurrentSpeech - offsetof(D2NPCSpeechStrc, field5_0x11)));
+          NPCMENU_SelectRandomDialogOption(pCurrentSpeech);
         }
 
-        pCurrentSpeech[4] = true;
+        pCurrentSpeech->bGreeting = true;
         nSpeechEntryIdx++;
-        pCurrentSpeech += sizeof(D2NPCSpeechStrc);
+        pCurrentSpeech++;
       } while (nSpeechEntryIdx < D2NPCSpeechCount);
     }
     pPlayer = _Interaction::bInteractingWithNpc ? UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER) : 0;
@@ -7131,7 +7131,7 @@ int __stdcall NPCMENU_EnableKashyaHireOption() {
 
 // bAddTradeOption: 0 removes the trade option from the NPC's menu, nonzero inserts it (before the hire option).
 static BOOL __stdcall NPCMENU_ConfigureMenuOption(BOOL bAddTradeOption, int32_t nNpcMenuOptionId) {
-    uint32_t* pdwCallbackSlot;
+    D2NpcMenuOptionFunc* pdwCallbackSlot;
     int nOptionsCount;
     D2NpcMenuOptionFunc* pnCallbackSlot;
     int nOptionIdx;
@@ -7165,7 +7165,7 @@ static BOOL __stdcall NPCMENU_ConfigureMenuOption(BOOL bAddTradeOption, int32_t 
                 nOptionsCount--;
                 if (nOptionsCount >= nOptionIdx) {
                   pwStringIdSlot = (uint16_t*)&NPC::D2NpcMenuOptions[nNpcMenuOptionId].nOptionStringId[nOptionsCount + 1];
-                  pdwCallbackSlot = (uint32_t*)&NPC::D2NpcMenuOptions[nNpcMenuOptionId].nOptionCallback[nOptionsCount + 1];
+                  pdwCallbackSlot = &NPC::D2NpcMenuOptions[nNpcMenuOptionId].nOptionCallback[nOptionsCount + 1];
                   nOptionsCount = nOptionsCount - nOptionIdx + 1;
                   do {
                     *pdwCallbackSlot = pdwCallbackSlot[-1];
@@ -7189,7 +7189,7 @@ static BOOL __stdcall NPCMENU_ConfigureMenuOption(BOOL bAddTradeOption, int32_t 
 
           nOptionsCount--;
           pwStringIdSlot = (uint16_t*)&NPC::D2NpcMenuOptions[nNpcMenuOptionId].nOptionStringId[nOptionsCount + 1];
-          pdwCallbackSlot = (uint32_t*)&NPC::D2NpcMenuOptions[nNpcMenuOptionId].nOptionCallback[nOptionsCount + 1];
+          pdwCallbackSlot = &NPC::D2NpcMenuOptions[nNpcMenuOptionId].nOptionCallback[nOptionsCount + 1];
           for (nOptionIdx = 0; nOptionIdx < 1; nOptionIdx++) {
             *pdwCallbackSlot = pdwCallbackSlot[-1];
             *pwStringIdSlot = pwStringIdSlot[-1];

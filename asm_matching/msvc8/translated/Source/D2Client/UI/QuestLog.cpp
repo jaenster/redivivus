@@ -1067,7 +1067,7 @@ static void QUESTLOG_PopulateQuestEntry(D2QuestLogEntryStrc * pEntry) {
     nActIndex = 0;
     while (gaQuestInfoTable[nActIndex].nQuestId != pEntry->eQuestId) {
       nActIndex++;
-      if ((intptr_t)&gaQuestInfoTable[nActIndex].nQuestId >= (intptr_t)((char*)&gaQuestInfoTable + sizeof(gaQuestInfoTable) + offsetof(D2QuestLogInfoStrc, nQuestId))) {
+      if ((intptr_t)&gaQuestInfoTable[nActIndex].nQuestId >= (intptr_t)&gaQuestInfoTable[_countof(gaQuestInfoTable)].nQuestId) {
         pEntry->nDisplayState = 2;
         return;
       }
@@ -1587,7 +1587,7 @@ void __stdcall FreeQuestImages() {
       }
 
       ppActImage++;
-    } while ((intptr_t)ppActImage < (intptr_t)((char*)&gQuestLog + offsetof(D2QuestLogStrc, questlast)));
+    } while ((intptr_t)ppActImage < (intptr_t)&gQuestLog.questlast);
 }
 
 // JMP thunk

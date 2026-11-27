@@ -16595,9 +16595,10 @@ void __fastcall AITHINK_Fn1_Scarab(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
     pAttacker = pAiParam->pTarget;
     D2AiGeneralStrc* pMonsterAiGeneral;
     pMonsterAiGeneral = pAiParam->pMonsterAiGeneral;
-    D2AiCmdArgumentsStrc* pAiCmd;
-    pAiCmd = (D2AiCmdArgumentsStrc*)Ai::AiGeneral::GetAiCmd(pUnit);
-    if (!pAiCmd) {
+    // The queued command's nCmdArg[0] is read as nCmdId of the D2AiCmdArgumentsStrc view that holds it.
+    D2MonsterAiCmdStrc* pAiCmdNode = Ai::AiGeneral::GetAiCmd(pUnit);
+    D2AiCmdArgumentsStrc* pAiCmd = CONTAINING_RECORD(&pAiCmdNode->nCmdArg[0], D2AiCmdArgumentsStrc, nCmdId);
+    if (!pAiCmdNode) {
       D2UnitStrc* pOwnerUnit;
       if (nDistToTarget >= 0x14 || (pOwnerUnit = Ai::AiGeneral::GetOwnerUnit(pUnit) , pOwnerUnit != pUnit)) {
         goto solo_behavior;

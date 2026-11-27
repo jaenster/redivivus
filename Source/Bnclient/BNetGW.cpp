@@ -61,7 +61,7 @@ static D2BNetClientCallbacksStrc sgBNetClientCallbacks = {
     /* .pfnSendChangePasswordRequest = */ &Bnclient::BnSend::BNCLIENT_SendChangePasswordRequest,
     /* .pfnWaitForChangePasswordResponse = */ &Bnclient::BnSend::BNCLIENT_WaitForChangePasswordResponse,
     /* .pfnSendQueryAdURL = */ &Bnclient::BnSend::NET_SID_CLIENT_Send_0x41_QueryAdURL,
-    /* .pfnSendNewsInfo = */ (fnSendNewsInfo)&Bnclient::BnSend::NET_SID_CLIENT_Send_0x46_NewsInfo,
+    /* .pfnSendNewsInfo = */ &Bnclient::BnSend::NET_SID_CLIENT_Send_0x46_NewsInfo,
     /* .pfnNewsShutdown = */ &Bnclient::BnSend::BNNEWS_Shutdown,
     /* .pfnGetProtocolVersionChar = */ &Bnclient::BnSend::BNCLIENT_GetProtocolVersionChar,
     /* .pfnIsEmailRequested = */ &Bnclient::BnSend::BNSEND_GetBNetThreadInitFlag,
@@ -157,7 +157,8 @@ int32_t __stdcall GMT(D2BNetGatewayAccessStr * pGatewayAccess, int nIndex) {
       szGatewayEntry = szGatewayEntry + nDnsStrLen + 1;
     }
 
-    long int nGmtBias = strtol(szGatewayEntry, (char**)&nIndex, 10);
+    char* pGmtEnd;
+    long int nGmtBias = strtol(szGatewayEntry, &pGmtEnd, 10);
     return nGmtBias;
 }
 

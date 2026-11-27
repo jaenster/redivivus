@@ -464,7 +464,7 @@ int __fastcall PumpIoCompletionQueueForWorker(D2QServerStrc * pQServer, int nWor
     bool bIsWriteOverlapped;
     bool bIsReadOverlapped;
     DWORD dwBytesTransferred;
-    uint32_t ulCompletionKey;
+    ULONG_PTR ulCompletionKey;
     LPOVERLAPPED pOverlapped;
     uint8_t byOverlapFlags;
     CRITICAL_SECTION* pClientLock;
@@ -482,7 +482,7 @@ int __fastcall PumpIoCompletionQueueForWorker(D2QServerStrc * pQServer, int nWor
       D2QServerStrc* pQServerRef;
       pQServerRef = pQServer;
       /* DWORD dwMilliseconds for GetQueuedCompletionStatus */ /* LPOVERLAPPED * lpOverlapped for GetQueuedCompletionStatus */ /* PULONG_PTR lpCompletionKey for GetQueuedCompletionStatus */ /* LPDWORD lpNumberOfBytesTransferred for GetQueuedCompletionStatus */ /* HANDLE CompletionPort for GetQueuedCompletionStatus */ pClient = 0;
-      bGqcsResult = GetQueuedCompletionStatus(pQServerRef->aIoCompletionPorts[nWorkerIndex], &dwBytesTransferred, (PULONG_PTR)&ulCompletionKey, &pOverlapped, dwTimeoutMs);
+      bGqcsResult = GetQueuedCompletionStatus(pQServerRef->aIoCompletionPorts[nWorkerIndex], &dwBytesTransferred, &ulCompletionKey, &pOverlapped, dwTimeoutMs);
       bIsWriteOverlapped = false;
       bIsReadOverlapped = false;
       if (!bGqcsResult && !pOverlapped) {

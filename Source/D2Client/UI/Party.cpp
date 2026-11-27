@@ -848,7 +848,7 @@ void __stdcall UI_HandlePartyButtonTooltips() {
     uint16_t* pText;
     uint16_t nLocaleId;
     int nTmp;
-    int* pButton;
+    D2UiPartyBoxStrc* pButton;
     int nButtonY;
     int nButtonIdx;
     int32_t nTmp3;
@@ -886,14 +886,14 @@ void __stdcall UI_HandlePartyButtonTooltips() {
       pRosterPlayer = pRosterIter;
       if (nTmpX < Inv::gnPanelOffsetX + 0x24 || nTmpX > Inv::gnPanelOffsetX + 0x8c || (nTmp -= Inv::gnPanelOffsetY , nTmpY < nTmp - 0x1a) || nTmpY > nTmp) {
         nButtonIdx = 1;
-        pButton = &pUiPartyCur->pPartyButtons[1].nButtonType;
+        pButton = &pUiPartyCur->pPartyButtons[1];
         do {
-          nButtonY = pButton[-3];
-          nTmp = pButton[-4];
+          nButtonY = pButton->nY;
+          nTmp = pButton->nX;
           nTmpX = Cursor::GetMouseX();
           nTmpY = Cursor::GetMouseY();
           if (nTmpX >= Inv::gnPanelOffsetX + nTmp && nTmpX <= Inv::gnPanelOffsetX + nTmp + 0x14 && nTmpY >= nButtonY - Inv::gnPanelOffsetY - 0x14 && nTmpY <= nButtonY - Inv::gnPanelOffsetY) {
-            nTmp = *pButton;
+            nTmp = pButton->nButtonType;
             switch (nTmp) {
               case 1:
                 {
@@ -1048,7 +1048,7 @@ void __stdcall UI_HandlePartyButtonTooltips() {
           }
 
           nButtonIdx++;
-          pButton += 8;
+          pButton++;
           pRosterPlayer = pRosterIter;
         } while (nButtonIdx < 5);
       } else {
@@ -1186,7 +1186,7 @@ void __stdcall INPUT_PartyScreenLeftClick(D2UIMouseMsgStrc * pMsg) {
     uint32_t nLevel;
     D2RoomStrc* pRoom;
     BOOL bInTown;
-    int* pButton;
+    D2UiPartyBoxStrc* pButton;
     int nButtonIdx;
     D2UiPartyStrc* pUiParty;
     int nTmpX;
@@ -1210,21 +1210,21 @@ void __stdcall INPUT_PartyScreenLeftClick(D2UIMouseMsgStrc * pMsg) {
 
       while (pUiParty) {
         nButtonIdx = 0;
-        for (pButton = &pUiParty->pPartyButtons[0].nButtonType; nButtonIdx < 5; nButtonIdx++ , pButton += 8) {
-          nTmpX = pButton[-4];
-          if (!((D2UiPartyBoxStrc*)(pButton - 5))->bIsPartyButton) {
-            nButtonY = pButton[-3];
+        for (pButton = &pUiParty->pPartyButtons[0]; nButtonIdx < 5; nButtonIdx++ , pButton++) {
+          nTmpX = pButton->nX;
+          if (!pButton->bIsPartyButton) {
+            nButtonY = pButton->nY;
             nMouseX = Cursor::GetMouseX();
             nMouseY = Cursor::GetMouseY();
             nTmpX = Inv::gnPanelOffsetX + nTmpX;
             if (nMouseX >= nTmpX && nMouseX <= nTmpX + 0x14 && nMouseY >= nButtonY - Inv::gnPanelOffsetY - 0x14 && nMouseY <= nButtonY - Inv::gnPanelOffsetY) {
-              if (*pButton == 1) {
+              if (pButton->nButtonType == 1) {
                 pRoster = GAME::Roster::GetNextRosterPlayer(nullptr);
                 nLevel = GAME::Roster::GetRosterLevel(pRoster);
                 if ((int)nLevel < 9) {
                   goto consume_box_click;
                 }
-                if (*pButton == 1) {
+                if (pButton->nButtonType == 1) {
                   pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
                   if (!pRoom) {
                     continue;
@@ -1236,8 +1236,8 @@ void __stdcall INPUT_PartyScreenLeftClick(D2UIMouseMsgStrc * pMsg) {
                   }
                 }
               }
-              if (!pButton[2]) {
-                pUiParty->pPartyButtons[nButtonIdx].nIndexDC6 = pButton[-1] + 1;
+              if (!pButton->bIsPressed) {
+                pUiParty->pPartyButtons[nButtonIdx].nIndexDC6 = pButton->nIndexDC6 + 1;
                 pUiParty->pPartyButtons[nButtonIdx].bIsPressed = 1;
                 gpWaypointButtonHover = 1;
                 consume_box_click:
@@ -1248,7 +1248,7 @@ void __stdcall INPUT_PartyScreenLeftClick(D2UIMouseMsgStrc * pMsg) {
               }
             }
           } else {
-            nButtonY = pButton[-3];
+            nButtonY = pButton->nY;
             nMouseX = Cursor::GetMouseX();
             nMouseY = Cursor::GetMouseY();
             nTmpX = Inv::gnPanelOffsetX + nTmpX;
@@ -1288,7 +1288,7 @@ void __stdcall INPUT_PartyScreenMouseUp(D2UIMouseMsgStrc * pMsg) {
     uint32_t nRosterLevel;
     D2RoomStrc* pRoom;
     BOOL bIsInTown;
-    int* pButtonField;
+    D2UiPartyBoxStrc* pButtonField;
     int nButtonIndex;
     D2UiPartyStrc* pUiParty;
     int nMouseX;
@@ -1315,22 +1315,22 @@ void __stdcall INPUT_PartyScreenMouseUp(D2UIMouseMsgStrc * pMsg) {
           pRosterPlayer = GAME::Roster::GetNextRosterPlayer(pRosterPlayer);
           while (pRosterPlayer && pUiParty) {
             nButtonIndex = 0;
-            for (pButtonField = &pUiParty->pPartyButtons[0].nIndexDC6; nButtonIndex < 5; nButtonIndex++ , pButtonField += 8) {
-              nMouseX = pButtonField[-3];
-              if (!((D2UiPartyBoxStrc*)(pButtonField - 4))->bIsPartyButton) {
-                nMouseY = pButtonField[-2];
+            for (pButtonField = &pUiParty->pPartyButtons[0]; nButtonIndex < 5; nButtonIndex++ , pButtonField++) {
+              nMouseX = pButtonField->nX;
+              if (!pButtonField->bIsPartyButton) {
+                nMouseY = pButtonField->nY;
                 nMouseX2 = Cursor::GetMouseX();
                 nMouseY2 = Cursor::GetMouseY();
                 nMouseX = Inv::gnPanelOffsetX + nMouseX;
                 if (nMouseX2 >= nMouseX && nMouseX2 <= nMouseX + 0x14 && nMouseY2 >= nMouseY - Inv::gnPanelOffsetY - 0x14 && nMouseY2 <= nMouseY - Inv::gnPanelOffsetY) {
-                  if (pButtonField[1] == 1) {
+                  if (pButtonField->nButtonType == 1) {
                     pFirstRoster = GAME::Roster::GetNextRosterPlayer(nullptr);
                     nRosterLevel = GAME::Roster::GetRosterLevel(pFirstRoster);
                     if ((int)nRosterLevel < 9) {
                       pMsg->bHandled = 1;
                       goto consume_keep_queued_clicks;
                     }
-                    if (pButtonField[1] == 1) {
+                    if (pButtonField->nButtonType == 1) {
                       pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
                       if (!pRoom) {
                         continue;
@@ -1343,13 +1343,13 @@ void __stdcall INPUT_PartyScreenMouseUp(D2UIMouseMsgStrc * pMsg) {
                     }
                   }
 
-                  nRosterLevel = ClickParty_II(pButtonField[1], pRosterPlayer);
+                  nRosterLevel = ClickParty_II(pButtonField->nButtonType, pRosterPlayer);
                   if (nRosterLevel) {
-                    *pButtonField += 2;
+                    pButtonField->nIndexDC6 += 2;
                   }
                 }
               } else {
-                nMouseY = pButtonField[-2];
+                nMouseY = pButtonField->nY;
                 nMouseX2 = Cursor::GetMouseX();
                 nMouseY2 = Cursor::GetMouseY();
                 nMouseX = Inv::gnPanelOffsetX + nMouseX;
@@ -1367,14 +1367,14 @@ void __stdcall INPUT_PartyScreenMouseUp(D2UIMouseMsgStrc * pMsg) {
           gpWaypointButtonHover = 0;
         } else {
           for (; pUiParty; pUiParty = pUiParty->pNext) {
-            pButtonField = &pUiParty->pPartyButtons[0].bIsPressed;
+            pButtonField = &pUiParty->pPartyButtons[0];
             for (nMouseX = 0; nMouseX < 5; nMouseX++) {
-              if (*pButtonField) {
-                pButtonField[-3]--;
-                *pButtonField = 0;
+              if (pButtonField->bIsPressed) {
+                pButtonField->nIndexDC6--;
+                pButtonField->bIsPressed = 0;
               }
 
-              pButtonField += 8;
+              pButtonField++;
             }
           }
         }

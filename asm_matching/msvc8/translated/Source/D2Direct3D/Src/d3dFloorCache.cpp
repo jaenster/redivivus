@@ -309,13 +309,13 @@ void __fastcall D3DFLOOR_Free(D3DFloorCacheStrc * pCache, BOOL bInvalidateAll) {
         pIface = *(IUnknown**)&pCurNode->pSurface;
         if (pIface) {
           pIface->Release();
-          *(uint32_t*)&pCurNode->pSurface = 0;
+          pCurNode->pSurface = nullptr;
         }
 
         pIface2 = *(IUnknown**)&pCurNode->pTexture;
         if (pIface2) {
           pIface2->Release();
-          *(uint32_t*)&pCurNode->pTexture = 0;
+          pCurNode->pTexture = nullptr;
         }
       }
       if (bInvalidateAll) {

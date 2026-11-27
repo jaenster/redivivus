@@ -58,7 +58,7 @@ struct D2SkillHitCountArgStrc {
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 union Skills_SrvDoFunc_066_Conviction_Slotm8 {
-    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+    operator uintptr_t() const { return *reinterpret_cast<const uintptr_t*>(this); }
 
     /* 0x00 */ int * pnPassiveCalc;
     /* 0x00 */ short * psAuraStat;
@@ -67,7 +67,7 @@ union Skills_SrvDoFunc_066_Conviction_Slotm8 {
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 union Skills_SrvDoFunc_066_Conviction_Slotmc {
-    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+    operator uintptr_t() const { return *reinterpret_cast<const uintptr_t*>(this); }
 
     /* 0x00 */ short * psValue;
     /* 0x00 */ int * pnValue;
@@ -76,7 +76,7 @@ union Skills_SrvDoFunc_066_Conviction_Slotmc {
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 union Skills_SrvDoFunc_081_HolyFreeze_Slotm8 {
-    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+    operator uintptr_t() const { return *reinterpret_cast<const uintptr_t*>(this); }
 
     /* 0x00 */ short * psValue;
     /* 0x00 */ int * pnValue;
@@ -85,7 +85,7 @@ union Skills_SrvDoFunc_081_HolyFreeze_Slotm8 {
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 union Skills_SrvDoFunc_081_HolyFreeze_Slotmc {
-    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+    operator uintptr_t() const { return *reinterpret_cast<const uintptr_t*>(this); }
 
     /* 0x00 */ int * pnPassiveCalc;
     /* 0x00 */ short * psAuraStat;

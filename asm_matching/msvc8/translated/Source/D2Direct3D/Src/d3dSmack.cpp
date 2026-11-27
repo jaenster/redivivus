@@ -102,7 +102,7 @@ int __fastcall RENDERER_D3D_CreateSmackerSurfaces(int nParam) {
         exit(-1);
       }
 
-      bSurfaceCreated = RENDERER_D3D_CreateSurfaceWithTexture(&gpD3DSmackerVideoSurface0[nSurfaceOffset], (void**)(int*)&gpD3DSmackerVideoTexture0[nSurfaceOffset], 0x100, 0x40);
+      bSurfaceCreated = RENDERER_D3D_CreateSurfaceWithTexture(&gpD3DSmackerVideoSurface0[nSurfaceOffset], (void**)&gpD3DSmackerVideoTexture0[nSurfaceOffset], 0x100, 0x40);
       if (!gpD3DSmackerVideoSurface0[nSurfaceOffset]) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4e);
         exit(-1);
@@ -142,25 +142,25 @@ void __stdcall RENDERER_D3D_ReleaseSmackerSurfaces() {
       pSmackerSystemTexture = gpD3DSmackerSystemTexture0[nByteOffset];
       if (pSmackerSystemTexture) {
         pSmackerSystemTexture->lpVtbl->Release(pSmackerSystemTexture);
-        *(uint32_t*)&gpD3DSmackerSystemTexture0[nByteOffset] = 0;
+        gpD3DSmackerSystemTexture0[nByteOffset] = 0;
       }
 
       pSmackerSystemSurface = gpD3DSmackerSystemSurface0[nByteOffset];
       if (pSmackerSystemSurface) {
         pSmackerSystemSurface->lpVtbl->Release(pSmackerSystemSurface);
-        *(uint32_t*)&gpD3DSmackerSystemSurface0[nByteOffset] = 0;
+        gpD3DSmackerSystemSurface0[nByteOffset] = 0;
       }
 
       pSmackerVideoTexture = gpD3DSmackerVideoTexture0[nByteOffset];
       if (pSmackerVideoTexture) {
         pSmackerVideoTexture->lpVtbl->Release(pSmackerVideoTexture);
-        *(uint32_t*)&gpD3DSmackerVideoTexture0[nByteOffset] = 0;
+        gpD3DSmackerVideoTexture0[nByteOffset] = 0;
       }
 
       pSmackerVideoSurface = gpD3DSmackerVideoSurface0[nByteOffset];
       if (pSmackerVideoSurface) {
         pSmackerVideoSurface->lpVtbl->Release(pSmackerVideoSurface);
-        *(uint32_t*)&gpD3DSmackerVideoSurface0[nByteOffset] = 0;
+        gpD3DSmackerVideoSurface0[nByteOffset] = 0;
       }
 
       nByteOffset++;

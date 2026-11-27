@@ -99,7 +99,7 @@ int OGL_GetTextureMemoryBudget() {
 // Described from the Mac body (no Windows twin).
 // 1.14d mac: 002e0c87
 BOOL OGL_InstallCursorCallbacks() {
-    (**(code**)((char*)*(void**)(uintptr_t)PTR_PTR_003961e0 + 196))(PTR_LAB_003961f4, PTR_MACCURSOR_ShowDisplayCursor_003961f0, PTR_LAB_003961ec);
+    (**((code**)*(void**)(uintptr_t)PTR_PTR_003961e0 + 49))(PTR_LAB_003961f4, PTR_MACCURSOR_ShowDisplayCursor_003961f0, PTR_LAB_003961ec);
     return 1;
 }
 
@@ -385,7 +385,7 @@ BOOL OGL_MacOpenWindow(int nResolution) {
           BVar7 = OGL_MacSetRenderer(CGDirectDisplayID_00552b2c, pix);
           if (BVar7) {
             aglDestroyPixelFormat(pix);
-            (**(code**)((char*)*(void**)(uintptr_t)PTR_PTR_003961e0 + 108))();
+            (**((code**)*(void**)(uintptr_t)PTR_PTR_003961e0 + 27))();
             DAT_003ce7e8 = nResolution;
             BVar7 = 1;
             goto LAB_002e1587;

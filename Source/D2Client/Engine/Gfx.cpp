@@ -1861,7 +1861,8 @@ D2GfxInfoUnkStrc * __fastcall GFX_EnsureUnitCofLoaded(D2UnitStrc * pUnit, int32_
     }
     if (eUnitType == UNIT_PLAYER) {
       uint8_t* bLoaded;
-      bLoaded = GFX_LoadCompositCof((uint8_t**)&nAnimMode, nModeEff, pUnit);
+      uint8_t* pCofData = 0;
+      bLoaded = GFX_LoadCompositCof(&pCofData, nModeEff, pUnit);
       if (bLoaded) {
         GfxUtil::GFXUTIL_SetGfxInfoComponent(pUnit, nModeEff, '\x01');
       }
@@ -3791,7 +3792,7 @@ BOOL __fastcall DRAW_WORLD_Unit_1(D2UnitStrc * pUnit, uint32_t nGamma, uint32_t 
     nPaletteOrFlag = GfxUtil::GFXUTIL_IsValidUnitType(pUnit);
     if (nPaletteOrFlag) {
       pGfxResult = GFX_DrawUnitComponents(bIsSelected, nGammaCopy, pPalShift, bDrawStates, nDrawY, pUnit);
-      return (BOOL)(uintptr_t)pGfxResult;
+      return pGfxResult != 0;
     }
 
     byDirection = D2Common::Units::GetDirection(pUnit);

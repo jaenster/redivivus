@@ -30,7 +30,7 @@ typedef int (__stdcall *pfnCheckRevision)(LPCSTR szFile1, LPCSTR szFile2, LPCSTR
 
 static unsigned int gbBnetDownloadCancelFlag = {0}; D2_STATIC_GUARD(gbBnetDownloadCancelFlag, "gbBnetDownloadCancelFlag");
 static char lpFileName_00881c58[260] = {0}; D2_STATIC_GUARD(lpFileName_00881c58, "lpFileName_00881c58");
-static LONG * lpAddend_00881d5c = 0; D2_STATIC_GUARD(lpAddend_00881d5c, "lpAddend_00881d5c");
+static LONG lpAddend_00881d5c = 0; D2_STATIC_GUARD(lpAddend_00881d5c, "lpAddend_00881d5c");
 
 namespace Bnclient { namespace BnDownload {
 
@@ -841,7 +841,7 @@ uint32_t __stdcall BnetDownloadFile_II(void * lpThreadParam) {
       LeaveCriticalSection(&lpCriticalSection_00881f64);
     }
 
-    /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement((LONG*)&lpAddend_00881d5c);
+    /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement(&lpAddend_00881d5c);
     return 0;
 }
 
@@ -896,7 +896,7 @@ void __fastcall BNDOWNLOAD_InitiateFileDownload(int32_t pDownloadCtx, uint32_t d
     pThreadCtx->ftFileTime.dwHighDateTime = pFileTime->dwHighDateTime;
     Storm::Source::SSTR::SStrCopy(pThreadCtx->szFileName, szBufferInput, 0x104);
     Storm::Source::SSTR::SStrCopy(pThreadCtx->szOutputPath, szText2, 0x104);
-    /* LONG * lpAddend for InterlockedIncrement */ InterlockedIncrement((LONG*)&lpAddend_00881d5c);
+    /* LONG * lpAddend for InterlockedIncrement */ InterlockedIncrement(&lpAddend_00881d5c);
     HANDLE hObject = (HANDLE)_beginthreadex(nullptr, 0, BnetDownloadFile_II, pThreadCtx, 0, &nThreadId);
     if (!hObject) {
       return;
@@ -1208,7 +1208,7 @@ uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pPatchList, uint32_
     pThreadCtx->ftFileTime.dwHighDateTime = ftZero.dwHighDateTime;
     Storm::Source::SSTR::SStrCopy(pThreadCtx->szFileName, (char*)pPatchList, 0x104);
     Storm::Source::SSTR::SStrCopy(pThreadCtx->szOutputPath, "", 0x104);
-    /* LONG * lpAddend for InterlockedIncrement */ InterlockedIncrement((LONG*)&lpAddend_00881d5c);
+    /* LONG * lpAddend for InterlockedIncrement */ InterlockedIncrement(&lpAddend_00881d5c);
     uintptr_t nThreadHandle = _beginthreadex(nullptr, 0, BnetDownloadFile_II, pThreadCtx, 0, &nThreadId);
     return nThreadHandle;
 }

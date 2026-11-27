@@ -929,7 +929,7 @@ struct D2DrlgLevelDataPresetArea {
 #ifndef D2_DEFINED_D2DrlgLevelDataUnion
 #define D2_DEFINED_D2DrlgLevelDataUnion
 union D2DrlgLevelDataUnion {
-    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+    operator uintptr_t() const { return *reinterpret_cast<const uintptr_t*>(this); }
 
     /* 0x00 */ struct D2LvlMazeTxt * pTxtLvlMaze; // when DRLG Type is DRLGTYPE_RandomMaze
     /* 0x00 */ struct D2DrlgLevelDataPresetArea * pDrlgLevelPresetData; // when DRLG Type is DRLGTYPE_PresetArea
@@ -1067,7 +1067,7 @@ D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2DrlgMapStrc {
 #ifndef D2_DEFINED_D2DrlgOrthLinkUnion
 #define D2_DEFINED_D2DrlgOrthLinkUnion
 union D2DrlgOrthLinkUnion {
-    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+    operator uintptr_t() const { return *reinterpret_cast<const uintptr_t*>(this); }
 
     /* 0x00 */ struct D2RoomExStrc * pRoomEx; // nType==1: linked room
     /* 0x00 */ struct D2DrlgLevelStrc * pLevel; // nType==0: linked level
@@ -1173,7 +1173,7 @@ struct D2DrlgRoomExDataPresetWorldCoordinatesBurialGrounds {
 #ifndef D2_DEFINED_D2DrlgRoomExDataUnion
 #define D2_DEFINED_D2DrlgRoomExDataUnion
 union D2DrlgRoomExDataUnion {
-    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+    operator uintptr_t() const { return *reinterpret_cast<const uintptr_t*>(this); }
 
     /* 0x00 */ struct D2DrlgOutdoorRoomStrc * pRoomExDataOutdoorRoom; // nPresetType == 1: outdoor room (DRLGOUTROOM_AllocOutdoorRoomData)
     /* 0x00 */ struct D2DrlgPresetRoomStrc * pRoomExDataPreset; // nPresetType == 2: maze and preset rooms
@@ -6871,7 +6871,7 @@ struct D2PassiveSkillsPerClassStrc {
 #ifndef D2_DEFINED_D2PathUnion
 #define D2_DEFINED_D2PathUnion
 union D2PathUnion {
-    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+    operator uintptr_t() const { return *reinterpret_cast<const uintptr_t*>(this); }
 
     /* 0x00 */ struct D2StaticPathStrc * pStaticPath; // Used for ITEM, OBJECT, WARP
     /* 0x00 */ struct D2DynamicPathStrc * pDynamicPath; // Used for PLAYER, MONSTER, MISSILE
@@ -8032,7 +8032,7 @@ struct D2UnitDataObjectStrc {
 #ifndef D2_DEFINED_D2UnitDataUnion
 #define D2_DEFINED_D2UnitDataUnion
 union D2UnitDataUnion {
-    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+    operator uintptr_t() const { return *reinterpret_cast<const uintptr_t*>(this); }
 
     /* 0x00 */ struct D2UnitDataPlayerStrc * pUnitDataPlayer;
     /* 0x00 */ struct D2UnitDataMonsterStrc * pUnitDataMonster;

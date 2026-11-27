@@ -23,7 +23,6 @@ namespace D2Glide { namespace glTextureCache {
 // Initializes Glide texture cache with LRU eviction policy. Allocates node array (0x1C bytes per entry), sets up active/free lists, and constrains capacity to 2MB in debug builds.
 // @sourcefile .\Src\glTextureCache.cpp
 int __fastcall GLTEXCACHE_Initialize(GlTextureCacheStrc * pCache, int nVramStart, int nVramEnd, uint32_t dwTextureSize) {
-    uint32_t* pDebugScan;
     int nVramAddr;
     uint32_t nEntryCount = (uint32_t)(nVramEnd - nVramStart) / dwTextureSize;
     pCache->dwEntrySize = dwTextureSize;
@@ -61,9 +60,8 @@ int __fastcall GLTEXCACHE_Initialize(GlTextureCacheStrc * pCache, int nVramStart
     if (!gbGlideIsDebugBuild) {
       iNode = 1;
       if (1 < (int)(pCache->nMaxEntries - 1)) {
-        pDebugScan = &pNodeArray[1].dwAddress;
         do {
-          if (*pDebugScan < 0x200000 && pCache->dwEntrySize + *pDebugScan > 0x200000) {
+          if (pNodeArray[iNode].dwAddress < 0x200000 && pCache->dwEntrySize + pNodeArray[iNode].dwAddress > 0x200000) {
             pNodeArray[iNode - 1].pNext = pNodeArray + (iNode + 1);
             pCache->pNodes[iNode + 1].pPrev = pCache->pNodes + (iNode - 1);
             pCache->pNodes[iNode].pPrev = 0;
@@ -73,7 +71,6 @@ int __fastcall GLTEXCACHE_Initialize(GlTextureCacheStrc * pCache, int nVramStart
           }
 
           iNode++;
-          pDebugScan += 7;
         } while (iNode < (int)(pCache->nMaxEntries - 1));
       }
 

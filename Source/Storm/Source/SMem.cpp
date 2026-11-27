@@ -1317,7 +1317,7 @@ static uint32_t * __stdcall SMEM_AllocateHeapBlock(uint32_t nSize, uint8_t byFla
         nPageSize = g_SMemPageSize;
       }
 
-      nNeededTotal = nSize + 0x10;
+      nNeededTotal = nSize + sizeof(D2FogLargeBlockHdrStrc);
       pDebugPage = (LPVOID)0x0;
       if (DebugMemory || ProtectMemory) {
         nBinIndex = nPageSize - (nPageSize - 1U & nNeededTotal);

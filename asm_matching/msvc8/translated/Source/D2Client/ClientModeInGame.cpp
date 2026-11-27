@@ -73,7 +73,7 @@ fnAppModeRun * (__fastcall AppModeClientInit)(HMODULE hModule) {
 
     D2Common::Chat::Ignorelist::IGNORELIST_Initialize();
     D2Game::GAME::Server::ServerInit_nullsub();
-    *(uint32_t*)((char*)&gMCPGameListBuffer + 28672) = (uint32_t)(uintptr_t)hModule;
+    *(HMODULE*)((char*)&gMCPGameListBuffer + 28672) = hModule;
     return &gpfnClientAppModeRun;
 }
 

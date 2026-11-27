@@ -369,13 +369,51 @@ bool DEBUG_EnumerateModulesViaToolhelp32(int * pModuleList) {
     return true;
 }
 
-// Loader-structure offsets in pointer units: every field before them is pointer-sized on both x86 and x64.
-#define PEB_WALK_TEB_PEB (12 * sizeof(void*))            // TEB.ProcessEnvironmentBlock
-#define PEB_WALK_PEB_LDR (3 * sizeof(void*))             // PEB.Ldr
-#define PEB_WALK_LDR_MEMORDER (8 + 3 * sizeof(void*))    // PEB_LDR_DATA.InMemoryOrderModuleList
-#define PEB_WALK_ENTRY_DLLBASE (4 * sizeof(void*))       // LDR_DATA_TABLE_ENTRY.DllBase, from InMemoryOrderLinks
-#define PEB_WALK_ENTRY_FULLNAME (7 * sizeof(void*))      // LDR_DATA_TABLE_ENTRY.FullDllName.Length, from InMemoryOrderLinks
-#define PEB_WALK_ENTRY_FULLNAME_BUF (8 * sizeof(void*))  // LDR_DATA_TABLE_ENTRY.FullDllName.Buffer, from InMemoryOrderLinks
+// The loader structures DEBUG_EnumerateModulesViaPEB walks, declared up to the last field it reads.
+// The VC8 Platform SDK's winternl.h hides every one of these fields behind Reserved arrays.
+struct D2LdrUnicodeStringStrc {
+    uint16_t nLength;
+    uint16_t nMaximumLength;
+    LPCWSTR wszBuffer;
+};
+
+// LDR_DATA_TABLE_ENTRY seen from its InMemoryOrderLinks member, which is what the list links point at.
+struct D2LdrMemOrderEntryStrc {
+    LIST_ENTRY tInMemoryOrderLinks;
+    LIST_ENTRY tInInitializationOrderLinks;
+    void* pDllBase;
+    void* pEntryPoint;
+    uint32_t nSizeOfImage;
+    D2LdrUnicodeStringStrc tFullDllName;
+};
+
+struct D2PebLdrDataStrc {
+    uint32_t nLength;
+    uint32_t bInitialized;
+    void* hSsHandle;
+    LIST_ENTRY tInLoadOrderModuleList;
+    LIST_ENTRY tInMemoryOrderModuleList;
+};
+
+struct D2PebStrc {
+    uint8_t aReserved1[2];
+    uint8_t bBeingDebugged;
+    uint8_t aReserved2[1];
+    void* aReserved3[2];
+    D2PebLdrDataStrc* pLdr;
+};
+
+struct D2TebStrc {
+    void* aReserved1[12];
+    D2PebStrc* pProcessEnvironmentBlock;
+};
+
+static_assert(sizeof(void*) != 4 || offsetof(D2TebStrc, pProcessEnvironmentBlock) == 0x30, "TEB.ProcessEnvironmentBlock");
+static_assert(sizeof(void*) != 4 || offsetof(D2PebStrc, pLdr) == 0x0c, "PEB.Ldr");
+static_assert(sizeof(void*) != 4 || offsetof(D2PebLdrDataStrc, tInMemoryOrderModuleList) == 0x14, "PEB_LDR_DATA.InMemoryOrderModuleList");
+static_assert(sizeof(void*) != 4 || offsetof(D2LdrMemOrderEntryStrc, pDllBase) == 0x10, "LDR_DATA_TABLE_ENTRY.DllBase");
+static_assert(sizeof(void*) != 4 || offsetof(D2LdrMemOrderEntryStrc, tFullDllName) == 0x1c, "LDR_DATA_TABLE_ENTRY.FullDllName");
+static_assert(sizeof(void*) != 8 || (offsetof(D2TebStrc, pProcessEnvironmentBlock) == 0x60 && offsetof(D2PebStrc, pLdr) == 0x18 && offsetof(D2PebLdrDataStrc, tInMemoryOrderModuleList) == 0x20 && offsetof(D2LdrMemOrderEntryStrc, pDllBase) == 0x20 && offsetof(D2LdrMemOrderEntryStrc, tFullDllName) == 0x38), "64-bit loader layout");
 
 bool __fastcall DEBUG_EnumerateModulesViaPEB(int * pModuleList) {
     void* pSavedEsp;
@@ -392,22 +430,21 @@ bool __fastcall DEBUG_EnumerateModulesViaPEB(int * pModuleList) {
     }
 
     tSehFrame.TryLevel = 0;
-    uint8_t* pbLdr = *(uint8_t**)((char*)*(void**)((char*)NtCurrentTeb() + PEB_WALK_TEB_PEB) + PEB_WALK_PEB_LDR);
-    uint32_t* pListHead = (uint32_t*)(pbLdr + PEB_WALK_LDR_MEMORDER);
-    uint32_t* pEntry = *(uint32_t**)pListHead;
+    LIST_ENTRY* pListHead = &((D2TebStrc*)NtCurrentTeb())->pProcessEnvironmentBlock->pLdr->tInMemoryOrderModuleList;
+    D2LdrMemOrderEntryStrc* pEntry = (D2LdrMemOrderEntryStrc*)pListHead->Flink;
     while (true) {
       bool bVar1;
-      if (pEntry == pListHead) {
+      if (&pEntry->tInMemoryOrderLinks == pListHead) {
         ExceptionList = tSehFrame.Next;
         return true;
       }
 
-      bVar1 = DEBUG_AddModuleToList(pModuleList, *(LPCWSTR*)((char*)pEntry + PEB_WALK_ENTRY_FULLNAME_BUF), (uint32_t)*(uint16_t*)((char*)pEntry + PEB_WALK_ENTRY_FULLNAME), *(short int**)((char*)pEntry + PEB_WALK_ENTRY_DLLBASE));
+      bVar1 = DEBUG_AddModuleToList(pModuleList, pEntry->tFullDllName.wszBuffer, (uint32_t)pEntry->tFullDllName.nLength, (short int*)pEntry->pDllBase);
       if (!bVar1) {
         break;
       }
 
-      pEntry = *(uint32_t**)pEntry;
+      pEntry = (D2LdrMemOrderEntryStrc*)pEntry->tInMemoryOrderLinks.Flink;
     }
 
     ExceptionList = tSehFrame.Next;

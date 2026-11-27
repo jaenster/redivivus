@@ -700,11 +700,10 @@ int32_t __fastcall PETS_GetTotalPetCount(D2UnitStrc * pUnit) {
 
     int nPetTypeSize = D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize;
     if (nPetTypeSize > 0) {
-      int* pnPetsCount;
-      pnPetsCount = &pPlayerData->pPets->pPetList->nPets2;
+      D2PetListStrc* pPetList = pPlayerData->pPets->pPetList;
       do {
-        nTotal += *pnPetsCount;
-        pnPetsCount += 3;
+        nTotal += pPetList->nPets2;
+        pPetList++;
         nPetTypeSize--;
       } while (nPetTypeSize);
     }

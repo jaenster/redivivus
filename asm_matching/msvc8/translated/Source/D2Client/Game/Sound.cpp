@@ -147,24 +147,24 @@ void __stdcall CleanUpGame() {
     }
 
     D2Sound::Src::D2SoundSmp::SOUNDSMP_SetGlobalVolume(0);
-    D2SoundChannelStrc** pChannel = &gaSoundChannels[0].pActiveSound;
+    int nChannel = 0;
     do {
-      if ((D2SoundSmpStrc*)pChannel[-2]) {
-        if (*pChannel) {
-          nStreamProgress = D2Sound::Src::D2SoundSmp::SOUNDSMP_GetStreamProgress((D2SoundSmpStrc*)pChannel[-2]);
-          *(uint32_t*)(*pChannel)->undefined_0x41 = nStreamProgress;
+      if (gaSoundChannels[nChannel].pSoundSmp) {
+        if (gaSoundChannels[nChannel].pActiveSound) {
+          nStreamProgress = D2Sound::Src::D2SoundSmp::SOUNDSMP_GetStreamProgress(gaSoundChannels[nChannel].pSoundSmp);
+          *(uint32_t*)(gaSoundChannels[nChannel].pActiveSound)->undefined_0x41 = nStreamProgress;
         }
 
-        D2Sound::Src::D2SoundSmp::SOUNDSMP_Stop((D2SoundSmpStrc*)pChannel[-2]);
+        D2Sound::Src::D2SoundSmp::SOUNDSMP_Stop(gaSoundChannels[nChannel].pSoundSmp);
       }
-      if (*pChannel) {
-        (*pChannel)->nPlayMode = 2;
-        (*pChannel)->pClientChannel = 0;
-        *pChannel = 0;
+      if (gaSoundChannels[nChannel].pActiveSound) {
+        (gaSoundChannels[nChannel].pActiveSound)->nPlayMode = 2;
+        (gaSoundChannels[nChannel].pActiveSound)->pClientChannel = 0;
+        gaSoundChannels[nChannel].pActiveSound = 0;
       }
 
-      pChannel += 8;
-    } while ((intptr_t)pChannel < (intptr_t)((char*)&gaSoundChannels + sizeof(gaSoundChannels) + 8));
+      nChannel++;
+    } while (nChannel < 16);
 
     D2Sound::Src::D2SoundSmp::SOUNDSMP_SetGlobalVolume(0xff);
 }
@@ -181,28 +181,28 @@ void __stdcall SOUND_UpdateNonLoopingStreams() {
     D2SoundsTxt* pSoundsTxtLine;
     int32_t bIsPlaying;
     uint32_t bIsStreaming;
-    D2SoundChannelStrc** pChannelEntry = &gaSoundChannels[0].pActiveSound;
+    int nChannel = 0;
     do {
-      if (*pChannelEntry) {
-        pSoundsTxtLine = D2Client::Sound::SoundHdr::TXT_sounds_GetLineBySoundId((*pChannelEntry)->nSoundId);
+      if (gaSoundChannels[nChannel].pActiveSound) {
+        pSoundsTxtLine = D2Client::Sound::SoundHdr::TXT_sounds_GetLineBySoundId((gaSoundChannels[nChannel].pActiveSound)->nSoundId);
         if (!pSoundsTxtLine->Loop) {
-          bIsPlaying = D2Sound::Src::D2SoundSmp::SOUNDSMP_IsPlaying((D2SoundSmpStrc*)pChannelEntry[-2]);
+          bIsPlaying = D2Sound::Src::D2SoundSmp::SOUNDSMP_IsPlaying(gaSoundChannels[nChannel].pSoundSmp);
           if (!bIsPlaying) {
-            bIsStreaming = D2Sound::Src::D2SoundSmp::SOUNDSMP_IsStreaming(((D2ClientSoundChannelStrc*)(pChannelEntry - 2))->pSoundSmp);
+            bIsStreaming = D2Sound::Src::D2SoundSmp::SOUNDSMP_IsStreaming(gaSoundChannels[nChannel].pSoundSmp);
             if (bIsStreaming) {
-              SOUND_StopAndDetach((D2ClientSoundChannelStrc*)(pChannelEntry - 2));
+              SOUND_StopAndDetach(&gaSoundChannels[nChannel]);
             }
-            if (*pChannelEntry) {
-              (*pChannelEntry)->nPlayMode = 2;
-              (*pChannelEntry)->pClientChannel = 0;
-              *pChannelEntry = 0;
+            if (gaSoundChannels[nChannel].pActiveSound) {
+              (gaSoundChannels[nChannel].pActiveSound)->nPlayMode = 2;
+              (gaSoundChannels[nChannel].pActiveSound)->pClientChannel = 0;
+              gaSoundChannels[nChannel].pActiveSound = 0;
             }
           }
         }
       }
 
-      pChannelEntry += 8;
-    } while ((intptr_t)pChannelEntry < (intptr_t)((char*)&gaSoundChannels + sizeof(gaSoundChannels) + 8));
+      nChannel++;
+    } while (nChannel < 16);
 }
 
 uint32_t __fastcall SOUND_GetStreamProgress(D2ClientSoundChannelStrc * pChannel) {
@@ -245,19 +245,20 @@ D2ClientSoundChannelStrc * __fastcall SOUND_FindPlayingByIdSafe(int32_t nId) {
     }
 
     D2ClientSoundChannelStrc* pDVar3 = 0;
-    D2SoundChannelStrc** ppDVar2 = &gaSoundChannels[0].pActiveSound;
+    D2SoundChannelStrc** ppActiveSound = &gaSoundChannels[0].pActiveSound;
     do {
       int32_t bIsPlaying;
-      bIsPlaying = D2Sound::Src::D2SoundSmp::SOUNDSMP_IsPlaying(((D2ClientSoundChannelStrc*)(ppDVar2 - 2))->pSoundSmp);
+      D2ClientSoundChannelStrc* pCur = CONTAINING_RECORD(ppActiveSound, D2ClientSoundChannelStrc, pActiveSound);
+      bIsPlaying = D2Sound::Src::D2SoundSmp::SOUNDSMP_IsPlaying(pCur->pSoundSmp);
       if (bIsPlaying) {
-        pDVar1 = *ppDVar2;
+        pDVar1 = *ppActiveSound;
         if (pDVar1 && pDVar1->nSoundId == nId && (!pDVar3 || pDVar1->nScheduledTime < pDVar3->pActiveSound->nScheduledTime)) {
-          pDVar3 = (D2ClientSoundChannelStrc*)(ppDVar2 - 2);
+          pDVar3 = pCur;
         }
       }
 
-      ppDVar2 += 8;
-    } while ((intptr_t)ppDVar2 < (intptr_t)((char*)&gaSoundChannels + sizeof(gaSoundChannels) + 8));
+      ppActiveSound = (D2SoundChannelStrc**)((D2ClientSoundChannelStrc*)ppActiveSound + 1);
+    } while ((intptr_t)ppActiveSound < (intptr_t)&gaSoundChannels[16].pActiveSound);
 
     return pDVar3;
 }

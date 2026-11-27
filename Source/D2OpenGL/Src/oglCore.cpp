@@ -216,11 +216,11 @@ BOOL OGL_OpenOpenGLWindow(int nResolutionMode) {
 
     bool bVar1 = OGL_HasAppleTextureExtensions();
     if (bVar1) {
-      pThis = (::COGLAGPTextures*)Game::Main::MISC_OperatorNewShim(0xa31c);
+      pThis = (::COGLAGPTextures*)Game::Main::MISC_OperatorNewShim(sizeof(::COGLAGPTextures));
       COGLAGPTextures::COGLAGPTEXTURES_ConstructThunk(pThis);
     } else {
       int nMemoryBudget;
-      pThis = (::COGLAGPTextures*)Game::Main::MISC_OperatorNewShim(100);
+      pThis = (::COGLAGPTextures*)Game::Main::MISC_OperatorNewShim(sizeof(::COGLTextures));
       nMemoryBudget = OGL_GetTextureMemoryBudget();
       COGLTextures::COGLTEXTURES_ConstructThunk((::COGLTextures*)pThis, nMemoryBudget);
     }

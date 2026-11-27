@@ -3005,7 +3005,7 @@ static void __stdcall SetHasActiveSound(D2UnitStrc * pUnit, BOOL bHasActiveSound
     pUnit->uSideData.pClientSide.bHasActiveSound = bHasActiveSound;
 }
 
-static int * UNITSND_GetTileDataAtPosition(D2RoomStrc * pRoom, int32_t nPosX, int32_t nPosY) {
+static D2DrlgTileDataStrc * UNITSND_GetTileDataAtPosition(D2RoomStrc * pRoom, int32_t nPosX, int32_t nPosY) {
     D2DrlgRoomCoordsStrc sRoomCoords;
     uint32_t nTileCount;
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &sRoomCoords);
@@ -3017,15 +3017,15 @@ static int * UNITSND_GetTileDataAtPosition(D2RoomStrc * pRoom, int32_t nPosX, in
       return nullptr;
     }
 
-    int* piTilePosY = &pTileData->nPosY;
+    int* pnTilePosY = &pTileData->nPosY;
     do {
-      int* pResult = &((D2DrlgTileDataStrc*)(piTilePosY - 3))->nScreenX;
-      if (piTilePosY[-1] == nTileX && *piTilePosY == nTileY) {
+      D2DrlgTileDataStrc* pResult = CONTAINING_RECORD(pnTilePosY, D2DrlgTileDataStrc, nPosY);
+      if (pResult->nPosX == nTileX && *pnTilePosY == nTileY) {
         return pResult;
       }
 
       nTileIdx++;
-      piTilePosY += 0xc;
+      pnTilePosY = (int*)((D2DrlgTileDataStrc*)pnTilePosY + 1);
     } while (nTileIdx < nTileCount);
 
     return nullptr;
@@ -3097,7 +3097,7 @@ int32_t __fastcall UNITSND_GetGroundMaterial(D2UnitStrc * pUnit) {
       return 0;
     }
 
-    D2DrlgTileDataStrc* pTileData = (D2DrlgTileDataStrc*)UNITSND_GetTileDataAtPosition(pRoom, nPosX, nPosY);
+    D2DrlgTileDataStrc* pTileData = UNITSND_GetTileDataAtPosition(pRoom, nPosX, nPosY);
     if (!pTileData) {
       int nAdjRoomIdx;
       D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppAdjacentRooms, &nAdjacentRoomCount);
@@ -3107,7 +3107,7 @@ int32_t __fastcall UNITSND_GetGroundMaterial(D2UnitStrc * pUnit) {
       }
 
       while (true) {
-        pTileData = (D2DrlgTileDataStrc*)UNITSND_GetTileDataAtPosition(ppAdjacentRooms[nAdjRoomIdx], nPosX, nPosY);
+        pTileData = UNITSND_GetTileDataAtPosition(ppAdjacentRooms[nAdjRoomIdx], nPosX, nPosY);
         if (pTileData) {
           break;
         }

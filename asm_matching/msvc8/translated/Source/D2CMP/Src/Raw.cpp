@@ -50,11 +50,7 @@ void __fastcall RAW_CreateCelFrames(::CELLIST * pRawFile, DC6 * pCelFile) {
 
       nDirIndex = CelCmp::CELCMP_GetDirectionFrameTableIndex(nDirAngle, uVar1);
       uVar1 = iFrame % nFramesPerDir;
-#if D2_ARCH_X86
-      *(DC6Block**)(pCelFile[1].nTerm + (nDirIndex * nFramesPerDir + uVar1) * 4 - 0xc) = (DC6Block*)pNewFrame;
-#elif D2_ARCH_X64
       pCelFile->pBlocks[nDirIndex * nFramesPerDir + uVar1] = pNewFrame;
-#endif
       iFrame++;
     }
 }

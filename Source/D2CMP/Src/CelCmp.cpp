@@ -562,7 +562,7 @@ static uint32_t gaCelCmpDirectionLookupByDirectionAndFrame[512] = {
     0x3f
 }; D2_STATIC_GUARD(gaCelCmpDirectionLookupByDirectionAndFrame, "gaCelCmpDirectionLookupByDirectionAndFrame");
 static pfnCelPixelDataFree gpCelPixelDataFreeCallback = (pfnCelPixelDataFree)0; D2_STATIC_GUARD(gpCelPixelDataFreeCallback, "gpCelPixelDataFreeCallback");
-static LONG * lpAddend_008f03e4 = 0; D2_STATIC_GUARD(lpAddend_008f03e4, "lpAddend_008f03e4");
+static LONG lpAddend_008f03e4 = 0; D2_STATIC_GUARD(lpAddend_008f03e4, "lpAddend_008f03e4");
 
 namespace D2CMP::SRC::CelCmp {
 
@@ -1741,7 +1741,7 @@ static __inline int CELCMP_GetCellCountInl(DC6* pFile) {
     return pFile->nDirections * pFile->nFrames;
 }
 
-uint32_t __stdcall CELCMP_AllocateDecodedCelFile(DC6 * pFile, uint32_t * ppDecodedOut, uint8_t * dwParam1, uint32_t dwParam2) {
+uint32_t __stdcall CELCMP_AllocateDecodedCelFile(DC6 * pFile, DC6 * * ppDecodedOut, uint8_t * dwParam1, uint32_t dwParam2) {
     // Static local variables (originally global data)
     static fpCelAllocDecodedByFormat gapfnCelAllocDecodedByFormat[2] = { (fpCelAllocDecodedByFormat)&D2CMP::SRC::FastCmp::FASTCMP_ConvertDCCWithPaletteRemap, nullptr }; D2_STATIC_GUARD(gapfnCelAllocDecodedByFormat, "D2CMP::SRC::CelCmp::CELCMP_AllocateDecodedCelFile::gapfnCelAllocDecodedByFormat");
 
@@ -1757,7 +1757,7 @@ uint32_t __stdcall CELCMP_AllocateDecodedCelFile(DC6 * pFile, uint32_t * ppDecod
     pDecodedBlock->nFrames = pFile->nFrames;
     pDecodedBlock->nFormat = 0;
     (*gapfnCelAllocDecodedByFormat[pFile->nFormat])(pFile, pDecodedBlock, dwParam1, dwParam2);
-    *ppDecodedOut = (uint32_t)(uintptr_t)pDecodedBlock;
+    *ppDecodedOut = pDecodedBlock;
     return 1;
 }
 
@@ -1969,16 +1969,20 @@ BOOL __stdcall CELCMP_SerializeCelFileToMemory(DC6 * pDCCSrc, uint32_t * ppDCCDe
 // A DC6 file is a 0x18-byte header, nDirections * nFrames 32-bit file offsets of the frame blocks,
 // and per frame a 0x20-byte block header, nLength bytes of RLE data and a 3-byte terminator. The
 // 32-bit build relocates the offsets in place and keeps each frame's renderer record in the block's
-// +0x18 field. On 64-bit the offset table and that field are pointer-sized, so the image is copied
-// into a native one.
+// +0x18 field. On 64-bit the offset table, that field and the header's nTerm/pRawData slot are
+// pointer-sized, so the image is copied into a native one.
 #if D2_ARCH_X86
 static_assert(sizeof(DC6Block) == 0x20, "DC6Block: DC6 frame blocks are used in place, so the header must be the 0x20 bytes on disk");
+static_assert(sizeof(DC6) == 0x18, "DC6: the header is used in place, so it must be the 0x18 bytes on disk");
 #elif D2_ARCH_X64
 #define DC6_FILE_HEADER_SIZE 0x18      // nVersion .. nFrames
+#define DC6_FILE_NTERM 0x0c            // char nTerm[4]; the native header widens this slot to hold pRawData
+#define DC6_FILE_NDIRECTIONS 0x10      // int nDirections
+#define DC6_FILE_NFRAMES 0x14          // int nFrames
 #define DC6_FILE_BLOCK_NLENGTH 0x1c    // int nLength in a file block header
 #define DC6_FILE_BLOCK_DATA 0x20       // RLE data after the file block header
 #define DC6_FILE_BLOCK_TERMINATOR 3    // bytes after each frame's RLE data
-static_assert(sizeof(DC6) == DC6_FILE_HEADER_SIZE, "DC6: the header before the frame table keeps its on-disk size");
+static_assert(offsetof(DC6, nTerm) == DC6_FILE_NTERM, "DC6: the fields before nTerm keep their on-disk offsets");
 static_assert(offsetof(DC6Block, nNextBlock) == 0x18, "DC6Block: the fields before nNextBlock keep their on-disk offsets");
 
 // Copies the DC6 file image pFile into one native allocation (header, pointer table, native blocks)
@@ -1986,7 +1990,9 @@ static_assert(offsetof(DC6Block, nNextBlock) == 0x18, "DC6Block: the fields befo
 static DC6 * CELCMP_WidenDC6(DC6 * pFile) {
     const uint8_t* pImage = (const uint8_t*)pFile;
     const int32_t* pFileOffsets = (const int32_t*)(pImage + DC6_FILE_HEADER_SIZE);
-    uint32_t nBlocks = (uint32_t)(pFile->nDirections * pFile->nFrames);
+    int32_t nDirections = *(const int32_t*)(pImage + DC6_FILE_NDIRECTIONS);
+    int32_t nFrames = *(const int32_t*)(pImage + DC6_FILE_NFRAMES);
+    uint32_t nBlocks = (uint32_t)(nDirections * nFrames);
     size_t nAllocSize = sizeof(DC6) + (size_t)nBlocks * sizeof(DC6Block*);
     for (uint32_t i = 0; i < nBlocks; i++) {
       int32_t nLength = *(const int32_t*)(pImage + pFileOffsets[i] + DC6_FILE_BLOCK_NLENGTH);
@@ -1999,7 +2005,13 @@ static DC6 * CELCMP_WidenDC6(DC6 * pFile) {
       exit(-1);
     }
 
-    memcpy(pNative, pImage, DC6_FILE_HEADER_SIZE);
+    pNative->nVersion = pFile->nVersion;
+    pNative->nFlags = pFile->nFlags;
+    pNative->nFormat = pFile->nFormat;
+    pNative->pRawData = nullptr;
+    memcpy(pNative->nTerm, pImage + DC6_FILE_NTERM, sizeof(pNative->nTerm));
+    pNative->nDirections = nDirections;
+    pNative->nFrames = nFrames;
     uint8_t* pCursor = (uint8_t*)&pNative->pBlocks[nBlocks];
     for (uint32_t i = 0; i < nBlocks; i++) {
       const uint8_t* pSrc = pImage + pFileOffsets[i];
@@ -2604,7 +2616,7 @@ uint32_t __stdcall CELCMP_CreateCelFileFromCache(uint32_t nCelListKey, DC6 * * p
     pCelFile->nFrames = pHashEntry->nFrameCount / pHashEntry->nDirections;
     if (pHashEntry->dwFlags & 4) {
       Raw::RAW_CreateCelFrames(pHashEntry, pCelFile);
-      *(void**)pCelFile->nTerm = pHashEntry->pRawData;
+      pCelFile->pRawData = pHashEntry->pRawData;
     } else {
       (*gapfnCelDecodeCachedByFormat[pHashEntry->nFormat])(pHashEntry, pCelFile);
     }
@@ -2654,7 +2666,7 @@ void __thiscall BITSTREAM_AdvanceBits(D2CodecBitStateStrc * pThis, int32_t nBitC
 }
 
 void __stdcall GFX_InitGlobalCriticalSection() {
-    LONG nTmp = InterlockedIncrement((LONG*)&lpAddend_008f03e4);
+    LONG nTmp = InterlockedIncrement(&lpAddend_008f03e4);
     if (nTmp != 1) {
       return;
     }
@@ -2663,7 +2675,7 @@ void __stdcall GFX_InitGlobalCriticalSection() {
 }
 
 void __stdcall GFX_DestroyGlobalCriticalSection() {
-    LONG nTmp = InterlockedDecrement((LONG*)&lpAddend_008f03e4);
+    LONG nTmp = InterlockedDecrement(&lpAddend_008f03e4);
     if (nTmp) {
       return;
     }

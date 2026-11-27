@@ -3439,15 +3439,15 @@ void __stdcall D2COMP_CreateCompositeUnit(D2CharSelCompStrc * pCompUnit, uint32_
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xcdd);
       exit(-1);
     } else {
-      int32_t* pCofCacheEntry;
-      pCofCacheEntry = (int32_t*)D2_ALLOC_AT(sizeof(int), ".\\Src\\D2Comp.cpp", 0x866);
+      D2CompCofListNodeStrc** pCofCacheEntry;
+      pCofCacheEntry = (D2CompCofListNodeStrc**)D2_ALLOC_AT(sizeof(D2CompCofListNodeStrc*), ".\\Src\\D2Comp.cpp", 0x866);
       if (!pCofCacheEntry) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x867);
         exit(-1);
       }
 
-      *pCofCacheEntry = 0;
-      pCompUnit->ppCofCacheEntries = (D2CompCofListNodeStrc**)pCofCacheEntry;
+      *pCofCacheEntry = nullptr;
+      pCompUnit->ppCofCacheEntries = pCofCacheEntry;
       pCompUnit->nPlayerClassId = nPlayerClassId;
       if (nPlayerClassId >= 7) {
         pCompUnit->nWeaponClass = 1;
@@ -4329,16 +4329,16 @@ D2CharSelCompStrc * __stdcall AllocCharSelectComponent(uint32_t nPlayerClassId, 
       exit(-1);
     }
     {
-      int* pCofCache;
+      D2CompCofListNodeStrc** pCofCache;
       memset(pCharSelComp, 0, sizeof(*pCharSelComp));
-      pCofCache = (int*)D2_ALLOC_AT(sizeof(int), ".\\Src\\D2Comp.cpp", 0x866);
+      pCofCache = (D2CompCofListNodeStrc**)D2_ALLOC_AT(sizeof(D2CompCofListNodeStrc*), ".\\Src\\D2Comp.cpp", 0x866);
       if (!pCofCache) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x867);
       exit(-1);
       }
       {
-        *pCofCache = 0;
-        pCharSelComp->ppCofCacheEntries = (D2CompCofListNodeStrc**)pCofCache;
+        *pCofCache = nullptr;
+        pCharSelComp->ppCofCacheEntries = pCofCache;
         D2COMP_AllocTxt_EverythingItems();
         pCharSelComp->nPlayerClassId = nPlayerClassId;
         if (nPlayerClassId >= 7) {

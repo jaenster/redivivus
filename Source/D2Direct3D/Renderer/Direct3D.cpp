@@ -2096,13 +2096,13 @@ void __stdcall RENDERER_D3D_ReleaseFontTextures() {
       pFontHandle = (IDirectDrawSurface7*)g_pFontTextureHandle[nByteOffset];
       if (pFontHandle) {
         pFontHandle->lpVtbl->Release(pFontHandle);
-        *(uint32_t*)&g_pFontTextureHandle[nByteOffset] = 0;
+        g_pFontTextureHandle[nByteOffset] = 0;
       }
 
       pFontSurface = (IDirectDrawSurface7*)g_pFontTextureSurface[nByteOffset];
       if (pFontSurface) {
         pFontSurface->lpVtbl->Release(pFontSurface);
-        *(uint32_t*)&g_pFontTextureSurface[nByteOffset] = 0;
+        g_pFontTextureSurface[nByteOffset] = 0;
       }
 
       nByteOffset++;

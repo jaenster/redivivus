@@ -1753,6 +1753,7 @@ static D2DrlgLevelStrc * DRLGLEVEL_FixDrlgLevelForSpiderForest(D2DrlgLevelStrc *
     // The values VC8 kept in pExitCount's one frame slot, one member each: a frame object reaches the slot.
     union pExitCount_u {
       D2DrlgSubLevelPlaceStrc** pExitCount2;
+      int32_t* pCellRow;
       int nExitCount;
       int nExitCount2;
       uint32_t nDirBits;
@@ -1961,15 +1962,15 @@ static D2DrlgLevelStrc * DRLGLEVEL_FixDrlgLevelForSpiderForest(D2DrlgLevelStrc *
           nFlipState = nConnFlags;
           do {
             if (iVar2 > 0) {
-              pExitCount.pExitCount2 = (D2DrlgSubLevelPlaceStrc**)(pDistWorkMap + (bNoOverlap * nWidth + nGridY));
+              pExitCount.pCellRow = pDistWorkMap + (bNoOverlap * nWidth + nGridY);
               nSubOffset = iVar2;
               do {
                 if (iVar1 > 0) {
-                  nCellPtr2 = (intptr_t)pExitCount.pExitCount2;
+                  nCellPtr2 = (intptr_t)pExitCount.pCellRow;
                   nAdjIdx = iVar1;
                   do {
                     *(int32_t*)((intptr_t)pSubLevelMap - (intptr_t)pDistWorkMap + nCellPtr2) = nSubIdx.nSubIdx2 + 1;
-                    *(D2DrlgSubLevelPlaceStrc**)nCellPtr2 = 0;
+                    *(int32_t*)nCellPtr2 = 0;
                     *(uint32_t*)((intptr_t)pDistMap - (intptr_t)pDistWorkMap + nCellPtr2) = 0;
                     *(uint32_t*)((intptr_t)pSubLevelDistMap - (intptr_t)pDistWorkMap + nCellPtr2) = 0;
                     nCellPtr2 += 4;
@@ -1978,7 +1979,7 @@ static D2DrlgLevelStrc * DRLGLEVEL_FixDrlgLevelForSpiderForest(D2DrlgLevelStrc *
                   } while (nAdjIdx);
                 }
 
-                pExitCount.pExitCount2 += nWidth;
+                pExitCount.pCellRow += nWidth;
                 nSubOffset--;
               } while (nSubOffset);
             }

@@ -42,7 +42,7 @@ struct D2MonEquipEntryStrc {
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 union D2MonStatsExTxtSlot {
-    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+    operator uintptr_t() const { return *reinterpret_cast<const uintptr_t*>(this); }
 
     /* 0x00 */ struct D2MonPropTxt * pMonPropTxt;
     /* 0x00 */ struct D2MonStats2Txt * pMonStats2Txt;

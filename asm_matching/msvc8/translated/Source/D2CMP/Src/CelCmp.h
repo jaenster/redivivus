@@ -63,7 +63,7 @@ uint32_t __stdcall CELCMP_GetDirectionFrameTableIndex(int32_t nFrameIndex, uint3
 BOOL __stdcall CELCMP_CanConvertFormat(int32_t nSrcFormat, int32_t nDstFormat);
 uint32_t __stdcall CELCMP_GetFrameDecodeHandlerForward(uint32_t nGameDirection, uint32_t nLevelOfRotation);
 void __stdcall CELCMP_ValidateCelFilePointer(int32_t hFile, uint32_t dwParam);
-uint32_t __stdcall CELCMP_AllocateDecodedCelFile(struct DC6 * pFile, uint32_t * ppDecodedOut, uint8_t * dwParam1, uint32_t dwParam2);
+uint32_t __stdcall CELCMP_AllocateDecodedCelFile(struct DC6 * pFile, struct DC6 * * ppDecodedOut, uint8_t * dwParam1, uint32_t dwParam2);
 void __stdcall CELCMP_FixupOffsetsAndSerialize(int * pOldFile, uint32_t * ppSerializedOut, size_t * pnSize);
 // Walk every frame in the DC6 sprite and apply palette colour-key conversion; asserts bit 2 of nFlags is set (indexed/ready format)
 void __stdcall CELCMP_ApplyPaletteToAllFrames(struct DC6 * pDCC, pfnTilecmpPixelCallback pPalette);

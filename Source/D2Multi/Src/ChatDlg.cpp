@@ -4188,7 +4188,10 @@ int __fastcall CHATDLG_RunChatLobbyScreen(D2IniConfigStrc * pD2IniConfig) {
       D2MCPClient::McpConnect::SetIsMPCJoinSuccesfull(0);
       /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ InitializeCriticalSection(&lpCriticalSection_0077ae28);
       if (!OOGUtilities::D2IniData_multiplayer->padding_0x35F[2]) {
-        pNetworkUnknown->pfnSendNewsInfo((uint32_t)(uintptr_t)CHATDLG_DisplayTimestampedMessage, (uint32_t)(uintptr_t)CHATDLG_EnqueueClearMessage);
+        // Both callbacks return int here; the news sender takes void-returning ones and ignores the result.
+        typedef void (__fastcall *fnNewsEntryCallback)(uint32_t, char *);
+        typedef void (__stdcall *fnNewsDoneCallback)();
+        pNetworkUnknown->pfnSendNewsInfo((fnNewsEntryCallback)CHATDLG_DisplayTimestampedMessage, (fnNewsDoneCallback)CHATDLG_EnqueueClearMessage);
       }
 
       /* Wait until game is either created or failed */ D2Win::Src::D2WinMain::MessagePump((pfnFramePump)OOGUtilities::JoinOrCreateGame);

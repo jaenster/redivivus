@@ -28,7 +28,7 @@
 #endif
 
 
-static LONG * lpAddend_007c8a74 = 0; D2_STATIC_GUARD(lpAddend_007c8a74, "lpAddend_007c8a74");
+static LONG lpAddend_007c8a74 = 0; D2_STATIC_GUARD(lpAddend_007c8a74, "lpAddend_007c8a74");
 int pAudioDeviceContext = 0; D2_GLOBAL_GUARD(pAudioDeviceContext, "pAudioDeviceContext");
 static uint32_t gnSoundChannelIndex = 0; D2_STATIC_GUARD(gnSoundChannelIndex, "gnSoundChannelIndex");
 static uint32_t gnSoundChannelPlaybackState = 0; D2_STATIC_GUARD(gnSoundChannelPlaybackState, "gnSoundChannelPlaybackState");
@@ -298,7 +298,7 @@ void __fastcall SOUND_ToggleSoundMixerBinary(D2EscMenuItemStrc * pItem, D2UIMous
       return;
     }
 
-    /* LONG * lpAddend for InterlockedIncrement */ InterlockedIncrement((LONG*)&lpAddend_007c8a74);
+    /* LONG * lpAddend for InterlockedIncrement */ InterlockedIncrement(&lpAddend_007c8a74);
     int32_t nMixer = D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer();
     D2Sound::Src::D2SoundSmp::CleanupSoundBuffer(0xb4);
     BOOL BVar1 = GAME::Sound::SOUND_SetSoundMixer((uint32_t)!nMixer);
@@ -307,7 +307,7 @@ void __fastcall SOUND_ToggleSoundMixerBinary(D2EscMenuItemStrc * pItem, D2UIMous
     }
 
     D2Sound::Src::D2SoundSmp::SOUNDSMP_SetGlobalVolume(0xff);
-    /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement((LONG*)&lpAddend_007c8a74);
+    /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement(&lpAddend_007c8a74);
 }
 
 void __fastcall SOUND_CycleSoundMixerMode(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
@@ -315,7 +315,7 @@ void __fastcall SOUND_CycleSoundMixerMode(D2EscMenuItemStrc * pItem, D2UIMouseMs
       return;
     }
 
-    /* LONG * lpAddend for InterlockedIncrement */ InterlockedIncrement((LONG*)&lpAddend_007c8a74);
+    /* LONG * lpAddend for InterlockedIncrement */ InterlockedIncrement(&lpAddend_007c8a74);
     int32_t nMixer = D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer();
     D2Sound::Src::D2SoundSmp::CleanupSoundBuffer(0xb4);
     BOOL BVar1 = GAME::Sound::SOUND_SetSoundMixer(nMixer != 2 ? 2 : 1);
@@ -324,7 +324,7 @@ void __fastcall SOUND_CycleSoundMixerMode(D2EscMenuItemStrc * pItem, D2UIMouseMs
     }
 
     D2Sound::Src::D2SoundSmp::SOUNDSMP_SetGlobalVolume(0xff);
-    /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement((LONG*)&lpAddend_007c8a74);
+    /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement(&lpAddend_007c8a74);
 }
 
 int32_t __fastcall SOUND_PlayFootstepSound(uint32_t nFrame, uint32_t nFootstepFrame, int nModulus) {

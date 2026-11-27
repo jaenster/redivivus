@@ -23,7 +23,7 @@ namespace D2Glide { namespace glSubtileCache {
 // @sourcefile .\Src\glSubtileCache.cpp
 int __fastcall GLSUBTILE_Initialize(GlSubtileCacheStrc * pCache, int nVramStart, int nVramEnd, uint32_t dwSubtileSize) {
     GlSubtileCacheNodeStrc* pNode;
-    uint32_t* pDebugScan;
+    GlSubtileCacheNodeStrc* pDebugScan;
     uint32_t nEntryCount = (uint32_t)(nVramEnd - nVramStart) / dwSubtileSize;
     pCache->dwEntrySize = dwSubtileSize;
     size_t nAllocSize = nEntryCount * 0x14;
@@ -64,9 +64,9 @@ int __fastcall GLSUBTILE_Initialize(GlSubtileCacheStrc * pCache, int nVramStart,
     if (!gbGlideIsDebugBuild) {
       nVramAddr = 1;
       if (1 < (int)(pCache->nMaxEntries - 1)) {
-        pDebugScan = &pNodesBase[1].dwAddress;
+        pDebugScan = &pNodesBase[1];
         do {
-          if (*pDebugScan < 0x200000 && pCache->dwEntrySize + *pDebugScan > 0x200000) {
+          if (pDebugScan->dwAddress < 0x200000 && pCache->dwEntrySize + pDebugScan->dwAddress > 0x200000) {
             pNodesBase[nVramAddr - 1].pNext = pNodesBase + (nVramAddr + 1);
             pCache->pNodes[nVramAddr + 1].pPrev = pCache->pNodes + (nVramAddr - 1);
             pCache->pNodes[nVramAddr].pPrev = 0;
@@ -76,7 +76,7 @@ int __fastcall GLSUBTILE_Initialize(GlSubtileCacheStrc * pCache, int nVramStart,
           }
 
           nVramAddr++;
-          pDebugScan += 5;
+          pDebugScan++;
         } while (nVramAddr < (int)(pCache->nMaxEntries - 1));
       }
 
@@ -111,10 +111,10 @@ GlSubtileCacheNodeStrc * __fastcall GLSUBTILE_RemoveNodeFromHead(GlSubtileCacheN
       return nullptr;
     }
 
-    uint8_t* pNext = (uint8_t*)pHeadNode->pNext;
-    pCache->pActiveHead = (GlSubtileCacheNodeStrc*)pNext;
+    GlSubtileCacheNodeStrc* pNext = pHeadNode->pNext;
+    pCache->pActiveHead = pNext;
     if (pNext) {
-      memset(pNext + 16, 0, 4 * sizeof(pNext[0]));
+      memset(&pNext->pPrev, 0, sizeof(pNext->pPrev));
     } else {
       pCache->pActiveTail = 0;
     }
@@ -126,7 +126,7 @@ GlSubtileCacheNodeStrc * __fastcall GLSUBTILE_RemoveNodeFromHead(GlSubtileCacheN
 
 // Removes a subtile cache node from the active LRU list by index. Returns pointer to removed node.
 static GlSubtileCacheNodeStrc * GLSUBTILE_RemoveNodeByIndex(GlSubtileCacheStrc * pCache, int nNodeIndex) {
-    uint8_t* pPrevTail;
+    GlSubtileCacheNodeStrc* pPrevTail;
     GlSubtileCacheNodeStrc* pHeadNode = pCache->pActiveHead;
     if (!pHeadNode) {
       return nullptr;
@@ -142,9 +142,9 @@ static GlSubtileCacheNodeStrc * GLSUBTILE_RemoveNodeByIndex(GlSubtileCacheStrc *
       return pHeadNode;
     }
     if (pTargetNode == pCache->pActiveTail) {
-      pPrevTail = (uint8_t*)pCache->pActiveTail->pPrev;
-      pCache->pActiveTail = (GlSubtileCacheNodeStrc*)pPrevTail;
-      memset(pPrevTail + 12, 0, 4 * sizeof(pPrevTail[0]));
+      pPrevTail = pCache->pActiveTail->pPrev;
+      pCache->pActiveTail = pPrevTail;
+      memset(&pPrevTail->pNext, 0, sizeof(pPrevTail->pNext));
     } else {
       pTargetNode->pPrev->pNext = pTargetNode->pNext;
       pTargetNode->pNext->pPrev = pTargetNode->pPrev;

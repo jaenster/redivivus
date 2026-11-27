@@ -953,7 +953,7 @@ static inline void* STORMLIST_Head(const StormLinkedListStrc* pList) {
 // @former-name SEVT_DispatchWindowMessage (invented. Its caller WND_DispatchWindowMessage 00420b00 is the Windows-message layer; this is not.)
 BOOL __stdcall SEvtDispatch(uint32_t dwEventId, uintptr_t dwSubId, uint32_t dwKey, void * pData) {
     // Static local variables (originally global data)
-    static LONG * lpAddend_007792fc; D2_STATIC_GUARD_BSS(lpAddend_007792fc, "Storm::Source::SEVT::SEvtDispatch::lpAddend_007792fc");
+    static LONG lpAddend_007792fc; D2_STATIC_GUARD_BSS(lpAddend_007792fc, "Storm::Source::SEVT::SEvtDispatch::lpAddend_007792fc");
 
     D2SevtHandlerTableStrc* pDVar1;
     BREAKCMD* pBreakCmd;
@@ -961,7 +961,7 @@ BOOL __stdcall SEvtDispatch(uint32_t dwEventId, uintptr_t dwSubId, uint32_t dwKe
     StormLinkStrc** pLinkSlot;
     pfnSEvtHandler pfnHandler;
     StormLinkStrc* nNextNode;
-    /* LONG * lpAddend for InterlockedIncrement */ InterlockedIncrement((LONG*)&lpAddend_007792fc);
+    /* LONG * lpAddend for InterlockedIncrement */ InterlockedIncrement(&lpAddend_007792fc);
     D2SevtHandlerNodeStrc* pHandlerNode;
     pHandlerNode = 0;
     BOOL bResult;
@@ -1002,7 +1002,7 @@ BOOL __stdcall SEvtDispatch(uint32_t dwEventId, uintptr_t dwSubId, uint32_t dwKe
           if (pDVar1->pBuckets && pDVar1->nBucketCount) {
             for (pHandlerNode = pDVar1->pBuckets[pDVar1->nBucketCount - 1 & dwKey]; pHandlerNode && (pHandlerNode->dwKey != dwKey || pHandlerNode->nPriority >= uLastPriority); pHandlerNode = pHandlerNode->pNext) {}
 
-            if (lpAddend_007792fc == (LONG*)0x1) {
+            if (lpAddend_007792fc == 1) {
               gnSevtSnapshotActive = 0;
             }
           }
@@ -1028,7 +1028,7 @@ BOOL __stdcall SEvtDispatch(uint32_t dwEventId, uintptr_t dwSubId, uint32_t dwKe
       }
     } while (pHandlerNode);
 
-    /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement((LONG*)&lpAddend_007792fc);
+    /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement(&lpAddend_007792fc);
     if (gpSevtBreakCmdListHead.head.pNext > 0) {
       BREAKCMD* nNode;
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0077930c);

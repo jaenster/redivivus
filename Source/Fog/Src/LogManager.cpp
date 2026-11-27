@@ -344,7 +344,7 @@ static char gLogFilePathArray[20][260] = {}; D2_STATIC_GUARD(gLogFilePathArray, 
 static FILE * globalOpenFileHandleArray[20] = {}; D2_STATIC_GUARD(globalOpenFileHandleArray, "globalOpenFileHandleArray");
 static uint32_t gLogFileLastWriteTimeArray[20] = {}; D2_STATIC_GUARD(gLogFileLastWriteTimeArray, "gLogFileLastWriteTimeArray");
 static uint32_t gLogWriterThreadStopFlag = 0; D2_STATIC_GUARD(gLogWriterThreadStopFlag, "gLogWriterThreadStopFlag");
-static LPDWORD gLogWriterThreadId = 0; D2_STATIC_GUARD(gLogWriterThreadId, "gLogWriterThreadId");
+static DWORD gLogWriterThreadId = 0; D2_STATIC_GUARD(gLogWriterThreadId, "gLogWriterThreadId");
 static CRITICAL_SECTION gLogMessageQueueCS = {}; D2_STATIC_GUARD(gLogMessageQueueCS, "gLogMessageQueueCS");
 // also labelled: FileHandlesCriticalSection_Maybe
 static _RTL_CRITICAL_SECTION gLogFileCS = {}; D2_STATIC_GUARD(gLogFileCS, "gLogFileCS");
@@ -1512,7 +1512,7 @@ void __stdcall StopLogWriterThread() {
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gLogMessageQueueCount = 0;
     gLogMessageQueueTotalBytes = 0;
     gLogWriterThreadHandle = (HANDLE)0x0;
-    gLogWriterThreadId = (LPDWORD)0x0;
+    gLogWriterThreadId = 0;
     gLogManagerInitialized = 0;
     gLogWriterThreadStopFlag = 0;
     LeaveCriticalSection(&gLogMessageQueueCS);
@@ -1731,7 +1731,7 @@ void __fastcall EnqueueFormattedLogMessage(char * szText, int32_t nPriority, int
 
 void __stdcall StartLogWriterThread() {
     /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ gLogWriterThreadStopFlag = 0;
-    gLogWriterThreadHandle = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)LOGMANAGER_LogWriterThreadProc, (LPVOID)0x0, 0, (LPDWORD)&gLogWriterThreadId);
+    gLogWriterThreadHandle = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)LOGMANAGER_LogWriterThreadProc, (LPVOID)0x0, 0, &gLogWriterThreadId);
     /* LPSYSTEMTIME lpSystemTime for GetLocalTime */ gLogManagerInitialized = 1;
     GetLocalTime(&gLogRealmStartupLocalTime);
     for (int i = 0; i < (int)(sizeof(gLogFileSlotMutex) / sizeof(gLogFileSlotMutex[0])); i++) {

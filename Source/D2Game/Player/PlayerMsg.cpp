@@ -1243,12 +1243,13 @@ eD2ServerIncomingStatus __fastcall SERVER_InteractOrPick(D2UnitStrc * pUnit, eD2
         nDist = D2Common::Collision::GetDistanceBetweenUnits(pUnit, pTargetUnit);
         if (nDist <= 0x32) {
           if (nDist <= 4 && (bInRange = D2Common::Units::TestCollisionBetweenInteractingUnits(pUnit, pTargetUnit, 0x804) , !bInRange)) {
+            uint32_t nPickResult;
             if (bSetting) {
-              ITEMS::ItemMode::SERVER_PickToCursor(pGame, pUnit, uuid, (uint32_t*)&pGame);
+              ITEMS::ItemMode::SERVER_PickToCursor(pGame, pUnit, uuid, &nPickResult);
             } else {
-              ITEMS::ItemMode::SERVER_PickToInventory(pGame, pUnit, uuid, (uint32_t*)&pGame);
+              ITEMS::ItemMode::SERVER_PickToInventory(pGame, pUnit, uuid, &nPickResult);
             }
-            if (pGame) {
+            if (nPickResult) {
               return SERVERSTATUS_BAD_PARAMS;
             }
           } else {

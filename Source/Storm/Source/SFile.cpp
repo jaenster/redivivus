@@ -892,8 +892,9 @@ uint32_t __stdcall SFileAuthenticateArchiveEx(D2ArchiveStrc * pArchive, uint32_t
       pExponentBytes = gaSFileSignatureRsaExponent;
       nExponentLen = 4;
     }
+    uint32_t nAuthResultDiscarded;
     if (!pdwAuthResult) {
-      pdwAuthResult = (uint32_t*)&pArchiveOut;
+      pdwAuthResult = &nAuthResultDiscarded;
     }
 
     *pdwAuthResult = 0;

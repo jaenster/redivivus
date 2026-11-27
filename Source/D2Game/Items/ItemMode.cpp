@@ -199,6 +199,7 @@ void __fastcall STATSLISTEX_FunctionCallback(::SGAMEDATA * pGame, D2UnitStrc * p
     uint32_t nChargedSkillParam;
     BOOL bChargedCountActive;
     D2UnitStrc* pItemOwnerUnit;
+    int nTransformAnimMode;
     BOOL eCurrentState;
     int32_t nHpScaled;
     int32_t nManaScaled;
@@ -385,8 +386,8 @@ void __fastcall STATSLISTEX_FunctionCallback(::SGAMEDATA * pGame, D2UnitStrc * p
         }
       nNewValue = pUnit->eUnitType;
       nOldValue = pUnit->nClassId;
-      pItemOwner = *(D2UnitStrc**)&pUnit->eAnimMode;
-      D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, (eD2UnitType*)&nNewValue, &nOldValue, (int*)&pItemOwner, ".\\ITEMS\\ItemMode.cpp", 0x130);
+      nTransformAnimMode = (int)pUnit->eAnimMode.ePlayerMode;
+      D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, (eD2UnitType*)&nNewValue, &nOldValue, &nTransformAnimMode, ".\\ITEMS\\ItemMode.cpp", 0x130);
       if (nNewValue) {
         return;
       }
@@ -399,8 +400,8 @@ void __fastcall STATSLISTEX_FunctionCallback(::SGAMEDATA * pGame, D2UnitStrc * p
         }
       nNewValue = pUnit->eUnitType;
       nOldValue = pUnit->nClassId;
-      pItemOwner = *(D2UnitStrc**)&pUnit->eAnimMode;
-      D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, (eD2UnitType*)&nNewValue, &nOldValue, (int*)&pItemOwner, ".\\ITEMS\\ItemMode.cpp", 0x145);
+      nTransformAnimMode = (int)pUnit->eAnimMode.ePlayerMode;
+      D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, (eD2UnitType*)&nNewValue, &nOldValue, &nTransformAnimMode, ".\\ITEMS\\ItemMode.cpp", 0x145);
       if (nNewValue) {
         return;
       }
@@ -4901,7 +4902,6 @@ BOOL __fastcall ITEMMODE_WeaponSwap(::SGAMEDATA * pGame, D2UnitStrc * pUnit, boo
     D2SkillStrc* pSkill;
     D2ClientStrc* pClient;
     eD2Skills eSkillId;
-    D2UnitStrc** ppSwapSlotItem;
     D2WeaponSwapSlotStrc* pSwapSlot;
     eD2Skills eRightSkillId;
     uint32_t nRightSkillOwner;
@@ -4939,19 +4939,19 @@ BOOL __fastcall ITEMMODE_WeaponSwap(::SGAMEDATA * pGame, D2UnitStrc * pUnit, boo
       D2Common::Units::InitSwitchRightSkill(pUnit);
       D2Common::Units::InitSwitchLeftSkill(pUnit);
       nSwapSlotIdx = 0;
-      ppSwapSlotItem = &aSwapSlots[0].pItem;
+      pSwapSlot = &aSwapSlots[0];
       do {
-        pCurItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, ((D2WeaponSwapSlotStrc*)(ppSwapSlotItem - 1))->eSourceBodyLoc);
-        *ppSwapSlotItem = pCurItem;
+        pCurItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, pSwapSlot->eSourceBodyLoc);
+        pSwapSlot->pItem = pCurItem;
         if (pCurItem) {
-          D2Common::INVENTORY::Inventory::GetCurrentItemOnBodyLocation(pUnit, pInventory, ppSwapSlotItem, ((D2WeaponSwapSlotStrc*)(ppSwapSlotItem - 1))->eSourceBodyLoc);
-          if (!*ppSwapSlotItem || (*ppSwapSlotItem)->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Neutral) {
+          D2Common::INVENTORY::Inventory::GetCurrentItemOnBodyLocation(pUnit, pInventory, &pSwapSlot->pItem, pSwapSlot->eSourceBodyLoc);
+          if (!pSwapSlot->pItem || pSwapSlot->pItem->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Neutral) {
             goto reject_bad_params;
           }
         }
 
         nSwapSlotIdx++;
-        ppSwapSlotItem += 4;
+        pSwapSlot++;
       } while (nSwapSlotIdx < 4);
 
       if (aSwapSlots[0].pItem) {
@@ -4962,15 +4962,15 @@ BOOL __fastcall ITEMMODE_WeaponSwap(::SGAMEDATA * pGame, D2UnitStrc * pUnit, boo
       }
 
       nSwapSlotIdx = 0;
-      ppSwapSlotItem = &aSwapSlots[0].pItem;
+      pSwapSlot = &aSwapSlots[0];
       do {
-        if (*ppSwapSlotItem) {
+        if (pSwapSlot->pItem) {
           if (nSwapSlotIdx < 2) {
-            D2Common::INVENTORY::Inventory::INVENTORY_SwapPrimaryWeaponOnRemoval(pInventorySaved, *ppSwapSlotItem);
+            D2Common::INVENTORY::Inventory::INVENTORY_SwapPrimaryWeaponOnRemoval(pInventorySaved, pSwapSlot->pItem);
           }
 
-          pCurItem = D2Common::INVENTORY::Inventory::INVENTORY_RemoveItem(pInventorySaved, *ppSwapSlotItem);
-          if (!pCurItem || pCurItem != *ppSwapSlotItem) {
+          pCurItem = D2Common::INVENTORY::Inventory::INVENTORY_RemoveItem(pInventorySaved, pSwapSlot->pItem);
+          if (!pCurItem || pCurItem != pSwapSlot->pItem) {
             pbSwapDone[0] = true;
             pbSwapDone[1] = false;
             pbSwapDone[2] = false;
@@ -4978,7 +4978,7 @@ BOOL __fastcall ITEMMODE_WeaponSwap(::SGAMEDATA * pGame, D2UnitStrc * pUnit, boo
             return 0;
           }
 
-          D2Common::INVENTORY::Inventory::NullSub_2Arg(pInventorySaved, ((D2WeaponSwapSlotStrc*)(ppSwapSlotItem - 1))->eSourceBodyLoc);
+          D2Common::INVENTORY::Inventory::NullSub_2Arg(pInventorySaved, pSwapSlot->eSourceBodyLoc);
           D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pCurItem, INVPAGE_None);
           D2Common::ITEMS::Items::ITEM_EditItemData_eD2ItemCmd(pCurItem, ITEMCMD_BODYLOC_SWAP_ITEMS, 1);
           D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pCurItem, ITEMFLAG_RELOAD, 1);
@@ -4991,7 +4991,7 @@ BOOL __fastcall ITEMMODE_WeaponSwap(::SGAMEDATA * pGame, D2UnitStrc * pUnit, boo
         }
 
         nSwapSlotIdx++;
-        ppSwapSlotItem += 4;
+        pSwapSlot++;
       } while (nSwapSlotIdx < 4);
 
       nSwapSlotIdx = 0;

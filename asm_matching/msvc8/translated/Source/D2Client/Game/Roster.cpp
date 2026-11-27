@@ -432,7 +432,7 @@ void __stdcall ROSTER_GroupPlayersIntoParties() {
 
       if (!pRosterPartyList) {
         pRosterPartyList = D2_NEW_AT(D2RosterPartyListStrc, ".\\GAME\\Roster.cpp", 0x1fc);
-        memset(pRosterPartyList, 0, 8);
+        memset(pRosterPartyList, 0, offsetof(D2RosterPartyListStrc, pNext));
         pRosterPartyList->nPartyId = nPartyId;
         pRosterPartyList->pNext = Roster::pRosterPartyList;
         Roster::pRosterPartyList = pRosterPartyList;

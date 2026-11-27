@@ -7,7 +7,7 @@
 10	Source/Bnclient/BNNews.cpp
 1	Source/Bnclient/BNetGW.cpp
 3	Source/Bnclient/BnDownload.cpp
-20	Source/Bnclient/BnSend.cpp
+17	Source/Bnclient/BnSend.cpp
 6	Source/Bnclient/Cache.cpp
 1	Source/Bnclient/SHA1.cpp
 2	Source/Bnclient/SRP/SHA.cpp
@@ -32,7 +32,6 @@
 2	Source/D2Client/Game/Game/stpl_SGAMEDATA.cpp
 3	Source/D2Client/Game/PalShift.cpp
 3	Source/D2Client/Game/Rendering.cpp
-1	Source/D2Client/Game/Roster.cpp
 3	Source/D2Client/Game/SCmd.cpp
 8	Source/D2Client/Game/View.cpp
 20	Source/D2Client/UI/Automap.cpp
@@ -68,7 +67,7 @@
 17	Source/D2Common/DataTbls/DataTbls.cpp
 15	Source/D2Common/DataTbls/ItemTbls.cpp
 3	Source/D2Common/DataTbls/MonsterTbls.cpp
-3	Source/D2Common/Drlg/Drlg.cpp
+1	Source/D2Common/Drlg/Drlg.cpp
 1	Source/D2Common/Drlg/Maze.cpp
 2	Source/D2Common/Drlg/OutJung.cpp
 3	Source/D2Common/Drlg/OutPlace.cpp
@@ -97,7 +96,7 @@
 6	Source/D2Game/Monster/Ai/Baal.cpp
 1	Source/D2Game/Monster/Create.cpp
 1	Source/D2Game/Monster/MonsterRegion.cpp
-3	Source/D2Game/Objects/Objects.cpp
+1	Source/D2Game/Objects/Objects.cpp
 1	Source/D2Game/Objects/ObjectsMode.cpp
 1	Source/D2Game/Objects/ObjectsRgn.cpp
 4	Source/D2Game/Player/PlayerIntro.cpp
@@ -123,7 +122,6 @@
 1	Source/D2Glide/Src/glPerspective.cpp
 13	Source/D2Glide/Src/glSmack.cpp
 2	Source/D2Glide/Src/glSprite.cpp
-2	Source/D2Glide/Src/glSubtileCache.cpp
 1	Source/D2Glide/Src/glVertex.cpp
 1	Source/D2Headers/d2_platform.h
 9	Source/D2Hell/D2HellRoot.cpp
@@ -166,20 +164,19 @@
 1	Source/D2Win/Src/D2WinPopup.cpp
 4	Source/D2Win/Src/D2WinTextBox.cpp
 5	Source/D2gfx/D2GfxHelperStrc.cpp
-14	Source/Fog/Debug.cpp
+12	Source/Fog/Debug.cpp
 6	Source/Fog/File.cpp
 1	Source/Fog/Skills.cpp
 1	Source/Fog/Source/SSComp.cpp
 1	Source/Fog/Src/AsyncData.cpp
 1	Source/Fog/Src/D2QSSocket.cpp
 1	Source/Fog/Src/DataArrays.cpp
-1	Source/Fog/Src/ErrorManager.cpp
 4	Source/Fog/Src/Excel/Excel.cpp
 1	Source/Fog/Src/QServer/QServer.cpp
 1	Source/Fog/Src/QServer/QServer98.cpp
 3	Source/Fog/Src/QServer/QServerNT.cpp
 4	Source/Fog/Src/String/FogString.cpp
-8	Source/MacSpecific/Source/CD2Textures/CD2Textures.cpp
+7	Source/MacSpecific/Source/CD2Textures/CD2Textures.cpp
 4	Source/Storm/Source/SBMP.cpp
 2	Source/Storm/Source/SBig.cpp
 1	Source/Storm/Source/SComp.cpp

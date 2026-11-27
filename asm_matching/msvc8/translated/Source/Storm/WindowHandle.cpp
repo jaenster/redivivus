@@ -602,8 +602,8 @@ void __stdcall SMsgUnregisterMessage(HWND hWnd, uint32_t dwKey, pfnSEvtHandler p
 // Name from the PowerPC 1.13c Storm traceback table (GenericWndProc @10026f30).
 LRESULT __stdcall GenericWndProc(HWND hWnd, uint32_t nMsg, uint32_t nWParam, LPARAM lParam) {
     BOOL bHandled = 0;
-    int32_t lOutResult = 0;
-    BOOL bDispatched = SMsgDispatchMessage(hWnd, nMsg, nWParam, lParam, &bHandled, (LRESULT*)&lOutResult);
+    LRESULT lOutResult = 0;
+    BOOL bDispatched = SMsgDispatchMessage(hWnd, nMsg, nWParam, lParam, &bHandled, &lOutResult);
     if (bDispatched && bHandled) {
       return lOutResult;
     }

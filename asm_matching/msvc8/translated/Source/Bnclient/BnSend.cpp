@@ -81,11 +81,11 @@ static void * g_pBNetCDKeyHashData = 0; D2_STATIC_GUARD(g_pBNetCDKeyHashData, "g
 static uint32_t g_nBNetConnectionState = 0; D2_STATIC_GUARD(g_nBNetConnectionState, "g_nBNetConnectionState");
 static D2NetDataStrc * g_pBNetSocketData = 0; D2_STATIC_GUARD(g_pBNetSocketData, "g_pBNetSocketData");
 // also labelled: lpAddend_00881bf4
-static LONG * Destination_00881bf4 = 0; D2_STATIC_GUARD(Destination_00881bf4, "Destination_00881bf4");
+static LONG Destination_00881bf4 = 0; D2_STATIC_GUARD(Destination_00881bf4, "Destination_00881bf4");
 static uint32_t gbBNetSocketConnected = 0; D2_STATIC_GUARD(gbBNetSocketConnected, "gbBNetSocketConnected");
 static long Target_00881bfc = 0; D2_STATIC_GUARD(Target_00881bfc, "Target_00881bfc");
 // also labelled: lpAddend_00881c00
-static LONG * Destination_00881c00 = 0; D2_STATIC_GUARD(Destination_00881c00, "Destination_00881c00");
+static LONG Destination_00881c00 = 0; D2_STATIC_GUARD(Destination_00881c00, "Destination_00881c00");
 static uint32_t g_nBNetThreadInitFlag = 0; D2_STATIC_GUARD(g_nBNetThreadInitFlag, "g_nBNetThreadInitFlag");
 uint32_t g_pfnNewsChannelCallback = 0; D2_GLOBAL_GUARD(g_pfnNewsChannelCallback, "g_pfnNewsChannelCallback");
 pfnNewsEntryCallback g_pfnMotdCallback = (pfnNewsEntryCallback)0; D2_GLOBAL_GUARD(g_pfnMotdCallback, "g_pfnMotdCallback");
@@ -957,7 +957,7 @@ void BNCLIENT_InterlockedCompareExchange(long * pDestination, LONG nExchange, LO
 }
 
 int Unreferenced_0051bea0() {
-    LONG LVar1 = InterlockedCompareExchange((LONG*)&g_pBNetSocketData, 0, 0);
+    LONG LVar1 = (LONG)(intptr_t)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, 0, 0); // steer-ok: winbase.h InterlockedCompareExchangePointer
     return LVar1;
 }
 
@@ -1087,10 +1087,10 @@ void __fastcall GetDnsRecordSync(char * * ppszDnsOutput, char * nDnsThreadParam2
     /* DWORD dwMilliseconds for Sleep */ g_nBNetConnectionState = 1;
     Sleep(10);
     /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ *(uint8_t*)ppszDnsOutput = 0;
-    char** dwThreadId = 0;
+    DWORD dwThreadId = 0;
     lpParameter_00881be8.pszOut = (char*)ppszDnsOutput;
     lpParameter_00881be8.pszHost = nDnsThreadParam2;
-    HANDLE hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)GetDnsResults, &lpParameter_00881be8, 0, (LPDWORD)&dwThreadId);
+    HANDLE hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)GetDnsResults, &lpParameter_00881be8, 0, &dwThreadId);
     int nCancelFlag = InterlockedCompareExchange(&Target_00881bfc, 0, 0);
     /* DWORD dwMilliseconds for WaitForSingleObject */ /* HANDLE hHandle for WaitForSingleObject */ while (true) {
       DWORD dwWaitResult;
@@ -1301,20 +1301,20 @@ BOOL __stdcall BNSEND_Disconnect() {
     BNMESSQUEUE_ClearAll();
     _net_sid::NET_SID_CLIENT_FreeSRP();
     /* LONG Value for InterlockedExchange */ /* LONG * Target for InterlockedExchange */ InterlockedExchange(&Target_00881bfc, 1);
-    int nAtomicVal = InterlockedCompareExchange((LONG*)&Destination_00881bf4, 0, 0);
+    int nAtomicVal = InterlockedCompareExchange(&Destination_00881bf4, 0, 0);
     while (nAtomicVal) {
       /* DWORD dwMilliseconds for Sleep */ Sleep(10);
-      /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ nAtomicVal = InterlockedCompareExchange((LONG*)&Destination_00881bf4, 0, 0);
+      /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ nAtomicVal = InterlockedCompareExchange(&Destination_00881bf4, 0, 0);
     }
 
     D2NetDataStrc* pNetData = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, 0, 0); // steer-ok: winbase.h InterlockedCompareExchangePointer
     if (pNetData) {
       D2NetDataStrc* pOldNetData;
       _net_sid::SID_SetReadyFlag();
-      /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ nAtomicVal = InterlockedCompareExchange((LONG*)&Destination_00881c00, 0, 0);
+      /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ nAtomicVal = InterlockedCompareExchange(&Destination_00881c00, 0, 0);
       while (nAtomicVal) {
         /* DWORD dwMilliseconds for Sleep */ Sleep(10);
-        /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ nAtomicVal = InterlockedCompareExchange((LONG*)&Destination_00881c00, 0, 0);
+        /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ nAtomicVal = InterlockedCompareExchange(&Destination_00881c00, 0, 0);
       }
 
       /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ pOldNetData = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, 0, pNetData); // steer-ok: winbase.h InterlockedCompareExchangePointer
@@ -1330,7 +1330,7 @@ BOOL __stdcall BNSEND_Disconnect() {
       bHasActiveDownloads = BnDownload::BNDOWNLOAD_HasActiveDownloads();
     }
 
-    LONG nReceiveThreadFlag = InterlockedCompareExchange((LONG*)&Destination_00881c00, 0, 0);
+    LONG nReceiveThreadFlag = InterlockedCompareExchange(&Destination_00881c00, 0, 0);
     if (!nReceiveThreadFlag) {
       return 1;
     }
@@ -1343,7 +1343,7 @@ BOOL __stdcall BNSEND_Disconnect() {
         return 0;
       }
 
-      /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ nReceiveThreadFlag = InterlockedCompareExchange((LONG*)&Destination_00881c00, 0, 0);
+      /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ nReceiveThreadFlag = InterlockedCompareExchange(&Destination_00881c00, 0, 0);
     } while (nReceiveThreadFlag);
 
     return 1;
@@ -1452,9 +1452,9 @@ DWORD __stdcall BnetReadFunction(uint32_t dwThreadParam) {
     int32_t nBytesRead;
     DWORD dwCurrentTick;
     char chRecvBuf[8196];
-    LONG lInterlockedResult = InterlockedIncrement((LONG*)&Destination_00881bf4);
+    LONG lInterlockedResult = InterlockedIncrement(&Destination_00881bf4);
     if (lInterlockedResult > 1) {
-      /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement((LONG*)&Destination_00881bf4);
+      /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement(&Destination_00881bf4);
       return 1;
     }
 
@@ -1513,7 +1513,7 @@ DWORD __stdcall BnetReadFunction(uint32_t dwThreadParam) {
       /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ pSafesock = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, 0, 0); // steer-ok: winbase.h InterlockedCompareExchangePointer
     } while (true);
 
-    /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement((LONG*)&Destination_00881bf4);
+    /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement(&Destination_00881bf4);
     return dwResult;
 }
 
@@ -1573,6 +1573,15 @@ void __fastcall BNSEND_SetGlobalFlag(DWORD dwThreadInitFlag) {
 
 // Battle.net connection orchestrator. Manages full logon sequence: server selection via fastest-connect test (select() on 64 candidate sockets, 5-second timeout per batch), protocol init (0x01 byte), SID_AUTHINFO (0x50) handshake, SID_AUTHCHECK (0x51) version/CD-key verification. Uses non-blocking socket multiplexing across up to 32 server candidates. Connection state machine: 2=searching, 3=accessing accounts, 4=checking version. Stores final socket in g_pBNetSocketData via InterlockedCompareExchange.
 BOOL __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
+    // One server being raced: its host name and the socket opened to it (0x108 bytes on x86).
+    struct D2BnServerCandidateStrc {
+      char szHost[0x100];
+      D2NetDataStrc* pNetData;
+#if D2_ARCH_X86
+      uint8_t __pad104[4];
+#endif
+    };
+    static_assert(sizeof(void*) != 4 || sizeof(D2BnServerCandidateStrc) == 0x108, "a server candidate is 0x108 bytes on x86");
     // Frame slots -8496..-8 are ONE object: &nSIDState is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -1583,7 +1592,7 @@ BOOL __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
       D2NetDataStrc* pWinnerSocket;
       uint8_t __pad20[3];
       char bProtocolByte;
-      uint8_t aCandidates[8448];
+      D2BnServerCandidateStrc aCandidates[32];
       uint8_t sockaddrPeer[16];
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8488, "frame group __frame0_t must reproduce the Ghidra frame layout");
@@ -1600,19 +1609,19 @@ BOOL __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
     uint32_t uWriteFDCount;
     int iVar2;
     uint32_t uExceptFDCount;
-    D2NetDataStrc** pCandidateSlot;
-    D2NetDataStrc** pCandidateIter;
+    D2BnServerCandidateStrc* pCandidateSlot;
+    D2BnServerCandidateStrc* pCandidateIter;
     int nLoopCounter;
     fd_set fdWriteSet;
     fd_set fdExceptSet;
     intptr_t nSIDStateCheck[2];
     timeval tvTimeout;
     int nAddrLen;
-    uint8_t* pCandidateSlotNext;
+    D2BnServerCandidateStrc* pCandidateSlotNext;
     bool bTooManyTimeouts;
     char cChar;
     SOCKET hSock;
-    uint8_t* pbVar3;
+    D2BnServerCandidateStrc* pbVar3;
     Debug::DEBUG_Trace("sFastestConnect()");
     memset(__frame0.aCandidates, 0, sizeof(__frame0.aCandidates));
     BnDownload::BNDOWNLOAD_ResetState(0x66);
@@ -1653,11 +1662,11 @@ BOOL __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
           if (pszToken && *pszToken != '\0' && __frame0.nCandidateCount < 0x20) {
             Debug::DEBUG_Trace("  Try to connect to %s", pszToken);
             pbVar3 = pCandidateSlotNext;
-            strcpy((char*)pCandidateSlotNext, pszToken);
-            pNetData = Fog::Src::Safesock::Create((char*)pCandidateSlotNext, 0x17e0, (LPTHREAD_START_ROUTINE)BnetReadFunction, (LPVOID)0x0, "Client->BNet", 1);
+            strcpy(pCandidateSlotNext->szHost, pszToken);
+            pNetData = Fog::Src::Safesock::Create(pCandidateSlotNext->szHost, 0x17e0, (LPTHREAD_START_ROUTINE)BnetReadFunction, (LPVOID)0x0, "Client->BNet", 1);
             __frame0.nCandidateCount++;
-            *(D2NetDataStrc**)(pbVar3 + 0x100) = (D2NetDataStrc*)pNetData;
-            pCandidateSlotNext = pbVar3 + 0x108;
+            pbVar3->pNetData = (D2NetDataStrc*)pNetData;
+            pCandidateSlotNext = pbVar3 + 1;
             pszToken = strtok(nullptr, " ,;");
             __frame0.pszNextServer = pszToken;
           }
@@ -1669,11 +1678,11 @@ BOOL __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
         fdWriteSet.fd_count = 0;
         fdExceptSet.fd_count = 0;
         if (__frame0.nCandidateCount > 0) {
-          pCandidateSlot = (D2NetDataStrc**)(__frame0.aCandidates + 0x100);
+          pCandidateSlot = __frame0.aCandidates;
           nLoopCounter = __frame0.nCandidateCount;
           do {
-            if (*pCandidateSlot) {
-              hSock = (*pCandidateSlot)->hSocket;
+            if (pCandidateSlot->pNetData) {
+              hSock = pCandidateSlot->pNetData->hSocket;
               if (uWriteFDCount < 0x40) {
                 fdWriteSet.fd_array[uWriteFDCount] = hSock;
                 uWriteFDCount = fdWriteSet.fd_count + 1;
@@ -1688,7 +1697,7 @@ BOOL __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
               iVar2++;
             }
 
-            pCandidateSlot += 0x108 / sizeof(D2NetDataStrc*);
+            pCandidateSlot++;
             nLoopCounter--;
           } while (nLoopCounter);
 
@@ -1713,30 +1722,30 @@ BOOL __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
             WSAGetLastError();
             pszToken = __frame0.pszNextServer;
           } else {
-            pCandidateIter = (D2NetDataStrc**)(__frame0.aCandidates + 0x100);
+            pCandidateIter = __frame0.aCandidates;
             nLoopCounter = __frame0.nCandidateCount;
             do {
-              /* fd_set * param_2 for __WSAFDIsSet */ /* SOCKET param_1 for __WSAFDIsSet */ if (*pCandidateIter) {
-                nFDResult = __WSAFDIsSet((*pCandidateIter)->hSocket, &fdExceptSet);
+              /* fd_set * param_2 for __WSAFDIsSet */ /* SOCKET param_1 for __WSAFDIsSet */ if (pCandidateIter->pNetData) {
+                nFDResult = __WSAFDIsSet(pCandidateIter->pNetData->hSocket, &fdExceptSet);
                 if (nFDResult) {
-                  Fog::Src::Safesock::Free(*pCandidateIter);
-                  *pCandidateIter = 0;
+                  Fog::Src::Safesock::Free(pCandidateIter->pNetData);
+                  pCandidateIter->pNetData = 0;
                 }
               }
 
-              pCandidateIter += 0x108 / sizeof(D2NetDataStrc*);
+              pCandidateIter++;
               nLoopCounter--;
             } while (nLoopCounter);
 
             nLoopCounter = 0;
-            pbVar3 = __frame0.aCandidates + 0x100;
+            pbVar3 = __frame0.aCandidates;
             do {
-              /* fd_set * param_2 for __WSAFDIsSet */ /* SOCKET param_1 for __WSAFDIsSet */ if (*(int*)pbVar3) {
-                nFDResult = __WSAFDIsSet((*(D2NetDataStrc**)pbVar3)->hSocket, &fdWriteSet);
+              /* fd_set * param_2 for __WSAFDIsSet */ /* SOCKET param_1 for __WSAFDIsSet */ if (pbVar3->pNetData) {
+                nFDResult = __WSAFDIsSet(pbVar3->pNetData->hSocket, &fdWriteSet);
                 if (nFDResult) {
-                  /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ pSocketResult = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, *(D2NetDataStrc**)(__frame0.aCandidates + (nLoopCounter * 0x108 + 0x100)), 0);
+                  /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ pSocketResult = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, __frame0.aCandidates[nLoopCounter].pNetData, 0);
                   if (!pSocketResult) {
-                    __frame0.pWinnerSocket = *(D2NetDataStrc**)(__frame0.aCandidates + (nLoopCounter * 0x108 + 0x100));
+                    __frame0.pWinnerSocket = __frame0.aCandidates[nLoopCounter].pNetData;
                     __frame0.pWinnerSocket->bConnected = 1;
                     __frame0.pWinnerSocket->bInit = 0;
                   }
@@ -1746,7 +1755,7 @@ BOOL __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
               }
 
               nLoopCounter++;
-              pbVar3 += 0x108;
+              pbVar3++;
             } while (nLoopCounter < iVar2);
 
             pNetData = __frame0.pWinnerSocket;
@@ -1776,16 +1785,16 @@ BOOL __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
       }
     }
     if (__frame0.nCandidateCount > 0) {
-      pbVar3 = __frame0.aCandidates + 0x100;
+      pbVar3 = __frame0.aCandidates;
       iVar2 = __frame0.nCandidateCount;
       do {
-        pCandidate = *(D2NetDataStrc**)pbVar3;
+        pCandidate = pbVar3->pNetData;
         if (pCandidate && pCandidate != pNetData) {
           Fog::Src::Safesock::Free(pCandidate);
-          memset(pbVar3, 0, 4 * sizeof(pbVar3[0]));
+          memset(&pbVar3->pNetData, 0, sizeof(pbVar3->pNetData));
         }
 
-        pbVar3 += 0x108;
+        pbVar3++;
         iVar2--;
         pfnInterlocked = d2_InterlockedCompareExchange;
       } while (iVar2);
@@ -1871,9 +1880,9 @@ int __stdcall BattleConnectFastest() {
     static char EntireDnsRecordOfServers[512] = {0}; D2_STATIC_GUARD(EntireDnsRecordOfServers, "Bnclient::BnSend::BattleConnectFastest::EntireDnsRecordOfServers");
 
     Debug::DEBUG_Trace("BattleConnectFastest()");
-    LONG lInterlockedResult = InterlockedIncrement((LONG*)&Destination_00881c00);
+    LONG lInterlockedResult = InterlockedIncrement(&Destination_00881c00);
     if (lInterlockedResult > 1) {
-      /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement((LONG*)&Destination_00881c00);
+      /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement(&Destination_00881c00);
       return 0;
     }
 
@@ -1888,7 +1897,7 @@ int __stdcall BattleConnectFastest() {
       GetDnsRecordSync((char**)EntireDnsRecordOfServers, RealmDNS);
     }
     if (EntireDnsRecordOfServers[0] == '\0') {
-      /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement((LONG*)&Destination_00881c00);
+      /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement(&Destination_00881c00);
       SID_SetStateFlag1(0xc);
       Debug::DEBUG_Trace("   failed to get server list");
       Bnet::BNET_LogIndent(2, -4);
@@ -1906,7 +1915,7 @@ int __stdcall BattleConnectFastest() {
       }
     }
 
-    /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement((LONG*)&Destination_00881c00);
+    /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement(&Destination_00881c00);
     return 1;
 }
 

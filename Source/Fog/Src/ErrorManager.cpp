@@ -654,7 +654,7 @@ void __fastcall CRASH_FillupCrashTxt(char * szSummary, char * szReason, char * *
         memset(&errorArg, 0, sizeof(errorArg));
         errorArg.szProduct = szProduct;
         if (bSilentFlag) {
-          *(uint32_t*)((char*)&errorArg + 12) |= 1;
+          *(uint32_t*)&errorArg.nFlags |= 1;
         }
 
         nAttachIndex = 0;

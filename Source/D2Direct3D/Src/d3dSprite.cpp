@@ -195,7 +195,6 @@ static void __stdcall RENDERER_D3D_CalculateTextureSize(D2D3DSpriteInfoStrc * pS
 // Direct3D texture cache: uploads a DC6 frame to video memory. Determines mipmap level based on size, allocates cache slot, renders frame to memory surface, copies to texture via LockRect/memcpy, and sets as active texture.
 static int32_t __stdcall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfoStrc * pTexInfo, BYTE * pPalette, uint8_t nOutlineColor, int32_t nMode) {
     // Static local variables (originally global data)
-    static uint8_t DAT_00970eac; D2_STATIC_GUARD_BSS(DAT_00970eac, "D2Direct3D::Renderer::RENDERER_DIRECT3D_UploadTextureToCache::DAT_00970eac");
     static int INT_00970ec4; D2_STATIC_GUARD_BSS(INT_00970ec4, "D2Direct3D::Renderer::RENDERER_DIRECT3D_UploadTextureToCache::INT_00970ec4");
 
     int iVar1;
@@ -241,7 +240,7 @@ static int32_t __stdcall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfoS
 
     iMipLevel = pCellNode->aModes[nMode].nSizeClass;
     int* pnCacheNodeIdx = &pCellNode->aModes[nMode].nCacheNode;
-    D3DTextureCacheStrc* pCache = (D3DTextureCacheStrc*)(&DAT_00970eac + iMipLevel * 0x1c);
+    D3DTextureCacheStrc* pCache = &gD3DGenericTextureCache.aCaches[iMipLevel - 1];
     if (*pnCacheNodeIdx && (pCache->pNodeBuffer[*pnCacheNodeIdx - 1].field_0x0C == pPalette || nOrigMode == 4)) {
       d3dTextureCache::D3DTEXCACHE_InvalidateByIndex(pCache, *pnCacheNodeIdx);
       dwHResult = g_pD3DDevice->lpVtbl->SetTexture(g_pD3DDevice, 0, pCache->pNodeBuffer[*pnCacheNodeIdx - 1].pTexture);
@@ -373,7 +372,7 @@ static int32_t __stdcall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfoS
           if (gnD3DTextureCapFlags & Fog::BitBuffer::gadwBitMasks[10]) {
             RENDERER_D3D_CopySurfacePixels(pIMipLevel->pSurface, pDestSurface_00, pTexInfo->nTexHeight);
           } else {
-            (*(dt_df2bbc22*)((char*)*(void**)pIMipLevel->pTexture + 20))(pIMipLevel->pTexture, lpD3DTexture_00);
+            pIMipLevel->pTexture->lpVtbl->Load(pIMipLevel->pTexture, lpD3DTexture_00);
           }
 
           dwHResult = g_pD3DDevice->lpVtbl->SetTexture(g_pD3DDevice, 0, pIMipLevel->pTexture);

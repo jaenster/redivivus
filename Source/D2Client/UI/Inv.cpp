@@ -9055,7 +9055,7 @@ static BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInven
     eInvPage = D2Common::Units::UNITS_GetInventoryRecordId(pUnit, nPage, nItemType);
     uint32_t nGridCellX;
     nGridCellX = (x - pInvLayout->left) / (uint32_t)pInvLayout->SlotPixelWidth;
-    uint32_t nGridCellY;
+    uintptr_t nGridCellY;
     nGridCellY = (y - pInvLayout->top) / (uint32_t)pInvLayout->SlotPixelHeigth;
     int nCallResult;
     nCallResult = Cursor::GetItemType();

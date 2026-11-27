@@ -29,7 +29,7 @@ struct D2RoomExStrc;
 #ifndef D2_DEFINED_D2DrlgLevelDataUnion
 #define D2_DEFINED_D2DrlgLevelDataUnion
 union D2DrlgLevelDataUnion {
-    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+    operator uintptr_t() const { return *reinterpret_cast<const uintptr_t*>(this); }
 
     /* 0x00 */ struct D2LvlMazeTxt * pTxtLvlMaze; // when DRLG Type is DRLGTYPE_RandomMaze
     /* 0x00 */ struct D2DrlgLevelDataPresetArea * pDrlgLevelPresetData; // when DRLG Type is DRLGTYPE_PresetArea

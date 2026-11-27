@@ -155,7 +155,11 @@ int32_t __fastcall SaveHeader(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t *
     int* pDstDword;
     int32_t nHotkeySkillId;
     uint8_t* nRequiredEndAddr;
-    char* szCharName;
+    // One frame slot: the character name early on, the hotkey hand flag in the hotkey loop.
+    union {
+      char* szCharName;
+      uint32_t nHotkeyHand;
+    } uNameOrHand;
     uint8_t byGuildField2;
     uint8_t byGuildField1;
     eD2Skills eSwapSkillId[2];
@@ -172,18 +176,18 @@ int32_t __fastcall SaveHeader(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t *
     pClientSaved = pClient;
     if (pClient) {
       uint8_t bWeaponSwapped;
-      szCharName = GAME::Clients::GetCharName(pClient);
-      if (szCharName) {
-        pNameEnd = szCharName + 0x10;
-        pNameCursor = szCharName;
-        if (szCharName < pNameEnd) {
+      uNameOrHand.szCharName = GAME::Clients::GetCharName(pClient);
+      if (uNameOrHand.szCharName) {
+        pNameEnd = uNameOrHand.szCharName + 0x10;
+        pNameCursor = uNameOrHand.szCharName;
+        if (uNameOrHand.szCharName < pNameEnd) {
           do {
             if (*pNameCursor == '\0') {
               if (pNameCursor >= pNameEnd) {
                 goto LAB_00568da5;
               }
 
-              iVar1 = (int)((intptr_t)pNameCursor - (intptr_t)szCharName);
+              iVar1 = (int)((intptr_t)pNameCursor - (intptr_t)uNameOrHand.szCharName);
               goto code_r0x00568f9d;
             }
 
@@ -206,7 +210,7 @@ int32_t __fastcall SaveHeader(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t *
           memset(&sSaveHeader, 0, sizeof(sSaveHeader));
           sSaveHeader.dwHeader = 0xaa55aa55;
           sSaveHeader.dwFileVersion = 0x60;
-          Storm::Source::SSTR::SStrCopy(sSaveHeader.szCharacterName, szCharName, 0x7fffffff);
+          Storm::Source::SSTR::SStrCopy(sSaveHeader.szCharacterName, uNameOrHand.szCharName, 0x7fffffff);
           sSaveHeader.dwCharacterStatus = GAME::Clients::GetCharacterStatus(pClient);
           if (pGame->bExpansion) {
             sSaveHeader.dwCharacterStatus |= 0x20;
@@ -233,13 +237,13 @@ int32_t __fastcall SaveHeader(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t *
 
           /* HotKeys section */ iHotkey = 0;
           do {
-            GAME::Clients::GetHotKey(pClientSaved, iHotkey, &nHotkeySkillId, (uint32_t*)&szCharName, (int*)(eSwapSkillId + 1));
+            GAME::Clients::GetHotKey(pClientSaved, iHotkey, &nHotkeySkillId, &uNameOrHand.nHotkeyHand, (int*)(eSwapSkillId + 1));
             if (nHotkeySkillId >= 0x8000) {
               Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1eb);
               exit(-1);
             }
 
-            sSaveHeader.pHotKeys[iHotkey].nSkillIdAndHand = (szCharName ? 0x8000 : 0) | (uint16_t)nHotkeySkillId;
+            sSaveHeader.pHotKeys[iHotkey].nSkillIdAndHand = (uNameOrHand.nHotkeyHand ? 0x8000 : 0) | (uint16_t)nHotkeySkillId;
             nHotkeyItemIndex = GetItemIndexInList(pGame, pUnit, eSwapSkillId[1]);
             sSaveHeader.pHotKeys[iHotkey].nItemIndex = nHotkeyItemIndex;
             iHotkey++;
@@ -1500,7 +1504,7 @@ BOOL __fastcall CreateItemIronGolemItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     int32_t nSocketSlotY;
     int32_t* pInvDummy;
     uint8_t* pReadPos = *ppReadPos;
-    size_t nBytesConsumed = (intptr_t)nEndOffset - (intptr_t)pReadPos;
+    uint32_t nBytesConsumed = (intptr_t)nEndOffset - (intptr_t)pReadPos;
     *ppGolemItem = 0;
     __frame0.pOwnerUnit = pUnit;
     D2Common::ITEMS::Items::ReadInfoFromStreamVersioned(pReadPos, nBytesConsumed, 1, &sItemDetails, nVersion);
@@ -1603,7 +1607,7 @@ int __fastcall LoadGolem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t * * pp
       if (!pGolem) {
         nGolemGUID = -1;
       } else {
-        nGolemGUID = *(int32_t*)(pGolem + 0xc);
+        nGolemGUID = ((D2UnitStrc*)pGolem)->nUnitGUID;
       }
 
       pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrSave2.cpp", 0x889);

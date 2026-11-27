@@ -73,9 +73,10 @@ BOOL __stdcall AreUnitsInNeighboredRooms(D2UnitStrc * pUnit, D2UnitStrc * pSrcUn
         return 0;
       }
 
-      /* Both arguments are reused here */ DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pSrcRoom, (D2RoomStrc***)&pSrcUnit, (int*)&nUnit);
+      D2RoomStrc** ppAdjacentRooms;
+      DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pSrcRoom, &ppAdjacentRooms, &nUnit);
       for (nRoomIdx = 0; nRoomIdx < nUnit; nRoomIdx++) {
-        if (*(D2RoomStrc**)(pSrcUnit->unk0x19 + nRoomIdx * 4 - 0x19) == pUnitRoom) {
+        if (ppAdjacentRooms[nRoomIdx] == pUnitRoom) {
           return 1;
         }
       }

@@ -284,7 +284,10 @@ D2_PACKED_BEGIN struct __attribute__((packed)) DC6 {
     /* 0x00 */ int nVersion;
     /* 0x04 */ int nFlags;
     /* 0x08 */ int nFormat;
-    /* 0x0C */ char nTerm[4];
+    /* 0x0C */ union {
+        char nTerm[4]; // frame terminator bytes of the file header
+        void * pRawData; // raw-data cel file (flags & 4): the source pixel data it was built from
+    };
     /* 0x10 */ int nDirections;
     /* 0x14 */ int nFrames;
     /* 0x18 */ struct DC6Block * pBlocks[0];

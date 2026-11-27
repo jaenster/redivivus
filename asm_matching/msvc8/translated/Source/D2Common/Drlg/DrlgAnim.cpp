@@ -226,7 +226,7 @@ void __fastcall DRLGANIM_AllocAnimatedTiles(D2DrlgGridStrc * pGrids, D2RoomExStr
               }
 
               *pTileEntryPtr = aTileResults[nIndex];
-              *pAnimTileGrid->ppTileData = (D2DrlgTileDataStrc*)(pTileEntryPtr - 6);
+              *pAnimTileGrid->ppTileData = pTileIter;
               nFrameIter = 1;
               nWorldPosX = pTileIter->nPosX + pRoomExCtx->sCoords.WorldPosition.x;
               nWorldPosY = pTileIter->nPosY + pRoomExCtx->sCoords.WorldPosition.y;

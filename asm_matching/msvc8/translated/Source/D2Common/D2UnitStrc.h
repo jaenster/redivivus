@@ -63,7 +63,7 @@ struct D2HoverTextStrc {
 #ifndef D2_DEFINED_D2PathUnion
 #define D2_DEFINED_D2PathUnion
 union D2PathUnion {
-    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+    operator uintptr_t() const { return *reinterpret_cast<const uintptr_t*>(this); }
 
     /* 0x00 */ struct D2StaticPathStrc * pStaticPath; // Used for ITEM, OBJECT, WARP
     /* 0x00 */ struct D2DynamicPathStrc * pDynamicPath; // Used for PLAYER, MONSTER, MISSILE
@@ -103,7 +103,7 @@ union D2UnionData0x64 {
 #ifndef D2_DEFINED_D2UnitDataUnion
 #define D2_DEFINED_D2UnitDataUnion
 union D2UnitDataUnion {
-    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+    operator uintptr_t() const { return *reinterpret_cast<const uintptr_t*>(this); }
 
     /* 0x00 */ struct D2UnitDataPlayerStrc * pUnitDataPlayer;
     /* 0x00 */ struct D2UnitDataMonsterStrc * pUnitDataMonster;
