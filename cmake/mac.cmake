@@ -46,3 +46,52 @@ target_compile_options(d2_mac_objs PRIVATE
     -Os -fstack-protector -fpascal-strings
     $<$<COMPILE_LANGUAGE:CXX>:-std=gnu++11 -stdlib=libc++>
     -Werror=implicit-function-declaration)
+
+# d2_mac_shared_objs  the shared game code the 1.14d Mac binary carries beside the Mac-only
+#              code (D2Common, D2Game, D2Client, Fog, Storm, D2Win ...), compiled with the Mac
+#              flags against Storm's Win32-on-Mac layer (Win32Mac.h) as the original was. Its
+#              own target, outside `all`, so d2_mac_objs stays a clean gate while the shared
+#              tree is brought up: `ninja -k 0 d2_mac_shared_objs` measures it.
+set(D2_MAC_SHARED_MODULES
+    D2Common D2CMP D2Lang D2Game D2Client Fog Storm D2Win D2gfx D2Sound D2Net D2Launch D2Hell
+    D2Multi D2MCPClient Bnclient Game)
+set(D2_MAC_SHARED_SOURCES)
+foreach(m IN LISTS D2_MAC_SHARED_MODULES)
+    file(GLOB_RECURSE _m_sources CONFIGURE_DEPENDS LIST_DIRECTORIES false
+        "${CMAKE_SOURCE_DIR}/Source/${m}/*.cpp")
+    list(APPEND D2_MAC_SHARED_SOURCES ${_m_sources})
+    if(EXISTS "${CMAKE_SOURCE_DIR}/Source/globals/${m}.cpp")
+        list(APPEND D2_MAC_SHARED_SOURCES "${CMAKE_SOURCE_DIR}/Source/globals/${m}.cpp")
+    endif()
+endforeach()
+list(APPEND D2_MAC_SHARED_SOURCES "${CMAKE_SOURCE_DIR}/Source/globals/globals.cpp")
+# The Mac variants of D2gfx and D2Hell are Mac-only code, in d2_mac_objs.
+list(FILTER D2_MAC_SHARED_SOURCES EXCLUDE REGEX "/Source/(D2gfx|D2Hell)/Mac/")
+list(REMOVE_DUPLICATES D2_MAC_SHARED_SOURCES)
+list(SORT D2_MAC_SHARED_SOURCES)
+
+# Headers are included by tree-relative path, a handful by bare name from their own
+# directory: every directory of the shared tree that holds headers is on the path, as in
+# the Windows build, less the Mac-only and renderer trees whose globals.h would shadow.
+file(GLOB_RECURSE _mac_shared_headers CONFIGURE_DEPENDS LIST_DIRECTORIES false
+    "${CMAKE_SOURCE_DIR}/Source/*.h")
+list(FILTER _mac_shared_headers EXCLUDE REGEX
+    "^${CMAKE_SOURCE_DIR}/Source/(D2OpenGL|MacSpecific|StormMac|D2Rave|D2Uni|D2Server)/")
+set(D2_MAC_SHARED_INCLUDE_DIRS "${CMAKE_SOURCE_DIR}")
+foreach(h IN LISTS _mac_shared_headers)
+    get_filename_component(_dir "${h}" DIRECTORY)
+    list(APPEND D2_MAC_SHARED_INCLUDE_DIRS "${_dir}")
+endforeach()
+list(REMOVE_DUPLICATES D2_MAC_SHARED_INCLUDE_DIRS)
+
+add_library(d2_mac_shared_objs OBJECT EXCLUDE_FROM_ALL ${D2_MAC_SHARED_SOURCES})
+set_target_properties(d2_mac_shared_objs PROPERTIES
+    CXX_COMPILER_LAUNCHER "${D2_NODE};${CMAKE_SOURCE_DIR}/cmake/mac-cxx.ts")
+target_include_directories(d2_mac_shared_objs PRIVATE ${D2_MAC_SHARED_INCLUDE_DIRS})
+target_compile_definitions(d2_mac_shared_objs PRIVATE D2_OS_MAC=1 D2_ARCH_X86=1 D2_TARGET_CLIENT=1)
+# d2_platform.h is forced ahead of every shared unit, as in the Windows build.
+target_compile_options(d2_mac_shared_objs PRIVATE
+    -Os -fstack-protector -fpascal-strings
+    $<$<COMPILE_LANGUAGE:CXX>:-std=gnu++11 -stdlib=libc++>
+    "SHELL:-include ${CMAKE_SOURCE_DIR}/Source/D2Headers/d2_platform.h"
+    -Werror=implicit-function-declaration -ferror-limit=0)
