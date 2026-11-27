@@ -58871,47 +58871,29 @@ void __fastcall UI_SLIDER_InitAutomapParty(D2EscMenuItemStrc * pItem, D2UIMouseM
 
 // Converts mouse Y coordinate to menu item index. Iterates visible items to find which contains the Y position, checking enable callbacks. Returns -1 if no valid item hit or if item is disabled.
 static int32_t ESCMENU_GetItemIndexFromMouseY(int32_t nParam) {
-    BOOL nItemCount;
-    int nMenuItemCount = gpEscMenuItemCount->nItemCount;
-    int nMenuCenterY = (Inv::ScreenSizeY - 0x50) / 2;
-    int nMenuHeight = gpEscMenuItemCount->nVerticalSpacing * nMenuItemCount / 2;
+    int nItemCount = gpEscMenuItemCount->nItemCount;
+    int nHalfHeight = gpEscMenuItemCount->nVerticalSpacing * nItemCount / 2;
+    int nCenterY = (Inv::ScreenSizeY - 0x50) / 2;
     int32_t nFoundIndex = -1;
-    if (!(nParam > nMenuCenterY - nMenuHeight && nParam < nMenuCenterY + nMenuHeight)) {
-      return nFoundIndex;
-    }
-
-    nMenuCenterY = 0;
-    if (nMenuItemCount <= 0) {
-      return nFoundIndex;
-    }
-
-    D2EscMenuItemStrc* pItem = gpEscMenuCurrentTable;
-    do {
-      if (pItem->nYPosition && nParam >= pItem->nYPosition + nMenuItemCount) {
-        nFoundIndex = nMenuCenterY;
+    if (nParam > nCenterY - nHalfHeight && nParam < nCenterY + nHalfHeight) {
+      for (int i = 0; i < nItemCount; i++) {
+        if (gpEscMenuCurrentTable[i].nYPosition && nParam >= gpEscMenuCurrentTable[i].nYPosition + nItemCount) {
+          nFoundIndex = i;
+        }
       }
 
-      nMenuCenterY++;
-      pItem++;
-    } while (nMenuCenterY < nMenuItemCount);
+      if (nFoundIndex >= 0) {
+        if (gpEscMenuCurrentTable[nFoundIndex].nMenuItemType != -1) {
+          pfnEscMenuItemVisible pfnEnableCallback = gpEscMenuCurrentTable[nFoundIndex].fpVisibilityCheck;
+          if (!pfnEnableCallback || pfnEnableCallback()) {
+            return nFoundIndex;
+          }
+        }
 
-    if (nFoundIndex < 0) {
-      return nFoundIndex;
-    }
-    if (gpEscMenuCurrentTable[nFoundIndex].nMenuItemType != -1) {
-      pfnEscMenuItemVisible pfnEnableCallback;
-      pfnEnableCallback = gpEscMenuCurrentTable[nFoundIndex].fpVisibilityCheck;
-      if (!pfnEnableCallback) {
-        return nFoundIndex;
-      }
-
-      nItemCount = (*pfnEnableCallback)();
-      if (nItemCount) {
-        return nFoundIndex;
+        nFoundIndex = -1;
       }
     }
 
-    nFoundIndex = -1;
     return nFoundIndex;
 }
 
