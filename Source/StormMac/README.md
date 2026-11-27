@@ -41,6 +41,7 @@ Two sources of evidence:
 |`H/stpl.h`|templates|-|1.14d `__FILE__` (`Storm Mac/H/stpl.h`)|
 |`Win32_utils.cpp`|0002c670..0002eae0|55|1.14d `__FILE__` + its static initialiser 0002ea70; beta `__sinit_Win32_utils_cpp` has the same path-cache, kernel-pool and FilepathToFSSpec code|
 |`Win32_Files.cpp`|00021a94..00022ca8|12 of 16|beta `__sinit_Win32_Files_cpp`, same functions in the same order|
+|`Win32_CommandLine.mm`|0002ab8e|1|GetCommandLine, the one Objective-C function of the Win32_Process run (NSProcessInfo), so a unit of its own beside Win32_Process.cpp; Win32Mac.h is not included because its BOOL is a 32-bit integer and Objective-C's is not|
 |`Win32_Process.cpp`|00029b68..0002b1fe|31 of 43|beta `__sinit_Win32_Process_cpp`, same order; SetLastError inlined into GetModuleFileName|
 |`Win32_TimeAndDate.cpp`|0002c0ee..0002c670|16 of 16|beta `__sinit_Win32_TimeAndDate_cpp`, same order|
 |`Win32_Events.cpp`|000216b0..00021a94|7|beta: a separate unit linked before Win32_Files.cpp|
@@ -83,7 +84,7 @@ decides, the boundary is chosen as follows.
 
 |File|Range|Note|
 |-|-|-|
-|`SFILE.CPP`|0001204e..00017700|ends with its static initialiser (00017700); the run 00016a2e..0001719c and 000175b6..0001762c is the instantiations of the lists of its five record types (TSLink, TSExplicitList), and its tail 00017484..000176a0 is the stream and request destructors and the lock. The records' destructors are the `SFILE_Free...Record` functions (the callers delete the record themselves); the completion-event list has a node type of its own (SFileEventNode)|
+|`SFILE.CPP`|0001204e..00017700|ends with its static initialiser (00017700); the run 00016a2e..0001719c and 000175b6..0001762c is the instantiations of the lists of its five record types (TSLink, TSExplicitList), and its tail 00017484..000176a0 is the stream and request destructors and the lock. The records' destructors are the `SFILE_Free...Record` functions (the callers delete the record themselves); the completion-event list has a node type of its own (SFileEventNode). The instantiations are tagged on explicit instantiations at the file's end (SFILE_ReleaseFileHandle 00017210 is the request list's DeleteNode, CRITSECT_Init 000176a0 sits here: the lock's constructor calls it, SRGN and SNET call it too); the calls inside the file inline them, where the original calls the weak copies, and the linker's hidden visibility of those copies is why the static initialiser reaches the destructors with `lea` rather than through a non-lazy pointer|
 |`SGDI.cpp`|00017886..00017c32|`__FILE__` (SGDI.CPP, 0x118/0x136 in SGdiDestroy's frees); ends with its static initialiser (00017be0)|
 |`SLOG.cpp`|00017c32..00018b0b|SLogClose is its first function (the Windows build's asserts name SLOG.CPP); no static initialiser, so the end is the first function of the next file, SMemAlloc|
 |`SMEM.cpp`|00018b0b..00018cdb|SMemAlloc .. SMemInitialize; SMsgBreakHandlerChain (00018cdb) is the first of SMSG|
@@ -116,3 +117,9 @@ the list-template instantiations before it belong to that file.
 |`SCMD.CPP`|0000d43e..0000e5cf|ends with SCMD_InitStaticLists|
 |`SCODE.CPP`|0000e610..0000eb41|ends with SCODE_InitStaticLists|
 |`SCOMP.CPP`, `SERR.CPP`, `SEVT.CPP`|0000eb42..00011f70+|each ends with its static initialiser|
+
+## Boundaries recorded by the last functions of the port
+
+- `Fog/Src/ErrorManager.cpp` (shared, generated): the Mac-only `FOG_MacGetBlizzardSupportPath` (002ef7cd) is a `D2_OS_MAC` block at the end of the file. The Mac build does not compile that file yet (the shared code is not Mac-clean), so the block was checked in isolation with the clang-425 toolchain; it calls `Source::SFile::SafeCreateDirectoryTree`, which the Windows header declares `__fastcall` and the Mac one is not.
+- 00002e4d and 00002e52 (`ErrorReportingSetSupportPath`) are not Blizzard code: they belong to crashy's error-reporting API, whose other entry point is `ErrorReportingLaunch` (00002e90; `crashy::ErrorReportingLaunch` on Windows). 2e52 fills the buffer 003e2cf0 that Launch reads, both are reached through the data table at 0061610b..e and called only from FOG_InitErrorManager. `coverage/units.tsv` classes them third-party.
+- `Win32MacWindow.h` holds the message state (`Win32MacMsgState`, the rings, MSG, timers) as well as the window; Win32_Messages.cpp used to keep its own copy of the window struct with the child links at 0x54/0x58, where the window manager has 0x50 first child, 0x54 last child, 0x58 previous sibling, 0x5c next sibling.

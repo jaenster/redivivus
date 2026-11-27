@@ -2,8 +2,8 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 00002e00	entry	61	crt1.o (start)	unit	-	third-party	missing		-	
 00002e3e	D2Game::GAME::Task::TASK_ReturnTrue	10	?	unit	-	shared	missing		-	00564ca0
 00002e48	D2Game::GAME::Task::TASK_Nop	5	?	unit	-	shared	missing		-	00564cb0
-00002e4d	FUN_00002e4d	5	?	unit	-	blizzard-mac	missing		-	
-00002e52	ErrorReportingSetSupportPath	62	?	unit	-	blizzard-mac	missing		-	
+00002e4d	FUN_00002e4d	5	3rdParty/crashy/?	override	-	third-party	missing		-	
+00002e52	ErrorReportingSetSupportPath	62	3rdParty/crashy/?	override	-	third-party	missing		-	
 00002e90	Fog::System::ErrorReportingLaunch	946	?	unit	-	shared	missing		-	00401790
 00003242	crashy::Report::Constructor	50	3rdParty/crashy/?	unit	-	third-party	missing		-	00401070
 00003274	crashy::Report::ScalarDeletingDestructor	47	3rdParty/crashy/?	unit	-	third-party	missing		-	00401090
@@ -243,7 +243,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 00011eac	Storm::TSLIST_LinkNode	116	StormMac/Storm Mac/SOURCE/SEVT.CPP|StormMac/Storm Mac/SOURCE/SFILE.CPP	between	Source/StormMac/SOURCE/SEVT.CPP|Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	body	Source/StormMac/SOURCE/SEVT.CPP	yes	
 00011f20	Storm::TSLIST_UnlinkAll	71	StormMac/Storm Mac/SOURCE/SEVT.CPP|StormMac/Storm Mac/SOURCE/SFILE.CPP	between	Source/StormMac/SOURCE/SEVT.CPP|Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	body	Source/StormMac/SOURCE/SEVT.CPP	yes	
 00011f70	Storm::SEVT_InitStatics	124	StormMac/Storm Mac/SOURCE/SEVT.CPP|StormMac/Storm Mac/SOURCE/SFILE.CPP	between	Source/StormMac/SOURCE/SEVT.CPP|Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SEVT.CPP	yes	
-00011fec	Storm::Source::SFile::SFileAuthenticateArchive	98	StormMac/Storm Mac/SOURCE/SEVT.CPP|StormMac/Storm Mac/SOURCE/SFILE.CPP	between	Source/StormMac/SOURCE/SEVT.CPP|Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	missing		-	
+00011fec	Storm::Source::SFile::SFileAuthenticateArchive	98	StormMac/Storm Mac/SOURCE/SEVT.CPP|StormMac/Storm Mac/SOURCE/SFILE.CPP	between	Source/StormMac/SOURCE/SEVT.CPP|Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SFILE.CPP	yes	
 0001204e	Storm::Source::SFile::SFileAuthenticateArchiveEx	534	StormMac/Storm Mac/SOURCE/SFILE.CPP	__FILE__	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SFILE.CPP	yes	00415bb0
 00012264	Storm::Source::SFile::SFILE_CancelAsyncRequestNoReturn	41	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SFILE.CPP	yes	0041a930
 0001228d	Storm::Source::SFile::SFILE_CancelAsyncRequest	271	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SFILE.CPP	yes	0041a300
@@ -254,7 +254,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 000129bc	Storm::Source::SFile::SFileSetFilePointer	261	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SFILE.CPP	yes	004165a0
 00012ac1	Storm::Source::SFile::SFileReadFileEx2	1471	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SFILE.CPP	yes	0041aad0
 00013080	Storm::Source::SFile::SFILE_FindChunk	178	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	body	Source/StormMac/SOURCE/SFILE.CPP	yes	0041b210
-00013132	Storm::Source::SFile::SFILE_CreateCdThread	165	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	missing		-	0041a880
+00013132	Storm::Source::SFile::SFILE_CreateCdThread	165	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SFILE.CPP	yes	0041a880
 000131d7	Storm::Source::SFile::SFileDdaDestroy	255	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SFILE.CPP	yes	00419f30
 000132d6	Storm::Source::SFile::SFileDdaGetPos	203	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SFILE.CPP	yes	00418140
 000133a1	Storm::Source::SFile::SFILE_GetStreamPosition	119	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SFILE.CPP	yes	00415760
@@ -295,44 +295,44 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 00015c32	Storm::Source::SFile::SFILE_DecompressWriteCallback	50	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SFILE.CPP	yes	
 00015c64	Storm::Source::SFile::SFILE_GetHashTableIndex	424	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SFILE.CPP	yes	
 00015e0c	Storm::Source::SFile::SFILE_CdThreadProc	3106	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SFILE.CPP	yes	0041a550
-00016a2e	Storm::Source::SFile::TSLIST_Destructor	33	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	missing		-	
-00016a50	Storm::Source::SFile::TSLIST_Destructor	33	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	missing		-	
+00016a2e	Storm::Source::SFile::TSLIST_Destructor	33	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SFILE.CPP	yes	
+00016a50	Storm::Source::SFile::TSLIST_Destructor	33	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SFILE.CPP	yes	
 00016a72	Storm::Source::SFile::CRITSECT_Destroy	22	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SFILE.CPP	yes	
-00016a8e	Storm::Source::SFile::TSLIST_Destructor	33	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	missing		-	
-00016ab0	Storm::Source::SFile::TSLIST_Destructor	33	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	missing		-	
-00016ad2	Storm::Source::SFile::TSLIST_Destructor	33	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	missing		-	
-00016af4	Storm::Source::SFile::TSLIST_NewNode	118	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	missing		-	
-00016b6a	Storm::Source::SFile::TSLIST_LinkNode	116	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	missing		-	
-00016bde	Storm::Source::SFile::TSLIST_NewNode	170	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	missing		-	00418f20
-00016c88	Storm::Source::SFile::TSLIST_LinkNode	116	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	missing		-	
-00016cfc	Storm::Source::SFile::TSLINK_Unlink	63	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	missing		-	
-00016d3c	Storm::Source::SFile::TSLINK_NextLink	53	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	missing		-	
-00016d72	Storm::Source::SFile::TSLINK_Unlink	63	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	missing		-	
-00016db2	Storm::Source::SFile::TSLINK_NextLink	53	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	missing		-	
-00016de8	Storm::Source::SFile::TSLINK_Unlink	63	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	missing		-	
-00016e28	Storm::Source::SFile::TSLINK_NextLink	53	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	missing		-	
-00016e5e	Storm::Source::SFile::TSLIST_LinkNode	116	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	missing		-	
-00016ed2	Storm::Source::SFile::TSLIST_UnlinkAll	71	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	missing		-	
-00016f1a	Storm::Source::SFile::TSLIST_UnlinkAll	71	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	missing		-	
-00016f62	Storm::Source::SFile::TSLINK_Unlink	63	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	missing		-	
-00016fa2	Storm::Source::SFile::TSLINK_NextLink	53	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	missing		-	
-00016fd8	Storm::Source::SFile::TSLIST_UnlinkAll	71	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	missing		-	
-00017020	Storm::Source::SFile::TSLIST_UnlinkAll	71	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	missing		-	
-00017068	Storm::Source::SFile::TSLINK_Unlink	63	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	missing		-	
-000170a8	Storm::Source::SFile::TSLINK_NextLink	53	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	missing		-	
-000170de	Storm::Source::SFile::TSLIST_UnlinkAll	71	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	missing		-	
-00017126	Storm::Source::SFile::TSLIST_NewNode	118	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	missing		-	
-0001719c	Storm::Source::SFile::TSLIST_LinkNode	116	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	missing		-	
-00017210	Storm::Source::SFile::SFILE_ReleaseFileHandle	104	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	missing		-	
+00016a8e	Storm::Source::SFile::TSLIST_Destructor	33	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SFILE.CPP	yes	
+00016ab0	Storm::Source::SFile::TSLIST_Destructor	33	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SFILE.CPP	yes	
+00016ad2	Storm::Source::SFile::TSLIST_Destructor	33	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SFILE.CPP	yes	
+00016af4	Storm::Source::SFile::TSLIST_NewNode	118	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SFILE.CPP	yes	
+00016b6a	Storm::Source::SFile::TSLIST_LinkNode	116	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SFILE.CPP	yes	
+00016bde	Storm::Source::SFile::TSLIST_NewNode	170	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SFILE.CPP	yes	00418f20
+00016c88	Storm::Source::SFile::TSLIST_LinkNode	116	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SFILE.CPP	yes	
+00016cfc	Storm::Source::SFile::TSLINK_Unlink	63	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SFILE.CPP	yes	
+00016d3c	Storm::Source::SFile::TSLINK_NextLink	53	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SFILE.CPP	yes	
+00016d72	Storm::Source::SFile::TSLINK_Unlink	63	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SFILE.CPP	yes	
+00016db2	Storm::Source::SFile::TSLINK_NextLink	53	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SFILE.CPP	yes	
+00016de8	Storm::Source::SFile::TSLINK_Unlink	63	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SFILE.CPP	yes	
+00016e28	Storm::Source::SFile::TSLINK_NextLink	53	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SFILE.CPP	yes	
+00016e5e	Storm::Source::SFile::TSLIST_LinkNode	116	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SFILE.CPP	yes	
+00016ed2	Storm::Source::SFile::TSLIST_UnlinkAll	71	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SFILE.CPP	yes	
+00016f1a	Storm::Source::SFile::TSLIST_UnlinkAll	71	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SFILE.CPP	yes	
+00016f62	Storm::Source::SFile::TSLINK_Unlink	63	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SFILE.CPP	yes	
+00016fa2	Storm::Source::SFile::TSLINK_NextLink	53	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SFILE.CPP	yes	
+00016fd8	Storm::Source::SFile::TSLIST_UnlinkAll	71	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SFILE.CPP	yes	
+00017020	Storm::Source::SFile::TSLIST_UnlinkAll	71	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SFILE.CPP	yes	
+00017068	Storm::Source::SFile::TSLINK_Unlink	63	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SFILE.CPP	yes	
+000170a8	Storm::Source::SFile::TSLINK_NextLink	53	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SFILE.CPP	yes	
+000170de	Storm::Source::SFile::TSLIST_UnlinkAll	71	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SFILE.CPP	yes	
+00017126	Storm::Source::SFile::TSLIST_NewNode	118	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SFILE.CPP	yes	
+0001719c	Storm::Source::SFile::TSLIST_LinkNode	116	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SFILE.CPP	yes	
+00017210	Storm::Source::SFile::SFILE_ReleaseFileHandle	104	StormMac/Storm Mac/SOURCE/SFILE.CPP	file-map	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SFILE.CPP	yes	
 00017278	Storm::Source::SFile::SFILE_FreeArchiveRecord	239	StormMac/Storm Mac/SOURCE/SFILE.CPP	__FILE__	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	body	Source/StormMac/SOURCE/SFILE.CPP	yes	00418a50
 0001737c	Storm::Source::SFile::SFILE_FreeFileRecord	242	StormMac/Storm Mac/SOURCE/SFILE.CPP	__FILE__	Source/StormMac/SOURCE/SFILE.CPP	blizzard-mac	body	Source/StormMac/SOURCE/SFILE.CPP	yes	00419070
 00017484	Storm::Source::SFile::SFILE_FreeStreamRecord	82	StormMac/Storm Mac/SOURCE/SFILE.CPP|StormMac/Storm Mac/SOURCE/SGDI.CPP	between	Source/StormMac/SOURCE/SFILE.CPP|Source/StormMac/SOURCE/SGDI.CPP	blizzard-mac	body	Source/StormMac/SOURCE/SFILE.CPP	yes	
 000174ec	Storm::Source::SFile::SFILE_FreeRequestRecord	89	StormMac/Storm Mac/SOURCE/SFILE.CPP|StormMac/Storm Mac/SOURCE/SGDI.CPP	between	Source/StormMac/SOURCE/SFILE.CPP|Source/StormMac/SOURCE/SGDI.CPP	blizzard-mac	body	Source/StormMac/SOURCE/SFILE.CPP	yes	
-00017546	Storm::Source::SFile::TSLIST_DeleteNode	112	StormMac/Storm Mac/SOURCE/SFILE.CPP|StormMac/Storm Mac/SOURCE/SGDI.CPP	between	Source/StormMac/SOURCE/SFILE.CPP|Source/StormMac/SOURCE/SGDI.CPP	blizzard-mac	missing		-	00419690
-000175b6	Storm::Source::SFile::TSLIST_NewNode	118	StormMac/Storm Mac/SOURCE/SFILE.CPP|StormMac/Storm Mac/SOURCE/SGDI.CPP	between	Source/StormMac/SOURCE/SFILE.CPP|Source/StormMac/SOURCE/SGDI.CPP	blizzard-mac	missing		-	
-0001762c	Storm::TSLIST_LinkNode	116	StormMac/Storm Mac/SOURCE/SFILE.CPP|StormMac/Storm Mac/SOURCE/SGDI.CPP	between	Source/StormMac/SOURCE/SFILE.CPP|Source/StormMac/SOURCE/SGDI.CPP	blizzard-mac	missing		-	
-000176a0	Storm::CRITSECT_Init	94	StormMac/Storm Mac/SOURCE/SFILE.CPP|StormMac/Storm Mac/SOURCE/SGDI.CPP	between	Source/StormMac/SOURCE/SFILE.CPP|Source/StormMac/SOURCE/SGDI.CPP	blizzard-mac	missing		-	
-00017700	Storm::SFILE_InitStatics	390	StormMac/Storm Mac/SOURCE/SFILE.CPP|StormMac/Storm Mac/SOURCE/SGDI.CPP	between	Source/StormMac/SOURCE/SFILE.CPP|Source/StormMac/SOURCE/SGDI.CPP	blizzard-mac	missing		-	
+00017546	Storm::Source::SFile::TSLIST_DeleteNode	112	StormMac/Storm Mac/SOURCE/SFILE.CPP|StormMac/Storm Mac/SOURCE/SGDI.CPP	between	Source/StormMac/SOURCE/SFILE.CPP|Source/StormMac/SOURCE/SGDI.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SFILE.CPP	yes	00419690
+000175b6	Storm::Source::SFile::TSLIST_NewNode	118	StormMac/Storm Mac/SOURCE/SFILE.CPP|StormMac/Storm Mac/SOURCE/SGDI.CPP	between	Source/StormMac/SOURCE/SFILE.CPP|Source/StormMac/SOURCE/SGDI.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SFILE.CPP	yes	
+0001762c	Storm::TSLIST_LinkNode	116	StormMac/Storm Mac/SOURCE/SFILE.CPP|StormMac/Storm Mac/SOURCE/SGDI.CPP	between	Source/StormMac/SOURCE/SFILE.CPP|Source/StormMac/SOURCE/SGDI.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SFILE.CPP	yes	
+000176a0	Storm::CRITSECT_Init	94	StormMac/Storm Mac/SOURCE/SFILE.CPP|StormMac/Storm Mac/SOURCE/SGDI.CPP	between	Source/StormMac/SOURCE/SFILE.CPP|Source/StormMac/SOURCE/SGDI.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SFILE.CPP	yes	
+00017700	Storm::SFILE_InitStatics	390	StormMac/Storm Mac/SOURCE/SFILE.CPP|StormMac/Storm Mac/SOURCE/SGDI.CPP	between	Source/StormMac/SOURCE/SFILE.CPP|Source/StormMac/SOURCE/SGDI.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SFILE.CPP	yes	
 00017886	Storm::Source::SGdi::SGDI_DeleteObject	134	StormMac/Storm Mac/SOURCE/SGDI.CPP	__FILE__	Source/StormMac/SOURCE/SGDI.CPP	blizzard-mac	match	Source/StormMac/SOURCE/SGDI.cpp	no	
 0001790c	Storm::Source::SGdi::SGdiDestroy	212	StormMac/Storm Mac/SOURCE/SGDI.CPP	__FILE__	Source/StormMac/SOURCE/SGDI.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SGDI.cpp	no	
 000179e0	Storm::Source::SGdi::SGDI_ResizeScratchBuffer	161	StormMac/Storm Mac/SOURCE/SGDI.CPP	__FILE__	Source/StormMac/SOURCE/SGDI.CPP	blizzard-mac	nonmatch	Source/StormMac/SOURCE/SGDI.cpp	no	
@@ -707,7 +707,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 00028e7c	Storm::Win32Mac::Msg_RemoveMsgsForHWnd	159	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/unknown_messages.cpp	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Messages.cpp	no	
 00028f1b	Storm::Win32Mac::Msg_FillMouseMsgFromPoint	462	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/unknown_messages.cpp	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Messages.cpp	no	
 000290e9	Storm::Win32Mac::Msg_GetPendingMessage	613	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/unknown_messages.cpp	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Messages.cpp	no	
-0002934e	Storm::Wnd_FindWindowNeedingPaint	48	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/unknown_messages.cpp	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Messages.cpp	no	
+0002934e	Storm::Wnd_FindWindowNeedingPaint	48	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/unknown_messages.cpp	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Messages.cpp	no	
 0002937e	Storm::Win32Mac::PeekMessage	35	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/unknown_messages.cpp	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Messages.cpp	no	
 000293a1	Storm::Win32Mac::IPeekMessage	352	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/unknown_messages.cpp	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Messages.cpp	no	
 00029501	Storm::Win32Mac::GetMessage	109	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	unit	Source/StormMac/Win32Mac/Source/Win32/unknown_messages.cpp	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Messages.cpp	no	
@@ -750,7 +750,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 0002a83d	Storm::Win32Mac::GetTempPath	162	StormMac/Storm Mac/Win32 Mac/Source/Win32/Win32_Process.cpp	unit	Source/StormMac/Win32Mac/Source/Win32/Win32_Process.cpp	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Process.cpp	yes	
 0002a8df	Storm::Win32Mac::GetDiskFreeSpaceEx	202	StormMac/Storm Mac/Win32 Mac/Source/Win32/Win32_Process.cpp	unit	Source/StormMac/Win32Mac/Source/Win32/Win32_Process.cpp	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Process.cpp	yes	
 0002a9a9	Storm::Win32Mac::GetTempFileName	485	StormMac/Storm Mac/Win32 Mac/Source/Win32/Win32_Process.cpp	unit	Source/StormMac/Win32Mac/Source/Win32/Win32_Process.cpp	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_Process.cpp	yes	
-0002ab8e	Storm::Win32Mac::GetCommandLine	741	StormMac/Storm Mac/Win32 Mac/Source/Win32/Win32_Process.cpp	unit	Source/StormMac/Win32Mac/Source/Win32/Win32_Process.cpp	blizzard-mac	missing		-	
+0002ab8e	Storm::Win32Mac::GetCommandLine	741	StormMac/Storm Mac/Win32 Mac/Source/Win32/Win32_Process.cpp	unit	Source/StormMac/Win32Mac/Source/Win32/Win32_Process.cpp	blizzard-mac	nonmatch	Source/StormMac/Win32Mac/Source/Win32/Win32_CommandLine.mm	no	
 0002ae74	Storm::Win32Mac::InterlockedDecrement	18	StormMac/Storm Mac/Win32 Mac/Source/Win32/Win32_Process.cpp	unit	Source/StormMac/Win32Mac/Source/Win32/Win32_Process.cpp	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Process.cpp	yes	
 0002ae86	Storm::Win32Mac::InterlockedIncrement	18	StormMac/Storm Mac/Win32 Mac/Source/Win32/Win32_Process.cpp	unit	Source/StormMac/Win32Mac/Source/Win32/Win32_Process.cpp	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Process.cpp	yes	
 0002ae98	Storm::Win32Mac::InterlockedExchange	27	StormMac/Storm Mac/Win32 Mac/Source/Win32/Win32_Process.cpp	unit	Source/StormMac/Win32Mac/Source/Win32/Win32_Process.cpp	blizzard-mac	match	Source/StormMac/Win32Mac/Source/Win32/Win32_Process.cpp	yes	
@@ -1581,7 +1581,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 002e6e00	D2OpenGL::COGLAGPTextures::CreateTexture	420	D2OpenGL/Src/COGLAGPTextures.cpp|D2OpenGL/Src/?	between	Source/D2OpenGL/Src/COGLAGPTextures.cpp|Source/D2OpenGL/Src/?	blizzard-mac	body	Source/D2OpenGL/Src/COGLAGPTextures.cpp	yes	
 002e6fa4	D2OpenGL::COGLAGPTextures::COGLAGPTEXTURES_AcquireSlot	343	D2OpenGL/Src/COGLAGPTextures.cpp|D2OpenGL/Src/?	between	Source/D2OpenGL/Src/COGLAGPTextures.cpp|Source/D2OpenGL/Src/?	blizzard-mac	body	Source/D2OpenGL/Src/COGLAGPTextures.cpp	yes	
 002e70fc	D2OpenGL::OGL_MacGetDisplayDevice	179	D2OpenGL/Src/COGLAGPTextures.cpp|D2OpenGL/Src/?	between	Source/D2OpenGL/Src/COGLAGPTextures.cpp|Source/D2OpenGL/Src/?	blizzard-mac	body	Source/D2OpenGL/Src/MacDisplayDevice.cpp	no	
-002ef7cd	Fog::ErrorManager::FOG_MacGetBlizzardSupportPath	304	Fog/Src/ErrorManager.cpp	unit	Source/Fog/Src/ErrorManager.cpp	blizzard-mac	missing		-	
+002ef7cd	Fog::ErrorManager::FOG_MacGetBlizzardSupportPath	304	Fog/Src/ErrorManager.cpp	unit	Source/Fog/Src/ErrorManager.cpp	blizzard-mac	body	Source/Fog/Src/ErrorManager.cpp	yes	
 002f7324	MACDISPLAY_SetGammaRamp	212	?	unit	?	blizzard-mac	match	Source/D2gfx/Mac/MACDISPLAYGamma.cpp	no	
 002f73f8	MACDISPLAY_RestoreGammaRamp	86	?	unit	?	blizzard-mac	match	Source/D2gfx/Mac/MACDISPLAYGamma.cpp	no	
 002f97bc	makewt	533	RAD/Bink/?	unit	-	third-party	missing		-	
