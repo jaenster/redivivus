@@ -441,12 +441,17 @@ public:
         m_fulllist.SetLinkOffset(offsetof(T, m_linktofull));
         m_slotmask = (uint32_t)-1;
     }
-    virtual void InternalDelete(T* pNode);
+    // Never inlined: the original keeps it a function of its own even where the table's type is known.
+    __attribute__((noinline)) virtual void InternalDelete(T* pNode);
     virtual T* InternalNew(List* pList, uint32_t nExtraBytes, uint32_t dwFlags);
     virtual ~TSHashTable();
     virtual void Destroy();
 
     void InternalClear(int bUnlinkOnly);
+    // Takes a node out of both lists; the node's own storage stays.
+    void Unlink(T* pNode);
+    // Unlinks and deletes a node and returns the one after it in the full list.
+    T* DeleteNode(T* pNode);
     void InitializeTableSlots();
     int MonitorFullness(uint32_t nSlot);
     void GrowListArray(uint32_t nNewSize);
@@ -500,6 +505,22 @@ void TSHashTable<T, TKey>::InternalClear(int bUnlinkOnly) {
             }
         }
     }
+}
+
+template<class T, class TKey>
+void TSHashTable<T, TKey>::Unlink(T* pNode) {
+    if (pNode->m_linktoslot.m_next != NULL) {
+        pNode->m_linktoslot.Unlink();
+        pNode->m_linktofull.Unlink();
+    }
+}
+
+template<class T, class TKey>
+T* TSHashTable<T, TKey>::DeleteNode(T* pNode) {
+    T* pNext = m_fulllist.Next(pNode);
+    Unlink(pNode);
+    InternalDelete(pNode);
+    return pNext;
 }
 
 template<class T, class TKey>
