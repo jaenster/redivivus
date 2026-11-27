@@ -53,10 +53,9 @@ void DialogDelete(DialogPtr pDialog);
 }
 
 // 1.14d mac: 000356df
-static void Dlg_UpdateEditMenu(int nUnused, DlgMenuState* pMenuState, DialogPtr pDialog, char bRefreshScrap);
+static void Dlg_UpdateEditMenu(DialogPtr pDialog, DlgMenuState* pMenuState, char bRefreshScrap);
 // 1.14d mac: 00035f34
-static void Dlg_HandleEditMenuCommand(short* pUnused, DlgMenuState* pMenuState, DialogPtr pDialog, long nMenuResult,
-                                      short* pItemHit);
+static void Dlg_HandleEditMenuCommand(DialogPtr pDialog, DlgMenuState* pMenuState, long nMenuResult, short* pItemHit);
 
 // 1.14d mac: 0003555c
 // Saves the enabled bits of the two menus into the record, disables their items and
@@ -81,18 +80,17 @@ void Dlg_DisableMenusForModal(DialogPtr pDialog, WindowRef pWindow, DlgMenuState
                 } while (nStep != 0x110000);
                 pMenuState->wSavedBits |= (unsigned short)dwEnabledBits & 0x3FFF;
                 EnableMenuItem(hMenu, 0);
+                unsigned short nItems = pMenuState->nMenuItems;
                 unsigned short nLastItem = 0xE;
-                if (pMenuState->nMenuItems < 0xF) {
-                    nLastItem = pMenuState->nMenuItems;
+                if (nItems < 0xF) {
+                    nLastItem = nItems;
                 }
                 if ((short)nLastItem > 0) {
                     short nDisable = 1;
-                    short nNext;
                     do {
-                        nNext = nDisable + 1;
                         DisableMenuItem(hMenu, nDisable);
-                        nDisable = nNext;
-                    } while (nNext <= (short)nLastItem);
+                        nDisable++;
+                    } while (nDisable <= (short)nLastItem);
                 }
             }
         }
@@ -113,24 +111,22 @@ void Dlg_DisableMenusForModal(DialogPtr pDialog, WindowRef pWindow, DlgMenuState
                 }
                 if ((short)nLastItem >= 0) {
                     short nDisable = 0;
-                    short nNext;
                     do {
-                        nNext = nDisable + 1;
                         DisableMenuItem(hMenu, nDisable);
-                        nDisable = nNext;
-                    } while (nNext <= (short)nLastItem);
+                        nDisable++;
+                    } while (nDisable <= (short)nLastItem);
                 }
             }
         }
         DrawMenuBar();
-        Dlg_UpdateEditMenu(0, pMenuState, pDialog, 1);
+        Dlg_UpdateEditMenu(pDialog, pMenuState, 1);
     }
 }
 
 // 1.14d mac: 000356df
 // Enables or disables Cut, Copy, Paste, Clear and Select All from the text field's
 // selection, the scrap's TEXT flavor and the text length.
-static void Dlg_UpdateEditMenu(int nUnused, DlgMenuState* pMenuState, DialogPtr pDialog, char bRefreshScrap) {
+static void Dlg_UpdateEditMenu(DialogPtr pDialog, DlgMenuState* pMenuState, char bRefreshScrap) {
     if (pMenuState->nEditMenuID < 1) {
         return;
     }
@@ -138,35 +134,30 @@ static void Dlg_UpdateEditMenu(int nUnused, DlgMenuState* pMenuState, DialogPtr 
     if (hMenu == NULL) {
         return;
     }
-    bool bAnyEnabled;
-    bool bSavedEnabled;
+    bool bAnyEnabled = false;
     short nFocus = GetDialogKeyboardFocusItem(pDialog);
-    if (nFocus < 1) {
-        bSavedEnabled = (short)pMenuState->wSavedBits >= 0;
-        bAnyEnabled = false;
-    } else {
+    if (nFocus >= 1) {
         TEHandle hTE = GetDialogTextEditHandle(pDialog);
         TEPtr pTE = *hTE;
         short nSelStart = pTE->selStart;
         short nSelEnd = pTE->selEnd;
         short nTextLength = pTE->teLength;
         short nMenuItem = pMenuState->nCutItem;
-        bAnyEnabled = false;
         if (nMenuItem > 0) {
-            if (nSelEnd == nSelStart) {
-                DisableMenuItem(hMenu, nMenuItem);
-            } else {
+            if (nSelEnd != nSelStart) {
                 EnableMenuItem(hMenu, nMenuItem);
                 bAnyEnabled = true;
+            } else {
+                DisableMenuItem(hMenu, nMenuItem);
             }
         }
         nMenuItem = pMenuState->nCopyItem;
         if (nMenuItem > 0) {
-            if (nSelEnd == nSelStart) {
-                DisableMenuItem(hMenu, nMenuItem);
-            } else {
+            if (nSelEnd != nSelStart) {
                 EnableMenuItem(hMenu, nMenuItem);
                 bAnyEnabled = true;
+            } else {
+                DisableMenuItem(hMenu, nMenuItem);
             }
         }
         nMenuItem = pMenuState->nPasteItem;
@@ -181,38 +172,38 @@ static void Dlg_UpdateEditMenu(int nUnused, DlgMenuState* pMenuState, DialogPtr 
                 pMenuState->wSavedBits = (pMenuState->wSavedBits & 0xBFFF) | wScrapText;
                 nMenuItem = pMenuState->nPasteItem;
             }
-            if (wScrapText == 0) {
-                DisableMenuItem(hMenu, nMenuItem);
-            } else {
+            if (wScrapText != 0) {
                 EnableMenuItem(hMenu, nMenuItem);
                 bAnyEnabled = true;
+            } else {
+                DisableMenuItem(hMenu, nMenuItem);
             }
         }
         nMenuItem = pMenuState->nClearItem;
         if (nMenuItem > 0) {
-            if (nSelEnd == nSelStart) {
-                DisableMenuItem(hMenu, nMenuItem);
-            } else {
+            if (nSelEnd != nSelStart) {
                 EnableMenuItem(hMenu, nMenuItem);
                 bAnyEnabled = true;
+            } else {
+                DisableMenuItem(hMenu, nMenuItem);
             }
         }
         short nSelectAll = pMenuState->nSelectAllItem;
         if (nSelectAll > 0) {
-            if (nTextLength < 1) {
-                DisableMenuItem(hMenu, nSelectAll);
-            } else {
+            if (nTextLength >= 1) {
                 EnableMenuItem(hMenu, nSelectAll);
                 bAnyEnabled = true;
+            } else {
+                DisableMenuItem(hMenu, nSelectAll);
             }
         }
-        bSavedEnabled = (short)pMenuState->wSavedBits >= 0;
-        if (bAnyEnabled && (short)pMenuState->wSavedBits >= 0) {
-            EnableMenuItem(hMenu, 0);
-            pMenuState->wSavedBits |= 0x8000;
-            DrawMenuBar();
-            return;
-        }
+    }
+    bool bSavedEnabled = (short)pMenuState->wSavedBits >= 0;
+    if (bAnyEnabled && bSavedEnabled) {
+        EnableMenuItem(hMenu, 0);
+        pMenuState->wSavedBits |= 0x8000;
+        DrawMenuBar();
+        return;
     }
     if (bAnyEnabled) {
         return;
@@ -294,7 +285,7 @@ void Dlg_ModalDialogLoop(DialogPtr pDialog, DlgMenuState* pMenuState, DlgFilterP
         char cResult = 0;
         do {
             Boolean bGotEvent = WaitNextEvent(0xFFFF, &tEvent, nSleepTicks, NULL);
-            Dlg_UpdateEditMenu(bGotEvent, pMenuState, pDialog, bGotEvent);
+            Dlg_UpdateEditMenu(pDialog, pMenuState, bGotEvent);
             if (pfnIdle != NULL) {
                 pfnIdle(pDialog, pMenuState);
             }
@@ -339,7 +330,7 @@ void Dlg_ModalDialogLoop(DialogPtr pDialog, DlgMenuState* pMenuState, DlgFilterP
                         continue;
                     }
                     if (pfnMenu == NULL || (cResult = pfnMenu(pDialog, pMenuState, nMenuResult, &nItemHit)) == 0) {
-                        Dlg_HandleEditMenuCommand(&nItemHit, pMenuState, pDialog, nMenuResult, &nItemHit);
+                        Dlg_HandleEditMenuCommand(pDialog, pMenuState, nMenuResult, &nItemHit);
                     }
                     cResult = 1;
                     HiliteMenu(0);
@@ -375,7 +366,7 @@ void Dlg_ModalDialogLoop(DialogPtr pDialog, DlgMenuState* pMenuState, DlgFilterP
                                     bEnabled = false;
                                 }
                                 if (bKnown && bEnabled) {
-                                    Dlg_HandleEditMenuCommand(&nItemHit, pMenuState, pDialog, nMenuResult, &nItemHit);
+                                    Dlg_HandleEditMenuCommand(pDialog, pMenuState, nMenuResult, &nItemHit);
                                 }
                             }
                         }
@@ -440,8 +431,7 @@ void Dlg_ModalDialog(DialogPtr pDialog, DlgMenuState* pMenuState, DlgFilterProc 
 
 // 1.14d mac: 00035f34
 // Dispatches an Edit menu selection to the dialog's text field and returns the focus item.
-static void Dlg_HandleEditMenuCommand(short* pUnused, DlgMenuState* pMenuState, DialogPtr pDialog, long nMenuResult,
-                                      short* pItemHit) {
+static void Dlg_HandleEditMenuCommand(DialogPtr pDialog, DlgMenuState* pMenuState, long nMenuResult, short* pItemHit) {
     short nFocusItem = 0;
     if ((nMenuResult >> 16) == pMenuState->nMenuID) {
         GetMenuHandle(pMenuState->nMenuID);
@@ -449,11 +439,12 @@ static void Dlg_HandleEditMenuCommand(short* pUnused, DlgMenuState* pMenuState, 
         MenuRef hMenu = GetMenuHandle(pMenuState->nEditMenuID);
         if (hMenu != NULL) {
             short nItem = (short)nMenuResult;
-            if (nItem == pMenuState->nCutItem) {
-                DialogCut(pDialog);
-                TEToScrap();
-            } else if (nItem == pMenuState->nCopyItem) {
-                DialogCopy(pDialog);
+            if (nItem == pMenuState->nCutItem || nItem == pMenuState->nCopyItem) {
+                if (nItem == pMenuState->nCutItem) {
+                    DialogCut(pDialog);
+                } else {
+                    DialogCopy(pDialog);
+                }
                 TEToScrap();
             } else if (nItem == pMenuState->nPasteItem) {
                 TEFromScrap();

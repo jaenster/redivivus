@@ -37,113 +37,70 @@ DWORD GetFileTypeAndCreatorForPath(LPCSTR szPath, DWORD* pdwCreator) {
     const char* szExtension = strrchr(szPath, '.');
     if (szExtension != NULL) {
         DWORD dwExtension = 0;
-        int nIndex = 0;
-        do {
-            if ((unsigned char)szExtension[nIndex + 1] == 0) {
+        for (int nIndex = 0; nIndex < 4; nIndex++) {
+            unsigned char cChar = szExtension[nIndex + 1];
+            if (cChar == 0) {
                 break;
             }
-            dwExtension = (dwExtension << 8) | toupper((unsigned char)szExtension[nIndex + 1]);
-            nIndex++;
-        } while (nIndex < 4);
+            dwExtension = (dwExtension << 8) | toupper(cChar);
+        }
 
         DWORD dwType;
-        DWORD dwCreator;
-        if (dwExtension > 0x4C4F46) {
-            if (dwExtension < 0x4D5051) {
-                if (dwExtension == 0x4C4F47) {
-                    *pdwCreator = 'ttxt';
-                    return 'TEXT';
-                }
-                return 'Temp';
-            }
-            if (dwExtension < 0x544D50) {
-                if (dwExtension != 0x4D5051) {
-                    return 'Temp';
-                }
-                dwCreator = *pdwCreator;
-                if (dwCreator < 0x576F5721) {
-                    if (dwCreator < 0x57617233) {
-                        if (dwCreator < 0x5732424E && dwCreator < 0x53576172) {
-                            if (dwCreator == 'Dbl2') {
-                                return 'D2pq';
-                            }
-                            if (dwCreator == 'Dblo') {
-                                return 'Dmpq';
-                            }
-                            if (dwCreator == 'FrTh') {
-                                *pdwCreator = 'War3';
-                                return 'Wmpq';
-                            }
-                        }
-                    } else if (dwCreator == 'War3') {
-                        return 'Wmpq';
-                    }
-                } else if (dwCreator == 'WoW!') {
-                    return 'W!pq';
-                }
+        switch (dwExtension) {
+        case 0x424E49:  // BNI
+            dwType = 'Wmpq';
+            break;
+        case 0x4C4F47:  // LOG
+        case 0x545854:  // TXT
+            *pdwCreator = 'ttxt';
+            return 'TEXT';
+        case 0x4D5051:  // MPQ
+            switch (*pdwCreator) {
+            case 'Dbl2':
+                return 'D2pq';
+            case 'Dblo':
+                return 'Dmpq';
+            case 'FrTh':
+                *pdwCreator = 'War3';
+                return 'Wmpq';
+            case 'War3':
+                return 'Wmpq';
+            case 'WoW!':
+                return 'W!pq';
+            default:
                 return 'Smpq';
             }
-            if (dwExtension > 0x574148) {
-                if (dwExtension != 0x574149) {
-                    return 'Temp';
-                }
-                dwCreator = *pdwCreator;
-                dwType = 'Wwai';
-            } else {
-                if (dwExtension < 0x545854) {
-                    if (dwExtension != 0x544D50) {
-                        return 'Temp';
-                    }
-                    dwCreator = *pdwCreator;
-                    if (dwCreator > 0x57617232 || dwCreator > 0x5732424D || dwCreator > 0x53576171) {
-                        return 'Temp';
-                    }
-                    if (dwCreator == 'Dbl2') {
-                        return 'D2tt';
-                    }
-                    if (dwCreator != 'Dblo') {
-                        if (dwCreator != 'FrTh') {
-                            return 'Temp';
-                        }
-                        *pdwCreator = 'War3';
-                        return 'Temp';
-                    }
-                    return 'DTmp';
-                }
-                if (dwExtension < 0x573347) {
-                    if (dwExtension == 0x545854) {
-                        *pdwCreator = 'ttxt';
-                        return 'TEXT';
-                    }
-                    return 'Temp';
-                }
-                if (dwExtension > 0x573357) {
-                    if (dwExtension != 0x573358) {
-                        return 'Temp';
-                    }
-                    dwCreator = *pdwCreator;
-                    dwType = 'Ww3x';
-                } else if (dwExtension == 0x573347) {
-                    dwCreator = *pdwCreator;
-                    dwType = 'Ww3g';
-                } else if (dwExtension == 0x57334D) {
-                    dwCreator = *pdwCreator;
-                    dwType = 'Ww3m';
-                } else {
-                    if (dwExtension != 0x57334E) {
-                        return 'Temp';
-                    }
-                    dwCreator = *pdwCreator;
-                    dwType = 'Ww3n';
-                }
-            }
-        } else {
-            if (dwExtension != 0x424E49) {
+        case 0x544D50:  // TMP
+            switch (*pdwCreator) {
+            case 'Dbl2':
+                return 'D2tt';
+            case 'Dblo':
+                return 'DTmp';
+            case 'FrTh':
+                *pdwCreator = 'War3';
+                return 'Temp';
+            default:
                 return 'Temp';
             }
-            dwCreator = *pdwCreator;
-            dwType = 'Wmpq';
+        case 0x574149:  // WAI
+            dwType = 'Wwai';
+            break;
+        case 0x573347:  // W3G
+            dwType = 'Ww3g';
+            break;
+        case 0x57334D:  // W3M
+            dwType = 'Ww3m';
+            break;
+        case 0x57334E:  // W3N
+            dwType = 'Ww3n';
+            break;
+        case 0x573358:  // W3X
+            dwType = 'Ww3x';
+            break;
+        default:
+            return 'Temp';
         }
+        DWORD dwCreator = *pdwCreator;
         if (dwCreator == 'War3') {
             return dwType;
         }
@@ -170,42 +127,42 @@ static Str255 s_szAppName;
 
 // 1.14d mac: 00033f9a
 int GetApplicationInformation(void* pName, FSSpec* pFileSpec, DWORD* pdwSignature, uint64_t* pPSN) {
-    int nErr;
+    short nErr = 0;
     if (!s_bAppInfoCached) {
         nErr = GetCurrentProcess(&s_tAppPSN);
-        if (nErr != 0) {
-            return nErr;
-        }
-        ProcessInfoRec tInfo;
-        tInfo.processInfoLength = sizeof(tInfo);
-        tInfo.processName = s_szAppName;
-        tInfo.processAppSpec = &s_tAppSpec;
-        nErr = GetProcessInformation(&s_tAppPSN, &tInfo);
-        if (nErr != 0) {
-            return nErr;
-        }
-        FSRef tBundle;
-        FSSpec tSpec;
-        if (GetProcessBundleLocation(&s_tAppPSN, &tBundle) == 0) {
-            if (FSGetCatalogInfo(&tBundle, 0, NULL, NULL, &tSpec, NULL) == 0) {
-                memcpy(&s_tAppSpec, &tSpec, sizeof(FSSpec));
+        if (nErr == 0) {
+            ProcessInfoRec tInfo;
+            tInfo.processInfoLength = sizeof(tInfo);
+            tInfo.processName = s_szAppName;
+            tInfo.processAppSpec = &s_tAppSpec;
+            nErr = GetProcessInformation(&s_tAppPSN, &tInfo);
+            if (nErr == 0) {
+                FSRef tBundle;
+                FSSpec tSpec;
+                if ((short)GetProcessBundleLocation(&s_tAppPSN, &tBundle) == 0) {
+                    if ((short)FSGetCatalogInfo(&tBundle, 0, NULL, NULL, &tSpec, NULL) == 0) {
+                        memcpy(&s_tAppSpec, &tSpec, sizeof(FSSpec));
+                    }
+                }
+                s_dwAppSignature = tInfo.processSignature;
+                s_bAppInfoCached = 1;
             }
         }
-        s_dwAppSignature = tInfo.processSignature;
-        s_bAppInfoCached = 1;
     }
-    if (pdwSignature != NULL) {
-        *pdwSignature = s_dwAppSignature;
-    }
-    if (pPSN != NULL) {
-        *pPSN = *(uint64_t*)&s_tAppPSN;
-    }
-    if (pFileSpec != NULL) {
-        memcpy(pFileSpec, &s_tAppSpec, sizeof(FSSpec));
-    }
-    nErr = 0;
-    if (pName != NULL) {
-        memmove(pName, s_szAppName, s_szAppName[0] + 1);
+    if (nErr == 0) {
+        if (pdwSignature != NULL) {
+            *pdwSignature = s_dwAppSignature;
+        }
+        if (pPSN != NULL) {
+            *pPSN = *(uint64_t*)&s_tAppPSN;
+        }
+        if (pFileSpec != NULL) {
+            memcpy(pFileSpec, &s_tAppSpec, sizeof(FSSpec));
+        }
+        nErr = 0;
+        if (pName != NULL) {
+            memmove(pName, s_szAppName, s_szAppName[0] + 1);
+        }
     }
     return nErr;
 }
@@ -432,7 +389,8 @@ short UnmountVolume(ConstStr255Param pVolName, short nVRefNum) {
 }
 
 // 1.14d mac: 000346e7
-// Catalog info: the isDirectory flag (attrib bit 4) and the directory ID.
+// Catalog info: the isDirectory flag (attrib bit 4); the ID is the directory's own for a
+// directory and the parent's for a file.
 short GetDirectoryID(short nVRefNum, long dwDirID, ConstStr255Param pName, long* pDirID, Boolean* pbIsDirectory) {
     CInfoPBRec tParamBlock;
     short nResult = GetCatInfoNoName(nVRefNum, dwDirID, pName, &tParamBlock);
@@ -440,9 +398,10 @@ short GetDirectoryID(short nVRefNum, long dwDirID, ConstStr255Param pName, long*
         Boolean bIsDirectory = (tParamBlock.hFileInfo.ioFlAttrib >> 4) & 1;
         *pbIsDirectory = bIsDirectory;
         if (bIsDirectory) {
-            tParamBlock.hFileInfo.ioDirID = tParamBlock.dirInfo.ioDrDirID;
+            *pDirID = tParamBlock.dirInfo.ioDrDirID;
+        } else {
+            *pDirID = tParamBlock.hFileInfo.ioFlParID;
         }
-        *pDirID = tParamBlock.hFileInfo.ioDirID;
     }
     return nResult;
 }
@@ -674,11 +633,11 @@ int SaveFSSpecFromMem(FSSpec* pFSSpec, const BYTE* pBuffer, int nSize, char bRes
 // 1.14d mac: 00034f87
 // Walks the Pascal path at each ':', creating the directories FSMakeFSSpec reports missing,
 // then saves the buffer.
-int SaveFileFromMemCreateDirs(const unsigned char* pPath, const BYTE* pBuffer, int nSize, char bResourceFork,
-                              char bUseTempFolder, char bParseTrailer) {
+int SaveFileFromMemCreateDirs(const unsigned char* pPath, const BYTE* pBuffer, int nSize, unsigned char bResourceFork,
+                              unsigned char bUseTempFolder, unsigned char bParseTrailer) {
+    FSSpec tSpec;
     short nVRefNum;
     long dwDirID;
-    FSSpec tSpec;
     short nResult;
     if (bUseTempFolder == 0) {
         nVRefNum = s_tAppLocation.vRefNum;
@@ -686,39 +645,42 @@ int SaveFileFromMemCreateDirs(const unsigned char* pPath, const BYTE* pBuffer, i
     } else {
         nResult = FindFolder(kOnSystemDisk, kTemporaryFolderType, true, &nVRefNum, &dwDirID);
         if (nResult != 0) {
-            return nResult;
+            goto done;
         }
     }
-    unsigned char nPathLen = *pPath;
-    if (nPathLen > 1) {
-        size_t nPos = 2;
-        do {
-            if (pPath[nPos] == ':' && pPath[nPos - 1] != ':') {
-                unsigned char abPartialPath[256];
-                memcpy(abPartialPath, pPath, nPos);
-                abPartialPath[0] = (unsigned char)(nPos - 1);
-                short nErr = FSMakeFSSpec(nVRefNum, dwDirID, abPartialPath, &tSpec);
-                if (nErr == fnfErr) {
-                    long dwNewDirID;
-                    nErr = FSpDirCreate(&tSpec, smSystemScript, &dwNewDirID);
-                    nResult = -120;
+    {
+        unsigned char nPathLen = *pPath;
+        if (nPathLen > 1) {
+            size_t nPos = 2;
+            do {
+                if (pPath[nPos] == ':' && pPath[nPos - 1] != ':') {
+                    unsigned char abPartialPath[256];
+                    memcpy(abPartialPath, pPath, nPos);
+                    abPartialPath[0] = (unsigned char)(nPos - 1);
+                    short nErr = FSMakeFSSpec(nVRefNum, dwDirID, abPartialPath, &tSpec);
                     if (nErr == fnfErr) {
-                        return nResult;
+                        long dwNewDirID;
+                        nErr = FSpDirCreate(&tSpec, smSystemScript, &dwNewDirID);
+                        nResult = -120;
+                        if (nErr == fnfErr) {
+                            goto done;
+                        }
+                    }
+                    nResult = nErr;
+                    if (nResult != 0) {
+                        goto check;
                     }
                 }
-                nResult = nErr;
-                if (nResult != 0) {
-                    goto check;
-                }
-            }
-            nPos++;
-        } while ((int)nPos <= (int)nPathLen);
+                nPos++;
+            } while ((int)nPos <= (int)nPathLen);
+        }
     }
     nResult = FSMakeFSSpec(nVRefNum, dwDirID, pPath, &tSpec);
 check:
     if (nResult == 0 || nResult == fnfErr) {
         nResult = SaveFSSpecFromMem(&tSpec, pBuffer, nSize, bResourceFork, bParseTrailer);
     }
+done:
     return nResult;
 }
 
@@ -728,11 +690,11 @@ int PathToFSSpecCreateDirs(short nVRefNum, long dwDirID, const char* szPath, cha
 
 // 1.14d mac: 0003513f
 // Saves a buffer under a backslash-separated Windows path, creating its directories.
-int SaveWinPathFileFromMem(const char* szPath, const BYTE* pBuffer, int nSize, char bResourceFork,
-                           char bUseTempFolder, char bParseTrailer) {
+int SaveWinPathFileFromMem(const char* szPath, const BYTE* pBuffer, int nSize, unsigned char bResourceFork,
+                           unsigned char bUseTempFolder, unsigned char bParseTrailer) {
+    FSSpec tSpec;
     short nVRefNum;
     long dwDirID;
-    FSSpec tSpec;
     short nResult;
     if (bUseTempFolder == 0) {
         nVRefNum = s_tAppLocation.vRefNum;
@@ -740,13 +702,14 @@ int SaveWinPathFileFromMem(const char* szPath, const BYTE* pBuffer, int nSize, c
     } else {
         nResult = FindFolder(kOnSystemDisk, kTemporaryFolderType, true, &nVRefNum, &dwDirID);
         if (nResult != 0) {
-            return nResult;
+            goto done;
         }
     }
     nResult = PathToFSSpecCreateDirs(nVRefNum, dwDirID, szPath, '\\', 1, &tSpec, NULL, NULL, NULL, 0);
     if (nResult == 0 || nResult == fnfErr) {
         nResult = SaveFSSpecFromMem(&tSpec, pBuffer, nSize, bResourceFork, bParseTrailer);
     }
+done:
     return nResult;
 }
 
@@ -778,25 +741,25 @@ void SetTextState(const short* pTextState) {
 // 1.14d mac: 00035351
 // A volume with a drive number that is locked, sized between 300 and 850 MiB and, by its
 // volume parameters, a CD: 1, else 0.
-BOOL STORM_IsCDVolume(unsigned short nVRefNum) {
+unsigned char STORM_IsCDVolume(unsigned short nVRefNum) {
     HParamBlockRec tVolInfo;
     unsigned char abVolName[256];
     char szVolName[256];
     memset(&tVolInfo, 0, sizeof(tVolInfo));
-    tVolInfo.volumeParam.ioVRefNum = nVRefNum;
     tVolInfo.volumeParam.ioNamePtr = abVolName;
-    BOOL bResult = 0;
+    tVolInfo.volumeParam.ioVRefNum = nVRefNum;
+    unsigned char bResult = 0;
     if (PBHGetVInfoSync(&tVolInfo) == 0) {
         CopyPascalStringToC(abVolName, szVolName);
-        if (tVolInfo.volumeParam.ioVDrvInfo > 0 && (tVolInfo.volumeParam.ioVAtrb & 0x80800000) != 0 &&
-            (tVolInfo.volumeParam.ioVAlBlkSiz >> 16) * tVolInfo.volumeParam.ioVNmAlBlks + 0xED400000 < 0x22600001) {
+        if (tVolInfo.volumeParam.ioVDrvInfo > 0 && (tVolInfo.volumeParam.ioVAtrb & 0x8080) != 0 &&
+            tVolInfo.volumeParam.ioVNmAlBlks * tVolInfo.volumeParam.ioVAlBlkSiz + 0xED400000 <= 0x22600000) {
+            HIOParam tVolParms;
             GetVolParmsInfoBuffer tParms;
-            HParamBlockRec tVolParms;
             memset(&tVolParms, 0, sizeof(tVolParms));
-            tVolParms.ioParam.ioVRefNum = nVRefNum;
-            tVolParms.ioParam.ioBuffer = (Ptr)&tParms;
-            tVolParms.ioParam.ioReqCount = 0x20;
-            PBHGetVolParmsSync(&tVolParms);
+            tVolParms.ioVRefNum = nVRefNum;
+            tVolParms.ioBuffer = (Ptr)&tParms;
+            tVolParms.ioReqCount = 0x20;
+            PBHGetVolParmsSync((HParamBlockRec*)&tVolParms);
             if (tParms.vMVersion < 3 || (tParms.vMExtendedAttributes & 1) != 0) {
                 bResult = 1;
             }
@@ -829,7 +792,7 @@ void SMemDestroy(void);
 void SErrDestroy(void);
 void SLogDestroy(void);
 void WinDestroy(void);
-void FUN_0001e320(void);
+void Mem_Nop(void);
 // 1.14d mac: 000354f4
 void MyRuntimeTerminate(void) {
     FPSetFatalToDebugger(1);
@@ -841,7 +804,7 @@ void MyRuntimeTerminate(void) {
     SErrDestroy();
     SLogDestroy();
     WinDestroy();
-    FUN_0001e320();
+    Mem_Nop();
 }
 
 HANDLE GetModuleHandle(LPCSTR szModuleName);

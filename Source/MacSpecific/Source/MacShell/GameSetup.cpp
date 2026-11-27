@@ -126,7 +126,15 @@ OSErr MAC_HandleTSMPosToOffset(const AppleEvent* pAppleEvent, AppleEvent* pReply
 OSErr MAC_HandleTSMOffsetToPos(const AppleEvent* pAppleEvent, AppleEvent* pReply);
 static void MAC_ShowFatalErrorAndExit(const unsigned char* szMessage);
 void FUN_0019db13(void);
-__attribute__((noinline)) void FUN_0019be53(int nExitCode);
+__attribute__((noinline, weak)) void FUN_0019be53(int nExitCode);
+__attribute__((noinline)) void FUN_0019b290(void);
+__attribute__((noinline)) void FUN_0019b2a2(void);
+__attribute__((noinline, weak)) void FUN_0019b2b4(int nExitCode);
+__attribute__((noinline)) bool MAC_PostKeyDown(EventRecord* pEvent);
+__attribute__((noinline)) bool MAC_PostKeyUp(EventRecord* pEvent);
+__attribute__((noinline)) uint8_t FUN_0019bbcd(uint32_t nCommand);
+__attribute__((noinline)) void* FUN_0019bbe8(void);
+extern int g_nMacAppInstance __attribute__((weak));
 extern uint8_t g_bMacMenuToggle;
 void FUN_0019e432(void);
 void MAC_SetWorkingDirectoryToAppFolder(void);
@@ -584,11 +592,13 @@ extern const char* gApplicationModeCommandLineArgumentArray[6];
 
 void MAC_ParseCommandLine(MacDisplayState* pState, const char* szCmdLine);
 Boolean FUN_0019cc81(int nOption0, int nFullScreen);
+// Weak: the callers keep their unused argument stores, as with a callee in another unit.
+int MAC_ParseCommandLineAndRun(int nInstance, int nUnused1, int nUnused2, int nUnused3) __attribute__((weak));
 
 // 1.14d mac: 0019ae9c
 // Builds the command line (the process's own, else the one saved in the registry, plus
 // -skiptobnet), picks the application mode and hands over to ApplicationMain.
-int MAC_ParseCommandLineAndRun(int nInstance) {
+int MAC_ParseCommandLineAndRun(int nInstance, int nUnused1, int nUnused2, int nUnused3) {
     char szVersion[260];
     char szCmdBuf[2048];
     char szSavedCmdLine[512];
@@ -1117,7 +1127,7 @@ void FUN_0019be53(int nExitCode) {
 // handlers off again.
 void FUN_0019be79(void) {
     FUN_0019b290();
-    int nExitCode = MAC_ParseCommandLineAndRun((int)FUN_0019bbe8());
+    int nExitCode = MAC_ParseCommandLineAndRun((int)FUN_0019bbe8(), 0, 0, 0);
     FUN_0019b2a2();
     g_nMacAppInstance = 0;
     FUN_0019b2b4(nExitCode);
