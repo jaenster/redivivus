@@ -1232,7 +1232,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 0005ad60	Bnclient::BNET_StaticInitLogCritSect	63	?	unpaired	-	compiler	missing		-		
 0005b525	Bnclient::IDEA_MulInverse	94	?	unpaired	?	shared-unpaired	missing		-	005242f0	
 0005b5ec	Bnclient::IDEA_InvertKey	283	?	unpaired	?	shared-unpaired	missing		-	005243e0	
-0005c2ca	Bnclient::BNNews::BNNEWS_RequestNews	684	D2BNClient/BNNews.cpp	__FILE__	Source/D2BNClient/BNNews.cpp	blizzard-mac	missing		-		
+0005c2ca	Bnclient::BNNews::BNNEWS_RequestNews	684	D2BNClient/BNNews.cpp	__FILE__	Source/D2BNClient/BNNews.cpp	shared-unpaired	missing		-	0051dbf0	
 0005c580	Bnclient::BNNews::BNNEWS_NotifyCallbacks	116	Bnclient/BNNews.cpp	file-map	Source/Bnclient/BNNews.cpp	shared-unpaired	missing		-	0051d510	
 0005c676	Bnclient::BNNews::BNNEWS_HandleNewsInfo	914	D2BNClient/BNNews.cpp	__FILE__	Source/D2BNClient/BNNews.cpp	shared-unpaired	missing		-	0051d860	
 0005ca08	TSGROWABLEARRAY_Destroy	61	?	unpaired	?	blizzard-mac	missing		-		
@@ -1892,7 +1892,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 001fb32c	D2Game::PLAYER_SpendStatPointsOnDexterity	91	?	unpaired	?	blizzard-mac	missing		-		
 00205604	D2Game::PLAYER::PlrMsg::FUN_00205604	37	D2Game/PLAYER/PlrMsg.cpp	file-map	Source/D2Game/PLAYER/PlrMsg.cpp	blizzard-mac	match	Source/D2Game/Player/PlayerMsg.cpp	no		
 002056d0	D2Game::PLAYER::PlayerMsg::PLRMSG_ValidateNpcInteract	406	D2Game/PLAYER/PlrMsg.cpp	file-map	Source/D2Game/PLAYER/PlrMsg.cpp	shared-unpaired	missing		-	0054b930	
-002151c9	D2Game::Quests::QUESTS::FUN_002151c9	68	D2Game/QUESTS/QUESTS.CPP	file-map	Source/D2Game/QUESTS/QUESTS.CPP	blizzard-mac	missing		-		
+002151c9	D2Game::Quests::QUESTS::FUN_002151c9	68	D2Game/QUESTS/QUESTS.CPP	file-map	Source/D2Game/QUESTS/QUESTS.CPP	shared-unpaired	missing		-	005447a0	
 002163d0	D2Game::Quests::QUESTS::QUEST_MarkActNPCsAsIntroduced	107	D2Game/QUESTS/QUESTS.CPP	file-map	Source/D2Game/QUESTS/QUESTS.CPP	shared-unpaired	missing		-	00544fa0	
 00219349	D2Game::Quests::QUESTS::A1Q3::Q03_NpcGossipHandler	173	D2Game/Quests/a1q3.cpp	file-map	Source/D2Game/Quests/a1q3.cpp	shared-unpaired	missing		-	005912e0	
 0021abc1	D2Game::Quests::QUESTS::A1Q4::Q04_NotifyQuestStateToPlayer	173	D2Game/Quests/a1q4.cpp	file-map	Source/D2Game/Quests/a1q4.cpp	shared-unpaired	missing		-	005920d0	
@@ -1928,7 +1928,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 00248873	D2Game::SKILLS::SkillAss::SKILLASS_OnChargeUpStateExpire	37	D2Game/SKILLS/SkillAss.cpp	file-map	Source/D2Game/SKILLS/SkillAss.cpp	blizzard-mac	match	Source/D2Game/Skills/SkillAss.cpp	no		
 0024eba7	D2Game::SKILLASS_SetupMissilePath	148	?	unpaired	?	shared-unpaired	missing		-	005d40f0	
 002584aa	D2Game::SKILLEMONST_RemoveBloodManaStatList	59	?	unpaired	?	blizzard-mac	missing		-		
-00267b1c	D2Game::SKILLS::SkillNec::FUN_00267b1c	381	D2Game/SKILLS/SkillNec.cpp	file-map	Source/D2Game/SKILLS/SkillNec.cpp	blizzard-mac	missing		-		
+00267b1c	D2Game::SKILLS::SkillNec::FUN_00267b1c	381	D2Game/SKILLS/SkillNec.cpp	file-map	Source/D2Game/SKILLS/SkillNec.cpp	shared-unpaired	missing		-	005c4180	
 0026ed6e	FUN_0026ed6e	45	?	unpaired	?	blizzard-mac	missing		-		
 00276341	D2Game::SKILLPAL_AuraCallback_Redemption	66	?	unpaired	?	shared-unpaired	missing		-	005d0d70	
 002779c2	D2Game::PLAYERLIST_SetHostileDelay	59	?	unpaired	?	shared-unpaired	missing		-	0055b720	
@@ -2307,9 +2307,9 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 002ed89d	Fog::Src::D2QSSocket::QSSOCKET_ReceiveLoop	845	?	unpaired	?	shared-unpaired	missing		-	006bc3a0	
 002edfed	Fog::FUN_002edfed	78	?	unpaired	?	blizzard-mac	missing		-		
 002ee03b	Fog::FOG_ArrayGetByHandle	175	?	unpaired	?	blizzard-mac	missing		-		
-002eed78	Fog::ErrorManager::FOG_InitErrorManager	737	Fog/Src/ErrorManager.cpp	file-map	Source/Fog/Src/ErrorManager.cpp	blizzard-mac	missing		-		
+002eed78	Fog::ErrorManager::FOG_InitErrorManager	737	Fog/Src/ErrorManager.cpp	file-map	Source/Fog/Src/ErrorManager.cpp	blizzard-mac	nonmatch	Source/Fog/Src/ErrorManager.cpp	yes		stack-layout
 002ef085	Fog::ErrorManager::FOG_GetFramePointer	7	Fog/Src/ErrorManager.cpp	file-map	Source/Fog/Src/ErrorManager.cpp	shared-unpaired	missing		-		
-002ef339	Fog::ErrorManager::FUN_002ef339	18	Fog/Src/ErrorManager.cpp	file-map	Source/Fog/Src/ErrorManager.cpp	blizzard-mac	missing		-		
+002ef339	Fog::ErrorManager::FUN_002ef339	18	Fog/Src/ErrorManager.cpp	file-map	Source/Fog/Src/ErrorManager.cpp	shared-unpaired	missing		-	00407ff0	
 002ef34b	Fog::ErrorManager::FUN_002ef34b	10	Fog/Src/ErrorManager.cpp	file-map	Source/Fog/Src/ErrorManager.cpp	blizzard-mac	match	Source/Fog/Src/ErrorManager.cpp	yes		
 002ef3cd	Fog::ErrorManager::FUN_002ef3cd	7	Fog/Src/ErrorManager.cpp	file-map	Source/Fog/Src/ErrorManager.cpp	blizzard-mac	match	Source/Fog/Src/ErrorManager.cpp	yes		
 002ef740	Fog::ErrorManager::FOG_GetInstallPath	44	Fog/Src/ErrorManager.cpp	file-map	Source/Fog/Src/ErrorManager.cpp	blizzard-mac	match	Source/Fog/Source/SFile.cpp	no		
@@ -2324,9 +2324,9 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 002f10de	Fog::STORMLIST_UnlinkAll	71	?	unpaired	?	blizzard-mac	missing		-		
 002f1130	Fog::FUN_002f1130	160	?	unpaired	-	compiler	missing		-		
 002f1443	Fog::Excel::Excel::TXT_GetLinesCountFromBinFieldExcel	11	Fog/Src/Excel/Excel.cpp	file-map	Source/Fog/Src/Excel/Excel.cpp	shared-unpaired	missing		-	006bcde0	
-002f2675	Fog::Excel::Excel::FUN_002f2675	25	Fog/Src/Excel/Excel.cpp	file-map	Source/Fog/Src/Excel/Excel.cpp	blizzard-mac	missing		-		
-002f268e	Fog::Excel::Excel::FUN_002f268e	24	Fog/Src/Excel/Excel.cpp	file-map	Source/Fog/Src/Excel/Excel.cpp	blizzard-mac	missing		-		
-002f27cd	Fog::Src::Excel::Excel::FOG_GetStringFromLinkIndex	137	Fog/Src/Excel/Excel.cpp	file-map	Source/Fog/Src/Excel/Excel.cpp	blizzard-mac	missing		-		
+002f2675	Fog::Excel::Excel::FUN_002f2675	25	Fog/Src/Excel/Excel.cpp	file-map	Source/Fog/Src/Excel/Excel.cpp	blizzard-mac	match	Source/Fog/Src/Excel/Excel.cpp	yes		
+002f268e	Fog::Excel::Excel::FUN_002f268e	24	Fog/Src/Excel/Excel.cpp	file-map	Source/Fog/Src/Excel/Excel.cpp	blizzard-mac	match	Source/Fog/Src/Excel/Excel.cpp	yes		
+002f27cd	Fog::Src::Excel::Excel::FOG_GetStringFromLinkIndex	137	Fog/Src/Excel/Excel.cpp	file-map	Source/Fog/Src/Excel/Excel.cpp	blizzard-mac	nonmatch	Source/Fog/Src/Excel/Excel.cpp	yes		sched
 002f33e9	Fog::FUN_002f33e9	7	?	unpaired	?	blizzard-mac	missing		-		
 002f33ff	Fog::FUN_002f33ff	7	?	unpaired	?	blizzard-mac	missing		-		
 002f3406	Fog::FUN_002f3406	141	?	unpaired	?	blizzard-mac	missing		-		
@@ -2335,7 +2335,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 002f3d5a	Fog::Src::QServer::QServer::QSERVER_SendToClient	80	Fog/Src/QServer/QServer.cpp	file-map	Source/Fog/Src/QServer/QServer.cpp	shared-unpaired	missing		-	006bfad0	
 002f3daa	Fog::Src::QServer::QServer::QSERVER_CreateClientConnection	486	Fog/Src/QServer/QServer.cpp	__FILE__	Source/Fog/Src/QServer/QServer.cpp	shared-unpaired	missing		-	006bfb70	
 002f4400	Fog::Src::QServer::QServer::QSERVER_UpdateHackListTimers	400	Fog/Src/QServer/QServer.cpp	file-map	Source/Fog/Src/QServer/QServer.cpp	shared-unpaired	missing		-	006be700	
-002f471c	Fog::Src::QServer::QServer::QSERVER_MatchesAddressMaskList	76	Fog/Src/QServer/QServer.cpp	file-map	Source/Fog/Src/QServer/QServer.cpp	blizzard-mac	missing		-		
+002f471c	Fog::Src::QServer::QServer::QSERVER_MatchesAddressMaskList	76	Fog/Src/QServer/QServer.cpp	file-map	Source/Fog/Src/QServer/QServer.cpp	shared-unpaired	missing		-	006bf660	
 002f47d4	Fog::Src::QServer::QServer::QSERVER_IsAddressConnectionLimitReached	124	Fog/Src/QServer/QServer.cpp	file-map	Source/Fog/Src/QServer/QServer.cpp	shared-unpaired	missing		-	006be9f0	
 002f5529	Fog::FUN_002f5529	17	?	unpaired	?	blizzard-mac	missing		-		
 002f553b	Fog::FUN_002f553b	64	?	unpaired	?	blizzard-mac	missing		-		
