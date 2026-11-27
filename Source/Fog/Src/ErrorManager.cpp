@@ -18,6 +18,9 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/Src/ErrorManager.data.h"
 #include "Source/D2Headers/D2Arch.h"
+#if !defined(_WIN32) && D2_OS_MAC
+#include <CoreServices/CoreServices.h>
+#endif
 static_assert(sizeof(void*) != 4 || sizeof(D2BlizzardErrorArgument) == 0x54, "D2BlizzardErrorArgument is 0x54 bytes on 32-bit");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -5018,5 +5021,37 @@ void __fastcall StubHook2_Unref_004095d0(int32_t nReserved) {
 _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9bfb(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext) {
     return ExceptionContinueSearch;
 }
+
+#if !defined(_WIN32) && D2_OS_MAC
+// The Mac build keeps its error and log files in a "Blizzard" folder of the user's Application
+// Support folder, as a Mac path token ("\\{MacPathNN}\\Blizzard\\").
+// 1.14d mac: 0002c7c3
+void PATH_MakeMacPathToken(char* szOut, const unsigned char* pName, int16_t nVRefNum, int32_t nDirID, int32_t n08,
+                           int32_t n0C);
+// 1.14d mac: 002ef69a
+int FOG_AppendBackslash(char* szPath, size_t nSize);
+// 1.14d mac: 0001c806
+int SStrCopy(char* szDest, const char* szSource, int nDestSize);
+// 1.14d mac: 0001ca30
+uint32_t SStrLen(const char* szString);
+
+// 1.14d mac: 002ef7cd
+bool FOG_MacGetBlizzardSupportPath(char* szPath, size_t nSize) {
+    FSRef tFolderRef;
+    FSCatalogInfo tCatalogInfo;
+    char szSupportPath[260];
+    bool bResult = false;
+    if (FSFindFolder(kUserDomain, kApplicationSupportFolderType, true, &tFolderRef) == noErr) {
+        FSGetCatalogInfo(&tFolderRef, kFSCatInfoVolume | kFSCatInfoNodeID, &tCatalogInfo, NULL, NULL, NULL);
+        PATH_MakeMacPathToken(szSupportPath, (const unsigned char*)"\pBlizzard", tCatalogInfo.volume,
+                              tCatalogInfo.nodeID, 0, 0);
+        if (FOG_AppendBackslash(szSupportPath, nSize) && Fog::Source::SFile::SafeCreateDirectoryTree(szSupportPath)) {
+            SStrCopy(szPath, szSupportPath, nSize);
+            bResult = SStrLen(szPath) == SStrLen(szSupportPath);
+        }
+    }
+    return bResult;
+}
+#endif
 
 } // namespace Fog::Src::ErrorManager

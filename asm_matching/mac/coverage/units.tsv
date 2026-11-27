@@ -21,6 +21,8 @@
 lo	hi	kind	class	file	redivivus	evidence
 00002e00	00002e3e	fixed	third-party	crt1.o (start)	-	the Mach-O entry, the CRT start stub
 00002e3e	00003242	fixed	shared	?	-	Fog error-reporting glue: ErrorReportingLaunch pairs with Fog::System
+00002e4d		override	third-party	3rdParty/crashy/?	-	crashy's error-reporting API, not Fog: its two entry points are called only by FOG_InitErrorManager and reached through the data table 0061610b..e beside ErrorReportingLaunch (crashy::ErrorReportingLaunch on Windows); 2e52 fills the 1024-byte buffer 003e2cf0 that ErrorReportingLaunch reads, 2e4d is an empty hook (push/pop ebp, ret)
+00002e52		override	third-party	3rdParty/crashy/?	-	crashy's error-reporting API, not Fog: its two entry points are called only by FOG_InitErrorManager and reached through the data table 0061610b..e beside ErrorReportingLaunch (crashy::ErrorReportingLaunch on Windows); 2e52 fills the 1024-byte buffer 003e2cf0 that ErrorReportingLaunch reads, 2e4d is an empty hook (push/pop ebp, ret)
 00003242	000035c0	fixed	third-party	3rdParty/crashy/?	-	crashy::Report, shared with Windows Fog::_3rdparty::crashy
 000035c0	00008fc0	fixed	third-party	3rdParty/crashy/?	-	CRASHY_*: Mach exception ports, MIG mach_exc_server, signal thread
 00008fc0	000095fc	fixed	third-party	3rdParty/crashy/contrib/mach_star/mach_override/mach_override.c	-	__FILE__ 0030d797 in 00009047
