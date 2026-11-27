@@ -306,12 +306,8 @@ static inline int WideCharToMultiByte(UINT cp, DWORD flags, const uint16_t* src,
 // layer implements, in place of the stand-ins below. Sockets are BSD's, as the Mac build
 // called them (Fog's Safesock and QServer): their types come from the system.
 #  include "Source/StormMac/Win32Mac/Source/Win32/Win32Mac.h"
-#  include <sys/types.h>
-#  include <sys/socket.h>
-#  include <sys/select.h>
-#  include <sys/time.h>
-#  include <netinet/in.h>
 #  include <limits.h>
+#  include "Source/D2Headers/d2_mac_sockets.h"
 #endif
 #ifndef _countof
 #  define _countof(a) (sizeof(a) / sizeof((a)[0]))
@@ -1032,6 +1028,10 @@ namespace _Wrappers {
   static inline void WSASetLastError(int iError) { ::WSASetLastError(iError); }
 }  // namespace _Wrappers
 #endif // _WIN32
+
+#if !defined(_WIN32) && D2_OS_MAC
+#  include "Source/D2Headers/d2_mac_win32.h"
+#endif
 
 // Array rows held by pointer (Ghidra `T[N] *` return and global types)
 typedef char D2Row_char_32[32];
