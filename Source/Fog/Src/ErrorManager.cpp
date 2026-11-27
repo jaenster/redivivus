@@ -300,10 +300,10 @@ static char* gaMacLanguageNames[15] = {
 // 1.14d mac: 002ee3df
 // The Mac report has no process/admin lines; only the application, inspector tags, both locales and the log attachments.
 // The inspector project id is only written once FOG_InitErrorManager has run (g_nProjectId is set there).
-bool __fastcall WriteCrashReportProcessInfo(::Report * pReport) {
+void __fastcall WriteCrashReportProcessInfo(::Report * pReport) {
     uint8_t* aLogFilePaths[21];
     if (!_3rdparty::crashy::IsOpen(pReport)) {
-      return false;
+      return;
     }
 
     _3rdparty::crashy::Printf(pReport, "<Application>%s\n", g_szApplicationName);
@@ -671,14 +671,14 @@ int __fastcall DumpLog(D2CrashReportStrc * pCrashInfo, void * pUserContext) {
 #if !defined(_WIN32) && D2_OS_MAC
 // 1.14d mac: 002ee625
 // Unlike the Windows filter the Mac one ends the process itself (CRASHY_Exit); it never sets a return value.
-int __fastcall DumpLog(D2CrashReportStrc * pCrashInfo, void * pUserContext) {
+void __fastcall DumpLog(D2CrashReportStrc * pCrashInfo, void * pUserContext) {
     static int32_t lpAddend_003cec90 = -0x1; D2_STATIC_GUARD(lpAddend_003cec90, "Fog::Src::ErrorManager::DumpLog::lpAddend_003cec90");
 
     D2BlizzardErrorArgument errorArg;
     ::Report crashFile;
     uint32_t nSkipFrames;
     if (InterlockedIncrement((LONG*)&lpAddend_003cec90) != 0) {
-      return 0;
+      return;
     }
 
     g_dwErrorState = 1;
@@ -748,7 +748,7 @@ int __fastcall DumpLog(D2CrashReportStrc * pCrashInfo, void * pUserContext) {
     }
 
     _3rdparty::crashy::Destructor(&crashFile);
-    return 0;
+    return;
 }
 #endif
 

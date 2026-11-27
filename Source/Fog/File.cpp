@@ -32,7 +32,12 @@ typedef void (__fastcall *fnCrashOutputLine)(::Report * pReport, char * szString
 #endif
 #ifndef RECON_FPTD_pfnFogExceptionFilter
 #define RECON_FPTD_pfnFogExceptionFilter
+#if !defined(_WIN32) && D2_OS_MAC
+// The Mac exception callback returns nothing (1.14d mac 002ee625).
+typedef void (__fastcall *pfnFogExceptionFilter)(D2CrashReportStrc * pExceptionReport, void * pUserContext);
+#else
 typedef int (__fastcall *pfnFogExceptionFilter)(D2CrashReportStrc * pExceptionReport, void * pUserContext);
+#endif
 #endif
 
 pfnFogExceptionFilter gpCurrentExceptionFilter = (pfnFogExceptionFilter)0; D2_GLOBAL_GUARD(gpCurrentExceptionFilter, "gpCurrentExceptionFilter");
