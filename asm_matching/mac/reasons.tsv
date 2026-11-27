@@ -573,3 +573,4 @@ addr	name	reason_class	detail
 ||||||| parent of 0f2b617f (feat(mac): port insert-CD dialog, reclass front end and credits)
 002c9eb7	D2Launch::MainMenus::MAINMENU_RunInsertExpansionCdDialog	unverified-ref	all 22 instructions identical; the byte at 0054a931 is fpInsertPlayCd, which shares its name with a function and so carries no address tag, so cmp names it as an offset from the neighbouring tagged global
 002c9f0f	D2Launch::MainMenus::MAINMENU_PollInsertCdDialog	unverified-ref	all 37 instructions identical; the same untagged byte at 0054a931 (fpInsertPlayCd) shows as an offset from gbCinematicsMenuShown
+001401ca	D2Common::DATATBLS::DataTbls::DATATBLS_SwapTableRecords	pic-ref	all other instructions identical; the original tests gbTxtAllocCountHeader with cmp mem,0 against an image-local datum, ours loads the externally defined global through its PIC pointer first

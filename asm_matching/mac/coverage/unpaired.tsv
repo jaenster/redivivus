@@ -389,13 +389,13 @@ addr	class	win_addr	evidence
 0012b632	compiler		10-byte stub that returns 1, no body
 0012b63c	compiler		5-byte void no-op stub, padding/stub
 0012ba21	shared-unpaired	006014c0	same-name Windows function 006014c0 (CELCMP_DrawCelFrame); was: CELCMP_DrawCelFrame: Win 006014c0 is a different __stdcall DC6 path; Mac dispatches via RLE row-table pointer
-0012bdac	mac-only		stores arg in global DAT_00455690; no verified Win twin
-0012bdc0	mac-only		returns global DAT_00455690; no verified Win twin
-0012bdd1	mac-only		null-check accessor returning dword +0x18, Mac assert line 0x62a; no verified twin
-0012be44	mac-only		list unlink helper over FUN_0012be84; no verified twin
-0012be84	mac-only		list link next-pointer helper; no verified Win twin
-0012beba	mac-only		list unlink helper, same body shape as 0012be44; no verified Win twin
-0012befa	mac-only		identical body to 0012be84 (Mac duplicate); no verified Win twin
+0012bdac	shared-unpaired	00601a30	win CELCMP_SetPixelDataFreeCallback stores the same callback global
+0012bdc0	shared-unpaired	00601a50	getter of gpCelPixelDataFreeCallback; win reads the global inline (DeleteCellFile)
+0012bdd1	shared-unpaired	00601b10	win CELCMP_GetDC6BlockPixelData: same null halt line 0x62a, returns the +0x18 field
+0012be44	shared-unpaired	00601c70	win TSLink unlink (LINKEDLIST_UnlinkSelf_Unref_00601c70) same body
+0012be84	shared-unpaired	00601c70	win inlines D2_StormNextLink into the unlink
+0012beba	shared-unpaired	00602140	win TSLink unlink (LINKEDLIST_UnlinkSelf_Unref_00602140) same body
+0012befa	shared-unpaired	00602140	win inlines D2_StormNextLink into the unlink
 0012bf78	compiler		TSExplicitList<CELLIST>::LinkNode template instantiation boilerplate
 0012c136	compiler		deleting destructor of TSHashTableReuse<CELLIST>; calls _pthread_mutex_destroy and operator_delete
 0012c386	compiler		TSLink::Unlink template instantiation boilerplate
@@ -403,7 +403,7 @@ addr	class	win_addr	evidence
 0012c4b8	compiler		TSExplicitList::NewNode template instantiation boilerplate
 0012c720	compiler		TSHashTable destructor template boilerplate
 0012c940	compiler		static initialiser: TSExportTableSync<CELLIST> ctor plus __cxa_atexit registration
-0012c99d	mac-only		CELDATAHASH_FreeEntry: no Win symbol of this name found
+0012c99d	shared-unpaired	0060aeb0	win CELDATAHASH_UnlinkEntry: bucket head advance then free, same line 0x3a
 0012cb1f	shared-unpaired	0060b0b0	GFX_RemoveCacheEntry: same halt line 0xb2, unlink at +0x28/+0x2c, then free the entry
 0012ecd4	shared-unpaired	0060cd30	GFX_InitGlobalCriticalSection: InterlockedIncrement, InitializeCriticalSection when the count is 1
 0012ed3a	shared-unpaired	00606d40	Win D2CMP::SRC::FastCmp FASTCMP_DecompressRLE same name (88B vs 97B)
@@ -421,18 +421,18 @@ addr	class	win_addr	evidence
 001306cc	shared-unpaired	00608110	FASTCMP_DecompressRLEWithBlend3; same-named Win FastCmp function
 0013093c	shared-unpaired	006082e0	FASTCMP_DecompressRLEWithBlend3AndClip; same-named Win FastCmp function
 00130c01	mac-only		D2CMP_DrawRleCelRows: no Win symbol of this name found
-001318ac	mac-only		GfxHash::GFXHASH_FreeEntry: no Win symbol of this name found
-0013268b	mac-only		SPRITECACHE_EvictCelCacheEntry: no Win symbol of this name found (incl. D2CMP::SRC::SpriteCache namespace)
-001342e4	mac-only		Wraps one global read in Storm::Win32Mac::EnterCriticalSection (pthread_mutex) calls; Mac lock wrapper path
-00134317	mac-only		returns sprite-cache global DAT_0051d034; no verified Win twin
-0013432b	mac-only		SPRITECACHE_GetCelCacheBytesUsed: no Win symbol of this name found
-0013433c	mac-only		SPRITECACHE_GetCelCacheBufSize: no verified Win twin
-0013434d	mac-only		returns address of sprite-cache global; no verified Win twin
-00134d0f	mac-only		SPRITECACHE_EnsureSpriteLoaded: no Win symbol of this name found
-00134ebb	mac-only		stores arg in global DAT_0052d0d8; no verified Win twin
-00134ecf	mac-only		SPRITECACHE_GetSpriteCacheStats: no Win symbol of this name found
-00134f21	mac-only		SPRITECACHE_ResetHitMissCounts: no Win symbol of this name found
-001351a1	mac-only		Tilecmp record-offset fixup loop (20-byte records); no verified Win twin
+001318ac	shared-unpaired	0060a9d0	win GFXHASH_UnlinkCacheEntry: same unlink, async cel data free, free lines 0x82/0x8e
+0013268b	mac-only		evict callback for the cel cache, registered with Storm (STORM_StoreValue) at the end of GFX_InitCelDataCache; win GFX_InitCelDataCache registers nothing; reads a D2GfxMemoryStrc field at +0x64 the shared struct does not model
+001342e4	shared-unpaired	005fee10	win SPRITECACHE_GetMemUsage: nUsedMemory read under the critical section
+00134317	shared-unpaired	005fee40	win SPRITECACHE_GetCacheSize: pMaxMemory unlocked
+0013432b	shared-unpaired	005fee60	win CELDATACACHE_GetMemUsage returns gCelDataCacheLru.nBytesUsed
+0013433c	shared-unpaired	005fee70	win CELDATACACHE_GetMemLimit returns gCelDataCacheLru.dwBufSize
+0013434d	shared-unpaired	0089db60	address of the sprite cache D2GfxMemoryStrc; win names the data directly
+00134d0f	shared-unpaired	005fdea0	win SPRITECACHE_AllocEntry: MoveToFront or GetOrAlloc, CheckIfFileExists, seek, read, close, relocate
+00134ebb	shared-unpaired	005fe000	win SPRITECACHE_SetFreeEntryCallback stores its argument in a cache global
+00134ecf	shared-unpaired	005fe010	win SPRITECACHE_GetStats: pool size, hit and miss counts, used percent or -1
+00134f21	shared-unpaired	005fe060	win SPRITECACHE_Lock zeroes gSpriteCacheLru hit and miss counts (misnamed there)
+001351a1	shared-unpaired	0060a4c0	loop body of win TILECMP_RelocateSubTilePixelData (mac 00135375 jumps into it; win inlines it)
 001351e2	shared-unpaired	0060a390	Same name on Win (TILECMP_FixupMinimalPointers) and same fatal line 0x37f shape; not win-decompiled; pairer score -3 rejected
 00135375	shared-unpaired	0060a390	TILECMP_FixupMinimalPointers: null argument halts (line 0x3c9, the HaltTail 0060a3a0) else fixup
 001353b9	mac-only		forwarder to 00134ebb; no verified Win twin
@@ -446,7 +446,7 @@ addr	class	win_addr	evidence
 0013a06d	shared-unpaired	00664ab0	table row index with fatal on idx>0; name matches candidate GetArenaTxtRecord; no platform API
 0013b1ae	shared-unpaired	00665740	UnloadBin on sgpTxtCharTemplate then NULL; matches candidate FreeCharTemplateTxt
 0013b1d7	shared-unpaired	00665770	level and template index with fatal checks; Mac comment cites Windows TXT_CharTemplate_GetLine 00665770
-001401ca	mac-only		forwards to Fog::Excel FUN_002f268e with args swapped; no verified Win twin
+001401ca	mac-only		Mac table fix-up hook (forwards to Fog 002f268e) called after CompileTxt in monstats, monpreset and cube; win has no such call; ported in DataTbls.cpp
 001411d7	shared-unpaired	00668600	cube input spec string parser (any, item, qty, quality tokens); no platform API; name matches candidate
 001417d2	shared-unpaired	00668a90	cube output string parser (portals, prefix/suffix, quality flags); no platform API; name matches candidate
 00141f82	shared-unpaired	006690e0	DATATBLS_LinkerItemStatCost: same name on Win, stat-name to id parse
@@ -456,18 +456,18 @@ addr	class	win_addr	evidence
 0014228b	shared-unpaired	0065b660	TXT_AllocTxt_inventory: CompileTxt inventory, record 0xf0, halts unless 0x20 records
 0014233b	shared-unpaired	0065c130	FreeInventoryTable: UnloadBin of the inventory table
 001423bb	shared-unpaired	0065c140	TXT_Inventory_GetLine: indexed record with halt when the table is null
-001451a8	mac-only		LVLTBLS_LoadLevelDefsTxt: no Win symbol of this name found
+001451a8	shared-unpaired	0061de00	win TXT_AllocTxt_leveldefs (CompileTxt leveldefs 0x9c) with LVLTBLS_BuildPortalLevelArray 0061dd00 inlined
 001455f6	shared-unpaired	0061eb40	LVLTBLS_GetLvlTypeFilename: Mac name differs in case only
-0014809e	mac-only		MONSTERTBLS_FreeMonStatsTxt: no Win symbol of this name found
-00148121	mac-only		MONSTER_GetRandomUniqueNameString: no Win symbol of this name found
-001481fd	mac-only		DATATBLS_AllocTreasureClassRecord: no Win symbol of this name found
-0014831b	mac-only		MonsterTbls offset/total shift helper; no verified Win twin
-001492bf	mac-only		MonsterTbls table unload: frees txt link 0xc4c and bin 0xc50 in data-tables; no verified Win twin
-001494bf	mac-only		MonsterTbls table unload (offsets 0xad4/0xad8); no verified Win twin
+0014809e	shared-unpaired	00653d30	win Unreferenced_00653d30: UnloadBin and FreeTxtLink of MonStats, same body
+00148121	shared-unpaired	00653ed0	win MONSTER_GetRandomUniquePrefix/Suffix/Appelation inline this seed roll and string pick
+001481fd	shared-unpaired	00653f90	win TC_ExtendTreasureClassSize: link table add, realloc by 16 (line 0x3a2), zero 0x2c record
+0014831b	shared-unpaired	006540c0	win AdjustRarities: shifts the cumulative weights of the 0x1c-byte TC entries
+001492bf	shared-unpaired	006552a0	win Unreferenced_006552a0 (MonUmod free: link, bin, count)
+001494bf	shared-unpaired	006556a0	win Unreferenced_006556a0 (SuperUniques free: link, bin, count)
 00149afd	shared-unpaired	00656900	linear npc-id search; Mac comment cites Windows 00656900 as its pair
-00149b3a	mac-only		MonsterTbls conditional unload (0xa84/0xa88); no verified Win twin
-00149db7	mac-only		MonsterTbls conditional unload (0xa90/0xa94); no verified Win twin
-0014a086	mac-only		MonsterTbls conditional unload (0xc30/0xc2c); no verified Win twin
+00149b3a	shared-unpaired	00656f60	win DATATBLS_UnloadMonSoundsTxt (UnloadBin, FreeTxtLink, count)
+00149db7	shared-unpaired	00658440	win Unreferenced_00658440 (MonStatsEx UnloadBin and FreeTxtLink)
+0014a086	shared-unpaired	006594d0	win Unreferenced_006594d0 (MonProp free, count 0)
 0014ab27	shared-unpaired	00654410	TC_ExtractNextIntModifier: same name on Win, 39-byte parser
 0014ad55	shared-unpaired	00640f20	TXT_AllocTxt_objgroup: CompileTxt objgroup, record 0x34
 0014adfd	shared-unpaired	00641320	TXT_AllocTxt_shrines: CompileTxt shrines, record 0xb8
@@ -479,7 +479,7 @@ addr	class	win_addr	evidence
 0014c083	compiler		one-line tail call to DRLGROOMEX_RecalcPriority; dispatch-table thunk
 0014c08f	compiler		one-line tail call to DRLGROOMEX_RecalcPriority; dispatch-table thunk
 0014c29f	shared-unpaired	0061b2c0	Win candidate 0061b2c0 has same name; Mac body is a 14-byte wrapper moving roomex to activation list
-0014d0dd	mac-only		DRLGLEVEL_GetRoomExBounds: no Win symbol of this name found
+0014d0dd	shared-unpaired	00642520	win GetMinAndMaxCoordinatesFromLevel: same room list bounds walk
 0014d937	shared-unpaired	0066d410	Exact name AnimateTiles at 0066d410; walks animated tile lists, no Mac API calls
 0014e6eb	shared-unpaired	0067c430	DrlgGrid::OrFlag: same name on Win (3-byte fastcall flag op)
 0014e6f8	shared-unpaired	0067c440	DrlgGrid::AndFlag: same name on Win
@@ -493,9 +493,9 @@ addr	class	win_addr	evidence
 0014f381	shared-unpaired	0066cf60	DRLGLOGIC_LinkCoordListEntry: same name on Win, links two rooms' coord-list grids at border point
 0014f413	shared-unpaired	0066c770	InitializeDrlgCoordList: same name on Win, replaces grid index across connected rooms
 0014f879	shared-unpaired	0066c100	Exact name DRLGROOMEX_FreeDrlgRoomEx at 0066c100; DrlgRoom.cpp free routine, no Mac API
-00150025	mac-only		copies non-null +0x30 of near rooms into array, bzero remainder; no verified Win twin
-0015323e	mac-only		Maze: random start direction, three DRLGMAZE_AllocRoomAndPickPreset calls, Act-specific preset overwrite; no verified twin
-001533f9	mac-only		Maze: FindAndReplacePreset then AllocRoomExAndPickPreset walk; no verified Win twin
+00150025	shared-unpaired	0066bd00	win GetRealRoomsNearCount: copies non-null pRoom of near rooms, same list
+0015323e	shared-unpaired	006718c0	win GenerateWolrdstoneAndTombs: seed roll, 3 rooms, level types 0x11/0x22 preset patch
+001533f9	shared-unpaired	006724e0	win ReplaceRoom: replace by preset id else alloc beside, *pRoll mod 4
 0015348b	shared-unpaired	00671320	DRLGMAZE_ExpandRoomsWithPresets: same name on Win, Maze.cpp file literal matches
 0015834a	mac-only		DRLGOUTROOM_AllocPathNode: no Win symbol of this name found
 0015a9cc	shared-unpaired	006772c0	DRLGLEVEL_ParseLevelData: same name on Win, lays out level group with backtracking
@@ -512,7 +512,7 @@ addr	class	win_addr	evidence
 0015ba0b	mac-only		DRLGOUTPLACE edge-border placement at direction 0; no verified Win twin
 0015ba7c	mac-only		DRLGOUTPLACE edge/flip placement with 0x38x0x60 node size; no verified Win twin
 0015bbea	mac-only		DRLGOUTPLACE edge/flip placement variant 2; no verified Win twin
-0015c10a	mac-only		DRLGOUTROOM_FreeOutdoorGridsAndVertices: no Win symbol of this name found
+0015c10a	shared-unpaired	0067d680	win DRLGOUTROOM_FreeOutRoomEx frees the 4 grids and the vertices inline
 0015cff8	mac-only		outdoor grid preset value 0x393-0x39A spawns preset +0x10 via SpawnOutdoorLevelPresetEx; no verified Win twin
 0015d1d0	shared-unpaired	0067fc20	Exact name DRLGOUTROOM_FindLeftExitPosition at 0067fc20; exit position search, no Mac API
 0015fe70	shared-unpaired	00667ed0	Exact name BuildArea at 00667ed0; Preset.cpp 2659 bytes, pure DRLG logic, no Mac API
@@ -528,10 +528,10 @@ addr	class	win_addr	evidence
 0016aa22	shared-unpaired	0063b340	Same job as win INVENTORY_CalcGridPlacementScore: perimeter occupancy count, 0xFF when fully blocked
 0016ab58	shared-unpaired	0065c7a0	Win ITEMMODS_UnpackSkillAndLevel at 0065c7a0 is the same 9-bit id / 5-bit level split; pairer candidate was wrong
 0016ab78	shared-unpaired	0065c7d0	Win ITEMMODS_UnpackChargedSkill at 0065c7d0 is the same four-field bit split; pairer candidate was wrong
-0016be52	mac-only		No win function named ITEMMOD_GetItemsTxtRecord; wrapper over TXT_Items_GetLine; not verified on win
-0016d98d	mac-only		Indexes the 3x3 gems.txt mod table at 0x30/0x60/0x90; no win function of this name found
-0016f440	mac-only		Seeded roll with version-0 off-by-one; no win function of this name found; not verified on win
-0016ffad	mac-only		Throwable and stackable check on ItemTypes row; no win function of this name found; not verified on win
+0016be52	shared-unpaired	0065e9b0	win Unreferenced_0065e9b0: item class id from the unit or fallback, TXT_Items_GetLine
+0016d98d	shared-unpaired	0065c6d0	win ITEMMOD_GetMaxLevelAtIndex: same 3x3 gem mod table, halts 0x8f/0x90
+0016f440	shared-unpaired	0065e9e0	win ITEMMOD_RollRandomValue: ordered min/max roll with the item seed and version quirk
+0016ffad	shared-unpaired	0062e5d0	win ITEM_IsReplenishable: repair type, throwable, stackable, flag test
 0017b8bd	shared-unpaired	00624b20	Windows CloseLogging: fclose of pLOGFILE then DeleteCriticalSection, the Mac body uses the pthread-backed one
 0017e166	shared-unpaired	0067b200	DRLGPATH_TryExpandNeighborNode: A* neighbour add (Windows source cites it as the expand helper)
 0017ef68	mac-only		Unnamed register-arg DRLG walker using gnDrlgMemoryMax seed table; no win twin identified
@@ -539,37 +539,37 @@ addr	class	win_addr	evidence
 0018258c	shared-unpaired	00678f00	DRLGPATH_NormalizeFixedPointPair: shifts both halves until within +-0x10000, checked against the Windows body
 001837f9	shared-unpaired	00650590	PATH_SnapPositionToTile: tile origin plus 0x8000 on both axes, then DRLGPATH_SetPathPosition
 0018702b	shared-unpaired	00647320	Win SKILLS_AddOrRemoveItemSkill at 00647320 (Skills.cpp literal, same args, same add/update/remove logic)
-0018849e	mac-only		SKILLS_GetSkillByEnum then GetSkillLevel; no win function of this name found
-00188f88	mac-only		Thin wrapper over SKILLS_CheckMonsterCorpseSelectable (win 006454c0) plus MonStats +0x32; no win wrapper identified
-001890a5	mac-only		Thin wrapper over SKILLS_CheckMonsterCorpseSelectable; no win wrapper of this shape identified
-001890c2	mac-only		Corpse-selectable plus IsSoftMonster wrapper; no win wrapper of this shape identified
+0018849e	shared-unpaired	0056e050	win inlines GetSkillLevel(unit, SKILLS_GetSkillByEnum(unit, id), 1) in SKILLS_CalcPetSkillDamage, its only caller
+00188f88	shared-unpaired	006454c0	win SKILLS_CheckMonsterCorpseSelectable called directly (mac wrapper)
+001890a5	shared-unpaired	006454c0	win SKILLS_CheckMonsterCorpseSelectable called directly with 0 (mac wrapper)
+001890c2	shared-unpaired	006454c0	win SKILLS_CheckMonsterCorpseSelectable plus IsSoftMonster inlined at callers (mac wrapper)
 001890f5	shared-unpaired	00645680	same-name Windows function 00645680 (SKILLS_IsSelectableCorpse2); was: Thin wrapper over SKILLS_CheckMonsterCorpseSelectable; no win wrapper of this shape identified
-00189112	mac-only		Thin wrapper over SKILLS_CheckMonsterCorpseSelectable; no win wrapper of this shape identified
+00189112	shared-unpaired	006454c0	win SKILLS_CheckMonsterCorpseSelectable called directly with 0 (mac wrapper)
 0018a158	shared-unpaired	00643d60	SKILLS_GetWeaponByHand: slot 4 when the arg is 5, else 5, checked against the Windows body
 0018b52f	mac-only		Builds 0x7C damage struct from missile row, skill and owner stats; no win function of this name found; win pairer candidate unrelated
-001904df	mac-only		Copies frame flags 1-4 into nActionFrame from anim data; no win function of this name found
+001904df	shared-unpaired	006218d0	win SetAnimActionFrame: same frame flag 1-4 copy
 0019074b	compiler		Empty void body; a call-target stub kept out of line, not a real function
 00193aa0	mac-only		Sets player-data flag and three fields; no win function of this name found
-00193d4c	mac-only		Waypoint signature state machine (0x101/0x102, fp_fatal line 0x113); no win function of this name found
-001965de	mac-only		Zeroes base stats by repeated STATLIST_SetStatValue; win STATLIST_RemoveAllStats 00627340 is a different body (propagates changes)
+00193d4c	shared-unpaired	00660f80	win WAYPOINT_UpgradeSignature: same 0x101/0x102 check, halt line 0x113
+001965de	shared-unpaired	00627340	win STATLIST_RemoveAllStats: same loop
 00197ddc	compiler		Destructor wrapper for IgnoreList calling its Destructor body; compiler-generated dtor
 00198e46	compiler		Destructor wrapper for TSHashTable<MappingEntryNode> calling Destructor; compiler-generated dtor
 00198e50	compiler		Destructor wrapper for TSHashTable<StringEntryNode> calling Destructor; compiler-generated dtor
-00198e5a	mac-only		Storm string-hash bucket lookup for Ignorelist (SStrHashHT, SStrCmpI); no win function of this name found
-00198f40	mac-only		Ignorelist mapping-entry lookup by case-insensitive key; no win function of this name found
-00198ffc	mac-only		Ignorelist mapping-entry create with table growth; no win function of this name found
-00199080	mac-only		Ignorelist hash table initialiser (mask 3, four slot lists); no win function of this name found
-001991c0	mac-only		Storm-style list link helper for Ignorelist nodes; no win function of this name found
-00199242	mac-only		Storm-style list unlink helper for Ignorelist nodes; no win function of this name found
-00199282	mac-only		Storm-style next-link computation for Ignorelist lists; no win function of this name found
-0019947c	mac-only		Frees mapped value and key string, unlinks two TSLinks (Ignorelist.cpp); no win function of this name found
-001996b2	mac-only		Ignorelist bucket-array realloc with relink (SMemReAlloc, mapping entries); no win function of this name found
-001997fa	mac-only		Ignorelist string-entry list unlink helper; no win function of this name found
-0019983a	mac-only		Ignorelist string-entry next-link helper; no win function of this name found
-00199870	mac-only		Ignorelist string-entry create with table growth; no win function of this name found
-001998f4	mac-only		Ignorelist string table initialiser (mask 3, four slot lists); no win function of this name found
-00199a34	mac-only		Ignorelist string-entry list link helper; no win function of this name found
-0019a270	mac-only		Ignorelist mapping-entry node allocator with SMemAlloc; no win function of this name found
+00198e5a	shared-unpaired	0060f590	win TSHashTable<StringEntryNode,HASHKEY_STRI>::Ptr(hash,key) lookup (SStrCmpI)
+00198f40	shared-unpaired	0060f1d0	win TSHashTable<MappingEntryNode,HASHKEY_STRI>::Ptr(hash,key) lookup
+00198ffc	shared-unpaired	00610df0	win TSHashTable<MappingEntryNode>::New (grow, link, key dup)
+00199080	shared-unpaired	00610b30	win TSHashTable<MappingEntryNode>::Constructor (mask 3, four slot lists)
+001991c0	shared-unpaired	00610630	win TSExplicitList<MappingEntryNode>::LinkNode, called from NewNode
+00199242	shared-unpaired	0060f720	win inlines the TSLink unlink (ReallocData of the mapping slot array)
+00199282	shared-unpaired	0060e1c0	win MappingEntryNode NextLink
+0019947c	shared-unpaired	00610690	win TSExplicitList<MappingEntryNode>::InternalDelete
+001996b2	shared-unpaired	0060f720	win TSGrowableArray<TSExplicitList<MappingEntryNode>>::ReallocData
+001997fa	shared-unpaired	0060f390	win inlines the TSLink unlink (ReallocData of the string slot array)
+0019983a	shared-unpaired	0060e170	win StringEntryNode NextLink
+00199870	shared-unpaired	00610be0	win TSHashTable<StringEntryNode>::New (grow, link, key dup)
+001998f4	shared-unpaired	006104a0	win TSHashTable<StringEntryNode>::Constructor (mask 3, four slot lists)
+00199a34	shared-unpaired	0060fe90	win TSExplicitList<StringEntryNode>::LinkNode, called from NewNode
+0019a270	shared-unpaired	00610630	win TSExplicitList<MappingEntryNode>::NewNode
 0019a50e	mac-only		Ignorelist string-entry node allocator with SMemAlloc; no win function of this name found
 0019f900	mac-only		Unit-iteration counter callback (excludes Death/Kick modes); no win function of this name found
 001a1132	shared-unpaired	005fc0c0	win AI_BAAL_HasPowerfulSkill: right skill then left skill through AI_BAAL_IsSkillPowerful
@@ -652,7 +652,7 @@ addr	class	win_addr	evidence
 0027b570	mac-only		Sets the global seed counter to GetTickCount; no win twin identified
 00284da0	shared-unpaired	005718c0	win UnitQueuePacket0x9E inlines the same message list append (pMsgFirst, pMsgLast)
 002b7f94	mac-only		Wide-char whitespace test via ___maskrune; no win function of this name found
-002b8570	mac-only		UTF-8 code-point counter over a length-bounded string; no win twin identified
+002b8570	shared-unpaired	005262a0	win UTF8_GetStringLength: same table driven UTF-8 decoder count
 002b9950	compiler		returns 0, no body; placeholder stub
 002b9add	shared-unpaired	00525350	Win STRTABLE_FormatNumber at 00525350 has the same name and args (dest, number, max length); win body 319 bytes vs Mac 365
 002ba4fc	shared-unpaired	0043b7a0	same-name Windows function 0043b7a0 (LAUNCHER_InitNetworkLobbyQueue); was: Mac body, no Windows twin per decompile; inits gpBNetCallbacks via Bnclient::BNCLIENT_GetCallbacks
