@@ -15,12 +15,17 @@
 #if !defined(_WIN32) && D2_OS_MAC
 
 #include <string.h>
+#include <new>
 
 void* SMemAlloc(uint32_t nBytes, const char* szFile, int nLine, uint32_t dwFlags);
 int SMemFree(void* pMem, const char* szFile, int nLine, uint32_t dwFlags);
 void* SMemReAlloc(void* pMem, uint32_t nBytes, const char* szFile, int nLine, uint32_t dwFlags);
 
-// File-local routines: the original compiler passes the first two arguments in ecx and edx.
+// File-local routines. Internal linkage is in the binary: they take their first two arguments in
+// ecx/edx (LLVM's fastcc, given only to internal functions) and each sits right after its first
+// caller (clang defers a static definition to its first use). Yet they stay out of line with one
+// caller, which plain `static` at -Os does not do (tried: seven of them inline); the source-level
+// cause is not recoverable, so noinline stands for it.
 #define SBIG_LOCAL static __attribute__((noinline))
 #define SBIG_FILE "/Users/bclemetson/dev/diablo2/Diablo2/Source/DiabloAll/../../../StormMac/Storm Mac/SOURCE/SBig.cpp"
 
@@ -30,6 +35,13 @@ struct BigBuffer {
     uint32_t* pData;      // 0x08  m_data
     uint32_t nGrowStep;   // 0x0C  m_chunk
     uint32_t nStartWord;  // 0x10  m_offset: the number's lowest word
+
+    BigBuffer() : nCapacity(0), nCount(0), pData(NULL), nGrowStep(0), nStartWord(0) {}
+    ~BigBuffer() {
+        if (pData != NULL) {
+            SMemFree(pData, "nothing", -2, 0);
+        }
+    }
 };
 
 struct ByteArray {
@@ -37,11 +49,20 @@ struct ByteArray {
     uint32_t nCount;
     uint8_t* pData;
     uint32_t nGrowStep;
+
+    ByteArray() : nCapacity(0), nCount(0), pData(NULL), nGrowStep(0) {}
+    ~ByteArray() {
+        if (pData != NULL) {
+            SMemFree(pData, "nothing", -2, 0);
+        }
+    }
 };
 
 struct BigStack {
     BigBuffer atBuffers[16];
     int32_t nDepth;  // 0x140: buffers in use
+
+    BigStack() : nDepth(0) {}
 };
 
 struct BigData {
@@ -57,8 +78,31 @@ void BigBuffer_SetZero(BigBuffer* pBuffer);
 void TSBaseArray_Ui_Copy(BigBuffer* pArray, uint32_t nCount, uint32_t* pSrc);
 void SBIG_GrowToIndexNoZero(BigBuffer* pBuffer, int32_t nIndex);
 void SBIG_TrimLeadingZeros(BigBuffer* pBuffer);
-void TSFixedArray_Ui_Set(BigBuffer* pArray, int nCount, const uint32_t* pSrc);
+void TSFixedArray_Ui_Set(BigBuffer* pArray, uint32_t nCount, const uint32_t* pSrc);
 void SBIG_BigBuffer_GetWord(BigStack* pStack, BigBuffer* pDest, BigBuffer* pSource);
+// The buffer's element access, inlined everywhere: word i above the start word. Reading a word
+// past the count gives 0; writing one first grows the array to hold it.
+static inline bool BigBuffer_IsUsed(const BigBuffer* pBuffer, uint32_t i) {
+    return i + pBuffer->nStartWord < pBuffer->nCount;
+}
+
+static inline uint32_t BigBuffer_Get(const BigBuffer* pBuffer, uint32_t i) {
+    return BigBuffer_IsUsed(pBuffer, i) ? pBuffer->pData[pBuffer->nStartWord + i] : 0;
+}
+
+// Moves the start word, making sure the words below it exist.
+static inline void BigBuffer_SetOffset(BigBuffer* pBuffer, uint32_t nOffset) {
+    pBuffer->nStartWord = nOffset;
+    if (nOffset != 0) {
+        TSBaseArray_Ui_Copy(pBuffer, nOffset - 1, (uint32_t*)1);
+    }
+}
+
+static inline uint32_t& BigBuffer_At(BigBuffer* pBuffer, uint32_t i) {
+    TSBaseArray_Ui_Copy(pBuffer, pBuffer->nStartWord + i, (uint32_t*)1);
+    return pBuffer->pData[pBuffer->nStartWord + i];
+}
+
 SBIG_LOCAL void BigBuffer_Add(BigBuffer* pDest, BigBuffer* pSourceA, BigBuffer* pSourceB);
 SBIG_LOCAL int32_t BigBuffer_Compare(BigBuffer* pA, BigBuffer* pB);
 SBIG_LOCAL void BigBuffer_Div(BigBuffer* pQuotient, BigBuffer* pRemainder, BigBuffer* pDividend, BigBuffer* pDivisor,
@@ -73,9 +117,8 @@ SBIG_LOCAL void BigBuffer_Shl(BigBuffer* pResult, BigBuffer* pSource, uint32_t n
 SBIG_LOCAL void BigBuffer_Shr(BigBuffer* pResult, BigBuffer* pSource, uint32_t nShiftBits);
 SBIG_LOCAL void BigBuffer_Square(BigBuffer* pResult, BigBuffer* pInput, BigStack* pStack);
 SBIG_LOCAL void BigBuffer_Sub(BigBuffer* pResult, BigBuffer* pLhs, BigBuffer* pRhs);
-SBIG_LOCAL void BigBuffer_Div_Ux(uint32_t* pnRemainder, BigBuffer* pQuotient, BigBuffer* pDividend, uint32_t nDivisorLo,
-                             uint32_t nDivisorHi);
-SBIG_LOCAL void BigBuffer_Mul_Ux(BigBuffer* pDest, BigBuffer* pSource, uint32_t nMultiplierLo, uint32_t nMultiplierHi);
+SBIG_LOCAL void BigBuffer_Div_Ux(BigBuffer* pQuotient, uint32_t* pnRemainder, BigBuffer* pDividend, uint64_t nDivisor);
+SBIG_LOCAL void BigBuffer_Mul_Ux(BigBuffer* pDest, BigBuffer* pSource, uint64_t nMultiplier);
 SBIG_LOCAL void SBIG_ToBinaryAppend(ByteArray* pBytes, BigBuffer* pBig);
 
 // ---- the exports ----
@@ -87,29 +130,14 @@ void SBigAdd(BigData* pResult, BigData* pBigA, BigData* pBigB) {
 
 // 1.14d mac: 0000a645
 SBIG_LOCAL void BigBuffer_Add(BigBuffer* pDest, BigBuffer* pSourceA, BigBuffer* pSourceB) {
-    uint32_t nCarry = 0;
-    int i = 0;
-    while (true) {
-        if (nCarry == 0 && pSourceA->nCount <= i + pSourceA->nStartWord &&
-            pSourceB->nCount <= pSourceB->nStartWord + i) {
-            SBIG_GrowToIndexNoZero(pDest, i);
-            return;
-        }
-        uint32_t nIndexA = pSourceA->nStartWord + i;
-        uint32_t nWordA = 0;
-        if (nIndexA < pSourceA->nCount) {
-            nWordA = pSourceA->pData[nIndexA];
-        }
-        uint32_t nIndexB = pSourceB->nStartWord + i;
-        uint32_t nWordB = 0;
-        if (nIndexB < pSourceB->nCount) {
-            nWordB = pSourceB->pData[nIndexB];
-        }
-        TSBaseArray_Ui_Copy(pDest, pDest->nStartWord + i, (uint32_t*)1);
-        pDest->pData[pDest->nStartWord + i] = nWordA + nCarry + nWordB;
-        nCarry = (uint32_t)((nWordA + nCarry) < nWordA) + (uint32_t)((nWordA + nCarry + nWordB) < nWordB);
-        i++;
+    uint64_t nCarry = 0;
+    uint32_t i;
+    for (i = 0; nCarry != 0 || BigBuffer_IsUsed(pSourceA, i) || BigBuffer_IsUsed(pSourceB, i); i++) {
+        nCarry = nCarry + BigBuffer_Get(pSourceA, i) + BigBuffer_Get(pSourceB, i);
+        BigBuffer_At(pDest, i) = (uint32_t)nCarry;
+        nCarry >>= 32;
     }
+    SBIG_GrowToIndexNoZero(pDest, i);
 }
 
 // 1.14d mac: 0000a71d
@@ -120,61 +148,19 @@ int32_t SBIG_CompareBigBuffers_ForSha1(BigData* pBigA, BigData* pBigB) {
 
 // 1.14d mac: 0000a72c
 SBIG_LOCAL int32_t BigBuffer_Compare(BigBuffer* pA, BigBuffer* pB) {
-    uint32_t nCountB = pB->nCount;
-    uint32_t nIndexB = pB->nStartWord;
-    uint32_t nCountA = pA->nCount;
-    uint32_t nIndexA = pA->nStartWord;
     int32_t nResult = 0;
-    while (true) {
-        uint32_t nWordA;
-        if (nIndexA < nCountA) {
-            nWordA = pA->pData[nIndexA];
-        } else {
-            nWordA = 0;
-            if (nCountB <= nIndexB) {
-                return nResult;
-            }
+    for (uint32_t i = 0; BigBuffer_IsUsed(pA, i) || BigBuffer_IsUsed(pB, i); i++) {
+        if (BigBuffer_Get(pA, i) != BigBuffer_Get(pB, i)) {
+            nResult = BigBuffer_Get(pA, i) > BigBuffer_Get(pB, i) ? 1 : -1;
         }
-        uint32_t nWordB = 0;
-        if (nIndexB < nCountB) {
-            nWordB = pB->pData[nIndexB];
-        }
-        if (nWordA != nWordB) {
-            uint32_t nHigherB = 0;
-            nWordA = 0;
-            if (nIndexA < nCountA) {
-                nWordA = pA->pData[nIndexA];
-            }
-            if (nIndexB < nCountB) {
-                nHigherB = pB->pData[nIndexB];
-            }
-            nResult = -1;
-            if (nHigherB < nWordA) {
-                nResult = 1;
-            }
-        }
-        nIndexA++;
-        nIndexB++;
     }
+    return nResult;
 }
 
 // 1.14d mac: 0000a7b6
 // The array of each buffer is freed, then the object itself.
 void SBigDel(BigData* pBig) {
-    if (pBig != NULL) {
-        if (pBig->tBytes.pData != NULL) {
-            SMemFree(pBig->tBytes.pData, "nothing", -2, 0);
-        }
-        for (int i = 16; i != 0; i--) {
-            if (pBig->tStack.atBuffers[i - 1].pData != NULL) {
-                SMemFree(pBig->tStack.atBuffers[i - 1].pData, "nothing", -2, 0);
-            }
-        }
-        if (pBig->tResult.pData != NULL) {
-            SMemFree(pBig->tResult.pData, "nothing", -2, 0);
-        }
-        operator delete(pBig);
-    }
+    delete pBig;
 }
 
 // 1.14d mac: 0000a87e
@@ -183,8 +169,8 @@ SBIG_LOCAL void BigBuffer_Div(BigBuffer* pQuotient, BigBuffer* pRemainder, BigBu
                           BigStack* pStack) {
     SBIG_TrimLeadingZeros(pDividend);
     SBIG_TrimLeadingZeros(pDivisor);
-    uint32_t nDivisorLen = pDivisor->nCount - pDivisor->nStartWord;
     uint32_t nDividendLen = pDividend->nCount - pDividend->nStartWord;
+    uint32_t nDivisorLen = pDivisor->nCount - pDivisor->nStartWord;
     if (nDivisorLen > nDividendLen) {
         if (pRemainder != pDividend) {
             TSFixedArray_Ui_Set(pRemainder, pDividend->nCount, pDividend->pData);
@@ -192,18 +178,13 @@ SBIG_LOCAL void BigBuffer_Div(BigBuffer* pQuotient, BigBuffer* pRemainder, BigBu
         pRemainder->nGrowStep = pDividend->nGrowStep;
         pRemainder->nStartWord = pDividend->nStartWord;
         BigBuffer_SetZero(pQuotient);
-    } else if (nDivisorLen < 2) {
-        TSBaseArray_Ui_Copy(pRemainder, pRemainder->nStartWord, (uint32_t*)1);
-        uint32_t* pnRemainder = pRemainder->pData + pRemainder->nStartWord;
-        uint32_t nDivisor = 0;
-        if (pDivisor->nStartWord < pDivisor->nCount) {
-            nDivisor = pDivisor->pData[pDivisor->nStartWord];
-        }
-        BigBuffer_Div_Ux(pnRemainder, pQuotient, pDividend, nDivisor, 0);
+    } else if (nDivisorLen <= 1) {
+        BigBuffer_Div_Ux(pQuotient, &BigBuffer_At(pRemainder, 0), pDividend, BigBuffer_Get(pDivisor, 0));
         SBIG_GrowToIndexNoZero(pRemainder, 1);
     } else {
-        int nTop = pStack->nDepth;
-        pStack->nDepth = nTop + 3;
+        BigBuffer* pWork = &pStack->atBuffers[pStack->nDepth++];
+        BigBuffer* pScaledDivisor = &pStack->atBuffers[pStack->nDepth++];
+        BigBuffer* pProduct = &pStack->atBuffers[pStack->nDepth++];
         // the shift that puts the divisor's top bit at the top of a word
         uint32_t nShift = 0x1f;
         for (int nWord = pDivisor->nCount - pDivisor->nStartWord; nWord != 0; nWord--) {
@@ -227,64 +208,30 @@ SBIG_LOCAL void BigBuffer_Div(BigBuffer* pQuotient, BigBuffer* pRemainder, BigBu
                 }
             }
         }
-        BigBuffer* pWork = &pStack->atBuffers[nTop];
-        BigBuffer* pScaledDivisor = &pStack->atBuffers[nTop + 1];
-        BigBuffer* pProduct = &pStack->atBuffers[nTop + 2];
         BigBuffer_Shl(pWork, pDividend, nShift);
         BigBuffer_Shl(pScaledDivisor, pDivisor, nShift);
-        int nTopWord = nDivisorLen - 1;
-        TSBaseArray_Ui_Copy(pScaledDivisor, pScaledDivisor->nStartWord - 1 + nDivisorLen, (uint32_t*)1);
-        uint32_t nTopDivisor = pScaledDivisor->pData[pScaledDivisor->nStartWord + nTopWord];
-        int nQuotientLen = nDividendLen + 1;
-        SBIG_GrowToIndexNoZero(pQuotient, nQuotientLen - nDivisorLen);
-        uint32_t nStep = nQuotientLen - nDivisorLen;
-        if (nStep != 0) {
-            uint32_t nEstimator = nTopDivisor + 1;
-            do {
-                uint32_t nNext = nStep - 1;
-                pQuotient->nStartWord = nNext;
-                if (nNext == 0) {
-                    pWork->nStartWord = 0;
-                    nStep = 0;
-                } else {
-                    TSBaseArray_Ui_Copy(pQuotient, nStep - 2, (uint32_t*)1);
-                    pWork->nStartWord = nNext;
-                    TSBaseArray_Ui_Copy(pWork, nStep - 2, (uint32_t*)1);
-                    nStep = pWork->nStartWord;
-                }
-                if (nEstimator == 0) {
-                    TSBaseArray_Ui_Copy(pWork, nStep + nDivisorLen, (uint32_t*)1);
-                    uint32_t nDigit = pWork->pData[pWork->nStartWord + nDivisorLen];
-                    TSBaseArray_Ui_Copy(pQuotient, pQuotient->nStartWord, (uint32_t*)1);
-                    pQuotient->pData[pQuotient->nStartWord] = nDigit;
-                } else {
-                    TSBaseArray_Ui_Copy(pWork, nStep + nTopWord, (uint32_t*)1);
-                    uint32_t nLow = pWork->pData[pWork->nStartWord + nTopWord];
-                    TSBaseArray_Ui_Copy(pWork, pWork->nStartWord + nDivisorLen, (uint32_t*)1);
-                    uint32_t nHigh = pWork->pData[pWork->nStartWord + nDivisorLen];
-                    TSBaseArray_Ui_Copy(pQuotient, pQuotient->nStartWord, (uint32_t*)1);
-                    uint32_t* pDigits = pQuotient->pData;
-                    uint32_t nDigitIndex = pQuotient->nStartWord;
-                    pDigits[nDigitIndex] = (uint32_t)((((uint64_t)nHigh << 32) | nLow) / nEstimator);
-                }
-                TSBaseArray_Ui_Copy(pQuotient, pQuotient->nStartWord, (uint32_t*)1);
-                if (pQuotient->pData[pQuotient->nStartWord] != 0) {
-                    TSBaseArray_Ui_Copy(pQuotient, pQuotient->nStartWord, (uint32_t*)1);
-                    BigBuffer_Mul_Ux(pProduct, pScaledDivisor, pQuotient->pData[pQuotient->nStartWord], 0);
-                    BigBuffer_Sub(pWork, pWork, pProduct);
-                }
-                while (true) {
-                    TSBaseArray_Ui_Copy(pWork, pWork->nStartWord + nDivisorLen, (uint32_t*)1);
-                    if (pWork->pData[pWork->nStartWord + nDivisorLen] == 0 &&
-                        BigBuffer_Compare(pWork, pScaledDivisor) < 0) {
-                        break;
-                    }
-                    TSBaseArray_Ui_Copy(pQuotient, pQuotient->nStartWord, (uint32_t*)1);
-                    pQuotient->pData[pQuotient->nStartWord]++;
-                    BigBuffer_Sub(pWork, pWork, pScaledDivisor);
-                }
-                nStep = nNext;
-            } while (nStep != 0);
+        uint32_t nTopWord = nDivisorLen - 1;
+        uint32_t nEstimator = BigBuffer_At(pScaledDivisor, nTopWord) + 1;
+        uint32_t nQuotientLen = nDividendLen + 1 - nDivisorLen;
+        SBIG_GrowToIndexNoZero(pQuotient, nQuotientLen);
+        // each quotient digit is found with both the quotient and the work buffer windowed at it
+        for (uint32_t i = nQuotientLen; i-- > 0;) {
+            BigBuffer_SetOffset(pQuotient, i);
+            BigBuffer_SetOffset(pWork, i);
+            if (nEstimator == 0) {
+                BigBuffer_At(pQuotient, 0) = BigBuffer_At(pWork, nDivisorLen);
+            } else {
+                BigBuffer_At(pQuotient, 0) =
+                    (BigBuffer_At(pWork, nTopWord) + ((uint64_t)BigBuffer_At(pWork, nDivisorLen) << 32)) / nEstimator;
+            }
+            if (BigBuffer_At(pQuotient, 0) != 0) {
+                BigBuffer_Mul_Ux(pProduct, pScaledDivisor, BigBuffer_At(pQuotient, 0));
+                BigBuffer_Sub(pWork, pWork, pProduct);
+            }
+            while (BigBuffer_At(pWork, nDivisorLen) != 0 || BigBuffer_Compare(pWork, pScaledDivisor) >= 0) {
+                BigBuffer_At(pQuotient, 0)++;
+                BigBuffer_Sub(pWork, pWork, pScaledDivisor);
+            }
         }
         BigBuffer_Shr(pRemainder, pWork, nShift);
         SBIG_TrimLeadingZeros(pRemainder);
@@ -336,52 +283,15 @@ SBIG_LOCAL void BigBuffer_Mul(BigBuffer* pResult, BigBuffer* pA, BigBuffer* pB, 
         pArray = &pStack->atBuffers[pStack->nDepth++];
     }
     BigBuffer_SetZero(pArray);
-    uint32_t nCountA = pA->nCount;
-    uint32_t nStartA = pA->nStartWord;
-    if (nStartA < nCountA) {
-        int iOuter = 0;
-        uint32_t nCarry;
-        do {
-            uint32_t nCountB = pB->nCount;
-            uint32_t nStartB = pB->nStartWord;
-            int iInner = 0;
-            nCarry = 0;
-            if (nStartB < nCountB) {
-                while (true) {
-                    uint32_t nWordA = 0;
-                    if (nStartA + iOuter < nCountA) {
-                        nWordA = pA->pData[nStartA + iOuter];
-                    }
-                    uint32_t nWordB = 0;
-                    if (nStartB + iInner < nCountB) {
-                        nWordB = pB->pData[nStartB + iInner];
-                    }
-                    int iDest = iOuter + iInner;
-                    uint64_t nProduct = (uint64_t)nWordB * (uint64_t)nWordA;
-                    uint32_t nLow = (uint32_t)nProduct;
-                    uint32_t nSum = nLow + nCarry;
-                    TSBaseArray_Ui_Copy(pArray, pArray->nStartWord + iDest, (uint32_t*)1);
-                    uint32_t* pDest = &pArray->pData[pArray->nStartWord + iDest];
-                    uint32_t nOld = *pDest;
-                    nCarry = (uint32_t)(nProduct >> 32) + (uint32_t)(nSum < nLow) + (uint32_t)((nSum + nOld) < nSum);
-                    TSBaseArray_Ui_Copy(pArray, pArray->nStartWord + iDest, (uint32_t*)1);
-                    pArray->pData[iDest + pArray->nStartWord] = nSum + nOld;
-                    nCountB = pB->nCount;
-                    nStartB = pB->nStartWord;
-                    iInner++;
-                    if (nCountB <= iInner + nStartB) {
-                        break;
-                    }
-                    nCountA = pA->nCount;
-                    nStartA = pA->nStartWord;
-                }
-            }
-            TSBaseArray_Ui_Copy(pArray, pArray->nStartWord + iInner + iOuter, (uint32_t*)1);
-            pArray->pData[iInner + iOuter + pArray->nStartWord] = nCarry;
-            nCountA = pA->nCount;
-            nStartA = pA->nStartWord;
-            iOuter++;
-        } while (nStartA + iOuter < nCountA);
+    for (uint32_t i = 0; BigBuffer_IsUsed(pA, i); i++) {
+        uint64_t nCarry = 0;
+        uint32_t j;
+        for (j = 0; BigBuffer_IsUsed(pB, j); j++) {
+            nCarry = (uint64_t)BigBuffer_Get(pA, i) * BigBuffer_Get(pB, j) + nCarry + BigBuffer_At(pArray, i + j);
+            BigBuffer_At(pArray, i + j) = (uint32_t)nCarry;
+            nCarry >>= 32;
+        }
+        BigBuffer_At(pArray, i + j) = (uint32_t)nCarry;
     }
     SBIG_BigBuffer_GetWord(pStack, pResult, pArray);
 }
@@ -400,32 +310,8 @@ SBIG_LOCAL void BigBuffer_MulMod(BigBuffer* pResult, BigBuffer* pA, BigBuffer* p
 
 // 1.14d mac: 0000b032
 void SBigNew(BigData** ppBigData) {
-    BigData* pBigNum = (BigData*)SMemAlloc(sizeof(BigData), SBIG_FILE, 0x51e, 0);
-    BigData* pResult = NULL;
-    if (pBigNum != NULL) {
-        pBigNum->tResult.nCount = 0;
-        pBigNum->tResult.nCapacity = 0;
-        pBigNum->tResult.nGrowStep = 0;
-        pBigNum->tResult.pData = NULL;
-        pBigNum->tResult.nStartWord = 0;
-        BigBuffer* pTail = (BigBuffer*)&pBigNum->tStack.nDepth;
-        for (int i = 0; i < 16; i++) {
-            BigBuffer* pBuffer = &pBigNum->tStack.atBuffers[i];
-            pBuffer->nCount = 0;
-            pBuffer->nCapacity = 0;
-            pBuffer->nGrowStep = 0;
-            pBuffer->pData = NULL;
-            pBuffer->nStartWord = 0;
-        }
-        // the depth counter and the byte array are laid out as one more five-word buffer
-        pTail->nCount = 0;
-        pTail->nCapacity = 0;
-        pTail->nGrowStep = 0;
-        pTail->pData = NULL;
-        pTail->nStartWord = 0;
-        pResult = pBigNum;
-    }
-    *ppBigData = pResult;
+    void* pMem = SMemAlloc(sizeof(BigData), SBIG_FILE, 0x51e, 0);
+    *ppBigData = pMem ? new (pMem) BigData : NULL;
 }
 
 // 1.14d mac: 0000b0fd
@@ -439,107 +325,62 @@ void SBigPowMod(BigData* pResult, BigData* pBase, BigData* pExponent, BigData* p
 SBIG_LOCAL void BigBuffer_PowMod(BigBuffer* pResult, BigBuffer* pBase, BigBuffer* pExponent, BigBuffer* pModulus,
                              BigStack* pStack) {
     SBIG_TrimLeadingZeros(pExponent);
-    if (pExponent->nCount == pExponent->nStartWord) {
+    if (pExponent->nCount - pExponent->nStartWord == 0) {
         SBIG_GrowToIndexNoZero(pResult, 1);
-        TSBaseArray_Ui_Copy(pResult, pResult->nStartWord, (uint32_t*)1);
-        pResult->pData[pResult->nStartWord] = 1;
-    } else {
-        int nDepth = pStack->nDepth;
-        pStack->nDepth = nDepth + 3;
-        BigBuffer* pQuotientSink = &pStack->atBuffers[nDepth];
-        BigBuffer* pSquare = &pStack->atBuffers[nDepth + 1];
-        BigBuffer* pCube = &pStack->atBuffers[nDepth + 2];
-        BigBuffer* pAccumulator = pResult;
-        if (pResult == pBase || pResult == pExponent || pResult == pModulus) {
-            pStack->nDepth = nDepth + 4;
-            pAccumulator = &pStack->atBuffers[nDepth + 3];
-        }
-        BigBuffer_MulMod(pSquare, pBase, pBase, pModulus, pStack);
-        BigBuffer_MulMod(pCube, pSquare, pBase, pModulus, pStack);
-        BigBuffer* apPowers[4] = {pQuotientSink, pBase, pSquare, pCube};
-        SBIG_GrowToIndexNoZero(pAccumulator, 1);
-        TSBaseArray_Ui_Copy(pAccumulator, pAccumulator->nStartWord, (uint32_t*)1);
-        pAccumulator->pData[pAccumulator->nStartWord] = 1;
-        uint32_t nCount = pExponent->nCount;
-        uint32_t nStart = pExponent->nStartWord;
-        int nWord = nCount - nStart;
-        while (nWord != 0) {
-            uint32_t nIndex = (nStart - 1) + nWord;
-            uint32_t dwExpWord = 0;
-            if (nIndex < nCount) {
-                dwExpWord = pExponent->pData[nIndex];
-            }
-            uint32_t nBits = 0x20;
-            bool bTopWord = nWord == (int)(nCount - nStart);
-            nWord--;
-            bool bRun = true;
-            if (bTopWord && dwExpWord < 0x40000000) {
-                int nLeading = -0x20;
-                do {
-                    nLeading += 2;
-                    dwExpWord <<= 2;
-                } while (dwExpWord < 0x40000000);
-                if (nLeading != 0) {
-                    nBits = -nLeading;
-                } else {
-                    bRun = false;
-                }
-            }
-            if (bRun) {
-                for (uint32_t i = 0; i < nBits; i += 2) {
-                    BigBuffer_Square(pAccumulator, pAccumulator, pStack);
-                    BigBuffer_Div(pQuotientSink, pAccumulator, pAccumulator, pModulus, pStack);
-                    BigBuffer_Square(pAccumulator, pAccumulator, pStack);
-                    BigBuffer_Div(pQuotientSink, pAccumulator, pAccumulator, pModulus, pStack);
-                    if (dwExpWord >> 0x1e != 0) {
-                        BigBuffer_MulMod(pAccumulator, pAccumulator, apPowers[dwExpWord >> 0x1e], pModulus, pStack);
-                    }
-                    dwExpWord <<= 2;
-                }
-            }
-            if (nWord == 0) {
-                break;
-            }
-            nCount = pExponent->nCount;
-            nStart = pExponent->nStartWord;
-        }
-        SBIG_BigBuffer_GetWord(pStack, pResult, pAccumulator);
-        pStack->nDepth = pStack->nDepth - 3;
+        BigBuffer_At(pResult, 0) = 1;
+        return;
     }
+    int nDepth = pStack->nDepth;
+    pStack->nDepth = nDepth + 3;
+    BigBuffer* pQuotientSink = &pStack->atBuffers[nDepth];
+    BigBuffer* pSquare = &pStack->atBuffers[nDepth + 1];
+    BigBuffer* pCube = &pStack->atBuffers[nDepth + 2];
+    BigBuffer* pAccumulator = pResult;
+    if (pResult == pBase || pResult == pExponent || pResult == pModulus) {
+        pAccumulator = &pStack->atBuffers[pStack->nDepth++];
+    }
+    BigBuffer_MulMod(pSquare, pBase, pBase, pModulus, pStack);
+    BigBuffer_MulMod(pCube, pSquare, pBase, pModulus, pStack);
+    BigBuffer* apPowers[3] = {pBase, pSquare, pCube};
+    SBIG_GrowToIndexNoZero(pAccumulator, 1);
+    BigBuffer_At(pAccumulator, 0) = 1;
+    for (uint32_t i = pExponent->nCount - pExponent->nStartWord; i > 0; i--) {
+        uint32_t dwExpWord = BigBuffer_Get(pExponent, i - 1);
+        uint32_t nBits = 32;
+        if (i == pExponent->nCount - pExponent->nStartWord) {
+            while (dwExpWord < 0x40000000) {
+                dwExpWord <<= 2;
+                nBits -= 2;
+            }
+        }
+        for (uint32_t j = 0; j < nBits; j += 2) {
+            BigBuffer_Square(pAccumulator, pAccumulator, pStack);
+            BigBuffer_Div(pQuotientSink, pAccumulator, pAccumulator, pModulus, pStack);
+            BigBuffer_Square(pAccumulator, pAccumulator, pStack);
+            BigBuffer_Div(pQuotientSink, pAccumulator, pAccumulator, pModulus, pStack);
+            if (dwExpWord >> 30 != 0) {
+                BigBuffer_MulMod(pAccumulator, pAccumulator, apPowers[(dwExpWord >> 30) - 1], pModulus, pStack);
+            }
+            dwExpWord <<= 2;
+        }
+    }
+    SBIG_BigBuffer_GetWord(pStack, pResult, pAccumulator);
+    pStack->nDepth = pStack->nDepth - 3;
 }
 
 // 1.14d mac: 0000b38f
 SBIG_LOCAL void BigBuffer_Shl(BigBuffer* pResult, BigBuffer* pSource, uint32_t nShiftBits) {
-    uint32_t nWordShift = nShiftBits >> 5;
-    int nIndex = (nWordShift + 1 + pSource->nCount) - pSource->nStartWord;
-    if (nIndex != 0) {
-        int iWord = pSource->nCount - pSource->nStartWord;
-        uint8_t nBitShift = nShiftBits & 0x1f;
-        int iNext;
-        do {
-            uint32_t nDest = nWordShift + iWord;
-            uint32_t dwWord = 0;
-            if (nWordShift <= nDest) {
-                uint32_t nSrc = pSource->nStartWord + iWord;
-                if (nSrc < pSource->nCount) {
-                    dwWord = pSource->pData[nSrc];
-                }
-                dwWord <<= nBitShift;
-            }
-            if (nWordShift < nDest && (nShiftBits & 0x1f) != 0) {
-                uint32_t dwLower = 0;
-                if ((uint32_t)(iWord - 1 + pSource->nStartWord) < pSource->nCount) {
-                    dwLower = pSource->pData[pSource->nStartWord + iWord - 1];
-                }
-                dwWord += dwLower >> ((0x20U - nBitShift) & 0x1f);
-            }
-            TSBaseArray_Ui_Copy(pResult, pResult->nStartWord + nDest, (uint32_t*)1);
-            pResult->pData[nDest + pResult->nStartWord] = dwWord;
-            iNext = (nWordShift - 1) + iWord;
-            iWord--;
-        } while (iNext != -1);
+    uint32_t nWords = nShiftBits / 32;
+    uint32_t nBits = nShiftBits % 32;
+    uint32_t nCount = pSource->nCount - pSource->nStartWord + nWords + 1;
+    for (uint32_t i = nCount; i-- > 0;) {
+        uint32_t nWord = i >= nWords ? BigBuffer_Get(pSource, i - nWords) << nBits : 0;
+        if (i > nWords && nBits != 0) {
+            nWord += BigBuffer_Get(pSource, i - nWords - 1) >> (32 - nBits);
+        }
+        BigBuffer_At(pResult, i) = nWord;
     }
-    SBIG_GrowToIndexNoZero(pResult, nIndex);
+    SBIG_GrowToIndexNoZero(pResult, nCount);
     SBIG_TrimLeadingZeros(pResult);
 }
 
@@ -635,32 +476,14 @@ void SBigSub(BigData* pResult, BigData* pBigA, BigData* pBigB) {
 
 // 1.14d mac: 0000b74d
 SBIG_LOCAL void BigBuffer_Sub(BigBuffer* pResult, BigBuffer* pLhs, BigBuffer* pRhs) {
-    uint32_t nBorrowLo = 0;
-    int32_t nBorrowHi = 0;
-    int i = 0;
-    while (true) {
-        uint32_t nIndexLhs = pLhs->nStartWord + i;
-        uint32_t nWordLhs;
-        if (nIndexLhs < pLhs->nCount) {
-            nWordLhs = pLhs->pData[nIndexLhs];
-        } else {
-            nWordLhs = 0;
-            if (pRhs->nCount <= pRhs->nStartWord + i) {
-                SBIG_GrowToIndexNoZero(pResult, i);
-                return;
-            }
-        }
-        uint32_t nIndexRhs = pRhs->nStartWord + i;
-        uint32_t nWordRhs = 0;
-        if (nIndexRhs < pRhs->nCount) {
-            nWordRhs = pRhs->pData[nIndexRhs];
-        }
-        TSBaseArray_Ui_Copy(pResult, pResult->nStartWord + i, (uint32_t*)1);
-        pResult->pData[pResult->nStartWord + i] = (nWordLhs + nBorrowLo) - nWordRhs;
-        nBorrowLo = (nBorrowHi + (uint32_t)((nWordLhs + nBorrowLo) < nWordLhs)) - (uint32_t)(nWordLhs + nBorrowLo < nWordRhs);
-        nBorrowHi = (int32_t)nBorrowLo >> 31;
-        i++;
+    int64_t nBorrow = 0;
+    uint32_t i;
+    for (i = 0; BigBuffer_IsUsed(pLhs, i) || BigBuffer_IsUsed(pRhs, i); i++) {
+        nBorrow = nBorrow + BigBuffer_Get(pLhs, i) - BigBuffer_Get(pRhs, i);
+        BigBuffer_At(pResult, i) = (uint32_t)nBorrow;
+        nBorrow = (int32_t)(nBorrow >> 32);
     }
+    SBIG_GrowToIndexNoZero(pResult, i);
 }
 
 // 1.14d mac: 0000b819
@@ -684,86 +507,43 @@ void TSGrowableArray_Uc_Reserve(ByteArray* pArray, int nCount, int bRound);
 // The bytes of the number, least significant first; zero bytes of the top word are not
 // appended.
 SBIG_LOCAL void SBIG_ToBinaryAppend(ByteArray* pBytes, BigBuffer* pBig) {
-    uint32_t nCount = pBig->nCount;
-    int nStart = pBig->nStartWord;
-    if (((nCount - nStart) & 0x3fffffff) != 0) {
-        uint32_t nBitShift = 0;
-        uint32_t nByte = 0;
-        do {
-            uint32_t nWordNo = nByte >> 2;
-            uint32_t nIndex = nStart + nWordNo;
-            uint32_t dwWord = 0;
-            if (nIndex < nCount) {
-                dwWord = pBig->pData[nIndex];
-            }
-            dwWord = dwWord >> (nBitShift & 0x18);
-            if (dwWord != 0 || nWordNo + 1 < nCount - nStart) {
-                TSGrowableArray_Uc_Reserve(pBytes, 1, 1);
-                uint8_t* pByteData = pBytes->pData;
-                uint32_t nUsed = pBytes->nCount;
-                pBytes->nCount = nUsed + 1;
-                pByteData[nUsed] = (uint8_t)dwWord;
-                nCount = pBig->nCount;
-                nStart = pBig->nStartWord;
-            }
-            nBitShift += 8;
-            nByte++;
-        } while (nByte < (nCount - nStart) * 4);
+    for (uint32_t i = 0; i < (pBig->nCount - pBig->nStartWord) * 4; i++) {
+        uint32_t dwValue = BigBuffer_Get(pBig, i / 4) >> (8 * i & 0x18);
+        if (dwValue != 0 || i / 4 + 1 < pBig->nCount - pBig->nStartWord) {
+            TSGrowableArray_Uc_Reserve(pBytes, 1, 1);
+            uint8_t* pByteData = pBytes->pData;
+            uint32_t nUsed = pBytes->nCount;
+            pBytes->nCount = nUsed + 1;
+            pByteData[nUsed] = (uint8_t)dwValue;
+        }
     }
 }
 
 // 1.14d mac: 0000b92f
 // pQuotient = pDividend / divisor, the remainder to *pnRemainder; the divisor is 64 bits.
-SBIG_LOCAL void BigBuffer_Div_Ux(uint32_t* pnRemainder, BigBuffer* pQuotient, BigBuffer* pDividend, uint32_t nDivisorLo,
-                             uint32_t nDivisorHi) {
+SBIG_LOCAL void BigBuffer_Div_Ux(BigBuffer* pQuotient, uint32_t* pnRemainder, BigBuffer* pDividend, uint64_t nDivisor) {
     SBIG_GrowToIndexNoZero(pQuotient, pDividend->nCount - pDividend->nStartWord);
-    uint32_t nCount = pDividend->nCount;
-    int nStart = pDividend->nStartWord;
-    uint32_t nRemainder = 0;
-    int iWord = nCount - nStart;
-    uint64_t nDivisor = ((uint64_t)nDivisorHi << 32) | nDivisorLo;
-    if (iWord != 0) {
-        while (true) {
-            uint32_t nWord = 0;
-            if ((uint32_t)(nStart - 1 + iWord) < nCount) {
-                nWord = pDividend->pData[nStart + iWord - 1];
-            }
-            TSBaseArray_Ui_Copy(pQuotient, iWord - 1 + pQuotient->nStartWord, (uint32_t*)1);
-            uint64_t nNumerator = ((uint64_t)nRemainder << 32) | nWord;
-            pQuotient->pData[pQuotient->nStartWord + iWord - 1] = (uint32_t)(nNumerator / nDivisor);
-            nRemainder = (uint32_t)(nNumerator % nDivisor);
-            if (iWord == 1) {
-                break;
-            }
-            iWord--;
-            nCount = pDividend->nCount;
-            nStart = pDividend->nStartWord;
-        }
+    uint64_t nData = 0;
+    uint32_t i = pDividend->nCount - pDividend->nStartWord;
+    while (i-- > 0) {
+        nData = (nData << 32) + BigBuffer_Get(pDividend, i);
+        BigBuffer_At(pQuotient, i) = (uint32_t)(nData / nDivisor);
+        nData %= nDivisor;
     }
     SBIG_TrimLeadingZeros(pQuotient);
-    *pnRemainder = nRemainder;
+    *pnRemainder = (uint32_t)nData;
 }
 
 // 1.14d mac: 0000ba3f
-SBIG_LOCAL void BigBuffer_Mul_Ux(BigBuffer* pDest, BigBuffer* pSource, uint32_t nMultiplierLo, uint32_t nMultiplierHi) {
-    uint32_t nCarry = 0;
-    int i = 0;
-    while (true) {
-        if (nCarry == 0 && pSource->nCount <= i + pSource->nStartWord) {
-            SBIG_GrowToIndexNoZero(pDest, i);
-            return;
-        }
-        uint32_t nIndex = pSource->nStartWord + i;
-        uint32_t nWord = 0;
-        if (nIndex < pSource->nCount) {
-            nWord = pSource->pData[nIndex];
-        }
-        TSBaseArray_Ui_Copy(pDest, pDest->nStartWord + i, (uint32_t*)1);
-        uint64_t nProduct = (uint64_t)nWord * (uint64_t)nMultiplierLo + (((uint64_t)(nWord * nMultiplierHi) << 32) | nCarry);
-        pDest->pData[pDest->nStartWord + i] = (uint32_t)nProduct;
-        nCarry = (uint32_t)(nProduct >> 32);
-        i++;
+SBIG_LOCAL void BigBuffer_Mul_Ux(BigBuffer* pDest, BigBuffer* pSource, uint64_t nMultiplier) {
+    uint64_t nCarry = 0;
+    uint32_t i;
+    for (i = 0; nCarry != 0 || BigBuffer_IsUsed(pSource, i); i++) {
+        nCarry = nCarry + BigBuffer_Get(pSource, i) * nMultiplier;
+        BigBuffer_At(pDest, i) = (uint32_t)nCarry;
+        nCarry >>= 32;
     }
+    SBIG_GrowToIndexNoZero(pDest, i);
 }
 
 void TSBaseArray_Uc_ReallocData(ByteArray* pArray, uint32_t nNewMax);
@@ -772,7 +552,7 @@ void TSBaseArray_Uc_ReallocData(ByteArray* pArray, uint32_t nNewMax);
 // Room for nCount more bytes; the chunk is a power of two up to 0x100.
 void TSGrowableArray_Uc_Reserve(ByteArray* pArray, int nCount, int bRound) {
     uint32_t nNewMax = pArray->nCount + nCount;
-    if (pArray->nCapacity < nNewMax) {
+    if (nNewMax > pArray->nCapacity) {
         if (bRound != 0) {
             uint32_t nGranularity = pArray->nGrowStep;
             if (pArray->nGrowStep == 0) {
@@ -813,7 +593,7 @@ void TSBaseArray_Uc_ReallocData(ByteArray* pArray, uint32_t nNewMax) {
                 nKeep = nNewMax;
             }
             for (uint32_t i = 0; i < nKeep; i++) {
-                pArray->pData[i] = pBlock[i];
+                new (&pArray->pData[i]) uint8_t(pBlock[i]);
             }
             SMemFree(pBlock, "nothing", -2, 0);
         }
@@ -837,7 +617,7 @@ void TSBaseArray_Ui_ReallocData(BigBuffer* pArray, uint32_t nNewMax);
 // The chunk is a power of two up to 0x40.
 void TSGrowableArray_Ui_Reserve(BigBuffer* pArray, int nCount, int bRound) {
     uint32_t nNewMax = pArray->nCount + nCount;
-    if (pArray->nCapacity < nNewMax) {
+    if (nNewMax > pArray->nCapacity) {
         if (bRound != 0) {
             uint32_t nGranularity = pArray->nGrowStep;
             if (pArray->nGrowStep == 0) {
@@ -871,15 +651,14 @@ void TSBaseArray_Ui_ReallocData(BigBuffer* pArray, uint32_t nNewMax) {
     pArray->nCapacity = nNewMax;
     pArray->pData = (uint32_t*)SMemReAlloc(pBlock, nNewMax * sizeof(uint32_t), "nothing", -2, 0x10);
     if (pArray->pData == NULL) {
-        uint32_t* pNew = (uint32_t*)SMemAlloc(nNewMax * sizeof(uint32_t), "nothing", -2, 0);
-        pArray->pData = pNew;
+        pArray->pData = (uint32_t*)SMemAlloc(nNewMax * sizeof(uint32_t), "nothing", -2, 0);
         if (pBlock != NULL) {
             uint32_t nKeep = pArray->nCount;
             if (nNewMax < nKeep) {
                 nKeep = nNewMax;
             }
             for (uint32_t i = 0; i < nKeep; i++) {
-                pNew[i] = pBlock[i];
+                new (&pArray->pData[i]) uint32_t(pBlock[i]);
             }
             SMemFree(pBlock, "nothing", -2, 0);
         }
@@ -888,8 +667,9 @@ void TSBaseArray_Ui_ReallocData(BigBuffer* pArray, uint32_t nNewMax) {
 
 // 1.14d mac: 0000bdc8
 // Makes nCount a valid index: grows the count to nCount + 1; a non-null pSrc zeroes the new words.
+// The new words are then constructed in place (a trivial constructor: the loop is left empty).
 void TSBaseArray_Ui_Copy(BigBuffer* pArray, uint32_t nCount, uint32_t* pSrc) {
-    if (pArray->nCount <= nCount) {
+    if (nCount >= pArray->nCount) {
         uint32_t nNewCount = nCount + 1;
         TSGrowableArray_Ui_Reserve(pArray, nNewCount - pArray->nCount, 1);
         if (pSrc != NULL) {
@@ -897,6 +677,9 @@ void TSBaseArray_Ui_Copy(BigBuffer* pArray, uint32_t nCount, uint32_t* pSrc) {
             if (0 < (int)n) {
                 bzero(pArray->pData + pArray->nCount, n);
             }
+        }
+        for (uint32_t i = pArray->nCount; i <= nCount; i++) {
+            new (&pArray->pData[i]) uint32_t;
         }
         pArray->nCount = nNewCount;
     }
@@ -943,17 +726,10 @@ void SBIG_BigBuffer_GetWord(BigStack* pStack, BigBuffer* pDest, BigBuffer* pSour
 }
 
 // 1.14d mac: 0000bf02
-void TSFixedArray_Ui_Set(BigBuffer* pArray, int nCount, const uint32_t* pSrc) {
+void TSFixedArray_Ui_Set(BigBuffer* pArray, uint32_t nCount, const uint32_t* pSrc) {
     TSFixedArray_Ui_ReallocData(pArray, nCount);
-    if (nCount != 0) {
-        uint32_t* pDest = pArray->pData;
-        for (int nRemaining = nCount; nRemaining != 0; nRemaining--) {
-            if (pDest != NULL) {
-                *pDest = *pSrc;
-            }
-            pSrc++;
-            pDest++;
-        }
+    for (uint32_t i = 0; i < nCount; i++) {
+        new (&pArray->pData[i]) uint32_t(pSrc[i]);
     }
     pArray->nCount = nCount;
 }

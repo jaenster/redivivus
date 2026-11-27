@@ -31,7 +31,7 @@ int g_nDebugMemory;
 // 1.14d mac: 003f094c
 int g_nProtectMemory;
 
-static void SMEM_DisplayOutOfMemoryError(int nUnused, int nLine, const char* szFile, uint32_t nBytes) __attribute__((noinline));
+static void SMEM_DisplayOutOfMemoryError(const char* szFile, int nLine, uint32_t nBytes);
 
 // 1.14d mac: 00018b0b
 void* SMemAlloc(uint32_t nBytes, const char* szFile, int nLine, uint32_t dwFlags) {
@@ -42,17 +42,17 @@ void* SMemAlloc(uint32_t nBytes, const char* szFile, int nLine, uint32_t dwFlags
     }
     void* pMemory = MemAlloc(nBytes, dwAllocFlags);
     if (!pMemory) {
-        if (*szFile == '\0') {
-            szFile = "SMemAlloc()";
-            nLine = -1;
+        if (*szFile != '\0') {
+            SMEM_DisplayOutOfMemoryError(szFile, nLine, nBytes);
+        } else {
+            SMEM_DisplayOutOfMemoryError("SMemAlloc()", -1, nBytes);
         }
-        SMEM_DisplayOutOfMemoryError(0, nLine, szFile, nBytes);
     }
     return pMemory;
 }
 
 // 1.14d mac: 00018b75
-static void SMEM_DisplayOutOfMemoryError(int nUnused, int nLine, const char* szFile, uint32_t nBytes) {
+static void SMEM_DisplayOutOfMemoryError(const char* szFile, int nLine, uint32_t nBytes) {
     char szBuffer[256];
     SStrPrintf(szBuffer, sizeof(szBuffer), "%d bytes", nBytes);
     SErrDisplayError(ERROR_NOT_ENOUGH_MEMORY, szFile, nLine, szBuffer, 0, 1);

@@ -12,7 +12,7 @@
 #include <alloca.h>
 #include <string.h>
 
-class Sha1;
+struct Sha1;
 struct BigData;
 
 // The verify stream's context. Its first fields are Windows' D2SsigContextStrc's.
@@ -22,28 +22,40 @@ struct SsigContext {
     uint32_t nBytesBuffered;  // 0x08: bytes in pDataBuffer
     uint32_t nBufferSize;     // 0x0C: nModulusLen + 4, the "SIGN" magic and the signature
     uint8_t* pDataBuffer;     // 0x10
-    uint32_t aSha1State[23];  // 0x14: the Sha1 object
+    uint32_t aSha1State[23];  // 0x14: the Sha1 object (unknown_sha1.cpp), opaque here
 };
 
 void* operator new(size_t nBytes);
-void Sha1_Initialize(uint32_t* pSha1);
-void Sha1_Append(uint32_t* pSha1, const void* pData, uint32_t nBytes);
-void Sha1_Finalize(uint32_t* pSha1, void* pDigest);
+void Sha1_Initialize(Sha1* pContext);
+void Sha1_Append(Sha1* pContext, const uint8_t* pData, uint32_t nSize);
+void Sha1_Finalize(Sha1* pContext, uint8_t* pDigest);
 void SBigNew(BigData** ppBig);
 void SBigDel(BigData* pBig);
 void CryptRSA_Prepare(BigData** pRsa, void* pModulus, uint32_t nModulusLen, void* pExponent, uint32_t nExponentLen);
 void CryptRSA_Process(BigData** pRsa, void* pData, uint32_t nLen);
 
+// A big number for the length of a scope: SBigNew on construction, SBigDel on destruction.
+struct SBigScoped {
+    BigData* pBig;
+    SBigScoped() { SBigNew(&pBig); }
+    ~SBigScoped() { SBigDel(pBig); }
+};
+
+// The RSA key's two numbers, side by side: CryptRSA takes them as a pair.
+struct RsaKey {
+    SBigScoped tModulus;
+    SBigScoped tExponent;
+};
+
 // 1.14d mac: 0001d302
 void SSignatureVerifyStream_Begin(SsigContext** ppContext, uint32_t nModulusLen, uint32_t nExponentLen) {
-    SsigContext* pContext = (SsigContext*)operator new(sizeof(SsigContext));
-    *ppContext = pContext;
-    pContext->nModulusLen = nModulusLen;
-    pContext->nExponentLen = nExponentLen;
-    pContext->nBytesBuffered = 0;
-    pContext->nBufferSize = nModulusLen + 4;
-    pContext->pDataBuffer = (uint8_t*)SMemAlloc(pContext->nBufferSize, __FILE__, 0x57, 8);
-    Sha1_Initialize(pContext->aSha1State);
+    *ppContext = (SsigContext*)operator new(sizeof(SsigContext));
+    (*ppContext)->nModulusLen = nModulusLen;
+    (*ppContext)->nExponentLen = nExponentLen;
+    (*ppContext)->nBytesBuffered = 0;
+    (*ppContext)->nBufferSize = nModulusLen + 4;
+    (*ppContext)->pDataBuffer = (uint8_t*)SMemAlloc((*ppContext)->nBufferSize, __FILE__, 0x5b, 8);
+    Sha1_Initialize((Sha1*)(*ppContext)->aSha1State);
 }
 
 // 1.14d mac: 0001d374
@@ -59,7 +71,7 @@ void SSignatureVerifyStream_ProvideData(SsigContext* pContext, uint8_t* pData, s
     if (nRemaining < 0) {
         int nFlush = nRemaining + nBuffered;
         if (0 < nFlush) {
-            Sha1_Append(pContext->aSha1State, pContext->pDataBuffer, nFlush);
+            Sha1_Append((Sha1*)pContext->aSha1State, pContext->pDataBuffer, nFlush);
             nNewBuffered = pContext->nBytesBuffered - nFlush;
             pContext->nBytesBuffered = nNewBuffered;
             if (0 < (int)nNewBuffered) {
@@ -72,10 +84,10 @@ void SSignatureVerifyStream_ProvideData(SsigContext* pContext, uint8_t* pData, s
         nNewBuffered = nDataLen + pContext->nBytesBuffered;
     } else {
         if (nBuffered != 0) {
-            Sha1_Append(pContext->aSha1State, pContext->pDataBuffer, nBuffered);
+            Sha1_Append((Sha1*)pContext->aSha1State, pContext->pDataBuffer, nBuffered);
         }
         if (0 < nRemaining) {
-            Sha1_Append(pContext->aSha1State, pData, nRemaining);
+            Sha1_Append((Sha1*)pContext->aSha1State, pData, nRemaining);
         }
         nNewBuffered = pContext->nBufferSize;
         if (0 < (int)nNewBuffered) {
@@ -93,24 +105,21 @@ int SSignatureVerifyStream_Finish(SsigContext* pContext, void* pModulus, void* p
     int bVerified = 0;
     if (pContext->nBytesBuffered == pContext->nBufferSize) {
         if (*(int*)pContext->pDataBuffer == 0x5349474e) {
+            // Both buffers are on the stack at run-time size: the original moves esp by
+            // (nModulusLen + 15) & ~15 for each.
             uint32_t nSigLen = pContext->nModulusLen;
-            BigData* aRsa[2];
             uint8_t* pHash = (uint8_t*)alloca(nSigLen);
             memset(pHash, 0xbb, nSigLen);
             pHash[nSigLen - 1] = 0x0b;
-            Sha1_Finalize(pContext->aSha1State, pHash);
+            Sha1_Finalize((Sha1*)pContext->aSha1State, pHash);
             uint8_t* pSig = (uint8_t*)alloca(pContext->nModulusLen);
             if (0 < (int)pContext->nModulusLen) {
                 memmove(pSig, pContext->pDataBuffer + 4, pContext->nModulusLen);
             }
-            SBigNew(&aRsa[0]);
-            SBigNew(&aRsa[1]);
-            CryptRSA_Prepare(aRsa, pModulus, pContext->nModulusLen, pExponent, pContext->nExponentLen);
-            CryptRSA_Process(aRsa, pSig, pContext->nModulusLen);
-            int nCmp = memcmp(pSig, pHash, pContext->nModulusLen);
-            SBigDel(aRsa[1]);
-            SBigDel(aRsa[0]);
-            bVerified = nCmp == 0;
+            RsaKey tKey;
+            CryptRSA_Prepare(&tKey.tModulus.pBig, pModulus, pContext->nModulusLen, pExponent, pContext->nExponentLen);
+            CryptRSA_Process(&tKey.tModulus.pBig, pSig, pContext->nModulusLen);
+            bVerified = memcmp(pSig, pHash, pContext->nModulusLen) == 0;
         }
         SMemFree(pContext->pDataBuffer, __FILE__, 0xd4, 0);
         if (pContext == NULL) {

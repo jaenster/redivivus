@@ -12,13 +12,13 @@
 #include <string.h>
 
 // 1.14d mac: 00397084
-// The padding block: 0x80, then zeros.
-extern const uint8_t g_abySha1Padding[64];
+// The padding block: 0x80, then zeros. Defined here: Finalize addresses it directly (lea),
+// not through a non-lazy pointer as it would an object of another unit.
+static const uint8_t g_abySha1Padding[64] = {0x80};
 
 // The context: the bit count (low, high), the five state words, the 64-byte block buffer.
 struct Sha1 {
-    uint32_t dwBitCountLow;   // 0x00
-    uint32_t dwBitCountHigh;  // 0x04
+    uint64_t qwBitCount;      // 0x00
     uint32_t aState[5];       // 0x08
     uint8_t abyBlock[64];     // 0x1C
 };
@@ -28,8 +28,9 @@ static inline uint32_t Rol(uint32_t dwValue, int nBits) {
 }
 
 // 1.14d mac: 00009d2e
-// One 512-bit block into the state.
-static void Sha1_Pump(uint32_t* pState, const uint8_t* pBlock) {
+// One 512-bit block into the state. External (a class member in the PPC build): the original
+// calls it with its arguments on the stack, not in ecx/edx as a file-local function.
+void Sha1_Pump(uint32_t* pState, const uint8_t* pBlock) {
     uint32_t aMsgSchedule[80];
     for (int i = 0; i < 16; i++) {
         aMsgSchedule[i] = (uint32_t)pBlock[i * 4 + 3] | (uint32_t)pBlock[i * 4 + 2] << 8 |
@@ -76,8 +77,7 @@ static void Sha1_Pump(uint32_t* pState, const uint8_t* pBlock) {
 
 // 1.14d mac: 0000a480
 void Sha1_Initialize(Sha1* pContext) {
-    pContext->dwBitCountHigh = 0;
-    pContext->dwBitCountLow = 0;
+    pContext->qwBitCount = 0;
     pContext->aState[0] = 0x67452301;
     pContext->aState[1] = 0xefcdab89;
     pContext->aState[2] = 0x98badcfe;
@@ -87,45 +87,36 @@ void Sha1_Initialize(Sha1* pContext) {
 
 // 1.14d mac: 0000a4b8
 void Sha1_Append(Sha1* pContext, const uint8_t* pData, uint32_t nSize) {
-    uint32_t dwOldLow = pContext->dwBitCountLow;
-    pContext->dwBitCountLow = nSize * 8 + dwOldLow;
-    pContext->dwBitCountHigh += (nSize >> 29) + (uint32_t)(pContext->dwBitCountLow < dwOldLow);
-    uint32_t nBuffered = dwOldLow >> 3 & 0x3f;
-    uint32_t nFilled = 0;
-    if (nBuffered != 0) {
-        nSize += nBuffered;
-        if (nSize < 0x40) {
-            nFilled = nBuffered;
-            pData -= nBuffered;
-            goto buffer;
+    uint32_t i = (uint32_t)(pContext->qwBitCount >> 3) & 0x3f;
+    pContext->qwBitCount += (uint64_t)nSize << 3;
+    if (i != 0) {
+        nSize += i;
+        pData -= i;
+        if (nSize >= 0x40) {
+            for (; i < 0x40; i++) {
+                pContext->abyBlock[i] = pData[i];
+            }
+            Sha1_Pump(pContext->aState, pContext->abyBlock);
+            pData += sizeof(pContext->abyBlock);
+            nSize -= 0x40;
+            i = 0;
         }
-        for (uint32_t i = nBuffered; i != 0x40; i++) {
-            pContext->abyBlock[i] = *pData++;
-        }
-        Sha1_Pump(pContext->aState, pContext->abyBlock);
-        nSize -= 0x40;
     }
-    while (nSize > 0x3f) {
+    while (nSize >= 0x40) {
         Sha1_Pump(pContext->aState, pData);
         pData += sizeof(pContext->abyBlock);
         nSize -= 0x40;
     }
-    nFilled = 0;
-buffer:
-    if (nFilled < nSize) {
-        uint8_t* pDest = pContext->abyBlock + nFilled;
-        pData += nFilled;
-        for (uint32_t n = nSize - nFilled; n != 0; n--) {
-            *pDest++ = *pData++;
-        }
+    for (; i < nSize; i++) {
+        pContext->abyBlock[i] = pData[i];
     }
 }
 
 // 1.14d mac: 0000a56e
 void Sha1_Finalize(Sha1* pContext, uint8_t* pDigest) {
     uint8_t abyLength[8];
-    uint32_t dwLow = pContext->dwBitCountLow;
-    uint32_t dwHigh = pContext->dwBitCountHigh;
+    uint32_t dwLow = (uint32_t)pContext->qwBitCount;
+    uint32_t dwHigh = (uint32_t)(pContext->qwBitCount >> 32);
     uint32_t dwShifted = dwLow;
     for (int i = 8; i > 0; i--) {
         abyLength[i - 1] = (uint8_t)dwShifted;
