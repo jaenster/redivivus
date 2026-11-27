@@ -823,7 +823,7 @@ int32_t __fastcall D2FILE_VerifySignatureWinTrust(LPCSTR szText) {
         pWideStr = (LPWSTR)Game::Main::MISC_OperatorNewShim(-(uint32_t)((int)((uint64_t)nVerifyResult * 2 >> 0x20) != 0) | (uint32_t)((uint64_t)nVerifyResult * 2));
         /* int cchWideChar for MultiByteToWideChar */ /* LPWSTR lpWideCharStr for MultiByteToWideChar */ /* int cbMultiByte for MultiByteToWideChar */ /* LPCSTR lpMultiByteStr for MultiByteToWideChar */ /* DWORD dwFlags for MultiByteToWideChar */ /* UINT CodePage for MultiByteToWideChar */ MultiByteToWideChar(0, 0, szText, -1, pWideStr, nVerifyResult);
         memset(&sWvtFileInfo, 0, sizeof(sWvtFileInfo));
-        sWvtFileInfo.cbStruct = 0x10;
+        sWvtFileInfo.cbStruct = sizeof(sWvtFileInfo);
         sWvtFileInfo.hFile = (HANDLE)0x0;
         sWvtFileInfo.pgKnownSubject = 0;
         sActionGuid.Data1 = 0xaac56b;
@@ -840,7 +840,7 @@ int32_t __fastcall D2FILE_VerifySignatureWinTrust(LPCSTR szText) {
         sWvtFileInfo.pcwszFilePath = pWideStr;
         memset(&sWvtData, 0, sizeof(sWvtData));
         sWvtData.pUnion = &sWvtFileInfo;
-        /* LPVOID pWVTData for WinVerifyTrust */ /* GUID * pgActionID for WinVerifyTrust */ /* HWND hwnd for WinVerifyTrust */ sWvtData.cbStruct = 0x30;
+        /* LPVOID pWVTData for WinVerifyTrust */ /* GUID * pgActionID for WinVerifyTrust */ /* HWND hwnd for WinVerifyTrust */ sWvtData.cbStruct = sizeof(sWvtData);
         sWvtData.pPolicyCallbackData = 0;
         sWvtData.pSIPClientData = 0;
         sWvtData.dwUIChoice = 2;

@@ -349,7 +349,7 @@ bool DEBUG_EnumerateModulesViaToolhelp32(int * pModuleList) {
     }
 
     bool bAddOk;
-    moduleEntry.dwSize = 0x428;
+    moduleEntry.dwSize = sizeof(moduleEntry);
     bHasModule = Module32FirstW(hSnapshot, &moduleEntry);
     while (true) {
       if (!bHasModule) {
@@ -361,7 +361,7 @@ bool DEBUG_EnumerateModulesViaToolhelp32(int * pModuleList) {
         break;
       }
 
-      moduleEntry.dwSize = 0x428;
+      moduleEntry.dwSize = sizeof(moduleEntry);
       bHasModule = Module32NextW(hSnapshot, &moduleEntry);
     }
 
