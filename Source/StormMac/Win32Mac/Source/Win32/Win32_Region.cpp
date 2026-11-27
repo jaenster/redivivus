@@ -20,6 +20,9 @@ void MemFreeHandle(Handle hMem);
 
 typedef Win32MacRect StripRect;
 
+// Declared fastcall in the source, not made fastcc by the optimiser: both callers of
+// Rgn_NewStripRgn pass 0 (xor ecx, ecx at 00031b0d and 00032207) and the argument
+// survives, which a static function would lose to constant propagation.
 #define D2_FASTCALL __attribute__((fastcall))
 
 // The region block: bounds, rect count, a lock count the walkers bump, capacity (a multiple

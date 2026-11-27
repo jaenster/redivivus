@@ -1,7 +1,7 @@
 // Storm's Win32-on-Mac layer: window classes, window lifetime, focus and activation,
-// 1.14d Intel Mac band 0002eae0..00031a0a (the window manager; the same unit as
-// Win32_WindowPaint.cpp, split for size). See Source/StormMac/README.md for how the
-// file boundary was pinned.
+// paint and props, 1.14d Intel Mac band 0002f888..00031b0c (the window manager). The
+// built-in window procedures and DefWindowProc before it are Win32_WndProcs.cpp. See
+// Source/StormMac/README.md for how the file boundaries were pinned.
 //
 // Windows are heap objects (Win32MacWindow) in a tree under one desktop window. A
 // registered class lives in one of 16 table slots.
@@ -77,11 +77,6 @@ static const int s_anShowVisible[10] = {0, 1, 0, 0, 0, 1, 0, 0, 0, 1};
 // 1.14d mac: 00322550
 // The SetWindowPos flags each SW_* command stands for.
 static const int s_anShowFlags[10] = {0x97, 0x47, 0, 0, 0, 0x47, 0, 0, 0, 0x47};
-// 1.14d mac: 003224f0
-// WM_GETDLGCODE for each button style.
-static const int s_anButtonDlgCode[10] = {0x2020, 0x2010, 0x2000, 0x2000, 0x2040,
-                                          0x2000, 0x2000, 0x2000, 0x2000, 0x2040};
-
 // 1.14d mac: 00322578
 // The virtual key of the Mac key codes below 0x80 the layout gives no letter.
 static const BYTE s_abyMacKeyToVirtualKey[0x80] = {
@@ -115,367 +110,12 @@ static const BYTE s_abyVirtualKeyToMacKey[0x100] = {
     0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff,
 };
 
-// 1.14d mac: 0002ef30
-D2_NOINLINE LRESULT Proc_DesktopWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-    if (uMsg != WM_PAINT && uMsg != WM_ERASEBKGND) {
-        return 0;
-    }
-    return DefWindowProc(hWnd, uMsg, wParam, lParam);
-}
-
-// 1.14d mac: 0002eae0
-// What a window does with the messages nothing else claims.
-D2_NOINLINE LRESULT DefWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-    switch (uMsg) {
-        case WM_CREATE:
-            return 1;
-        case WM_ACTIVATE:
-            if ((wParam & 0xFFFF) - 1 < 2) {
-                SetFocus(hWnd);
-            }
-            return 0;
-        case WM_ENABLE:
-            InvalidateRect(hWnd, 0, 1);
-            break;
-        case WM_SETTEXT: {
-            if (hWnd == 0) {
-                return 0;
-            }
-            hWnd->cMnemonic = 0;
-            if (hWnd->szText != 0) {
-                Priv_Free(hWnd->szText);
-                hWnd->szText = 0;
-            }
-            const char* szText = (const char*)lParam;
-            if (szText != 0 && *szText != 0) {
-                hWnd->szText = (char*)Priv_Alloc(strlen(szText) + 1);
-                strcpy(hWnd->szText, szText);
-                hWnd->cMnemonic = 0;
-                const char* pAmp = strchr(hWnd->szText, '&');
-                if (pAmp != 0 && pAmp[1] != 0 && pAmp[1] != '&') {
-                    hWnd->cMnemonic = pAmp[1];
-                }
-            }
-            return 1;
-        }
-        case WM_GETTEXT: {
-            char* szBuf = (char*)lParam;
-            if (szBuf != 0 && (int)wParam > 0) {
-                *szBuf = 0;
-                if (hWnd != 0 && hWnd->szText != 0 && *hWnd->szText != 0) {
-                    strncpy(szBuf, hWnd->szText, wParam - 1);
-                    szBuf[wParam - 1] = 0;
-                    return strlen(szBuf) + 1;
-                }
-            }
-            return 0;
-        }
-        case WM_GETTEXTLENGTH:
-            if (hWnd != 0 && hWnd->szText != 0 && *hWnd->szText != 0) {
-                return strlen(hWnd->szText);
-            }
-            return 0;
-        case WM_PAINT: {
-            PAINTSTRUCT tPaint;
-            BeginPaint(hWnd, &tPaint);
-            EndPaint(hWnd, &tPaint);
-            break;
-        }
-        case WM_CLOSE:
-            DestroyWindow(hWnd);
-            break;
-        case WM_ERASEBKGND:
-            if (hWnd != 0) {
-                RECT rcClient;
-                GetClientRect(hWnd, &rcClient);
-                FillRect((HDC)wParam, &rcClient);
-            }
-            return 1;
-        case WM_SHOWWINDOW:
-            if (lParam != 0 && (((hWnd->dwStyle & WS_VISIBLE) != 0) == (wParam == 0))) {
-                ShowWindow(hWnd, wParam != 0 ? 5 : 0);
-            }
-            break;
-        case WM_SETFONT:
-            if (hWnd == 0) {
-                return 0;
-            }
-            if (wParam == 0) {
-                wParam = (int)GetStockObject(SYSTEM_FONT);
-            }
-            hWnd->hFont = wParam;
-            return 0;
-        case WM_GETFONT:
-            if (hWnd == 0) {
-                return 0;
-            }
-            {
-                int hFont = hWnd->hFont;
-                return hFont != (int)GetStockObject(SYSTEM_FONT) ? hFont : 0;
-            }
-        case WM_NCCREATE:
-            return 1;
-        case WM_NCACTIVATE:
-            return 1;
-        case WM_KEYDOWN:
-            if (wParam == 0x2D || wParam == 0x70) {
-                HWND hActive = GetActiveWindow();
-                if (hActive != 0) {
-                    SendMessage(hActive, WM_HELP, 0, 0);
-                }
-                return 0;
-            }
-            break;
-        case WM_SYSKEYDOWN:
-            if (wParam == 0x73) {
-                HWND hTop = Wnd_GetTopParent(hWnd);
-                if ((hTop->pClass->style & CS_NOCLOSE) == 0) {
-                    PostMessage(hTop, WM_SYSCOMMAND, SC_CLOSE, 0);
-                }
-            }
-            break;
-        case WM_SYSCOMMAND:
-            if ((wParam & 0xFFF0) == SC_CLOSE) {
-                return SendMessage(hWnd, WM_CLOSE, 0, 0);
-            }
-            break;
-    }
-    return 0;
-}
-
-// 1.14d mac: 0002ef4a
-D2_NOINLINE LRESULT Proc_ButtonWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-    DWORD dwStyle = hWnd->dwStyle;
-    LRESULT lResult = 0;
-    WPARAM wNotify;
-    HWND hParent;
-
-    if (uMsg < 0x200) {
-        if (uMsg >= 0xF0) {
-            switch (uMsg) {
-                case 0xF0:
-                case 0xF1:
-                    return 0;
-                case BM_GETSTATE:
-                    return GetProp(hWnd, "__ButtonIsPressed") != 0;
-                case BM_SETSTATE: {
-                    int bPressed = GetProp(hWnd, "__ButtonIsPressed");
-                    if (bPressed == 0 && wParam != 0) {
-                        SetProp(hWnd, "__ButtonIsPressed", 1);
-                    } else {
-                        if (wParam != 0 || bPressed == 0) {
-                            return 0;
-                        }
-                        RemoveProp(hWnd, "__ButtonIsPressed");
-                    }
-                    InvalidateRect(hWnd, 0, 1);
-                    return 0;
-                }
-                case BM_SETSTYLE:
-                    hWnd->dwStyle = dwStyle | 0xF;
-                    return 0;
-                case BM_CLICK:
-                    SendMessage(hWnd, WM_LBUTTONDOWN, 0, 0);
-                    SendMessage(hWnd, WM_LBUTTONUP, 0, 0);
-                    return 0;
-                default:
-                    return DefWindowProc(hWnd, uMsg, wParam, lParam);
-            }
-        }
-        if (uMsg > WM_NCHITTEST + 2) {
-            if (uMsg == WM_GETDLGCODE) {
-                return (dwStyle & 0xF) < 10 ? s_anButtonDlgCode[dwStyle & 0xF] : 0x2000;
-            }
-            return DefWindowProc(hWnd, uMsg, wParam, lParam);
-        }
-        if (uMsg < WM_SETFOCUS) {
-            if (uMsg != WM_DESTROY) {
-                return DefWindowProc(hWnd, uMsg, wParam, lParam);
-            }
-            RemoveProp(hWnd, "__ButtonIsPressed");
-            return DefWindowProc(hWnd, WM_DESTROY, wParam, lParam);
-        }
-        switch (uMsg) {
-            case WM_SETFOCUS:
-                if ((dwStyle & 0x4000) != 0) {
-                    wNotify = hWnd->nID;
-                    hParent = GetParent(hWnd);
-                    SendMessage(hParent, WM_COMMAND, (wNotify & 0xFFFF) | 0x60000, (LPARAM)hWnd);
-                }
-                return 0;
-            case WM_KILLFOCUS:
-                if ((dwStyle & 0x4000) != 0) {
-                    wNotify = hWnd->nID;
-                    hParent = GetParent(hWnd);
-                    SendMessage(hParent, WM_COMMAND, (wNotify & 0xFFFF) | 0x70000, (LPARAM)hWnd);
-                }
-                return 0;
-            case WM_SETTEXT: {
-                LRESULT lText = DefWindowProc(hWnd, WM_SETTEXT, wParam, lParam);
-                if (lText != 0) {
-                    InvalidateRect(hWnd, 0, 1);
-                    lResult = lText;
-                }
-                return lResult;
-            }
-            case WM_PAINT: {
-                PAINTSTRUCT tPaint;
-                HDC hDC = BeginPaint(hWnd, &tPaint);
-                if (hDC != 0 && hWnd != 0) {
-                    DWORD dwType = dwStyle & 0xF;
-                    if (dwType > 1) {
-                        if (dwType == 0xB) {
-                            DRAWITEMSTRUCT tItem;
-                            tItem.CtlType = 4;
-                            tItem.CtlID = hWnd->nID;
-                            tItem.itemID = 0;
-                            tItem.itemAction = 1;
-                            tItem.itemState = 0;
-                            tItem.hwndItem = hWnd;
-                            tItem.itemData = 0;
-                            tItem.hDC = hDC;
-                            GetClientRect(hWnd, &tItem.rcItem);
-                            if (GetFocus() == hWnd) {
-                                tItem.itemState |= 0x10;
-                            }
-                            if ((dwStyle & 0x8000000) != 0) {
-                                tItem.itemState |= 4;
-                            }
-                            hParent = GetParent(hWnd);
-                            SendMessage(hParent, WM_DRAWITEM, hWnd->nID, (LPARAM)&tItem);
-                        } else if (dwType == 9) {
-                            fp_fatal("Only painting of owner-drawn buttons has been implemented");
-                        } else {
-                            fp_fatal("Proc_PaintButton: Unknown button style");
-                        }
-                    }
-                }
-                EndPaint(hWnd, &tPaint);
-                return 0;
-            }
-            default:
-                return DefWindowProc(hWnd, uMsg, wParam, lParam);
-        }
-    }
-    if (uMsg - WM_MOUSEMOVE > 3) {
-        return DefWindowProc(hWnd, uMsg, wParam, lParam);
-    }
-    int nMouseX = (short)lParam;
-    int nMouseY = (int)lParam >> 16;
-    switch (uMsg) {
-        case WM_MOUSEMOVE:
-            if (GetCapture() == hWnd) {
-                RECT rcClient;
-                GetClientRect(hWnd, &rcClient);
-                BOOL bInside = PtInRect(&rcClient, nMouseX, nMouseY);
-                SendMessage(hWnd, BM_SETSTATE, bInside != 0, 0);
-            }
-            return 0;
-        case WM_LBUTTONDOWN:
-            SendMessage(hWnd, BM_SETSTATE, 1, 0);
-            SetFocus(hWnd);
-            SetCapture(hWnd);
-            return 0;
-        case WM_LBUTTONUP: {
-            if (GetCapture() != hWnd) {
-                return 0;
-            }
-            ReleaseCapture();
-            SendMessage(hWnd, BM_SETSTATE, 0, 0);
-            RECT rcButton;
-            GetClientRect(hWnd, &rcButton);
-            if (PtInRect(&rcButton, nMouseX, nMouseY) == 0) {
-                return 0;
-            }
-            if ((dwStyle & 0xF) == 9) {
-                SendMessage(hWnd, BM_SETCHECK, 1, 0);
-            }
-            wNotify = hWnd->nID;
-            hParent = GetParent(hWnd);
-            SendMessage(hParent, WM_COMMAND, wNotify & 0xFFFF, (LPARAM)hWnd);
-            return 0;
-        }
-        case WM_LBUTTONDBLCLK:
-            wNotify = hWnd->nID;
-            hParent = GetParent(hWnd);
-            SendMessage(hParent, WM_COMMAND, (wNotify & 0xFFFF) | 0x50000, (LPARAM)hWnd);
-            return 0;
-    }
-    return lResult;
-}
-
-// 1.14d mac: 0002f793
-D2_NOINLINE LRESULT Proc_StaticWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-    LRESULT lResult = 0;
-    if (uMsg < WM_MOUSEMOVE) {
-        if (uMsg - WM_SETFOCUS < 2) {
-            InvalidateRect(hWnd, 0, 1);
-        } else if (uMsg == WM_SETTEXT) {
-            LRESULT lText = DefWindowProc(hWnd, WM_SETTEXT, wParam, lParam);
-            if (lText != 0) {
-                InvalidateRect(hWnd, 0, 1);
-                lResult = lText;
-            }
-        } else if (uMsg == WM_PAINT) {
-            PAINTSTRUCT tPaint;
-            BeginPaint(hWnd, &tPaint);
-            EndPaint(hWnd, &tPaint);
-        } else {
-            lResult = DefWindowProc(hWnd, uMsg, wParam, lParam);
-        }
-    } else if (uMsg - WM_MOUSEMOVE >= 3) {
-        lResult = DefWindowProc(hWnd, uMsg, wParam, lParam);
-    }
-    return lResult;
-}
-
-// 1.14d mac: 0002f500
-// Registers the classes every window needs: the desktop, Button, Static, Listbox, Edit.
-D2_NOINLINE void Proc_RegisterBuiltInClasses(int hInstance) {
-    WNDCLASSEX tClass;
-
-    tClass.cbSize = sizeof(WNDCLASSEX);
-    tClass.style = 0x10000000;
-    tClass.lpfnWndProc = Proc_DesktopWndProc;
-    tClass.cbClsExtra = 0;
-    tClass.cbWndExtra = 0;
-    tClass.hInstance = hInstance;
-    tClass.hIcon = 0;
-    tClass.hCursor = 0;
-    tClass.hbrBackground = 0;
-    tClass.lpszMenuName = "";
-    tClass.lpszClassName = "Wnd_Desktop";
-    tClass.hIconSm = 0;
-    RegisterClassEx(&tClass);
-
-    tClass.cbSize = sizeof(WNDCLASSEX);
-    tClass.style = 8;
-    tClass.lpfnWndProc = Proc_ButtonWndProc;
-    tClass.lpszClassName = "Button";
-    RegisterClassEx(&tClass);
-
-    tClass.cbSize = sizeof(WNDCLASSEX);
-    tClass.style = 0;
-    tClass.lpfnWndProc = Proc_StaticWndProc;
-    tClass.lpszClassName = "Static";
-    RegisterClassEx(&tClass);
-
-    tClass.cbSize = sizeof(WNDCLASSEX);
-    tClass.style = 8;
-    tClass.lpfnWndProc = ListBox_WndProc;
-    tClass.lpszClassName = "Listbox";
-    RegisterClassEx(&tClass);
-
-    tClass.cbSize = sizeof(WNDCLASSEX);
-    tClass.style = 8;
-    tClass.lpfnWndProc = Edit_WndProc;
-    tClass.lpszClassName = "Edit";
-    RegisterClassEx(&tClass);
-}
+// 1.14d mac: 0002f500 is Proc_RegisterBuiltInClasses (Win32_WndProcs.cpp).
+void Proc_RegisterBuiltInClasses(int hInstance);
 
 // 1.14d mac: 0002fa20
 // The registered class of that name, case-insensitively, or NULL.
-D2_NOINLINE Win32MacWindowClass* Wnd_FindClassByName(LPCSTR szClassName) {
+Win32MacWindowClass* Wnd_FindClassByName(LPCSTR szClassName) {
     for (UINT i = 0; i < WINDOW_CLASS_COUNT; i++) {
         Win32MacWindowClass* pClass = &s_aWindowClasses[i];
         if (pClass->nUsed != 0 && _strnicmp(pClass->szClassName, szClassName, 0x100) == 0) {
@@ -487,7 +127,7 @@ D2_NOINLINE Win32MacWindowClass* Wnd_FindClassByName(LPCSTR szClassName) {
 
 // 1.14d mac: 0002faf8
 // A free slot of the class table with cbClsExtra bytes of class storage, or NULL.
-D2_NOINLINE Win32MacWindowClass* Wnd_NewWndClass(int nClsExtra) {
+Win32MacWindowClass* Wnd_NewWndClass(int nClsExtra) {
     for (UINT i = 0; i < WINDOW_CLASS_COUNT; i++) {
         Win32MacWindowClass* pClass = &s_aWindowClasses[i];
         if (pClass->nUsed == 0) {
@@ -504,7 +144,7 @@ D2_NOINLINE Win32MacWindowClass* Wnd_NewWndClass(int nClsExtra) {
 }
 
 // 1.14d mac: 0002f888
-D2_NOINLINE HWND Wnd_CreateDesktopWindow(int hInstance, Win32MacWindowClass* pClass) {
+HWND Wnd_CreateDesktopWindow(int hInstance, Win32MacWindowClass* pClass) {
     HWND hWnd = (HWND)Priv_AllocClear(pClass->cbWndExtra + sizeof(Win32MacWindow));
     if (hWnd != 0) {
         int nWidth = GetSystemMetrics(SM_CXSCREEN);
@@ -546,14 +186,14 @@ D2_NOINLINE HWND Wnd_CreateDesktopWindow(int hInstance, Win32MacWindowClass* pCl
 }
 
 // 1.14d mac: 0002f9e0
-D2_NOINLINE void Wnd_InitWnd(int hInstance) {
+void Wnd_InitWnd(int hInstance) {
     Proc_RegisterBuiltInClasses(hInstance);
     Win32MacWindowClass* pClass = Wnd_FindClassByName("Wnd_Desktop");
     g_hDesktopWnd = Wnd_CreateDesktopWindow(hInstance, pClass);
 }
 
 // 1.14d mac: 0002fad7
-D2_NOINLINE void Wnd_FreeWnd(HWND hWnd) {
+void Wnd_FreeWnd(HWND hWnd) {
     if (hWnd->szText != 0) {
         Priv_Free(hWnd->szText);
     }
@@ -562,7 +202,7 @@ D2_NOINLINE void Wnd_FreeWnd(HWND hWnd) {
 
 // 1.14d mac: 0002fa76
 // Tears the window system down.
-D2_NOINLINE void Wnd_Shutdown(void) {
+void Wnd_Shutdown(void) {
     if (g_hDesktopWnd != 0) {
         if (g_hDesktopWnd->hUpdateRgn != 0) {
             DeleteObject(g_hDesktopWnd->hUpdateRgn);
@@ -577,7 +217,7 @@ D2_NOINLINE void Wnd_Shutdown(void) {
 }
 
 // 1.14d mac: 0002fb57
-D2_NOINLINE BOOL Wnd_IsSelfOrDescendant(HWND hWndFind, HWND hWndRoot, int nDepth) {
+BOOL Wnd_IsSelfOrDescendant(HWND hWndFind, HWND hWndRoot, int nDepth) {
     if (hWndFind == hWndRoot) {
         return 1;
     }
@@ -591,7 +231,7 @@ D2_NOINLINE BOOL Wnd_IsSelfOrDescendant(HWND hWndFind, HWND hWndRoot, int nDepth
 
 // 1.14d mac: 0002fb9f
 // Tells each ancestor a child window was created or destroyed, unless the window opted out.
-D2_NOINLINE BOOL Wnd_SendParentNotify(HWND hWnd, WPARAM wEvent, int nChildID, LPARAM lParam) {
+BOOL Wnd_SendParentNotify(HWND hWnd, WPARAM wEvent, int nChildID, LPARAM lParam) {
     if (g_hDesktopWnd == hWnd) {
         return 0;
     }
@@ -610,7 +250,7 @@ D2_NOINLINE BOOL Wnd_SendParentNotify(HWND hWnd, WPARAM wEvent, int nChildID, LP
 
 // 1.14d mac: 0002fe9b
 // The ancestor whose parent is the desktop.
-D2_NOINLINE HWND Wnd_GetTopParent(HWND hWnd) {
+HWND Wnd_GetTopParent(HWND hWnd) {
     while (hWnd != 0) {
         HWND hParent = hWnd->pParent;
         if (hParent == g_hDesktopWnd) {
@@ -622,12 +262,12 @@ D2_NOINLINE HWND Wnd_GetTopParent(HWND hWnd) {
 }
 
 // 1.14d mac: 0002ffdd
-D2_NOINLINE HWND GetDesktopWindow(void) {
+HWND GetDesktopWindow(void) {
     return g_hDesktopWnd;
 }
 
 // 1.14d mac: 0002ffee
-D2_NOINLINE LRESULT CallWindowProc(WNDPROC pfnWndProc, HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
+LRESULT CallWindowProc(WNDPROC pfnWndProc, HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     if (pfnWndProc != 0 && Wnd_IsSelfOrDescendant(hWnd, g_hDesktopWnd, 0) != 0) {
         return pfnWndProc(hWnd, uMsg, wParam, lParam);
     }
@@ -635,12 +275,12 @@ D2_NOINLINE LRESULT CallWindowProc(WNDPROC pfnWndProc, HWND hWnd, UINT uMsg, WPA
 }
 
 // 1.14d mac: 00030049
-D2_NOINLINE BOOL IsWindow(HWND hWnd) {
+BOOL IsWindow(HWND hWnd) {
     return Wnd_IsSelfOrDescendant(hWnd, g_hDesktopWnd, 0);
 }
 
 // 1.14d mac: 00030077
-D2_NOINLINE ATOM RegisterClassEx(const WNDCLASSEX* pClassEx) {
+ATOM RegisterClassEx(const WNDCLASSEX* pClassEx) {
     if (Wnd_FindClassByName(pClassEx->lpszClassName) != 0) {
         return 0;
     }
@@ -676,7 +316,7 @@ D2_NOINLINE ATOM RegisterClassEx(const WNDCLASSEX* pClassEx) {
 }
 
 // 1.14d mac: 00030162
-D2_NOINLINE ATOM RegisterClass(const WNDCLASS* pClass) {
+ATOM RegisterClass(const WNDCLASS* pClass) {
     WNDCLASSEX tClassEx;
     tClassEx.cbSize = sizeof(WNDCLASSEX);
     tClassEx.style = pClass->style;
@@ -694,7 +334,7 @@ D2_NOINLINE ATOM RegisterClass(const WNDCLASS* pClass) {
 }
 
 // 1.14d mac: 000301c7
-D2_NOINLINE BOOL UnregisterClass(LPCSTR szClassName) {
+BOOL UnregisterClass(LPCSTR szClassName) {
     Win32MacWindowClass* pClass = Wnd_FindClassByName(szClassName);
     if (pClass == 0) {
         return 0;
@@ -729,7 +369,7 @@ static void Wnd_UnlinkFromParent(HWND hWnd) {
 }
 
 // 1.14d mac: 0003020c
-D2_NOINLINE BOOL DestroyWindow(HWND hWnd) {
+BOOL DestroyWindow(HWND hWnd) {
     HWND hDesktop = g_hDesktopWnd;
     if (Wnd_IsSelfOrDescendant(hWnd, hDesktop, 0) == 0) {
         return 0;
@@ -793,7 +433,7 @@ D2_NOINLINE BOOL DestroyWindow(HWND hWnd) {
 }
 
 // 1.14d mac: 00030408
-D2_NOINLINE BOOL ShowWindow(HWND hWnd, UINT nCmdShow) {
+BOOL ShowWindow(HWND hWnd, UINT nCmdShow) {
     if (hWnd == 0) {
         return 0;
     }
@@ -816,7 +456,7 @@ D2_NOINLINE BOOL ShowWindow(HWND hWnd, UINT nCmdShow) {
 }
 
 // 1.14d mac: 000304b5
-D2_NOINLINE HWND SetFocus(HWND hWnd) {
+HWND SetFocus(HWND hWnd) {
     Win32MacMsgState* pState = g_pMsgState;
     HWND hOldFocus = pState->hWndFocus;
     HWND hPrev = 0;
@@ -861,7 +501,7 @@ D2_NOINLINE HWND SetFocus(HWND hWnd) {
 }
 
 // 1.14d mac: 000305a7
-D2_NOINLINE HWND GetFocus(void) {
+HWND GetFocus(void) {
     HWND hResult = 0;
     if (g_pMsgState != 0) {
         HWND hFocus = g_pMsgState->hWndFocus;
@@ -873,7 +513,7 @@ D2_NOINLINE HWND GetFocus(void) {
 }
 
 // 1.14d mac: 000305f6
-D2_NOINLINE HWND SetActiveWindow(HWND hWnd) {
+HWND SetActiveWindow(HWND hWnd) {
     Win32MacMsgState* pState = g_pMsgState;
     HWND hOldActive = pState->hWndActive;
     HWND hPrev = 0;
@@ -1074,7 +714,7 @@ HWND CreateWindowEx(DWORD dwExStyle, LPCSTR szClassName, LPCSTR szWindowName, DW
 }
 
 // 1.14d mac: 00030b93
-D2_NOINLINE HWND GetParent(HWND hWnd) {
+HWND GetParent(HWND hWnd) {
     HWND hResult = 0;
     if (Wnd_IsSelfOrDescendant(hWnd, g_hDesktopWnd, 0) != 0) {
         hResult = (hWnd->dwStyle & WS_CHILD) != 0 ? hWnd->pParent : hWnd->pOwner;
@@ -1083,7 +723,7 @@ D2_NOINLINE HWND GetParent(HWND hWnd) {
 }
 
 // 1.14d mac: 00030bdf
-D2_NOINLINE HWND GetCapture(void) {
+HWND GetCapture(void) {
     if (g_pMsgState == 0) {
         return 0;
     }
@@ -1091,7 +731,7 @@ D2_NOINLINE HWND GetCapture(void) {
 }
 
 // 1.14d mac: 00030c00
-D2_NOINLINE HWND SetCapture(HWND hWnd) {
+HWND SetCapture(HWND hWnd) {
     Win32MacMsgState* pState = g_pMsgState;
     HWND hPrev = 0;
     if (pState != 0) {
@@ -1105,7 +745,7 @@ D2_NOINLINE HWND SetCapture(HWND hWnd) {
 }
 
 // 1.14d mac: 00030c56
-D2_NOINLINE BOOL ReleaseCapture(void) {
+BOOL ReleaseCapture(void) {
     Win32MacMsgState* pState = g_pMsgState;
     if (pState == 0) {
         return 0;
@@ -1119,7 +759,7 @@ D2_NOINLINE BOOL ReleaseCapture(void) {
 }
 
 // 1.14d mac: 00030cb2
-D2_NOINLINE HWND GetActiveWindow(void) {
+HWND GetActiveWindow(void) {
     HWND hActive = g_pMsgState->hWndActive;
     HWND hResult = 0;
     if (hActive != 0 && Wnd_IsSelfOrDescendant(hActive, g_hDesktopWnd, 0) != 0) {
@@ -1129,7 +769,7 @@ D2_NOINLINE HWND GetActiveWindow(void) {
 }
 
 // 1.14d mac: 0002fdc5
-D2_NOINLINE BOOL GetClientRect(HWND hWnd, RECT* pRect) {
+BOOL GetClientRect(HWND hWnd, RECT* pRect) {
     if (hWnd == 0 || pRect == 0) {
         return 0;
     }
@@ -1141,6 +781,8 @@ D2_NOINLINE BOOL GetClientRect(HWND hWnd, RECT* pRect) {
 }
 
 // 1.14d mac: 0002fec2
+// Kept out of line: GetWindowRect (00031060, same unit by its run of direct g_hDesktopWnd
+// references) calls it twice out of line, where clang 425 -Os inlines this body.
 D2_NOINLINE BOOL ClientToScreen(HWND hWnd, POINT* pPoint) {
     if (pPoint == 0) {
         return 0;
@@ -1157,7 +799,7 @@ D2_NOINLINE BOOL ClientToScreen(HWND hWnd, POINT* pPoint) {
 }
 
 // 1.14d mac: 0002fef3
-D2_NOINLINE BOOL ScreenToClient(HWND hWnd, POINT* pPoint) {
+BOOL ScreenToClient(HWND hWnd, POINT* pPoint) {
     if (pPoint == 0) {
         return 0;
     }
@@ -1173,7 +815,7 @@ D2_NOINLINE BOOL ScreenToClient(HWND hWnd, POINT* pPoint) {
 }
 
 // 1.14d mac: 00031060
-D2_NOINLINE BOOL GetWindowRect(HWND hWnd, RECT* pRect) {
+BOOL GetWindowRect(HWND hWnd, RECT* pRect) {
     if (hWnd == 0 || pRect == 0) {
         return 0;
     }
@@ -1189,7 +831,7 @@ D2_NOINLINE BOOL GetWindowRect(HWND hWnd, RECT* pRect) {
 // 1.14d mac: 0002fdfe
 // Takes a visible, opaque window's screen rectangle out of the region being built.
 // 1 when nothing is left.
-D2_NOINLINE BOOL Wnd_Iterate_RemoveWindowFromVisRgn(HWND hWnd, Win32MacVisRgnContext* pContext) {
+BOOL Wnd_Iterate_RemoveWindowFromVisRgn(HWND hWnd, Win32MacVisRgnContext* pContext) {
     if ((hWnd->dwStyle & WS_VISIBLE) == 0 || (hWnd->dwExStyle & 0x20) != 0) {
         return 0;
     }
@@ -1202,7 +844,7 @@ D2_NOINLINE BOOL Wnd_Iterate_RemoveWindowFromVisRgn(HWND hWnd, Win32MacVisRgnCon
 
 // 1.14d mac: 0002fbf8
 // hRgn becomes the part of the window that shows: its client area less everything in front.
-D2_NOINLINE void Wnd_CalculateVisibleRgn(HWND hWnd, HRGN hRgn, int bClipChildren) {
+void Wnd_CalculateVisibleRgn(HWND hWnd, HRGN hRgn, int bClipChildren) {
     int nOriginY = 0;
     int nOriginX = 0;
     SetRectRgn(hRgn, 0, 0, 0, 0);
@@ -1277,7 +919,7 @@ D2_NOINLINE void Wnd_CalculateVisibleRgn(HWND hWnd, HRGN hRgn, int bClipChildren
 // 1.14d mac: 0002ff24
 // The child of hWndParent that contains the point (in the parent's client space),
 // the deepest one with bRecurse; bVisibleOnly skips hidden and disabled windows.
-D2_NOINLINE HWND Wnd_ChildFromPoint(HWND hWndParent, int nX, int nY, int bRecurse, int bVisibleOnly) {
+HWND Wnd_ChildFromPoint(HWND hWndParent, int nX, int nY, int bRecurse, int bVisibleOnly) {
     if (hWndParent == 0) {
         return 0;
     }
@@ -1298,7 +940,7 @@ D2_NOINLINE HWND Wnd_ChildFromPoint(HWND hWndParent, int nX, int nY, int bRecurs
 }
 
 // 1.14d mac: 00030fce
-D2_NOINLINE HWND WindowFromPoint(POINT pt) {
+HWND WindowFromPoint(POINT pt) {
     HWND hResult = 0;
     if (g_hDesktopWnd != 0) {
         hResult = Wnd_ChildFromPoint(g_hDesktopWnd, pt.x, pt.y, 1, 1);
@@ -1351,7 +993,7 @@ static void Wnd_AddToUpdateRegion(HWND hWnd, HRGN hRgn, int bErase, int bPaintNo
 }
 
 // 1.14d mac: 000318bf
-D2_NOINLINE BOOL Wnd_InvalidateRectRecursive(HWND hWnd, Win32MacInvalidateArgs* pArgs) {
+BOOL Wnd_InvalidateRectRecursive(HWND hWnd, Win32MacInvalidateArgs* pArgs) {
     if ((hWnd->dwStyle & WS_VISIBLE) != 0) {
         RECT rc = pArgs->rcInvalid;
         OffsetRect(&rc, -hWnd->rcWindow.left, -hWnd->rcWindow.top);
@@ -1448,7 +1090,7 @@ static void Wnd_InvalidateInParent(HWND hWnd, const RECT* pRect) {
 
 // 1.14d mac: 00031874
 // Marks hWnd, if hOwner owns it, and everything it owns in turn. 1 when it did.
-D2_NOINLINE BOOL Wnd_MarkOwnedWindows(HWND hWnd, HWND hOwner) {
+BOOL Wnd_MarkOwnedWindows(HWND hWnd, HWND hOwner) {
     if (hWnd->pOwner != hOwner) {
         return 0;
     }
@@ -1501,7 +1143,7 @@ static BOOL Wnd_ReorderOwnedWindows(HWND hWnd, HWND hAfter) {
 }
 
 // 1.14d mac: 00030cfd
-D2_NOINLINE BOOL SetWindowPos(HWND hWnd, HWND hWndInsertAfter, int nX, int nY, int cx, int cy, BYTE uFlags) {
+BOOL SetWindowPos(HWND hWnd, HWND hWndInsertAfter, int nX, int nY, int cx, int cy, BYTE uFlags) {
     BOOL bResult = 0;
     if (hWnd == 0) {
         return 0;
@@ -1609,12 +1251,12 @@ D2_NOINLINE BOOL SetWindowPos(HWND hWnd, HWND hWndInsertAfter, int nX, int nY, i
 }
 
 // 1.14d mac: 000312b5
-D2_NOINLINE BOOL AdjustWindowRectEx(void* pRect, DWORD dwStyle, BOOL bMenu, DWORD dwExStyle) {
+BOOL AdjustWindowRectEx(void* pRect, DWORD dwStyle, BOOL bMenu, DWORD dwExStyle) {
     return 1;
 }
 
 // 1.14d mac: 000312bf
-D2_NOINLINE BOOL InvalidateRect(HWND hWnd, const RECT* pRect, BOOL bErase) {
+BOOL InvalidateRect(HWND hWnd, const RECT* pRect, BOOL bErase) {
     RECT rcInvalid;
     int bPaintNow = 0;
     if (hWnd == 0) {
@@ -1638,7 +1280,7 @@ D2_NOINLINE BOOL InvalidateRect(HWND hWnd, const RECT* pRect, BOOL bErase) {
 }
 
 // 1.14d mac: 0003135a
-D2_NOINLINE BOOL UpdateWindow(HWND hWnd) {
+BOOL UpdateWindow(HWND hWnd) {
     if (hWnd != 0) {
         Wnd_SendPaintIfPending(hWnd);
         return 1;
@@ -1656,7 +1298,7 @@ static void Wnd_ClearUpdateRegion(HWND hWnd) {
 }
 
 // 1.14d mac: 000313af
-D2_NOINLINE HDC BeginPaint(HWND hWnd, PAINTSTRUCT* pPaint) {
+HDC BeginPaint(HWND hWnd, PAINTSTRUCT* pPaint) {
     HDC hDC = 0;
     if (hWnd != 0 && pPaint != 0) {
         hDC = GetDC(hWnd);
@@ -1678,13 +1320,13 @@ D2_NOINLINE HDC BeginPaint(HWND hWnd, PAINTSTRUCT* pPaint) {
 }
 
 // 1.14d mac: 000314f9
-D2_NOINLINE BOOL EndPaint(HWND hWnd, const PAINTSTRUCT* pPaint) {
+BOOL EndPaint(HWND hWnd, const PAINTSTRUCT* pPaint) {
     ReleaseDC(hWnd, pPaint->hdc);
     return 1;
 }
 
 // 1.14d mac: 0003151d
-D2_NOINLINE BOOL IsWindowVisible(HWND hWnd) {
+BOOL IsWindowVisible(HWND hWnd) {
     if (hWnd == 0) {
         return 0;
     }
@@ -1692,7 +1334,7 @@ D2_NOINLINE BOOL IsWindowVisible(HWND hWnd) {
 }
 
 // 1.14d mac: 00031539
-D2_NOINLINE BYTE Wnd_IsVisibleAndEnabled(HWND hWnd) {
+BYTE Wnd_IsVisibleAndEnabled(HWND hWnd) {
     BYTE bVisible = 0;
     bool bEnabled = false;
     if (hWnd != 0) {
@@ -1704,12 +1346,12 @@ D2_NOINLINE BYTE Wnd_IsVisibleAndEnabled(HWND hWnd) {
 }
 
 // 1.14d mac: 00031564
-D2_NOINLINE int Wnd_ReturnZero(void) {
+int Wnd_ReturnZero(void) {
     return 0;
 }
 
 // 1.14d mac: 0003156b
-D2_NOINLINE int GetWindowLong(HWND hWnd, int nIndex) {
+int GetWindowLong(HWND hWnd, int nIndex) {
     if (hWnd == 0) {
         return 0;
     }
@@ -1746,7 +1388,7 @@ D2_NOINLINE int GetWindowLong(HWND hWnd, int nIndex) {
 }
 
 // 1.14d mac: 00031618
-D2_NOINLINE int GetProp(HWND hWnd, LPCSTR szName) {
+int GetProp(HWND hWnd, LPCSTR szName) {
     if (hWnd == 0 || szName == 0 || *szName == 0) {
         return 0;
     }
@@ -1761,7 +1403,7 @@ D2_NOINLINE int GetProp(HWND hWnd, LPCSTR szName) {
 }
 
 // 1.14d mac: 00031666
-D2_NOINLINE BOOL SetProp(HWND hWnd, LPCSTR szName, int nValue) {
+BOOL SetProp(HWND hWnd, LPCSTR szName, int nValue) {
     if (hWnd == 0 || szName == 0 || *szName == 0) {
         return 0;
     }
@@ -1782,7 +1424,7 @@ D2_NOINLINE BOOL SetProp(HWND hWnd, LPCSTR szName, int nValue) {
 }
 
 // 1.14d mac: 000316f2
-D2_NOINLINE int RemoveProp(HWND hWnd, LPCSTR szName) {
+int RemoveProp(HWND hWnd, LPCSTR szName) {
     if (hWnd == 0 || szName == 0 || *szName == 0) {
         return 0;
     }
@@ -1807,7 +1449,7 @@ D2_NOINLINE int RemoveProp(HWND hWnd, LPCSTR szName) {
 
 // 1.14d mac: 00031766
 // Clears the update region of the window and of every window below it.
-D2_NOINLINE BOOL Wnd_ClearUpdateRegionTree(HWND hWnd, int nReserved) {
+BOOL Wnd_ClearUpdateRegionTree(HWND hWnd, int nReserved) {
     Wnd_ClearUpdateRegion(hWnd);
     HWND hChild = hWnd->pFirstChild;
     while (hChild != 0) {
@@ -1823,7 +1465,7 @@ D2_NOINLINE BOOL Wnd_ClearUpdateRegionTree(HWND hWnd, int nReserved) {
 // 1.14d mac: 00031a84
 // The Win32 virtual key of a Mac key code: the letter the keyboard layout gives it, else a
 // fixed table.
-D2_NOINLINE UINT Win32VirtualKey_From_MacScanCode(BYTE nKeyCode) {
+UINT Win32VirtualKey_From_MacScanCode(BYTE nKeyCode) {
     uint32_t nKeyState = 0;
     void* pKCHR = (void*)GetScriptManagerVariable(smKCHRCache);
     uint32_t nResult = KeyTranslate(pKCHR, nKeyCode, &nKeyState);
@@ -1839,7 +1481,7 @@ D2_NOINLINE UINT Win32VirtualKey_From_MacScanCode(BYTE nKeyCode) {
 }
 
 // 1.14d mac: 00031af6
-D2_NOINLINE BYTE Key_VirtualKeyToMacKeyCode(BYTE nIndex) {
+BYTE Key_VirtualKeyToMacKeyCode(BYTE nIndex) {
     return s_abyVirtualKeyToMacKey[nIndex];
 }
 

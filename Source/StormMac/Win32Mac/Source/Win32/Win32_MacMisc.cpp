@@ -1,6 +1,6 @@
-// Storm's Win32-on-Mac layer: Carbon helpers and the layer's start-up, 1.14d Intel Mac
-// 0001e94c..0001ed6c: newline conversion for alerts, the mouse, debug output, the
-// microsecond/millisecond clock, c2pstr/p2cstr, WIN32MAC_Initialize and WinDestroy.
+// Storm's Win32-on-Mac layer: Carbon helpers, 1.14d Intel Mac 0001e94c..0001ec2e: newline
+// conversion for alerts, the mouse, debug output, the microsecond/millisecond clock and
+// c2pstr/p2cstr. The clock thunks and the layer's start-up are Win32_MacInit.cpp.
 // The original file is unknown: no 1.14d string names it (see Source/StormMac/README.md).
 #include "Win32Mac.h"
 
@@ -12,27 +12,14 @@
 #include <stdio.h>
 #include <string.h>
 
-// 1.14d mac: 0001ec2e
-void MAC_GetMicrosecondsThunk(DWORD* pHigh, DWORD* pLow) __attribute__((noinline));
-// 1.14d mac: 0001ec37
-void MAC_GetMillisecondsThunk(DWORD* pHigh, DWORD* pLow) __attribute__((noinline));
+void MAC_GetMicrosecondsThunk(DWORD* pHigh, DWORD* pLow);
+void MAC_GetMillisecondsThunk(DWORD* pHigh, DWORD* pLow);
 // 1.14d mac: 0001eb3a
 void MAC_GetMicroseconds(DWORD* pdwHigh, DWORD* pdwLow);
-
-void PATHCACHE_Initialize(void);
-void PATHCACHE_Destroy(void);
-void GDI_InitStockObjects(void);
-void Wnd_InitWnd(int nFlags);
-void ShutdownWin32GDI(void);
-void Rgn_DestroyAllRegions(void);
-void Mem_DestroyMasterPointer(void);
-HANDLE AllocModuleHandle(void);
 
 // 1.14d mac: 003f0e74
 // 0 before the first clock read, 1 once Microseconds() is the source.
 static unsigned char s_nClockState;
-// 1.14d mac: 003f0e78
-static HANDLE s_hModule;
 
 // 1.14d mac: 0001e94c
 // Replaces *pString with it split on "\n" and rejoined with "\r".
@@ -146,49 +133,6 @@ void MAC_GetMilliseconds(DWORD* pdwHigh, DWORD* pdwLow) {
     uint64_t ullMilliseconds = (((uint64_t)*pdwHigh << 32) | tTime.lo) / 1000;
     *pdwLow = (DWORD)ullMilliseconds;
     *pdwHigh = (DWORD)(ullMilliseconds >> 32);
-}
-
-// 1.14d mac: 0001ec2e
-void MAC_GetMicrosecondsThunk(DWORD* pHigh, DWORD* pLow) {
-    MAC_GetMicroseconds(pHigh, pLow);
-}
-
-// 1.14d mac: 0001ec37
-void MAC_GetMillisecondsThunk(DWORD* pHigh, DWORD* pLow) {
-    MAC_GetMilliseconds(pHigh, pLow);
-}
-
-// 1.14d mac: 0001ec40
-// Makes the process' module handle (its path and serial number), then starts the path
-// cache, the GDI stock objects and the window subsystem.
-void WIN32MAC_Initialize(void) {
-    Win32MacFSSpec tSpec;
-    char szAppPath[256];
-    HANDLE hModule = AllocModuleHandle();
-    Win32HandleObject* pModule = GetWin32HandlePtr(hModule);
-    pModule->pLibrary = NULL;
-    uint64_t nSize;
-    GetApplicationInformation(NULL, (FSSpec*)&tSpec, NULL, &nSize);
-    pModule->dwPSNHigh = (DWORD)nSize;
-    pModule->dwPSNLow = (DWORD)(nSize >> 32);
-    FSSpecToFilepath(szAppPath, (const FSSpec*)&tSpec);
-    size_t nPathLen = strlen(szAppPath);
-    char* szPathCopy = (char*)MemAlloc(nPathLen + 1, 0);
-    memcpy(szPathCopy, szAppPath, nPathLen + 1);
-    pModule->szModulePath = szPathCopy;
-    s_hModule = hModule;
-    PATHCACHE_Initialize();
-    GDI_InitStockObjects();
-    Wnd_InitWnd(0);
-}
-
-// 1.14d mac: 0001ed37
-void WinDestroy(void) {
-    ShutdownWin32GDI();
-    PATHCACHE_Destroy();
-    CloseHandle(s_hModule);
-    Rgn_DestroyAllRegions();
-    Mem_DestroyMasterPointer();
 }
 
 #endif  // D2_OS_MAC

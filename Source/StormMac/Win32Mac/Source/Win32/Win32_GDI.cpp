@@ -87,6 +87,9 @@ static const int g_anFontAscent[13] = {5, 0, 0, 0, 4, 3, 0, 0, 3, 0, 0, 3, 3};
 // 1.14d mac: 00321e70
 static const int g_anFontAveWidth[13] = {1, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0};
 
+// Declared fastcall in the source (Storm's Windows convention), not made fastcc by the
+// optimiser: GDI_PickMacFont takes its arguments in ecx/edx yet its one call site
+// (GDI_InitStockObjects) does not inline it, which a static single-use callee would be.
 #define D2_FASTCALL __attribute__((fastcall))
 
 // What GetRegionData fills: the RGNDATA header, the bounds and the rectangles.
