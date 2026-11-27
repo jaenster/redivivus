@@ -1833,32 +1833,22 @@ BOOL __fastcall Skills_SrvDoFunc_044_SummonBladeSentinel(::SGAMEDATA * pGame, D2
 
 // 1.14d mac: 0024b7b6
 BOOL __fastcall Skills_SrvDoFunc_045_SummonTrapSentry(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    BOOL _bHasPos;
-    bool bHasPos;
     uint32_t nTargetX;
     eD2Skills eSkillSlot;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if (!((int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
+
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    _bHasPos = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nTargetX, &eSkillSlot);
-    if (!_bHasPos) {
+    if (!SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nTargetX, &eSkillSlot)) {
       return 0;
     }
 
-    D2UnitStrc* pSummon = SKILLASS_CreateSummon(pGame, pUnit, nTargetX, eSkillSlot, pSkillTxt, eSkill, nSkillLvl);
-    return (uint32_t)(pSummon != 0);
+    return SKILLASS_CreateSummon(pGame, pUnit, nTargetX, eSkillSlot, pSkillTxt, eSkill, nSkillLvl) != nullptr;
 }
 
 // Generic Assassin skill melee attack resolver. Computes to-hit (SKILLS_CalcToHit + progressive_tohit stat), runs DAMAGE_CalculateHitCheck; on hit applies progressive damage, elemental enhancement, conversion percent, SetDamageOnEvent, offensive damage calculation, and DispatchChargeUpDamage. Always finalises with DAMAGE_CalculateAndApplyDamage.
