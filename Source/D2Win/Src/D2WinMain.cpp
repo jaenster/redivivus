@@ -37,6 +37,9 @@
 #include "Source/D2Win/D2WinScrollbar.h"
 #include "Source/D2Win/D2WinTimer.h"
 #include "Source/D2Win/Src/D2WinMain.data.h"
+#if !defined(_WIN32) && D2_OS_MAC
+#include "Source/MacSpecific/Source/MacShell/MacShell.h"
+#endif
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -1267,6 +1270,9 @@ BOOL __stdcall MessagePump(pfnFramePump pfnFrameCallback)
     uint32_t nBudgetAccum = 0;
     while (gbMessageLoopActive) {
       BOOL hasMessage;
+#if !defined(_WIN32) && D2_OS_MAC
+      MAC_ProcessEvents();
+#endif
       /* UINT wRemoveMsg for PeekMessageA */ /* UINT wMsgFilterMax for PeekMessageA */ /* UINT wMsgFilterMin for PeekMessageA */ /* HWND hWnd for PeekMessageA */ /* LPMSG lpMsg for PeekMessageA */ hasMessage = PeekMessageA(&windowMsg, (HWND)0x0, 0, 0, 0);
       if (hasMessage) {
         /* UINT wMsgFilterMax for GetMessageA */ /* UINT wMsgFilterMin for GetMessageA */ /* HWND hWnd for GetMessageA */ /* LPMSG lpMsg for GetMessageA */ gbMessageLoopActive = GetMessageA(&windowMsg, (HWND)0x0, 0, 0);
