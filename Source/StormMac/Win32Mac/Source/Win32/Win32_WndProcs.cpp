@@ -24,6 +24,12 @@
 #define BM_CLICK 0x00F5
 #define WM_GETDLGCODE 0x0087
 #define SYSTEM_FONT 13
+#define WM_NCCALCSIZE 0x0083
+#define WM_NCPAINT 0x0085
+#define WM_NCLBUTTONDOWN 0x00A1
+#define WM_NCLBUTTONUP 0x00A2
+#define WM_NCLBUTTONDBLCLK 0x00A3
+#define WM_NCRBUTTONDOWN 0x00A4
 
 // 1.14d mac: 003224f0
 // WM_GETDLGCODE for each button style.
@@ -103,7 +109,7 @@ LRESULT DefWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             if (hWnd != 0) {
                 RECT rcClient;
                 GetClientRect(hWnd, &rcClient);
-                FillRect((HDC)wParam, &rcClient);
+                FillRect((HDC)wParam, &rcClient, hWnd->pClass->hbrBackground);
             }
             return 1;
         case WM_SHOWWINDOW:
@@ -130,6 +136,19 @@ LRESULT DefWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
             }
         case WM_NCCREATE:
             return 1;
+        // No-op cases: the binary range-tests 0x82..0x85, 0xA1..0xA4 and 0x203 apart from default.
+        case WM_NCDESTROY:
+        case WM_NCCALCSIZE:
+        case WM_NCHITTEST:
+        case WM_NCPAINT:
+            break;
+        case WM_NCLBUTTONDOWN:
+        case WM_NCLBUTTONUP:
+        case WM_NCLBUTTONDBLCLK:
+        case WM_NCRBUTTONDOWN:
+            break;
+        case WM_LBUTTONDBLCLK:
+            break;
         case WM_NCACTIVATE:
             return 1;
         case WM_KEYDOWN:

@@ -259,7 +259,7 @@ HRGN CreateRectRgn(int nLeft, int nTop, int nRight, int nBottom);
 BOOL SetRectRgn(HRGN hRgn, int nLeft, int nTop, int nRight, int nBottom);
 int CombineRgn(HRGN hDest, HRGN hSrc1, HRGN hSrc2, int nMode);
 BOOL DeleteObject(void* hObject);
-BOOL FillRect(HDC hDC, const RECT* pRect);
+BOOL FillRect(HDC hDC, const RECT* pRect, int hBrush);
 HDC GetDC(HWND hWnd);
 int ReleaseDC(HWND hWnd, HDC hDC);
 int ExtSelectClipRgn(HDC hDC, HRGN hRgn, int nMode);

@@ -1156,8 +1156,8 @@ static BOOL GDI_FillRect(Win32MacDCData* pDC, const RECT* pRect, BYTE nColor) {
 }
 
 // 1.14d mac: 00024b8e
-// Fills with palette index 0 when the DC has a surface.
-BOOL FillRect(HDC hDC, const RECT* pRect) {
+// Fills with palette index 0 when the DC has a surface; the brush is not used.
+BOOL FillRect(HDC hDC, const RECT* pRect, int hBrush) {
     Win32MacDCData* pDC = LockDC(hDC);
     BOOL bResult = 0;
     if (pDC->pPixels != NULL && pDC->nRowBytes > 0) {
