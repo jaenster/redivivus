@@ -1,7 +1,11 @@
 // Writes "// 1.14d mac: <addr>" before the definition of every shared function whose Windows twin
 // has a Mac pair in docs/data/mac-win-pairs.tsv, so that cmp.ts compares it with the Mac binary.
 //
-//   node asm_matching/mac/tag-shared.ts --pairs <mac-win-pairs.tsv> [--module <Dir>[,<Dir>...]] [--dry]
+//   node asm_matching/mac/tag-shared.ts --pairs <mac-win-pairs.tsv> [--unpaired <coverage/unpaired.tsv>] [--module <Dir>[,<Dir>...]] [--dry]
+//
+// --unpaired adds the rows of coverage/unpaired.tsv classed shared-unpaired that name a Windows address
+// (a function the pair table has no row for, matched by hand): they are tagged by the same rules, minus
+// the tier test, which a hand verdict replaces.
 //
 // The Windows side of a function is its address in the generator's *.cpp.map next to the source
 // (the sources carry no address comment of their own); the definition is found by name in that file.
@@ -16,16 +20,17 @@ import { fileURLToPath } from "node:url";
 
 const REPO = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const TIERS = /^(T0|T1[a-z]|V|S|K|F|J)$/;
-let pairsPath = "", dry = false;
+let pairsPath = "", unpairedPath = "", dry = false;
 let modules: string[] = [];
 const argv = process.argv.slice(2);
 for (let i = 0; i < argv.length; i++) {
     if (argv[i] === "--pairs") pairsPath = resolve(argv[++i]);
+    else if (argv[i] === "--unpaired") unpairedPath = resolve(argv[++i]);
     else if (argv[i] === "--module") modules = argv[++i].split(",");
     else if (argv[i] === "--dry") dry = true;
     else { console.error(`unknown argument ${argv[i]}`); process.exit(2); }
 }
-if (!pairsPath) { console.error("usage: tag-shared.ts --pairs <mac-win-pairs.tsv> [--module A,B] [--dry]"); process.exit(2); }
+if (!pairsPath) { console.error("usage: tag-shared.ts --pairs <mac-win-pairs.tsv> [--unpaired <unpaired.tsv>] [--module A,B] [--dry]"); process.exit(2); }
 
 const walk = (d: string): string[] =>
     existsSync(d) ? readdirSync(d).flatMap((f) => { const p = join(d, f); return statSync(p).isDirectory() ? walk(p) : [p]; }) : [];
@@ -39,6 +44,18 @@ for (const r of rows.slice(1)) macSeen.set(r[col.mac_addr], (macSeen.get(r[col.m
 for (const r of rows.slice(1)) {
     if (!TIERS.test(r[col.tier]) || r[col.stale] !== "no" || macSeen.get(r[col.mac_addr]) !== 1) continue;
     mac.set(r[col.win_addr], r[col.mac_addr]);
+}
+
+// hand-matched rows: a Windows address two Mac functions claim is left alone
+if (unpairedPath) {
+    const byWin = new Map<string, string[]>();
+    for (const l of readFileSync(unpairedPath, "utf8").split("\n")) {
+        if (!l || l.startsWith("#")) continue;
+        const c = l.split("\t");
+        if (c[1] !== "shared-unpaired" || !/^[0-9a-f]{8}$/.test(c[2] ?? "") || !/^[0-9a-f]{8}$/.test(c[0])) continue;
+        byWin.set(c[2], [...(byWin.get(c[2]) ?? []), c[0]]);
+    }
+    for (const [w, macs] of byWin) if (macs.length === 1 && !mac.has(w)) mac.set(w, macs[0]);
 }
 
 // every Mac address a source already tags (in any file): never claimed twice

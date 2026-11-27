@@ -130,7 +130,7 @@ addr	class	win_addr	evidence
 0007c26b	mac-only		Returns non-null pointer whose int equals 1; no verified win twin
 0007c2b1	shared-unpaired	00475df0	VIEW_InitLookupTables: same asserts at lines 0xca..0xce, palette tables 0x9000/0x20000 and lerp tables
 0007c521	shared-unpaired	00475b80	VIEW_AllocByteTable: same 32x32 lerp table builder (nDim,nSteps), 16.16 fixed point; win takes nDim as param
-0007db33	mac-only		MWC random generator filling four global tables at index ECX; no verified win twin
+0007db33	shared-unpaired	00476190	VIEW_GenerateRandomViewParams: Arcane Sanctuary star re-roll (i,0 at init, i,1 when a star leaves the screen); the Mac inlines DRAW_Overlay_ArcaneStars into ViewDraw2, hence its two calls from ViewDraw2 and the register arguments
 0007fe34	shared-unpaired	0046beb0	ClientLight_UpdateLightTimers (room light pulse inlined)
 000942d4	shared-unpaired	004df800	Verified win CleanUpGame (D2Client::GAME::Sound, same job: stop channels, set global volume)
 0009458b	shared-unpaired	004e0050	SOUND_SetBackgroundSoundsActive
@@ -331,7 +331,7 @@ addr	class	win_addr	evidence
 000eea0e	mac-only		forwarder to SpinnerWrapper::Constructor; no verified win twin
 000ef1d3	shared-unpaired	0049d4d0	TEXT_FreeAllScreenMessages: loop-free-count + halt line 0x6cd + zero head/count identical; Win inlines TEXT_FreeScreenMessage; source fn untagged
 000ef610	shared-unpaired	0049f960	TEXT_CloseScrollingText: free box, stop sound, unregister handlers, send 0x31; source fn untagged
-000ef807	shared-unpaired	0049da50	TEXT_ClearNpcMenuSelection: clears one byte flag; called from SetSelectedUnit_I like Win; NOTE source tags this fn with mac 000ef691 which is really TEXT_SetEventHandlersRegistered (wrong tag)
+000ef807	shared-unpaired	0049da50	TEXT_ClearNpcMenuSelection: clears one byte flag; called from SetSelectedUnit_I like Win. The Windows twin carried the tag 000ef691 (TEXT_SetEventHandlersRegistered, now on Unreferenced_0049da60)
 000f185e	shared-unpaired		0049f960 TEXT_CloseScrollingText / 004a1320 TEXT_ShowScrollingText / 004a10e0 TEXT_ShowNpcDialog: Win inlines SOUND_StopSound+StopChannelGracefully(.,0,0,4) in all three (mac has the same 3 callers)
 000f1912	shared-unpaired	004a1320	TEXT_ShowScrollingText: halt line 0x1063, alloc box font 8, bAlignToPanel/bShowImage = param_2/param_3; source fn untagged
 000f1ada	shared-unpaired	004a1510	frees prior static popup, allocates font-13 text box, sets timeout and centres it; win 004a1510 TEXT_ShowStaticTextPopup same job
@@ -377,8 +377,8 @@ addr	class	win_addr	evidence
 00124756	shared-unpaired	0055b110	same-name Windows function 0055b110 (PLAYERLIST_FindEntry); was: roster list walk; Win PLAYERLIST_FindEntry is D2Game-side (0055b110), no client twin verified
 001286ca	shared-unpaired	00480e70	UNITMODE_SetAnimMode: ChangeAnimMode and COF load (Mac keeps that in UNITMODE_SetModeAndLoadCof), then ShowElementalHitOverlay and the mode-change sound
 0012875b	shared-unpaired	00480ec0	UNITMODE_SetAnimModeSilent: the same SetModeAndLoadCof body without the effects; Mac wrapper
-0012876a	shared-unpaired	00480c80	Win UNITMODE_IsTargetInActionRange same range test incl. aura check for actions 6/0xd
-00128831	mac-only		UNITMODE_ExecuteAttackAndQueueSkill: no Win symbol; uses INPUT_GetClickModifierFlags, no verified twin
+0012876a	shared-unpaired	00480c80	UNITMODE_IsTargetInActionRange: same range test, the Mac passes (unit, target) in ecx and edx where the Windows twin takes (target, unit)
+00128831	mac-only		static helper of the Mac UNITMODE_ExecuteDeferredAction (ecx unit, edx queued skill): attacks, then queues the interaction; the shared flow walks to the target there instead
 001288b4	shared-unpaired	004ca280	Win SOUND_ClearGlobalState same name (52B vs 89B)
 00128d8f	shared-unpaired	004ca810	UNITSND_GetHitSound: halt line 0xc08 on null; (mode&0xf) 1-9 / 10-11 mapping (mac via table) [med confidence]
 00128e04	shared-unpaired	004ca870	UNITSND_GetSfxDataListHead: halt line 0xc2c, returns +0x78 field
@@ -422,7 +422,7 @@ addr	class	win_addr	evidence
 0013093c	shared-unpaired	006082e0	FASTCMP_DecompressRLEWithBlend3AndClip; same-named Win FastCmp function
 00130c01	shared-unpaired	00608540	FASTCMP_DecompressRLEDispatcher: halts 0x5ea/0x5eb, skips rows, picks the FASTCMP row blitter by remap, blend and clip
 001318ac	shared-unpaired	0060a9d0	win GFXHASH_UnlinkCacheEntry: same unlink, async cel data free, free lines 0x82/0x8e
-0013268b	mac-only		evict callback for the cel cache, registered with Storm (STORM_StoreValue) at the end of GFX_InitCelDataCache; win GFX_InitCelDataCache registers nothing; reads a D2GfxMemoryStrc field at +0x64 the shared struct does not model
+0013268b	mac-only		evict callback for the cel cache, handed to Storm by GFX_InitCelDataCache (Mac block); win registers nothing; the decode counter at +0x64 of the cache record is a Mac field
 001342e4	shared-unpaired	005fee10	win SPRITECACHE_GetMemUsage: nUsedMemory read under the critical section
 00134317	shared-unpaired	005fee40	win SPRITECACHE_GetCacheSize: pMaxMemory unlocked
 0013432b	shared-unpaired	005fee60	win CELDATACACHE_GetMemUsage returns gCelDataCacheLru.nBytesUsed
@@ -446,7 +446,7 @@ addr	class	win_addr	evidence
 0013a06d	shared-unpaired	00664ab0	table row index with fatal on idx>0; name matches candidate GetArenaTxtRecord; no platform API
 0013b1ae	shared-unpaired	00665740	UnloadBin on sgpTxtCharTemplate then NULL; matches candidate FreeCharTemplateTxt
 0013b1d7	shared-unpaired	00665770	level and template index with fatal checks; Mac comment cites Windows TXT_CharTemplate_GetLine 00665770
-001401ca	mac-only		Mac table fix-up hook (forwards to Fog 002f268e) called after CompileTxt in monstats, monpreset and cube; win has no such call; ported in DataTbls.cpp
+001401ca	mac-only		Mac table fix-up hook (forwards to Fog 002f268e) called after CompileTxt in monstats, monpreset and cube (Mac blocks in MonsterTbls.cpp and Cube.cpp); win has no such call; ported in DataTbls.cpp
 001411d7	shared-unpaired	00668600	cube input spec string parser (any, item, qty, quality tokens); no platform API; name matches candidate
 001417d2	shared-unpaired	00668a90	cube output string parser (portals, prefix/suffix, quality flags); no platform API; name matches candidate
 00141f82	shared-unpaired	006690e0	DATATBLS_LinkerItemStatCost: same name on Win, stat-name to id parse
@@ -691,17 +691,17 @@ addr	class	win_addr	evidence
 002ccd1d	shared-unpaired	00449de0	MCPCONNECT_GetD2GSGameHash: returns a 32-bit global
 002ccfd4	shared-unpaired	0044a1d0	NET_MCP_CLIENT_Send_0x01_StartUp: builds MCP packet 0x01 and sends it
 002cfbd1	shared-unpaired	0043e570	win CHATDLG_EnqueueClearMessage queues the clear node
-002d098a	mac-only		chat-dialog MCP pump; checks DAT_00551d8c bit 0 instead of gnMainMenuConnectFlag; win OOG_PollMCPCharLogonPump 0043dbf0 not verified
+002d098a	shared-unpaired	0043dbf0	OOG_PollMCPCharLogonPump: Mac tests bit 0 of the restore result where Windows tests the whole value (Mac block in the shared function)
 002d1dc6	shared-unpaired	0043e4c0	same-name Windows function 0043e4c0 (CHATDLG_DisplayTimestampedMessage); was: FileTime to local date via MAC_ConvertTextToUnicode and GetDateFormat; Mac text conversion; no verified win twin
-002d269b	mac-only		chat slash-command dispatcher (/ignore, /filtermsg, /home) with Mac-named ignorelist vtable calls; win twin not verified
-002d42cf	mac-only		/r and /reply handler with Mac-style artifact fix comment; win OOGUTIL_HandleReplyCommand 00442180 not verified
+002d269b	shared-unpaired	00442810	CHAT_SendOutOfGameMessage with OOGUTIL_HandleChatCommands 004423b0 inlined; the Mac /home also sends the join to the network interface (Mac block in the shared function)
+002d42cf	shared-unpaired	00442180	OOGUTIL_HandleReplyCommand: same /r and /reply handling, the Mac takes the command only and reads the shared input buffer
 002d4558	shared-unpaired	0043e6e0	win someStrCompare is the same case-insensitive prefix compare (first string a parameter)
 002d45de	shared-unpaired	0043f870	win CHATDLG_ParseCommandArgument takes the text after the first space (source passed as a parameter)
 002d4627	shared-unpaired	0043e250	win StoreChatMsg allocates the same 0x10 node (line 0xc1d) and queues it under the chat critical section
 002d471f	shared-unpaired	0043dba0	win EDITBOX_Cb_D2WINTEXTBOX_SetSelectedLine clears the selected line
 002d474b	shared-unpaired	00440110	win EDITBOX_Cb_CHATDLG_UpdateChannelOkButtonState calls the same update and returns 1
 002d5842	shared-unpaired	00446cf0	win COMCALLBACK_GetCurrentChannelName returns the channel name buffer
-002d5a7a	mac-only		unlinks channel user, prints has-left message, refreshes list; win COMCALLBACK_RemoveChannelUser 004493e0 not verified
+002d5a7a	shared-unpaired	004493e0	COMCALLBACK_RemoveChannelUser: the Mac inlines it into the user-left callback (Windows COMCALLBACK_HandleChannelUserLeave 00449690)
 002d5d27	shared-unpaired	00447ab0	win PrintChannelText converts to wide and appends to the OOG chat and chat box
 002d7520	mac-only		strcmp of two names after skipping '*' account prefix; no verified win twin
 002d7874	shared-unpaired	0043cbe0	AppModeMultiplayerInit: stores the module handle, returns the app mode table

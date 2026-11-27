@@ -572,7 +572,6 @@ addr	name	reason_class	detail
 002c9eb7	D2Launch::MainMenus::MAINMENU_RunInsertExpansionCdDialog	unverified-ref	all 22 instructions identical; the byte at 0054a931 is fpInsertPlayCd, which shares its name with a function and so carries no address tag, so cmp names it as an offset from the neighbouring tagged global
 002c9f0f	D2Launch::MainMenus::MAINMENU_PollInsertCdDialog	unverified-ref	all 37 instructions identical; the same untagged byte at 0054a931 (fpInsertPlayCd) shows as an offset from gbCinematicsMenuShown
 001401ca	D2Common::DATATBLS::DataTbls::DATATBLS_SwapTableRecords	pic-ref	all other instructions identical; the original tests gbTxtAllocCountHeader with cmp mem,0 against an image-local datum, ours loads the externally defined global through its PIC pointer first
-00128831	UNITMODE_ExecuteAttackAndQueueSkill	regalloc	orig is a static function of the unit with the unit and the queued skill in ecx and edx (fastcc); its only caller, the Mac UNITMODE_ExecuteDeferredAction, is a different body than the shared one, so ours is external and takes stack arguments
 001af228	TSHashTableSGAMEDATA_Initialize	regalloc	same calls and loop; the loop index starts in edi in the original, in eax in ours
 001dd3f3	MONMODE_EnterSkill1AndThink	stack-layout	same calls; the original saves ebx,edi,esi in a 0x3c frame, ours a 0x40 frame with another save order
 001dd468	MONMODE_EnterSkill1AndThink2	stack-layout	identical to 001dd3f3: same calls, different frame size and save order
@@ -591,3 +590,4 @@ addr	name	reason_class	detail
 00095dd8	D2Client::FUN_00095dd8	regalloc	callee-saved register choice differs from the first push (edi vs ebx)
 000ed666	D2Client::FUN_000ed666	data-guess	memset length 0x3c5 in the original; sizeof the grid region (0x3c8) here so the size is not a raw literal
 0004bcf9	D2Win::D2WIN_HandleEditMenuCommand	regalloc	scratch register for the saved pointer is edx here, ecx in the original
+002ef904	FOG_BuildGammaRamp	sched	instruction mix identical through the argument checks; the loop-invariant doubles are hoisted in a different order and the pow argument pair is scheduled differently (121 vs 122 insns)
