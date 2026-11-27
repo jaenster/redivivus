@@ -514,7 +514,8 @@ BOOL __fastcall SKILLDRUID_CreateSummon(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    D2MonsterCastPetStrc sPetCast = {};
+    D2MonsterCastPetStrc sPetCast;
+    memset(&sPetCast, 0, sizeof(sPetCast));
     sPetCast.classId = nClassId;
     sPetCast.nFlags = 0;
     sPetCast.nFunctionId = 0;
