@@ -13,6 +13,9 @@
 #include "Source/D2Win/D2Win.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Win/D2WinEditBox.h"
+#if !defined(_WIN32) && D2_OS_MAC
+#include <Carbon/Carbon.h>
+#endif
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -107,7 +110,39 @@ void __fastcall D2WINEDITBOX_SetChangeCallback(::D2WinEditBox * pEditBox, fpD2Wi
     }
 }
 
-// Not in the 1.14d Mac binary: the layer has no clipboard.
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 00044f0d
+char * __stdcall D2WINEDITBOX_GetClipboardText() {
+    static char gszClipboardTextBuffer[512] = {};
+    ScrapRef hScrap;
+    ByteCount nSize = 0;
+    GetCurrentScrap(&hScrap);
+    GetScrapFlavorSize(hScrap, 'TEXT', (Size*)&nSize);
+    char* szResult = (char*)"";
+    if (nSize != 0 && nSize < 0x200) {
+      szResult = gszClipboardTextBuffer;
+      GetScrapFlavorData(hScrap, 'TEXT', (Size*)&nSize, gszClipboardTextBuffer);
+      gszClipboardTextBuffer[nSize] = 0;
+    }
+
+    return szResult;
+}
+
+// 1.14d mac: 00044f92
+BOOL __fastcall D2WINEDITBOX_SetClipboardText(char * szText) {
+    // 00431854: set by the copy-menu path while it puts its own text on the scrap.
+    static char gbSuppressClipboardSet = 0;
+    BOOL bResult = 0;
+    if (!gbSuppressClipboardSet) {
+      ScrapRef hScrap;
+      ClearCurrentScrap();
+      GetCurrentScrap(&hScrap);
+      bResult = PutScrapFlavor(hScrap, 'TEXT', 0, strlen(szText), szText) == noErr;
+    }
+
+    return bResult;
+}
+#else
 #if !D2_OS_MAC
 char * __stdcall D2WINEDITBOX_GetClipboardText() {
     // Static local variables (originally global data)
@@ -171,6 +206,8 @@ BOOL __fastcall D2WINEDITBOX_SetClipboardText(char * szText) {
     CloseClipboard();
     return 1;
 }
+#endif
+
 #endif
 
 // Returns TRUE when the edit box has a non-empty selection: nSelAnchor (+0x54) != -1 and

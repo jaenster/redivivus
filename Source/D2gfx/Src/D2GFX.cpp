@@ -1065,6 +1065,52 @@ void __stdcall D2GFX_EndCutScene() {
 }
 #endif
 
+#if D2_OS_MAC
+// 1.14d mac: 002b5aab
+int32_t __stdcall D2GFX_EndCutSceneReturnSceneState() {
+    if (::D2GFX_EndCutScene != D2GFX_EndCutSceneCurrentState && hwndD2GFX_Window) {
+      if (!RENDERER_CurrentRenderedFunctions) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x169);
+        exit(-1);
+      }
+
+      // 1.14d mac: 00031564, the layer's IsIconic stub
+      if (D2GFX_EndCutSceneCurrentState || Wnd_ReturnZero() == 0) {
+        ::D2GFX_EndCutScene = D2GFX_EndCutSceneCurrentState;
+        RENDERER_CurrentRenderedFunctions->nfpEndCutScene(hwndD2GFX_Window, gnD2GFXResolutionMode, ::D2GFX_EndCutScene);
+        if (!::D2GFX_EndCutScene) {
+          D2GFX_SetPalette((LPPALETTEENTRY)0x0);
+          D2GFX_InitializeWindowSize();
+        }
+      }
+    }
+
+    return ::D2GFX_EndCutScene;
+}
+
+// 1.14d mac: 002b5e47
+void __stdcall EndCutScene(int32_t nResolution) {
+    int32_t nSceneState;
+    BOOL bResizeOk;
+    if (!RENDERER_CurrentRenderedFunctions) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2b9);
+      exit(-1);
+    }
+
+    nSceneState = D2GFX_EndCutSceneReturnSceneState();
+    if (!nSceneState) {
+      bResizeOk = D2GFX_ResizeWindow(nResolution, 0);
+      if (!bResizeOk) {
+        Fog::Src::LogManager::LOGFILE_WriteStringToFile("Failed to resize window after cutscenes... this is fatal!");
+        exit(-1);
+      }
+    } else {
+      gnD2GFXResolutionMode = nResolution;
+    }
+
+    D2GFX_SetPalette((LPPALETTEENTRY)0x0);
+}
+#else
 int32_t __stdcall D2GFX_EndCutSceneReturnSceneState() {
     D2GFX_EndCutScene();
     return ::D2GFX_EndCutScene;
@@ -1090,6 +1136,8 @@ void __stdcall EndCutScene(int32_t nResolution) {
 
     D2GFX_SetPalette((LPPALETTEENTRY)0x0);
 }
+
+#endif
 
 // Start render frame. Dispatches to backend (Glide/D3D/OpenGL/Rave) via vtable.
 // bClear=1 clears backbuffer. RGB sets clear color (level-specific darkness).

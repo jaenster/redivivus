@@ -1390,7 +1390,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 002b56e7	D2gfx::D2GFX::D2GFX_GetWindowSizeByResolutionMode	132	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	missing		-	004f5570	
 002b576b	D2gfx::D2GFX::D2GFX_CreateWindow	689	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	body	Source/D2gfx/Src/D2GFX.cpp	no	004f5610	
 002b5a1c	D2gfx::D2GFX::D2GFX_DestroyWindow	143	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	missing		-	004f5900	
-002b5aab	D2gfx::D2GFX::D2GFX_EndCutSceneReturnSceneState	194	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	missing		-	004f6070	
+002b5aab	D2gfx::D2GFX::D2GFX_EndCutSceneReturnSceneState	194	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	body	Source/D2gfx/Src/D2GFX.cpp	no	004f6070	
 002b5b6d	D2gfx::D2GFX::GetHwnd	20	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	missing		-	004f59a0	
 002b5b81	D2gfx::D2GFX::D2GFX_GetScreenSize	70	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	missing		-	004f59b0	
 002b5bc7	D2gfx::D2GFX::UpdateOSCursorVisibilty	85	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	missing		-	004f59f0	
@@ -1401,7 +1401,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 002b5dc3	FUN_002b5dc3	31	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	blizzard-mac	body	Source/D2gfx/Mac/D2GFXMacForward.cpp	no		
 002b5de2	FUN_002b5de2	31	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	blizzard-mac	body	Source/D2gfx/Mac/D2GFXMacForward.cpp	no		
 002b5e01	D2gfx::D2GFX::D2GFX_BeginCutScene	70	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	missing		-	004f5d60	
-002b5e47	D2gfx::D2GFX::EndCutScene	144	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	missing		-	004f6080	
+002b5e47	D2gfx::D2GFX::EndCutScene	144	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	body	Source/D2gfx/Src/D2GFX.cpp	no	004f6080	
 002b5ed7	D2gfx::D2GFX::D2GFX_PlayCutScene	70	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	missing		-	004f5d90	
 002b5f1d	D2gfx::D2GFX::D2GFX_CheckCutScene	70	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared	missing		-	004f5dd0	
 002b5f63	D2gfx::D2GFX::D2GFX_DecodeSmacker	70	?|Bnclient/BNetGW.cpp	between	?|Source/Bnclient/BNetGW.cpp	shared-unpaired	missing		-		
