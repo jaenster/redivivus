@@ -197,6 +197,83 @@ T* TSExplicitList<T, OFFSET>::NewNode(uint32_t nLinkType, uint32_t nExtraBytes, 
     return pNode;
 }
 
+// ---- TSList ----
+
+// A list whose elements start with their link: the node is its own link, so no link offset
+// is applied to a node (the list still carries one, which LinkNode hands to NextLink).
+template<class T>
+class TSLinkList {
+public:
+    int m_linkoffset;        // 0x00
+    TSLink<T> m_terminator;  // 0x04: the list's own link: last link, first element
+
+    TSLinkList() : m_linkoffset(0) { InitializeTerminator(); }
+    ~TSLinkList() { UnlinkAll(); }
+
+    void InitializeTerminator() {
+        m_terminator.m_prevlink = &m_terminator;
+        m_terminator.m_next = (T*)((intptr_t)&m_terminator | 1);
+    }
+    TSLink<T>* Link(T* pNode) { return pNode ? (TSLink<T>*)pNode : &m_terminator; }
+    T* Head() { return m_terminator.Next(); }
+    T* Next(T* pNode) { return Link(pNode)->Next(); }
+    void UnlinkNode(T* pNode) { Link(pNode)->Unlink(); }
+    void UnlinkAll();
+    void LinkNode(T* pNode, uint32_t nLinkType, T* pExisting);
+    T* NewNode(uint32_t nLinkType, uint32_t nExtraBytes, uint32_t dwFlags);
+    // Unlinks the node, frees it, and returns the node after it.
+    T* DeleteNode(T* pNode) {
+        T* pNext = Next(pNode);
+        UnlinkNode(pNode);
+        pNode->~T();
+        SMemFree(pNode, "", -2, 0);
+        return pNext;
+    }
+};
+
+template<class T>
+void TSLinkList<T>::UnlinkAll() {
+    T* pNode;
+    while ((pNode = Head()) != NULL) {
+        UnlinkNode(pNode);
+    }
+}
+
+template<class T>
+void TSLinkList<T>::LinkNode(T* pNode, uint32_t nLinkType, T* pExisting) {
+    TSLink<T>* pLink = Link(pNode);
+    if (pLink->IsLinked()) {
+        pLink->Unlink();
+    }
+    TSLink<T>* pExistingLink = pExisting ? (TSLink<T>*)pExisting : &m_terminator;
+    switch (nLinkType) {
+    case STORM_LIST_LINK_AFTER:
+        pLink->m_prevlink = pExistingLink;
+        pLink->m_next = pExistingLink->m_next;
+        pExistingLink->NextLink(m_linkoffset)->m_prevlink = pLink;
+        pExistingLink->m_next = pNode;
+        break;
+    case STORM_LIST_LINK_BEFORE: {
+        TSLink<T>* pPrev = pExistingLink->m_prevlink;
+        pLink->m_prevlink = pPrev;
+        pLink->m_next = pPrev->m_next;
+        pPrev->m_next = pNode;
+        pExistingLink->m_prevlink = pLink;
+        break;
+    }
+    }
+}
+
+template<class T>
+T* TSLinkList<T>::NewNode(uint32_t nLinkType, uint32_t nExtraBytes, uint32_t dwFlags) {
+    void* pMem = SMemAlloc(sizeof(T) + nExtraBytes, "", -2, dwFlags | SMEM_FLAG_ZEROMEMORY);
+    T* pNode = pMem ? new (pMem) T : NULL;
+    if (nLinkType) {
+        LinkNode(pNode, nLinkType, NULL);
+    }
+    return pNode;
+}
+
 // ---- TSGrowableArray ----
 
 template<class T>

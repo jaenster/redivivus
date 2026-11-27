@@ -60,7 +60,7 @@ struct SMsgEventData {
 };
 
 // 1.14d mac: 003f0950
-static TSExplicitList<SMsgWindowRecord, 0> s_tWindowList;
+static TSLinkList<SMsgWindowRecord> s_tWindowList;
 // 1.14d mac: 003f095c
 // The window messages are currently dispatched for.
 void* g_pActiveWindow;
@@ -68,13 +68,13 @@ void* g_pActiveWindow;
 int g_nActiveWindowState[4];
 
 // The instantiations clang-425 emitted into this file's object (stpl.h):
-// 1.14d mac: 0001929a TSExplicitList<SMsgWindowRecord,0>::~TSExplicitList[D1]
-// 1.14d mac: 000192bc TSExplicitList<SMsgWindowRecord,0>::UnlinkAll
+// 1.14d mac: 0001929a TSLinkList<SMsgWindowRecord>::~TSLinkList[D1]
+// 1.14d mac: 000192bc TSLinkList<SMsgWindowRecord>::UnlinkAll
 // 1.14d mac: 00019304 TSLink<SMsgWindowRecord>::Unlink
 // 1.14d mac: 00019344 TSLink<SMsgWindowRecord>::NextLink
-// 1.14d mac: 0001937a TSExplicitList<SMsgWindowRecord,0>::NewNode
-// 1.14d mac: 000193f0 TSExplicitList<SMsgWindowRecord,0>::LinkNode
-// 1.14d mac: 00019464 TSExplicitList<SMsgWindowRecord,0>::DeleteNode
+// 1.14d mac: 0001937a TSLinkList<SMsgWindowRecord>::NewNode
+// 1.14d mac: 000193f0 TSLinkList<SMsgWindowRecord>::LinkNode
+// 1.14d mac: 00019464 TSLinkList<SMsgWindowRecord>::DeleteNode
 // 1.14d mac: 000194e0 _GLOBAL__I_a
 
 static void SMSG_DeleteWindow(void* pWindow);

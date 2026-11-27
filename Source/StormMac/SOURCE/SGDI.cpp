@@ -10,6 +10,9 @@
 // 1.14d mac: 00010bb3
 void SErrReportResourceLeak(const char* szResource);
 
+// The path the original's SGDI_FILE names.
+#define SGDI_FILE "/Users/bclemetson/dev/diablo2/Diablo2/Source/DiabloAll/../../../StormMac/Storm Mac/SOURCE/SGDI.CPP"
+
 #define SGDI_OBJECT_SIGNATURE 0x4F4D  // 'MO'
 
 // An SGdi font or drawing object, linked into the object list by its first member.
@@ -21,38 +24,39 @@ struct SGdiObject {
 };
 
 // 1.14d mac: 003f06d8
-static TSExplicitList<SGdiObject, 0> s_tObjectList;
+static TSLinkList<SGdiObject> s_tObjectList;
 // 1.14d mac: 003f06e4
-static SGdiObject* s_pCurrentObject;
+// The globals below are read by the rest of SGDI.CPP (SGdi's drawing calls, not in this band).
+SGdiObject* g_pSGdiCurrentObject;
 // 1.14d mac: 003f06e8
-static void* s_pBuffer;
+void* g_pSGdiBuffer;
 // 1.14d mac: 003f06ec
-static int s_nBufferSize;
+int g_nSGdiBufferSize;
 // 1.14d mac: 003f06f0
-static int s_nBufferUsed;
+int g_nSGdiBufferUsed;
 // 1.14d mac: 003f06f4
-static void* s_pScratchBuffer;
+void* g_pSGdiScratchBuffer;
 // 1.14d mac: 003f06f8
-static int s_nScratchBufferSize;
+int g_nSGdiScratchBufferSize;
 
-static int SGDI_ResizeScratchBuffer(int nSize);
+int SGDI_ResizeScratchBuffer(int nSize);
 
 // The instantiations clang-425 emitted into this file's object (stpl.h):
-// 1.14d mac: 00017a82 TSExplicitList<SGdiObject,0>::~TSExplicitList[D1]
-// 1.14d mac: 00017aa4 TSExplicitList<SGdiObject,0>::DeleteNode
+// 1.14d mac: 00017a82 TSLinkList<SGdiObject>::~TSLinkList[D1]
+// 1.14d mac: 00017aa4 TSLinkList<SGdiObject>::DeleteNode
 // 1.14d mac: 00017b14 TSLink<SGdiObject>::Unlink
 // 1.14d mac: 00017b54 TSLink<SGdiObject>::NextLink
-// 1.14d mac: 00017b8a TSExplicitList<SGdiObject,0>::UnlinkAll
+// 1.14d mac: 00017b8a TSLinkList<SGdiObject>::UnlinkAll
 // 1.14d mac: 00017be0 _GLOBAL__I_a
 
 // 1.14d mac: 00017886
 int SGDI_DeleteObject(SGdiObject* pObject) {
     if (pObject && pObject->wSignature == SGDI_OBJECT_SIGNATURE && pObject->wKind == 0) {
-        if (s_pCurrentObject == pObject) {
-            s_pCurrentObject = NULL;
+        if (g_pSGdiCurrentObject == pObject) {
+            g_pSGdiCurrentObject = NULL;
         }
         if (pObject->pData) {
-            SMemFree(pObject->pData, __FILE__, 280, 0);
+            SMemFree(pObject->pData, SGDI_FILE, 280, 0);
             pObject->pData = NULL;
         }
         s_tObjectList.DeleteNode(pObject);
@@ -75,28 +79,29 @@ int SGdiDestroy(void) {
         SGDI_DeleteObject(pObject);
     }
     SGDI_ResizeScratchBuffer(0);
-    if (s_pBuffer) {
-        SMemFree(s_pBuffer, __FILE__, 310, 0);
-        s_pBuffer = NULL;
-        s_nBufferSize = 0;
-        s_nBufferUsed = 0;
+    if (g_pSGdiBuffer) {
+        SMemFree(g_pSGdiBuffer, SGDI_FILE, 310, 0);
+        g_pSGdiBuffer = NULL;
+        g_nSGdiBufferSize = 0;
+        g_nSGdiBufferUsed = 0;
     }
     return 1;
 }
 
 // 1.14d mac: 000179e0
-static int SGDI_ResizeScratchBuffer(int nSize) {
-    if (s_nScratchBufferSize < nSize || nSize == 0) {
-        if (s_pScratchBuffer) {
-            SMemFree(s_pScratchBuffer, __FILE__, 79, 0);
-            s_pScratchBuffer = NULL;
-            s_nScratchBufferSize = 0;
+// Called with other sizes by the drawing calls of this file that are not in this band.
+int SGDI_ResizeScratchBuffer(int nSize) {
+    if (g_nSGdiScratchBufferSize < nSize || nSize == 0) {
+        if (g_pSGdiScratchBuffer) {
+            SMemFree(g_pSGdiScratchBuffer, SGDI_FILE, 79, 0);
+            g_pSGdiScratchBuffer = NULL;
+            g_nSGdiScratchBufferSize = 0;
         }
         if (nSize == 0) {
             return 0;
         }
-        s_pScratchBuffer = SMemAlloc(nSize, __FILE__, 86, 0);
-        s_nScratchBufferSize = nSize;
+        g_pSGdiScratchBuffer = SMemAlloc(nSize, SGDI_FILE, 86, 0);
+        g_nSGdiScratchBufferSize = nSize;
     }
     return 1;
 }

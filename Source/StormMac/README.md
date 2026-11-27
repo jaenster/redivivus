@@ -81,6 +81,11 @@ decides, the boundary is chosen as follows.
 
 |File|Range|Note|
 |-|-|-|
+|`SFILE.CPP`|0001204e..00017700|ends with its static initialiser (00017700); its tail 00017484..000176a0 is the record destructors and the lock|
+|`SGDI.cpp`|00017886..00017c32|`__FILE__` (SGDI.CPP, 0x118/0x136 in SGdiDestroy's frees); ends with its static initialiser (00017be0)|
+|`SLOG.cpp`|00017c32..00018b0b|SLogClose is its first function (the Windows build's asserts name SLOG.CPP); no static initialiser, so the end is the first function of the next file, SMemAlloc|
+|`SMEM.cpp`|00018b0b..00018cdb|SMemAlloc .. SMemInitialize; SMsgBreakHandlerChain (00018cdb) is the first of SMSG|
+|`SMSG.cpp`|00018cdb..00019532|ends with its static initialiser (000194e0); WND_RemoveAndFreeRecord (00019464) is the list's DeleteNode instantiation|
 |`SNET.cpp`|00019532..0001ae80|ends with `__sinit_SNET_CPP`|
 |`SRGN.cpp`|0001b087..0001c6f0|region code only, no literal names the file; ends with `SRGN_InitStatics`|
 |`SSTR.cpp`|0001c730..0001d2f9|SStrLower (0001d2f9) included|
