@@ -224,38 +224,20 @@ BOOL __fastcall EndScene2() {
 }
 
 BOOL __fastcall GetBackBuffer(BYTE * pBuffer) {
-    uint8_t* ppvSrcRow;
-    int nCol;
-    uint8_t byPaletteIndex;
-    int nRow = 0;
-    int nWindowWidth = RENDERER_nWindowWidth;
-    uint8_t* ppvSrcCol = gpRenderBackBufferBits;
-    if (RENDERER_nWindowHeight <= 0) {
-      return 1;
-    }
-
-    do {
-      uint8_t* pbPixel;
-      nCol = 0;
-      pbPixel = pBuffer;
-      ppvSrcRow = ppvSrcCol;
-      if (nWindowWidth > 0) {
-        do {
-          byPaletteIndex = *ppvSrcRow;
-          *pbPixel = prgbq_00989c40[byPaletteIndex].rgbRed;
-          pbPixel[1] = prgbq_00989c40[byPaletteIndex].rgbGreen;
-          pbPixel[2] = prgbq_00989c40[byPaletteIndex].rgbBlue;
-          nCol++;
-          ppvSrcRow++;
-          pbPixel += 3;
-          nWindowWidth = RENDERER_nWindowWidth;
-        } while (nCol < RENDERER_nWindowWidth);
+    uint8_t* pSrcRow = gpRenderBackBufferBits;
+    for (int nRow = 0; nRow < RENDERER_nWindowHeight; nRow++) {
+      uint8_t* pSrc = pSrcRow;
+      BYTE* pDst = pBuffer;
+      for (int nCol = 0; nCol < RENDERER_nWindowWidth; nCol++) {
+        RGBQUAD* pColor = &prgbq_00989c40[*pSrc++];
+        *pDst++ = pColor->rgbRed;
+        *pDst++ = pColor->rgbGreen;
+        *pDst++ = pColor->rgbBlue;
       }
 
-      pBuffer += nWindowWidth * 3;
-      nRow++;
-      ppvSrcCol += nWindowWidth;
-    } while (nRow < RENDERER_nWindowHeight);
+      pSrcRow += RENDERER_nWindowWidth;
+      pBuffer += RENDERER_nWindowWidth * 3;
+    }
 
     return 1;
 }
