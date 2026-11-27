@@ -102,7 +102,8 @@ BOOL __fastcall Skills_SrvDoFunc_115_SummonPoisonCreeper(::SGAMEDATA * pGame, D2
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    D2MonsterCastPetStrc sPetCast = {};
+    D2MonsterCastPetStrc sPetCast;
+    memset(&sPetCast, 0, sizeof(sPetCast));
     sPetCast.pPlayer = pUnit;
     sPetCast.classId = nClassId;
     sPetCast.nFlags = 0;
