@@ -1494,7 +1494,6 @@ static void __stdcall D2CalcKickDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 }
 
 BOOL __fastcall SKILLASS_SrvStFn24_DragonTalon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    int32_t nKickCount;
     D2SkillsTxt* pSkilsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkilsTxt) {
       return 0;
@@ -1508,18 +1507,16 @@ BOOL __fastcall SKILLASS_SrvStFn24_DragonTalon(::SGAMEDATA * pGame, D2UnitStrc *
     D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     if (!pTarget) {
       D2Common::Skills::SKILL_SetParam1(pSkills, 0);
-    } else {
-      BOOL bInRange;
-      bInRange = D2Common::Units::IsInMeleeRange(pUnit, pTarget, 0);
-      if (bInRange) {
-        nKickCount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkilsTxt->calc[0], eSkill, nSkillLvl);
-        D2Common::Skills::SKILL_SetParam1(pSkills, nKickCount - 1);
-        D2CalcKickDamage(pGame, pTarget, pSkilsTxt, nSkillLvl, (uint32_t)!(nKickCount - 1), pUnit, eSkill);
-        return 1;
-      }
+      return 0;
+    }
+    if (!D2Common::Units::IsInMeleeRange(pUnit, pTarget, 0)) {
+      return 0;
     }
 
-    return 0;
+    int32_t nKicksLeft = D2Common::Skills::D2GetSkillCalc(pUnit, pSkilsTxt->calc[0], eSkill, nSkillLvl) - 1;
+    D2Common::Skills::SKILL_SetParam1(pSkills, nKicksLeft);
+    D2CalcKickDamage(pGame, pTarget, pSkilsTxt, nSkillLvl, !nKicksLeft, pUnit, eSkill);
+    return 1;
 }
 
 // Server DoFunc for the Assassin Dragon Talon skill (skill srvdofunc 42). Validates the Skills.txt row, resolves the attack target, releases any charge-up attack and processes the combat queue. Decrements the skill's Param1 (remaining kick count); while kicks remain it keeps the SKSRVDOFUNC flag and re-arms the anim timer. On the final kick it rolls a knockback chance from skill calc[1..3] (selected by target being player/merc, boss, or a specific monster type) against the unit seed, then applies kick damage via D2CalcKickDamage and reprocesses the combat queue. Returns TRUE on success.
