@@ -1092,7 +1092,12 @@ void __fastcall GetDnsRecordSync(char * * ppszDnsOutput, char * nDnsThreadParam2
     DWORD dwThreadId = 0;
     lpParameter_00881be8.pszOut = (char*)ppszDnsOutput;
     lpParameter_00881be8.pszHost = nDnsThreadParam2;
+#if !defined(_WIN32) && D2_OS_MAC
+    // The Mac layer's CreateThread names the thread (1.14d mac 00050973).
+    HANDLE hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)GetDnsResults, &lpParameter_00881be8, 0, &dwThreadId, "sGetServersList");
+#else
     HANDLE hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)GetDnsResults, &lpParameter_00881be8, 0, &dwThreadId);
+#endif
     int nCancelFlag = InterlockedCompareExchange(&Target_00881bfc, 0, 0);
     /* DWORD dwMilliseconds for WaitForSingleObject */ /* HANDLE hHandle for WaitForSingleObject */ while (true) {
       DWORD dwWaitResult;
@@ -1939,7 +1944,12 @@ HANDLE __fastcall ConnectingToBattleNet() {
         _net_sid::SID_InitializeProtocolState();
         _net_sid::NET_SID_CLIENT_InitializeSRP();
         /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ g_nBNetThreadInitFlag = 0;
+#if !defined(_WIN32) && D2_OS_MAC
+        // The Mac layer's CreateThread names the thread (1.14d mac 00050cde).
+        hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)BattleConnectFastest, (LPVOID)0x0, 0, &dwThreadId, "(LPTHREAD_START_ROUTINE)BattleConnectFastest");
+#else
         hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)BattleConnectFastest, (LPVOID)0x0, 0, &dwThreadId);
+#endif
         return hThread;
       }
     }
