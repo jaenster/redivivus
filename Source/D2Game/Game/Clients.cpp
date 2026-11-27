@@ -1577,31 +1577,24 @@ void __fastcall RecordSyncWarpTimestamp(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
 
 // @sourcefile .\GAME\Clients.cpp
 BOOL __fastcall CheckSyncWarpRateExceeded(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    int nSlotIdx;
-    int* pWarpFrameSlot;
-    if (!pUnit || pUnit->eUnitType != UNIT_PLAYER) {
+    if (GetTypeInline(pUnit) != UNIT_PLAYER) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd2d);
       exit(-1);
-    } else {
-      D2ClientStrc* pClient;
-      pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\GAME\\Clients.cpp", 0xd2f);
-      if (!pClient) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd30);
-        exit(-1);
-      }
-
-      nSlotIdx = 0;
-      pWarpFrameSlot = pClient->dwLastWarpFrame;
-      while (*pWarpFrameSlot && (uint32_t)(pGame->dwGameFrame - *pWarpFrameSlot) <= 0x8ca) {
-        nSlotIdx++;
-        pWarpFrameSlot++;
-        if (nSlotIdx >= 5) {
-          return 1;
-        }
-      }
-
-      return 0;
     }
+
+    D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\GAME\\Clients.cpp", 0xd2f);
+    if (!pClient) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd30);
+      exit(-1);
+    }
+
+    for (int i = 0; i < 5; i++) {
+      if (!pClient->dwLastWarpFrame[i] || (uint32_t)(pGame->dwGameFrame - pClient->dwLastWarpFrame[i]) > 0x8ca) {
+        return 0;
+      }
+    }
+
+    return 1;
 }
 
 // Returns pClient->dwLangId; halts (line 3392) on NULL.
