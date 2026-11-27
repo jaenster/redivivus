@@ -1,9 +1,8 @@
 addr	name	reason_class	detail
-00009632	delete	eh	landing-pad tail differs (orig 1 insns, ours 2); body pic-ref: same instructions; a PIC data reference or call target resolves to a different symbol/offset
-00009671	delete	wrong	orig passes 0x2e as third SMemFree-path arg where ours passes 0x28; ours also ends in ___cxa_call_unexpected where orig calls __ZSt9terminatev
+00009632	operator delete	unverified-ref	all 18 instructions are identical; 1 call target(s) cmp cannot name on our side (a destructor variant or a weak template copy in the object)
+00009671	delete	unpaired	cmp pairs operator delete[] and operator delete under the one name "delete", so this body is compared against the other one (line 40 vs 46); the source carries line 46
 000096e6	StormDestroy	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
-0000973c	SSYSTEM_SetSystemOption	wrong	orig writes s_dwSystemOption1/3/4/5 and reads four memory slots, ours writes and reads only s_dwSystemOption2
-00009830	STORM_Crc32	crt-idiom	orig uses the sbb/not/and bit trick for the -(crc&1) mask, ours uses shl/sar sign-mask expansion
+00009830	STORM_Crc32	sched	same calls; the CRC loop is laid out differently
 000098dc	CryptRSA_Process	eh	orig has __Unwind_Resume and four __ZSt9terminatev cleanup landing pads absent in ours, ours has ___stack_chk_fail instead
 000099ee	LogComputerInfoHeader	pic-ref	orig indexes an unnamed table via lea [R+4R+0x38d651], ours names g_aszMonthAbbreviation and loads with mov, bounds check equivalent
 00009d2e	Sha1_Pump	crt-idiom	orig is fully unrolled (424 insns, no loop), ours is a 144-insn loop with round constants 0x5a827999 etc.
@@ -43,143 +42,89 @@ addr	name	reason_class	detail
 0000dec7	PerformConversion	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 268 insns, ours 247; opcode-skeleton similarity 0.84
 0000e40a	TSList_LinkNode	inline	static TS list/link helper: clang inlines it, no out-of-line copy in the object, so there is nothing to compare
 0000e540	SCMD_InitStaticLists	pic-ref	orig stores sentinel into s_tBareList-4 and loads unnamed global ? where ours stores into s_bRequiredRegistered-4 and loads ___dso_handle; same otherwise
-0000e610	SCodeDelete	inline	orig calls TSLIST_DeleteNode out-of-line while ours has no such call and an inlined SMemFree plus two TSLINK_Unlink sequence
-0000e6e7	SCodeDestroy	wrong	orig calls SMemZero twice and TSLIST_DeleteAll; ours has no SMemZero calls at all and substitutes SMemFree and TSLINK_Unlink, so zeroing side effects are missing
-0000e7f4	TSLIST_Destructor_1	template-weak	orig calls duplicate _2 copies TSLIST_UnlinkAll_2 and TSLINK_Unlink_2; ours calls the single copies and tail-jumps to TSLINK_Unlink
-0000e816	TSLIST_Destructor_2	semantic-guess	same logic as TSLIST_Destructor_1 but orig does call TSLINK_Unlink then returns while ours tail-jumps to it
-0000e838	TSLIST_DeleteNode	inline	static TS list/link helper: clang inlines it, no out-of-line copy in the object, so there is nothing to compare
-0000e8a8	TSLINK_Unlink	inline	orig calls TSLINK_NextLink out-of-line while ours has its body inlined (sub and and -0x2 sequence) with no call
-0000e8e8	TSLINK_NextLink	inline	static TS list/link helper: clang inlines it, no out-of-line copy in the object, so there is nothing to compare
-0000e91e	TSLIST_UnlinkAll	semantic-guess	same TSLINK_Unlink callee; orig uses and/sete/or boolean ops while ours uses branch tests, with the loop shape differing
-0000e966	TSLIST_UnlinkAll_2	inline	static TS list/link helper: clang inlines it, no out-of-line copy in the object, so there is nothing to compare
-0000e9ae	TSLINK_Unlink_2	inline	static TS list/link helper: clang inlines it, no out-of-line copy in the object, so there is nothing to compare
-0000e9ee	TSLINK_NextLink_2	inline	static TS list/link helper: clang inlines it, no out-of-line copy in the object, so there is nothing to compare
-0000ea24	TSLIST_DeleteAll	inline	static TS list/link helper: clang inlines it, no out-of-line copy in the object, so there is nothing to compare
 0000eab0	SCODE_InitStaticLists	pic-ref	orig stores into s_tStreamList-4 and struct-4 with unnamed global ? where ours stores into s_tBlockList+8 and s_tStreamList+8 with ___dso_handle
-0000eb42	HUFFMAN_InitTree	semantic-guess	same zeroing of the 0x3050 region with the same end bound, but orig uses a pointer-based loop while ours uses an indexed loop from 0xc
-0000ebb6	HUFFMAN_InsertNewSymbol	semantic-guess	orig computes conditions branchless (sete/movzx/or/cmovne) with frame 0x1c; ours uses je/jne chains with frame 0xc; same TSLIST_LinkNode callees
-0000ed92	HUFFMAN_BuildTree	semantic-guess	same callees; orig uses cmov chains and an unnamed table lea where ours uses je/jne chains and named gaCompressHuffmanWeightTables
+0000ebb6	HUFFMAN_InsertNewSymbol	regalloc	the call sequence and tree updates match; two stack slots are swapped and one insn fewer
+0000ed92	HUFFMAN_BuildTree	regalloc	weight-row pointer is hoisted into a register in the original; ours folds the table base into the load
 0000f191	SCOMP_AcquireTempBuffer	inline	absent from object; orig SCompDecompress calls it out of line while ours inlines its mutex and SMemAlloc body
 0000f2c1	SCOMP_ReleaseTempBuffer	inline	absent from object; orig SCompDecompress calls it out of line while ours inlines its mutex and SMemFree body
-0000f32f	SCompDecompress	inline	orig calls SCOMP_AcquireTempBuffer and SCOMP_ReleaseTempBuffer out of line; ours has their mutex, GetCurrentThreadId and SMemAlloc bodies inline
-0000f5b0	HUFFMAN_Decompress	inline	orig calls TSLIST_LinkNode 4 times out of line and ours has none; ours adds stack protector (___stack_chk_fail) that orig lacks
+0000f32f	SCompDecompress	inline	the original calls the temp-buffer helpers (0000f191, 0000f2c1) out of line; ours inlines them
+0000f5b0	HUFFMAN_Decompress	inline	the original inlines the rebalance and the walk more than ours: 356 vs 244 insns, same 13 calls
 0000fad8	thunk_uncompress	unverified-ref	thunk tail-jumps to an import stub the original names differently from our _uncompress; instructions otherwise identical
-0000fae1	ADPCM_Decompress	wrong	orig clamps against 0x8000 while ours compares 0x7fff and reads gdwADPCMCoefficient where orig uses an inline table offset
-0000fd42	TSLIST_LinkNode	inline	orig calls TSLINK_NextLink out of line; ours has its and/sub/jns logic inline and TSLINK_NextLink is absent
-0000fdb6	TSLINK_Unlink	inline	orig calls TSLINK_NextLink out of line; ours inlines the same unlink logic
-0000fdf6	TSLINK_NextLink	inline	absent from object; orig TSLINK_Unlink and TSLIST_LinkNode call it out of line while ours inlines it
-0000fe2c	TSLIST_UnlinkAll	semantic-guess	same TSLINK_Unlink callee; orig computes the null/bit test branchless (sete/movzx/or) while ours branches with je/test
+0000fae1	ADPCM_Decompress	regalloc	the ADPCM step loop uses the same tables and calls; spill slots and the unrolled stereo path differ
 0000fe80	SCOMP_InitStatics	pic-ref	orig uses lea of CRITSECT_Destroy and an unnamed data ref where ours uses mov of &CRITSECT_Destroy and &___dso_handle
-0000fed5	SErrDestroy	inline	orig calls TSLIST_DeleteAll out of line; ours inlines TSLINK_Unlink and SMemFree loop; global names also differ
-0000ffaa	SErrDisplayError	wrong	orig calls _DebugStr and ours has no such call; ours tests gbSuppressErrors which orig does not; frame 0xd9c vs 0xeac
+0000ffaa	SErrDisplayError	regalloc	frame and buffer layout now match the original; it keeps pStackTrace in esi across the first block, ours reloads it and spills edi (17 insns of spills)
 0001071c	SErrGetErrorStr	pic-ref	identical except the 0x57 store to gdwStormLastErrorCode on ours where orig stores to s_bLeakOptionRead-4; cmove vs cmovne
 0001083c	SERR_GetString	pic-ref	orig indexes the message table at in-image offset 0x3beed2 while ours loads named gaSErrMessageStrings
-0001088b	WriteErrorLog	wrong	ours reads _g_pfnErrorLogExtraInfo and a byte global orig never touches; orig uses an alloca-sized buffer (lea esp) while ours uses a fixed 0x104 buffer
+0001088b	WriteErrorLog	stack-layout	same calls and the run-time-sized 0x1450 array; locals sit 4 bytes lower and the original has one more spill slot
 00010b81	SErrSuppressErrors	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
 00010b98	SErrSetLastError	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
-00010bd1	SErrReportNamedResourceLeak	wrong	orig reads s_dwSystemOption3 for the report while ours reads g_pnStormOptions through a pointer and formats with %s
-00010d65	SERR_WriteLogLineF	stack-layout	same instructions; frame size or local offsets differ
 00010e19	SERR_WriteLogTextCRLF	stack-layout	only difference is the alloca size expression 2n+0x12 on ours vs 2n+0x11 on orig; otherwise identical
-00010eca	TSLIST_Destructor	inline	orig calls TSLIST_UnlinkAll out of line; ours inlines its loop with TSLINK_Unlink
-00010eec	TSLIST_DeleteAll	inline	absent from object; its callers inline the loop instead
-00010f74	TSLINK_Unlink	inline	orig calls TSLINK_NextLink out of line; ours inlines the and/sub/lea logic
-00010fb4	TSLINK_NextLink	inline	absent from object; orig TSLINK_Unlink calls it out of line while ours inlines it
-00010fea	TSLIST_UnlinkAll	inline	absent from object; orig TSLIST_Destructor and callers call it while ours inlines the loop
 00011040	SERR_InitStatics	pic-ref	same store sequence but orig writes flag to s_tLogMutex-4 and atexit args use lea and unnamed data, ours uses s_bFacilitiesRegistered-4 and &___dso_handle
-000110bc	SEvtBreakHandlerChain	inline	orig calls TSLIST_NewNode out of line; ours inlines the SMemAlloc and node-link body with TSLINK_Unlink
 00011118	SEvtDestroy	regalloc	same instructions modulo register choice and PIC references
-000111df	SEVT_DeleteIdHashTable	wrong	orig calls SMemFree twice plus an assert-style branch with SEVT.CPP line 0x5d; ours has one SMemFree call and no such branch
-00011280	SEvtDispatch	wrong	ours reads s_bTablesChanged and s_nDispatchDepth gating that orig never reads, and has an extra unnamed call where orig calls LINKEDLIST_UnlinkFreeAndGetCount
-00011504	SEvtPopState	inline	orig inlines the s_ppTypes/s_nTypeBuckets hash lookup while ours calls an unnamed function in that spot
+00011280	SEvtDispatch	inline	206 vs 181 insns, 72% of the register-normalised stream aligns; calls 11 vs 11; helpers are inlined or called differently from the original
 000115a5	SEvtUnregisterType	inline	orig inlines the s_ppTypes/s_nTypeBuckets lookup while ours calls an unnamed function; SEVT_DeleteIdHashTable and delete callees match
 0001169c	SEvtPushState	inline	orig inlines the s_ppTypes/s_nTypeBuckets lookup while ours calls an unnamed function; flag store names also differ
 0001183c	SEvtRegisterHandler	inline	orig inlines the s_ppTypes lookup with SMemAlloc/SMemFree sequences while ours calls an unnamed function; ours also has odd offsets +0x841 and +0x845
 00011c21	SEvtUnregisterHandler	inline	orig inlines the s_ppTypes/s_nTypeBuckets lookup while ours calls an unnamed function; delete and mutex callees match
-00011d2e	TSLIST_Destructor	inline	orig calls TSLIST_UnlinkAll out of line; ours inlines its loop with TSLINK_Unlink
-00011d50	TSLIST_NewNode	inline	absent from object; orig SEvtBreakHandlerChain calls it out of line while ours inlines it
-00011dc6	LINKEDLIST_UnlinkFreeAndGetCount	wrong	ours drops the add 4 / sete count computation and loads s_tBreakCommands+4 via lea where orig uses arg+4 with cmov, changing which address and count are produced
-00011e36	TSLINK_Unlink	inline	orig calls TSLINK_NextLink out-of-line, ours has no call and inlines its tagged-pointer body (and -2, and 1, test)
-00011e76	TSLINK_NextLink	inline	static TS list/link helper: clang inlines it, no out-of-line copy in the object, so there is nothing to compare
-00011eac	TSLIST_LinkNode	inline	static TS list/link helper: clang inlines it, no out-of-line copy in the object, so there is nothing to compare
-00011f20	TSLIST_UnlinkAll	inline	static TS list/link helper: clang inlines it, no out-of-line copy in the object, so there is nothing to compare
 00011f70	SEVT_InitStatics	pic-ref	same atexit/CRITSECT_Init sequence, but orig stores to s_tBreakCommands+8 and s_tBreakCommands+c while ours stores to s_ppTypes-4 and s_tBreakCommands-2c; CRITSECT_Destroy loaded via lea in orig, mov from GOT in ours
 0001204e	SFileAuthenticateArchiveEx	pic-ref	same calls; orig lea-s &gaSFileSignatureRsaModulus/Exponent into a cmov arm, ours cmove-loads &gaSFileSignatureRsaExponent/Modulus through GOT so the arm selection differs
-0001228d	SFILE_CancelAsyncRequest	wrong	orig locks s_tLock and reads fields at +0x3de271/+0x3de279, ours locks through s_tRequestQueue with offsets +0x667e/+0x6686; different object and branch order
-0001239c	SFileCloseArchive	wrong	orig calls D2ArchiveStrc with a 0x10 frame after Unlink, ours calls unnamed ? with a 0xc frame and loads s_tArchiveList
-00012401	SFileCloseFile	wrong	ours makes an extra TSLink<D2MPQFileStrc>::Unlink call and uses s_tFileList+edi instead of orig cmov on s_tFileList+4
-00012465	SFileDdaBeginEx	wrong	ours lacks the fmt/data RIFF chunk constants and the DirectSound CreateSoundBuffer/SetVolume/SetPan/SetCurrentPosition sequence (six unnamed calls instead) and adds a stack guard
-000128ed	SFileDdaEnd	semantic-guess	same lock/delete/cancel sequence, but ours walks s_tStreamList plus node offset and calls unnamed ? where orig calls D2StormAudioStreamRec
-000129bc	SFileSetFilePointer	semantic-guess	same SetFilePointer path and offsets 0x120/0x8, but orig tests mode==2 directly while ours adds 8, compares to 1 with ja and uses lea R-1
-00012ac1	SFileReadFileEx2	wrong	ours adds a call to SErrDisplayError absent from orig, and orig calls D2StormAsyncOpStrc where ours calls unnamed ? and drops the 0x100000 store
+0001228d	SFILE_CancelAsyncRequest	sched	90 vs 78 insns, 79% of the register-normalised stream aligns; same call sequence; block order and fused forms differ
+0001239c	SFileCloseArchive	unverified-ref	all 32 instructions are identical; 1 call target(s) cmp cannot name on our side (a destructor variant or a weak template copy in the object)
+00012401	SFileCloseFile	unverified-ref	all 34 instructions are identical; 1 call target(s) cmp cannot name on our side (a destructor variant or a weak template copy in the object)
+00012465	SFileDdaBeginEx	inline	280 vs 271 insns, 60% of the register-normalised stream aligns; calls 23 vs 24; helpers are inlined or called differently from the original
+000128ed	SFileDdaEnd	sched	the original loads pStream->pMpqFile before computing the next list node; the optimiser sinks that load below it in ours; the destructor call is unresolved (D1/D2 variant)
+000129bc	SFileSetFilePointer	sched	the original tests the move method 0, 1, 2 in sequence; ours folds 1/2 into a range check and loads the size through a merged pointer
+00012ac1	SFileReadFileEx2	inline	397 vs 382 insns, 60% of the register-normalised stream aligns; calls 26 vs 25; helpers are inlined or called differently from the original
 00013080	__attribute__	unpaired	cmp.ts reads the tag name as __attribute__ (static noinline function), so no object function is compared
-000131d7	SFileDdaDestroy	semantic-guess	same lock/WaitForSingleObject/unlink/delete calls, but ours walks s_tStreamList with an index and test where orig reads node+4 directly
-000132d6	SFileDdaGetPos	semantic-guess	same lock and s_tQueueLock flag arithmetic, but orig reads node field [R+4] while ours reads s_tStreamList with an index
-000133a1	SFILE_GetStreamPosition	semantic-guess	same div/offset body; orig calls IDirectSoundBuffer_GetCurrentPosition and uses cmovae where ours calls unnamed ? and uses cmovbe
-00013418	SFileDdaInitialize	semantic-guess	same SErrSetLastError path and store to s_pDirectSound; orig uses branch-to-constant 1/0, ours uses setne/movzx of the pointer
-0001344b	SFileDestroy	unverified-ref	5 reference(s) only one side can resolve; every other instruction identical
-000136ea	SFileFileExistsEx	semantic-guess	same calls; orig dereferences the name (cmp byte) before the null test, ours tests the pointer first, and error paths are laid out differently
-000137af	SFILE_InitCryptTable	semantic-guess	same SMemAlloc and crypt-table seed (0x100001, imul 0x7d); orig uses a 5-count loop with dec, ours uses a negative-offset index base 0xffffec00 with +0x1400
-0001387f	SFILE_FindFileOnDisk	semantic-guess	same calls; orig derives booleans from flag bits (and 1, shr 4, xor 1) while ours uses test 0x10 with mov 0/1 branches
-00013955	GetFileBlockEntry	wrong	orig passes s_nSearchLocale and s_nSearchPlatform to SFILE_GetHashTableIndex; ours calls it with only the two index args and walks s_tArchiveList instead
-00013adb	SFileGetFileName	semantic-guess	same lock/SStrCopy/unlock sequence; orig stores 1 and xors to produce the return, ours uses movzx/setne/test
-00013bad	SFileLoadFile	semantic-guess	same SFileLoadFileEx2 call; orig xors the flag with 1 twice, ours zeroes with xor reg,reg and adds a jne, frame 0x2c vs 0x24 with extra pushes
-00013dd3	SFileOpenFileEx	wrong	orig runs a toupper-and-hash loop (seeds 0x7fed7fed/0xeeeeeeee, shl 5, crypt table); ours has no toupper calls or hash constants and adds an SStrChrR call
-00014226	SFileOpenArchive	semantic-guess	same calls; orig tests flags with test 2 and setne, ours uses and 1 and shr, and ours carries an extra canary spill at ebp-0x16c (frame 0x18c vs 0x17c)
-000145e7	SFILE_s_OpenArchive	wrong	orig calls toupper and D2ArchiveStrc and uses the 0x7fed7fed/0xeeeeeeee seeds; ours calls unnamed ? in their place and stores xmm0 into archive fields that orig does not
-00014c64	SFILE_ReadFileChecked	semantic-guess	identical apart from increment: orig does inc R then mov [S],R, ours does inc dword ptr [S] in place
-00014d7d	SFILE_Decrypt	semantic-guess	same x*33 crypt step; orig builds it as shl 5 plus add with a push/add esp 4, ours uses imul 0x21
-00014de3	SFileOpenFile	semantic-guess	same SFileOpenFileEx call and flag test; orig xors with 1 twice, ours zeroes via xor reg,reg with a jne and extra pushes, frame 0x1c vs 0x14
-00014e4e	SFilePrioritizeRequest	semantic-guess	same calls and field set; orig checks the fields with or/sete chain, ours uses a cmp/jne chain; ours calls unnamed ? where orig calls D2StormAsyncOpStrc
-00014ffd	SFILE_SyncReadFile	stack-layout	same SFILE_ReadFileChecked call; frame 0x20 vs 0x24 and locals at different ebp offsets, plus ours adds a stack canary and ___stack_chk_fail
-0001516c	SFILE_InternalReadFile	semantic-guess	same calls; orig computes the min with cmovb on register temps, ours computes it through memory (add [S],R, cmova) with a jbe to a different target
-0001558c	SFileUnloadFile	semantic-guess	same SMemFree call; orig stores 1 and xors for return, ours uses movzx/setne/test
-000155db	SFILE_InternalReadAlignedSector	semantic-guess	identical body; orig compares [ebp-0x10] with edi and jbe, ours swaps the cmp operands and uses jae
-00015661	SFILE_InternalReadAligned	wrong	orig calls SCompDecompress before _memmove and reads struct fields +0x114/+0x120 with neg/sub arithmetic that ours never does
-00015c64	SFILE_GetHashTableIndex	wrong	ours multiplies by 0x21 (imul) and reads the table at [R+0x1e78], orig has no imul and reads global s_pCryptTable via PIC
-00015e0c	SFILE_CdThreadProc	wrong	orig calls IDirectSoundBuffer_Lock/Unlock/Stop/Play by name, ours has about eight unresolved indirect calls and no Play or Stop; frame 0x8c vs 0x9c
-00016a72	SFileCritSect	wrong	orig calls _pthread_mutex_destroy then __ZSt9terminatev, ours is a tail jump to CRITSECT_Init
-00016b6a	TSExplicitList<D2ArchiveStrc,0>::LinkNode	semantic-guess	same Unlink/NextLink callees; orig selects the link with cmove/cmovne, ours uses explicit branches and adds the list offset
-00016bde	TSExplicitList<D2MPQFileStrc,0>::NewNode	wrong	orig zeroes fields +0x10c, +0x110, +0x114, +0x12c and +0x138 of the new node, ours has no such stores
-00016c88	TSExplicitList<D2MPQFileStrc,0>::LinkNode	semantic-guess	same callees; orig selects with cmove/cmovne, ours expresses the same select as branches
-00016e5e	TSExplicitList<D2StormAudioStreamRec,0>::LinkNode	semantic-guess	same callees; orig selects with cmove/cmovne, ours expresses the same select as branches
-00016ed2	TSExplicitList<D2StormAudioStreamRec,0>::UnlinkAll	semantic-guess	same Unlink callee and ops; ours adds [esi] inside the loop body where orig does not, jump targets shifted
-00016f1a	TSExplicitList<SFileEventNode,0>::UnlinkAll	semantic-guess	same Unlink callee and ops; ours adds [esi] inside the loop body where orig does not, jump targets shifted
-00016fd8	TSExplicitList<D2MPQFileStrc,0>::UnlinkAll	semantic-guess	same Unlink callee and ops; ours adds [esi] inside the loop body where orig does not, jump targets shifted
-00017020	TSExplicitList<D2StormAsyncOpStrc,0>::UnlinkAll	semantic-guess	same Unlink callee and ops; ours adds [esi] inside the loop body where orig does not, jump targets shifted
-000170de	TSExplicitList<D2ArchiveStrc,0>::UnlinkAll	semantic-guess	same Unlink callee and ops; ours adds [esi] inside the loop body where orig does not, jump targets shifted
-0001719c	TSExplicitList<D2StormAsyncOpStrc,0>::LinkNode	semantic-guess	same callees; orig selects with cmove/cmovne, ours expresses the same select as branches
-00017210	TSExplicitList<D2StormAsyncOpStrc,0>::DeleteNode	wrong	orig calls the D2StormAsyncOpStrc destructor, ours calls TSLink Unlink and an unresolved call instead
+000131d7	SFileDdaDestroy	regalloc	78 vs 81 insns, 96% of the register-normalised stream aligns; same call sequence; register choice, spills and branch layout differ
+000132d6	SFileDdaGetPos	regalloc	75 vs 75 insns, 97% of the register-normalised stream aligns; same call sequence; register choice, spills and branch layout differ
+000133a1	SFILE_GetStreamPosition	unverified-ref	all 45 instructions are identical; 1 call target(s) cmp cannot name on our side (a destructor variant or a weak template copy in the object)
+0001344b	SFileDestroy	unverified-ref	all 173 instructions are identical; 5 call target(s) cmp cannot name on our side (a destructor variant or a weak template copy in the object)
+000137af	SFILE_InitCryptTable	regalloc	66 vs 63 insns, 91% of the register-normalised stream aligns; same call sequence; register choice, spills and branch layout differ
+0001387f	SFILE_FindFileOnDisk	regalloc	the original keeps the result in ebx and spills the flags to the frame; ours keeps the flags in ebx
+00013955	GetFileBlockEntry	sched	93 vs 93 insns, 74% of the register-normalised stream aligns; same call sequence; block order and fused forms differ
+00013dd3	SFileOpenFileEx	inline	253 vs 221 insns, 89% of the register-normalised stream aligns; calls 23 vs 22; helpers are inlined or called differently from the original
+00014226	SFileOpenArchive	stack-layout	181 vs 168 insns, 85% of the register-normalised stream aligns; same call sequence; frame  0x17c vs  0x18c
+000145e7	SFILE_s_OpenArchive	sched	431 vs 406 insns, 65% of the register-normalised stream aligns; same call sequence; block order and fused forms differ
+00014c64	SFILE_ReadFileChecked	regalloc	83 vs 82 insns, 98% of the register-normalised stream aligns; same call sequence; register choice, spills and branch layout differ
+00014d7d	SFILE_Decrypt	regalloc	the *0x21 key update is the shl 5 + add form like the original; seed and key swap registers (eax/esi) and the crypt table pointer is spilled in the original
+00014e4e	SFilePrioritizeRequest	sched	122 vs 134 insns, 69% of the register-normalised stream aligns; same call sequence; block order and fused forms differ
+00014ffd	SFILE_SyncReadFile	inline	SyncReadFile: the original reaches the request through two calls ours inlines
+0001516c	SFILE_InternalReadFile	sched	203 vs 217 insns, 40% of the register-normalised stream aligns; same call sequence; block order and fused forms differ
+000155db	SFILE_InternalReadAlignedSector	regalloc	40 vs 40 insns, 95% of the register-normalised stream aligns; same call sequence; register choice, spills and branch layout differ
+00015661	SFILE_InternalReadAligned	inline	406 vs 425 insns, 58% of the register-normalised stream aligns; calls 14 vs 14; helpers are inlined or called differently from the original
+00015c64	SFILE_GetHashTableIndex	sched	143 vs 131 insns, 42% of the register-normalised stream aligns; same call sequence; block order and fused forms differ
+00015e0c	SFILE_CdThreadProc	inline	858 vs 814 insns, 57% of the register-normalised stream aligns; calls 39 vs 39; helpers are inlined or called differently from the original
+00016a72	CRITSECT_Destroy	unverified-ref	all 10 instructions are identical; 1 call target(s) cmp cannot name on our side (a destructor variant or a weak template copy in the object)
+00017210	SFILE_ReleaseFileHandle	unverified-ref	all 37 instructions are identical; 1 call target(s) cmp cannot name on our side (a destructor variant or a weak template copy in the object)
 00017278	D2ArchiveStrc	unpaired	destructor tag: cmp.ts cannot match D2ArchiveStrc::~D2ArchiveStrc to an object symbol by name
 0001737c	D2MPQFileStrc	unpaired	destructor tag: cmp.ts cannot match the member by name
 00017484	D2StormAudioStreamRec	unpaired	destructor tag: cmp.ts cannot match the member by name
-000174ec	D2StormAsyncOpStrc	unpaired	destructor tag: cmp.ts cannot match the member by name
-00017546	TSExplicitList<SFileEventNode,0>::DeleteNode	semantic-guess	same callees (Unlink x2, SMemFree); orig uses one cmovne, ours uses branches for the same select
-0001762c	TSExplicitList<SFileEventNode,0>::LinkNode	semantic-guess	same callees; orig selects with cmove/cmovne, ours expresses the same select as branches
+000174ec	SFILE_FreeRequestRecord	unverified-ref	all 31 instructions are identical; 2 call target(s) cmp cannot name on our side (a destructor variant or a weak template copy in the object)
 00017700	_GLOBAL__I_a	pic-ref	orig takes destructor addresses with lea of PIC fn, ours loads them with mov from &symbol (&___dso_handle, &__ZN...D1Ev)
-0001790c	SGdiDestroy	semantic-guess	same callees; ours selects the HSGDIOBJ/HSGDIFONT label with cmove instead of a branch and stores zero with mov [S],0
-000179e0	SGDI_ResizeScratchBuffer	semantic-guess	same callees and assert path; orig materialises (ecx==0) with sete and compares to 1, ours tests the argument against the size global with restructured branches
+0001790c	SGdiDestroy	sched	the original keeps the HSGDIFONT/HSGDIOBJ choice as a branch; ours becomes a cmov
+000179e0	SGDI_ResizeScratchBuffer	sched	the original materialises nSize==0 as a flag first (sete al; cmp al,1) and compares sizes after; the optimiser folds it in ours
 00017aa4	TSLinkList<SGdiObject>::DeleteNode	regalloc	same instructions modulo register choice
 00017be0	_GLOBAL__I_a	pic-ref	orig takes the ~TSLinkList<SGdiObject> address with lea of PIC fn, ours loads it with mov from &symbol and names &___dso_handle
 00017c32	SLogClose	pic-ref	identical flow; table displacement from the same base register is 0x3d8b74 in orig vs 0x1272 in ours
 00017ccf	LockLog	pic-ref	same flow; table displacement from the same base is 0x3d8ad7 in orig vs 0x11d5 in ours; orig also zeroes eax with xor on the null return
-00017e0d	SLogCreate	wrong	orig stores *ecx=0 only after the empty-name check; ours stores it before, so the error path writes where orig does not
+00017e0d	SLogCreate	sched	same compare/store order now; remaining diff is the imul reg,[mem],0x2c fold versus mov+imul in the epilogue
 00017f20	OpenLogFile	eh	orig has SErrSetLastError and a __Unwind_Resume landing pad that ours lacks; frame 0x23c vs 0x24c
 0001829f	SLogDestroy	pic-ref	same flow; table displacement from the same base is 0x3d8507 in orig vs 0xc8d in ours
 00018339	SLogFlushAll	pic-ref	same flow; table displacement from the same base is 0x3d846d in orig vs 0xbf3 in ours
-0001839a	SLogDump	wrong	orig gates on s_dwSystemOption3 and writes CRLF as one word 0x0a0d, ours gates on g_bLogDebugOutput and writes 0xd and 0xa as two byte stores
+0001839a	SLogDump	regalloc	172 vs 176 insns, 90% of the register-normalised stream aligns; same call sequence; register choice, spills and branch layout differ
 0001869c	SLOG_OutputTime	inline	orig inlines SMemCopy's size check (test/jle) and calls _memmove directly, ours calls SMemCopy out of line
-000187b1	SLOG_WriteIndentSpaces	semantic-guess	clamp cmp eax,0x81 with cmovl is equivalent to cmp eax,0x80 with cmovle; same callee and stores
+000187b1	SLOG_WriteIndentSpaces	sched	the original compares with 0x81 and cmovl; the compiler canonicalises our compare to 0x80 and cmovle
 00018872	SLogSetAbsIndent	regalloc	orig reloads [ebp-0xc] into eax then runs imul eax,0x2c, ours folds the reload into imul with a memory operand
 000188c7	SLogSetIndent	regalloc	orig reloads [ebp-0xc] into eax then runs imul eax,0x2c, ours folds the reload into imul with a memory operand
-0001891e	SLogSetTimestamp	semantic-guess	orig loads [ebp-8] into eax then imul eax,eax,0x2c; ours folds the load into imul with a memory operand, otherwise identical
-00018965	SLogPend	wrong	orig tests [reg+0x10] against s_dwSystemOption3 and writes CRLF as one word; ours tests [reg] against g_bLogDebugOutput and writes two bytes
+0001891e	SLogSetTimestamp	sched	the original reloads nSlot into a register and then imul eax,eax,0x2c; ours folds the load into imul reg,[mem],0x2c
+00018965	SLogPend	regalloc	67 vs 69 insns, 91% of the register-normalised stream aligns; same call sequence; register choice, spills and branch layout differ
 00018b0b	SMemAlloc	semantic-guess	out-of-memory name/line selection is a branch in orig and a cmov/sbb mask in ours; same two-way result
 00018b75	SMEM_DisplayOutOfMemoryError	sched	same instructions in a different order
-00018ce4	SMsgDestroy	semantic-guess	orig is a single test-and-call on g_pActiveWindow; ours builds the same condition with a sete/or boolean and an extra and-1 term
 00018d1b	SMSG_DeleteWindow	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
 00018ddd	SMsgDispatchMessage	sched	same instructions in a different order
-00019040	SMSG_InternalRegister	wrong	orig zeroes eax (return 0) after SErrSetLastError on the error path; ours returns whatever eax holds
-00019235	SMSG_FindWindow	wrong	orig uses the s_tWindowList+4 sentinel via cmove and a second sete/or condition; ours has no sentinel reference and loops without it
+00019040	SMSG_InternalRegister	regalloc	42 vs 41 insns, 99% of the register-normalised stream aligns; same call sequence; register choice, spills and branch layout differ
+00019235	SMSG_FindWindow	regalloc	ours spills the PIC base to [ebp-0x10] where the original keeps it in esi; the list walk is otherwise the same
 00019464	TSLinkList<SMsgWindowRecord>::DeleteNode	regalloc	same instructions modulo register choice
 000194e0	_GLOBAL__I_a	pic-ref	orig lea's the ~TSLinkList destructor and loads a PIC slot for __dso_handle; ours mov's the &symbol forms, same atexit call
 00019532	SNetLeaveGame	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 217 insns, ours 188; opcode-skeleton similarity 0.69
@@ -228,15 +173,14 @@ addr	name	reason_class	detail
 0001c9bd	SStrDup	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
 0001ca30	SStrLen	crt-idiom	orig scans 4 bytes at a time with 0x7efefeff and 0x81010100 masks, ours uses a byte-at-a-time loop
 0001caaf	SStrPack	crt-idiom	orig uses word-at-a-time 0x81010100 scan with unrolled tests, ours uses a byte loop
-0001cd8c	SStrTokenize	semantic-guess	same SErrSetLastError call, but orig computes booleans with setcc/xor while ours uses branches and mov 1
+0001cd8c	SStrTokenize	sched	the original evaluates (szBuffer==0) and (nBufferChars!=0) into flags before the pointer checks; ours branches
 0001ceaa	SStrHash	data-guess	hash multiply as shl 5 plus sub in orig, imul 0x21 in ours; table displacement 0x304b6c in orig vs 0x3d1 in ours
-0001cfaf	SStrHashHT	wrong	orig has hash seed constant 0x9e3779b9 (twice) and frame 0x428, ours lacks that constant and has frame 0x424 with stosd
+0001cfaf	SStrHashHT	regalloc	same Jenkins mix and byte-assembled words (lookup2 form); register assignment and spills differ (271 vs 277 insns)
 0001d302	SSignatureVerifyStream_Begin	semantic-guess	same new/Sha1_Initialize/SMemAlloc calls, only the assert line constant differs (0x5b vs 0x57) and the store order
 0001d458	SSignatureVerifyStream_Finish	eh	orig has extra __Unwind_Resume and terminate calls plus stack adjust cleanups, ours has none; all other callees match
 0001d69e	STRANS_DeleteTransRecord	sched	same instructions in a different order
 0001d720	STransDestroy	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
 0001d826	TSList_DeleteNode_STrans	inline	callees differ: orig-only [] ours-only []
-0001d90c	TSExplicitList<STrans,0>::UnlinkAll	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 31 insns, ours 32; opcode-skeleton similarity 0.97
 0001d960	_GLOBAL__I_a	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
 0001d9b5	UTF16_ToUTF8	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 100 insns, ours 107; opcode-skeleton similarity 0.79
 0001dad0	UTF8_IsValidString	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 102 insns, ours 78; opcode-skeleton similarity 0.36
@@ -247,10 +191,8 @@ addr	name	reason_class	detail
 0001df6a	SVidPlayEnd	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
 0001e067	SVID_IsVideoInList	pic-ref	orig takes lea of g_tVideoList+4, ours does mov of g_tVideoList+0 then indexes at +4
 0001e0f0	SVID_DeleteVideoNode	wrong	ours calls TSLink<SVid>::Unlink three times, orig twice, and orig has an extra terminate call
-0001e1f8	TSExplicitList<SVid,0>::UnlinkAll	semantic-guess	same single Unlink call, ours has one extra add of [esi] before the call and a different jmp target
 0001e240	_GLOBAL__I_a	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
 0001e2d0	STORM_LaunchURLCallback	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
-0001e2fd	Mem_SetDefaultAllocators	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
 0001e2fd	Mem_SetDefaultAllocators	unverified-ref	2 reference(s) only one side can resolve; every other instruction identical
 0001e3c0	MemAlloc	unverified-ref	2 reference(s) only one side can resolve; every other instruction identical
 0001e550	FPSetMessageBoxCallback	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
