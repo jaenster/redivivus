@@ -1,0 +1,9 @@
+# blast 1.2 (24 Oct 2012), contrib/blast of zlib 1.2.8: PKWARE Data Compression Library decompressor.
+# The 1.14d Mac binary decompresses PKWARE implode with it (SCOMP_DecompressImplode, and the sector
+# reader in SFILE).
+# Source: https://zlib.net/fossils/zlib-1.2.8.tar.gz
+#   SHA-256 36658cb768a54c1d4dec43c3116c27ed893e88b02ecfcb44f2166f9c0b7f2a0d, contrib/blast/
+# Byte-identical to the tarball. Licence: zlib licence, see LICENSE (also in blast.h).
+# Built only by cmake/mac.cmake (d2_mac_link_deps); the Windows build excludes this directory.
+65a1655f9dce77e79faabbd13d3e98c97c974303b652632f0ea791401c66f1ed  blast.c
+825e2f90c605133c96dc134ace6b62b70cc08156c7306a299bc8847f8fbb8ecb  blast.h

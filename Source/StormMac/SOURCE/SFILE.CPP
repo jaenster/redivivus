@@ -1899,8 +1899,8 @@ BOOL SFileDdaBeginEx(D2MPQFileStrc* hFile, uint32_t dwBufferBytes, uint32_t dwFl
     return 0;
 }
 
-typedef int (*PFNBLASTWRITE)(void* pState, void* pData, size_t nSize);
-typedef unsigned (*PFNBLASTREAD)(void* pState, void** ppData);
+typedef blast_out PFNBLASTWRITE;
+typedef blast_in PFNBLASTREAD;
 
 // What the blast decompressor's callbacks share: the destination (buffer, running offset) and
 // the source (data at 0x0C, size at 0x14).

@@ -111,6 +111,8 @@ foreach(list D2_SOURCES D2_HEADERS)
     list(FILTER ${list} EXCLUDE REGEX "^${D2_ROOT}/3rdparty/libbacktrace/")
     # LuaJIT source, built by its own Makefile (cmake/luajit.cmake).
     list(FILTER ${list} EXCLUDE REGEX "^${D2_ROOT}/3rdparty/luajit/")
+    # Mac link dependencies (zlib, blast, MoreFiles, the link stubs): built by cmake/mac.cmake only.
+    list(FILTER ${list} EXCLUDE REGEX "^${D2_ROOT}/3rdparty/(zlib|blast|MoreFiles|macstubs)/")
     # The Lua host's own test program has a main(); it is a target of its own below.
     list(FILTER ${list} EXCLUDE REGEX "^${D2_ROOT}/Redivivus/Lua/test/")
     # The Lua tools' node_modules (packages for the generator and the mod CLI) hold no game code.

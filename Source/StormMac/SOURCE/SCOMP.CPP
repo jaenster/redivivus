@@ -21,10 +21,10 @@ DWORD GetCurrentThreadId(void);
 void CRITSECT_Init(pthread_mutex_t* pMutex);
 void CRITSECT_Destroy(void* pMutex);
 
-// PKWARE's blast (3rd party).
-typedef unsigned (*blast_in)(void* pHow, unsigned char** ppBuffer);
-typedef int (*blast_out)(void* pHow, unsigned char* pBuffer, unsigned nSize);
-int blast(blast_in pfnInput, void* pInputHow, blast_out pfnOutput, void* pOutputHow);
+// PKWARE's blast (3rd party, 3rdparty/blast).
+extern "C" {
+#include "3rdparty/blast/blast.h"
+}
 
 // zlib's uncompress.
 extern "C" int uncompress(uint8_t* pDest, unsigned long* pnDestLen, const uint8_t* pSource, unsigned long nSourceLen);

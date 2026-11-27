@@ -1,0 +1,7 @@
+# Link stubs for the Mac link (cmake/mac.cmake, d2_mac_link_deps). Written here, not vendored.
+# bink_stub.c    RAD Bink 1.x (proprietary): the 7 entry points D2OpenGL references, all failing.
+# ijl_stub.c     Intel JPEG Library (proprietary): ijlInit/ijlFree/ijlWrite, all failing.
+# crashy_stub.cpp  Blizzard's crashy (3rdParty/crashy, no public source): the 20 symbols Fog's
+#                ErrorManager references, all doing nothing. Reconstructing crashy is separate work.
+# mach_override (rentzsch/mach_star, inside crashy in the binary) is not vendored: nothing in the
+# tree references it, and it is only reachable through crashy.

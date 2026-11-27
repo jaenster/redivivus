@@ -183,8 +183,9 @@ struct IDirectSound {
 // ---- the entry points of the other Storm files this one calls ----
 int SCompDecompress(void* pDest, uint32_t* pnDestSize, const void* pSource, uint32_t nSourceSize,
                     const char* szArchivePath);
-int blast(unsigned (*pfnRead)(void* pState, void** ppData), void* pReadParam,
-          int (*pfnWrite)(void* pState, void* pData, size_t nSize), void* pWriteParam);
+extern "C" {
+#include "3rdparty/blast/blast.h"
+}
 void SErrSetLastError(DWORD dwErrCode);
 void SErrReportResourceLeak(const char* szType);
 void SErrReportNamedResourceLeak(const char* szType, const char* szName);

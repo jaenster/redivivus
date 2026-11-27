@@ -248,12 +248,12 @@ its templates (92), the Mac shell (77).
 ## Link probe
 
 `link-probe.ts` asks how far the Mac build is from linking into an executable like the
-original. It links every object of `d2_mac_objs` and `d2_mac_shared_objs` with the Xcode 4.6.2
+original. It links every object of `d2_mac_objs`, `d2_mac_shared_objs` and `d2_mac_link_deps` (vendored third-party code and link stubs, 3rdparty) with the Xcode 4.6.2
 `ld` (x86_64, runs under Rosetta; i386, 10.7 SDK, the frameworks `otool -L` shows on
 `DiabloII_macho`) and classifies what ld reports:
 
 ```
-ninja -k 0 -C build-mac d2_mac_objs d2_mac_shared_objs
+ninja -k 0 -C build-mac d2_mac_objs d2_mac_shared_objs d2_mac_link_deps
 node asm_matching/mac/link-probe.ts --build build-mac [--out build-mac/link-probe]
 ```
 

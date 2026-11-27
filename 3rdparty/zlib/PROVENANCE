@@ -1,0 +1,25 @@
+# zlib 1.2.8 - the inflate path and uncompress(), for the Mac link only.
+# The 1.14d Mac binary embeds zlib 1.2.8 (inflateInit_ checks "1.2.8"; adler32, crc32, inffast,
+# inflate, inftrees, uncompr, zutil, no deflate), and Storm's SCOMP calls its uncompress().
+# Source: https://zlib.net/fossils/zlib-1.2.8.tar.gz
+#   SHA-256 36658cb768a54c1d4dec43c3116c27ed893e88b02ecfcb44f2166f9c0b7f2a0d
+# Every file is byte-identical to the one in that tarball (gzguts.h only because zutil.c includes it).
+# Licence: zlib licence, see LICENSE.
+# Built only by cmake/mac.cmake (d2_mac_link_deps); the Windows build excludes this directory.
+# Not to be confused with Source/Storm/3rdparty/zlib, the decompiled Windows rendering.
+341d49ae2703037d2d10c8486f1a1ca3b65e0f10cc9e5fead6bfbbc0b34564ba  adler32.c
+3f3daca510273dda74eaf381c46d2551e3a3506891ae063ab451b87744a7a36c  crc32.c
+407af59d0abfea84a6507c603eb29809411797f98249614fe76a661def783ce1  crc32.h
+2d3c0154089061fd3a9a789903e54b2ca3cef241383599f37b63914330b9c358  gzguts.h
+fd82c328b310f2f0ecc6a13475889e51c407dd4c5e8a931a36f18ad63f319c35  inffast.c
+7d8c1c873ce9bc346ad6005bb9d75cce5c6352aaf7395385be216a9452a34908  inffast.h
+237ba710f090e432b62ebf963bee8b302867e9691406b2d3f8ee89ee7bfef9b0  inffixed.h
+fb9bfa1295e7a6ef1b4a1149eec372dd7dcce407dd4fe9fea9c23a45a6857381  inflate.c
+36e5300408aa55a175a7d9be6b2f25dc0c5f80d79b2115fe43a2fe531e84775d  inflate.h
+608f96120ac1572002bbce6dcd2625171dae0afbecf4334070288a33e19e5952  inftrees.c
+c510b36402784b1f898be3b049b923469aa92701de2d9195aed19f6b65c0dce2  inftrees.h
+454902e5c47baf75e946b999fb93b9f8a3f6bbac68c5c51b3e0fe8f54542123e  uncompr.c
+ec0d0a6e87b749ab5fc3f27c0e8292b7aed139ca0b6121ab27e6eb30e2e9b6ba  zconf.h
+726b0569915917b967f87f3f08a1eec039101bf9dcc29d61c0b2b0b8f271b58d  zlib.h
+c5e9927d5a1a1dec514ccdcedfa1e0f01664c58bb33166b4997b50b8001f1d6c  zutil.c
+91cce8e78e83bcdb8c6acb98d4f0686dbdc81ca97d4a36a60c0b48f7ef78f1af  zutil.h

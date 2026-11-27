@@ -3,7 +3,8 @@
 //
 //   node asm_matching/mac/link-probe.ts --build <mac build dir> [--out <dir>]
 //
-// Links every object of both targets with the Xcode 4.6.2 ld (i386, 10.7 SDK, the frameworks the
+// Links every object of the three targets (d2_mac_link_deps holds the vendored third-party code and
+// the link stubs, see cmake/mac.cmake) with the Xcode 4.6.2 ld (i386, 10.7 SDK, the frameworks the
 // original links) and reads what ld says. Two links are needed because ld64 stops at the first
 // failing phase: `-undefined error` yields the undefined symbols, `-undefined dynamic_lookup`
 // lets it get as far as the duplicate-symbol pass. Nothing is written into the tree; the result
@@ -17,7 +18,8 @@
 //
 // Undefined-symbol classes:
 //   a  third-party the Mac binary embeds (Bink, crashy, blast, zlib, MoreFiles) or that the shared
-//      Windows code needs (Intel JPEG Library)
+//      Windows code needs (Intel JPEG Library); d2_mac_link_deps defines all of them, so this
+//      class is 0 unless a new reference appears
 //   b  a function the Mac binary has (Ghidra name or FUN_ address) and the tree has no body for
 //   b2 no Mac function of that name: Windows-only code the shared unit still calls, or unnamed
 //   c  data or a global that is declared and never defined
@@ -61,7 +63,7 @@ function walk(dir: string, out: string[]) {
     }
 }
 const objs: string[] = [];
-for (const t of ["d2_mac_objs", "d2_mac_shared_objs"]) {
+for (const t of ["d2_mac_objs", "d2_mac_shared_objs", "d2_mac_link_deps"]) {
     const d = join(buildDir, "CMakeFiles", `${t}.dir`);
     if (!existsSync(d)) { console.error(`no ${d}: build ${t} first`); process.exit(2); }
     walk(d, objs);

@@ -1,0 +1,21 @@
+# MoreFiles (Apple sample code, Jim Luther, 1992-1999): FSpIterateDirectory and what it needs.
+# The 1.14d Mac binary embeds FSpIterateDirectory (00036f91); Win32Mac's FindFirstFile calls it.
+# IterateDirectory.c needs GetDirectoryID and DetermineVRefNum (MoreFilesExtras.c), which need
+# FSpCompat.c and MoreFiles.c; the headers are the ones those files include.
+# Source: https://github.com/hogsy/OniFoxed, commit 26c758ec4687bbc173778a78f9e14235d4de69f6,
+#   BungieFrameWork/BFW_Source/BFW_FileManager/Platform_MacOS/MoreFiles/ (Apple's own archive is gone;
+#   this is a copy of the MoreFiles 1.5 sources, UTF-8 where Apple's were MacRoman). Unmodified.
+# Licence: Apple sample code licence, quoted in LICENSE; it allows incorporation without restriction
+#   and redistribution of unmodified source.
+# Built only by cmake/mac.cmake (d2_mac_link_deps); the Windows build excludes this directory.
+c4ec52ce9b24994b8f50a284327112a2aba6d49d66355bc2f10c7d8f992751ea  FSpCompat.c
+f7e72021eb9abec6218bf8a4532a34cacc16cea3798cac320197dbafc93d992d  FSpCompat.h
+df0e746c3c3aaefafcd49128952425e03e959b7eafbafe4ad917036b056116f7  IterateDirectory.c
+1371b48546a6431bcb2ae4b357e33887c0271c2101151505e7ea76b2ff8ff83d  IterateDirectory.h
+e652b3c4a286310e3ed8e40d7de083bd11496231c15555860fbdbce069f04429  MoreDesktopMgr.h
+d74154c17f63bffbbf23c2948c45260b08fee30c37347a6bea0df4f3edb3b1ed  MoreFiles.c
+9f7875227c6de286b6a5a0a3b89134fb2630a4163b55f8fbe79d9805aadfcc85  MoreFiles.h
+a7c69924fae74ee9a71793c457a0963104abf7f72f66c66c9f7a5f36f821fca3  MoreFilesExtras.c
+b5158ddee25d702f99c037efe7710ce2a3cf983a53f04fe3be1e2a8a4c857b5f  MoreFilesExtras.h
+7bacffeb5e8db834de88677a40e941e9825fb9a344b5dbe02096b24daab953d4  Optimization.h
+f94b642af5443a98ea933b74565495ac66a23c985e0a9cc02b12a3422c25a6c8  OptimizationEnd.h

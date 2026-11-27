@@ -120,3 +120,28 @@ target_compile_options(d2_mac_shared_objs PRIVATE
     $<$<COMPILE_LANGUAGE:CXX>:-std=gnu++11 -stdlib=libc++>
     "SHELL:-include ${CMAKE_SOURCE_DIR}/Source/D2Headers/d2_platform.h"
     -Werror=implicit-function-declaration -ferror-limit=0)
+
+# d2_mac_link_deps  what the Mac objects reference and the tree does not define: the third-party
+#              code the 1.14d Mac binary embeds (zlib 1.2.8's inflate and uncompress, PKWARE blast
+#              from zlib's contrib, Apple's MoreFiles IterateDirectory), vendored unmodified under
+#              3rdparty/ (each directory has a PROVENANCE), and link stubs for the two proprietary
+#              libraries (Bink, Intel JPEG) and for Blizzard's crashy, whose source is not public
+#              (3rdparty/macstubs). Outside `all`; asm_matching/mac/link-probe.ts links it in.
+#              The Windows build never sees any of it (CMakeLists.txt excludes these directories).
+set(D2_3RDPARTY "${CMAKE_SOURCE_DIR}/3rdparty")
+add_library(d2_mac_link_deps OBJECT EXCLUDE_FROM_ALL
+    ${D2_3RDPARTY}/zlib/adler32.c ${D2_3RDPARTY}/zlib/crc32.c ${D2_3RDPARTY}/zlib/inffast.c
+    ${D2_3RDPARTY}/zlib/inflate.c ${D2_3RDPARTY}/zlib/inftrees.c ${D2_3RDPARTY}/zlib/uncompr.c
+    ${D2_3RDPARTY}/zlib/zutil.c
+    ${D2_3RDPARTY}/blast/blast.c
+    ${D2_3RDPARTY}/MoreFiles/IterateDirectory.c
+    ${D2_3RDPARTY}/MoreFiles/MoreFilesExtras.c ${D2_3RDPARTY}/MoreFiles/FSpCompat.c
+    ${D2_3RDPARTY}/MoreFiles/MoreFiles.c
+    ${D2_3RDPARTY}/macstubs/bink_stub.c ${D2_3RDPARTY}/macstubs/ijl_stub.c
+    ${D2_3RDPARTY}/macstubs/crashy_stub.cpp)
+# MoreFiles includes the Carbon headers by bare name: the SDK's FlatCarbon directory.
+target_include_directories(d2_mac_link_deps PRIVATE
+    "${D2_3RDPARTY}/zlib" "${D2_3RDPARTY}/blast" "${D2_3RDPARTY}/MoreFiles"
+    "${D2_MAC_SDK}/Developer/Headers/FlatCarbon")
+target_compile_options(d2_mac_link_deps PRIVATE -Os -fstack-protector -w
+    $<$<COMPILE_LANGUAGE:CXX>:-std=gnu++11 -stdlib=libc++>)
