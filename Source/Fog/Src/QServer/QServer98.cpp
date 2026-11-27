@@ -16,6 +16,7 @@ struct QServer;
 
 namespace Fog::Src::QServer::QServer98 {
 
+// 1.14d mac: 002f5f2b
 void __fastcall QSERVER_CloseAllConnections(D2QServerStrc * pQServer) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pQServer->csClientLifecycle);
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ pQServer->aAcceptThreadStopFlags[0] = 1;
@@ -42,6 +43,7 @@ static void __fastcall QSERVER_AllocateConnectionStruct(int nSocket, uint32_t nI
     }
 }
 
+// 1.14d mac: 002f57d3
 DWORD __stdcall SocketThreadMain(void * lpThreadParam) {
     // Frame slots -1616..-1568 are ONE object: &nAddrLen is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -333,6 +335,7 @@ DWORD __stdcall SocketThreadMain(void * lpThreadParam) {
     goto check_read_fd;
 }
 
+// 1.14d mac: 002f5583
 BOOL __fastcall CreateSocketOnline(D2QServerStrc * pQServer, u_short nPort) {
     u_short uPortNetOrder;
     int nResult;

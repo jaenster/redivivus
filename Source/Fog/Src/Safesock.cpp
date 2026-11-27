@@ -41,11 +41,13 @@ static char cp_0075d040[256] = {}; D2_STATIC_GUARD(cp_0075d040, "cp_0075d040");
 
 namespace Fog::Src::Safesock {
 
+// 1.14d mac: 002f28c7
 int __fastcall closeSocket(SOCKET hSocket) {
     int nResult = closesocket(hSocket);
     return nResult;
 }
 
+// 1.14d mac: 002f28d0
 BOOL __stdcall StartUp() {
     WSADATA wsaData;
     int nResult = WSAStartup(0x101, &wsaData);
@@ -58,6 +60,7 @@ int __stdcall WSACleanup() {
 }
 
 // @sourcefile .\Src\Safesock.cpp
+// 1.14d mac: 002f2914
 D2NetDataStrc * __fastcall Create(char * szHostName, u_short nPort, LPTHREAD_START_ROUTINE pThreadProc, LPVOID pThreadParam, char * szConnectionAlias, uint32_t dwFlags) {
     uint32_t nLocalIpAddr;
     HANDLE hThread;
@@ -172,6 +175,7 @@ D2NetDataStrc * __fastcall Create(char * szHostName, u_short nPort, LPTHREAD_STA
 }
 
 // @sourcefile .\Src\Safesock.cpp
+// 1.14d mac: 002f2c27 Fog::Src::Safesock::Free
 void __fastcall Free(D2NetDataStrc * pNetData) {
     CRITICAL_SECTION* lpCriticalSection = &pNetData->pSync;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(lpCriticalSection);
@@ -202,6 +206,7 @@ void __fastcall Free(D2NetDataStrc * pNetData) {
     D2_FREE_AT(pNetData, ".\\Src\\Safesock.cpp", 0x183);
 }
 
+// 1.14d mac: 002f2ce5
 int32_t __fastcall WSASocket2_Read(D2NetDataStrc * pNetData, char * pBuffer, uint32_t nSize) {
     int nWSAError;
     if (pNetData && !pNetData->bBlocked) {
@@ -221,6 +226,7 @@ int32_t __fastcall WSASocket2_Read(D2NetDataStrc * pNetData, char * pBuffer, uin
     return 0;
 }
 
+// 1.14d mac: 002f2d52
 int32_t __fastcall WSASocket2_Send(D2NetDataStrc * pNetData, char * pBytes, uint32_t nSize) {
     int nWSAError;
     CRITICAL_SECTION* lpCriticalSection;
@@ -254,6 +260,7 @@ int32_t __fastcall WSASocket2_Send(D2NetDataStrc * pNetData, char * pBytes, uint
     return 0;
 }
 
+// 1.14d mac: 002f2de1
 int32_t __fastcall WSASocket2_SendOrCloseOnTimeout(D2NetDataStrc * pNetData, char * pBytes, uint32_t nSize) {
     int nBytesSent = send(pNetData->hSocket, pBytes, nSize, 0);
     int nWSAError = WSAGetLastError();
@@ -271,10 +278,12 @@ void __fastcall SAFESOCK_EnterCriticalSection(D2NetDataStrc * pNetData) {
 }
 
 // Leaves the critical section embedded at offset 0xC within the safesock structure. Thin wrapper around Win32 LeaveCriticalSection.
+// 1.14d mac: 002f2e65
 void __fastcall LeaveCriticalSection_Safesock(D2NetDataStrc * pSafesockStrc) {
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pSafesockStrc->pSync);
 }
 
+// 1.14d mac: 002f2e7e
 int __fastcall Safesock_PollReadReady(D2NetDataStrc * pNetData) {
     fd_set readFds;
     fd_set exceptFds;
@@ -313,6 +322,7 @@ int __fastcall Safesock_PollReadReady(D2NetDataStrc * pNetData) {
     return 0;
 }
 
+// 1.14d mac: 002f2ff2
 int32_t __fastcall GetPeerNameDoesReturn(D2NetDataStrc * pNetData, sockaddr * pName, int * pNameLen) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pNetData->pSync);
     int nResult = getpeername(pNetData->hSocket, pName, pNameLen);
@@ -327,6 +337,7 @@ uint32_t __fastcall GetSockNameDoesReturn(D2NetDataStrc * pNetData, sockaddr * p
     return (uint32_t)(nResult != -1);
 }
 
+// 1.14d mac: 002f3084
 char * __stdcall NET_GetLocalIp() {
     hostent* pHostEnt;
     SOCKET hSocket;
@@ -366,6 +377,7 @@ char * __stdcall NET_GetLocalIp() {
     return cp_0075d040;
 }
 
+// 1.14d mac: 002f31e5
 char * __fastcall NET_MakeIPV4AddressHumanFriendly(uint32_t sAddr) {
     // Static local variables (originally global data)
     static char szIPV4Address[32] = {}; D2_STATIC_GUARD(szIPV4Address, "Fog::Src::Safesock::NET_MakeIPV4AddressHumanFriendly::szIPV4Address");
@@ -383,12 +395,14 @@ char * __fastcall NET_MakeIPV4AddressHumanFriendly(uint32_t sAddr) {
     return szIPV4Address;
 }
 
+// 1.14d mac: 002f321d
 int __fastcall GetSocketStatusAndWsaResultToArguments(D2NetDataStrc * pNetData, int * dwSocketStatus, int * dwWSAResult) {
     *dwSocketStatus = pNetData->nError;
     *dwWSAResult = pNetData->nWSALastError;
     return 1;
 }
 
+// 1.14d mac: 002f323a
 char * __fastcall inet_nameToIp(char * szText) {
     char* pDstIp;
     int nOctet0;
@@ -445,6 +459,7 @@ char * __fastcall inet_nameToIp(char * szText) {
     return nullptr;
 }
 
+// 1.14d mac: 002f32c4
 int __fastcall SAFESOCK_SetSocketNonBlocking(D2NetDataStrc * pNetData, u_long bNonBlocking) {
     u_long nIoctlArg = bNonBlocking;
     /* u_long * argp for ioctlsocket */ /* long cmd for ioctlsocket */ /* SOCKET s for ioctlsocket */ SOCKET hSocket = pNetData->hSocket;

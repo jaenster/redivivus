@@ -37,6 +37,7 @@ typedef BOOL (__fastcall *Draw)(D2ControlStrc * pControl);
 
 namespace D2Win::Src::D2WinButton {
 
+// 1.14d mac: 00043804
 void __fastcall FORMS_DestroyD2WinButton(::D2WinButton * pButton) {
     if (pButton->sControl.neD2FormType != FORM_Button) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x59);
@@ -48,6 +49,7 @@ void __fastcall FORMS_DestroyD2WinButton(::D2WinButton * pButton) {
 
 // Returns TRUE when both bPressed and bPressedInside (+0x44/+0x48) are set: the toggle state of a toggle button (read only for the create-game level-restriction checkbox). Halts at line 0x65 if pButton is not FORM_Button.
 // Provenance: asm 00500960; 5 readers, all on gUIGameListLevelRestrictionCheckbox (00798c40): OOGUTIL_RefreshGameList 0044373c, OOGUTIL_RefreshGameListWithDelay 004451c6, NET_MCP_CLIENT_PrepareGameCreatePacket 00445771/0044599f, OOGUTIL_OnPressLevelRestrictionCheckbox 00445556.
+// 1.14d mac: 00043842
 BOOL __fastcall D2WINBUTTON_IsPressed(::D2WinButton * pButton) {
     if (pButton->sControl.neD2FormType != FORM_Button) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x65);
@@ -62,6 +64,7 @@ BOOL __fastcall D2WINBUTTON_IsPressed(::D2WinButton * pButton) {
 
 // Sets the button's bPressed and bPressedInside (+0x44/+0x48) to bPressed; the ladder tabs and dialog buttons use it to show one button held down. Halts at line 0x72 if pButton is not FORM_Button.
 // Provenance: asm 005009a0..005009c7; callers pass 0/1 in EDX.
+// 1.14d mac: 00043890
 void __fastcall D2WINBUTTON_SetPressed(::D2WinButton * pButton, BOOL bPressed) {
     if (pButton->sControl.neD2FormType != FORM_Button) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x72);
@@ -73,6 +76,7 @@ void __fastcall D2WINBUTTON_SetPressed(::D2WinButton * pButton, BOOL bPressed) {
 }
 
 // Sets button text (wide string), font ID (field 0x18), and text color (field 0x99).
+// 1.14d mac: 000438d9
 void __fastcall D2WINBUTTON_SetTextWithFont(::D2WinButton * pButton, int32_t nFontId, uint16_t * wszText, int32_t nTextColor) {
     if (pButton->sControl.neD2FormType != FORM_Button) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x84);
@@ -98,6 +102,7 @@ void __fastcall D2WINBUTTON_SetLocalizedTextWithFont(::D2WinButton * pButton, in
 }
 
 // Sets button bounding box: x, y, width, height (fields 3-6).
+// 1.14d mac: 0004393a
 void __fastcall D2WINBUTTON_SetBounds(::D2WinButton * pButton, int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight) {
     if (pButton->sControl.neD2FormType != FORM_Button) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xab);
@@ -111,6 +116,7 @@ void __fastcall D2WINBUTTON_SetBounds(::D2WinButton * pButton, int32_t nX, int32
 }
 
 // Invokes button click callback (field 9) and optional secondary callback (field 10). Sets active flag (field 0x13) before callback dispatch. Uses global recursion counter INT_007d55c4.
+// 1.14d mac: 00043992
 void __fastcall D2WINBUTTON_InvokeClickCallback(D2ControlMsg * ppButton) {
     D2ControlStrc* pDVar1 = ppButton->pControl;
     if (pDVar1->neD2FormType != FORM_Button) {
@@ -135,6 +141,7 @@ void __fastcall D2WINBUTTON_InvokeClickCallback(D2ControlMsg * ppButton) {
 }
 
 // Sets the active image index (field 0x17) for multi-state button controls.
+// 1.14d mac: 00043a05
 void __fastcall D2WINBUTTON_SetImageIndex(::D2WinButton * pButton, int32_t nImageIndex) {
     if (pButton->sControl.neD2FormType != FORM_Button) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd6);
@@ -145,6 +152,7 @@ void __fastcall D2WINBUTTON_SetImageIndex(::D2WinButton * pButton, int32_t nImag
 }
 
 // Handles mouse wheel input for scrollable buttons. Checks scroll up/down flags (bits 3-4 of field 0x10), invokes wheel callback (field 0xd) if delta is non-zero. Uses global recursion counter.
+// 1.14d mac: 00043a4b
 BOOL __fastcall D2WINBUTTON_HandleMouseWheel(::D2WinButton * pButton, int32_t nWheelDelta) {
     if (pButton->sControl.neD2FormType != FORM_Button) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe2);
@@ -170,6 +178,7 @@ BOOL __fastcall D2WINBUTTON_HandleMouseWheel(::D2WinButton * pButton, int32_t nW
 }
 
 // Sets custom user data field (field 0x9c) for application-specific button state.
+// 1.14d mac: 00043ae7
 void __fastcall D2WINBUTTON_SetCustomData(::D2WinButton * pButton, int32_t nCustomData) {
     if (pButton->sControl.neD2FormType != FORM_Button) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x100);
@@ -248,6 +257,7 @@ static void __stdcall D2WINBUTTON_DrawText(::D2WinButton * pButton, int nOffsetY
     D2WinFont::D2WINFONT_DrawTextWithOptionalBackground(wszText, nPrimaryXCenter, nDrawY, pButton->nTextColor, 0, DRAW_DARKTRANSPARENT);
 }
 
+// 1.14d mac: 00042fc3 D2Win::Src::D2WinButton::Draw
 BOOL __fastcall Draw(::D2WinButton * pButton) {
     BOOL bIsPointInside;
     int nLastTileRow;
@@ -513,6 +523,7 @@ BOOL __stdcall D2WINBUTTON_HandleHotkey(D2ControlMsg * pControlMsg) {
 }
 
 // @sourcefile .\Src\D2WinButton.cpp
+// 1.14d mac: 00042e6f
 ::D2WinButton * __fastcall D2WinButton(int32_t nPosX, int32_t nPosY, int32_t nSizeX, int32_t nSizeY, DC6 * pDC6, OnPress pfnOnPress, int32_t nHotkeyVK, int32_t nInitialImageIndex, int32_t nButtonFlags, int32_t wLabelStringId, ::Mouse pMouse) {
     uint32_t dwState;
     int nTileFrames;

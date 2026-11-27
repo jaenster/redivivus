@@ -681,6 +681,7 @@ void * __fastcall InitCriticalSection(void * pElement) {
     return pElement;
 }
 
+// 1.14d mac: 002efe39
 void __fastcall InitLogFilePathPointers(uint8_t * * pPathPtrArray, uint32_t nCount) {
     uint32_t nIndex = 0;
     if (nCount <= 0) {
@@ -701,6 +702,7 @@ void __fastcall InitLogFilePathPointers(uint8_t * * pPathPtrArray, uint32_t nCou
     } while (nIndex < nCount);
 }
 
+// 1.14d mac: 002efe7a
 FILE * __fastcall OpenLogFileWithTimestamp(char * szFilePrefix, LPSYSTEMTIME pSystemTime, char * szOpenMode, int * pbIsNewFile, char * szOutPath, int32_t nOutPathLen) {
     FILE* pFile;
     char szLogFilePath[260];
@@ -725,6 +727,7 @@ FILE * __fastcall OpenLogFileWithTimestamp(char * szFilePrefix, LPSYSTEMTIME pSy
 }
 
 // Writes the header of a newly opened log file: a rule, the computer name and the date from pTime, and a closing rule.
+// 1.14d mac: 002f0ca5
 void __fastcall WriteLogFileHeader(FILE * pFile, SYSTEMTIME * pTime) {
     char szComputerName[64];
     DWORD nNameSize = 0x40;
@@ -739,6 +742,7 @@ void __fastcall WriteLogFileHeader(FILE * pFile, SYSTEMTIME * pTime) {
 }
 
 // Writes the realm-startup banner to a log file: a rule, the computer name and the local time, and a closing rule.
+// 1.14d mac: 002f0d74
 void __fastcall WriteRealmStartupHeader(FILE * pFile) {
     char szComputerName[64];
     DWORD nNameSize = 0x40;
@@ -753,6 +757,7 @@ void __fastcall WriteRealmStartupHeader(FILE * pFile) {
 }
 
 // Returns the open log file for a name, opening it in a free slot and writing its header when it is new.
+// 1.14d mac: 002f0a6e
 FILE * __fastcall FindOrOpenLogFileSlot(uint8_t * szFileName, uint32_t * pnSlotIndex) {
     uint32_t pNameEnd;
     uint8_t* pSearchName;
@@ -895,6 +900,7 @@ void __fastcall FILETOOLS_GetUserMyDocumentsDiabloIIGameLogsFolder(char * szGame
 #endif
 
 // Writes a log record whose body is a hex dump to its log file, one formatted line at a time.
+// 1.14d mac: 002f048f
 void __fastcall WriteHexDumpLogEntry(D2LogRecordStrc * pLogRecord) {
     // Frame slots -352..-8 are ONE object: &local_160 is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -1033,6 +1039,7 @@ void __stdcall CloseStaleLogFileHandles() {
     } while (nSlotOffset < 20);
 }
 
+// 1.14d mac: 002f0e8e
 void __fastcall DeleteOldLogFile(FILETIME * pRefFileTime, char * szFileName) {
     FILETIME ftLog;
     int32_t nDay;
@@ -1122,6 +1129,7 @@ intptr_t __fastcall Unreferenced_0040f580(StormLinkedListStrc * pList) {
     return ~(uintptr_t)pSVar1;
 }
 
+// 1.14d mac: 002efd72
 void __fastcall FILETOOLS_SetLogFilePathWithoutDateAndExtension2(char * szSuffix) {
     char szLogsFolder[260];
     FILETOOLS_GetUserMyDocumentsDiabloIIGameLogsFolder(szLogsFolder, 0x104);
@@ -1169,6 +1177,7 @@ char * __fastcall ReadLogFileRange(uint8_t * szFileName, int32_t nStartOffset, i
 }
 
 // Writes one log record to its log file, prefixed with the record's time of day.
+// 1.14d mac: 002f03ba
 void __fastcall LogToFile(D2LogRecordStrc * pLogRecord) {
     uint32_t nSlot;
     if (pLogRecord->nType != 1) {
@@ -1221,6 +1230,7 @@ int32_t __thiscall NormalizeListNodePointer(int32_t pThis, int32_t pNodePtr) {
     return pNodePtr;
 }
 
+// 1.14d mac: 002f02ad
 void __stdcall ExitOrCrashCleanup() {
     DWORD dwTickCountC;
     intptr_t nQueueCount; // the queue head link word (a TSLink pointer or tag), tested for non-zero
@@ -1259,10 +1269,12 @@ void __stdcall ExitOrCrashCleanup() {
 }
 
 // JMP thunk
+// 1.14d mac: 002f03b1
 void __stdcall ExitOrCrashCleanUpJmp() {
     ::Fog::Src::LogManager::ExitOrCrashCleanup();
 }
 
+// 1.14d mac: 002f0904
 void __stdcall DeleteOldLogFiles() {
     // Static local variables (originally global data)
     static uint32_t gLogCleanupLastTickCount; D2_STATIC_GUARD_BSS(gLogCleanupLastTickCount, "Fog::Src::LogManager::DeleteOldLogFiles::gLogCleanupLastTickCount");
@@ -1298,6 +1310,7 @@ void __stdcall DeleteOldLogFiles() {
     }
 }
 
+// 1.14d mac: 002f1068
 void __fastcall UnlinkListNodeDouble(intptr_t * pNode) {
     intptr_t* pPrevLink;
     uintptr_t nOffset;
@@ -1466,6 +1479,7 @@ void * __thiscall DestroyListNodeAndFree(void * pThis, uint8_t bFreeMemory) {
     return pThis;
 }
 
+// 1.14d mac: 002f0f6c
 void __fastcall DestroyAllListNodes(StormLinkedListStrc * pListHead) {
     intptr_t* pObject;
     pfnEHHandlerRoutine pfnSEHHandler = __GSHandlerCheck_EH_6c9dc8;
@@ -1510,6 +1524,7 @@ D2LogRecordStrc * __thiscall AllocateAndInsertMessageNode(intptr_t * * ppListHea
     return pNode;
 }
 
+// 1.14d mac: 002efccf
 void __stdcall StopLogWriterThread() {
     /* DWORD dwMilliseconds for WaitForSingleObject */ /* HANDLE hHandle for WaitForSingleObject */ gLogWriterThreadStopFlag = 1;
     WaitForSingleObject(gLogWriterThreadHandle, 30000);
@@ -1587,6 +1602,7 @@ void EnqueueLogMessage(char * szText1, char * szText2, void * pData, uint32_t nD
 }
 
 // lpStartAddress parameter of CreateThread
+// 1.14d mac: 002efb88
 DWORD __stdcall LOGMANAGER_LogWriterThreadProc(void * lpThreadParam) {
     DWORD dwSleepMs;
     intptr_t* pPrevLink;
@@ -1767,6 +1783,7 @@ void LOGFILE_WriteStringToFile(char * Format, ...) {
     EnqueueFormattedLogMessage("", 1, 1, Format, __va);
 }
 
+// 1.14d mac: 002f01c3
 void LOGMANAGER_TraceToModuleLog(char * szModule, char * szFormatString, ...) {
     va_list __va;
     va_start(__va, szFormatString);
@@ -1806,6 +1823,7 @@ void LogSimple(char * szText, ...) {
     EnqueueFormattedLogMessage("", 0, 0, szText, __va);
 }
 
+// 1.14d mac: 002f0238
 void LogWithCategoryVarArgs(char * szText1, char * szText2, ...) {
     va_list __va;
     va_start(__va, szText2);
@@ -1945,6 +1963,7 @@ void InitHighResTimer() {
 }
 
 // Returns the current wall-clock second count in EAX (base seconds + elapsed ticks/1000). Takes no arguments: the former EBX parameter was a phantom propagated from AtomicExchange64's don't-care comparand.
+// 1.14d mac: 002f72b8
 uint32_t LOGMGR_GetHighResolutionTime() {
 #if !D2_OS_MAC
     int nPriority;

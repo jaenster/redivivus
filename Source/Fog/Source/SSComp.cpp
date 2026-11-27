@@ -118,6 +118,7 @@ void __fastcall COMPRESS_BuildHuffmanTree(int * pWeights, int32_t nCount) {
     }
 }
 
+// 1.14d mac: 002eca6c
 void __fastcall COMPRESS_BuildHuffmanDecodeTable(uint8_t * pCodeLengths) {
     // Static local variables (originally global data)
     static uint8_t gaHuffmanDecodeBuffer[768] = {}; D2_STATIC_GUARD(gaHuffmanDecodeBuffer, "Fog::Source::SSComp::COMPRESS_BuildHuffmanDecodeTable::gaHuffmanDecodeBuffer");

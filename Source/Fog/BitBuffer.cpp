@@ -27,10 +27,12 @@ void __stdcall SetBitAtOffset(char * pBuffer, uint32_t nOffset) {
     pBuffer[(int)nOffset >> 3] |= (uint8_t)gadwBitMasks[nOffset & 7];
 }
 
+// 1.14d mac: 002ec6ff
 BOOL __stdcall CheckBitAtOffset(char * pBuffer, int32_t nOffset) {
     return (uint32_t)(uint8_t)pBuffer[nOffset >> 3] & gadwBitMasks[nOffset & 7];
 }
 
+// 1.14d mac: 002ec725
 void __stdcall UnsetBitAtOffset(char * pBuffer, int32_t nOffset) {
     pBuffer[nOffset >> 3] &= (uint8_t)gadwInvBitMasks[nOffset & 7];
 }
@@ -111,6 +113,7 @@ void __stdcall BITBUF_XorBuffers(uint8_t * pBufferA, uint32_t * pBufferB, uint8_
     }
 }
 
+// 1.14d mac: 002ec750
 void __stdcall InitBitBuffer(D2BitBufferStrc * pBitBuffer, uint8_t * pBytes, uint32_t nSize) {
     if (!pBitBuffer) {
       Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), 0x13c);
@@ -124,6 +127,7 @@ void __stdcall InitBitBuffer(D2BitBufferStrc * pBitBuffer, uint8_t * pBytes, uin
     pBitBuffer->bEnd = 0;
 }
 
+// 1.14d mac: 002ec7b0
 int32_t __stdcall GetNextPositon(D2BitBufferStrc * pBitBuffer) {
     if (pBitBuffer->nBitsAtPos) {
       return (uint32_t)((uint32_t)pBitBuffer->nCurrentPos + 1);
@@ -132,6 +136,7 @@ int32_t __stdcall GetNextPositon(D2BitBufferStrc * pBitBuffer) {
     return (uint32_t)pBitBuffer->nCurrentPos;
 }
 
+// 1.14d mac: 002ec7c2
 void __stdcall WriteValueToBitBuffer(D2BitBufferStrc * pBitBuffer, int32_t nValue, int32_t nSizeInBits) {
     uint32_t nCapacityBits = pBitBuffer->nBitsInBuffer;
     /* check if there is room */ if ((int)(pBitBuffer->nBitsAtPos + pBitBuffer->nCurrentPos * 8 + nSizeInBits) > (int)nCapacityBits) {
@@ -173,6 +178,7 @@ void __stdcall WriteValueToBitBuffer(D2BitBufferStrc * pBitBuffer, int32_t nValu
     }
 }
 
+// 1.14d mac: 002ec8a7
 int32_t __stdcall Read(D2BitBufferStrc * pBitBuffer, int32_t nSize) {
     // Static local variables (originally global data)
     static uint8_t gbGameSaveFileMarker[12] = {
@@ -237,11 +243,13 @@ int32_t __stdcall Read(D2BitBufferStrc * pBitBuffer, int32_t nSize) {
     return 0;
 }
 
+// 1.14d mac: 002ec98f
 uint32_t __stdcall ReadUnsigned(D2BitBufferStrc * pBitBuffer, int32_t nSize) {
     uint32_t dwResult = Read(pBitBuffer, nSize);
     return dwResult;
 }
 
+// 1.14d mac: 002ec998
 int32_t __stdcall ReadSigned(D2BitBufferStrc * pBitBuffer, int32_t nSize) {
     uint32_t dwValue = Read(pBitBuffer, nSize);
     if (nSize < 0x20 && dwValue & 1 << D2_SHIFT_COUNT((uint32_t)nSize - 1)) {
@@ -251,6 +259,7 @@ int32_t __stdcall ReadSigned(D2BitBufferStrc * pBitBuffer, int32_t nSize) {
     return dwValue;
 }
 
+// 1.14d mac: 002ec9cf
 void __stdcall BitBufferEndCurrentByte(D2BitBufferStrc * pBitBuffer) {
     if (!pBitBuffer->nBitsAtPos) {
       return;

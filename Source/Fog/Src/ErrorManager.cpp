@@ -116,11 +116,13 @@ void __fastcall StubHook1_Unref_00407300(uint32_t dwThreadId, HANDLE hThread) {
 
 }
 
+// 1.14d mac: 002ee3ad
 void __stdcall CrashGame() {
     volatile uint32_t* pNull = 0;
     *pNull = (uint32_t)(uintptr_t)pNull;
 }
 
+// 1.14d mac: 002ee3b2
 void __fastcall FILETOOLS_WriteOneStringToFile(::Report * pReport, char * szString) {
     _3rdparty::crashy::Printf(pReport, "%s", szString);
 }
@@ -389,6 +391,7 @@ void __stdcall InitializeSystemInfo() {
 #endif
 
 // Registered with atexit. Tears down the Fog error/log subsystem and deletes the two critical sections at 0074c830 and 0074d848. Takes no arguments: the earlier EAX/ESI "parameters" were a callee-save PUSH ESI / POP ESI pair misread as inputs.
+// 1.14d mac: 002ef08e
 void EXIT_AtExit() {
     if (!gbFogErrorManagerInitialized) {
       return;
@@ -406,11 +409,13 @@ void EXIT_AtExit() {
 }
 
 // Registers: dwThreadId (ECX) and hThread (EDX) are passed by the callers but not read.
+// 1.14d mac: 002ef0f2
 void __fastcall StubHook1(uint32_t dwThreadId, HANDLE hThread) {
 
 }
 
 // Registers: nReserved (ECX) is 0 at every call site and not read.
+// 1.14d mac: 002ef0f7
 void __fastcall StubHook2(int32_t nReserved) {
 
 }
@@ -437,6 +442,7 @@ uint32_t __stdcall GetErrorState() {
 }
 
 // @sourcefile .\Src\ErrorManager.cpp
+// 1.14d mac: 002ef2cc
 char * __fastcall StripPathPrefixToRelative(char * szText) {
     // Static local variables (originally global data)
     static uint32_t g_nPathStripOffset; D2_STATIC_GUARD_BSS(g_nPathStripOffset, "Fog::Src::ErrorManager::StripPathPrefixToRelative::g_nPathStripOffset");
@@ -925,6 +931,7 @@ void __fastcall CRASH_FillupCrashTxt(char * szSummary, char * szReason, char * *
 }
 #endif
 
+// 1.14d mac: 002ef26d
 BOOL __fastcall CheckErrorDuringError(char * szText, int32_t nLine, char * szReason) {
     if (g_dwErrorState) {
       LogManager::LOGMANAGER_TraceToModuleLog("", "\n***** ENCOUNTERED ERROR DURING ERROR HANDLING!!!\n%s,%d\n%s\n*****", StripPathPrefixToRelative(szText), nLine, szReason);
@@ -936,6 +943,7 @@ BOOL __fastcall CheckErrorDuringError(char * szText, int32_t nLine, char * szRea
 
 // Main error handling dispatcher for Fog subsystem. Validates error is not recursive via CheckErrorDuringError, logs the error category, and formats error message with file/line info. For assertion/halt/OOM errors, writes crash report via CRASH_FillupCrashTxt. Uses two 4096-byte buffers: one for vsnprintf formatting the reason (varargs), one for the final "[ErrorType] (reason) failed at file(line)" message. Sets global error state to prevent cascading errors.
 // @sourcefile .\Src\ErrorManager.cpp
+// 1.14d mac: 002ef0fe
 void FOG_ErrorHandler(eFOG_ErrorType eErrorType, char * szFile, int32_t nLine, char * szReasonFormat, ...) {
     va_list __va;
     va_start(__va, szReasonFormat);

@@ -2624,6 +2624,7 @@ int __stdcall UTF16_CalculateUTF8Length(uint16_t * pszUTF16, int nMaxChars, int 
     return nUTF8Len;
 }
 
+// 1.14d mac: 0001d9b5
 int __stdcall UTF16_ToUTF8(uint8_t * pbUTF8, int nOutMaxChars, uint16_t * pszUTF16Out, int nInBytes, int * pnCharsWritten, int * pnBytesRead) {
     uint32_t uCodepoint;
     uint8_t* pOutCur;
@@ -3100,6 +3101,7 @@ static int __thiscall TRANSTBL_UnicodeToSingleByte(uint16_t * pThis, uint16_t * 
     return (int)(pOutCur - pbOut);
 }
 
+// 1.14d mac: 0001de00
 static int __fastcall TRANSTBL_SingleByteToUnicode(uint8_t * pbSrc, int nCount, uint16_t * pDest, uint16_t * pXlatTbl) {
     if (!nCount) {
       return 0;
@@ -3139,6 +3141,7 @@ void __stdcall TRANSTBL_UnicodeToKorean(uint8_t * pbOut, uint16_t * pSrcUTF16, i
     TRANSTBL_UnicodeToSingleByte((uint16_t*)pSrcUTF16, gszUnicodeKorean_1, pbOut, nCount);
 }
 
+// 1.14d mac: 0001ddd4
 int __stdcall TRANSTBL_Latin1ToUnicode(uint16_t * dest, uint8_t * src, int count) {
     int nCharsWritten = TRANSTBL_SingleByteToUnicode(src, count, dest, gszUnicodeLatin1_1);
     return nCharsWritten;

@@ -41,6 +41,7 @@ uint32_t gbSmackerKeepTempFile = 0; D2_GLOBAL_GUARD(gbSmackerKeepTempFile, "D2Wi
 namespace D2Win::Src::D2WinSmack {
 
 // Calculates title prefix index based on character class and gender. Used for cinematics and titles. Class < 4 maps to index 0, < 8 to 1, < 12 to 2, else 3. If bIsExpansion non-zero and index > 0, adds 3.
+// 1.14d mac: 00042233
 char * __stdcall D2COMP_GetTitleFromProgress(int nCharClass, int32_t nActsCompleted, int32_t bHardcore, int32_t bIsExpansion) {
     uint32_t nTitleIndex;
     bool bSignedGreaterOrEqual;
@@ -79,6 +80,7 @@ char * __stdcall D2COMP_GetTitleFromProgress(int nCharClass, int32_t nActsComple
 }
 
 // Loads and decodes Smacker video file into D2WinSmack control. Copies file path to field 0x40, closes previous smacker context, decodes new smacker to field 0x140. Stores path in global gpSmackerVideoBuffer and flags in gbSmackerVideoFlags.
+// 1.14d mac: 0004d123
 BOOL __stdcall D2WINSMACK_LoadAndDecodeSmacker(::D2WinSmack * pSmack, char * szFilePath, int32_t nFlags) {
     if (pSmack->sControl.neD2FormType != FORM_Smack) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x53);
@@ -136,6 +138,7 @@ void __stdcall D2WINSMACK_SetKeepTempFile() {
     gbSmackerKeepTempFile = 1;
 }
 
+// 1.14d mac: 0004d029 D2Win::Src::D2WinSmack::Draw
 BOOL __fastcall Draw(::D2WinSmack * pSmack) {
     if (pSmack->sControl.neD2FormType != FORM_Smack) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa4);
@@ -159,6 +162,7 @@ BOOL __fastcall Draw(::D2WinSmack * pSmack) {
     return 0;
 }
 
+// 1.14d mac: 0004d0c2 D2Win::Src::D2WinSmack::Push
 BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
     BOOL bOnPressResult;
     ::D2WinSmack* pSmack = (::D2WinSmack*)pControlMsg->pControl;
@@ -181,6 +185,7 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
 }
 
 // @sourcefile .\Src\D2WinSmack.cpp
+// 1.14d mac: 0004cf24
 ::D2WinSmack * __fastcall D2WinSmack(int32_t nPosX, int32_t nPosY, int32_t nWidth, int32_t nHeight, OnPress pfnOnPress) {
     uint32_t dwState;
     ::D2WinSmack* pSmack = D2_NEW_AT(::D2WinSmack, ".\\Src\\D2WinSmack.cpp", 0x23);

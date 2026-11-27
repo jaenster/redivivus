@@ -624,6 +624,7 @@ BigData * * __thiscall SSIGNATURE_RsaPowMod(BigData * * ppResult, BigData * * pp
 
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_ExportBytesWithPadding. DESCRIPTIVE, not an oracle name. Body = SBigToBinaryBuffer into the caller's buffer, then zero-fill the remainder to the requested length - the exact tail of Crypt::RSA::Process. Zero callers: MSVC out-of-line COMDAT copy. Moved from SBig to SSignature.
+// 1.14d mac: 000099a0
 void * __thiscall SSIGNATURE_RsaExportZeroPadded(BigData * * ppBig, uint8_t * pOutBuf, uint32_t nBufLen) {
     uint32_t nWritten;
     SBig::SBigToBinaryBuffer(*ppBig, pOutBuf, nBufLen, &nWritten);
@@ -650,6 +651,7 @@ void __thiscall CryptRSA_Prepare(BigData * * ppKey, void * pModulusBytes, uint32
 
 // Crypt::RSA::Process: one RSA operation in place on nDataLen bytes at pData. Loads the bytes into a BigData, computes SBigPowMod(out, in, ppKey[1] exponent, ppKey[0] modulus), writes the result back with SBigToBinaryBuffer and zero-fills any shorter tail; used for both signing (SSignatureGenerate) and verifying (SSignatureVerifyStream_Finish).
 // Provenance: 1.14d asm 004260a0; PPC Storm 1.10b symbol Process__Q25Crypt3RSAFPUcUl with the same callee set.
+// 1.14d mac: 000098dc
 void __thiscall CryptRSA_Process(BigData * * ppKey, uint8_t * pData, uint32_t nDataLen) {
     BigData* pPlainBn;
     BigData* pCipherBn;

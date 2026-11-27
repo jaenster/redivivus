@@ -33,6 +33,7 @@ void __fastcall FORMS_DestroyD2WinProgressBar(::D2WinProgressBar * pProgressBar)
     D2WinMain::FORMS_DestroyControl(&pProgressBar->sControl);
 }
 
+// 1.14d mac: 0004c633 D2Win::Src::D2WinProgressBar::Draw
 BOOL __fastcall Draw(::D2WinProgressBar * pProgressBar) {
     int nXStart;
     uint8_t bVar2;
@@ -58,6 +59,7 @@ BOOL __fastcall Draw(::D2WinProgressBar * pProgressBar) {
     return 0;
 }
 
+// 1.14d mac: 0004c56c
 ::D2WinProgressBar * __fastcall D2WinProgressBar(int32_t dwPosX, int32_t dwPosY, int32_t dwSizeX, int32_t dwSizeY) {
     uint32_t uVar1;
     ::D2WinProgressBar* pNewBar = D2_NEW_AT(::D2WinProgressBar, ".\\Src\\D2WinProgressBar.cpp", 0x1a);

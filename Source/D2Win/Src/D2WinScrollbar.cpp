@@ -39,11 +39,13 @@ typedef BOOL (__fastcall *Draw)(D2ControlStrc * pControl);
 
 namespace D2Win::Src::D2WinScrollbar {
 
+// 1.14d mac: 0004cc72
 void __fastcall FORMS_DestroyD2WinScrollbar(::D2WinScrollbar * pScrollbar) {
     D2WinMain::FORMS_DestroyControl(&pScrollbar->sControl);
 }
 
 // Returns scrollbar maximum value (field 0x12). Validates form type FORM_Scrollbar (5).
+// 1.14d mac: 0004cc7b
 int32_t __fastcall D2WINSCROLLBAR_GetMaxValue(::D2WinScrollbar * pScrollbar) {
     if (pScrollbar->sControl.neD2FormType != FORM_Scrollbar) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4b);
@@ -54,6 +56,7 @@ int32_t __fastcall D2WINSCROLLBAR_GetMaxValue(::D2WinScrollbar * pScrollbar) {
 }
 
 // Sets scrollbar maximum value (field 0x12). Clamps to non-negative. Validates form type FORM_Scrollbar (5).
+// 1.14d mac: 0004ccba
 BOOL __fastcall D2WINSCROLLBAR_SetMaxValue(::D2WinScrollbar * pScrollbar, uint32_t nMaxValue) {
     if (pScrollbar->sControl.neD2FormType != FORM_Scrollbar) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x56);
@@ -65,6 +68,7 @@ BOOL __fastcall D2WINSCROLLBAR_SetMaxValue(::D2WinScrollbar * pScrollbar, uint32
 }
 
 // Sets scrollbar position (field 0x13). Clamps to [0, maxValue]. Validates form type FORM_Scrollbar (5).
+// 1.14d mac: 0004cd0c
 BOOL __fastcall D2WINSCROLLBAR_SetPosition(::D2WinScrollbar * pScrollbar, int32_t nPosition) {
     if (pScrollbar->sControl.neD2FormType != FORM_Scrollbar) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x65);
@@ -89,6 +93,7 @@ int32_t __fastcall D2WINSCROLLBAR_GetPosition(::D2WinScrollbar * pScrollbar) {
 }
 
 // Links scrollbar to text box control (field 0x15). Scrollbar changes auto-update linked text box. Validates form type FORM_Scrollbar (5).
+// 1.14d mac: 0004cd9e
 BOOL __fastcall D2WINSCROLLBAR_SetLinkedTextBox(::D2WinScrollbar * pScrollbar, ::D2WinTextBox * pTextBox) {
     if (pScrollbar->sControl.neD2FormType != FORM_Scrollbar) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7f);
@@ -111,6 +116,7 @@ BOOL __fastcall D2WINSCROLLBAR_SetChangeCallback(::D2WinScrollbar * pScrollbar, 
 }
 
 // Handles mouse wheel scroll for scrollbar. Increments/decrements position (field 0x13), sets up/down arrow flags (fields 0x10/0x11), clamps to [0, maxValue], updates linked text box and invokes change callback. Returns 0.
+// 1.14d mac: 0004ce34
 BOOL __fastcall D2WINSCROLLBAR_HandleMouseWheel(D2UIMouseMsgStrc * pMsg, ::D2WinScrollbar * pScrollbar, int nWheelDelta) {
     if (pScrollbar->sControl.neD2FormType != FORM_Scrollbar) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x99);
@@ -162,6 +168,7 @@ int32_t __fastcall D2WINSCROLLBAR_GetStyle(::D2WinScrollbar * pScrollbar) {
     return pScrollbar->nStyle;
 }
 
+// 1.14d mac: 0004ca0f D2Win::Src::D2WinScrollbar::Push
 BOOL __stdcall Push(D2ControlMsg * pScrollbar) {
     int32_t nCurPos;
     int nStep;
@@ -271,6 +278,7 @@ BOOL __stdcall Push(D2ControlMsg * pScrollbar) {
     return 0;
 }
 
+// 1.14d mac: 0004cc06 D2Win::Src::D2WinScrollbar::Mouse
 BOOL __stdcall Mouse(D2ControlMsg * pScrollbar) {
     D2ControlStrc* pDVar1 = pScrollbar->pControl;
     if (pDVar1->neD2FormType != FORM_Scrollbar) {
@@ -287,6 +295,7 @@ BOOL __stdcall Mouse(D2ControlMsg * pScrollbar) {
     return 1;
 }
 
+// 1.14d mac: 0004c7e2 D2Win::Src::D2WinScrollbar::Draw
 BOOL __fastcall Draw(::D2WinScrollbar * pScrollbar) {
     int nDrawY;
     D2GfxDataStrc sGfxData;
@@ -351,6 +360,7 @@ BOOL __fastcall Draw(::D2WinScrollbar * pScrollbar) {
     }
 }
 
+// 1.14d mac: 0004c6ef
 ::D2WinScrollbar * __fastcall D2WinScrollbar(int32_t nPosX, int32_t nPosY, int32_t nSizeX, int32_t nSizeY, DC6 * pDC6, OnPress pfnOnPress) {
     ::D2WinScrollbar* pNewScrollbar = D2_NEW_AT(::D2WinScrollbar, ".\\Src\\D2WinScrollbar.cpp", 0x1c);
     memset(pNewScrollbar, 0, sizeof(*pNewScrollbar));

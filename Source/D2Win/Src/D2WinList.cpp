@@ -50,6 +50,7 @@ DC6 * gpPentSpinCursorDC6 = 0; D2_GLOBAL_GUARD(gpPentSpinCursorDC6, "gpPentSpinC
 
 namespace D2Win::Src::D2WinList {
 
+// 1.14d mac: 00049f3e
 void __fastcall FORMS_DestroyD2WinList(::D2WinList * pList) {
     D2WinListEntry* pNextEntry;
     if (pList->sControl.neD2FormType != FORM_List) {
@@ -214,6 +215,7 @@ void __stdcall D2WINLIST_FreePentSpinCursor() {
     gpPentSpinCursorDC6 = 0;
 }
 
+// 1.14d mac: 00049a45 D2Win::Src::D2WinList::Draw
 BOOL __fastcall Draw(::D2WinList * pList) {
     int nScrollOffset;
     int pY;
@@ -283,6 +285,7 @@ BOOL __fastcall Draw(::D2WinList * pList) {
     }
 }
 
+// 1.14d mac: 00049c36 D2Win::Src::D2WinList::Push
 BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
     // Static local variables (originally global data)
     static unsigned int gdwListLastClickTick; D2_STATIC_GUARD_BSS(gdwListLastClickTick, "D2Win::Src::D2WinList::Push::gdwListLastClickTick");
@@ -321,6 +324,7 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
     return 0;
 }
 
+// 1.14d mac: 00049d12
 BOOL __stdcall ListCheck(D2ControlMsg * pList) {
     BOOL bCallbackResult;
     ::D2WinList* pControl = (::D2WinList*)pList->pControl;
@@ -342,6 +346,7 @@ BOOL __stdcall ListCheck(D2ControlMsg * pList) {
     return 0;
 }
 
+// 1.14d mac: 00049d87 D2Win::Src::D2WinList::Key
 BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
     D2WinListEntry* pDVar2;
     int nKeyCode;
@@ -467,6 +472,7 @@ struct D2WinListItemDefStrc {
 };
 static_assert(sizeof(void*) != 4 || sizeof(D2WinListItemDefStrc) == 0x10, "list item table rows are 0x10 bytes on 32-bit");
 
+// 1.14d mac: 000497e3
 ::D2WinList * __fastcall D2WinList(int32_t nPosX, int32_t nPosY, int32_t nSizeX, int32_t nSizeY, int * pnItemArray, int * pnFontType) {
     // Static local variables (originally global data)
     static int INT_ARRAY_006dd024[14] = {

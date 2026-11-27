@@ -1653,6 +1653,7 @@ static void D2COMP_PadStringTo4Chars(char * szInput, char * szOutput) {
     szOutput[3] = ' ';
 }
 
+// 1.14d mac: 0003f088
 static void * D2COMP_AssertNotNull(void * pValue) {
     if (!pValue) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3dd);
@@ -1679,6 +1680,7 @@ static uint8_t * __stdcall D2COMP_LoadAndValidateCOFFile(char * szCOFFilePath, u
     }
 }
 
+// 1.14d mac: 0003f458
 static uint8_t * __stdcall D2COMP_ValidateCOFLayerData(int32_t nLayerIndex, int32_t nFrameIndex, uint8_t * pbyCofData) {
     if (!pbyCofData) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x400);
@@ -1804,6 +1806,7 @@ static void __stdcall D2COMP_BuildCOFFilePath(int32_t nPlayerClassId, int32_t nA
     *pszDestPath = '\0';
 }
 
+// 1.14d mac: 0003f3f8
 static D2CompCofListNodeStrc * D2COMP_FindCOFEntryByModeAndWeapon(D2CompCofListNodeStrc * * ppCOFList, int32_t nAnimMode, uint32_t dwWeaponClassToken) {
     if (!ppCOFList) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4b0);
@@ -1867,6 +1870,7 @@ static uint8_t * __stdcall D2COMP_GetOrLoadCOF(D2CompCofListNodeStrc * * ppCOFLi
     return puVar1;
 }
 
+// 1.14d mac: 0003e9d4
 void __fastcall D2COMP_PopulateComponentFromCOF(D2CharSelCompStrc * pCOFData, D2GfxDataStrc * pGfxData) {
     // Static local variables (originally global data)
     static int gaCompCompositTokens[16] = {
@@ -2505,6 +2509,7 @@ static int32_t __stdcall D2COMP_LoadLayerSpritesAndCalcHeight(uint8_t * pbLayerC
     return nLoadedSpriteCount;
 }
 
+// 1.14d mac: 0003f0c4
 void __fastcall D2COMP_DrawUnitShadow(D2CharSelCompStrc * pCompUnit) {
     D2CompCofListNodeStrc* pCOFEntry;
     uint8_t* nLayerCount;
@@ -2579,6 +2584,7 @@ void __fastcall D2COMP_DrawUnitShadow(D2CharSelCompStrc * pCompUnit) {
     }
 }
 
+// 1.14d mac: 0003f4db
 void __fastcall D2COMP_DrawCompositeUnit(D2CharSelCompStrc * pCompUnit, int32_t nDrawColor) {
     // Static local variables (originally global data)
     static uint32_t gnUniqueCursorAnimTick; D2_STATIC_GUARD_BSS(gnUniqueCursorAnimTick, "D2Win::Src::D2Comp::D2COMP_DrawCompositeUnit::gnUniqueCursorAnimTick");
@@ -2749,6 +2755,7 @@ int32_t __stdcall D2COMP_TruncateStringToFitWidth(uint16_t * wszText, int32_t nM
     return nFitCount;
 }
 
+// 1.14d mac: 000405b0
 void __stdcall D2COMP_AddTextLineToLayout(uint16_t * wszText, uint8_t * pLayoutBase, int * pnLineCount, int * pnMaxWidth, int * pnTotalHeight) {
     uint16_t* pLineEntry = (uint16_t*)(pLayoutBase + *pnLineCount * 0x208);
     if (*pnLineCount >= 7) {
@@ -2775,6 +2782,7 @@ void * __fastcall D2COMP_ZeroBuffer512(void * pBuffer) {
     return pBuffer;
 }
 
+// 1.14d mac: 00041ada
 static BOOL D2COMP_ValidateAndLoadCOFForUnit(D2CharSelCompStrc * pCompUnit) {
     // Static local variables (originally global data)
     static uint32_t gnD2CompLoadedSize0 = 0x19; D2_STATIC_GUARD(gnD2CompLoadedSize0, "D2Win::Src::D2Comp::D2COMP_ValidateAndLoadCOFForUnit::gnD2CompLoadedSize0");
@@ -2847,6 +2855,7 @@ void __fastcall D2COMP_UnlinkCompositeUnit(D2CharSelStrc * pCharSel) {
     D2_FREE_AT(pCharSel, ".\\Src\\D2Comp.cpp", 0x85a);
 }
 
+// 1.14d mac: 000414bf
 void __stdcall D2COMP_AllocSmallClientBlock() {
     uint32_t* pAllocated = (uint32_t*)D2_ALLOC_AT(4, ".\\Src\\D2Comp.cpp", 0x866);
     if (!pAllocated) {
@@ -2857,6 +2866,7 @@ void __stdcall D2COMP_AllocSmallClientBlock() {
     *pAllocated = 0;
 }
 
+// 1.14d mac: 00040658
 void __stdcall D2COMP_DestroyCompositeUnit(D2CharSelCompStrc * pCharSel, int32_t bUnlink) {
     D2CompCofListNodeStrc** pCOFListHead;
     D2CompCofListNodeStrc* pNextCOFNode;
@@ -2894,6 +2904,7 @@ void __stdcall D2COMP_DestroyCompositeUnit(D2CharSelCompStrc * pCharSel, int32_t
     }
 }
 
+// 1.14d mac: 0004086a
 void __stdcall D2COMP_SetUnitDisplayStrings(D2CharSelCompStrc * pCompUnit, uint16_t * wszText1, uint16_t * wszText2, uint16_t * wszText3, uint16_t * wszText4, int32_t nDisplayFlags, int32_t nExtraData) {
     if (!pCompUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8a8);
@@ -2908,6 +2919,7 @@ void __stdcall D2COMP_SetUnitDisplayStrings(D2CharSelCompStrc * pCompUnit, uint1
     pCompUnit->dwProductCode = nExtraData;
 }
 
+// 1.14d mac: 0004090d
 BOOL __fastcall D2COMP_SetAnimationMode(D2CharSelCompStrc * pCompUnit, int32_t nAnimMode) {
     uint8_t* pCOFLayerData;
     if (!pCompUnit) {
@@ -2968,6 +2980,7 @@ void * __stdcall D2COMP_LoadExcelTxtFile(D2PoolManagerStrc * pMemory, char * szF
     return pFileData;
 }
 
+// 1.14d mac: 0004098e
 void * __stdcall LoadTxt(D2PoolManagerStrc * pMemory, char * szTxtName, D2BinFieldInputStrc * pBinFields, uint32_t * pSize, int32_t nLineLength) {
     // Static local variables (originally global data)
     static uint32_t gbLoadBinFiles = 0x1; D2_STATIC_GUARD(gbLoadBinFiles, "D2Win::Src::D2Comp::LoadTxt::gbLoadBinFiles");
@@ -3010,6 +3023,7 @@ void * __stdcall LoadTxt(D2PoolManagerStrc * pMemory, char * szTxtName, D2BinFie
     return pRecord;
 }
 
+// 1.14d mac: 00040a7f
 void __fastcall D2COMP_AllocTxt_Items(D2PoolManagerStrc * pMemory) {
     // Static local variables (originally global data)
     static D2ItemsTxt * pD2CompItemsCopy; D2_STATIC_GUARD_BSS(pD2CompItemsCopy, "D2Win::Src::D2Comp::D2COMP_AllocTxt_Items::pD2CompItemsCopy");
@@ -3109,6 +3123,7 @@ void __stdcall Unreferenced_005049d0() {
     gnHitClassTxtLinkHandle = 0;
 }
 
+// 1.14d mac: 00040daa
 int32_t __stdcall D2COMP_IsItemTypeDescendant(int32_t nItemType, int32_t nAncestorType) {
     int nQueueCount;
     int nQueueHead[64];
@@ -3169,6 +3184,7 @@ int32_t __stdcall D2COMP_IsItemTypeDescendant(int32_t nItemType, int32_t nAncest
     exit(-1);
 }
 
+// 1.14d mac: 00041531
 static int32_t __stdcall D2COMP_ResolveWeaponClass(int32_t nPlayerClassId, uint8_t * pEquipData) {
     int32_t bIsDescendant;
     bool bBothHandsEquipped;
@@ -3296,6 +3312,7 @@ static int32_t __stdcall D2COMP_ResolveWeaponClass(int32_t nPlayerClassId, uint8
     return 0xb;
 }
 
+// 1.14d mac: 00040e8c
 void __stdcall D2COMP_SetSelectionAndAuraImages(DC6 * pDC6, DC6 * pDC62) {
     gpUniqueCursorDC6 = pDC6;
     gnUniqueCursorMaxFrames = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(pDC6);
@@ -3303,6 +3320,7 @@ void __stdcall D2COMP_SetSelectionAndAuraImages(DC6 * pDC6, DC6 * pDC62) {
     gnPentaSpinCursorMaxFrames = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(pDC62);
 }
 
+// 1.14d mac: 00041752
 static void D2COMP_ValidateEquippedItemForClass(int32_t nEquipSlot, uint8_t * pbyItemIndex) {
     int32_t bIsDescendant;
     int nSearchIdx;
@@ -3428,6 +3446,7 @@ static void D2COMP_ValidateEquippedItemForClass(int32_t nEquipSlot, uint8_t * pb
     }
 }
 
+// 1.14d mac: 00041bf0
 void __stdcall D2COMP_CreateCompositeUnit(D2CharSelCompStrc * pCompUnit, uint32_t nPlayerClassId, uint32_t nAnimMode, uint8_t * pbyEquipSlots, char * szText) {
     int32_t nWeaponClass;
     BOOL BVar2;
@@ -3498,6 +3517,7 @@ void __stdcall D2COMP_CreateCompositeUnit(D2CharSelCompStrc * pCompUnit, uint32_
     }
 }
 
+// 1.14d mac: 00041d07
 void __stdcall D2COMP_FreeAllCompositeUnits() {
     D2CharSelCompStrc* pCharSel = gpCompositeUnitListHead;
     while (pCharSel) {
@@ -3511,10 +3531,12 @@ void __stdcall D2COMP_FreeAllCompositeUnits() {
     gpCompositeUnitListHead = 0;
 }
 
+// 1.14d mac: 00041d79
 D2CharSelCompStrc * __stdcall D2COMP_GetCompositeUnitListHead() {
     return gpCompositeUnitListHead;
 }
 
+// 1.14d mac: 00041d8a
 D2CharSelCompStrc * __stdcall D2COMP_GetNextCompositeUnit(D2CharSelCompStrc * pCompUnit) {
     if (!pCompUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd4c);
@@ -3524,6 +3546,7 @@ D2CharSelCompStrc * __stdcall D2COMP_GetNextCompositeUnit(D2CharSelCompStrc * pC
     return pCompUnit->pNext;
 }
 
+// 1.14d mac: 00041dcb
 void __stdcall D2COMP_SetAnimationSpeed(D2CharSelCompStrc * pCompUnit, uint8_t bySpeed) {
     if (!pCompUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd57);
@@ -3542,6 +3565,7 @@ uint8_t __stdcall D2COMP_GetNumDirections(D2CharSelCompStrc * pCompUnit) {
     return pCompUnit->nNumDirections;
 }
 
+// 1.14d mac: 00041e1a
 int __stdcall D2COMP_GetNumFrames(D2CharSelCompStrc * pCompUnit) {
     if (!pCompUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd6b);
@@ -3551,6 +3575,7 @@ int __stdcall D2COMP_GetNumFrames(D2CharSelCompStrc * pCompUnit) {
     return pCompUnit->nNumFrames;
 }
 
+// 1.14d mac: 00041e58
 void __stdcall D2COMP_SetCurrentFrame(D2CharSelCompStrc * pCompUnit, uint32_t nTargetFrame) {
     if (!pCompUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd76);
@@ -3566,6 +3591,7 @@ void __stdcall D2COMP_SetCurrentFrame(D2CharSelCompStrc * pCompUnit, uint32_t nT
     pCompUnit->nCurrentFrameFixed = nMaxFrame;
 }
 
+// 1.14d mac: 00041ead
 void __stdcall D2COMP_SetScreenX(D2CharSelCompStrc * pCompUnit, int32_t nScreenX) {
     if (!pCompUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd81);
@@ -3575,6 +3601,7 @@ void __stdcall D2COMP_SetScreenX(D2CharSelCompStrc * pCompUnit, int32_t nScreenX
     pCompUnit->nScreenX = nScreenX;
 }
 
+// 1.14d mac: 00041ef0
 void __stdcall D2COMP_SetScreenY(D2CharSelCompStrc * pCompUnit, int32_t nScreenY) {
     if (!pCompUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd8c);
@@ -3584,6 +3611,7 @@ void __stdcall D2COMP_SetScreenY(D2CharSelCompStrc * pCompUnit, int32_t nScreenY
     pCompUnit->nScreenY = nScreenY;
 }
 
+// 1.14d mac: 00041f33
 uint32_t __stdcall D2COMP_GetFlags(D2CharSelCompStrc * pCompUnit) {
     if (!pCompUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd95);
@@ -3593,6 +3621,7 @@ uint32_t __stdcall D2COMP_GetFlags(D2CharSelCompStrc * pCompUnit) {
     return pCompUnit->nFlags;
 }
 
+// 1.14d mac: 00041f70
 void __stdcall D2COMP_SetFlags(D2CharSelCompStrc * pCharSel, uint32_t dwFlags) {
     if (!pCharSel) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xda2);
@@ -3631,6 +3660,7 @@ void __stdcall D2COMP_LoadGuildEmblemIcon(D2CharSelCompStrc * pCompUnit, uint8_t
     pCompUnit->nGuildEmblemColor2 = 0;
 }
 
+// 1.14d mac: 00042042
 static void D2COMP_LoadItemPaletteFile(char * szPaletteFilename, int32_t nPaletteSlot) {
     char szFullPath[256];
     D2MPQFileStrc* pFile;
@@ -3658,6 +3688,7 @@ void __stdcall D2COMP_LoadAllItemPalettes() {
     D2COMP_LoadItemPaletteFile("invgreybrown", 8);
 }
 
+// 1.14d mac: 000421a6
 void __stdcall D2COMP_InitEmblemColorTables() {
     // Static local variables (originally global data)
     static uint8_t gbD2CompColorInitR[30] = {
@@ -3734,6 +3765,7 @@ void __stdcall D2COMP_InitEmblemColorTables() {
     }
 }
 
+// 1.14d mac: 0003fe26
 char * __stdcall D2COMP_GetTitlePrefix(uint32_t nCharClass, uint32_t nTitleRank, int32_t bExpansion) {
     if (bExpansion) {
       bool bFemale;
@@ -3835,6 +3867,7 @@ char * __stdcall D2COMP_GetTitlePrefix(uint32_t nCharClass, uint32_t nTitleRank,
     return "";
 }
 
+// 1.14d mac: 0003fa6c
 int __fastcall D2COMP_DrawUnitNameAndTitle(D2CharSelCompStrc * pCompUnit) {
     // Static local variables (originally global data)
     static int gnItemQuality_Set = 0x7d; D2_STATIC_GUARD(gnItemQuality_Set, "D2Win::Src::D2Comp::D2COMP_DrawUnitNameAndTitle::gnItemQuality_Set");
@@ -3930,6 +3963,7 @@ int __fastcall D2COMP_DrawUnitNameAndTitle(D2CharSelCompStrc * pCompUnit) {
     return bDrawn;
 }
 
+// 1.14d mac: 0003fe9e
 void __fastcall DRAW_OOG_ChannelPlayers(D2CharSelCompStrc * pA3Q6Data) {
     // Frame slots -16..-4 are ONE object: &nLineCount is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -4316,6 +4350,7 @@ void __stdcall D2COMP_AllocTxt_EverythingItems() {
     gnMaxCharacters = 0xff;
 }
 
+// 1.14d mac: 00040ecb
 D2CharSelCompStrc * __stdcall AllocCharSelectComponent(uint32_t nPlayerClassId, int32_t nAnimMode, uint8_t * pbyEquipSlots, char * szText) {
     BOOL BVar2;
     uint32_t nComponentSlot;

@@ -45,6 +45,7 @@ static D2AsyncDataSlotStrc * pD2AsyncDataStrc = 0; D2_STATIC_GUARD(pD2AsyncDataS
 namespace Fog::Src::AsyncData {
 
 // Registers: nEnable in ECX; nReserved (EDX) is 0 at the only call site and not read.
+// 1.14d mac: 002ea169
 void __fastcall STRUCT_AllocAsyncData(int32_t nEnable, int32_t nReserved) {
     if (gbAsyncDataInitialized) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x7b);
@@ -72,6 +73,7 @@ void __fastcall STRUCT_AllocAsyncData(int32_t nEnable, int32_t nReserved) {
     gbAsyncDataInitialized = 1;
 }
 
+// 1.14d mac: 002ea270
 void __stdcall STRUCT_FreeAsyncData() {
     uint32_t nIndex;
     void* pSlot;
@@ -100,6 +102,7 @@ void __stdcall STRUCT_FreeAsyncData() {
     gbAsyncDataInitialized = 0;
 }
 
+// 1.14d mac: 002ea315
 void __fastcall ASYNCDATA_CancelAndCleanup(D2AsyncData_Line0x128 * pAsyncData) {
     size_t nResultSize;
     if (pAsyncData->nFlags & 1) {
@@ -130,6 +133,7 @@ void __fastcall ASYNCDATA_CancelAndCleanup(D2AsyncData_Line0x128 * pAsyncData) {
     memset(&pAsyncData->tCallback, 0, sizeof(pAsyncData->tCallback));
 }
 
+// 1.14d mac: 002ea3c8
 D2AsyncDataSlotStrc * __stdcall ASYNCDATA_AllocSlot() {
     DWORD dwWaitResult;
     HANDLE hEvent;
@@ -179,6 +183,7 @@ D2AsyncDataSlotStrc * __stdcall ASYNCDATA_AllocSlot() {
     return nullptr;
 }
 
+// 1.14d mac: 002ea4ca
 D2AsyncData_Line0x128 * __fastcall STRUCT_AllocAsyncData_Line0x128(D2PoolManagerStrc * pMemory, char * szText1, int32_t bAsync, uint32_t nFileOffset, uint32_t nReadSize, void * pReadBuffer, D2AsyncDataCallbackStrc * pCallback, int nPriority, char * szText2, int32_t nLine) {
     DWORD nSeekResult;
     D2AsyncDataSlotStrc* pSlot;
@@ -253,6 +258,7 @@ D2AsyncData_Line0x128 * __fastcall STRUCT_AllocAsyncData_Line0x128(D2PoolManager
     }
 }
 
+// 1.14d mac: 002ea795
 uint32_t __fastcall ASYNCDATA_IsComplete(D2AsyncData_Line0x128 * pAsyncData) {
     DWORD dwWaitResult;
     if (!pAsyncData) {
@@ -408,6 +414,7 @@ void * __fastcall ASYNCDATA_GetResult(D2AsyncData_Line0x128 * pAsyncData) {
 
 // Returns pAsyncData->nReadSize (+0x40; set by STRUCT_AllocAsyncData_Line0x128 and by the completion copy); halts on a bad tag.
 // The SOUNDHDR callers add the result to their loaded-byte counters.
+// 1.14d mac: 002ea97b
 uint32_t __fastcall ASYNCDATA_GetReadSize(D2AsyncData_Line0x128 * pAsyncData) {
     if (!pAsyncData) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x271);
@@ -443,6 +450,7 @@ void __thiscall ASYNCDATA_SetResult(D2AsyncData_Line0x128 * pAsyncData, void * p
     }
 }
 
+// 1.14d mac: 002ea9e5
 void __fastcall ASYNCDATA_Free(D2AsyncData_Line0x128 * pAsyncData) {
     uint32_t bIsComplete;
     if (!pAsyncData) {

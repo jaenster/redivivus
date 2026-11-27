@@ -84,6 +84,7 @@ static char * gnExcelRecordFieldNotFound = (char*)"\?\?\?"; D2_STATIC_GUARD(gnEx
 namespace Fog::Src::Excel {
 
 // @sourcefile .\Src\Excel\Excel.cpp
+// 1.14d mac: 002f13e3
 void __stdcall TXT_FreeBinFieldExcel(D2BinFieldExcelStrc * pBinFieldExcel) {
     D2_FREE_AT(pBinFieldExcel->pD2Archive, ".\\Src\\Excel\\Excel.cpp", 0x9a);
     D2_FREE_POOL_AT(nullptr, pBinFieldExcel, ".\\Src\\Excel\\Excel.cpp", 0x9b);
@@ -243,6 +244,7 @@ int __stdcall FOG_ParseBinField(short * pOutMapping, D2BinFieldExcelStrc * pBinF
     return nErrorAddress;
 }
 
+// 1.14d mac: 002f26a6
 D2TxtLinkStrc * __stdcall STRUCT_CreateTxtLinkStrc(char * szFile, int nLine) {
     D2TxtLinkStrc* structTxtLink = (D2TxtLinkStrc*)Memory::AllocServerMemory(nullptr, sizeof(D2TxtLinkStrc), szFile, nLine, 0);
     memset(structTxtLink, 0, sizeof(*structTxtLink));
@@ -250,6 +252,7 @@ D2TxtLinkStrc * __stdcall STRUCT_CreateTxtLinkStrc(char * szFile, int nLine) {
 }
 
 // @sourcefile .\Src\Excel\Excel.cpp
+// 1.14d mac: 002f2774
 void __fastcall STRUCT_FreeTxtLinkNode(D2TxtLinkNodeStrc * pTxtLinkNode) {
     if (pTxtLinkNode->pPrevious) {
       STRUCT_FreeTxtLinkNode(pTxtLinkNode->pPrevious);
@@ -262,6 +265,7 @@ void __fastcall STRUCT_FreeTxtLinkNode(D2TxtLinkNodeStrc * pTxtLinkNode) {
 }
 
 // @sourcefile .\Src\Excel\Excel.cpp
+// 1.14d mac: 002f26f1
 void __stdcall STRUCT_FreeTxtLink(D2TxtLinkStrc * pTxtLink) {
     if (!pTxtLink) {
       return;
@@ -285,6 +289,7 @@ void __stdcall STRUCT_FreeTxtLink(D2TxtLinkStrc * pTxtLink) {
     D2_FREE_POOL_AT(nullptr, pTxtLink, ".\\Src\\Excel\\Excel.cpp", 0x360);
 }
 
+// 1.14d mac: 002f256e
 int32_t __stdcall GetClassIdFromName(D2TxtLinkStrc * pTxtLink, uint32_t pItemsTxt, uint32_t dwParam3) {
     int nMid;
     int nHigh = pTxtLink->nRecords;
@@ -360,6 +365,7 @@ BOOL __stdcall FOG_GetTxtLinkRecord(D2TxtLinkStrc * pTxtLink, int nRecordId, cha
     return 0;
 }
 
+// 1.14d mac: 002f225c
 uint32_t __stdcall FOG_AddTxtLinkRecord(D2TxtLinkStrc * pTxtLink, uint32_t nItemCode) {
     int nMidIndex;
     int nLowIndex;
@@ -459,6 +465,7 @@ char * __stdcall FOG_ParseIntField(D2TxtLinkStrc * pTxtLink, int nLinkIndex, int
     return pRecord;
 }
 
+// 1.14d mac: 002f25b2
 int32_t __stdcall GetLinkNodeIndex(D2TxtLinkStrc * pLink, char * szItemCode, uint32_t dwParam3) {
     int nCmpResult;
     int32_t iVar1;
@@ -493,6 +500,7 @@ int32_t __stdcall GetLinkNodeIndex(D2TxtLinkStrc * pLink, char * szItemCode, uin
     return -1;
 }
 
+// 1.14d mac: 002f2858
 static void __fastcall FOG_ValidateBytePtr(uint8_t * pbyte, uint8_t * pKey) {
     int nCmpResult = *(int*)pbyte;
     do {
@@ -520,6 +528,7 @@ static void __fastcall FOG_ValidateBytePtr(uint8_t * pbyte, uint8_t * pKey) {
 }
 
 // @sourcefile .\Src\Excel\Excel.cpp
+// 1.14d mac: 002f2398
 int __stdcall FOG_ParseStringField(D2TxtLinkStrc * pTxtLink, char * szText) {
     int nRecordIndex;
     if (!pTxtLink) {
@@ -544,6 +553,7 @@ int __stdcall FOG_ParseStringField(D2TxtLinkStrc * pTxtLink, char * szText) {
     }
 }
 
+// 1.14d mac: 002f2477
 int __fastcall FOG_ParseTxtLink(D2TxtLinkStrc * pTxtLink, char * szText) {
     uint8_t* pKey;
     if (!pTxtLink) {

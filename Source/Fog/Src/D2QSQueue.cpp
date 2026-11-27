@@ -27,6 +27,7 @@ void __fastcall D2QSQUEUE_Initialize(D2QSQueueStrc * pQueue) {
     /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ InitializeCriticalSection(&pQueue->csLock);
 }
 
+// 1.14d mac: 002ed07f Fog::Src::D2QSQueue::Free
 void __fastcall Free(D2QSQueueStrc * pPoolManager) {
     D2QSQueueEntryStrc* pDVar1 = pPoolManager->pHead;
     while (pDVar1) {
@@ -47,6 +48,7 @@ uint32_t __fastcall GetAddress(uint32_t * pQueue) {
     return dwHead;
 }
 
+// 1.14d mac: 002ed0e7
 void __fastcall FOG_EnqueueMessage(D2QSQueueStrc * pClientSideData, void * pMessage, uint16_t wMsgSize) {
     if (wMsgSize <= 0) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x4a);
@@ -68,6 +70,7 @@ void __fastcall FOG_EnqueueMessage(D2QSQueueStrc * pClientSideData, void * pMess
     LeaveCriticalSection(&pClientSideData->csLock);
 }
 
+// 1.14d mac: 002ed19e
 uint32_t __fastcall D2QSQUEUE_Dequeue(D2QSQueueStrc * pQueue, void * pOutBuffer, int nMaxSize) {
     uint32_t uBytesRead;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pQueue->csLock);

@@ -2260,6 +2260,7 @@ uint32_t __fastcall crc32_combine64(uint32_t crc1, uint32_t crc2, int64_t len2) 
     return uVar1;
 }
 
+// 1.14d mac: 0003746d
 uint32_t __fastcall crc32(uint32_t crc, uint8_t * buf, uint32_t len) {
     if (buf == 0)
         return 0UL;

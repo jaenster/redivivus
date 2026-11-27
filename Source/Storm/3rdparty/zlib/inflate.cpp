@@ -2743,6 +2743,7 @@ static ZlibHuffCode distfix[32] = {
 
 namespace Storm::_3rdparty::zlib::inflate {
 
+// 1.14d mac: 00037c98
 int __fastcall inflateResetKeep(z_stream * strm) {
     struct inflate_state *state;
     if (strm == 0 || strm->state == 0)
@@ -2765,6 +2766,7 @@ int __fastcall inflateResetKeep(z_stream * strm) {
     return 0;
 }
 
+// 1.14d mac: 00037d32
 int __fastcall inflateReset(z_stream * strm) {
     struct inflate_state *state;
     if (strm == 0 || strm->state == 0)
@@ -2776,6 +2778,7 @@ int __fastcall inflateReset(z_stream * strm) {
     return inflateResetKeep(strm);
 }
 
+// 1.14d mac: 00037d65
 int __fastcall inflateReset2(z_stream * strm, int windowBits) {
     int32_t nWrap;
     if (strm) {
@@ -2816,6 +2819,7 @@ int __fastcall inflateReset2(z_stream * strm, int windowBits) {
     return -2;
 }
 
+// 1.14d mac: 00037de7
 int32_t __fastcall inflateInit2_(z_stream * strm, uint32_t windowBits, char * version, int32_t stream_size) {
     int ret;
     struct inflate_state *state;
@@ -2872,6 +2876,7 @@ static void __fastcall fixedtables(inflate_state * state) {
     state->distbits = 5;
 }
 
+// 1.14d mac: 00039914
 static BOOL __stdcall updatewindow(z_stream * strm, uint8_t * end, uint32_t copy) {
     struct inflate_state *state;
     unsigned dist;
@@ -2915,6 +2920,7 @@ static BOOL __stdcall updatewindow(z_stream * strm, uint8_t * end, uint32_t copy
     return 0;
 }
 
+// 1.14d mac: 00037eec
 int32_t __fastcall inflate(z_stream * strm, int32_t flush) {
     static uint16_t gwZlibInflateWindow[19] = {
     0x10,
@@ -3897,6 +3903,7 @@ inf_leave:
     return ret;
 }
 
+// 1.14d mac: 00039a1b
 int __fastcall inflateEnd(z_stream * strm) {
     struct inflate_state *state;
     if (strm == 0 || strm->state == 0 || strm->zfree == (void(__fastcall *)(void *, void *))0)

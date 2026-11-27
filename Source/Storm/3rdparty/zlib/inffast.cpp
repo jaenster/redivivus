@@ -14,6 +14,7 @@
 namespace Storm::_3rdparty::zlib::inffast {
 
 // Fast-path inflate decompression main loop. Processes compressed data using precomputed Huffman tables with 15-bit lookahead for literal/distance pairs. Copies match data with optimized 3-byte blocking pattern.
+// 1.14d mac: 000376cb
 void __fastcall inflate_fast(z_stream * strm, int32_t start) {
     struct inflate_state *state;
     unsigned char *in;         /* local strm->next_in */

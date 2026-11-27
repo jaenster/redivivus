@@ -26,6 +26,7 @@ struct QServer;
 
 namespace Fog::Src::QServer::QServerNT {
 
+// 1.14d mac: 002f6d2b
 void __fastcall AwaitAndClose(D2QServerStrc * pQserver) {
     HANDLE aWaitHandles[8];
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pQserver->csClientLifecycle);
@@ -117,6 +118,7 @@ static BOOL __stdcall BeginAsyncReadForClient(D2QServerStrc * pQServer, D2QServe
     }
 }
 
+// 1.14d mac: 002f7042
 static D2QServerClientPacketStrc * __stdcall NET_QServerClientPacket_CreateStructAndCopyBytesThere(D2QServerClientConnectionStrc * pQServerClient, char * pBytes, uint32_t nSize) {
     D2QServerClientPacketStrc* pNewPacket = (D2QServerClientPacketStrc*)D2_ALLOC_AT(nSize + sizeof(D2QServerClientPacketStrc), ".\\Src\\QServer\\QServerNT.cpp", 0x440);
     memcpy(pNewPacket + 1, pBytes, nSize);
@@ -301,6 +303,7 @@ static int __stdcall PopAndFreeCompletedSendPacket(D2QServerClientConnectionStrc
 }
 
 // Accept thread entry point for QServer network listener. Polls listening socket with select(), accepts incoming client connections via AcceptConnection(), and periodically sweeps expired hacklist entries to enforce IP-based rate limiting. Telemetry tracks performance of each accept operation substage (hacklist check, connection limit, IP rate, IOCP attachment, initial recv).
+// 1.14d mac: 002f62f5
 DWORD __stdcall AcceptThreadMain(D2QServerWorkerThreadContextStrc * lpThreadParam) {
     DWORD dwNextSweepTick;
     uint32_t dwQpcDelta;
@@ -416,6 +419,7 @@ DWORD __stdcall AcceptThreadMain(D2QServerWorkerThreadContextStrc * lpThreadPara
     return 1;
 }
 
+// 1.14d mac: 002f6e47
 BOOL __fastcall SendToClientLocal(D2QServerStrc * pQServer, D2QServerClientConnectionStrc * pQServerClient, char * pBytes, int nSize) {
     int nWsaError;
     CRITICAL_SECTION* lpCriticalSection = &pQServerClient->clientLock;
@@ -605,6 +609,7 @@ int __fastcall PumpIoCompletionQueueForWorker(D2QServerStrc * pQServer, int nWor
 #endif
 
 // lpStartAddress parameter of CreateThread
+// 1.14d mac: 002f6c7f
 DWORD __stdcall IoWorkerThreadMain(D2QServerWorkerThreadContextStrc * lpThreadParam) {
     D2QServerStrc* pQServer = lpThreadParam->pQServer;
     int nWorkerIndex = lpThreadParam->nWorkerIndex;
@@ -649,6 +654,7 @@ int __fastcall PumpIoCompletionQueues(D2QServerStrc * pQServer, uint32_t dwTimeo
     return 1;
 }
 
+// 1.14d mac: 002f5fcb
 SOCKET __fastcall StartListening(D2QServerStrc * pQServer, uint32_t nPort) {
     int nResult;
     D2QServerWorkerThreadContextStrc* pThreadArgs;
@@ -730,6 +736,7 @@ SOCKET __fastcall StartListening(D2QServerStrc * pQServer, uint32_t nPort) {
     return hListenSocket;
 }
 
+// 1.14d mac: 002f5fb5
 SOCKET __fastcall CreateSocketLocal(D2QServerStrc * pQServer, int nPort) {
     WSADATA wsaData;
     /* LPWSADATA lpWSAData for WSAStartup */ /* WORD wVersionRequired for WSAStartup */ pQServer->nPerIpConnectionLimit = 1;

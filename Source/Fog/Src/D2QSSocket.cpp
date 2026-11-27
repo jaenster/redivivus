@@ -46,6 +46,7 @@ typedef int (__fastcall *fpD2QSSocketPacketHandler)(uint8_t * pPacketBuf, int nP
 
 namespace Fog::Src::D2QSSocket {
 
+// 1.14d mac: 002ed249
 void __stdcall QSSOCKET_SetCallbackHandler1(D2QSSocketStrc * pQSSocket, void * fpCallback, void * pContext) {
     if (!pQSSocket) {
       return;
@@ -97,6 +98,7 @@ BOOL __stdcall QSSOCKET_SendWithTimeout(D2QSSocketStrc * pQSSocket, char * pBuff
     return 0;
 }
 
+// 1.14d mac: 002ed547
 int __stdcall ReadBytesFromSocket(D2QSSocketStrc * pMCPQSocket, char * pOutBuf, int nMaxBytes) {
     if (!pMCPQSocket) {
       return 0;
@@ -181,6 +183,7 @@ void __stdcall QSSOCKET_SetCallbackHandler2(D2QSSocketStrc * pQSSocket, int nHea
 }
 
 // NOTE: Register param types inferred (medium confidence): pQSSocketStrc (ESI): D2QSSocketStrc *
+// 1.14d mac: 002ed69a
 static void __stdcall QSSOCKET_BlockSocket(D2QSSocketStrc * pQSSocketStrc) {
     if (!pQSSocketStrc) {
       return;
@@ -198,6 +201,7 @@ static void __stdcall QSSOCKET_BlockSocket(D2QSSocketStrc * pQSSocketStrc) {
 }
 
 // Thread-safe socket close with critical section protection
+// 1.14d mac: 002edbea
 static void __stdcall CloseSocket(D2QSSocketStrc * pQServer) {
     if (!pQServer) {
       return;
@@ -283,6 +287,7 @@ DWORD __stdcall QSSOCKET_ThreadEntryPoint(D2QSSocketStrc * lpThreadParam) {
     return 1;
 }
 
+// 1.14d mac: 002ed57c
 void __stdcall NET_MCP_CLIENT_CreateConnectionThread(D2QSSocketStrc * NET_MCP_CLIENT_D2QSSocket) {
     if (!(NET_MCP_CLIENT_D2QSSocket && !NET_MCP_CLIENT_D2QSSocket->hThread)) {
       return;
@@ -323,6 +328,7 @@ HANDLE __stdcall QSSOCKET_Initialize(D2QSSocketStrc * pQSSocket) {
 }
 #endif
 
+// 1.14d mac: 002ed688
 void __stdcall D2QSSOCKET_BlockSocketIfValid(D2QSSocketStrc * pQSSocket) {
     if (!pQSSocket) {
       return;
@@ -332,6 +338,7 @@ void __stdcall D2QSSOCKET_BlockSocketIfValid(D2QSSocketStrc * pQSSocket) {
 }
 
 // @sourcefile .\Src\D2QSSocket.cpp
+// 1.14d mac: 002ed6e8
 D2QSSocketStrc * __stdcall STRUCT_D2QSSocket_Init(char * szIpAddress, int nPort, char * szName) {
     char cCurChar;
     int32_t dwErrorCode;
@@ -370,6 +377,7 @@ D2QSSocketStrc * __stdcall STRUCT_D2QSSocket_Init(char * szIpAddress, int nPort,
 }
 
 // @sourcefile .\Src\D2QSSocket.cpp
+// 1.14d mac: 002ed812
 void __stdcall FreeD2QSSocket(D2QSSocketStrc * pSocket) {
     if (!pSocket) {
       return;
@@ -395,6 +403,7 @@ DWORD __stdcall QSSOCKET_WaitForEvent(D2QSSocketStrc * pQSSocket, DWORD dwTimeou
     return DVar1;
 }
 
+// 1.14d mac: 002ed887
 D2NetDataStrc * __stdcall NET_D2QSocket_GetSafesock(D2QSSocketStrc * pQSSocket) {
     if (!pQSSocket) {
       return nullptr;

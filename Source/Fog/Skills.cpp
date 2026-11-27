@@ -47,6 +47,7 @@ int __fastcall SKILLS_PopValue(int * pValueStack) {
 }
 
 // Stack-based bytecode evaluator for compiled skill and missile calc formulas. The 64-entry value stack keeps its count in the 65th slot, at byte offset 0x100 from the base, which is why it is one int[65] local and not a head plus a separate counter. Consecutive SKILLS_PopValue calls reuse the stack pointer in ECX without reloading it, so that callee is typed __fastcall_ecxsafe.
+// 1.14d mac: 002eab3c
 uint32_t __stdcall FOG_EvaluateCalcExpression(uint32_t * pFormula, int nFormulaSize, fnSkillCalcMethod pFunction, D2ItemsEventMethodStrc * pFunctionArray, int32_t nFunctionArraySize, void * pContext) {
     uint32_t uFuncResult;
     uint32_t nOperand3;
@@ -896,6 +897,7 @@ static uint8_t * __fastcall SKILLS_WriteValueToBuffer2(uint8_t * pBase, int nVal
 }
 
 // Parse calc expression from skill desc into bytecode formula
+// 1.14d mac: 002eb300
 int __stdcall SKILLS_ParseCalcExpression(char * szExpressionString, uint8_t * pbByteCodeOutput, int nMaxOutputSize, CalcGetKeyWordToNumber_t pDescTable, CalcGetFunctionParameterCount_t pOpcodeInfo, CalcGetLinkerIndex_t pfnGetLinkerIndex) {
     // Frame slots -348..-8 are ONE object: &dwTokenValue is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.

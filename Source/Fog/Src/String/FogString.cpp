@@ -11,6 +11,7 @@
 
 namespace Fog::Src::String::FogString {
 
+// 1.14d mac: 002f7185
 void __stdcall SMEM_TitleCaseString(char * pMcpData) {
     BOOL bAtWordStart = TRUE;
     if (!pMcpData) {
@@ -46,6 +47,7 @@ void __stdcall SMEM_TitleCaseString(char * pMcpData) {
     } while (nIndex < nLen);
 }
 
+// 1.14d mac: 002f721d
 void __fastcall SMemStringToUppercase(char * szText, int32_t nMaxLen) {
     uint8_t cCurChar = *szText;
     uint8_t* pEnd = (uint8_t*)(szText + nMaxLen);

@@ -568,6 +568,7 @@ void __fastcall Free(D2PoolManagerStrc * pMemory, void * * pStruct, char * szFil
     FreeTrackedAllocation(pManager, *pStruct, szFile, Line0);
 }
 
+// 1.14d mac: 002f33f5
 void InitializeMemoryManagers(D2PoolManagerStrc * pMemory) {
     D2PoolBlockStrc* _Memory;
     D2PoolBlockStrc* pNextBlock;
@@ -619,6 +620,7 @@ void InitializeMemoryManagers(D2PoolManagerStrc * pMemory) {
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pManager->pSync);
 }
 
+// 1.14d mac: 002f33f0
 void FreeMemoryPool(D2PoolManagerStrc * pMemory) {
     void* pBlockHeader;
     D2PoolBlockStrc* pNextBlock;
@@ -790,6 +792,7 @@ void InitializePoolSystem(D2PoolManagerStrc * * pPoolManager, char * szName, int
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
 }
 
+// 1.14d mac: 002f33fa
 void SetPoolIdForMemoryManager(D2PoolManagerStrc * pMemory, int32_t nPoolId) {
     if (!pMemory) {
       pMemory = pGlobalPoolSystem.pManagers;
@@ -963,6 +966,7 @@ void __fastcall FOG_SetServerMemHeap(pfnBlizzardError pfnFunc) {
     gpServerMemHeap = (uint32_t)(uintptr_t)pfnFunc;
 }
 
+// 1.14d mac: 002f3336
 void * __fastcall AllocClientMemory(size_t nAllocSize, char * szFile, int32_t nLine, int32_t nNull) {
     void* pMemory = Memory::Alloc(nullptr, nAllocSize, szFile, nLine);
     if (!pMemory) {
@@ -972,6 +976,7 @@ void * __fastcall AllocClientMemory(size_t nAllocSize, char * szFile, int32_t nL
     return pMemory;
 }
 
+// 1.14d mac: 002f333f
 BOOL __fastcall FreeClientMemory(void * pMemoryToFree, char * szFile, int32_t nLine, int32_t nNull) {
     void* pMemPtr = pMemoryToFree;
     Memory::Free(nullptr, &pMemPtr, szFile, nLine);
@@ -988,6 +993,7 @@ void * __fastcall ReAllocClientMemory(void * pMemory, size_t nSize, char * szFil
 }
 
 // Allocates server-side memory from the pool manager. Returns void* to allocated memory. Calls FOG_ErrorHandler on allocation failure.
+// 1.14d mac: 002f3348
 void * __fastcall AllocServerMemory(D2PoolManagerStrc * pPoolManagerStrc, size_t nSize, char * szFile, int32_t nLine, int32_t nNull) {
     void* pMemory = Memory::Alloc(gpServerMemHeap ? (D2PoolManagerStrc*)pPoolManagerStrc : nullptr, nSize, szFile, nLine);
     if (!pMemory) {
@@ -997,6 +1003,7 @@ void * __fastcall AllocServerMemory(D2PoolManagerStrc * pPoolManagerStrc, size_t
     return pMemory;
 }
 
+// 1.14d mac: 002f338c
 BOOL __fastcall FreeServerMemory(D2PoolManagerStrc * pPoolManagerStrc, void * pMemoryToFree, char * szFile, int32_t nLine, int32_t nNull) {
     void* pMemPtr = pMemoryToFree;
     Memory::Free(gpServerMemHeap ? (D2PoolManagerStrc*)pPoolManagerStrc : nullptr, &pMemPtr, szFile, nLine);
@@ -1004,6 +1011,7 @@ BOOL __fastcall FreeServerMemory(D2PoolManagerStrc * pPoolManagerStrc, void * pM
 }
 
 // Reallocates server-side memory to a new size. Returns void* to reallocated memory block. Calls FOG_ErrorHandler on reallocation failure.
+// 1.14d mac: 002f33b7
 void * __fastcall ReAllocServerMemory(D2PoolManagerStrc * pPoolManagerStrc, void * pMemory, size_t nNewSize, char * szFile, int nLine, int nUnused) {
     void* pResult = ReAlloc(gpServerMemHeap ? (D2PoolManagerStrc*)pPoolManagerStrc : nullptr, pMemory, nNewSize, szFile, nLine);
     if (!pResult) {

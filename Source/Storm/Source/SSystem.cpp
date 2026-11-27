@@ -88,6 +88,7 @@ BOOL __stdcall SSYSTEM_GetSystemOption(uint32_t nOptionId, uint32_t * pOutValue,
     return 1;
 }
 
+// 1.14d mac: 0000973c
 void __stdcall SSYSTEM_SetSystemOption(uint32_t nOptionId, uint32_t * pValue, int32_t nValueSize) {
     D2_CHECKS_BEGIN;
     D2_CHECK(pValue);

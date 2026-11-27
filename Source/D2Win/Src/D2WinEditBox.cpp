@@ -78,6 +78,7 @@ void __fastcall FORMS_DestroyD2WinEditBox(::D2WinEditBox * pWinEditBox) {
 
 // Sets pEditBox->fpFilterCallback (+0x268), the per-key filter HandleKeyPress calls with (pEditBox, nCursorIndex, pointer to the key char) and whose 0 rejects the key. Every caller passes a code address in EDX (0042fde0, 0042fe60, 0042ff00, 00430590, 0042fef0, 0043dba0). Halts on NULL or a non-edit-box control.
 // It sets a callback.
+// 1.14d mac: 00044e39
 void __fastcall D2WINEDITBOX_SetFilterCallback(::D2WinEditBox * pEditBox, fpD2WinEditBoxFilter fpFilterCallback) {
     if (!pEditBox) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x79);
@@ -95,6 +96,7 @@ void __fastcall D2WINEDITBOX_SetFilterCallback(::D2WinEditBox * pEditBox, fpD2Wi
 
 // Sets pEditBox->fpChangeCallback (+0x26c), called with 0 after the text changes by HandleKeyPress (004ff014) and HandleKeyRelease (004ff4b2, 004ff60c). Every caller passes a code address in EDX (00433bd0, 00433be0, 00436d40, 00436f20, 004372a0). Halts on NULL or a non-edit-box control.
 // It sets a callback.
+// 1.14d mac: 00044ea3
 void __fastcall D2WINEDITBOX_SetChangeCallback(::D2WinEditBox * pEditBox, fpD2WinEditBoxChange fpChangeCallback) {
     if (!pEditBox) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x86);
@@ -214,6 +216,7 @@ BOOL __fastcall D2WINEDITBOX_SetClipboardText(char * szText) {
 // nSelAnchor != nSelCursor (+0x58). HandleKeyPress uses it to decide whether typing replaces a selection
 // and whether Ctrl+C / Ctrl+X have anything to copy. Halts on NULL or a non-edit-box control.
 // Evidence: 1.14d asm 004fdc9f (CMP [EAX+0x54],-1, then compare with [EAX+0x58]).
+// 1.14d mac: 000459b4
 static BOOL D2WINEDITBOX_HasSelection(::D2WinEditBox * pEditBox) {
     if (!pEditBox) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x198);
@@ -233,6 +236,7 @@ static BOOL D2WINEDITBOX_HasSelection(::D2WinEditBox * pEditBox) {
 
 // Clears the selection: nSelAnchor = -1, nSelCursor = 0. Halts (lines 0x1A4/0x1A6) unless
 // pEditBox is a non-null FORM_EditBox. It does not touch focus.
+// 1.14d mac: 00044ffa
 void __fastcall D2WINEDITBOX_ClearSelection(::D2WinEditBox * pEditBox) {
     if (!pEditBox) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a4);
@@ -251,6 +255,7 @@ void __fastcall D2WINEDITBOX_ClearSelection(::D2WinEditBox * pEditBox) {
 
 // Selects the whole text: nSelAnchor = 0, nSelCursor = STRING_GetWideStringLength(wszText).
 // Halts (lines 0x1B3/0x1B5) unless pEditBox is a non-null FORM_EditBox. It clears no text.
+// 1.14d mac: 00045067
 void __fastcall D2WINEDITBOX_SelectAll(::D2WinEditBox * pEditBox) {
     int32_t nLine;
     if (!pEditBox) {
@@ -270,6 +275,7 @@ void __fastcall D2WINEDITBOX_SelectAll(::D2WinEditBox * pEditBox) {
 }
 
 // MISNAMED: writes D2WinEditBox+0x48 (nMaxLength), not a password flag. Callers pass character counts (0xd, 0x10, 0x20).
+// 1.14d mac: 00046d5c
 void __fastcall D2WINEDITBOX_SetMaxLength(::D2WinEditBox * pEditBox, uint32_t nMaxLength) {
     if (!pEditBox) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x445);
@@ -285,6 +291,7 @@ void __fastcall D2WINEDITBOX_SetMaxLength(::D2WinEditBox * pEditBox, uint32_t nM
     }
 }
 
+// 1.14d mac: 00046eed
 uint16_t * __fastcall FORMS_TextInput_GetValue(D2ControlStrc * pControl) {
     if (!pControl) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x47e);
@@ -301,6 +308,7 @@ uint16_t * __fastcall FORMS_TextInput_GetValue(D2ControlStrc * pControl) {
 
 // Links two edit boxes in tab order: pEditBox->pNextTabEditBox = pNextEditBox, pNextEditBox->pPrevTabEditBox = pEditBox. Halts unless both are non-null edit-box controls (eType 1).
 // @provenance 1.14d asm 004fddd0..004fde22; was named D2WINEDITBOX_SetText, which it does not do.
+// 1.14d mac: 00046f51
 void __fastcall D2WINEDITBOX_LinkTabOrder(::D2WinEditBox * pEditBox, ::D2WinEditBox * pNextEditBox) {
     if (!pEditBox) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x48a);
@@ -404,6 +412,7 @@ static int32_t __stdcall D2WINEDITBOX_GetTextHeight(::D2WinEditBox * pEditBox, s
 }
 
 // Calculate text cursor position from edit box state. Iterates text lines and calculates pixel X,Y position of cursor based on character index. Outputs screen coordinates via pX and pY.
+// 1.14d mac: 00046454
 static void __stdcall D2WINEDITBOX_GetCaretPosition(::D2WinEditBox * pEditBox, int * pX, int * pY) {
     uint32_t nFontHeight;
     int32_t nCharPixelWidth;
@@ -586,6 +595,7 @@ static void __stdcall D2WINEDITBOX_GetCaretPosition(::D2WinEditBox * pEditBox, i
     }
 }
 
+// 1.14d mac: 00044d5b D2Win::Src::D2WinEditBox::Mouse
 BOOL __stdcall Mouse(D2ControlMsg * pEditBox) {
     D2ControlStrc* pDVar1 = pEditBox->pControl;
     if (!pDVar1) {
@@ -605,6 +615,7 @@ BOOL __stdcall Mouse(D2ControlMsg * pEditBox) {
     }
 }
 
+// 1.14d mac: 00046912
 BOOL __stdcall D2WINEDITBOX_PlaceCaretAtPoint(D2ControlMsg * pMsg, int nX, int nY) {
     uint32_t uVar1;
     int32_t nLinePixels;
@@ -783,6 +794,7 @@ BOOL __stdcall D2WINEDITBOX_PlaceCaretAtPoint(D2ControlMsg * pMsg, int nX, int n
     return bCallbackResult;
 }
 
+// 1.14d mac: 00044a6a D2Win::Src::D2WinEditBox::Push
 BOOL __stdcall Push(D2ControlMsg * pControlMsg)
 {
     ::D2WinEditBox* pEditBox = (::D2WinEditBox*)pControlMsg->pControl;
@@ -816,6 +828,7 @@ int __stdcall D2WINEDITBOX_FilterLetterChar(::D2WinEditBox * pEditBox, int nText
     return 0;
 }
 
+// 1.14d mac: 00045b77
 static void D2WINEDITBOX_UpdateCursorPosition(::D2WinEditBox * pEditBox) {
     int nScrollStart;
     int nLoopCount;
@@ -971,6 +984,7 @@ static void D2WINEDITBOX_UpdateCursorPosition(::D2WinEditBox * pEditBox) {
 // rebuilds wszText as text[0..nDelStart) + text[nDelEnd..], sets nCursorIndex (+0x25c) to nDelStart
 // (clamped to the new length) and clears the selection. Halts on NULL or a non-edit-box control.
 // Evidence: 1.14d asm 004fea46..004fea58 (CMP/JL/JG min-max into EBX/EDI).
+// 1.14d mac: 00045a25
 static void D2WINEDITBOX_HandleDelete(::D2WinEditBox * pEditBox) {
     int32_t nDelStart;
     uint16_t* pWideZeroIter;
@@ -1020,6 +1034,7 @@ static void D2WINEDITBOX_HandleDelete(::D2WinEditBox * pEditBox) {
     }
 }
 
+// 1.14d mac: 000450db
 BOOL __fastcall D2WINEDITBOX_HandleKeyPress(::D2WinEditBox * pEditBox, uint8_t byKeyChar) {
     // Frame -2980..-4 is ONE object: an address is computed ACROSS these slots, folded against the frame pointer.
     // Separate locals let the compiler reorder them, so the arithmetic needs one struct.
@@ -1272,6 +1287,7 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyPress(::D2WinEditBox * pEditBox, uint8_t b
     return 1;
 }
 
+// 1.14d mac: 00045eac
 BOOL __fastcall D2WINEDITBOX_HandleKeyDown(::D2WinEditBox * pEditBox, char nVirtualKey) {
     SHORT wTabKeyState;
     BOOL nHasText;
@@ -1546,6 +1562,7 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyDown(::D2WinEditBox * pEditBox, char nVirt
     return 1;
 }
 
+// 1.14d mac: 00046e36
 int __fastcall D2WINEDITBOX_SetTextWide(::D2WinEditBox * pEditBox, uint16_t * wszText) {
     int32_t nLine;
     if (!pEditBox) {
@@ -1574,6 +1591,7 @@ int __fastcall D2WINEDITBOX_SetTextWide(::D2WinEditBox * pEditBox, uint16_t * ws
     }
 }
 
+// 1.14d mac: 00043ca6 D2Win::Src::D2WinEditBox::Draw
 BOOL __fastcall Draw(::D2WinEditBox * pEditBox) {
     int32_t nPixelWidth;
     int nFontHeight;
@@ -1840,6 +1858,7 @@ BOOL __fastcall Draw(::D2WinEditBox * pEditBox) {
     goto measure_partial_selection;
 }
 
+// 1.14d mac: 00044af3
 BOOL __stdcall PushFlag0x8(D2ControlMsg * pControlMsg) {
     // Static local variables (originally global data)
     static void * gpLastClickedEditBoxControl; D2_STATIC_GUARD_BSS(gpLastClickedEditBoxControl, "D2Win::Src::D2WinEditBox::PushFlag0x8::gpLastClickedEditBoxControl");
@@ -1981,6 +2000,7 @@ BOOL __stdcall PushFlag0x8(D2ControlMsg * pControlMsg) {
 
 // Sets the text of a D2Win edit box from a narrow string: widens szText into a zeroed 256-WCHAR buffer (STRING_CopyCharToWCharWithSetMaxSize) and passes it to D2WINEDITBOX_SetTextWide.
 // Provenance: asm 004ffe10; callers pass edit boxes (e.g. gUILevelRestrictionEditBox at 00445387) and char buffers built by SStrPrintf/sprintf.
+// 1.14d mac: 00046dc3
 void __fastcall D2WINEDITBOX_SetTextFromAnsi(::D2WinEditBox * pEditBox, char * szText) {
     int nZeroCount;
     uint16_t* pwszBufPtr;
@@ -1993,6 +2013,7 @@ void __fastcall D2WINEDITBOX_SetTextFromAnsi(::D2WinEditBox * pEditBox, char * s
     D2WINEDITBOX_SetTextWide(pEditBox, wszText);
 }
 
+// 1.14d mac: 000445b3
 BOOL __fastcall DrawFlag0x8(::D2WinEditBox * pEditBox) {
     // Frame slots -16..-8 are ONE object: &local_10 is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -2168,6 +2189,7 @@ BOOL __fastcall DrawFlag0x8(::D2WinEditBox * pEditBox) {
 }
 
 // @sourcefile .\Src\D2WinEditBox.cpp
+// 1.14d mac: 00043b30
 ::D2WinEditBox * __fastcall D2WinEditBox(int32_t nPosX, int32_t nPosY, int32_t nSizeX, int32_t nSizeY, int32_t nInsetX, int32_t nInsetY, DC6 * pDC6, fpD2WinEditBoxSubmit pfnSubmit, OnPress pfnOnPress, uint32_t nFlags, uint32_t * pFontIds) {
     ::D2WinEditBox* pNewEditBox = D2_NEW_AT(::D2WinEditBox, ".\\Src\\D2WinEditBox.cpp", 0x39);
     memset(pNewEditBox, 0, sizeof(*pNewEditBox));

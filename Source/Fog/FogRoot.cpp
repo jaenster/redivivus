@@ -580,6 +580,7 @@ int32_t __stdcall FOG_GetAsyncFileCount_ReturnZero_Unref_0040a070() {
     return 0;
 }
 
+// 1.14d mac: 002eab34
 int32_t __stdcall FOG_GetAsyncFileCount_ReturnZero() {
     return 0;
 }
@@ -596,14 +597,17 @@ void __stdcall Return_Unref_0040b120() {
 
 }
 
+// 1.14d mac: 002f32f7
 void __stdcall Return() {
 
 }
 
+// 1.14d mac: 002f32fc
 float __stdcall MATH_sinTable_f32_LookupOffset(int32_t findex) {
     return sinTable_f32[findex + 0x80U & 0x1ff];
 }
 
+// 1.14d mac: 002f331c
 float __stdcall MATH_sinTable_f32_Lookup(uint32_t findex) {
     return sinTable_f32[findex & 0x1ff];
 }

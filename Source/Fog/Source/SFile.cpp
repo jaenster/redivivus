@@ -32,22 +32,26 @@ void __fastcall SFILE_InitializeFileSystem(BOOL bResult, BOOL bSeekOptimization)
     Storm::Source::SSystem::SSYSTEM_SetSystemOption(3, dwSysOptionBuf + 1, 4);
 }
 
+// 1.14d mac: 002ef50d
 int32_t __fastcall ARCHIVE_OpenD2FileWrap(char * szFilename, D2MPQFileStrc * * ppFile) {
     int32_t nResult = Storm::Source::SFile::SFileOpenFile(szFilename, ppFile);
     return nResult;
 }
 
+// 1.14d mac: 002ef516
 void __fastcall ERRORMANAGER_FCloseFile(D2MPQFileStrc * pMPQFile) {
     Storm::Source::SFile::SFileCloseFile(pMPQFile);
 }
 
 // NOTE: Register params: pFileHandle (ECX): D2MPQFileStrc *, pOutputBuffer (EDX): void *
+// 1.14d mac: 002ef51f
 int __fastcall ERRORMANAGER_FReadFile(D2MPQFileStrc * pFileHandle, void * pOutputBuffer, uint32_t nBytesToRead, uint32_t * pBytesRead, LPOVERLAPPED lpOverlapped, D2StormAsyncCompletionStrc * pCompletion, int dwReadFlags) {
     int nResult = Storm::Source::SFile::SFileReadFileEx2(pFileHandle, pOutputBuffer, nBytesToRead, pBytesRead, lpOverlapped, dwReadFlags, pCompletion);
     return nResult;
 }
 
 // Thunk to Storm's SFILE_GetFileSize. PUSH EDX; PUSH ECX; CALL 00416370; RET - it tail-calls and returns that DWORD in EAX. Typed void, its callers dropped the result and tested an unassigned local, which fired the line-95 assert in the file-size path non-deterministically.
+// 1.14d mac: 002ef55f
 DWORD __fastcall ERRORMANAGER_FGetFileSize(D2MPQFileStrc * pFileHandle, LPDWORD pdwFileSize) {
     DWORD DVar1 = Storm::Source::SFile::SFileGetFileSize(pFileHandle, pdwFileSize);
     return DVar1;
@@ -55,11 +59,13 @@ DWORD __fastcall ERRORMANAGER_FGetFileSize(D2MPQFileStrc * pFileHandle, LPDWORD 
 
 // @wasnamed SFILE_SeekFileWrapper
 // @basis internal. NOT an exported Storm symbol. Renamed only to follow its callee: a __fastcall thunk whose entire body forwards to SFileSetFilePointer (004165a0) and discards the result.
+// 1.14d mac: 002ef568
 DWORD __fastcall SFILE_SetFilePointerThunk(D2MPQFileStrc * pFileHandle, int32_t nOffset, int * pnOffsetHigh, uint32_t dwMoveMethod) {
     DWORD DVar1 = Storm::Source::SFile::SFileSetFilePointer(pFileHandle, nOffset, pnOffsetHigh, dwMoveMethod);
     return DVar1;
 }
 
+// 1.14d mac: 002ef571
 HANDLE __fastcall thunk_CreateFileA(LPCSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpSecurityAttributes, DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplateFile) {
     HANDLE hFile = CreateFileA(lpFileName, dwDesiredAccess, dwShareMode, lpSecurityAttributes, dwCreationDisposition, dwFlagsAndAttributes, hTemplateFile);
     return hFile;
@@ -74,16 +80,19 @@ void __fastcall thunk_DeleteFileA(LPCSTR szText) {
 // @evidence Whole body is PUSH ECX; CALL dword ptr [0x006cc134]; RET - a one-instruction forward to
 // the imported KERNEL32 CloseHandle. Same failure class as Storm's SetLastError.
 // @abi __fastcall(HANDLE hObject @ECX) -> BOOL.
+// 1.14d mac: 002ef583
 BOOL __fastcall SFILE_Win32CloseHandle(HANDLE hObject) {
     BOOL bResult = CloseHandle(hObject);
     return bResult;
 }
 
+// 1.14d mac: 002ef58c
 BOOL __fastcall thunk_ReadFile(HANDLE hFile, LPVOID lpBuffer, DWORD nNumberOfBytesToRead, LPDWORD lpNumberOfBytesRead, LPOVERLAPPED lpOverlapped) {
     BOOL bResult = ReadFile(hFile, lpBuffer, nNumberOfBytesToRead, lpNumberOfBytesRead, lpOverlapped);
     return bResult;
 }
 
+// 1.14d mac: 002ef595
 BOOL __fastcall thunk_WriteFile(HANDLE hFile, LPCVOID lpBuffer, DWORD nNumberOfBytesToWrite, LPDWORD lpNumberOfBytesWritten, LPOVERLAPPED lpOverlapped) {
     BOOL bResult = WriteFile(hFile, lpBuffer, nNumberOfBytesToWrite, lpNumberOfBytesWritten, lpOverlapped);
     return bResult;
@@ -93,11 +102,13 @@ BOOL __fastcall thunk_WriteFile(HANDLE hFile, LPCVOID lpBuffer, DWORD nNumberOfB
 // @evidence Body forwards ECX,EDX and two stack slots to the import at [0x006cc1ac] and RET 8.
 // @abi __fastcall(HANDLE hFile @ECX, LONG lDistanceToMove @EDX, PLONG lpDistanceToMoveHigh @Stack[0x4],
 // DWORD dwMoveMethod @Stack[0x8]) -> DWORD. Arity and storage were already correct; only the name was.
+// 1.14d mac: 002ef59e
 DWORD __fastcall SFILE_Win32SetFilePointer(HANDLE hFile, LONG lDistanceToMove, PLONG lpDistanceToMoveHigh, DWORD dwMoveMethod) {
     DWORD dwFilePointer = SetFilePointer(hFile, lDistanceToMove, lpDistanceToMoveHigh, dwMoveMethod);
     return dwFilePointer;
 }
 
+// 1.14d mac: 002ef5a7
 int __fastcall SafeCreateDirectoryTree(char * szPath) {
     char szPartialPath[260];
     int bResult = 1;
@@ -144,6 +155,7 @@ int __fastcall SFILE_EnsurePathEndsWithBackslash(char * szText1, uint32_t nMaxLe
     return 1;
 }
 
+// 1.14d mac: 002ef6ec
 int __fastcall SFILE_GetExecutableDirectory(char * szText, DWORD nSize) {
     DWORD dwLength = GetModuleFileNameA((HMODULE)0x0, szText, nSize);
     if (dwLength && dwLength != nSize) {
@@ -241,6 +253,7 @@ int __fastcall SFILE_GetBlizzardAppDataPath(char * szOutPath, uint32_t nMaxLen) 
 }
 #endif
 
+// 1.14d mac: 002ef8fd
 BOOL __stdcall GetUseDirectCommand() {
     return D2Ini_bUseDirect;
 }
@@ -585,6 +598,7 @@ void __fastcall SFILE_DeleteOldLogFiles(char * szLogPrefix) {
     }
 }
 
+// 1.14d mac: 002ee146
 void __stdcall LOGFILE_StoreGameStartupInfo() {
     _SYSTEMTIME systemTime;
     char szAppPath[4096];

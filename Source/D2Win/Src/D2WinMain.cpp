@@ -260,12 +260,14 @@ BOOL __stdcall D2WINMAIN_ClearCurrentRenderedFunctions() {
 }
 
 // Sets gnWindowInitState background DC6 pointer, returns 1
+// 1.14d mac: 0004a5ab
 BOOL __stdcall D2WINMAIN_SetBackgroundDC6(DC6 * pBackgroundDC6) {
     gpOutOfGameBackgroundDC6 = pBackgroundDC6;
     return 1;
 }
 
 // Sets gpCursorDC6 cursor DC6 pointer, returns 1
+// 1.14d mac: 0004a5c4
 BOOL __stdcall D2WINMAIN_SetCursorDC6(DC6 * pCursorDC6) {
     gpCursorDC6 = pCursorDC6;
     return 1;
@@ -277,6 +279,7 @@ void __stdcall D2WINMAIN_SetExitCallback(pfnVoidNoArgCallback pfnExitCallback) {
 }
 
 // Clears gbMessageLoopActive message loop flag to 0, returns 1
+// 1.14d mac: 0004a5f1
 BOOL __stdcall D2WINMAIN_ClearMessageLoopFlag() {
     gbMessageLoopActive = 0;
     return 1;
@@ -289,6 +292,7 @@ BOOL __stdcall D2WINMAIN_SetControlField4(D2ControlStrc * pControl, DC6 * dwValu
 }
 
 // Sets pFormSecond to the specified control, defocusing previous control if different
+// 1.14d mac: 0004a9ab
 BOOL __stdcall D2WINMAIN_SetFocusedControl(D2ControlStrc * pControl) {
     if (pFormSecond) {
       if (pControl != pFormSecond) {
@@ -303,10 +307,12 @@ BOOL __stdcall D2WINMAIN_SetFocusedControl(D2ControlStrc * pControl) {
     return 1;
 }
 
+// 1.14d mac: 0004a9e4
 ::D2WinEditBox * __stdcall FORMS_GetFormTextAndEditBox() {
     return pFormTextAndEditBox;
 }
 
+// 1.14d mac: 0004a9f5
 BOOL __stdcall FORMS_AddControlToGlobalList(D2ControlStrc * pControl) {
     if (!pFormsList) {
       pFormsList = pControl;
@@ -339,6 +345,7 @@ BOOL __fastcall FORMS_AppendFormToDestroyQueue(D2ControlStrc * pControl) {
 }
 
 // @sourcefile .\Src\D2WinMain.cpp
+// 1.14d mac: 0004a41f
 BOOL __stdcall D2WINMAIN_FreeLeadingFormControls()
 {
     if (D2WinButton::gnFormControlCount > 0) {
@@ -397,6 +404,7 @@ BOOL __stdcall FORMS_DestroyControl(D2ControlStrc * pControl) {
     return 1;
 }
 
+// 1.14d mac: 0004ab11
 D2ControlStrc * __stdcall FORMS_CreateAnyForm(FORMS_PredefinedFormStrc * pForm) {
     void* pTextBox;
     void* pEditBox;
@@ -453,6 +461,7 @@ D2ControlStrc * __stdcall FORMS_CreateAnyForm(FORMS_PredefinedFormStrc * pForm) 
     return nullptr;
 }
 
+// 1.14d mac: 0004aeb4
 void __stdcall FORMS_DestroyAnyForm(D2ControlStrc * * pForm) {
     ::D2WinEditBox* pWinEditBox;
     if (!pForm) {
@@ -519,6 +528,7 @@ void __stdcall FORMS_DestroyAnyForm(D2ControlStrc * * pForm) {
 }
 
 // Sets or clears bit 0 of control flags (offset +8), controlling visibility/enabled state
+// 1.14d mac: 0004afa4
 void __fastcall D2WINMAIN_SetControlVisible(D2ControlStrc * pControl, BOOL bVisible) {
     if (!pControl) {
       return;
@@ -532,6 +542,7 @@ void __fastcall D2WINMAIN_SetControlVisible(D2ControlStrc * pControl, BOOL bVisi
 }
 
 // Returns bit 0 of control flags (offset +8), checking visibility/enabled state. Halts on null pointer.
+// 1.14d mac: 0004afd5
 BOOL __fastcall D2WINMAIN_GetControlVisible(D2ControlStrc * pControl) {
     if (!pControl) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x33f);
@@ -544,6 +555,7 @@ BOOL __fastcall D2WINMAIN_GetControlVisible(D2ControlStrc * pControl) {
 // Sets (bActive != 0) or clears bit 2 (gadwBitMasks[2] = 4) of pControl->dwState (+0x8); halts (line 844) on NULL.
 // Every control constructor sets this bit and every control Draw/Push/Key/Mouse handler skips the control while it is clear, so it is the active flag (drawn and takes input), not a disabled flag.
 // Provenance: asm 004f9740..004f9779; set at creation e.g. 005012d3 (D2WinButton), tested e.g. 005010c1 (button Push), 004fbf71 (textbox Draw).
+// 1.14d mac: 0004b01b
 void __fastcall D2WINMAIN_SetControlActive(D2ControlStrc * pControl, BOOL bActive) {
     if (!pControl) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x34c);
@@ -569,6 +581,7 @@ BOOL __fastcall D2WINMAIN_IsControlActive(D2ControlStrc * pControl) {
 }
 
 // Tests if current mouse position (D2Client::Mouse::nPosX/Y) is inside the specified RECT using PtInRect
+// 1.14d mac: 0004b07c
 BOOL __stdcall D2WINMAIN_TestMouseInRect(RECT * pRect) {
     POINT pt;
     pt.y = nPosY;
@@ -738,6 +751,7 @@ int __fastcall Unreferenced_004f9b30(D2ControlStrc * pControl) {
     return 1;
 }
 
+// 1.14d mac: 0004b810
 void __stdcall INPUT_FormKeyHandler(D2UIMouseMsgStrc * pMsg) {
     WPARAM nKey = pMsg->nWParam;
     if (pFormTextAndEditBox) {
@@ -776,6 +790,7 @@ void __stdcall INPUT_FormKeyHandler(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 0004b8c0
 void __stdcall INPUT_FormKeyDownHandler(D2UIMouseMsgStrc * pMsg) {
     WPARAM nKey = pMsg->nWParam;
     if (pFormTextAndEditBox) {
@@ -814,11 +829,13 @@ void __stdcall INPUT_FormKeyDownHandler(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 0004b9ba
 void __stdcall INPUT_CtrlKeyDown(D2UIMouseMsgStrc * pMsg) {
     gbCtrlKeyDown = 1;
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 0004baba
 void __stdcall INPUT_CtrlKeyUp(D2UIMouseMsgStrc * pMsg) {
     gbCtrlKeyDown = 0;
     Storm::SMsgBreakHandlerChain(pMsg);
@@ -907,6 +924,7 @@ void __stdcall D2WIN_HandleSystemCommand(D2UIMouseMsgStrc * pMsg) {
 }
 #endif
 
+// 1.14d mac: 0004ba39
 void __stdcall D2WIN_HandleActivation(D2UIMouseMsgStrc * pMsg) {
     // Static local variables (originally global data)
     static uint32_t gnSavedMusicVolume; D2_STATIC_GUARD_BSS(gnSavedMusicVolume, "D2Win::Src::D2WinMain::D2WIN_HandleActivation::gnSavedMusicVolume");
@@ -1004,6 +1022,7 @@ static void __stdcall D2WIN_SaveScreenshotToFile(uint8_t * pDibBytes, LPCSTR szF
 }
 
 // @sourcefile .\Src\D2WinMain.cpp
+// 1.14d mac: 0004b1f2
 void __fastcall D2WIN_TakeThrottledScreenshot(LPCSTR szFileName) {
     DWORD dwTickCount = GetTickCount();
     if (!(dwTickCount - gdwLastScreenshotTick >= 1000 || szFileName)) {
@@ -1023,6 +1042,7 @@ void __fastcall D2WIN_TakeThrottledScreenshot(LPCSTR szFileName) {
     D2_FREE_AT(pBuffer, ".\\Src\\D2WinMain.cpp", 0x6b4);
 }
 
+// 1.14d mac: 0004b9d3
 void __stdcall D2WIN_ToggleMusicOptions(D2UIMouseMsgStrc * pMsg) {
     if (!gbCtrlKeyDown) {
       return;
@@ -1133,6 +1153,7 @@ D2ControlStrc * __stdcall D2WIN_FindClosestControlToMouse(D2ControlStrc * pContr
     return pBestControl;
 }
 
+// 1.14d mac: 0004bad3
 void __stdcall INPUT_FormMouseWheel(D2UIMouseMsgStrc * pMsg) {
     int32_t nMaxValue;
     ::D2WinScrollbar* pControl;
@@ -1189,6 +1210,7 @@ void __stdcall D2WINMAIN_SetCursorVisible(BOOL bVisible) {
     gbCursorVisible = bVisible;
 }
 
+// 1.14d mac: 0004b557
 void __stdcall SetUnsetFlag0x08(D2ControlStrc * pControl, int32_t bSet) {
     if (bSet) {
       pControl->dwState |= Fog::BitBuffer::gadwBitMasks[3];
@@ -1199,15 +1221,18 @@ void __stdcall SetUnsetFlag0x08(D2ControlStrc * pControl, int32_t bSet) {
 }
 
 // Sets pFormFourth global to the specified control
+// 1.14d mac: 0004b585
 void __stdcall CONTROL_SetEscapeButton(D2ControlStrc * pButton) {
     gpEscapeButton = pButton;
 }
 
 // Returns gnWinMainState global value
+// 1.14d mac: 0004b599
 uint32_t __stdcall D2WINMAIN_IsMouseButtonDown() {
     return gbMouseButtonDown;
 }
 
+// 1.14d mac: 0004b5aa
 BOOL __stdcall FORMS_SetGlobalFormImage(D2ControlStrc * pControl, int32_t nInitialFormState) {
     pFormImage = pControl;
     gnInitialFormState = nInitialFormState;
@@ -1215,6 +1240,7 @@ BOOL __stdcall FORMS_SetGlobalFormImage(D2ControlStrc * pControl, int32_t nIniti
 }
 
 // Returns first element from linked list (dereferences pointer if non-null)
+// 1.14d mac: 0004b5cc
 eD2FormType __stdcall CONTROL_GetType(D2ControlStrc * pControl) {
     if (!pControl) {
       return 0;
@@ -1228,6 +1254,7 @@ D2ControlStrc * __stdcall D2WINMAIN_GetFormImage() {
     return pFormImage;
 }
 
+// 1.14d mac: 0004b683
 void __stdcall D2WIN_HandleCursorHide(D2UIMouseMsgStrc * pMsg) {
     gbCursorVisible = 0;
     if (pMsg->nWParam == 2) {
@@ -1249,6 +1276,7 @@ void __stdcall D2WIN_HandleMouseLeave(D2UIMouseMsgStrc * pMsg) {
     pMsg->dwResult = 0;
 }
 
+// 1.14d mac: 0004a074
 BOOL __stdcall D2GFX_PreSetupBeforeCreatingWindow(HINSTANCE hInstance, eD2RendererMode eRenderedMode, BOOL bWindowed, BOOL bDontUseCompression) {
     D2GFX_eRendererMode = eRenderedMode;
     D2CMP::SRC::SpriteCache::SetCompressedDataGlobalAndSaveItToRegistry(bDontUseCompression);
@@ -1265,6 +1293,7 @@ BOOL __stdcall FreeInGameGFX() {
     return 1;
 }
 
+// 1.14d mac: 0004a60b
 BOOL __stdcall MessagePump(pfnFramePump pfnFrameCallback)
 {
     DWORD TickCountA;
@@ -1404,6 +1433,7 @@ void __stdcall INPUT_FormEscapeKey(D2UIMouseMsgStrc * pMsg) {
 }
 
 // @sourcefile .\Src\D2WinMain.cpp
+// 1.14d mac: 0004b1db
 void __stdcall TakeScreenshot() {
     DWORD dwTickCount = GetTickCount();
     if (!(dwTickCount - gdwLastScreenshotTick >= 1000)) {
@@ -1423,12 +1453,14 @@ void __stdcall TakeScreenshot() {
     D2_FREE_AT(pBuffer, ".\\Src\\D2WinMain.cpp", 0x6b4);
 }
 
+// 1.14d mac: 0004ba92
 void __stdcall D2WIN_TakeScreenshotMsgHandler(D2UIMouseMsgStrc * pMsg) {
     TakeScreenshot();
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
 }
 
+// 1.14d mac: 0004b6c1
 void __stdcall INPUT_FormMouseHandler(D2UIMouseMsgStrc * pMsg) {
     MOUSE_CaptureMousePosition(pMsg);
     BOOL bHandled;

@@ -35,6 +35,7 @@ void __fastcall FORMS_DestroyD2WinTimer(::D2WinTimer * pTimer) {
     D2WinMain::FORMS_DestroyControl(&pTimer->sControl);
 }
 
+// 1.14d mac: 0004f950
 void __fastcall D2WINTIMER_DisableSpaceKey(int * pTimer) {
     if (*pTimer != 8) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3b);
@@ -44,6 +45,7 @@ void __fastcall D2WINTIMER_DisableSpaceKey(int * pTimer) {
     pTimer[0xc] = 0;
 }
 
+// 1.14d mac: 0004f851
 BOOL __fastcall DrawEx(::D2WinTimer * pTimer) {
     DWORD dwTickCount;
     D2ControlMsg sMsg;
@@ -68,6 +70,7 @@ BOOL __fastcall DrawEx(::D2WinTimer * pTimer) {
     return 0;
 }
 
+// 1.14d mac: 0004f9d8
 int __fastcall D2WINTIMER_UpdateRepeating(::D2WinTimer * pTimer) {
     // Static local variables (originally global data)
     static uint32_t gnTimerNextFireTick; D2_STATIC_GUARD_BSS(gnTimerNextFireTick, "D2Win::Src::D2WinTimer::D2WINTIMER_UpdateRepeating::gnTimerNextFireTick");
@@ -99,6 +102,7 @@ int __fastcall D2WINTIMER_UpdateRepeating(::D2WinTimer * pTimer) {
     return 0;
 }
 
+// 1.14d mac: 0004f8e3 D2Win::Src::D2WinTimer::Key
 BOOL __stdcall Key(D2ControlMsg * pTimer) {
     OnPress pfnTimerCb;
     ::D2WinTimer* pControlRaw = (::D2WinTimer*)pTimer->pControl;
@@ -119,6 +123,7 @@ BOOL __stdcall Key(D2ControlMsg * pTimer) {
 }
 
 // @sourcefile .\Src\D2WinTimer.cpp
+// 1.14d mac: 0004f7b6
 ::D2WinTimer * __fastcall D2WinTimer(int32_t nTimeoutInSeconds, OnPress pfnOnPress) {
     DWORD dwCreationTick;
     ::D2WinTimer* pTimer = D2_NEW_AT(::D2WinTimer, ".\\Src\\D2WinTimer.cpp", 0x1c);
@@ -137,6 +142,7 @@ BOOL __stdcall Key(D2ControlMsg * pTimer) {
     return pTimer;
 }
 
+// 1.14d mac: 0004f993
 void __fastcall D2WINTIMER_SetRepeating(::D2WinTimer * pTimer) {
     if (pTimer->sControl.neD2FormType != FORM_Timer) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x45);

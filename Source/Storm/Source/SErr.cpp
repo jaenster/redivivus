@@ -53,6 +53,7 @@ namespace Storm::Source::SErr {
 //   SErrDestroy 10016a10, 384 B, 0 args, callees {SMemFree, GetProcessHeap, HeapFree, DeleteCriticalSection} - a distinctive four-callee teardown set; nothing in the 1.14d SErr run matches it.
 // Five of the eight have no callees at all, so callee-set fingerprinting cannot place them; they will need global-usage analysis instead.
 // @oracle-absent The PPC SErr.cpp also contains a crash-log writer that 1.14d does NOT have: .WriteErrorLog @10016bd0 (2 args, CreateFile/CreateDirectory/GetLocalTime), .WriteMessageToLog @10016e30, .LogComputerInfoHeader, .LogMachineState. 1.14d's SErrDisplayError has no counterpart call - it ends in TerminateProcess where the PPC ends in WriteErrorLog then ExitProcess. Do not go looking for these in 1.14d.
+// 1.14d mac: 0000fec0
 void __fastcall SErrSetBlizzardErrorFunction(pfnBlizzardError pfnFunc) {
     /* 0x1c0e0  17  ?SErrSetBlizzardErrorFunction@@YIXP6IXPBD0QAPBDII_N@Z@Z */ pfnBlizzardErrorCallback = pfnFunc;
 }
@@ -62,6 +63,7 @@ void __fastcall SErrSetBlizzardErrorFunction(pfnBlizzardError pfnFunc) {
 // @module Internal to SErr.cpp; only caller is SERR_RegisterDefaultModules 0041c140.
 // @oracle-negative It is NOT the export SErrRegisterMessageSource (that is 0041c2f0). Both write gpErrorModuleList, but the oracle's SErrRegisterMessageSource @10015890 takes the critical section and does not call GetModuleHandle, while this one calls GetModuleHandleA and takes no lock. It also appends at the tail where the export pushes at the head.
 // @blizzard AddStormFacility (SERR.CPP)
+// 1.14d mac: 00010d08
 void __stdcall SERR_AddStormFacility(uint16_t wModuleId) {
     D2SErrMessageSourceStrc** ppTailLink = &gpErrorModuleList;
     D2SErrMessageSourceStrc* pNewNode;
@@ -94,6 +96,7 @@ void __stdcall SERR_AddStormMessages() {
 // @module Internal to SErr.cpp; its only caller is SErrDisplayError 0041caf0. Not on the Storm 1.10b export table.
 // @oracle-negative It is NOT SErrGetErrorStr. That export takes 3 arguments and calls FormatMessage; this takes 1 and calls LoadStringA. The real SErrGetErrorStr is 0041c430. On the PPC the oracle inlines this LoadString step directly into SErrDisplayError, so there is no oracle counterpart to name it from.
 // @blizzard GetString (SERR.CPP)
+// 1.14d mac: 0001083c
 static LPSTR * SERR_GetString(int32_t nErrorIndex) {
     // Static local variables (originally global data)
     static char * gaSErrMessageStrings[12] = {
@@ -130,6 +133,7 @@ static LPSTR * SERR_GetString(int32_t nErrorIndex) {
 // @module Internal to SErr.cpp, not an export - it appears nowhere on the Storm 1.10b export table, and MWCC inlined this idiom into every SErr export on the PPC side (which is why all 19 oracle exports show InterlockedIncrement/InitializeCriticalSection/EnterCriticalSection in their raw callee sets).
 // @module-basis All 7 callers are SErr functions: SErrDisplayError, SErrGetErrorStr, SErrPrepareAppFatal, SErrRegisterMessageSource, SErrRegisterHandler, SErrUnregisterHandler, SErrDisplayAppFatal. Nothing outside the module touches it.
 // @blizzard InternalEnterCriticalSection (SERR.CPP)
+// 1.14d mac: 0000ff5d
 void __stdcall SERR_InternalEnterCriticalSection() {
     // Static local variables (originally global data)
     static int gnSErrCriticalSectionInitGuard = -0x1; D2_STATIC_GUARD(gnSErrCriticalSectionInitGuard, "Storm::Source::SErr::SERR_InternalEnterCriticalSection::gnSErrCriticalSectionInitGuard");
@@ -253,6 +257,7 @@ void __fastcall Unreferenced_0041c410(StormLinkedListStrc * pList) {
 // @oracle-basis Arity 3 = 3 (dwMessageId, szText, nBufferSize). It is the ONLY function in the module in either build that calls FormatMessage, and the PPC SErrGetErrorStr calls it too. Both are called from SErrDisplayError. Both guard a null/zero buffer by setting last error 0x57 (ERROR_INVALID_PARAMETER).
 // @oracle-note The rival candidate SSYSTEM_LoadErrorString 0041c170 was ruled out: 1 parameter against the oracle's 3, and it calls LoadStringA rather than FormatMessage. It is a 1.14d-only helper that MWCC inlined into SErrDisplayError on the PPC side. Left under its descriptive name.
 // @corroboration Also called from Lng::LNG_FormatErrorMessageWithFallback, i.e. from D2 code outside the Storm module - the caller profile of an export.
+// 1.14d mac: 0001071c
 uint32_t __stdcall SErrGetErrorStr(DWORD dwMessageId, LPSTR szText, DWORD nBufferSize) {
     D2_CHECKS_BEGIN;
     D2_CHECK(szText);
@@ -843,6 +848,7 @@ void SErrDisplayErrorFmt(uint32_t nErrorCode, char * pStackTrace, int32_t nTrace
 // @was SSYSTEM_DebugMemoryHandleError (pass 6, 2026.08.28)
 // @oracle Storm 1.10b PPC export SErrReportNamedResourceLeak, code vector 100156d0 (TVector 100cbebc).
 // @oracle-basis Callee set identical to the oracle's and distinctive: SRegLoadValue (a registry read is unique to this function in the whole module, in both builds), SStrPrintf, SErrDisplayError, OutputDebugString. Arity 2 = 2. The literal "handle never released" confirms the operation independently of the oracle.
+// 1.14d mac: 00010bd1
 void __stdcall SErrReportNamedResourceLeak(char * szMessage, char * szText) {
     // Static local variables (originally global data)
     static int gnDebugMemoryInitFlag; D2_STATIC_GUARD_BSS(gnDebugMemoryInitFlag, "Storm::Source::SErr::SErrReportNamedResourceLeak::gnDebugMemoryInitFlag");

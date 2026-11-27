@@ -21,6 +21,7 @@ static_assert(sizeof(void*) != 4 || sizeof(D2DataArrayStrc) == 0x120, "D2_ALLOC_
 namespace Fog::Src::DataArrays {
 
 // @sourcefile .\Src\DataArrays.cpp
+// 1.14d mac: 002edd12
 D2DataArrayStrc * __fastcall FOG_CreateDataArray(char * pszName, int numObjects, int nObjectSize) {
     D2DataArrayStrc* local_EAX_31 = (D2DataArrayStrc*)D2_ALLOC_AT(numObjects * nObjectSize + sizeof(D2DataArrayStrc), ".\\Src\\DataArrays.cpp", 0x34);
     if (local_EAX_31) {
@@ -36,11 +37,13 @@ D2DataArrayStrc * __fastcall FOG_CreateDataArray(char * pszName, int numObjects,
 }
 
 // @sourcefile .\Src\DataArrays.cpp
+// 1.14d mac: 002eddae
 void __fastcall FreeWeatherPointer(void * pDataArray) {
     memset(pDataArray, 0, 0x120);
     D2_FREE_AT(pDataArray, ".\\Src\\DataArrays.cpp", 0x4c);
 }
 
+// 1.14d mac: 002ede0e
 void __fastcall FOG_InitDataArray(D2DataArrayStrc * pDataArray) {
     if (!pDataArray->bInitialized) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x68);
@@ -56,6 +59,7 @@ void __fastcall FOG_InitDataArray(D2DataArrayStrc * pDataArray) {
     }
 }
 
+// 1.14d mac: 002ede99
 uint32_t __fastcall FOG_GetMissileField(D2DataArrayStrc * pMissilesTxt) {
     uint32_t nMissileSlot = -1;
     if (!pMissilesTxt->bInitialized) {
@@ -131,6 +135,7 @@ short * __fastcall FOG_GetDataArrayEntryOrHalt(D2DataArrayStrc * pDataArray, int
     return pEntry;
 }
 
+// 1.14d mac: 002eddf8
 void __fastcall FOG_CloseDataArray(D2DataArrayStrc * pDataArray) {
     pDataArray->bInitialized = 1;
     FOG_InitDataArray(pDataArray);

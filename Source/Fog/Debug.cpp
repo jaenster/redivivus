@@ -1308,6 +1308,7 @@ void __fastcall CRASH_FormatStackTrace(DWORD dwThreadId, D2CrashFrameStrc * aFra
 }
 #endif
 
+// 1.14d mac: 002ef355
 int __stdcall DEBUG_UnloadStackCrawlDbgHelp() {
     bBetterStackCrawls = 0;
     if (pDbgHelpOrImageHlp) {
@@ -1830,6 +1831,7 @@ static D2FogModuleNodeStrc * __stdcall LoadSymbolsForAllModules(HANDLE hProcess,
     return pModuleListHead;
 }
 
+// 1.14d mac: 002ef35f
 BOOL __fastcall FILETOOLS_GetExecutableFolderPath(LPSTR lpFilename, DWORD nSize) {
     int32_t nScanIndex;
     /* DWORD nSize for GetModuleFileNameA */ /* LPSTR lpFilename for GetModuleFileNameA */ /* HMODULE hModule for GetModuleFileNameA */ *lpFilename = '\0';

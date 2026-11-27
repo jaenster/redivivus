@@ -44,6 +44,7 @@ typedef BOOL (__fastcall *Draw)(D2ControlStrc * pControl);
 
 namespace D2Win::Src::D2WinImage {
 
+// 1.14d mac: 0004e8bf
 void __fastcall D2WINTEXTBOX_SetTextW(::D2WinTextBox * pTextBox, uint16_t * wszText) {
     D2WinTextBox::SetText(pTextBox, wszText, 4, false, 0);
 }
@@ -103,6 +104,7 @@ BOOL __stdcall D2WINIMAGE_SetFrame(::D2WinImage * pImage, int32_t nFrame) {
 
 // Sets eDrawMode (+0x44) to DRAW_SOLID; the second argument is never read (the only caller passes DRAW_LIGHTTRANSPARENT, Mac 1.14d also stores 5); halts unless the control type is 2 (image); returns TRUE.
 // The asm stores the constant 5 to [EAX+0x44] (004fd19a).
+// 1.14d mac: 00049754
 BOOL __stdcall D2WINIMAGE_SetDrawModeSolid(::D2WinImage * pImage, DRAWMODE eDrawModeIgnored) {
     if (pImage->sControl.neD2FormType != FORM_Image) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x9d);
@@ -300,6 +302,7 @@ BOOL __fastcall Draw(D2WinImageEx * pImageEx) {
     }
 }
 
+// 1.14d mac: 0004915e D2Win::Src::D2WinImage::Push
 BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
     ::D2WinImage* pImage = (::D2WinImage*)pControlMsg->pControl;
     if (pImage->sControl.neD2FormType != FORM_Image) {
@@ -332,6 +335,7 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
 }
 
 // @sourcefile .\Src\D2WinImage.cpp
+// 1.14d mac: 00048efd
 ::D2WinImage * __fastcall D2WinImage(int32_t nPosX, int32_t nPosY, int32_t nSizeX, int32_t nSizeY, DC6 * pDC6, OnPress pfnOnPress, D2WinImageHitArea * pHitAreas, ::Key pKey) {
     uint32_t dwState;
     ::D2WinImage* pNewImage = D2_NEW_AT(::D2WinImage, ".\\Src\\D2WinImage.cpp", 0x1d);
@@ -360,6 +364,7 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
 }
 
 // @sourcefile .\Src\D2WinImage.cpp
+// 1.14d mac: 00049228
 D2WinImageEx * __fastcall D2WINIMAGE_CreateImageEx(int32_t nPosX, int32_t nPosY, int32_t nSizeX, int32_t nSizeY, DC6 * pDC6, int32_t nBorderX, int32_t nBorderY) {
     D2WinImageEx* pNewImageEx = D2_NEW_AT(D2WinImageEx, ".\\Src\\D2WinImage.cpp", 0x3b);
     memset(pNewImageEx, 0, sizeof(*pNewImageEx));

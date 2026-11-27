@@ -13,6 +13,7 @@
 namespace Storm::_3rdparty::zlib::inftrees {
 
 // Build Huffman decoding table from bit lengths. Generates lookup tables for inflate decompression. Uses intermediate code arrays and calculates bit-level offsets for dynamic Huffman tree construction.
+// 1.14d mac: 00039a70
 int __fastcall inflate_table(int32_t type, uint16_t * lens, uint32_t codes, inflate_code * * table, uint32_t * bits, uint16_t * work) {
     // Static local variables (originally global data)
     // also labelled: nZlibInflateTable_MaxCodes

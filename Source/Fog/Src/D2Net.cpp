@@ -18,6 +18,7 @@ static unsigned long long gnSentPacketHeaderBytes = 0; D2_STATIC_GUARD(gnSentPac
 
 namespace Fog::Src::D2Net {
 
+// 1.14d mac: 002ecd97
 void __stdcall NET_SERVER_SentPacketLog_Clear() {
     int nCopyCount;
     gaServerSentPacketByteCounts[0] = 0;
@@ -35,6 +36,7 @@ void __stdcall NET_SERVER_SentPacketLog_Clear() {
     Source::SSComp::COMPRESS_BuildHuffmanDecodeTable(Source::SSComp::gabHuffmanCodeLengths);
 }
 
+// 1.14d mac: 002ece0a
 void __fastcall NET_D2GS_SERVER_LogSentPacket(char * pBytes, uint32_t nSize) {
     uint32_t nBitCount;
     uint32_t i;
@@ -56,6 +58,7 @@ void __fastcall NET_D2GS_SERVER_LogSentPacket(char * pBytes, uint32_t nSize) {
     gnSentPacketHeaderBytes += nHeaderSize;
 }
 
+// 1.14d mac: 002ececd
 uint32_t __fastcall NET_D2GS_SERVER_CompressPacket(char * pBuffer, uint32_t nBufferSize, char * pBytes, uint32_t nBytesSize) {
     uint32_t nNumBits;
     uint8_t* pOutCur;
