@@ -3493,14 +3493,16 @@ void __fastcall SFILE_DestroyFileRecord(D2MPQFileStrc * pMPQFile) {
       return;
     }
 
-    uint32_t* pnRefCount = &pMPQFile->dwComputedCRC;
-    (*pnRefCount)--;
-    if (*pnRefCount) {
+    // The record is an archive record (refcount at 0x148, freed by SFILE_FreeArchiveRecord); the
+    // parameter type is the file record's only by the prototype.
+    D2ArchiveStrc* pArchive = (D2ArchiveStrc*)pMPQFile;
+    pArchive->nRefCount--;
+    if (pArchive->nRefCount) {
       return;
     }
 
-    SFILE_FreeArchiveRecord((D2ArchiveStrc*)pMPQFile);
-    SMem::SMemFree(pMPQFile, "delete", -1, 0);
+    SFILE_FreeArchiveRecord(pArchive);
+    SMem::SMemFree(pArchive, "delete", -1, 0);
 }
 
 D2MPQFileStrc * * __thiscall SFILE_AllocFileRecord1(int * * ppArchive, int32_t nInsertMode, int32_t nExtraSize, uint32_t nFlags) {
