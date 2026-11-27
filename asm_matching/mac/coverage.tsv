@@ -1417,7 +1417,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 002b66d5	D2FILE_SeekFile	186	Bnclient/BNetGW.cpp|D2Hell/SRC/Archive.cpp	between	Source/Bnclient/BNetGW.cpp|Source/D2Hell/SRC/Archive.cpp	shared	missing		-	00516f14
 002b678f	D2FILE_ReadFile	249	Bnclient/BNetGW.cpp|D2Hell/SRC/Archive.cpp	between	Source/Bnclient/BNetGW.cpp|Source/D2Hell/SRC/Archive.cpp	shared	missing		-	00516f85
 002b6888	Bnclient::D2Hell::Archive::D2FILE_AllocAndLoadD2File	162	D2Hell/SRC/Archive.cpp	__FILE__	Source/D2Hell/SRC/Archive.cpp	shared	missing		-	00517079
-002b692a	Bnclient::D2Hell::Archive::FUN_002b692a	213	Bnclient/D2Hell/SRC/Archive.cpp	file-map	Source/Bnclient/D2Hell/SRC/Archive.cpp	blizzard-mac	nonmatch	Source/D2Hell/Mac/ArchiveMac.cpp	no	
+002b692a	Bnclient::D2Hell::Archive::FUN_002b692a	213	Bnclient/D2Hell/SRC/Archive.cpp	file-map	Source/Bnclient/D2Hell/SRC/Archive.cpp	blizzard-mac	body	Source/D2Hell/D2HellRoot.cpp	no	
 002b69ff	Fog::Archive::ARCHIVE_LoadMPQ	1129	D2Hell/SRC/Archive.cpp	__FILE__	Source/D2Hell/SRC/Archive.cpp	shared	missing		-	00517332
 002b6e68	Fog::Archive::ARCHIVE_FreeMpqFile	78	D2Hell/SRC/Archive.cpp	__FILE__	Source/D2Hell/SRC/Archive.cpp	shared	missing		-	005173ac
 002b6eb6	D2MEM_FindLowestSetBit	37	D2Hell/SRC/Archive.cpp|?	between	Source/D2Hell/SRC/Archive.cpp|?	shared	missing		-	00517abb
