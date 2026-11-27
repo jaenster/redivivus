@@ -761,8 +761,8 @@ BOOL __fastcall Skills_SrvDoFunc_067_Charge(::SGAMEDATA * pGame, D2UnitStrc * pU
         UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, eSkill);
         pHitTarget = SkillsServer::SKILLS_FindNextUnitInAreaByGUID(pGame, pUnit, 0, 0, 3, 3, nTargetGUID, nullptr);
         if (pHitTarget && D2Common::Units::IsInMeleeRange(pUnit, pHitTarget, 0)) {
-          D2Common::Skills::SKILL_SetParam1(pSkill, D2Common::Units::GetType(pHitTarget));
-          D2Common::Skills::SKILL_SetParam2(pSkill, D2Common::Units::GetGUID(pHitTarget));
+          D2Common::Skills::SKILL_SetParam1(pSkill, GetTypeInline(pHitTarget));
+          D2Common::Skills::SKILL_SetParam2(pSkill, GetGUIDInline(pHitTarget));
         } else {
           if (!pUnit || pUnit->eUnitType != UNIT_MONSTER || D2Common::DATATBLS::MonsterTbls::ValidateClassId(D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pUnit)) != 0x1b4 || D2Common::DATATBLS::MonsterTbls::ValidateClassId(D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pUnit)) != 0x1b9) {
             GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
