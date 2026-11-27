@@ -52,7 +52,7 @@ BOOL GetTextExtentExPointA(HDC hDC, const char* szText, int nLength, int nMaxExt
 int Text_CalculateLineBreaks(HDC hDC, const char* szText, int nLength, int nMaxWidth, Win32MacTextLine* pLines,
                              int nMaxLines);
 BOOL Rect_PinPtInRect(RECT* pRect, int* pX, int* pY);
-int GetKeyState(int nVirtKey);
+short GetKeyState(int nVirtKey);
 BOOL CLIPBOARD_SetText(const char* szText, int nLength);
 int CLIPBOARD_GetTextSize(void);
 int CLIPBOARD_GetText(char* pBuffer, int nBufferSize);

@@ -318,7 +318,7 @@ addr	name	reason_class	detail
 00026bc2	std::__1::__deque_base<Win32HandleObject,std::__1::allocator<Win32HandleObject>>::clear	eh	orig has __ZSt9terminatev and MemFree in clear; ours calls delete
 00026c70	_GLOBAL__I_a	pic-ref	same structure; orig takes the dtor address via lea and an unresolved PIC symbol, ours loads &___dso_handle and &dtor via mov
 00026d14	Keys_PrepareKeyMsg	sched	123 vs 119 insns; bKeyDown/bUpdateState are int-sized as in the asm; the first byChar test and the extended-key bit test compile differently
-00026f58	GetKeyState	regalloc	16 vs 14 insns; orig has no early zero of eax and returns the int directly
+00026f58	GetKeyState	regalloc	16 vs 14 insns; the orig returns the int without the movsx a short return adds, but declaring it int moves the (GetKeyState & 0x8000) test in IPeekMessage and loses that MATCH
 00026f82	GetAsyncKeyState	regalloc	54 vs 55 insns; orig computes the byte index with a widening shift, ours narrows first
 00027028	TranslateMessage	regalloc	42 vs 39 insns; orig keeps the character byte in ebx
 000270a4	ListBox_WndProc	sched	969 vs 1071 insns; callee sequence identical; orig dispatches by range tests and keeps one result variable (frame 0x11c vs 0x12c); a goto-done rewrite made it worse (1092)
@@ -334,7 +334,6 @@ addr	name	reason_class	detail
 00028e09	MSG_PeekQueuedMessage	regalloc	same compares and loads; orig loads [ebp+0x18] into edi then cmp reg,reg, ours cmp mem directly
 00028f1b	Msg_FillMouseMsgFromPoint	sched	135 vs 135 insns; same callees, WindowFromPoint branch is placed earlier in orig
 0002934e	Wnd_FindWindowNeedingPaint	sched	23 vs 23 insns; same structure, field offset order differs (0x54 vs 0x50 walk)
-000293a1	IPeekMessage	regalloc	95 insns both; same callee sequence; register choice or operand order differs
 000297df	MSG_EnqueueMessage	sched	orig 52 vs ours 49 insns; same callee sequence; branch layout and instruction selection differ
 00029af1	CLIPBOARD_GetText	regalloc	orig loads [ebp+0xc] into edx before the cmp while ours compares the memory operand directly; same calls and ops
 00029b86	LoadLibraryEx	regalloc	7/186(orig) 178(ours): ours 'pop ebx' orig 'pop ecx'
