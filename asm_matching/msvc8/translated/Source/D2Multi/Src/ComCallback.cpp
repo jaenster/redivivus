@@ -19,6 +19,14 @@
 #include "Source/D2Multi/OOG.h"
 #include "Source/D2Win/D2WinEditBox.h"
 
+// The clamps use the Windows SDK min/max macros, as windef.h defines them for VC8.
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 #ifndef D2_FREE_AT
@@ -1837,26 +1845,22 @@ BOOL __fastcall COMCALLBACK_ProcessEmoteCommand(uint32_t dwCbArg1, uint32_t dwCb
 // Scrolls the chat-lobby user list by nScrollDelta rows: clamps gnChannelUserListScrollOffset to 0..gnChannelUserCount-11 (0 when fewer than 12 users), rebuilds the list through COMCALLBACK_UpdateChannelUserList when the offset changed, and shows the back/forward scroll buttons only when there is something to scroll to.
 // Provenance: asm 00448bd0..00448c6c; the four user-list scroll buttons call it with -10, 10, -1 and 1.
 void __fastcall COMCALLBACK_ScrollChannelUserList(int32_t nScrollDelta) {
-    uint32_t nMaxOffset;
     int nOldOffset = gnChannelUserListScrollOffset;
-    BOOL bShowUpArrows = 0;
-    BOOL bShowDownArrows = 0;
+    BOOL bShowUpArrows = FALSE;
+    BOOL bShowDownArrows = FALSE;
     if (gnChannelUserCount <= 0xb) {
       gnChannelUserListScrollOffset = 0;
     } else {
-      uint32_t nNewOffset;
-      nNewOffset = gnChannelUserListScrollOffset + nScrollDelta;
-      nMaxOffset = gnChannelUserCount - 0xb;
-      gnChannelUserListScrollOffset = nMaxOffset;
-      if ((int)((int)nNewOffset <= 0 ? 0 : nNewOffset) < (int)nMaxOffset && (gnChannelUserListScrollOffset = nNewOffset , (int)nNewOffset <= 0)) {
-        gnChannelUserListScrollOffset = 0;
-      } else if (gnChannelUserListScrollOffset > 0) {
-        bShowUpArrows = 1;
+      gnChannelUserListScrollOffset = min(max(gnChannelUserListScrollOffset + nScrollDelta, 0), gnChannelUserCount - 0xb); // steer-ok: windef.h min/max macros
+      if (gnChannelUserListScrollOffset > 0) {
+        bShowUpArrows = TRUE;
       }
-      if (gnChannelUserListScrollOffset < (int)nMaxOffset) {
-        bShowDownArrows = 1;
+
+      if (gnChannelUserListScrollOffset < gnChannelUserCount - 0xb) {
+        bShowDownArrows = TRUE;
       }
     }
+
     if (gnChannelUserListScrollOffset != nOldOffset) {
       COMCALLBACK_UpdateChannelUserList();
     }

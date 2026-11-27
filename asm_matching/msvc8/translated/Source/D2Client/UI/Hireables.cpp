@@ -525,46 +525,39 @@ void __stdcall UI_ToggleHirelingIconsVisibility() {
 }
 
 void __stdcall INPUT_HireableLongPress(D2UIMouseMsgStrc * pMsg) {
-    int32_t nMercGUID;
-    BOOL bResult = GAME::Game::CLIENT_CheckExpansion();
-    if (!bResult) {
+    if (!GAME::Game::CLIENT_CheckExpansion()) {
       return;
     }
 
-    uint32_t nMouseX = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
-    uint16_t nMouseY = pMsg->uLParam.sMousePos.nMouseY;
-    bool bNotCombatMode = gnHireDisplayMode != 2;
+    int nMouseX = pMsg->uLParam.sMousePos.nMouseX;
+    int nMouseY = pMsg->uLParam.sMousePos.nMouseY;
     pMsg->bHandled = 0;
-    if (bNotCombatMode && (int)nMouseX >= gnHireIconDrawX && (int)nMouseX <= gnHireIconDrawX + 0x2e && nMouseY >= 0x18 && nMouseY <= 0x3c) {
-      DWORD dwNow;
-      if (!gnHireIconHoverIndex) {
-        gnHireIconHoverIndex = GetTickCount();
-      }
-
-      dwNow = GetTickCount();
-      if (dwNow - gnHireIconHoverIndex >= 700) {
-        pMsg->bHandled = 1;
-        pMsg->dwResult = 0;
-        Storm::SMsgBreakHandlerChain(pMsg);
-        bResult = ui::GetUIFlag(UI_HIREICONS);
-        if (!bResult) {
-          return;
-        }
-
-        bResult = ui::GetUIFlag(UI_MERCINV);
-        if (bResult) {
-          return;
-        }
-
-        nMercGUID = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, 0);
-        if (nMercGUID == -1) {
-          return;
-        }
-
-        ui::SetUIFlag(UI_MERCINV, UI_SET, 0);
-      }
+    if (gnHireDisplayMode == 2 || nMouseX < gnHireIconDrawX || nMouseX > gnHireIconDrawX + 0x2e || nMouseY < 0x18 || nMouseY > 0x3c) {
+      gnHireIconHoverIndex = 0;
+      return;
     }
 
+    if (!gnHireIconHoverIndex) {
+      gnHireIconHoverIndex = GetTickCount();
+    }
+
+    if (GetTickCount() - gnHireIconHoverIndex < 700) {
+      gnHireIconHoverIndex = 0;
+      return;
+    }
+
+    pMsg->bHandled = 1;
+    pMsg->dwResult = 0;
+    Storm::SMsgBreakHandlerChain(pMsg);
+    if (!ui::GetUIFlag(UI_HIREICONS) || ui::GetUIFlag(UI_MERCINV)) {
+      return;
+    }
+
+    if (GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, 0) == -1) {
+      return;
+    }
+
+    ui::SetUIFlag(UI_MERCINV, UI_SET, 0);
     gnHireIconHoverIndex = 0;
 }
 
