@@ -1017,12 +1017,9 @@ BOOL __fastcall UpdateSaveFileToExpansion(char * szCharname) {
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 12, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
-    D2SaveFileBufferStrc* lpBuffer;
     D2SaveFileBufferStrc sSaveFile;
     char szSavePathBuffer[1024];
     char szFilePath[500];
-    DWORD nNumberOfBytesToWrite;
-    __frame0.dwBytesRead = 0x43caad;
     Fog::Source::SFile::GetAndCreateSavePath(szSavePathBuffer, 0x400);
     sprintf(szFilePath, "%s%s.d2s", szSavePathBuffer, szCharname);
     HANDLE hFile = Fog::Source::SFile::thunk_CreateFileA(szFilePath, 0xc0000000, 0, (LPSECURITY_ATTRIBUTES)0x0, 3, 0x8000000, (HANDLE)0x0);
@@ -1031,9 +1028,11 @@ BOOL __fastcall UpdateSaveFileToExpansion(char * szCharname) {
     }
 
     Fog::Source::SFile::thunk_ReadFile(hFile, &sSaveFile, 0x2000, &__frame0.dwBytesRead, (LPOVERLAPPED)0x0);
-    if (!(__frame0.dwBytesRead >= 8 && sSaveFile.sHeader.dwHeader == 0xaa55aa55)) {
+    if (__frame0.dwBytesRead < 8 || sSaveFile.sHeader.dwHeader != 0xaa55aa55) {
       return 0;
     }
+
+    BOOL bWriteSuccess;
     if (sSaveFile.sHeader.dwFileVersion <= 0x5b) {
       if (__frame0.dwBytesRead < 0x82) {
         return 0;
@@ -1041,8 +1040,7 @@ BOOL __fastcall UpdateSaveFileToExpansion(char * szCharname) {
 
       __frame0.dwExpansionFlag = *(uint32_t*)((char*)&sSaveFile.sHeader.szCharacterName + 4) | 0x20;
       Fog::Source::SFile::SFILE_Win32SetFilePointer(hFile, 0x18, (PLONG)0x0, 0);
-      lpBuffer = (D2SaveFileBufferStrc*)&__frame0.dwExpansionFlag;
-      nNumberOfBytesToWrite = 4;
+      bWriteSuccess = Fog::Source::SFile::thunk_WriteFile(hFile, &__frame0.dwExpansionFlag, 4, &__frame0.dwBytesWritten, nullptr);
     } else {
       if (__frame0.dwBytesRead < 0x14f) {
         return 0;
@@ -1052,11 +1050,9 @@ BOOL __fastcall UpdateSaveFileToExpansion(char * szCharname) {
       sSaveFile.sHeader.dwChecksum = 0;
       sSaveFile.sHeader.dwChecksum = Fog::Save::CalculateChecksum((uint8_t*)&sSaveFile, __frame0.dwBytesRead);
       Fog::Source::SFile::SFILE_Win32SetFilePointer(hFile, 0, (PLONG)0x0, 0);
-      lpBuffer = &sSaveFile;
-      nNumberOfBytesToWrite = __frame0.dwBytesRead;
+      bWriteSuccess = Fog::Source::SFile::thunk_WriteFile(hFile, &sSaveFile, __frame0.dwBytesRead, &__frame0.dwBytesWritten, nullptr);
     }
 
-    BOOL bWriteSuccess = Fog::Source::SFile::thunk_WriteFile(hFile, (LPCVOID)lpBuffer, nNumberOfBytesToWrite, &__frame0.dwBytesWritten, (LPOVERLAPPED)0x0);
     Fog::Source::SFile::SFILE_Win32CloseHandle(hFile);
     return bWriteSuccess;
 }

@@ -1502,39 +1502,33 @@ void __fastcall COMCALLBACK_BroadcastChatMessage(char * szMessageBody) {
 // Handles incoming BNet whisper message. Checks ignore list, finds sender in channel user list for status flags, formats sender/message and appends to chat with appropriate color.
 // 1.14d mac: 002d6438
 BOOL __fastcall COMCALLBACK_HandleWhisperMessage(uint32_t dwCbArg1, uint32_t dwCbArg2, char * szUsername, char * szText) {
-    int nCmpResult;
+    char szOutput[256];
     char szClanTag[256];
     char szFormattedSender[256];
-    char cScan;
-    uint32_t dwStatusFlags;
-    D2ChannelUserStrc* pCurUser;
-    char* pszOutput = szUsername;
     COMCALLBACK_FormatChatMessage(szUsername, szClanTag, szFormattedSender);
     ::IgnoreList* pIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
-    int32_t pszTmp = vc8_thiscall(pIgnoreList->_vfptr->CheckIgnored)(pIgnoreList, szUsername);
-    if (pszTmp) {
+    if (vc8_thiscall(pIgnoreList->_vfptr->CheckIgnored)(pIgnoreList, szUsername)) {
       return 1;
     }
 
     pIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
-    pszTmp = vc8_thiscall(pIgnoreList->_vfptr->CheckAccountNameIgnored)(pIgnoreList, szText);
-    if (pszTmp) {
+    if (vc8_thiscall(pIgnoreList->_vfptr->CheckAccountNameIgnored)(pIgnoreList, szText)) {
       return 1;
     }
 
-    int nColor_lcl = 4;
-    int nColorArg = 0;
-    for (pCurUser = gpChannelUserListHead; pCurUser; pCurUser = pCurUser->pNext) {
-      nCmpResult = strcmp(pCurUser->szUsername, (char*)(uint8_t*)szUsername);
-      if (!nCmpResult) {
-        dwStatusFlags = pCurUser->nStatusFlags;
+    int nStatusRank = 4;
+    int nChatColor = 0;
+    for (D2ChannelUserStrc* pUser = gpChannelUserListHead; pUser; pUser = pUser->pNext) {
+      if (!strcmp(pUser->szUsername, szUsername)) {
+        uint32_t dwStatusFlags = pUser->nStatusFlags;
         if (dwStatusFlags & 2) {
-          nColor_lcl = 0;
-        } else {
-          if (dwStatusFlags & 1 || dwStatusFlags & 8) {
-            nColor_lcl = 3;
-            nColorArg = 3;
-          }
+          nStatusRank = 0;
+        } else if (dwStatusFlags & 1) {
+          nStatusRank = 3;
+          nChatColor = 3;
+        } else if (dwStatusFlags & 8) {
+          nStatusRank = 3;
+          nChatColor = 3;
         }
 
         break;
@@ -1542,23 +1536,17 @@ BOOL __fastcall COMCALLBACK_HandleWhisperMessage(uint32_t dwCbArg1, uint32_t dwC
     }
 
     if (strlen(szFormattedSender) != 0) {
-      char szOutput[256];
       if (strlen(szClanTag) != 0) {
         sprintf(szOutput, "%s%s", szClanTag, szFormattedSender);
-        pszOutput = szOutput;
       } else {
-        nCmpResult = 0;
-        do {
-          pszOutput = szFormattedSender + nCmpResult;
-          szOutput[nCmpResult] = *pszOutput;
-          nCmpResult++;
-        } while (*pszOutput != '\0');
-
-        pszOutput = szOutput;
+        strcpy(szOutput, szFormattedSender);
       }
+
+      COMCALLBACK_AppendChatWithColor(szOutput, nChatColor, szText, nStatusRank);
+    } else {
+      COMCALLBACK_AppendChatWithColor(szUsername, nChatColor, szText, nStatusRank);
     }
 
-    COMCALLBACK_AppendChatWithColor(pszOutput, nColorArg, szText, nColor_lcl);
     return 1;
 }
 

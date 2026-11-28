@@ -557,56 +557,33 @@ void __fastcall SOUND_LoadWavFile(char * szText) {
 }
 
 void __fastcall SOUND_PlaySoundEffect(uint8_t * szSoundFile) {
-    D2SoundWavCacheEntryStrc* pbCacheEntry;
-    int32_t bIsPlaying;
-    uint8_t* pbSearchName;
-    D2SoundWavCacheEntryStrc* pbMatchedEntry;
-    D2SoundSmpStrc* ppSoundBuffer;
-    if (gnSoundEffectSampleCount) {
-      int nCmpResult;
-      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_008817c4);
-      pbCacheEntry = gpWavFileCacheListHead;
-      pbSearchName = szSoundFile;
-      pbMatchedEntry = gpWavFileCacheListHead;
-      if (gpWavFileCacheListHead) {
-        match_cache_entry:
-        nCmpResult = strcmp(pbCacheEntry->szFileName, (char*)pbSearchName);
-        if (nCmpResult) {
-          goto next_cache_entry;
-        }
-
-        nCmpResult = 0;
-        while (gpaSoundEffectBuffers[nCmpResult]->dwFlags != pbMatchedEntry->bStereo || (bIsPlaying = D2SoundSmp::SOUNDSMP_IsPlaying(gpaSoundEffectBuffers[nCmpResult]) , bIsPlaying != 0)) {
-          nCmpResult++;
-          if (nCmpResult >= 8) {
-            /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_008817c4);
-            return;
-          }
-        }
-
-        if (nCmpResult < 8) {
-          ppSoundBuffer = gpaSoundEffectBuffers[nCmpResult];
-          D2SoundSmp::SOUNDSMP_Reset(ppSoundBuffer);
-          D2SoundSmp::SOUNDSMP_LoadWavDataIntoBuffer(ppSoundBuffer, pbMatchedEntry->pWavData, pbMatchedEntry->nDataSize);
-          D2SoundSmp::SOUNDSMP_SetVolume(ppSoundBuffer, 0xff);
-          D2SoundSmp::SOUNDSMP_Play(ppSoundBuffer);
-        }
-      }
-
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_008817c4);
-    }
-
-    return;
-    next_cache_entry:
-    pbMatchedEntry = pbMatchedEntry->pNext;
-    pbCacheEntry = pbMatchedEntry;
-    pbSearchName = szSoundFile;
-    if (!pbMatchedEntry) {
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_008817c4);
+    if (!gnSoundEffectSampleCount) {
       return;
     }
 
-    goto match_cache_entry;
+    EnterCriticalSection(&lpCriticalSection_008817c4);
+    for (D2SoundWavCacheEntryStrc* pEntry = gpWavFileCacheListHead; pEntry; pEntry = pEntry->pNext) {
+      if (!strcmp(pEntry->szFileName, (char*)szSoundFile)) {
+        int i;
+        for (i = 0; i < 8; i++) {
+          if (gpaSoundEffectBuffers[i]->dwFlags == pEntry->bStereo && !D2SoundSmp::SOUNDSMP_IsPlaying(gpaSoundEffectBuffers[i])) {
+            break;
+          }
+        }
+
+        if (i < 8) {
+          D2SoundSmpStrc* pSoundBuffer = gpaSoundEffectBuffers[i];
+          D2SoundSmp::SOUNDSMP_Reset(pSoundBuffer);
+          D2SoundSmp::SOUNDSMP_LoadWavDataIntoBuffer(pSoundBuffer, pEntry->pWavData, pEntry->nDataSize);
+          D2SoundSmp::SOUNDSMP_SetVolume(pSoundBuffer, 0xff);
+          D2SoundSmp::SOUNDSMP_Play(pSoundBuffer);
+        }
+
+        break;
+      }
+    }
+
+    LeaveCriticalSection(&lpCriticalSection_008817c4);
 }
 
 BOOL __stdcall SOUND_IsAnySoundEffectPlaying() {
