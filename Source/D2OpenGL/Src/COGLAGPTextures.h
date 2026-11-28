@@ -131,6 +131,7 @@ namespace D2OpenGL::COGLAGPTextures {
 // Function declarations
 // Calls the COGLAGPTextures constructor.
 // Described from the Mac body (no Windows twin).
+bool OGL_HasAppleTextureExtensions(); // 1.14d mac: 002e5f00
 void COGLAGPTEXTURES_ConstructThunk(::COGLAGPTextures * pThis); // 1.14d mac: 002e5f90
 // Constructor. Sets the vtable, base CD2Textures init, allocates the AGP range and generates all the textures.
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.

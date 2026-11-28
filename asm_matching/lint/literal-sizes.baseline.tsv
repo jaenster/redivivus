@@ -135,14 +135,14 @@
 9	Source/D2Multi/Src/ChatDlg.cpp
 3	Source/D2Multi/Src/ComCallback.cpp
 1	Source/D2Net/Src/Client.cpp
-2	Source/D2OpenGL/Src/COGLAGPTextures.cpp
+3	Source/D2OpenGL/Src/COGLAGPTextures.cpp
 6	Source/D2OpenGL/Src/oglBlocks.cpp
 2	Source/D2OpenGL/Src/oglCore.cpp
 4	Source/D2OpenGL/Src/oglMac.cpp
 1	Source/D2OpenGL/Src/oglPerspective.cpp
 7	Source/D2OpenGL/Src/oglSmack.cpp
 3	Source/D2OpenGL/Src/oglSprite.cpp
-2	Source/D2OpenGL/Src/oglVertex.cpp
+1	Source/D2OpenGL/Src/oglVertex.cpp
 2	Source/D2Rave/Src/CRaveTextures.cpp
 8	Source/D2Rave/Src/raveBlocks.cpp
 6	Source/D2Rave/Src/raveCore.cpp

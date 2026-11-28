@@ -45,6 +45,7 @@
 #include "Source/D2OpenGL/Src/BinkCutscene.h"
 #include "Source/D2OpenGL/Src/oglBlocks.h"
 #include "Source/D2OpenGL/Src/oglDebugFont.h"
+#include "Source/D2OpenGL/Src/oglEngine.h"
 #include "Source/D2OpenGL/Src/oglFloorCache.h"
 #include "Source/D2OpenGL/Src/oglMac.h"
 #include "Source/D2OpenGL/Src/oglPerspective.h"
@@ -91,6 +92,7 @@ using namespace D2OpenGL::oglCore;
 using namespace D2OpenGL::BinkCutscene;
 using namespace D2OpenGL::oglBlocks;
 using namespace D2OpenGL::oglDebugFont;
+using namespace D2OpenGL::oglEngine;
 using namespace D2OpenGL::oglFloorCache;
 using namespace D2OpenGL::oglMac;
 using namespace D2OpenGL::oglPerspective;

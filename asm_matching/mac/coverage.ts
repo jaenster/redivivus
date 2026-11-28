@@ -22,6 +22,9 @@ const FUNCTIONS = join(HERE, "coverage/functions.tsv");
 const UNITS = join(HERE, "coverage/units.tsv");
 const REASONS = join(HERE, "reasons.tsv");
 const UNPAIRED = join(HERE, "coverage/unpaired.tsv");
+// a function's file named by another build of the same source (a PPC build's __FILE__ or traceback
+// table, the 1999 D2OpenGL.dll's __FILE__): an anchor like the function's own literal
+const FILE_EVIDENCE = join(HERE, "coverage/file-evidence.tsv");
 // where a "// 1.14d mac:" tag may stand: the Mac trees and the shared code's D2_OS_MAC blocks
 const SOURCE_ROOTS = ["Source", "Redivivus"];
 
@@ -97,6 +100,13 @@ const overrideOf = (a: number) => overrideRows.find((u) => a >= u.lo && a < u.hi
 const PATH_EXCEPTIONS = join(HERE, "coverage/path-exceptions.tsv");
 const pathExceptions = existsSync(PATH_EXCEPTIONS) ? readTsv(PATH_EXCEPTIONS).slice(1).map((r) => ({ match: r[0], reason: r[1] ?? "", used: 0 })) : [];
 for (const e of pathExceptions) if (!e.reason) { console.error(`path-exceptions.tsv: ${e.match} has no reason`); process.exit(2); }
+
+// coverage/file-evidence.tsv: addr, file (below Diablo2/Source, with the Mac folder names' spaces), source, evidence
+const extEvidence = new Map<number, { file: string; source: string }>();
+if (existsSync(FILE_EVIDENCE)) for (const r of readTsv(FILE_EVIDENCE).slice(1)) {
+    if (!r[1] || !r[2] || !r[3]) { console.error(`file-evidence.tsv: ${r[0]} needs file, source and evidence`); process.exit(2); }
+    extEvidence.set(parseInt(r[0], 16), { file: r[1], source: r[2] });
+}
 
 // ---- our sources: the address tags, as cmp.ts reads them ----
 interface Tag { addr: number; file: string; defined: boolean }
@@ -236,12 +246,13 @@ for (const u of units) {
         if (!f.fileMap || /\.(h|hpp)$/i.test(f.fileMap)) return null;
         return u.file.startsWith("StormMac/") ? f.fileMap.replace(/^Storm\/SOURCE\//, "StormMac/Storm Mac/SOURCE/") : f.fileMap;
     };
-    const anchorFile = (f: Fn) => literal(f) ?? mapped(f);
+    const external = (f: Fn) => extEvidence.get(f.addr)?.file ?? null;
+    const anchorFile = (f: Fn) => literal(f) ?? external(f) ?? mapped(f);
     inUnit.forEach((f, i) => {
         let file = u.file, ev = u.kind === "fixed" ? "unit" : "";
         if (u.kind === "anchors") {
             const own = anchorFile(f);
-            if (own) { file = own; ev = literal(f) ? "__FILE__" : "file-map"; }
+            if (own) { file = own; ev = literal(f) ? "__FILE__" : external(f) ? extEvidence.get(f.addr)!.source : "file-map"; }
             else {
                 let before: string | null = null, after: string | null = null;
                 for (let j = i - 1; j >= 0 && !before; j--) before = anchorFile(inUnit[j]);

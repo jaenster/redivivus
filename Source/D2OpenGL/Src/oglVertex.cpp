@@ -45,6 +45,7 @@
 #include "Source/D2OpenGL/Src/BinkCutscene.h"
 #include "Source/D2OpenGL/Src/oglBlocks.h"
 #include "Source/D2OpenGL/Src/oglDebugFont.h"
+#include "Source/D2OpenGL/Src/oglEngine.h"
 #include "Source/D2OpenGL/Src/oglFloorCache.h"
 #include "Source/D2OpenGL/Src/oglMac.h"
 #include "Source/D2OpenGL/Src/oglPerspective.h"
@@ -85,6 +86,7 @@ using namespace D2OpenGL::oglCore;
 using namespace D2OpenGL::BinkCutscene;
 using namespace D2OpenGL::oglBlocks;
 using namespace D2OpenGL::oglDebugFont;
+using namespace D2OpenGL::oglEngine;
 using namespace D2OpenGL::oglFloorCache;
 using namespace D2OpenGL::oglMac;
 using namespace D2OpenGL::oglPerspective;
@@ -95,7 +97,6 @@ using namespace D2OpenGL::MacDisplayDevice;
 
 
 static __attribute__((used)) uint8_t DAT_00552dfc; D2_STATIC_GUARD_BSS(DAT_00552dfc, "D2OpenGL::oglVertex::OGL_InitTileVertices::DAT_00552dfc");
-static __attribute__((used)) void* PTR_DAT_003963b4 = (void*)0x005ebc38; D2_STATIC_GUARD(PTR_DAT_003963b4, "D2OpenGL::oglVertex::OGL_HasAppleTextureExtensions::PTR_DAT_003963b4");
 
 // Allocates the 64K oglVertex.cpp table.
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
@@ -752,23 +753,6 @@ BOOL OGL_DrawWallTile(D2TileLibraryEntryStrc * pTile, int nX, int nY, D2GfxLight
 
     BOOL BVar1 = OGL_DrawWallTileBlocks(pTile, nX, nY, pLight, 0xff, nScreenPanels);
     return BVar1;
-}
-
-// True only if GL_APPLE_client_storage, GL_APPLE_texture_range and GL_EXT_texture_rectangle are present and the version check passes.
-// Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
-// 1.14d mac: 002e5f00
-bool OGL_HasAppleTextureExtensions() {
-    GLubyte* pGVar2 = glGetString(0x1f03);
-    glGetString(0x1f01);
-    char* pClientStorage = strstr((char*)pGVar2, "GL_APPLE_client_storage");
-    char* pTextureRange = strstr((char*)pGVar2, "GL_APPLE_texture_range");
-    if (!pClientStorage || !pTextureRange) {
-      return false;
-    }
-
-    uint32_t uVar1 = *(uint32_t*)((uint8_t*)PTR_DAT_003963b4 + 0xc);
-    char* pcVar3 = strstr((char*)pGVar2, "GL_EXT_texture_rectangle");
-    return pcVar3 && 0xfffffff < uVar1;
 }
 
 } // namespace D2OpenGL::oglVertex

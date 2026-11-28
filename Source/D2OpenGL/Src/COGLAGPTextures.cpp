@@ -40,6 +40,26 @@ static int s_anBucketWidth[6] = { 0x10, 0x20, 0x40, 0x80, 0xa0, 0x100 };
 static int s_anBucketHeight[6] = { 0x10, 0x20, 0x40, 0x80, 0x50, 0x100 };
 static int s_anBucketCount[6] = { 0x200, 0x800, 0x800, 0x100, 0x100, 0x40 };
 
+static __attribute__((used)) void* PTR_DAT_003963b4 = (void*)0x005ebc38; D2_STATIC_GUARD(PTR_DAT_003963b4, "D2OpenGL::COGLAGPTextures::OGL_HasAppleTextureExtensions::PTR_DAT_003963b4");
+
+// True only if GL_APPLE_client_storage, GL_APPLE_texture_range and GL_EXT_texture_rectangle are present and the version check passes.
+// The PPC 1.10 Beta Carbon function with these three strings pushes COGLAGPTextures.cpp (coverage/file-evidence.tsv).
+// Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
+// 1.14d mac: 002e5f00
+bool OGL_HasAppleTextureExtensions() {
+    GLubyte* pGVar2 = glGetString(0x1f03);
+    glGetString(0x1f01);
+    char* pClientStorage = strstr((char*)pGVar2, "GL_APPLE_client_storage");
+    char* pTextureRange = strstr((char*)pGVar2, "GL_APPLE_texture_range");
+    if (!pClientStorage || !pTextureRange) {
+      return false;
+    }
+
+    uint32_t uVar1 = *(uint32_t*)((uint8_t*)PTR_DAT_003963b4 + 0xc);
+    char* pcVar3 = strstr((char*)pGVar2, "GL_EXT_texture_rectangle");
+    return pcVar3 && 0xfffffff < uVar1;
+}
+
 // Calls the COGLAGPTextures constructor.
 // Described from the Mac body (no Windows twin).
 // 1.14d mac: 002e5f90

@@ -95,7 +95,7 @@ It writes `coverage.tsv`, one row per function of the Mac-only regions:
 |-|-|
 |`addr`, `name`, `bytes`|the function in the clean Ghidra program|
 |`orig_file`|its original file below `Diablo2/Source`, with the Mac folder names' spaces; `?` where nothing names it; `A\|B` where it lies between functions of two files and the boundary is not known|
-|`file_evidence`|`__FILE__` (its own literal), `file-map` (`docs/data/mac-file-map.tsv`, for a paired function its Windows twin's file), `bracketed` (between two functions of one file), `between`, `unit` (the unit's file in `coverage/units.tsv`), `override`|
+|`file_evidence`|`__FILE__` (its own literal), `ppc-storm`/`ppc-shell`/`fossil` (`coverage/file-evidence.tsv`), `file-map` (`docs/data/mac-file-map.tsv`, for a paired function its Windows twin's file), `bracketed` (between two functions of one file), `between`, `unit` (the unit's file in `coverage/units.tsv`), `override`|
 |`redivivus`|where that file lives here: spaces dropped, `StormMac/Storm Mac/` is `Source/StormMac/`|
 |`class`|`blizzard-mac` (the goal), `third-party` (crashy, `mach_override`, MoreFiles, zlib, blast, RAD Bink, the CRT start), `shared` (paired with a Windows function, the shared source covers it), `shared-unpaired` (in a shared file, unpaired, but the pairer found a Windows body candidate, or `unpaired.tsv` says a Windows function does the same), `compiler` (`unpaired.tsv` only: thunks, stubs, static initialisers)|
 |`status`|`missing`; `body` (a definition tagged `// 1.14d mac: <addr>` exists); `match` / `nonmatch` (`cmp.ts` SAME / DIFF)|
@@ -114,6 +114,12 @@ runs. The inputs are checked in under `coverage/`:
   names one function, or every function of `[lo, hi)` when `hi` is given. Where no
   binary records a unit's file, `file` ends in `?` and `redivivus` names the file
   chosen here; such a body counts as `dir`, never `yes`.
+- `file-evidence.tsv`: a function's file named by another build of the same source where the
+  1.14d binary has none: the PPC Storm (`ppc-storm`, traceback names plus `__FILE__`/`__sinit`), the
+  PPC 1.10 Beta Carbon game (`ppc-shell`, unique shared strings) and the 1.07 JP `D2OpenGL.dll`
+  (`fossil`, its COFF names and `__FILE__`). Inside an `anchors` unit a row anchors like the
+  function's own literal; `file_evidence` shows the source. `path-evidence.md` lists every source
+  searched and, per unit, why the rest stays `dir`, `range` or `exception`.
 - `path-exceptions.tsv`: a body at none of the paths its evidence allows, by address,
   file or folder, with the reason it stays there. `coverage.ts` names the rows that
   match no body. The goal is `no` = 0 with every exception explained.

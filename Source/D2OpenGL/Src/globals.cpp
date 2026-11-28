@@ -57,6 +57,7 @@ uint64_t DAT_00335278 = 0x4330000000000000; D2_GLOBAL_GUARD(DAT_00335278, "DAT_0
 #include "Source/D2OpenGL/Src/oglFloorCache.h"
 #include "Source/D2OpenGL/Src/oglSprite.h"
 #include "Source/D2OpenGL/Src/oglDebugFont.h"
+#include "Source/D2OpenGL/Src/oglEngine.h"
 namespace D2OpenGL {
 namespace Renderer {
 // 1.14d mac: 003ce6ec
@@ -108,14 +109,14 @@ void* OpenGLFunctionTable[57] = {
     (void*)&D2OpenGL::oglVertex::OGL_DrawWallTile,
     (void*)&D2OpenGL::oglVertex::OGL_DrawTransWallTile,
     (void*)&D2OpenGL::oglVertex::OGL_DrawShadowTile,
-    (void*)&D2OpenGL::oglDebugFont::OGL_DrawRect,
-    (void*)&D2OpenGL::oglDebugFont::OGL_DrawRectEx,
-    (void*)&D2OpenGL::oglDebugFont::OGL_DrawSolidRect,
-    (void*)&D2OpenGL::oglDebugFont::OGL_DrawSolidSquare,
-    (void*)&D2OpenGL::oglDebugFont::OGL_DrawSolidRectEx,
-    (void*)&D2OpenGL::oglDebugFont::OGL_DrawSolidRectAlpha,
-    (void*)&D2OpenGL::oglDebugFont::OGL_DrawLine,
-    (void*)&D2OpenGL::oglDebugFont::OGL_ClearScreen,
+    (void*)&D2OpenGL::oglEngine::OGL_DrawRect,
+    (void*)&D2OpenGL::oglEngine::OGL_DrawRectEx,
+    (void*)&D2OpenGL::oglEngine::OGL_DrawSolidRect,
+    (void*)&D2OpenGL::oglEngine::OGL_DrawSolidSquare,
+    (void*)&D2OpenGL::oglEngine::OGL_DrawSolidRectEx,
+    (void*)&D2OpenGL::oglEngine::OGL_DrawSolidRectAlpha,
+    (void*)&D2OpenGL::oglEngine::OGL_DrawLine,
+    (void*)&D2OpenGL::oglEngine::OGL_ClearScreen,
     (void*)&D2OpenGL::oglDebugFont::OGL_DrawString,
     (void*)&D2OpenGL::oglDebugFont::OGL_DrawLight,
     (void*)&D2OpenGL::oglSprite::OGL_DebugFillBackBuffer,

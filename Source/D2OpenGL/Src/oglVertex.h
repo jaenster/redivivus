@@ -44,6 +44,5 @@ BOOL OGL_DrawWallTileBlocks(struct D2TileLibraryEntryStrc * pTile, int nX, int n
 BOOL OGL_DrawWallTile(struct D2TileLibraryEntryStrc * pTile, int nX, int nY, struct D2GfxLightStrc * pLight, int nScreenPanels); // 1.14d mac: 002e5ea1
 // True only if GL_APPLE_client_storage, GL_APPLE_texture_range and GL_EXT_texture_rectangle are present and the version check passes.
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
-bool OGL_HasAppleTextureExtensions(); // 1.14d mac: 002e5f00
 
 } // namespace D2OpenGL::oglVertex

@@ -1,0 +1,37 @@
+# A function's file named by another build of the same source, where the 1.14d Intel binary has no
+# __FILE__ for it. Read by coverage.ts: inside an `anchors` unit such a row anchors like the function's own
+# literal, so it names its file and brackets the functions between it and an anchor of the same file.
+# Searched and how each source is read: coverage/path-evidence.md.
+#
+# addr      the clean Mac program's address
+# file      below Diablo2/Source, with the Mac folder names' spaces (as units.tsv)
+# source    ppc-storm   the PPC Storm shared library (CodeWarrior, traceback-table names): the function of
+#                       the same name references the file's __FILE__ (own), or lies between two of that
+#                       file's __FILE__ users or its __sinit_<file> (bracket), in both the 1.13d classic Storm
+#                       and the 1.10 Beta Carbon Storm
+#           ppc-shell   the PPC 1.10 Beta Carbon game (no traceback names): the one function holding the
+#                       same unique strings as the Mac function pushes the file's __FILE__ in its body
+#           fossil      the Windows 1.07 (JP) D2OpenGL.dll, whose COFF table names every function
+#                       (MSVC-decorated): the function of the interface slot the Mac function fills
+#                       (docs/data/mac-only-proposals.tsv kind fossil-name, high) pushes the file's
+#                       __FILE__ (own), or lies between two of its users (bracket)
+# evidence  the addresses and strings, re-checkable from the binaries
+addr	file	source	evidence
+0000d1f8	StormMac/Storm Mac/SOURCE/SBMP.CPP	ppc-storm	bracket: UncompressPcxImage (1.13d 10005170, 1.10 Beta 10002a50) between SBmpAllocLoadImage and EncodePcx256File, both SBMP.CPP __FILE__ users
+000110bc	StormMac/Storm Mac/SOURCE/SEVT.CPP	ppc-storm	bracket: SEvtBreakHandlerChain (1.13d 10018360, 1.10 Beta 10016200) between SEvtDestroy and CopyIdHashTable, both SEVT.CPP __FILE__ users
+00011118	StormMac/Storm Mac/SOURCE/SEVT.CPP	ppc-storm	own: SEvtDestroy (1.13d 10018210, 1.10 Beta 100160b0) loads SEVT.CPP
+00011c21	StormMac/Storm Mac/SOURCE/SEVT.CPP	ppc-storm	bracket: SEvtUnregisterHandler (1.13d 10017460, 1.10 Beta 10015200) between SEvtUnregisterType and SEvtRegisterHandler, both SEVT.CPP __FILE__ users
+00011fec	StormMac/Storm Mac/SOURCE/SFILE.CPP	ppc-storm	bracket: SFileAuthenticateArchive (1.13d 1001e640, 1.10 Beta 1001ca40) between SFileAuthenticateArchiveEx and ReadAdditionalAttributes, both SFILE.CPP __FILE__ users
+0001ae80	StormMac/Storm Mac/SOURCE/SNET.CPP	ppc-storm	own: __sinit_SNET_CPP (1.13d 10035ef0, 1.10 Beta 10035810) is SNET.CPP's static initialiser by name; the Mac one pairs to it by the string 'SNet Packet Dump' (docs/data/stormmac-proposals.tsv)
+002df3c4	D2OpenGL/Src/oglCore.cpp	fossil	own: slot 0 ?OpenGLDetect@@YIHPAUHINSTANCE__@@@Z (10002270) pushes C:\D2\Source\D2OpenGL\Src\oglCore.cpp
+002df3cd	D2OpenGL/Src/oglCore.cpp	fossil	own: slot 1 ?OpenGLInit@@YIHPAUGFXOPTIONS@@PAUCMNGFX@@@Z (10002720) pushes oglCore.cpp
+002df47b	D2OpenGL/Src/oglCore.cpp	fossil	bracket: slot 3 ?OpenGLCreateSurface@@YIHPAUHWND__@@W4DISPLAY_RES@@@Z (100028b0) between OpenGLInit (10002720) and sOpenOpenGLWindow (10002900), both oglCore.cpp users
+002dff15	D2OpenGL/Src/oglEngine.cpp	fossil	own: slot 40 ?OpenGLDrawBox@@YIXHHHHEW4ETRANSTYPE@@@Z (10003fe0) pushes C:\D2\Source\D2OpenGL\Src\oglEngine.cpp
+002e00c0	D2OpenGL/Src/oglEngine.cpp	fossil	own: slot 41 ?OpenGLDrawBoxAlpha@@YIXHHHHEE@Z (10004320) pushes oglEngine.cpp
+002e0245	D2OpenGL/Src/oglEngine.cpp	fossil	bracket: slot 42 ?OpenGLDrawLine@@YIXHHHHEE@Z (10004610) between OpenGLDrawBoxAlpha (10004320) and OpenGLUtilDiamond (100047b0), both oglEngine.cpp users
+002e0534	D2OpenGL/Src/oglEngine.cpp	fossil	own: slot 37 ?OpenGLUtilRect@@YIXPAUtagRECT@@E@Z (100049b0) pushes oglEngine.cpp
+002e06bd	D2OpenGL/Src/oglEngine.cpp	fossil	own: slot 38 ?OpenGLUtilFilledRect@@YIXPAUtagRECT@@E@Z (10004ce0) pushes oglEngine.cpp
+002e15a6	D2OpenGL/Src/oglMac.cpp	ppc-shell	own: 1037d900..1037dcb0, the only function with the 'OpenGLMacSetRenderer: *** ...' strings the Mac function prints, pushes oglMac.cpp
+002e1f1a	D2OpenGL/Src/oglPerspective.cpp	fossil	own: slot 20 ?OpenGLPerspectiveTransform@@YIXHHHPAH0@Z (10005f80) pushes C:\D2\Source\D2OpenGL\Src\oglPerspective.cpp
+002e1fcc	D2OpenGL/Src/oglPerspective.cpp	fossil	own: slot 21 ?OpenGLPerspectiveTransformScale@@YIXHHHPAH0H@Z (10006240) pushes oglPerspective.cpp
+002e5f00	D2OpenGL/Src/COGLAGPTextures.cpp	ppc-shell	own: 103800a0..103801c0, the only function with the strings GL_APPLE_client_storage, GL_EXT_texture_rectangle and GL_APPLE_texture_range the Mac function tests, pushes COGLAGPTextures.cpp (assert 'glGetString != 0L')

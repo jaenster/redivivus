@@ -80,7 +80,7 @@ list(FILTER D2_MAC_SHARED_SOURCES EXCLUDE REGEX
 # copy of each: its __FILE__ strings are ".../StormMac/Storm Mac/SOURCE/SBig.cpp" (SBigNew), "SCOMP.CPP" and
 # "SEVT.CPP", no Storm/Source path, and their functions are StormMac's (0000a629..0000bf46 SBig,
 # 0000eb42.. SCOMP, ..00011f70 SEVT; asm_matching/mac/coverage.tsv). The same-named Source/Storm units are the
-# Windows build's. StormRoot.cpp's one function, SMsgBreakHandlerChain, is StormMac's SMSG.cpp (00018cdb).
+# Windows build's. StormRoot.cpp's one function, SMsgBreakHandlerChain, is StormMac's SMSG.CPP (00018cdb).
 # Storm's third-party code: the Mac SCOMP.CPP decompresses PKWARE implode with blast.c (00039fdf..0003a591),
 # so PKWARE's implode.cpp/explode.cpp are not in the binary; its zlib is inflate only (adler32, crc32,
 # inffast, inflate, inftrees, uncompr, zutil at 000371f9..00039fdf; no deflate, no "deflate" string), so
