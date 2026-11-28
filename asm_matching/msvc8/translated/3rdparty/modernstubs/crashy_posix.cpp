@@ -28,6 +28,7 @@
 
 #include "3rdparty/crashy/Report.h"
 #include "3rdparty/crashy/crashyRoot.h"
+#include "3rdparty/crashy/crashy.globals.h"
 
 namespace {
 
@@ -88,6 +89,15 @@ bool StorePath(char* pSlot, size_t nSlotSize, const std::string& s) {
 }  // namespace
 
 namespace Fog { namespace _3rdparty { namespace crashy {
+
+// The thread the crash path treats as the main one (Fog/Debug.cpp), set by the last of the
+// game's static initialisers (Redivivus/d2_static_init.cpp), as 3rdparty/crashy/crashyRoot.cpp
+// and Source/globals/crashy.cpp hold them on Windows.
+uint32_t dwCurrentThreadId = 0;
+
+void __stdcall SetCurrentThreadId() {
+    dwCurrentThreadId = GetCurrentThreadId();
+}
 
 ::Report* __fastcall ScalarDeletingDestructor(::Report* pThis, int, uint32_t nFlags) {
     vc8_thiscall(Destructor)(pThis);
