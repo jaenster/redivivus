@@ -8,6 +8,8 @@
 #include "Source/Storm/Source/SMem.h"
 #include "Source/Fog/Memory.h"
 #include "Source/Fog/Src/ErrorManager.h"
+#include "Source/Fog/Fog.h"
+#include "Source/Fog/Src/ErrorManager.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -40,7 +42,6 @@ static int s_anBucketWidth[6] = { 0x10, 0x20, 0x40, 0x80, 0xa0, 0x100 };
 static int s_anBucketHeight[6] = { 0x10, 0x20, 0x40, 0x80, 0x50, 0x100 };
 static int s_anBucketCount[6] = { 0x200, 0x800, 0x800, 0x100, 0x100, 0x40 };
 
-static __attribute__((used)) void* PTR_DAT_003963b4 = (void*)0x005ebc38; D2_STATIC_GUARD(PTR_DAT_003963b4, "D2OpenGL::COGLAGPTextures::OGL_HasAppleTextureExtensions::PTR_DAT_003963b4");
 
 // True only if GL_APPLE_client_storage, GL_APPLE_texture_range and GL_EXT_texture_rectangle are present and the version check passes.
 // The PPC 1.10 Beta Carbon function with these three strings pushes COGLAGPTextures.cpp (coverage/file-evidence.tsv).
@@ -55,7 +56,8 @@ bool OGL_HasAppleTextureExtensions() {
       return false;
     }
 
-    uint32_t uVar1 = *(uint32_t*)((uint8_t*)PTR_DAT_003963b4 + 0xc);
+    // Fog's gSystemInfo (0x005ebc38), reached through its non-lazy pointer 003963b4: at least 256 MB of RAM.
+    uint32_t uVar1 = gSystemInfo.dwTotalPhysicalMemory;
     char* pcVar3 = strstr((char*)pGVar2, "GL_EXT_texture_rectangle");
     return pcVar3 && 0xfffffff < uVar1;
 }
