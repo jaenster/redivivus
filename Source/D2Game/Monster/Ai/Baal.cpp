@@ -420,80 +420,49 @@ static int32_t __stdcall AI_BAAL_CloneChooseAction(::SGAMEDATA * pGame, D2UnitSt
 
 // Weighted random action selector for Baal's throne-room fight (custom regs: stack params pGame/pUnit/nParam2..4, ESI=pUnit2=Baal). Builds a 16-entry weight table seeded with base action weights, boosting the "act" entry by (100-Baal's life pct) plus a difficulty-dependent base (125 on Normal else 100), and adjusting entries based on the flags nParam2 (wave count <2), nParam3, AI_BAAL_HasPowerfulSkill, and nParam4. Sums total weight, draws a roll from pUnit2->sSeed (power-of-two fast path uses mask, else modulo), advancing the seed LCG, then walks the table accumulating weights and returns the index of the first bucket exceeding the roll (defaults to 1 if none). Return value is the chosen Baal action/skill index; no other side effects besides advancing Baal's seed.
 static int32_t __stdcall AI_BAAL_ThroneRoomChooseAction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nCandidateCount, int32_t bVeryFarFromAnchor, int32_t bBeyondAnchorLimit, D2UnitStrc * pUnit2) {
-    int anWeights[17];
-    int nWeightAccum;
-    nWeightAccum = 0;
-    anWeights[2] = 0x14;
-    anWeights[3] = 0x14;
-    anWeights[4] = 0x14;
-    anWeights[6] = 0x14;
-    anWeights[0] = 0;
-    int nBaseWeight;
-    nBaseWeight = 100;
-    anWeights[5] = 0;
-    anWeights[7] = 0;
-    anWeights[8] = 0x50;
-    anWeights[9] = 0x46;
-    memset(anWeights + 10, 0, 6 * sizeof(anWeights[0]));
+    int anWeights[16] = { 0, 100, 0x14, 0x14, 0x14, 0, 0x14, 0, 0x50, 0x46, 0, 0, 0, 0, 0, 0 };
     if (!pGame->nDifficulty) {
-      nBaseWeight = 0x7d;
+      anWeights[1] = 0x7d;
     }
     if (nCandidateCount < 2) {
       anWeights[2] = 0x2d;
       anWeights[10] = 0x19;
     }
 
-    int32_t nLifePercent;
-    nLifePercent = D2Common::Units::GetCurrentLifePercentage(pUnit2);
-    anWeights[1] = nBaseWeight + (100 - nLifePercent);
-    BOOL BVar1;
-    BVar1 = AI_BAAL_HasPowerfulSkill(pUnit);
-    if (BVar1) {
-      if (bVeryFarFromAnchor) {
-        goto apply_far_weights;
-      }
-
+    anWeights[1] += 100 - D2Common::Units::GetCurrentLifePercentage(pUnit2);
+    if (AI_BAAL_HasPowerfulSkill(pUnit) && !bVeryFarFromAnchor) {
       anWeights[0xd] = 0x32;
       anWeights[0xe] = 0x32;
-    } else {
-      if (bVeryFarFromAnchor) {
-        apply_far_weights:
-        anWeights[0xd] = 0x19;
-        anWeights[2] = 0;
-        anWeights[6] = 0;
-        anWeights[3] = 0x23;
-        anWeights[0xb] = 0x19;
-      }
+    } else if (bVeryFarFromAnchor) {
+      anWeights[0xd] = 0x19;
+      anWeights[2] = 0;
+      anWeights[6] = 0;
+      anWeights[3] = 0x23;
+      anWeights[0xb] = 0x19;
     }
     if (bBeyondAnchorLimit) {
       anWeights[5] = 0x3c;
     }
 
-    uint32_t nTotalWeight = 0;
-    nBaseWeight = 4;
-    int* pWeightEntry = anWeights + 2;
-    do {
-      nTotalWeight = nTotalWeight + pWeightEntry[-2] + pWeightEntry[-1] + pWeightEntry[1] + *pWeightEntry;
-      nBaseWeight--;
-      pWeightEntry += 4;
-    } while (nBaseWeight);
-
-    uint32_t nRandRoll = 0;
-    if ((int)nTotalWeight > 0) {
-      nRandRoll = D2_SeedRollLimited(&pUnit2->sSeed, nTotalWeight);
+    int nTotalWeight = 0;
+    int* pWeight = anWeights;
+    for (int i = 0; i < 16; i++) {
+      nTotalWeight += *pWeight;
+      pWeight++;
     }
 
-    pWeightEntry = anWeights;
-    nBaseWeight = 0;
-    do {
-      nWeightAccum += *pWeightEntry;
-      if ((int)nRandRoll < nWeightAccum) {
-        return nBaseWeight;
+    int nRandRoll = D2_SeedRollLimited(&pUnit2->sSeed, nTotalWeight);
+
+    int nWeightAccum = 0;
+    pWeight = anWeights;
+    for (int i = 0; i < 16; i++) {
+      nWeightAccum += *pWeight;
+      if (nRandRoll < nWeightAccum) {
+        return i;
       }
 
-      nBaseWeight++;
-      pWeightEntry++;
-    } while (nBaseWeight < 0x10);
+      pWeight++;
+    }
 
     return 1;
 }
