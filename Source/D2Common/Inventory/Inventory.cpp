@@ -4458,132 +4458,65 @@ static int32_t __stdcall INVENTORY_CalculateSwapActionCode(int32_t nParam1, int3
 // Decides whether an item can be equipped alongside the unit's current weapon for dual-wield. pUnit=currently-equipped weapon item, pItem1=item being equipped, pCharUnit=the character. Returns 1 if compatible/allowed, 0 if not. Rejects shoots+ammo mismatches and quivers; blocks two-handers unless the Barbarian's 2H-as-1H check passes; otherwise requires both to be weapons and gates on class (Barbarian dual-wield, Assassin/Druid hand-to-hand) via ValidateClassId. Used by item-equip placement logic.
 // 1.14d mac: 0016a5e7
 static BOOL INVENTORY_CanDualWieldItems(D2UnitStrc * pUnit, D2UnitStrc * pItem1, D2UnitStrc * pCharUnit) {
-    BOOL _bIsTwoHanded;
-    bool bIsTwoHanded;
-    eD2ItemTypes eShootsType;
-    uint32_t bItemTypeMatch;
-    if (!pItem1) {
-      return 1;
-    }
-    if (!pUnit) {
+    if (!pItem1 || !pUnit) {
       return 1;
     }
 
-    int32_t nCheckResult;
-    nCheckResult = ITEMS::Items::ITEM_GetTxtItemTypes_shoots(pItem1);
-    if (nCheckResult) {
-      uint32_t bIsOfType;
-      eShootsType = ITEMS::Items::ITEM_GetTxtItemTypes_shoots(pItem1);
-      bIsOfType = ITEMS::Items::ITEMS_IsA(pUnit, eShootsType);
-      if (bIsOfType) {
-        return 1;
-      }
+    if (ITEMS::Items::ITEM_GetTxtItemTypes_shoots(pItem1) && ITEMS::Items::ITEMS_IsA(pUnit, ITEMS::Items::ITEM_GetTxtItemTypes_shoots(pItem1))) {
+      return 1;
     }
 
-    int32_t nShootsOrQuiverCheck;
-    nShootsOrQuiverCheck = ITEMS::Items::ITEM_GetTxtItemTypes_shoots(pUnit);
-    if (nShootsOrQuiverCheck) {
-      eShootsType = ITEMS::Items::ITEM_GetTxtItemTypes_shoots(pUnit);
-      bItemTypeMatch = ITEMS::Items::ITEMS_IsA(pItem1, eShootsType);
-      if (bItemTypeMatch) {
-        return 1;
-      }
+    if (ITEMS::Items::ITEM_GetTxtItemTypes_shoots(pUnit) && ITEMS::Items::ITEMS_IsA(pItem1, ITEMS::Items::ITEM_GetTxtItemTypes_shoots(pUnit))) {
+      return 1;
     }
 
-    nShootsOrQuiverCheck = ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pItem1);
-    if (nShootsOrQuiverCheck) {
+    if (ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pItem1) || ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pUnit)) {
       return 0;
     }
 
-    nShootsOrQuiverCheck = ITEMS::Items::ITEM_GetTxtItemTypes_quiver(pUnit);
-    if (nShootsOrQuiverCheck) {
+    if (ITEMS::Items::IsTwoHanded(pItem1) && !ITEMS::Items::BARBARIAN_CheckItemData_b1or2Handed_isTrue(pCharUnit, pItem1)) {
       return 0;
     }
 
-    _bIsTwoHanded = ITEMS::Items::IsTwoHanded(pItem1);
-    if (_bIsTwoHanded) {
-      nShootsOrQuiverCheck = ITEMS::Items::BARBARIAN_CheckItemData_b1or2Handed_isTrue(pCharUnit, pItem1);
-      if (!nShootsOrQuiverCheck) {
-        return 0;
-      }
+    if (ITEMS::Items::IsTwoHanded(pUnit) && !ITEMS::Items::BARBARIAN_CheckItemData_b1or2Handed_isTrue(pCharUnit, pUnit)) {
+      return 0;
     }
 
-    _bIsTwoHanded = ITEMS::Items::IsTwoHanded(pUnit);
-    if (_bIsTwoHanded) {
-      nShootsOrQuiverCheck = ITEMS::Items::BARBARIAN_CheckItemData_b1or2Handed_isTrue(pCharUnit, pUnit);
-      if (!nShootsOrQuiverCheck) {
-        return 0;
-      }
-    }
-
-    bItemTypeMatch = ITEMS::Items::ITEMS_IsA(pItem1, ITEMTYPE_Weapon);
-    if (!bItemTypeMatch || (bItemTypeMatch = ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Weapon) , !bItemTypeMatch)) {
-      bItemTypeMatch = ITEMS::Items::ITEMS_IsA(pItem1, ITEMTYPE_Weapon);
-      if (bItemTypeMatch) {
-        return 1;
-      }
-
-      eShootsType = ITEMTYPE_Weapon;
-      LAB_0063dcec:
-      bItemTypeMatch = ITEMS::Items::ITEMS_IsA(pUnit, eShootsType);
-    } else {
+    if (ITEMS::Items::ITEMS_IsA(pItem1, ITEMTYPE_Weapon) && ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Weapon)) {
       if (!pCharUnit) {
         return 0;
       }
-      if (pCharUnit->eUnitType != UNIT_MONSTER) {
-        if (pCharUnit->eUnitType != UNIT_PLAYER) {
-          return 0;
+
+      if (pCharUnit->eUnitType == UNIT_MONSTER) {
+        switch (DATATBLS::MonsterTbls::ValidateClassId(pCharUnit->nClassId)) {
+          case 0x1a1:
+          case 0x1a2:
+            return ITEMS::Items::ITEMS_IsA(pItem1, ITEMTYPE_HandtoHand) && ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_HandtoHand);
+          case 0x21c:
+          case 0x21d:
+          case 0x21e:
+            return 1;
         }
 
-        switch (pCharUnit->nClassId) {
-          case 4:
-            {
-              return 1;
-            }
-          default:
-            {
-              return 0;
-            }
-          case 6:
-            {
-              bItemTypeMatch = ITEMS::Items::ITEMS_IsA(pItem1, ITEMTYPE_HandtoHand);
-              if (!bItemTypeMatch) {
-                return 0;
-              }
-
-              eShootsType = ITEMTYPE_HandtoHand;
-              goto LAB_0063dcec;
-            }
-        }
+        return 0;
       }
 
-      nShootsOrQuiverCheck = DATATBLS::MonsterTbls::ValidateClassId(pCharUnit->nClassId);
-      switch (nShootsOrQuiverCheck) {
-        case 0x1a1:
-
-        case 0x1a2:
-          bItemTypeMatch = ITEMS::Items::ITEMS_IsA(pItem1, ITEMTYPE_HandtoHand);
-        if (!bItemTypeMatch) {
-          return 0;
-        }
-
-        bItemTypeMatch = ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_HandtoHand);
-        break;
-        case 0x21c:
-
-        case 0x21d:
-
-        case 0x21e:
-          return 1;
-        default:
-          return 0;
+      if (pCharUnit->eUnitType != UNIT_PLAYER) {
+        return 0;
       }
-    }
-    if (bItemTypeMatch) {
-      return 1;
+
+      if (pCharUnit->nClassId == 4) {
+        return 1;
+      }
+
+      if (pCharUnit->nClassId == 6 && ITEMS::Items::ITEMS_IsA(pItem1, ITEMTYPE_HandtoHand) && ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_HandtoHand)) {
+        return 1;
+      }
+
+      return 0;
     }
 
-    return 0;
+    return ITEMS::Items::ITEMS_IsA(pItem1, ITEMTYPE_Weapon) || ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Weapon);
 }
 
 // Determines the equip-swap action code (0-7) when equipping pNewItem into a weapon slot on pUnit1, given the current items pUnit (paired slot) and pUnit2 (current slot). Returns: 0=equip empty, 1=replace, 2=can't dual-wield, 3=move to stash, 4=two-hander blocks, 5=dual-wield swap, 6=socket insert, 7=move to stash (page check). Used by INVENTORY_GetEquipActionForBodySlot to decide what happens when a weapon slot changes.
