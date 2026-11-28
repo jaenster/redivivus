@@ -19,12 +19,13 @@ namespace D2DDraw { namespace ddSprite {
 
 // DirectDraw renderer internal helpers for sprite visibility testing, clip rect computation, debug font rendering, shadow quality query, pixel/line drawing primitives, and smacker video frame blitting.
 void __fastcall RENDERER_DDRAW_SetHorizontalBounds(int32_t bWidescreen) {
-    gnDDrawSurfaceXMin = 0;
-    gnDDrawRenderWidth = 0x280;
     if (!bWidescreen) {
+      gnDDrawSurfaceXMin = 0;
+      gnDDrawRenderWidth = 0x280;
       return;
     }
 
+    gnDDrawSurfaceXMin = 0;
     gnDDrawRenderWidth = 800;
 }
 

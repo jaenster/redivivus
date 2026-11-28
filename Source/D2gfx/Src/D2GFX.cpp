@@ -1247,24 +1247,25 @@ BOOL __stdcall D2GFX_EndScene() {
     static double gdFrameStartTime = 0; D2_STATIC_GUARD(gdFrameStartTime, "D2gfx::D2GFX::D2GFX_EndScene::gdFrameStartTime");
     static unsigned int gbGammaRampInitialized_b; D2_STATIC_GUARD_BSS(gbGammaRampInitialized_b, "D2gfx::D2GFX::D2GFX_EndScene::gbGammaRampInitialized_b");
 
-    double dVar2;
     if (!(gbGammaRampInitialized_b & 1)) {
       gbGammaRampInitialized_b |= 1;
       gdFrameStartTime = D2GFX_CalculateGammaRamp();
     }
 
-    double dVar1 = D2GFX_CalculateGammaRamp();
-    if (dVar1 - gdFrameStartTime <= 5.0) {
-      DWORD dwMilliseconds;
-      dVar2 = 5.0 - (dVar1 - gdFrameStartTime) + gdFrameSleepRemainder;
-      dwMilliseconds = (DWORD)dVar2;
-      gdFrameSleepRemainder = dVar2 - (double)(int)dwMilliseconds;
-      if ((int)dwMilliseconds < 1 || (int)dwMilliseconds > 5) {
-        gdFrameSleepRemainder = 0.0;
+    double dFrameEndTime = D2GFX_CalculateGammaRamp();
+    if (dFrameEndTime - gdFrameStartTime <= 5.0) {
+      double dSleepTime = 5.0 - (dFrameEndTime - gdFrameStartTime) + gdFrameSleepRemainder;
+      int nMilliseconds = (int)dSleepTime;
+      gdFrameSleepRemainder = dSleepTime - nMilliseconds;
+      if (nMilliseconds > 0) {
+        if (nMilliseconds <= 5) {
+          Sleep(nMilliseconds);
+          gdFrameSleepRemainder -= D2GFX_CalculateGammaRamp() - dFrameEndTime - nMilliseconds;
+        } else {
+          gdFrameSleepRemainder = 0.0;
+        }
       } else {
-        /* DWORD dwMilliseconds for Sleep */ Sleep(dwMilliseconds);
-        dVar2 = D2GFX_CalculateGammaRamp();
-        gdFrameSleepRemainder -= dVar2 - dVar1 - (double)(int)dwMilliseconds;
+        gdFrameSleepRemainder = 0.0;
       }
     }
 
