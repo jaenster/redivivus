@@ -20376,24 +20376,14 @@ void __fastcall AI_Fn1_Izual(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamS
 // AI Function1 handler for Uber Izual (Pandemonium Event). Enhanced Izual AI with additional skill rotations and aggression for the uber version.
 // 1.14d mac: 00298535
 void __fastcall AI_Fn1_UberIzual(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
-    BOOL bCollideWall;
-    uint32_t nRandRoll;
-    int nDifficulty;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
+    int nDistance = pAiParam->nDistanceToTarget;
+    int bEngagedInCombat = pAiParam->bEngagedInCombat;
+    D2UnitStrc* pTarget = pAiParam->pTarget;
+    D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
+    D2SeedStrc* pSeed = &pUnit->sSeed;
     int32_t nTargetX;
-    int32_t nTargetY;
-    short int nAuraState;
-    D2MonStatsTxt* pMonStats;
-    pMonStats = pAiParam->pMonStats;
-    int nDistance;
-    nDistance = pAiParam->nDistanceToTarget;
-    int bEngagedInCombat;
-    bEngagedInCombat = pAiParam->bEngagedInCombat;
-    D2UnitStrc* pTarget;
-    pTarget = pAiParam->pTarget;
-    D2AiGeneralStrc* pAiGeneral;
-    pAiGeneral = pAiParam->pMonsterAiGeneral;
-    eD2UnitType eUnitType;
-    eUnitType = pTarget->eUnitType;
+    eD2UnitType eUnitType = pTarget->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
       nTargetX = pTarget->pPath.pStaticPath->nPosX;
     } else if (pTarget->pPath.pDynamicPath) {
@@ -20402,6 +20392,7 @@ void __fastcall AI_Fn1_UberIzual(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPa
       nTargetX = 0;
     }
 
+    int32_t nTargetY;
     eUnitType = pTarget->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
       nTargetY = pTarget->pPath.pStaticPath->nPosY;
@@ -20410,24 +20401,20 @@ void __fastcall AI_Fn1_UberIzual(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPa
     } else {
       nTargetY = 0;
     }
+
     if (pMonStats->aSkill[1] >= 0) {
-      int nAuraSkillId;
-      nAuraSkillId = (int)pMonStats->aSkill[1];
+      int nAuraSkillId = (int)pMonStats->aSkill[1];
       D2SkillsTxt* pSkillsTxt = nAuraSkillId >= 0 && nAuraSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + nAuraSkillId : nullptr;
       if (pSkillsTxt) {
-        nAuraState = pSkillsTxt->aurastate;
-        if (nAuraState >= 0) {
-          bCollideWall = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)nAuraState);
-          if (!bCollideWall) {
-            SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[1], (int)pMonStats->aSkill[1], nullptr, 0, 0);
-            return;
-          }
+        short int nAuraState = pSkillsTxt->aurastate;
+        if (nAuraState >= 0 && !D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, (int)nAuraState)) {
+          SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[1], (int)pMonStats->aSkill[1], nullptr, 0, 0);
+          return;
         }
       }
     }
 
-    bCollideWall = D2Common::Units::TestCollisionWithUnit(pUnit, pTarget, 6);
-    if (bCollideWall) {
+    if (D2Common::Units::TestCollisionWithUnit(pUnit, pTarget, 6)) {
       SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[2], (int)pMonStats->aSkill[2], nullptr, nTargetX, nTargetY);
       return;
     }
@@ -20436,54 +20423,47 @@ void __fastcall AI_Fn1_UberIzual(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPa
       pAiGeneral->dwArg1 = 0;
       return;
     }
-    if (bEngagedInCombat) {
-      if (pAiGeneral->dwArg2 > 0 || (nRandRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100) , (int)nRandRoll < (int)pMonStats->aip[0][pGame->nDifficulty])) {
-        if (pAiGeneral->dwArg2 > 0) {
-          pAiGeneral->dwArg2--;
+    if (!bEngagedInCombat) {
+      if (pMonStats->aSkill[0] >= 0 && nDistance < 10 && pAiGeneral->dwArg2 <= 0 && (int)D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100) < (int)pMonStats->aip[2][pGame->nDifficulty]) {
+        SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[0], (int)pMonStats->aSkill[0], pTarget, nTargetX, nTargetY);
+        pAiGeneral->dwArg1 = (int)pMonStats->aip[4][pGame->nDifficulty];
+        pAiGeneral->dwArg2 = (int)pMonStats->aip[5][pGame->nDifficulty];
+        return;
+      }
+      if (pAiGeneral->dwArg2 <= 0) {
+        int nDifficulty = (int)pGame->nDifficulty;
+        if ((int)D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100) >= (int)pMonStats->aip[1][nDifficulty]) {
+          if (nDistance > 0xa) {
+            MONSTERAI_CommandWalkToDistance(pGame, pUnit, pTarget, 6, 9);
+            return;
+          }
+
+          PlanNextAiMove(pGame, pUnit, (uint32_t)pMonStats->aidel[nDifficulty]);
+          return;
         }
-
-        AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pTarget);
-        return;
       }
 
-      pAiGeneral->dwArg2 = 0;
-      if (pMonStats->aSkill[0] < 0 || (nRandRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100) , (int)nRandRoll >= (int)pMonStats->aip[3][pGame->nDifficulty])) {
-        PlanNextAiMove(pGame, pUnit, (uint32_t)pMonStats->aidel[pGame->nDifficulty]);
-        return;
+      MONSTERAI_CommandWalkToUnit(pGame, pUnit, pTarget, 7);
+      return;
+    }
+    if (pAiGeneral->dwArg2 > 0 || (int)D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100) < (int)pMonStats->aip[0][pGame->nDifficulty]) {
+      if (pAiGeneral->dwArg2 > 0) {
+        pAiGeneral->dwArg2--;
       }
 
-      cast_skill0_with_cooldown:
+      AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pTarget);
+      return;
+    }
+
+    pAiGeneral->dwArg2 = 0;
+    if (pMonStats->aSkill[0] >= 0 && (int)D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100) < (int)pMonStats->aip[3][pGame->nDifficulty]) {
       SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[0], (int)pMonStats->aSkill[0], pTarget, nTargetX, nTargetY);
       pAiGeneral->dwArg1 = (int)pMonStats->aip[4][pGame->nDifficulty];
       pAiGeneral->dwArg2 = (int)pMonStats->aip[5][pGame->nDifficulty];
       return;
     }
-    if (pMonStats->aSkill[0] >= 0 && nDistance < 10) {
-      if (pAiGeneral->dwArg2 > 0) {
-        goto walk_to_target;
-      }
 
-      nRandRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
-      if ((int)nRandRoll < (int)pMonStats->aip[2][pGame->nDifficulty]) {
-        goto cast_skill0_with_cooldown;
-      }
-    }
-    if (pAiGeneral->dwArg2 <= 0) {
-      nDifficulty = (int)pGame->nDifficulty;
-      nRandRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
-      if ((int)nRandRoll >= (int)pMonStats->aip[1][nDifficulty]) {
-        if (nDistance > 0xa) {
-          MONSTERAI_CommandWalkToDistance(pGame, pUnit, pTarget, 6, 9);
-          return;
-        }
-
-        PlanNextAiMove(pGame, pUnit, (uint32_t)pMonStats->aidel[nDifficulty]);
-        return;
-      }
-    }
-
-    walk_to_target:
-    MONSTERAI_CommandWalkToUnit(pGame, pUnit, pTarget, 7);
+    PlanNextAiMove(pGame, pUnit, (uint32_t)pMonStats->aidel[pGame->nDifficulty]);
 }
 
 // AI think phase-1 for the Tentacle monster (summoned appendage of Duriel-class bosses). Kills itself if its owner is gone. Has a 40% chance each tick to die when the owner is in Kick animation. Manages a two-state skill cycle (dwArg2 1/2): casts Skill1 when idle or when timer expires and range/combat/owner conditions require it; casts Skill2 (self-buff) when dwArg2==1 and the cooldown has elapsed. Falls back to PlanNextAiMove or CalledOnEndAiFunction1 if no skill fires.
