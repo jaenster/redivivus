@@ -217,72 +217,55 @@ void __stdcall D2WINLIST_FreePentSpinCursor() {
 
 // 1.14d mac: 00049a45 D2Win::Src::D2WinList::Draw
 BOOL __fastcall Draw(::D2WinList * pList) {
-    int nScrollOffset;
-    int pY;
-    D2WinListEntry* pCurrentEntry;
-    D2GfxDataStrc sGfxData;
-    int32_t pYBase;
-    int nPosX;
-    int nSizeX;
-    int nSkipCount;
     if (pList->sControl.neD2FormType != FORM_List) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x119);
       exit(-1);
     }
 
-    {
-      int nTextWidth;
-      D2WinFont::SetAndReturnLastFont(pList->sEntriesControl.nFontId);
-      pCurrentEntry = pList->sEntriesControl.pFirstEntry;
-      pY = pList->sEntriesControl.nRowPadding - pList->sControl.dwSizeY + pList->sEntriesControl.nFontHeight + pList->sControl.dwPosY;
-      if (pList->sEntriesControl.nTopIndex > 0) {
-        nTextWidth = pList->sEntriesControl.nTopIndex;
-        do {
-          if (pCurrentEntry) {
-            pCurrentEntry = pCurrentEntry->pNext;
-          }
-
-          nTextWidth--;
-        } while (nTextWidth);
+    D2WinFont::SetAndReturnLastFont(pList->sEntriesControl.nFontId);
+    int nY = pList->sEntriesControl.nRowPadding - pList->sControl.dwSizeY + pList->sEntriesControl.nFontHeight + pList->sControl.dwPosY;
+    D2WinListEntry* pEntry = pList->sEntriesControl.pFirstEntry;
+    for (int i = 0; i < pList->sEntriesControl.nTopIndex; i++) {
+      if (pEntry) {
+        pEntry = pEntry->pNext;
       }
+    }
 
-      memset(&sGfxData, 0, sizeof(sGfxData));
-      sGfxData.nFrameNumber = pList->sEntriesControl.nCursorFrame;
-      sGfxData.nDirection = 0;
-      sGfxData.pDC6 = gpPentSpinCursorDC6;
-      for (; pCurrentEntry && pY < pList->sControl.dwPosY; pY += pList->sEntriesControl.nFontHeight + pList->sEntriesControl.nRowPadding * 2) {
-        nTextWidth = pList->sControl.dwSizeX;
-        nPosX = pList->sControl.dwPosX;
-        nSizeX = pCurrentEntry->nTextWidth;
-        if (pCurrentEntry == pList->sEntriesControl.pSelectedEntry) {
-          pYBase = pY + 3;
-          if (pList->sEntriesControl.nFontId == 2) {
-            pYBase = pY + 9;
-          }
-
-          nSkipCount = pList->sControl.dwPosX;
-          nScrollOffset = nTextWidth - pList->sEntriesControl.nMaxTextWidth >> 2;
-          D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, pList->sControl.dwPosX - 0x19 + nScrollOffset, pYBase, -1, DRAW_SOLID, nullptr);
-          D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nSkipCount - nScrollOffset - 0x19 + nTextWidth, pYBase, -1, DRAW_SOLID, nullptr);
+    D2GfxDataStrc sGfxData;
+    memset(&sGfxData, 0, sizeof(sGfxData));
+    sGfxData.pDC6 = gpPentSpinCursorDC6;
+    sGfxData.nDirection = 0;
+    sGfxData.nFrameNumber = pList->sEntriesControl.nCursorFrame;
+    for (; pEntry && nY < pList->sControl.dwPosY; pEntry = pEntry->pNext) {
+      int nSizeX = pList->sControl.dwSizeX;
+      int nTextX = (nSizeX - pEntry->nTextWidth >> 1) + pList->sControl.dwPosX; // steer-ok: the original computes the text x before the selected-entry check
+      if (pEntry == pList->sEntriesControl.pSelectedEntry) {
+        int nCursorY = nY + 3;
+        if (pList->sEntriesControl.nFontId == 2) {
+          nCursorY += 6;
         }
 
-        D2WinFont::DRAW_text(pCurrentEntry->wszText, (nTextWidth - nSizeX >> 1) + nPosX, pY, 0, 0);
-        nTextWidth = pList->sControl.dwPosX;
-        pCurrentEntry->nLeft = nTextWidth;
-        pCurrentEntry->nRight = pList->sControl.dwSizeX + nTextWidth;
-        pCurrentEntry->nTop = pY - pList->sEntriesControl.nRowPadding - pList->sEntriesControl.nFontHeight;
-        pCurrentEntry->nBottom = pList->sEntriesControl.nRowPadding + pY;
-        pCurrentEntry = pCurrentEntry->pNext;
+        int nCursorInset = nSizeX - pList->sEntriesControl.nMaxTextWidth >> 2;
+        int nRightX = pList->sControl.dwPosX - nCursorInset + nSizeX - 0x19; // steer-ok: the original computes the right cursor x before drawing the left cursor
+        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, pList->sControl.dwPosX + nCursorInset - 0x19, nCursorY, -1, DRAW_SOLID, nullptr);
+        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nRightX, nCursorY, -1, DRAW_SOLID, nullptr);
       }
 
-      pList->sEntriesControl.nCursorFrame++;
-      if (pList->sEntriesControl.nCursorFrame >= 8) {
-        pList->sEntriesControl.nCursorFrame = 0;
-      }
-
-      D2WinFont::SetAndReturnLastFont(1);
-      return 1;
+      D2WinFont::DRAW_text(pEntry->wszText, nTextX, nY, 0, 0);
+      pEntry->nLeft = pList->sControl.dwPosX;
+      pEntry->nRight = pList->sControl.dwSizeX + pEntry->nLeft;
+      pEntry->nTop = nY - pList->sEntriesControl.nRowPadding - pList->sEntriesControl.nFontHeight;
+      pEntry->nBottom = pList->sEntriesControl.nRowPadding + nY;
+      nY += pList->sEntriesControl.nFontHeight + pList->sEntriesControl.nRowPadding * 2;
     }
+
+    pList->sEntriesControl.nCursorFrame++;
+    if (pList->sEntriesControl.nCursorFrame >= 8) {
+      pList->sEntriesControl.nCursorFrame = 0;
+    }
+
+    D2WinFont::SetAndReturnLastFont(1);
+    return 1;
 }
 
 // 1.14d mac: 00049c36 D2Win::Src::D2WinList::Push
@@ -348,14 +331,6 @@ BOOL __stdcall ListCheck(D2ControlMsg * pList) {
 
 // 1.14d mac: 00049d87 D2Win::Src::D2WinList::Key
 BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
-    D2WinListEntry* pDVar2;
-    int nKeyCode;
-    D2WinListEntry* pCurrentEntry;
-    BOOL bCallbackResult;
-    D2WinListEntry* pDVar3;
-    int nTopIndex;
-    D2WinListEntry* pPrevEntry;
-    fpListEntryCallback pfnOnActivate;
     ::D2WinList* pList = (::D2WinList*)pControlMsg->pControl;
     if (pList->sControl.neD2FormType != FORM_List) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 399);
@@ -365,99 +340,78 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
       return 0;
     }
 
-    WPARAM WVar1 = pControlMsg->wParam;
-    switch (WVar1) {
-      case 0xd:
-        {
-          D2WinMain::D2WINMAIN_SetFocusedControl(nullptr);
-          pfnOnActivate = pList->sEntriesControl.pSelectedEntry->pfnOnActivate;
-          if (pfnOnActivate) {
-            bCallbackResult = (*pfnOnActivate)(pControlMsg);
-            return bCallbackResult;
-          }
-
-          break;
+    switch (pControlMsg->wParam) {
+      case 0xd: {
+        D2WinMain::D2WINMAIN_SetFocusedControl(nullptr);
+        fpListEntryCallback pfnOnActivate = pList->sEntriesControl.pSelectedEntry->pfnOnActivate;
+        if (pfnOnActivate) {
+          return pfnOnActivate(pControlMsg);
         }
-      case 0x26:
-        {
-          pDVar3 = pList->sEntriesControl.pFirstEntry;
-          pPrevEntry = pList->sEntriesControl.pSelectedEntry;
-          pDVar2 = pDVar3->pNext;
-          pCurrentEntry = pDVar3;
-          if (pDVar3 == pPrevEntry) {
-            for (; pDVar2; pDVar2 = pDVar2->pNext) {
-              pCurrentEntry = pDVar2;
-            }
-          } else {
-            for (; pDVar2 != pPrevEntry; pDVar2 = pDVar2->pNext) {
-              pCurrentEntry = pDVar2;
-            }
+        break;
+      }
+      case 0x26: {
+        D2WinListEntry* pPrevEntry = pList->sEntriesControl.pFirstEntry;
+        D2WinListEntry* pSelectedEntry = pList->sEntriesControl.pSelectedEntry;
+        if (pList->sEntriesControl.pFirstEntry == pSelectedEntry) {
+          while (pPrevEntry->pNext) {
+            pPrevEntry = pPrevEntry->pNext;
           }
-
-          pList->sEntriesControl.pSelectedEntry = pCurrentEntry;
-          pList->sEntriesControl.nSelectedIndex = 0;
-          for (; pDVar3 != pCurrentEntry; pDVar3 = pDVar3->pNext) {
-            pList->sEntriesControl.nSelectedIndex++;
+        } else {
+          while (pPrevEntry->pNext != pSelectedEntry) {
+            pPrevEntry = pPrevEntry->pNext;
           }
+        }
 
-          nKeyCode = pList->sEntriesControl.nSelectedIndex;
-          nTopIndex = pList->sEntriesControl.nTopIndex;
-          if (nTopIndex > nKeyCode) {
-            pList->sEntriesControl.nTopIndex = nKeyCode;
-            D2WinMain::D2WINMAIN_SetFocusedControl(nullptr);
-            return 1;
-          }
+        pList->sEntriesControl.pSelectedEntry = pPrevEntry;
+        pList->sEntriesControl.nSelectedIndex = 0;
+        for (D2WinListEntry* pEntry = pList->sEntriesControl.pFirstEntry; pEntry != pPrevEntry; pEntry = pEntry->pNext) {
+          pList->sEntriesControl.nSelectedIndex++;
+        }
 
-          nKeyCode -= nTopIndex;
-          while (nKeyCode > pList->sEntriesControl.nMaxVisibleIndex) {
+        int nSelectedIndex = pList->sEntriesControl.nSelectedIndex;
+        int nTopIndex = pList->sEntriesControl.nTopIndex;
+        if (nTopIndex > nSelectedIndex) {
+          pList->sEntriesControl.nTopIndex = nSelectedIndex;
+        } else {
+          for (int nRow = nSelectedIndex - nTopIndex; nRow > pList->sEntriesControl.nMaxVisibleIndex; nRow--) {
             pList->sEntriesControl.nTopIndex++;
-            nKeyCode--;
           }
-
-          D2WinMain::D2WINMAIN_SetFocusedControl(nullptr);
-          return 1;
         }
-      case 0x28:
-        {
-          pDVar3 = pList->sEntriesControl.pSelectedEntry->pNext;
-          if (!pDVar3) {
-            pDVar3 = pList->sEntriesControl.pFirstEntry;
-          }
 
-          pPrevEntry = pList->sEntriesControl.pFirstEntry;
-          pList->sEntriesControl.pSelectedEntry = pDVar3;
-          pList->sEntriesControl.nSelectedIndex = 0;
-          for (; pPrevEntry != pDVar3; pPrevEntry = pPrevEntry->pNext) {
-            pList->sEntriesControl.nSelectedIndex++;
-          }
+        D2WinMain::D2WINMAIN_SetFocusedControl(nullptr);
+        return 1;
+      }
+      case 0x28: {
+        D2WinListEntry* pNextEntry = pList->sEntriesControl.pSelectedEntry->pNext;
+        if (!pNextEntry) {
+          pNextEntry = pList->sEntriesControl.pFirstEntry;
+        }
 
-          nKeyCode = pList->sEntriesControl.nSelectedIndex;
-          nTopIndex = pList->sEntriesControl.nTopIndex;
-          if (nTopIndex > nKeyCode) {
-            pList->sEntriesControl.nTopIndex = nKeyCode;
-            D2WinMain::D2WINMAIN_SetFocusedControl(nullptr);
-            return 1;
-          }
+        pList->sEntriesControl.pSelectedEntry = pNextEntry;
+        pList->sEntriesControl.nSelectedIndex = 0;
+        for (D2WinListEntry* pEntry = pList->sEntriesControl.pFirstEntry; pEntry != pNextEntry; pEntry = pEntry->pNext) {
+          pList->sEntriesControl.nSelectedIndex++;
+        }
 
-          nKeyCode -= nTopIndex;
-          while (nKeyCode > pList->sEntriesControl.nMaxVisibleIndex) {
+        int nSelectedIndex = pList->sEntriesControl.nSelectedIndex;
+        int nTopIndex = pList->sEntriesControl.nTopIndex;
+        if (nTopIndex > nSelectedIndex) {
+          pList->sEntriesControl.nTopIndex = nSelectedIndex;
+        } else {
+          for (int nRow = nSelectedIndex - nTopIndex; nRow > pList->sEntriesControl.nMaxVisibleIndex; nRow--) {
             pList->sEntriesControl.nTopIndex++;
-            nKeyCode--;
           }
-
-          D2WinMain::D2WINMAIN_SetFocusedControl(nullptr);
-          return 1;
         }
+
+        D2WinMain::D2WINMAIN_SetFocusedControl(nullptr);
+        return 1;
+      }
     }
 
-    pDVar3 = pList->sEntriesControl.pFirstEntry;
-    while (pDVar3) {
-      if ((uint32_t)(uint16_t)pDVar3->nUserData == pControlMsg->wParam && pDVar3->pfnOnActivate) {
-        bCallbackResult = pDVar3->pfnOnActivate(pControlMsg);
-        return bCallbackResult;
+    for (D2WinListEntry* pEntry = pList->sEntriesControl.pFirstEntry; pEntry; pEntry = pEntry->pNext) {
+      if ((uint16_t)pEntry->nUserData == pControlMsg->wParam && pEntry->pfnOnActivate) {
+        return pEntry->pfnOnActivate(pControlMsg);
       }
-
-      pDVar3 = pDVar3->pNext;
     }
 
     return 0;

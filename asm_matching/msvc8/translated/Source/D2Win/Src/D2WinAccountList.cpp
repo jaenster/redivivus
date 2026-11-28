@@ -182,16 +182,6 @@ void __fastcall FORMS_DestroyD2WinAccountList(::D2WinAccountList * pAccountList)
 
 // 1.14d mac: 0004239f D2Win::Src::D2WinAccountList::Draw
 BOOL __fastcall Draw(::D2WinAccountList * pAccountList) {
-    uint32_t nFontHeight;
-    int nEntryCount;
-    uint16_t wszAccountName[256];
-    int nBaseY;
-    int nPosX;
-    int nEntryIdx;
-    int nPosXEntry;
-    int nYEnd;
-    D2WinAccountListEntry* pSource;
-    ::D2WinAccountList* pAccountListSave = pAccountList;
     if (pAccountList->sControl.neD2FormType != FORM_AccountList) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd0);
       exit(-1);
@@ -200,31 +190,23 @@ BOOL __fastcall Draw(::D2WinAccountList * pAccountList) {
     uint32_t dwControlState = pAccountList->sControl.dwState;
     if (Fog::BitBuffer::gadwBitMasks[2] & dwControlState && Fog::BitBuffer::gadwBitMasks[0] & dwControlState && pAccountList->pFirstEntry) {
       D2WinFont::SetAndReturnLastFont(pAccountList->nFontId);
+      uint16_t wszAccountName[256];
       Fog::File::CONTAINER_InitializeBuffer(wszAccountName, 2, 0x100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
-      nPosX = pAccountList->sControl.dwPosX;
-      pSource = pAccountList->pFirstEntry;
-      nEntryIdx = 0;
-      nFontHeight = D2WinFont::D2WINFONT_GetCurrentFontHeight();
-      nBaseY = nFontHeight + (pAccountList->sControl.dwPosY - pAccountList->sControl.dwSizeY);
-      nPosXEntry = 0;
-      nEntryCount = nEntryIdx;
-      for (; nEntryIdx = nPosXEntry , pSource != 0; pSource = pSource->pNext) {
-        if (nEntryIdx >= pAccountList->nTopIndex && nEntryIdx < pAccountList->nTopIndex + 0x18) {
-          nPosXEntry = nPosX + nEntryIdx % 6 * 0x78;
-          nYEnd = nBaseY + nEntryIdx / 6 * 0x14;
-          nEntryIdx = nEntryCount;
-          D2gfx::D2GFX::D2GFX_DrawSolidRectEx(nPosXEntry, nYEnd - 0xe, nPosXEntry + 0x1c, nYEnd, 0x55, DRAW_SOLID);
-          D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszAccountName, pSource->szAccountName, 0x100);
-          D2WinFont::DRAW_text(wszAccountName, nPosXEntry + 0x20, nYEnd, 0, 0);
-          pAccountList = pAccountListSave;
-          if (pSource == pAccountListSave->pSelectedEntry) {
-            D2gfx::D2GFX::D2GFX_DrawSolidRectEx(nPosXEntry - 1, nYEnd - 0x10, nPosXEntry + 0x76, nYEnd + 1, 0xff, DRAW_TRANSPARENT);
-            pAccountList = pAccountListSave;
+      int i = 0;
+      int nPosX = pAccountList->sControl.dwPosX;
+      D2WinAccountListEntry* pEntry = pAccountList->pFirstEntry;
+      int nBaseY = D2WinFont::D2WINFONT_GetCurrentFontHeight() + (pAccountList->sControl.dwPosY - pAccountList->sControl.dwSizeY);
+      for (; pEntry; pEntry = pEntry->pNext, i++) {
+        if (i >= pAccountList->nTopIndex && i < pAccountList->nTopIndex + 0x18) {
+          int nX = nPosX + i % 6 * 0x78;
+          int nY = nBaseY + i / 6 * 0x14;
+          D2gfx::D2GFX::D2GFX_DrawSolidRectEx(nX, nY - 0xe, nX + 0x1c, nY, 0x55, DRAW_SOLID);
+          D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszAccountName, pEntry->szAccountName, 0x100);
+          D2WinFont::DRAW_text(wszAccountName, nX + 0x20, nY, 0, 0);
+          if (pEntry == pAccountList->pSelectedEntry) {
+            D2gfx::D2GFX::D2GFX_DrawSolidRectEx(nX - 1, nY - 0x10, nX + 0x76, nY + 1, 0xff, DRAW_TRANSPARENT);
           }
         }
-
-        nEntryCount = nEntryIdx + 1;
-        nPosXEntry = nEntryCount;
       }
 
       return 1;

@@ -14,6 +14,14 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Win/D2WinScrollbar.h"
 
+// The clamps use the Windows SDK min/max macros, as windef.h defines them for VC8.
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 #ifndef D2_FREE_AT
@@ -915,10 +923,7 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
 
 // 1.14d mac: 0004dc03 D2Win::Src::D2WinTextBox::Key
 BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
-    int32_t nVisibleLines;
-    uint32_t uPageDownTarget;
-    ::D2WinTextBox* pTextBox;
-    pTextBox = (::D2WinTextBox*)pControlMsg->pControl;
+    ::D2WinTextBox* pTextBox = (::D2WinTextBox*)pControlMsg->pControl;
     if (!pTextBox) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x501);
       exit(-1);
@@ -928,8 +933,7 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
       exit(-1);
     }
 
-    uint32_t dwState;
-    dwState = pTextBox->sControl.dwState;
+    uint32_t dwState = pTextBox->sControl.dwState;
     if (!(Fog::BitBuffer::gadwBitMasks[2] & dwState)) {
       return 0;
     }
@@ -942,108 +946,72 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
     if (pTextBox->sListState.nSelectedLine == -1) {
       return 0;
     }
-
-    ::D2WinEditBox* pEditBox;
-    pEditBox = D2WinMain::FORMS_GetFormTextAndEditBox();
-    if (pEditBox) {
+    if (D2WinMain::FORMS_GetFormTextAndEditBox()) {
       return 0;
     }
 
-    int nLineCount;
-    nLineCount = pTextBox->sListState.nLineCount;
-    dwState = pTextBox->sListState.nTopLineIndex;
-    uint32_t uScrollTop;
-    uScrollTop = pTextBox->sListState.nSelectedLine;
-    nVisibleLines = D2WINTEXTBOX_GetVisibleLineCount((::D2WinTextBox*)pControlMsg->pControl);
-    uint32_t uNewScrollTop;
-    uNewScrollTop = dwState;
-    uint32_t uCurSel;
-    uCurSel = uScrollTop;
-    if (!false) {
-      switch (pControlMsg->wParam) {
-        case 0x21:
-          uCurSel = dwState;
-        if ((int)uScrollTop <= (int)dwState) {
-          uCurSel = uScrollTop;
-          if ((int)dwState > 0) {
-            dwState += 1 - nVisibleLines;
-            uNewScrollTop = (int)dwState <= 0 ? 0 : dwState;
-            uCurSel = uNewScrollTop;
-          }
+    int nLineCount = pTextBox->sListState.nLineCount;
+    int nTopLine = pTextBox->sListState.nTopLineIndex;
+    int nSelectedLine = pTextBox->sListState.nSelectedLine;
+    int nVisibleLines = D2WINTEXTBOX_GetVisibleLineCount((::D2WinTextBox*)pControlMsg->pControl);
+    switch (pControlMsg->wParam) {
+      case 0x21:
+        if (nSelectedLine > nTopLine) {
+          nSelectedLine = nTopLine;
+        } else if (nTopLine > 0) {
+          nTopLine = max(nTopLine - nVisibleLines + 1, 0);
+          nSelectedLine = nTopLine;
         }
-
         break;
-        case 0x22:
-          uPageDownTarget = dwState + (nVisibleLines - 1);
-        if ((int)uScrollTop < (int)uPageDownTarget) {
-          uCurSel = nLineCount - 1U;
-          if ((int)uPageDownTarget < (int)(nLineCount - 1U)) {
-            uCurSel = uPageDownTarget;
-          }
-        } else {
-          uScrollTop = nLineCount - nVisibleLines;
-          if ((int)dwState < (int)uScrollTop) {
-            if ((int)uPageDownTarget >= (int)uScrollTop) {
-              uPageDownTarget = uScrollTop;
-            }
-
-            dwState = uPageDownTarget + (nVisibleLines - 1);
-            uNewScrollTop = uPageDownTarget;
-            uCurSel = nLineCount - 1U;
-            if ((int)dwState < (int)(nLineCount - 1U)) {
-              uCurSel = dwState;
-            }
-          }
+      case 0x22: {
+        int nPageEnd = nVisibleLines + nTopLine - 1;
+        if (nSelectedLine < nPageEnd) {
+          nSelectedLine = min(nPageEnd, nLineCount - 1);
+        } else if (nTopLine < nLineCount - nVisibleLines) {
+          nTopLine = min(nPageEnd, nLineCount - nVisibleLines);
+          nSelectedLine = min(nVisibleLines + nTopLine - 1, nLineCount - 1);
         }
-
-        break;
-        case 0x26:
-          if ((int)uScrollTop <= 0) {
-            break;
-          }
-        uCurSel = uScrollTop - 1;
-        goto scroll_selection_into_view;
-        case 0x28:
-          if ((int)uScrollTop >= nLineCount - 1) {
-            break;
-          }
-        uCurSel = uScrollTop + 1;
-        scroll_selection_into_view:
-        uNewScrollTop = uCurSel;
-        if ((int)uCurSel >= (int)dwState) {
-          uNewScrollTop = dwState;
-          if ((int)uCurSel > (int)(dwState + (nVisibleLines - 1))) {
-            uNewScrollTop = uCurSel + (1 - nVisibleLines);
-          }
-        }
-
-        break;
-        case 0x24:
-          uNewScrollTop = 0;
-        uCurSel = 0;
-        break;
-        case 0x23:
-          uNewScrollTop = nLineCount - nVisibleLines;
-        uCurSel = nLineCount - 1;
         break;
       }
+      case 0x26:
+        if (nSelectedLine > 0) {
+          nSelectedLine--;
+          if (nSelectedLine < nTopLine) {
+            nTopLine = nSelectedLine;
+          } else if (nSelectedLine > nVisibleLines + nTopLine - 1) {
+            nTopLine = nSelectedLine - nVisibleLines + 1;
+          }
+        }
+        break;
+      case 0x28:
+        if (nSelectedLine < nLineCount - 1) {
+          nSelectedLine++;
+          if (nSelectedLine < nTopLine) {
+            nTopLine = nSelectedLine;
+          } else if (nSelectedLine > nVisibleLines + nTopLine - 1) {
+            nTopLine = nSelectedLine - nVisibleLines + 1;
+          }
+        }
+        break;
+      case 0x24:
+        nSelectedLine = 0;
+        nTopLine = 0;
+        break;
+      case 0x23:
+        nSelectedLine = nLineCount - 1;
+        nTopLine = nLineCount - nVisibleLines;
+        break;
     }
 
-    dwState = pTextBox->sListState.nSelectedLine;
-    pTextBox->sListState.nSelectedLine = uCurSel;
-    if (nLineCount > nVisibleLines && uNewScrollTop != pTextBox->sListState.nTopLineIndex) {
-      D2WINTEXTBOX_ScrollToLine((::D2WinTextBox*)pControlMsg->pControl, uNewScrollTop);
+    BOOL bSelectionChanged = nSelectedLine != pTextBox->sListState.nSelectedLine;
+    pTextBox->sListState.nSelectedLine = nSelectedLine;
+    if (nLineCount > nVisibleLines && nTopLine != pTextBox->sListState.nTopLineIndex) {
+      D2WINTEXTBOX_ScrollToLine((::D2WinTextBox*)pControlMsg->pControl, nTopLine);
     }
-    if (uCurSel == dwState) {
-      return 0;
-    }
-
-    OnPress pOVar1 = pTextBox->sControl.fpOnPress;
-    if (!pOVar1) {
-      return 0;
+    if (bSelectionChanged && pTextBox->sControl.fpOnPress) {
+      pTextBox->sControl.fpOnPress(pControlMsg);
     }
 
-    (*pOVar1)(pControlMsg);
     return 0;
 }
 
