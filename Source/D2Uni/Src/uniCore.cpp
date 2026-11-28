@@ -13,8 +13,9 @@
 // initializer per object (__sinit_uniCore: the Gestalt 'sysv'/'apvr' test of a header static).
 // This file is the classic LoD 1.10b object; the Carbon dispatch is not reconstructed here.
 //
-// Classic Mac PowerPC only.
-#if !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC
+// The Win32Posix build (D2_BACKEND_POSIX) dispatches the same way to one back end of its own,
+// SDL3 (gnUniMode 4, sdlCore.cpp), and leaves DrawSprocket and QuickDraw out.
+#if !defined(_WIN32) && ((D2_MAC_CARBON && D2_ARCH_PPC) || D2_BACKEND_POSIX)
 
 #include "Source/D2Uni/Src/uniInternal.h"
 
@@ -49,7 +50,11 @@ BOOL __fastcall UniSetFullScreen(BOOL bFullScreen) {
 // Mac slot 0 / Windows 0 Initialize (D2gfx's "GFXDetect"). Both back ends must be available.
 BOOL __fastcall UniDetect(HINSTANCE hInstance) {
     LogPrintf("UniDetect: Initializing software video drivers.");
+#if D2_BACKEND_POSIX
+    return SdlDetect();
+#else
     return DSpDetect() && QDDetect();
+#endif
 }
 
 // ppc 1.10b: 10058e70 (1.00 10088140, 1.13d 1005eee0, carbon 1.10b 103a8350, carbon 1.13d 103d7ae0)
@@ -71,12 +76,18 @@ BOOL __fastcall UniInit(D2GfxSettingsStrc * pSettings, D2GfxHelperStrc * pHelper
         }
     }
 
+#if D2_BACKEND_POSIX
+    if (gnUniMode == UNIMODE_SDL) {
+        return SdlInit(pSettings, pHelpers);
+    }
+#else
     if (gnUniMode == UNIMODE_DRAWSPROCKET) {
         return DSpInit(pSettings, pHelpers);
     }
     if (gnUniMode == UNIMODE_QUICKDRAW) {
         return QDInit(pSettings, pHelpers);
     }
+#endif
     return 0;
 }
 
@@ -87,12 +98,18 @@ BOOL __fastcall UniRelease() {
         DisposeHandle((Handle)ghUniColorTable);
         ghUniColorTable = nullptr;
     }
+#if D2_BACKEND_POSIX
+    if (gnUniMode == UNIMODE_SDL) {
+        return SdlRelease();
+    }
+#else
     if (gnUniMode == UNIMODE_DRAWSPROCKET) {
         return DSpRelease();
     }
     if (gnUniMode == UNIMODE_QUICKDRAW) {
         return QDClose();
     }
+#endif
     return 0;
 }
 
@@ -100,12 +117,18 @@ BOOL __fastcall UniRelease() {
 // Mac slot 4 / Windows 4 DestroyWindow (D2gfx's "GFXCloseSurface"). Ends any movie first.
 BOOL __stdcall UniCloseSurface() {
     gbUniCutsceneQuit = 1;
+#if D2_BACKEND_POSIX
+    if (gnUniMode == UNIMODE_SDL) {
+        return SdlCloseSurface();
+    }
+#else
     if (gnUniMode == UNIMODE_DRAWSPROCKET) {
         return DSpCloseSurface();
     }
     if (gnUniMode == UNIMODE_QUICKDRAW) {
         return QDCloseSurface();
     }
+#endif
     return 0;
 }
 
@@ -116,12 +139,18 @@ BOOL __fastcall UniChangeRes(HWND hWnd, BOOL nResolution) {
         nResolution = 1;
     }
     gbUniCutsceneQuit = 1;
+#if D2_BACKEND_POSIX
+    if (gnUniMode == UNIMODE_SDL) {
+        return SdlChangeRes(hWnd, nResolution);
+    }
+#else
     if (gnUniMode == UNIMODE_DRAWSPROCKET) {
         return DSpChangeRes(hWnd, nResolution);
     }
     if (gnUniMode == UNIMODE_QUICKDRAW) {
         return QDChangeRes(hWnd, nResolution);
     }
+#endif
     return 0;
 }
 
@@ -138,11 +167,20 @@ BOOL __fastcall UniSetOption(int nOption, intptr_t nValue) {
         case 0:
             // The device to run on.
             ghUniDevice = (GDHandle)(intptr_t)nValue;
+#if !D2_BACKEND_POSIX
             QDSetGDevice();
             DSpSetGDevice();
+#endif
             return 1;
         case 1:
             // The device in use: DrawSprocket's is the one set, QuickDraw's the one under the window.
+#if D2_BACKEND_POSIX
+            // SDL's is the one set: there is no device list to search.
+            if (gnUniMode == UNIMODE_SDL) {
+                *(GDHandle *)(intptr_t)nValue = ghUniDevice;
+                return 1;
+            }
+#else
             if (gnUniMode == UNIMODE_DRAWSPROCKET) {
                 *(GDHandle *)(intptr_t)nValue = ghUniDevice;
                 return 1;
@@ -151,6 +189,7 @@ BOOL __fastcall UniSetOption(int nOption, intptr_t nValue) {
                 *(GDHandle *)(intptr_t)nValue = QDGetGDevice();
                 return 1;
             }
+#endif
             return 0;
         case 2:
             gaUniDisplayModes[0] = *(const D2MacDisplayModeStrc *)(intptr_t)nValue;
@@ -159,15 +198,24 @@ BOOL __fastcall UniSetOption(int nOption, intptr_t nValue) {
             gaUniDisplayModes[1] = *(const D2MacDisplayModeStrc *)(intptr_t)nValue;
             return 1;
         case 8:
+#if D2_BACKEND_POSIX
+            // SDL runs both: a window, or the same window full screen (SdlCreateSurface).
+            gnUniMode = UNIMODE_SDL;
+#else
             // Windowed (non-zero low byte) runs QuickDraw, full screen runs DrawSprocket.
             gnUniMode = (BYTE)nValue ? UNIMODE_QUICKDRAW : UNIMODE_DRAWSPROCKET;
+#endif
             return 1;
         case 10:
             *(BOOL *)(intptr_t)nValue = gbUniInScene;
             return 1;
         case 11:
             // The contrast for the gamma curve (D2DDraw stores gnDirectDrawPaletteSize here).
+#if D2_BACKEND_POSIX
+            gnUniContrast = (int)nValue; // a value, never a pointer: its low 32 bits
+#else
             gnUniContrast = nValue;
+#endif
             return 1;
     }
     return 0;
@@ -179,12 +227,18 @@ BOOL __fastcall UniCreateSurface(HWND hWnd, int nResolution) {
     if (nResolution == 2) {
         nResolution = 1;
     }
+#if D2_BACKEND_POSIX
+    if (gnUniMode == UNIMODE_SDL) {
+        return SdlCreateSurface(hWnd, nResolution);
+    }
+#else
     if (gnUniMode == UNIMODE_DRAWSPROCKET) {
         return DSpCreateSurface(hWnd, nResolution);
     }
     if (gnUniMode == UNIMODE_QUICKDRAW) {
         return QDCreateSurfaceEntry(hWnd, nResolution);
     }
+#endif
     return 0;
 }
 
@@ -194,93 +248,141 @@ void __fastcall UniEndCutScene(HWND hWnd, int nResolution, int bRelease) {
     if (nResolution == 2) {
         nResolution = 1;
     }
+#if D2_BACKEND_POSIX
+    if (gnUniMode == UNIMODE_SDL) {
+        SdlEndCutScene(hWnd, nResolution, bRelease);
+    }
+#else
     if (gnUniMode == UNIMODE_DRAWSPROCKET) {
         DSpEndCutScene(hWnd, nResolution, bRelease);
     }
     if (gnUniMode == UNIMODE_QUICKDRAW) {
         QDEndCutScene(hWnd, nResolution, bRelease);
     }
+#endif
 }
 
 // ppc 1.10b: 10058aa0 (1.00 10087dcc, 1.13d 1005eb10, carbon 1.10b 103a7ec0, carbon 1.13d 103d7650)
 // Mac slot 16 / Windows 13 BeginCutScene.
 BOOL __stdcall UniCutsceneCreateWindow() {
+#if D2_BACKEND_POSIX
+    if (gnUniMode == UNIMODE_SDL) {
+        return SdlCutsceneCreateWindow();
+    }
+#else
     if (gnUniMode == UNIMODE_DRAWSPROCKET) {
         return DSpCutsceneCreateWindow();
     }
     if (gnUniMode == UNIMODE_QUICKDRAW) {
         return QDCutsceneCreateWindow();
     }
+#endif
     return 0;
 }
 
 // ppc 1.10b: 10058a50 (1.00 10087d84, 1.13d 1005eac0, carbon 1.10b 103a7e60, carbon 1.13d 103d75f0)
 // Mac slot 17 / Windows 14.
 void __fastcall UniPlayCutscene(char * szFile, int nResolution, fnBinkFrameCallback pfnFrame) {
+#if D2_BACKEND_POSIX
+    if (gnUniMode == UNIMODE_SDL) {
+        SdlPlayCutscene(szFile, nResolution, pfnFrame);
+    }
+#else
     if (gnUniMode == UNIMODE_DRAWSPROCKET) {
         DSpPlayCutsceneGuarded(szFile, nResolution, pfnFrame);
     } else if (gnUniMode == UNIMODE_QUICKDRAW) {
         QDPlayCutscene(szFile, nResolution, pfnFrame);
     }
+#endif
 }
 
 // ppc 1.10b: 10058a00 (1.00 10087d34, 1.13d 1005ea70, carbon 1.10b 103a7df0, carbon 1.13d 103d7580)
 // Mac slot 18 / Windows 15.
 BOOL __fastcall UniCheckCutscene() {
+#if D2_BACKEND_POSIX
+    if (gnUniMode == UNIMODE_SDL) {
+        return SdlCheckCutscene();
+    }
+#else
     if (gnUniMode == UNIMODE_DRAWSPROCKET) {
         return DSpCheckCutscene();
     }
     if (gnUniMode == UNIMODE_QUICKDRAW) {
         return QDCheckCutscene();
     }
+#endif
     return 0;
 }
 
 // ppc 1.10b: 100589b0 (1.00 10087ce4, 1.13d 1005ea20, carbon 1.10b 103a7d80, carbon 1.13d 103d7510)
 // Mac slot 6 / Windows 6 BeginScene. The clear colour is ignored: the clear is to index 0.
 BOOL __fastcall UniStartDraw(BOOL bClear, BYTE nRed, BYTE nGreen, BYTE nBlue) {
+#if D2_BACKEND_POSIX
+    if (gnUniMode == UNIMODE_SDL) {
+        return SdlStartDraw(bClear);
+    }
+#else
     if (gnUniMode == UNIMODE_DRAWSPROCKET) {
         return DSpStartDraw(bClear);
     }
     if (gnUniMode == UNIMODE_QUICKDRAW) {
         return QDStartDraw(bClear);
     }
+#endif
     return 0;
 }
 
 // ppc 1.10b: 10058960 (1.00 10087c94, 1.13d 1005e9d0, carbon 1.10b 103a7d10, carbon 1.13d 103d74a0)
 // Mac slot 7 / Windows 7 EndScene1.
 BOOL __fastcall UniEndDraw() {
+#if D2_BACKEND_POSIX
+    if (gnUniMode == UNIMODE_SDL) {
+        return SdlEndDraw();
+    }
+#else
     if (gnUniMode == UNIMODE_DRAWSPROCKET) {
         return DSpEndDraw();
     }
     if (gnUniMode == UNIMODE_QUICKDRAW) {
         return QDEndDraw();
     }
+#endif
     return 0;
 }
 
 // ppc 1.10b: 10058910 (1.00 10087c44, 1.13d 1005e980, carbon 1.10b 103a7ca0, carbon 1.13d 103d7430)
 // Mac slot 8 / Windows 8: present the frame.
 BOOL __fastcall UniEndScene2() {
+#if D2_BACKEND_POSIX
+    if (gnUniMode == UNIMODE_SDL) {
+        return SdlBlit();
+    }
+#else
     if (gnUniMode == UNIMODE_DRAWSPROCKET) {
         return DSpBlit();
     }
     if (gnUniMode == UNIMODE_QUICKDRAW) {
         return QDBlit();
     }
+#endif
     return 0;
 }
 
 // ppc 1.10b: 100588c0 (1.00 10087bf4, 1.13d 1005e930, carbon 1.10b 103a7c30, carbon 1.13d 103d73c0)
 // Presents the changed part of a Bink frame (UniBinkRenderFrame).
 BOOL UniBinkBlit(Rect * pRect) {
+#if D2_BACKEND_POSIX
+    if (gnUniMode == UNIMODE_SDL) {
+        return SdlBinkBlit(pRect);
+    }
+#else
     if (gnUniMode == UNIMODE_DRAWSPROCKET) {
         return DSpBinkBlit(pRect);
     }
     if (gnUniMode == UNIMODE_QUICKDRAW) {
         return QDBinkBlit(pRect);
     }
+#endif
     return 0;
 }
 
@@ -292,12 +394,18 @@ BOOL __fastcall UniGetBackBuffer(BYTE * pBuffer) {
     uint32_t nWidth;
     uint32_t nHeight;
 
+#if D2_BACKEND_POSIX
+    if (gnUniMode == UNIMODE_SDL) {
+        SdlGetScreenSize((int *)&nWidth, (int *)&nHeight);
+    }
+#else
     if (gnUniMode == UNIMODE_DRAWSPROCKET) {
         DSpGetScreenSize((int *)&nWidth, (int *)&nHeight);
     }
     if (gnUniMode == UNIMODE_QUICKDRAW) {
         QDGetScreenSize((int *)&nWidth, (int *)&nHeight);
     }
+#endif
 
     if (gnUniBackBufferDepth == 8) {
         const BYTE * pSrc = gpUniBackBuffer;
@@ -337,172 +445,226 @@ BOOL __fastcall UniGetBackBuffer(BYTE * pBuffer) {
 // Mac slot 23 / Windows 20. The PEF function returns nothing (r3 is left as it is); the table
 // slot's int return is 0 here.
 int __fastcall UniGetScreenSize(int * pWidth, int * pHeight) {
+#if D2_BACKEND_POSIX
+    if (gnUniMode == UNIMODE_SDL) {
+        SdlGetScreenSize(pWidth, pHeight);
+    }
+#else
     if (gnUniMode == UNIMODE_DRAWSPROCKET) {
         DSpGetScreenSize(pWidth, pHeight);
     }
     if (gnUniMode == UNIMODE_QUICKDRAW) {
         QDGetScreenSize(pWidth, pHeight);
     }
+#endif
     return 0;
 }
 
 // ppc 1.10b: 10058660 (1.00 10087ac8, 1.13d 1005e6d0, carbon 1.10b 103a7970, carbon 1.13d 103d7100)
 // Mac slot 31 / Windows 28.
 void __fastcall UniSetPalette(LPPALETTEENTRY pPalette) {
+#if D2_BACKEND_POSIX
+    if (gnUniMode == UNIMODE_SDL) {
+        SdlSetPalette(pPalette);
+    }
+#else
     if (gnUniMode == UNIMODE_DRAWSPROCKET) {
         DSpSetPalette(pPalette);
     }
     if (gnUniMode == UNIMODE_QUICKDRAW) {
         QDSetPalette(pPalette);
     }
+#endif
 }
 
 // ppc 1.10b: 10058600 (1.00 10087a64, 1.13d 1005e670, carbon 1.10b 103a78f0, carbon 1.13d 103d7080)
 // Mac slot 32 / Windows 29.
 void __fastcall UniSetPaletteTable(BYTE ** ppTables) {
+#if D2_BACKEND_POSIX
+    if (gnUniMode == UNIMODE_SDL) {
+        SdlSetPaletteTable(ppTables);
+    }
+#else
     if (gnUniMode == UNIMODE_DRAWSPROCKET) {
         DSpSetPaletteTable(ppTables);
     }
     if (gnUniMode == UNIMODE_QUICKDRAW) {
         QDSetPaletteTable(ppTables);
     }
+#endif
 }
 
 // ppc 1.10b: 100585a0 (1.00 10087a00, 1.13d 1005e610, carbon 1.10b 103a7870, carbon 1.13d 103d7000)
 // Mac slot 24 / Windows 21.
 void __fastcall UniUpdateScaleFactor(int nScale) {
+#if !D2_BACKEND_POSIX
     if (gnUniMode == UNIMODE_DRAWSPROCKET) {
         DSpUpdateScaleFactor();
     }
     if (gnUniMode == UNIMODE_QUICKDRAW) {
         QDUpdateScaleFactor(nScale);
     }
+#endif
 }
 
 // ppc 1.10b: 10058540 (1.00 1008799c, 1.13d 1005e5b0, carbon 1.10b 103a77f0, carbon 1.13d 103d6f80)
 // Mac slot 25 / Windows 22.
 void __fastcall UniSetGamma(int nGamma) {
+#if D2_BACKEND_POSIX
+    if (gnUniMode == UNIMODE_SDL) {
+        SdlSetGamma(nGamma);
+    }
+#else
     if (gnUniMode == UNIMODE_DRAWSPROCKET) {
         DSpSetGamma(nGamma);
     }
     if (gnUniMode == UNIMODE_QUICKDRAW) {
         QDSetGamma(nGamma);
     }
+#endif
 }
 
 // ppc 1.10b: 100584f0 (1.00 1008794c, 1.13d 1005e560, carbon 1.10b 103a7780, carbon 1.13d 103d6f10)
 // Mac slot 26 / Windows 23.
 int __fastcall UniCheckGamma() {
+#if D2_BACKEND_POSIX
+    if (gnUniMode == UNIMODE_SDL) {
+        return SdlCheckGamma();
+    }
+#else
     if (gnUniMode == UNIMODE_DRAWSPROCKET) {
         return DSpCheckGamma();
     }
     if (gnUniMode == UNIMODE_QUICKDRAW) {
         return QDCheckGamma();
     }
+#endif
     return 0;
 }
 
 // ppc 1.10b: 10058470 (1.00 100878c0, 1.13d 1005e4e0, carbon 1.10b 103a76e0, carbon 1.13d 103d6e70)
 // Mac slot 33 / Windows 30.
 void __fastcall UniSetGlobalLight(int nRed, int nGreen, int nBlue) {
+#if !D2_BACKEND_POSIX
     if (gnUniMode == UNIMODE_DRAWSPROCKET) {
         DSpSetGlobalLight();
     }
     if (gnUniMode == UNIMODE_QUICKDRAW) {
         QDSetGlobalLight(nRed, nGreen, nBlue);
     }
+#endif
 }
 
 // ppc 1.10b: 10058400 (1.00 10087848, 1.13d 1005e470, carbon 1.10b 103a7650, carbon 1.13d 103d6de0)
 // Mac slot 27 / Windows 24.
 void __fastcall UniSetPerspectiveScale(int nScaleX, int nScaleY) {
+#if !D2_BACKEND_POSIX
     if (gnUniMode == UNIMODE_DRAWSPROCKET) {
         DSpSetPerspectiveScale();
     }
     if (gnUniMode == UNIMODE_QUICKDRAW) {
         QDSetPerspectiveScale(nScaleX, nScaleY);
     }
+#endif
 }
 
 // ppc 1.10b: 10058380 (1.00 100877bc, 1.13d 1005e3f0, carbon 1.10b 103a75b0, carbon 1.13d 103d6d40)
 // Mac slot 28 / Windows 25.
 void __fastcall UniAdjustPerspectivePosition(int nPosX, int nPosY, int nBias, int * pXAdjust, int * pYAdjust) {
+#if !D2_BACKEND_POSIX
     if (gnUniMode == UNIMODE_DRAWSPROCKET) {
         DSpAdjustPerspectivePosition();
     }
     if (gnUniMode == UNIMODE_QUICKDRAW) {
         QDAdjustPerspectivePosition(nPosX, nPosY, nBias, pXAdjust, pYAdjust);
     }
+#endif
 }
 
 // ppc 1.10b: 10058300 (1.00 10087724, 1.13d 1005e370, carbon 1.10b 103a7500, carbon 1.13d 103d6c90)
 // Mac slot 29 / Windows 26.
 void __fastcall UniPerspectiveScalePosition(int nPosX, int nPosY, int nAngle, int * pXAdjust, int * pYAdjust,
                                             BOOL bOrder) {
+#if !D2_BACKEND_POSIX
     if (gnUniMode == UNIMODE_DRAWSPROCKET) {
         DSpPerspectiveScalePosition();
     }
     if (gnUniMode == UNIMODE_QUICKDRAW) {
         QDPerspectiveScalePosition(nPosX, nPosY, nAngle, pXAdjust, pYAdjust, bOrder);
     }
+#endif
 }
 
 // ppc 1.10b: 100582b0 (1.00 100876d4, 1.13d 1005e320, carbon 1.10b 103a7490, carbon 1.13d 103d6c20)
 // Mac slot 30 / Windows 27.
 void __fastcall UniSetDefaultPerspectiveFactor() {
+#if !D2_BACKEND_POSIX
     if (gnUniMode == UNIMODE_DRAWSPROCKET) {
         DSpSetDefaultPerspectiveFactor();
     }
     if (gnUniMode == UNIMODE_QUICKDRAW) {
         QDSetDefaultPerspectiveFactor();
     }
+#endif
 }
 
 // ppc 1.10b: 10058260 (1.00 10087684, 1.13d 1005e2d0, carbon 1.10b 103a7420, carbon 1.13d 103d6bb0)
 // Mac slot 22 / Windows 19.
 int * __fastcall UniGetRenderStatistics() {
+#if D2_BACKEND_POSIX
+    if (gnUniMode == UNIMODE_SDL) {
+        return SdlGetRenderStatistics();
+    }
+#else
     if (gnUniMode == UNIMODE_DRAWSPROCKET) {
         return DSpGetRenderStatistics();
     }
     if (gnUniMode == UNIMODE_QUICKDRAW) {
         return QDGetRenderStatistics();
     }
+#endif
     return nullptr;
 }
 
 // ppc 1.10b: 10058210 (1.00 10087634, 1.13d 1005e280, carbon 1.10b 103a73b0, carbon 1.13d 103d6b40)
 // Mac slot 11 (no Windows twin).
 unsigned char UniProcessEvent(EventRecord * pEvent) {
+#if !D2_BACKEND_POSIX
     if (gnUniMode == UNIMODE_DRAWSPROCKET) {
         return DSpProcessEvent(pEvent);
     }
     if (gnUniMode == UNIMODE_QUICKDRAW) {
         return QDProcessEvent(pEvent);
     }
+#endif
     return 0;
 }
 
 // ppc 1.10b: 100581c0 (1.00 100875e4, 1.13d 1005e230, carbon 1.10b 103a7340, carbon 1.13d 103d6ad0)
 // Mac slot 12 (no Windows twin).
 int UniGlobalToLocal(Point * pPoint) {
+#if !D2_BACKEND_POSIX
     if (gnUniMode == UNIMODE_DRAWSPROCKET) {
         return DSpGlobalToLocal(pPoint);
     }
     if (gnUniMode == UNIMODE_QUICKDRAW) {
         return QDGlobalToLocal(pPoint);
     }
+#endif
     return 0;
 }
 
 // ppc 1.10b: 10058170 (1.00 10087594, 1.13d 1005e1e0, carbon 1.10b 103a72d0, carbon 1.13d 103d6a60)
 // Mac slot 13 (no Windows twin).
 int UniLocalToGlobal(Point * pPoint) {
+#if !D2_BACKEND_POSIX
     if (gnUniMode == UNIMODE_DRAWSPROCKET) {
         return DSpLocalToGlobal(pPoint);
     }
     if (gnUniMode == UNIMODE_QUICKDRAW) {
         return QDLocalToGlobal(pPoint);
     }
+#endif
     return 0;
 }
 
@@ -572,4 +734,4 @@ D2MacRendererSlotsStrc UniMacFunctionTable = {
     UniLocalToGlobal,
 };
 
-#endif // !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC
+#endif // !defined(_WIN32) && ((D2_MAC_CARBON && D2_ARCH_PPC) || D2_BACKEND_POSIX)

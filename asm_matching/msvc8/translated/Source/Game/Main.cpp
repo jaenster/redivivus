@@ -1168,8 +1168,19 @@ int __fastcall ApplicationMain(HINSTANCE hInstance, D2IniConfigStrc * pD2IniData
       }
     }
 #elif D2_OS_MAC
+#if D2_BACKEND_POSIX
+    // The modern Mac: the software renderer (D2Uni on SDL3, mode 2), or OpenGL once it is
+    // linked in (D2_RENDERER_OPENGL) and asked for.
+#if D2_RENDERER_OPENGL
+    if (pD2IniData->bOPENGL) {
+      eD2ApplicationModeAndRenderer = RENDERED_Unused5;
+    } else
+#endif
+    eD2ApplicationModeAndRenderer = RENDERER_Unused2;
+#else
     // The Mac 1.14d (0019ebbe) has only the OpenGL row and always asks for it.
     eD2ApplicationModeAndRenderer = RENDERED_Unused5;
+#endif
 #elif D2_OS_LINUX
     // OpenGL is the only Linux row (D2_RENDERER_OPENGL).
     eD2ApplicationModeAndRenderer = RENDERED_Unused5;

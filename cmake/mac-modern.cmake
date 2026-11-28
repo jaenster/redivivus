@@ -1,9 +1,14 @@
-# The modern macOS build: the shared game code and the D2OpenGL renderer, compiled with
-# Apple clang for arm64 (or x86_64) on the current SDK, against the Win32Posix layer
+# The modern macOS build: the shared game code and the D2Uni software renderer on SDL3, compiled
+# with Apple clang for arm64 (or x86_64) on the current SDK, against the Win32Posix layer
 # (Source/StormMac/Win32Posix) in place of Blizzard's Carbon one. Included from
 # CMakeLists.txt when the toolchain is cmake/mac-appleclang.cmake.
 #
-# d2_modern_objs  compile only, outside `all`: `ninja -k 0 d2_modern_objs` measures it.
+# d2_modern_objs         compile only, outside `all`: `ninja -k 0 d2_modern_objs` measures it
+#                        (and builds d2_modern_opengl_objs with it).
+# d2_modern_opengl_objs  the D2OpenGL renderer, compiled with the same flags but not linked:
+#                        its Carbon, AGL and Core Graphics calls have no Win32Posix side yet.
+# d2_uni_objs            the D2Uni renderer's shared slots and its SDL3 back end (sdlCore.cpp),
+#                        D2gfx's video mode 2.
 #
 # What it leaves out, and why:
 #   Source/StormMac        Storm's Mac project: SOURCE is the Carbon Storm, Win32Mac the
@@ -11,12 +16,14 @@
 #                          SReg ...) are built instead, on Win32Posix.
 #   Source/MacSpecific/Source/MacShell, Source/D2gfx/Mac, Source/D2Hell/Mac
 #                          the Carbon shell, the Carbon D2gfx and the Mac copy protection.
-#   Source/D2Rave, Source/D2Uni        the classic Mac PowerPC renderers.
+#   Source/D2Rave, and D2Uni's DrawSprocket and QuickDraw back ends   the classic Mac PowerPC
+#                          renderers (D2Uni's shared slots build here, in d2_uni_objs).
 #   Source/D2DDraw, D2Direct3D, D2Gdi, D2Glide   the Windows renderers (not in the module list).
 #   Source/D2OpenGL/Src/MacSdkOnWin32.cpp        the renderer's Mac SDK on Win32/WGL.
 #   3rdparty/macstubs and the other Mac link dependencies (cmake/mac.cmake).
 # What it keeps beside the shared modules: D2OpenGL, and the texture manager it builds on
-# (Source/MacSpecific/Source/CD2Textures, no Carbon), as the Windows d2opengl_objs does.
+# (Source/MacSpecific/Source/CD2Textures, no Carbon), as the Windows d2opengl_objs does - compiled
+# in d2_modern_opengl_objs, out of the link.
 #
 # The target axes: D2_OS_MAC (macOS behaviour, shared with the 1.14d Mac build),
 # D2_BACKEND_POSIX (the Win32Posix layer), D2_MAC_CARBON=0 (no Carbon layer), and one
@@ -45,7 +52,6 @@ file(GLOB _ogl_sources CONFIGURE_DEPENDS LIST_DIRECTORIES false
     "${CMAKE_SOURCE_DIR}/Source/D2OpenGL/Src/*.cpp"
     "${CMAKE_SOURCE_DIR}/Source/MacSpecific/Source/CD2Textures/*.cpp")
 list(FILTER _ogl_sources EXCLUDE REGEX "/Source/D2OpenGL/Src/MacSdkOnWin32\\.cpp$")
-list(APPEND D2_MODERN_SOURCES ${_ogl_sources})
 list(REMOVE_DUPLICATES D2_MODERN_SOURCES)
 list(SORT D2_MODERN_SOURCES)
 
@@ -63,11 +69,6 @@ foreach(h IN LISTS _modern_headers)
 endforeach()
 list(REMOVE_DUPLICATES D2_MODERN_INCLUDE_DIRS)
 
-add_library(d2_modern_objs OBJECT EXCLUDE_FROM_ALL ${D2_MODERN_SOURCES})
-set_target_properties(d2_modern_objs PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS ON)
-target_include_directories(d2_modern_objs PRIVATE ${D2_MODERN_INCLUDE_DIRS})
-target_compile_definitions(d2_modern_objs PRIVATE
-    D2_OS_MAC=1 D2_BACKEND_POSIX=1 D2_MAC_CARBON=0 D2_TARGET_CLIENT=1)
 set(_d2_arch_flags)
 foreach(_arch IN LISTS CMAKE_OSX_ARCHITECTURES)
     if(_arch STREQUAL "arm64")
@@ -84,12 +85,31 @@ endforeach()
 # -Wshorten-64-to-32 is added. Off by name, as noise on this target only: the Windows calling
 # conventions the tree spells (no meaning on arm64 or x86-64), string literals held as char *
 # (the decompile's spelling), and the SDK's deprecation notes (sprintf, the GL calls).
-target_compile_options(d2_modern_objs PRIVATE
-    ${_d2_arch_flags}
-    -g -fwrapv -fpascal-strings
-    -Wshorten-64-to-32 -Wno-ignored-attributes -Wno-writable-strings -Wno-deprecated-declarations
-    "SHELL:-include ${CMAKE_SOURCE_DIR}/Source/D2Headers/d2_platform.h"
-    -Werror=implicit-function-declaration -ferror-limit=0)
+function(d2_modern_game_setup _target)
+    set_target_properties(${_target} PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS ON)
+    target_include_directories(${_target} PRIVATE ${D2_MODERN_INCLUDE_DIRS})
+    target_compile_definitions(${_target} PRIVATE
+        D2_OS_MAC=1 D2_BACKEND_POSIX=1 D2_MAC_CARBON=0 D2_TARGET_CLIENT=1)
+    target_compile_options(${_target} PRIVATE
+        ${_d2_arch_flags}
+        -g -fwrapv -fpascal-strings
+        -Wshorten-64-to-32 -Wno-ignored-attributes -Wno-writable-strings -Wno-deprecated-declarations
+        "SHELL:-include ${CMAKE_SOURCE_DIR}/Source/D2Headers/d2_platform.h"
+        -Werror=implicit-function-declaration -ferror-limit=0)
+endfunction()
+
+add_library(d2_modern_objs OBJECT EXCLUDE_FROM_ALL ${D2_MODERN_SOURCES})
+d2_modern_game_setup(d2_modern_objs)
+add_library(d2_modern_opengl_objs OBJECT EXCLUDE_FROM_ALL ${_ogl_sources})
+d2_modern_game_setup(d2_modern_opengl_objs)
+# Built with d2_modern_objs, so `ninja d2_modern_objs` still compiles the renderer.
+add_custom_target(d2_modern_opengl_built DEPENDS $<TARGET_OBJECTS:d2_modern_opengl_objs>)
+add_dependencies(d2_modern_objs d2_modern_opengl_built)
+
+# D2Uni: every unit but the PowerPC back ends (dspCore.cpp, qdCore.cpp compile to nothing here
+# anyway). Its tree headers are found from the root, as the PowerPC check finds them.
+file(GLOB _uni_sources CONFIGURE_DEPENDS LIST_DIRECTORIES false "${CMAKE_SOURCE_DIR}/Source/D2Uni/Src/*.cpp")
+list(FILTER _uni_sources EXCLUDE REGEX "/Source/D2Uni/Src/(dspCore|qdCore)\\.cpp$")
 
 # ---- Win32Posix and the link ----
 #
@@ -102,8 +122,8 @@ target_compile_options(d2_modern_objs PRIVATE
 #                       video, and crashy's report file) and the Intel JPEG Library on
 #                       stb_image_write (Redivivus/x64/d2_ijl.cpp, as the 64-bit Windows build).
 #                       Each unit reads its own headers: no forced include.
-# d2_modern             the executable: d2_modern_objs, both halves of the layer and the link
-#                       dependencies, on SDL3 and OpenGL. Outside `all` until it links;
+# d2_modern             the executable: d2_modern_objs, d2_uni_objs, both halves of the layer
+#                       and the link dependencies, on SDL3. Outside `all` until it links;
 #                       asm_matching/mac/modern-link-probe.ts lists what it still lacks.
 # d2_win32posix_test    the kernel's unit test (Source/StormMac/Win32Posix/Tests).
 # d2_sockets_test       Winsock on loopback (SocketsTest.cpp): TCP, UDP, select and the codes.
@@ -155,6 +175,9 @@ set_source_files_properties("${CMAKE_SOURCE_DIR}/Redivivus/x64/d2_ijl.cpp" PROPE
 
 find_package(SDL3 CONFIG QUIET PATHS /opt/homebrew /usr/local)
 if(SDL3_FOUND)
+    add_library(d2_uni_objs OBJECT EXCLUDE_FROM_ALL ${_uni_sources})
+    d2_modern_game_setup(d2_uni_objs)
+    target_link_libraries(d2_uni_objs PRIVATE SDL3::SDL3)
     if(_posix_rest)
         add_library(d2_win32posix OBJECT EXCLUDE_FROM_ALL ${_posix_rest})
         d2_win32posix_setup(d2_win32posix)
@@ -162,8 +185,8 @@ if(SDL3_FOUND)
         set(_posix_rest_objs $<TARGET_OBJECTS:d2_win32posix>)
     endif()
     add_executable(d2_modern EXCLUDE_FROM_ALL
-        $<TARGET_OBJECTS:d2_modern_objs> $<TARGET_OBJECTS:d2_win32posix_kernel> ${_posix_rest_objs}
-        $<TARGET_OBJECTS:d2_modern_link_deps>)
+        $<TARGET_OBJECTS:d2_modern_objs> $<TARGET_OBJECTS:d2_uni_objs> $<TARGET_OBJECTS:d2_win32posix_kernel>
+        ${_posix_rest_objs} $<TARGET_OBJECTS:d2_modern_link_deps>)
     set_target_properties(d2_modern PROPERTIES OUTPUT_NAME "Diablo II")
     target_link_libraries(d2_modern PRIVATE SDL3::SDL3 "-framework OpenGL")
 
@@ -175,6 +198,17 @@ if(SDL3_FOUND)
     target_link_libraries(d2_directsound_test PRIVATE SDL3::SDL3)
     set_source_files_properties("${CMAKE_SOURCE_DIR}/Source/StormMac/Win32Posix/Tests/DirectSoundTest.cpp" PROPERTIES
         COMPILE_OPTIONS "-include;${CMAKE_SOURCE_DIR}/Source/D2Headers/d2_platform.h")
+
+    # d2_uni_test  the D2Uni table on the SDL3 back end (Source/D2Uni/Tests/UniSdlTest.cpp):
+    #              primitives and a DC6 sprite through D2CMP's blitter, presented and read back,
+    #              headless on SDL's dummy driver. The test supplies the game calls those reach.
+    add_executable(d2_uni_test EXCLUDE_FROM_ALL
+        "${CMAKE_SOURCE_DIR}/Source/D2Uni/Tests/UniSdlTest.cpp"
+        "${CMAKE_SOURCE_DIR}/Source/D2CMP/Src/CelCmp.cpp"
+        "${CMAKE_SOURCE_DIR}/Source/D2CMP/Src/FastCmp.cpp"
+        $<TARGET_OBJECTS:d2_uni_objs> $<TARGET_OBJECTS:d2_win32posix_kernel> ${_posix_rest_objs})
+    d2_modern_game_setup(d2_uni_test)
+    target_link_libraries(d2_uni_test PRIVATE SDL3::SDL3)
 else()
     message(STATUS "mac-modern: no SDL3 (brew install sdl3); d2_modern and d2_directsound_test are not defined")
 endif()

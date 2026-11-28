@@ -10,8 +10,8 @@
 //
 // Bodies from the LoD 1.10b classic PEF; differences in other builds are noted where seen.
 //
-// Classic Mac PowerPC only.
-#if !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC
+// Classic Mac PowerPC, and the Win32Posix build (D2_BACKEND_POSIX) over the SDL3 back end.
+#if !defined(_WIN32) && ((D2_MAC_CARBON && D2_ARCH_PPC) || D2_BACKEND_POSIX)
 
 #include "Source/D2Uni/Src/uniInternal.h"
 
@@ -371,10 +371,20 @@ void __fastcall UniDrawLight(DWORD * pLight, DWORD * pPlayerLight, int nPosX, in
 void UniBinkRenderFrame(BYTE * pDest, int nDestPitch, uint32_t dwSurfaceType) {
     BinkDoFrame(ghUniBink);
     BinkCopyToBuffer(ghUniBink, pDest, nDestPitch, ghUniBink->Height, gnUniBinkDestX, gnUniBinkDestY, dwSurfaceType);
+#if !D2_BACKEND_POSIX
     BinkGetRects(ghUniBink, dwSurfaceType);
+#endif
 
     int16_t nTop = (int16_t)((gnUniScreenHeight - (int)ghUniBink->Height) >> 1);
     int16_t nLeft = (int16_t)((gnUniScreenWidth - (int)ghUniBink->Width) >> 1);
+#if D2_BACKEND_POSIX
+    // The 64-bit Bink keeps no dirty rectangles (uniPosix.h): the whole frame is presented.
+    Rect tDirty;
+    tDirty.top = nTop;
+    tDirty.left = nLeft;
+    tDirty.bottom = (int16_t)(nTop + (int)ghUniBink->Height);
+    tDirty.right = (int16_t)(nLeft + (int)ghUniBink->Width);
+#else
     // Start inverted (top/left at the far edge, bottom/right at the near one) and grow.
     Rect tDirty;
     tDirty.top = (int16_t)((gnUniScreenHeight + (int)ghUniBink->Height) >> 1);
@@ -400,6 +410,7 @@ void UniBinkRenderFrame(BYTE * pDest, int nDestPitch, uint32_t dwSurfaceType) {
             tDirty.right = nRectRight;
         }
     }
+#endif
 
     if (tDirty.left < tDirty.right && tDirty.top < tDirty.bottom) {
         UniBinkBlit(&tDirty);
@@ -420,22 +431,31 @@ void UniBinkRenderFrame(BYTE * pDest, int nDestPitch, uint32_t dwSurfaceType) {
 void UniPlayBinkFile(char * szFile, int nResolution, BYTE * pDest, int nDestPitch, uint32_t dwSurfaceType,
                      fnBinkFrameCallback pfnFrame) {
     HANDLE hFile;
+#if !D2_BACKEND_POSIX
     int16_t nRefNum;
     EventRecord tEvent;
+#endif
 
     gbUniCutsceneQuit = 0;
     if (ghUniBink) {
         return;
     }
 
+#if D2_BACKEND_POSIX
+    // Win32Posix's DirectSound, as Windows D2DDraw's BINK_PlayVideoFile opens it.
+    BinkSetSoundSystem(BinkOpenDirectSound, 0);
+#else
     FlushEvents(everyEvent, 0);
     BinkSetSoundSystem(BinkOpenSoundManager, 0);
+#endif
     uint32_t dwOpenMode = Fog::GetUseDirectCommand() ? 5 : 4;
     Storm::Source::SFile::SFileOpenFileEx(nullptr, szFile, dwOpenMode, (void**)&hFile);  // a direct open: a Win32 file HANDLE
     if (!hFile) {
         LogPrintf("UniPlayBinkFile: *** Couldn't load Bink movie \"%s\".", szFile);
     } else {
+#if !D2_BACKEND_POSIX
         FileRefFromHANDLE(hFile, &nRefNum);
+#endif
         uint32_t dwOpenFlags = BINKFILEHANDLE;
         switch (nResolution) {
             case 1:
@@ -449,8 +469,13 @@ void UniPlayBinkFile(char * szFile, int nResolution, BYTE * pDest, int nDestPitc
                 break;
         }
 
+#if D2_BACKEND_POSIX
+        // BinkOpen takes the Storm file HANDLE, as on Windows.
+        ghUniBink = (HBINK)BinkOpen(hFile, dwOpenFlags);
+#else
         // The Mac BinkOpen takes the file's refNum where Windows passes a HANDLE.
         ghUniBink = (HBINK)BinkOpen((void *)(intptr_t)nRefNum, dwOpenFlags);
+#endif
         if (!ghUniBink) {
             LogPrintf("UniPlayBinkFile: *** Bink can't load \"%s\".", szFile);
         } else {
@@ -466,12 +491,20 @@ void UniPlayBinkFile(char * szFile, int nResolution, BYTE * pDest, int nDestPitc
                 if (pfnFrame) {
                     pfnFrame();
                 }
+#if D2_BACKEND_POSIX
+                if (SdlInputPending()) {
+                    gbUniCutsceneQuit = 1;
+                } else if (!BinkWait(ghUniBink)) {
+                    UniBinkRenderFrame(pDest, nDestPitch, dwSurfaceType);
+                }
+#else
                 if (OSEventAvail(everyEvent & ~(mUpMask | keyUpMask), &tEvent)) {
                     gbUniCutsceneQuit = 1;
                     FlushEvents(0x3E, 0); // mouse down/up, key down/up, auto-key
                 } else if (!BinkWait(ghUniBink)) {
                     UniBinkRenderFrame(pDest, nDestPitch, dwSurfaceType);
                 }
+#endif
             }
         }
     }
@@ -485,4 +518,4 @@ void UniPlayBinkFile(char * szFile, int nResolution, BYTE * pDest, int nDestPitc
     }
 }
 
-#endif // !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC
+#endif // !defined(_WIN32) && ((D2_MAC_CARBON && D2_ARCH_PPC) || D2_BACKEND_POSIX)

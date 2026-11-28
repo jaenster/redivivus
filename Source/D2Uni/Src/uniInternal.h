@@ -5,12 +5,16 @@
 // Not an original header name (no PPC string names one); see Source/D2Uni/README.md. Globals are
 // listed with their LoD 1.10b classic address. Names are inferred unless a comment says otherwise.
 //
-// Classic Mac PowerPC only: the guard is `#if !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC`, from
-// the compiler flags of the Mac PowerPC target (never from D2Arch.h).
+// Classic Mac PowerPC, and the Win32Posix build: the guard is
+// `#if !defined(_WIN32) && ((D2_MAC_CARBON && D2_ARCH_PPC) || D2_BACKEND_POSIX)`, from the compiler
+// flags of the target (never from D2Arch.h). On D2_BACKEND_POSIX the DrawSprocket and QuickDraw
+// back ends and the Mac platform calls are left out, and the SDL3 back end (sdlCore.cpp) stands
+// in for them; uniPosix.h supplies the Toolbox and RAD records the shared slots read.
 #pragma once
 
-#if !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC
+#if !defined(_WIN32) && ((D2_MAC_CARBON && D2_ARCH_PPC) || D2_BACKEND_POSIX)
 
+#if !D2_BACKEND_POSIX
 // The Mac C library owns FILE; d2_platform.h's MSVC _iobuf stand-in is for the Windows CRT layout.
 #ifndef _FILE_DEFINED
 #define _FILE_DEFINED
@@ -19,6 +23,11 @@
 #include "Redivivus/Platform/MacClassic/MacClassicUniToolbox.h"
 #include "Redivivus/Platform/MacClassic/MacClassicUniDrawSprocket.h"
 #include "Redivivus/Platform/MacClassic/MacClassicUniRad.h"
+#else
+#include "Source/D2Uni/Src/uniPosix.h"
+// The 1.14d record, whose cel UniGetCel reads (uniSprite.cpp).
+#include "Source/D2Client/D2GfxDataStrc.h"
+#endif
 #include "Source/D2gfx/D2gfx.public.h"
 #include "Source/D2Client/D2GfxSettingsStrc.h"
 #include "Source/D2Client/Engine/Gfx.h"
@@ -35,6 +44,9 @@ enum eD2UniMode {
     UNIMODE_DRAWSPROCKET = 1,
     UNIMODE_QUICKDRAW = 2,
     UNIMODE_COREGRAPHICS = 3,
+#if D2_BACKEND_POSIX
+    UNIMODE_SDL = 4, // the Win32Posix build's only back end, windowed or full screen
+#endif
 };
 
 // A display mode record (SetOption 2 and 3 store one each, 8 bytes; index 0 is 640x480, 1 is
@@ -47,6 +59,7 @@ struct D2MacDisplayModeStrc {
     /* 0x04 */ int32_t fRefreshRate; // Fixed 16.16
 };
 
+#if !D2_BACKEND_POSIX
 // The Storm Mac "vid" table (a CFM data import): the renderer registers its suspend/resume and
 // cursor callbacks here so Storm's Mac event loop can switch it out. Only the slots D2Uni calls
 // are named; the offsets are the ones the PEF code loads.
@@ -59,6 +72,7 @@ struct D2MacVidTableStrc {
     /* 0xC0 */ void (*pfnSetSuspendResumeProcs)(VIDSUSPENDPROC pfnSuspend, VIDSUSPENDPROC pfnResume);
     /* 0xC4 */ void (*pfnSetCursorProcs)(VIDCURSORPROC pfnInit, VIDCURSORPROC pfnShow, VIDCURSORPROC pfnHide);
 };
+#endif
 
 // ---------------------------------------------------------------------------------------------
 // Shared state (uniCore.cpp)
@@ -137,6 +151,7 @@ BYTE * UniGetPaletteTable(int nDrawMode, int * pnTableKind);
 // uniCore.cpp
 BOOL UniBinkBlit(Rect * pRect);
 
+#if !D2_BACKEND_POSIX
 // ---------------------------------------------------------------------------------------------
 // dspCore.cpp - the DrawSprocket back end (full screen; the Windows twin is D2DDraw ddCore.cpp)
 int * DSpGetRenderStatistics();
@@ -204,15 +219,44 @@ BOOL QDClose();
 BOOL QDInit(D2GfxSettingsStrc * pSettings, D2GfxHelperStrc * pHelpers);
 BOOL QDDetect();
 void QDSetGDevice();
+#else
+// ---------------------------------------------------------------------------------------------
+// sdlCore.cpp - the SDL3 back end of the Win32Posix build (windowed and full screen): the 8-bit
+// back buffer converted through the palette into an SDL texture, scaled into the window.
+BOOL SdlDetect();
+BOOL SdlInit(D2GfxSettingsStrc * pSettings, D2GfxHelperStrc * pHelpers);
+BOOL SdlRelease();
+BOOL SdlCreateSurface(HWND hWnd, int nResolution);
+BOOL SdlCloseSurface();
+BOOL SdlChangeRes(HWND hWnd, int nResolution);
+void SdlEndCutScene(HWND hWnd, int nResolution, BOOL bRelease);
+BOOL SdlCutsceneCreateWindow();
+void SdlPlayCutscene(char * szFile, int nResolution, fnBinkFrameCallback pfnFrame);
+BOOL SdlCheckCutscene();
+BOOL SdlStartDraw(BOOL bClear);
+BOOL SdlEndDraw();
+BOOL SdlBlit();
+BOOL SdlBinkBlit(Rect * pRect);
+void SdlGetScreenSize(int * pWidth, int * pHeight);
+void SdlSetPalette(PALETTEENTRY * pPalette);
+void SdlSetPaletteTable(BYTE ** ppTables);
+void SdlSetGamma(int nGamma);
+int SdlCheckGamma();
+int * SdlGetRenderStatistics();
+// A key or mouse button press is waiting (it is taken off the queue): the Bink loop's quit test.
+BOOL SdlInputPending();
+#endif
 
 // ---------------------------------------------------------------------------------------------
 // The rest of the game fragment. Named by their Windows twins or their own log strings; the
 // address is the LoD 1.10b classic one.
 
-// The Mac platform log (1.10b 1003c160).
+// The Mac platform log (1.10b 1003c160). sdlCore.cpp defines it on D2_BACKEND_POSIX.
 void LogPrintf(const char * szFormat, ...);
-// Halts with the message (1.10b 10006820: FPvfatal + ExitToShell).
+// Halts with the message (1.10b 10006820: FPvfatal + ExitToShell). sdlCore.cpp defines it on
+// D2_BACKEND_POSIX.
 void MacFatal(const char * szMessage);
+#if !D2_BACKEND_POSIX
 // Mac platform gamma helpers. MacSetGammaCurve (1.10b 10012bc0) builds a ramp with
 // MacBuildGammaTable and loads it into the device's gamma table (PBStatus/Control on the driver);
 // MacRestoreGamma (1.10b 10012a30) puts the saved table back (Control).
@@ -237,6 +281,17 @@ void DisposeMemCGrafPort(BYTE * pBits, CGrafPtr pPort, GDHandle hPortDevice);
 namespace Fog {
 BOOL __stdcall GetUseDirectCommand();                // 1.10b 10033370 (1.14d Fog 00406d20)
 }
+#else
+// The 1.14d home of the Fog call the Bink player makes.
+namespace Fog::Source::SFile {
+BOOL __stdcall GetUseDirectCommand();
+}
+namespace Fog {
+inline BOOL GetUseDirectCommand() {
+    return Fog::Source::SFile::GetUseDirectCommand();
+}
+}
+#endif
 namespace Fog::Memory {
 void * __fastcall AllocClientMemory(size_t nAllocSize, char * szFile, int32_t nLine, int32_t nNull); // 1.10b 10039940
 BOOL __fastcall FreeClientMemory(void * pMemoryToFree, char * szFile, int32_t nLine, int32_t nNull);  // 1.10b 10039970
@@ -249,9 +304,33 @@ struct Unicode {
     Unicode() : wChar(0) {}
     static Unicode * toUnicode(Unicode * pDest, const char * szSrc, int nMax); // 1.10b 1009b940
 };
+#if !D2_BACKEND_POSIX
 int D2Win_SetTextFont(int nFont);                                                  // 1.10b 1004b630
 void D2Win_DrawText(const Unicode * wszText, int nX, int nY, int nColor, BOOL bCentered); // 1.10b 1004a400
+#else
+// The same three calls in the 1.14d tree: D2Lang's char-to-wide copy, D2Win's font switch and
+// its text draw (DRAW_text takes the same colour and centring arguments).
+namespace D2Lang::Unicode::UNISYS {
+uint16_t * __fastcall STRING_ConvertCharToWchar(uint16_t * pwszBuffer, char * pszBuffer, int32_t nSize);
+}
+namespace D2Win::Src::D2WinFont {
+void __fastcall DRAW_text(uint16_t * wMessage, int32_t nX, int32_t nY, int32_t dwColor, BOOL bMultiLineCenter);
+int32_t __fastcall SetAndReturnLastFont(int32_t nFontId);
+}
+static_assert(sizeof(Unicode) == sizeof(uint16_t), "a D2Lang character is one 16-bit unit");
+inline Unicode * Unicode::toUnicode(Unicode * pDest, const char * szSrc, int nMax) {
+    D2Lang::Unicode::UNISYS::STRING_ConvertCharToWchar((uint16_t *)pDest, (char *)szSrc, nMax);
+    return pDest;
+}
+inline int D2Win_SetTextFont(int nFont) {
+    return D2Win::Src::D2WinFont::SetAndReturnLastFont(nFont);
+}
+inline void D2Win_DrawText(const Unicode * wszText, int nX, int nY, int nColor, BOOL bCentered) {
+    D2Win::Src::D2WinFont::DRAW_text((uint16_t *)wszText, nX, nY, nColor, bCentered);
+}
+#endif
 
+#if !D2_BACKEND_POSIX
 // ---------------------------------------------------------------------------------------------
 // The Storm Mac layer (CFM imports from StormLib; the Win32-on-Mac names are Storm's).
 extern "C" {
@@ -265,5 +344,6 @@ void SetMousePosition(Point tWhere);
 void YieldToThinThread(int nFlags);
 }
 int16_t FilepathToFSSpec(FSSpec * pSpec, const char * szPath, int hBase);
+#endif
 
-#endif // !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC
+#endif // !defined(_WIN32) && ((D2_MAC_CARBON && D2_ARCH_PPC) || D2_BACKEND_POSIX)

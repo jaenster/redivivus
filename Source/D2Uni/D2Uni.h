@@ -8,10 +8,10 @@
 // their own record, D2MacRendererSlotsStrc, rather than forking the shared type; a Mac D2gfx
 // reads both. Names are inferred (Source/D2Uni/README.md).
 //
-// Classic Mac PowerPC only.
+// Classic Mac PowerPC, and the Win32Posix build (D2_BACKEND_POSIX) over the SDL3 back end.
 #pragma once
 
-#if !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC
+#if !defined(_WIN32) && ((D2_MAC_CARBON && D2_ARCH_PPC) || D2_BACKEND_POSIX)
 
 struct D2RendererFunctionsStrc;
 struct EventRecord;
@@ -30,4 +30,4 @@ struct D2MacRendererSlotsStrc {
 extern D2RendererFunctionsStrc UniFunctionTable;
 extern D2MacRendererSlotsStrc UniMacFunctionTable;
 
-#endif // !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC
+#endif // !defined(_WIN32) && ((D2_MAC_CARBON && D2_ARCH_PPC) || D2_BACKEND_POSIX)

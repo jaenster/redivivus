@@ -34,8 +34,12 @@
 void FUN_002b6035(void);
 #endif
 #elif D2_ARCH_X64 || D2_ARCH_ARM64
-// The modern Mac renders through D2OpenGL, as the 1.14d Intel Mac does.
+// The modern Mac renders through D2Uni, the software renderer, on SDL3; D2OpenGL, as the 1.14d
+// Intel Mac renders, once it is linked in (D2_RENDERER_OPENGL).
+#include "Source/D2Uni/D2Uni.h"
+#if D2_RENDERER_OPENGL
 #include "Source/D2OpenGL/Src/D2gfxRenderer.h"
+#endif
 #else
 #error "D2GFX.cpp: unsupported Mac architecture"
 #endif
@@ -330,8 +334,13 @@ BOOL __stdcall D2GFX_Initialize(HINSTANCE hInstance, WNDPROC pfWndProc, eD2Rende
     // Mac 1.14d (002b4975, selector 003c817c): OpenGL at 5 is the only row.
     static D2RendererFunctionsStrc * RENDERER_RenderedFunctionsSelector[7] = { nullptr, nullptr, nullptr, nullptr, nullptr, &D2OpenGL::Renderer::OpenGLFunctionTable, nullptr }; D2_STATIC_GUARD(RENDERER_RenderedFunctionsSelector, "D2gfx::D2GFX::D2GFX_Initialize::RENDERER_RenderedFunctionsSelector");
 #elif D2_ARCH_X64 || D2_ARCH_ARM64
-    // The modern Mac: OpenGL at 5 is the only row, as on the 1.14d Intel Mac.
-    static D2RendererFunctionsStrc * RENDERER_RenderedFunctionsSelector[7] = { nullptr, nullptr, nullptr, nullptr, nullptr, &D2OpenGL::Renderer::OpenGLFunctionTable, nullptr }; D2_STATIC_GUARD(RENDERER_RenderedFunctionsSelector, "D2gfx::D2GFX::D2GFX_Initialize::RENDERER_RenderedFunctionsSelector");
+#if D2_RENDERER_OPENGL
+    // The modern Mac: software (D2Uni on SDL3) at 2, and OpenGL at 5 as on the 1.14d Intel Mac.
+    static D2RendererFunctionsStrc * RENDERER_RenderedFunctionsSelector[7] = { nullptr, nullptr, &UniFunctionTable, nullptr, nullptr, &D2OpenGL::Renderer::OpenGLFunctionTable, nullptr }; D2_STATIC_GUARD(RENDERER_RenderedFunctionsSelector, "D2gfx::D2GFX::D2GFX_Initialize::RENDERER_RenderedFunctionsSelector");
+#else
+    // The modern Mac: software (D2Uni on SDL3) at 2 is the only row.
+    static D2RendererFunctionsStrc * RENDERER_RenderedFunctionsSelector[7] = { nullptr, nullptr, &UniFunctionTable, nullptr, nullptr, nullptr, nullptr }; D2_STATIC_GUARD(RENDERER_RenderedFunctionsSelector, "D2gfx::D2GFX::D2GFX_Initialize::RENDERER_RenderedFunctionsSelector");
+#endif
 #else
 #error "D2GFX.cpp: no video driver rows for this Mac architecture"
 #endif

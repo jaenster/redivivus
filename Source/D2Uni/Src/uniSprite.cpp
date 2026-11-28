@@ -9,10 +9,10 @@
 //
 // The PPC builds keep the 1.10 D2GfxDataStrc, whose first word is the cel (the RAVE analysis,
 // docs/analysis/d2-rave-renderer.md); UniGetCel reads it. The 1.14d layout in the tree has the
-// cel at +0x3C.
+// cel at +0x3C (pDC6Block), and the Win32Posix build, which runs the 1.14d game, reads it there.
 //
-// Classic Mac PowerPC only.
-#if !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC
+// Classic Mac PowerPC, and the Win32Posix build (D2_BACKEND_POSIX) over the SDL3 back end.
+#if !defined(_WIN32) && ((D2_MAC_CARBON && D2_ARCH_PPC) || D2_BACKEND_POSIX)
 
 #include "Source/D2Uni/Src/uniInternal.h"
 
@@ -27,7 +27,11 @@ static int gnUniSpriteClipLeft;     // 1043449c
 static const int gaUniPaletteTableKinds[7] = {2, 2, 2, 1, 1, 0, 1}; // 104420f8
 
 static inline DC6Block * UniGetCel(D2GfxDataStrc * pData) {
+#if D2_BACKEND_POSIX
+    return pData->pDC6Block;
+#else
     return *(DC6Block **)pData;
+#endif
 }
 
 // The palette table a draw mode blits through, inlined into every sprite slot below; the same
@@ -385,4 +389,4 @@ void __fastcall UniDebugFillBackBuffer(int nPosX, int nPosY) {
     MacFatal("UniLens");
 }
 
-#endif // !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC
+#endif // !defined(_WIN32) && ((D2_MAC_CARBON && D2_ARCH_PPC) || D2_BACKEND_POSIX)

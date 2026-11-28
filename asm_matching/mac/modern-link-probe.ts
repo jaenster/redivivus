@@ -3,8 +3,8 @@
 //
 //   node asm_matching/mac/modern-link-probe.ts --build <modern build dir> [--out <dir>]
 //
-// Build the objects first: `ninja -k 0 d2_modern_objs d2_win32posix_kernel d2_win32posix
-// d2_modern_link_deps` (d2_win32posix exists once the layer has units beside the kernel's;
+// Build the objects first: `ninja -k 0 d2_modern_objs d2_uni_objs d2_win32posix_kernel
+// d2_win32posix d2_modern_link_deps` (d2_uni_objs and d2_win32posix exist when SDL3 is found;
 // d2_modern_link_deps holds the third-party stand-ins). The probe links every
 // object of those targets with Apple clang from Xcode, on the Xcode SDK, against SDL3 and
 // OpenGL, as the d2_modern target does, and reads what ld says. ld64 stops at its first failing
@@ -27,7 +27,7 @@
 //             DirectSound*.cpp)
 //   shell     Win32PosixShell.h: the shell calls, the crash handler
 //   renderer  the D2OpenGL renderer's Carbon, AGL and Core Graphics calls
-//   3rdparty  Bink, the Intel JPEG Library, crashy
+//   3rdparty  Bink, Smacker, the Intel JPEG Library, crashy
 //   runtime   the MSVC runtime symbols a shared unit still reaches
 //   tree      a game function declared and never defined for this build
 import { execFileSync } from "node:child_process";
@@ -66,8 +66,8 @@ function walk(dir: string, out: string[]) {
     }
 }
 const objs: string[] = [];
-for (const [t, required] of [["d2_modern_objs", true], ["d2_win32posix_kernel", true], ["d2_win32posix", false],
-    ["d2_modern_link_deps", false]] as const) {
+for (const [t, required] of [["d2_modern_objs", true], ["d2_uni_objs", false], ["d2_win32posix_kernel", true],
+    ["d2_win32posix", false], ["d2_modern_link_deps", false]] as const) {
     const d = join(buildDir, "CMakeFiles", `${t}.dir`);
     if (!existsSync(d)) {
         if (required) { console.error(`no ${d}: build ${t} first`); process.exit(2); }
@@ -150,7 +150,7 @@ undefSyms.forEach((s, i) => {
     const ns = parts.slice(0, -1).join("::").replace(/^_+/, "");
     let cls: string;
     if (/^D2OpenGL::/.test(base)) cls = "renderer";
-    else if (/^(Bink|ijl)|crashy|^D2CRASH_/.test(base)) cls = "3rdparty";
+    else if (/^(Bink|Smack|ijl)|crashy|^D2CRASH_/.test(base)) cls = "3rdparty";
     else if (/^_*(eh_vector_|except_handler|purecall$)/.test(base)) cls = "runtime";
     else if ((ns === "" || ns === "Wrappers") && headerOf.has(last)) cls = headerOf.get(last)!;
     else if (ns === "" && PLATFORM_USER.test(last)) cls = "user";

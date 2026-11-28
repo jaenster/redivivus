@@ -10,12 +10,46 @@ screen runs DrawSprocket (`dspCore.cpp`), windowed runs QuickDraw (`qdCore.cpp`)
 Windows picks a DLL: D2DDraw (full screen) and D2Gdi (windowed). The drawing slots draw into one
 8-bit back buffer and are shared by both.
 
-**Mac-only, PowerPC-only.** Every file compiles to nothing unless the Mac PowerPC target's flags
-define `D2_OS_MAC`, `D2_MAC_CARBON` and `D2_ARCH_PPC`; the guard is spelled
-`#if !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC` (the VC8 oracle's translator skips
-`!defined(_WIN32)` blocks), placed before any include. Nothing here includes `D2Arch.h`. No CMake
-target builds it yet: the default build's glob compiles each file to an empty object. The Carbon
-builds' CoreGraphics back end (`cgCore.cpp`) is not reconstructed.
+**Mac PowerPC, and the Win32Posix build.** The DrawSprocket and QuickDraw back ends compile to
+nothing unless the Mac PowerPC target's flags define `D2_OS_MAC`, `D2_MAC_CARBON` and
+`D2_ARCH_PPC` (`#if !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC`). The shared files -
+`D2Uni.h`, `uniInternal.h`, `uniCore.cpp`, `uniEngine.cpp`, `uniSprite.cpp`, `uniSmack.cpp` - also
+build on the modern macOS target, `#if !defined(_WIN32) && ((D2_MAC_CARBON && D2_ARCH_PPC) ||
+D2_BACKEND_POSIX)`, where the SDL3 back end `sdlCore.cpp` stands in for both (below). The VC8
+oracle's translator skips `!defined(_WIN32)` blocks; every guard sits before any include. Nothing
+here includes `D2Arch.h`. The Carbon builds' CoreGraphics back end (`cgCore.cpp`) is not
+reconstructed.
+
+## The SDL3 back end (Win32Posix build)
+
+`sdlCore.cpp` is ours: no Mac build had an SDL back end. `uniCore.cpp` dispatches to it as gnUniMode
+4 (`UNIMODE_SDL`), the way the Carbon builds added CoreGraphics as 3; SetOption(8) always picks it,
+since Win32Posix makes the one window full screen or not. It keeps QuickDraw's shape (the 640x480
+and 800x600 buffers, the surface teardown, the 32-bit cutscene surface, the palette compare) and
+presents by converting the 8-bit back buffer through the palette into an ARGB8888 streaming
+texture, scaled into the client area `Win32Posix_GetViewport` gives (aspect kept, nearest), with
+vsync when the settings ask. D2gfx picks it as mode 2 on the modern Mac (`D2GFX.cpp`,
+`Main.cpp`); D2OpenGL takes mode 5 once it is linked in (`D2_RENDERER_OPENGL`).
+
+Every POSIX difference in the shared files is an `#if D2_BACKEND_POSIX` branch, so the PowerPC
+preprocessed output is unchanged byte for byte:
+
+|where|PowerPC|Win32Posix|
+|-|-|-|
+|`uniInternal.h`|the classic stub headers|`Src/uniPosix.h`: the Toolbox and RAD records the slots read, natively laid out, and the Memory Manager and block calls as inlines|
+|`UniGetCel`|the 1.10 `D2GfxDataStrc`, cel in the first word|the 1.14d record's `pDC6Block`|
+|the Bink player|refNum open, Sound Manager, OSEventAvail, dirty rectangles|HANDLE open, DirectSound, `SdlInputPending`, the whole frame (the 64-bit Bink keeps only the head: Width, Height, Frames, FrameNum)|
+|`UniDecodeSmacker`|SmackOpen on an FSSpec|SmackOpen on the path, as Windows|
+|`UniDrawString`|D2Win 1.10b font calls|the 1.14d `SetAndReturnLastFont`, `DRAW_text`, `STRING_ConvertCharToWchar`|
+|SetOption 11|`gnUniContrast = nValue`|the value's low 32 bits|
+
+Byte order: the 8-bit buffer and the palette entries are bytes; the converted frame is written as
+ARGB words, which is what ARGB8888 means on either byte order. Only the Bink cutscene surface
+(B, G, R, A bytes) depends on a little-endian host, and `sdlCore.cpp` asserts it.
+
+The test, `Tests/UniSdlTest.cpp` (`ninja d2_uni_test`, headless on SDL's dummy driver; `--live`
+opens a window), drives the table as D2gfx does and checks the back buffer, the screenshot slot
+and the presented pixels at 1:1 and scaled.
 
 ## Names: what is attested, what is inferred
 
@@ -30,6 +64,7 @@ No PowerPC string names a folder, and only one D2Uni file:
 |`Src/uniCore.cpp`|inferred: the slot layer, in D2Gdi `gdiCore.cpp` order|
 |`Src/qdCore.cpp`|inferred: the code's own `QD*:` log prefix|
 |`Src/uniInternal.h`, `D2Uni.h`|ours|
+|`Src/sdlCore.cpp`, `Src/uniPosix.h`, `Tests/UniSdlTest.cpp`|ours: the Win32Posix build's back end|
 
 The module name follows the code's own `Uni*` log prefix (`UniDetect`, `UniPlayBinkFile`); the
 Video Wizard calls it "Software". Function names with a log string of their own (`UniDetect`,
@@ -69,4 +104,5 @@ be folded into one when both land.
 Modern clang has no `powerpc-apple` target, so the check is the i386 fallback with the PPC
 macros forced:
 `clang++ -std=gnu++17 -fsyntax-only -target i386-apple-macos10.13 -DD2_OS_MAC=1 -DD2_MAC_CARBON=1 -DD2_ARCH_PPC=1 -I<tree> -I<tree>/Source/D2Headers Source/D2Uni/Src/<file>.cpp`
-(0 errors on every file). Without `D2_ARCH_PPC`, and under mingw, each file is an empty object.
+(0 errors on every file); `cmake/check-macppc.sh` runs it over the module. Under mingw each file is
+an empty object. On the modern target `ninja d2_uni_objs` builds the shared files and `sdlCore.cpp`.

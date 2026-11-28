@@ -11,8 +11,8 @@
 // functions below are in source order, highest address first. UniCloseSmacker's body is inlined
 // into the decoder and the player.
 //
-// Classic Mac PowerPC only.
-#if !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC
+// Classic Mac PowerPC, and the Win32Posix build (D2_BACKEND_POSIX) over the SDL3 back end.
+#if !defined(_WIN32) && ((D2_MAC_CARBON && D2_ARCH_PPC) || D2_BACKEND_POSIX)
 
 #include "Source/D2Uni/Src/uniInternal.h"
 #include "Source/D2Multi/D2Multi.h"
@@ -52,7 +52,9 @@ static BYTE UniSmackNearestColor(const BYTE * pRGB) {
 // 's' opens a Smacker movie (through its FSSpec) and decodes the first frame; 'p' loads a PCX
 // banner through Storm and remaps its palette. On any failure the context is closed again.
 void __fastcall UniDecodeSmacker(char * szFile, D2SmackerContextStrc * pContext, int nMode) {
+#if !D2_BACKEND_POSIX
     FSSpec tSpec;
+#endif
     BYTE abPalette[1024];
     void * pFileData;
     DWORD dwFileSize;
@@ -65,9 +67,15 @@ void __fastcall UniDecodeSmacker(char * szFile, D2SmackerContextStrc * pContext,
         if (pContext->hSmack) {
             return;
         }
+#if D2_BACKEND_POSIX
+        {
+            // SmackOpen takes the path, as on Windows.
+            pContext->hSmack = SmackOpen(szFile, SMACKTRACKS, 0xFFFFFFFF);
+#else
         if (FilepathToFSSpec(&tSpec, szFile, 0) == 0) {
             // The Mac SmackOpen takes the FSSpec where Windows takes a path.
             pContext->hSmack = SmackOpen((const char *)&tSpec, SMACKTRACKS, 0xFFFFFFFF);
+#endif
             Smack * pSmack = (Smack *)pContext->hSmack;
             if (pSmack) {
                 gpUniSmackBuffer = (BYTE *)Fog::Memory::AllocClientMemory(pSmack->Width * pSmack->Height,
@@ -193,4 +201,4 @@ static void sUniSmackBlit(D2SmackerContextStrc * pContext, uint32_t nWidth, int 
     }
 }
 
-#endif // !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC
+#endif // !defined(_WIN32) && ((D2_MAC_CARBON && D2_ARCH_PPC) || D2_BACKEND_POSIX)
