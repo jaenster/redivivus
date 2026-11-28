@@ -2298,6 +2298,11 @@ void __fastcall SKILLDESC_AppendSetBonusTextByStateValue(D2UnitStrc * pUnit, D2U
 void __fastcall SKILLDESC_FormatMagicPrefixDesc(D2UnitStrc * pUnit, D2GemsTxt * pD2MagicAffixTxt, uint32_t nMagicAffixId, uint16_t * wszText1, int32_t nMaxBufferSize, uint16_t * wszText2) {
     D2Common::ITEMS::ItemMods::ApplyRuneAndGemStats(5, nullptr, pUnit, (D2MagicAffixTxt*)pD2MagicAffixTxt, nMagicAffixId, 0);
     uint16_t wszStatDescBuf[1024];
+    uint32_t* pStatDescWords = (uint32_t*)wszStatDescBuf;
+    for (int i = 0; i < 0x200; i++) {
+      pStatDescWords[i] = 0;
+    }
+
     wszStatDescBuf[0] = L'\0';
     SKILLDESC_AppendStatBuffText(pUnit, wszStatDescBuf, nMaxBufferSize, 1, wszText2);
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText1, wszStatDescBuf);
@@ -2308,7 +2313,8 @@ void __fastcall SKILLDESC_FormatMagicPrefixDesc(D2UnitStrc * pUnit, D2GemsTxt * 
       D2Common::Stats::StatsEx::FreeStatList(&pStatList->sStatList);
     }
 
-    if (wszText1[D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText1) - 1] == L'\n') {
+    uint16_t* pLastChar = &wszText1[D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText1) - 1];
+    if (*pLastChar == L'\n') {
       wszText1[D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText1) - 1] = L'\0';
     }
 }
@@ -2324,7 +2330,8 @@ void __fastcall SKILLDESC_FormatMagicSuffixDesc(D2UnitStrc * pUnit, D2GemsTxt * 
       D2Common::Stats::StatsEx::FreeStatList(&pStatList->sStatList);
     }
 
-    if (wszText1[D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText1) - 1] == L'\n') {
+    uint16_t* pLastChar = &wszText1[D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText1) - 1];
+    if (*pLastChar == L'\n') {
       wszText1[D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText1) - 1] = L'\0';
     }
 }
@@ -5615,6 +5622,9 @@ static void __stdcall SKILLDESC_DescLine1A_SkillDamage(uint16_t * wszText, D2Ski
     nMinDmgRaw = nMinDmgRaw * 0x19 >> 8;
     nMaxDmgRaw = nMaxDmgRaw * 0x19 >> 8;
     switch (pSkillsTxt->EType) {
+      case ELEMENTAL_FIRE:
+        wDmgTypeStringId = 0x10a1;
+      break;
       case ELEMENTAL_LIGHTNING:
         wDmgTypeStringId = 0x10a3;
       break;

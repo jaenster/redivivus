@@ -551,10 +551,7 @@ static void __stdcall LIGHTMAP_AddLightToCell(int nIntensity, uint8_t nRed, uint
 
     D2LightMapCellStrc* pCell = &gaLightMapCells[nGridY * 0x30 + nGridX];
     const int nOld = pCell->nCellIntensity;
-    uint32_t nNew = (uint32_t)(nOld + nIntensity);
-    if (nNew >= 0xff) {
-      nNew = 0xff;
-    }
+    const uint32_t nNew = (uint32_t)(nOld + nIntensity) < 0xff ? nOld + nIntensity : 0xff;
 
     if (gbLightmapColorEnabled) {
       const uint32_t nFalloff = gnLightmapInterpolationState[nNew + 1];

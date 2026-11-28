@@ -128,29 +128,16 @@ void __stdcall VIEW_Init() {
 uint8_t * __stdcall VIEW_AllocByteTable(uint32_t nDim, int32_t nSteps) {
     uint8_t* pTable = (uint8_t*)D2Hell::D2MEM_VirtualAlloc(nDim * nDim * nSteps + 3);
     uint8_t* pWrite = pTable;
-    uint32_t nOuter = 0;
-    if (nDim > 0) {
-      int nOuterScaled = 0;
-      do {
-        int nBase = nOuter << 0x10;
-        int nMidScaled = nOuterScaled;
-        uint32_t nMidLeft = nDim;
-        do {
-          int nAccum = nBase;
-          int nStep = nMidScaled / nSteps;
-          for (uint32_t nStepLeft = nSteps; nStepLeft > 0; nStepLeft--) {
-            *pWrite = (uint8_t)(nAccum / 65536);
-            pWrite++;
-            nAccum += nStep;
-          }
-
-          nMidScaled += 0x10000;
-          nMidLeft--;
-        } while (nMidLeft);
-
-        nOuterScaled -= 0x10000;
-        nOuter++;
-      } while (nOuter < nDim);
+    for (uint32_t nX = 0; nX < nDim; nX++) {
+      for (uint32_t nY = 0; nY < nDim; nY++) {
+        int nValue = nX << 0x10;
+        int nStep = (int)((nY - nX) << 0x10) / nSteps;
+        for (uint32_t i = 0; i < nSteps; i++) {
+          *pWrite = (uint8_t)(nValue / 65536);
+          pWrite++;
+          nValue += nStep;
+        }
+      }
     }
 
     return pTable;
@@ -211,29 +198,16 @@ void __fastcall Unreferenced_00475d20(LPVOID pMemory) {
 uint8_t * * __stdcall VIEW_AllocPalettePointerTable2(uint32_t nDim, int32_t nSteps) {
     uint8_t** pTable = (uint8_t**)D2Hell::D2MEM_VirtualAlloc(nDim * nDim * nSteps * sizeof(uint8_t*));
     uint8_t** pWrite = pTable;
-    uint32_t nOuter = 0;
-    if (nDim > 0) {
-      int nOuterScaled = 0;
-      do {
-        int nBase = nOuter << 0x10;
-        int nMidScaled = nOuterScaled;
-        uint32_t nMidLeft = nDim;
-        do {
-          int nAccum = nBase;
-          int nStep = nMidScaled / nSteps;
-          for (uint32_t nStepLeft = nSteps; nStepLeft > 0; nStepLeft--) {
-            *pWrite = gPaletteTransitionTable + ((uint8_t)(nAccum / 65536) << 8);
-            pWrite++;
-            nAccum += nStep;
-          }
-
-          nMidScaled += 0x10000;
-          nMidLeft--;
-        } while (nMidLeft);
-
-        nOuterScaled -= 0x10000;
-        nOuter++;
-      } while (nOuter < nDim);
+    for (uint32_t nX = 0; nX < nDim; nX++) {
+      for (uint32_t nY = 0; nY < nDim; nY++) {
+        int nValue = nX << 0x10;
+        int nStep = (int)((nY - nX) << 0x10) / nSteps;
+        for (uint32_t i = 0; i < nSteps; i++) {
+          *pWrite = gPaletteTransitionTable + ((uint8_t)(nValue / 65536) << 8);
+          pWrite++;
+          nValue += nStep;
+        }
+      }
     }
 
     return pTable;
