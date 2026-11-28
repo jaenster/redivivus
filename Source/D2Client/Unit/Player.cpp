@@ -2220,7 +2220,6 @@ static BOOL INPUT_HandleRightClickWithPet(D2UnderMouseStrc * pUnderMouse) {
 // Client input dispatcher for map clicks. Converts raw screen coordinates to perspective-view world coords, builds a D2UnderMouseStrc with the player and currently selected unit, sets run/walk and force-move flags from mouseEventFlags, then dispatches to the appropriate handler based on clickType (0=left-down, 1=left-hold, 2=left-up, 3=right-down, 4=right-hold, 5=right-up). Guards against re-entrant calls and ESC-menu-open state.
 // 1.14d mac: 0012243a
 int __fastcall ClickMap(int32_t clickType, int32_t nX, int32_t nY, uint16_t mouseEventFlags) {
-    uint32_t nResult;
     int nXConverted = nX;
     BOOL bEscOpen = UI::ui::GetUIFlag(UI_ESCMENU);
     if (bEscOpen) {
@@ -2263,53 +2262,40 @@ int __fastcall ClickMap(int32_t clickType, int32_t nX, int32_t nY, uint16_t mous
 
     switch (clickType) {
       case 0:
-        {
-          if (mouse.pTarget) {
-            GAME::Select::SELECT_UpdateUnitSelection(mouse.pTarget);
-            mouse.flags |= 5;
-            bEscOpen = INPUT_HandleLeftClickRepeat(&mouse);
-            return bEscOpen;
-          }
-
+        if (mouse.pTarget) {
+          GAME::Select::SELECT_UpdateUnitSelection(mouse.pTarget);
+        } else {
           GAME::Select::ClearSelectedUnit();
-          mouse.flags |= 5;
-          bEscOpen = INPUT_HandleLeftClickRepeat(&mouse);
-          return bEscOpen;
         }
+
+        mouse.flags |= 5;
+        return INPUT_HandleLeftClickRepeat(&mouse);
       case 1:
         mouse.flags |= 9;
-      nResult = WalkToCoordOrUnit(&mouse);
-      return nResult;
+        return WalkToCoordOrUnit(&mouse);
       case 2:
         GAME::Select::ClearSelectedUnit();
-      mouse.flags |= 0x11;
-      bEscOpen = INPUT_HandleLeftClickWithPet(&mouse);
-      return bEscOpen;
+        mouse.flags |= 0x11;
+        return INPUT_HandleLeftClickWithPet(&mouse);
       case 3:
         if (mouse.pTarget) {
           GAME::Select::SELECT_UpdateUnitSelection(mouse.pTarget);
-          mouse.flags |= 6;
-          bEscOpen = ClickMapRightSkill(&mouse);
-          return bEscOpen;
+        } else {
+          GAME::Select::ClearSelectedUnit();
         }
-      GAME::Select::ClearSelectedUnit();
-      mouse.flags |= 6;
-      bEscOpen = ClickMapRightSkill(&mouse);
-      return bEscOpen;
+
+        mouse.flags |= 6;
+        return ClickMapRightSkill(&mouse);
       case 4:
         mouse.flags |= 10;
-      bEscOpen = INPUT_HandleRightClickRepeat(&mouse);
-      return bEscOpen;
+        return INPUT_HandleRightClickRepeat(&mouse);
       case 5:
         GAME::Select::ClearSelectedUnit();
-      mouse.flags |= 0x12;
-      bEscOpen = INPUT_HandleRightClickWithPet(&mouse);
-      return bEscOpen;
+        mouse.flags |= 0x12;
+        return INPUT_HandleRightClickWithPet(&mouse);
       default:
         return 1;
     }
-
-    return 0;
 }
 
 uint8_t __stdcall PLAYER_GetWeaponTypeForAnimation(D2UnitStrc * pPlayerUnit, D2UnitStrc * pUnit) {
