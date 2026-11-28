@@ -708,10 +708,12 @@ void FAULT_ShowFormattedErrorWithArgs(uint32_t nErrorCode, ...) {
     FAULT_LookupErrorString(nErrorCode, szErrorMsg, 0x200);
     #if !defined(_WIN32) && D2_OS_MAC
     vsprintf(szFormattedMsg, szErrorMsg, __va);
+    // FAULT_ShowErrorMessageBox, which the Mac build has inlined
+    MessageBoxA((HWND)0x0, szFormattedMsg, lpCaption_006cc848, 0x2010);
 #else
     /* va_list arglist for wvsprintfA */ /* LPCSTR param_2 for wvsprintfA */ /* LPSTR param_1 for wvsprintfA */ wvsprintfA(szFormattedMsg, szErrorMsg, __va);
-#endif
     FAULT_ShowErrorMessageBox(szFormattedMsg);
+#endif
 }
 
 LPVOID __fastcall D2MEM_VirtualAlloc(SIZE_T nSize) {
@@ -3484,7 +3486,7 @@ short UnmountVolume(ConstStr255Param szVolumeName, short nVRefNum);
 // 1.14d mac: 002b692a
 // Walks the mounted volumes by index and unmounts each one the CD check accepts, stopping
 // when an unmount fails or there are no more volumes. Always returns 1.
-int FUN_002b692a(void) {
+int ARCHIVE_UnmountCdVolumes(void) {
     HParamBlockRec tParam;
     Str255 szVolumeName;
     tParam.volumeParam.ioVolIndex = 1;

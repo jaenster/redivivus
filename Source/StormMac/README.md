@@ -87,19 +87,19 @@ decides, the boundary is chosen as follows.
 |File|Range|Note|
 |-|-|-|
 |`SFILE.CPP`|0001204e..00017700|ends with its static initialiser (00017700); the run 00016a2e..0001719c and 000175b6..0001762c is the instantiations of the lists of its five record types (TSLink, TSExplicitList), and its tail 00017484..000176a0 is the stream and request destructors and the lock. The records' destructors are the `SFILE_Free...Record` functions (the callers delete the record themselves); the completion-event list has a node type of its own (SFileEventNode). The instantiations are tagged on explicit instantiations at the file's end (SFILE_ReleaseFileHandle 00017210 is the request list's DeleteNode, CRITSECT_Init 000176a0 sits here: the lock's constructor calls it, SRGN and SNET call it too); the calls inside the file inline them, where the original calls the weak copies, and the linker's hidden visibility of those copies is why the static initialiser reaches the destructors with `lea` rather than through a non-lazy pointer|
-|`SGDI.cpp`|00017886..00017c32|`__FILE__` (SGDI.CPP, 0x118/0x136 in SGdiDestroy's frees); ends with its static initialiser (00017be0)|
+|`SGDI.CPP`|00017886..00017c32|`__FILE__` (SGDI.CPP, 0x118/0x136 in SGdiDestroy's frees); ends with its static initialiser (00017be0)|
 |`SLOG.cpp`|00017c32..00018b0b|SLogClose is its first function (the Windows build's asserts name SLOG.CPP); no static initialiser, so the end is the first function of the next file, SMemAlloc|
 |`SMEM.cpp`|00018b0b..00018cdb|SMemAlloc .. SMemInitialize; SMsgBreakHandlerChain (00018cdb) is the first of SMSG|
 |`SMSG.cpp`|00018cdb..00019532|ends with its static initialiser (000194e0); WND_RemoveAndFreeRecord (00019464) is the list's DeleteNode instantiation|
-|`SNET.cpp`|00019532..0001ae80|ends with `__sinit_SNET_CPP`|
+|`SNET.CPP`|00019532..0001ae80|ends with `__sinit_SNET_CPP`|
 |`SRGN.cpp`|0001b087..0001c6f0|region code only, no literal names the file; ends with `SRGN_InitStatics`|
-|`SSTR.cpp`|0001c730..0001d2f9|SStrLower (0001d2f9) included|
+|`SSTR.CPP`|0001c730..0001d2f9|SStrLower (0001d2f9) included|
 |`SSignature.cpp`|0001d302..0001d69e||
 |`STRANS.CPP`|0001d69e..0001de67|the UTF-8/UTF-16/Latin-1 helpers have no file evidence; placed here with their tables|
 |`SVID.CPP`|0001de67..0001e2fd|includes STORM_LaunchURL and its callback|
-|`SDRAW_VidDriver.cpp`|00036035|`SDrawDestroy`|
+|`SDRAW_VidDriver.CPP`|00036035|`SDrawDestroy`|
 
-Files keep the case of their `__FILE__` literal where one exists (STORM.CPP, SBLT.CPP); the compare and coverage tools and `cmake/mac.cmake` accept both `.cpp` and `.CPP`. The names above are lowercase `.cpp` where no literal fixes the case.
+Files keep the case of their `__FILE__` literal where one exists (STORM.CPP, SBLT.CPP, SGDI.CPP, SNET.CPP, SSTR.CPP, SDRAW_VidDriver.CPP); the compare and coverage tools and `cmake/mac.cmake` accept both `.cpp` and `.CPP`. SERR, SLOG, SMEM, SMSG and SRGN have no `__FILE__` in the Mac binary: their names come from their Windows twins' files (the file map; SRGN from the address order only). SERR.CPP is spelled as the file map spells it; SLOG, SMEM, SMSG and SRGN stay lowercase `.cpp` because no Mac literal fixes their case (`asm_matching/mac/coverage/path-exceptions.tsv` records SMSG, the one the file map spells `SMSG.CPP`).
 
 ## Storm SOURCE, STORM.CPP through SEVT.CPP (1.14d 000095fc..00011fdb)
 

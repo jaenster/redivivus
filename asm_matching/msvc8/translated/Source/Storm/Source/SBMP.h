@@ -119,7 +119,11 @@ namespace Storm { namespace Source { namespace SBMP {
 // @oracle-source Storm export vector SBmpDecodeImage @100cbc64 -> code 10004d00 = the traceback-named function .SBmpDecodeImage, in Mac PPC 1.10b Storm
 // @rename-basis Behaviour. The only SBmp entry point that touches no file at all: it takes a source pointer and a byte count instead of a path, and it is the only one with an explicit format-selector argument. SBmpAllocLoadImage 006c6e70 calls it twice - once with a NULL destination to probe the dimensions, once to decode - which is what a decode-from-memory primitive is for.
 // @former-name SBMP_LoadImageFromMemory
+#if !defined(_WIN32) && D2_OS_MAC
+int __stdcall SBmpDecodeImage(int nFormat, const void * pData, uint32_t nDataSize, void * pPalette, uint8_t * pbPixels, int nPixelBufSize, uint32_t * pnWidth, uint32_t * pnHeight, uint32_t * pnBpp);
+#else
 int __stdcall SBmpDecodeImage(int nFormat, void * pData, uint32_t nDataSize, void * pPalette, uint8_t * pbPixels, int nPixelBufSize, uint32_t * pnWidth, uint32_t * pnHeight, uint32_t * pnBpp);
+#endif
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 // Write bitmap data to PCX format file with RLE compression and palette

@@ -29,11 +29,13 @@ int __stdcall SSYSTEM_Shutdown(uint32_t nShutdownCode) {
     return 0;
 }
 
+#if !D2_OS_MAC
 void __stdcall SSYSTEM_Initialize() {
     SMem::SMemInitialize();
     SLog::SLogInitialize();
     SSTR::SSTR_InitConversionTables();
 }
+#endif
 
 // @blizzard StormGetInstance (STORM.CPP)
 HMODULE __stdcall StormGetInstance() {
@@ -137,10 +139,12 @@ void __stdcall SSYSTEM_SetSystemOption(uint32_t nOptionId, uint32_t * pValue, in
     }
 }
 
+#if !D2_OS_MAC
 uint32_t __fastcall SSYSTEM_InitializeAndReturn(uint32_t nFlags) {
     SSYSTEM_Initialize();
     return nFlags;
 }
+#endif
 
 char * ILT_strpbrk(char * _Str, char * _Control) {
     char* pResult = strpbrk(_Str, _Control);
@@ -170,9 +174,11 @@ void * __fastcall TSFixedArray_Ui_Constructor(void * pNode) {
     return pNode;
 }
 
+#if !D2_OS_MAC
 // JMP thunk
 void __stdcall StaticInit_6ca890() {
     ::Storm::Source::SSystem::SSYSTEM_Initialize();
 }
+#endif
 
 }}} // namespace Storm::Source::SSystem

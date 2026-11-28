@@ -629,7 +629,7 @@ void __fastcall SOUND_UpdateEnvironmentAmbience(int32_t nTick) {
 }} // namespace D2Client::Sound
 
 #if !defined(_WIN32) && D2_OS_MAC
-namespace D2Sound { namespace Src { namespace D2SoundSmp { BOOL __stdcall FUN_002e93bd(void * pSoundSmp); }}}
+namespace D2Sound { namespace Src { namespace D2SoundSmp { uint32_t __fastcall SOUNDSMP_GetStatus(struct D2SoundSmpStrc * ppSoundSmp); }}}
 
 namespace D2Client { namespace Sound {
 
@@ -643,7 +643,7 @@ BOOL __stdcall SOUND_IsClientSampleActive(D2ClientSoundChannelStrc * pSound) {
     if (!pSound || !pSound->pSoundSmp) {
       return 0;
     }
-    return D2Sound::Src::D2SoundSmp::FUN_002e93bd(pSound->pSoundSmp);
+    return D2Sound::Src::D2SoundSmp::SOUNDSMP_GetStatus((D2SoundSmpStrc*)pSound->pSoundSmp);
 }
 
 // 1.14d mac: 000978f8

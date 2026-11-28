@@ -40,7 +40,11 @@ void __stdcall SLogCreate(LPCSTR szFileName, uint32_t dwUnused, int * pnHandleOu
 // Provenance: 1.14d asm 00420120 (SLOG_LockLog, [ctx+0x14] += delta); caller BNET_LogIndent.
 int32_t __stdcall SLogSetIndent(uint32_t nHandle, int32_t nDelta);
 // @blizzard SLogWrite (SLOG.CPP)
+#if !defined(_WIN32) && D2_OS_MAC
+void SLogWrite(uint32_t nHandle, const char * szFormat, ...);
+#else
 void SLogWrite(uint32_t nHandle, char * szFormat, ...);
+#endif
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 // @blizzard SLogDump (SLOG.CPP)

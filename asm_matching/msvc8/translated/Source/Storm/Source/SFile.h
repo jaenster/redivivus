@@ -357,7 +357,11 @@ void __stdcall SFileSetAsyncBudget(uint32_t nBudgetBytesPerSec);
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SFileSetBasePath"
 // @wasnamed SFILE_SetMaxFileHandles
 // @basis behaviour-confirmed, and a hard contradiction of the old name. The single parameter is a PATH STRING, not a handle count: it is length-checked against MAX_PATH (0x104, SetLastError(0xa1) = ERROR_BAD_PATHNAME on overflow), copied into the global base-path buffer lpFilename_00778f28, and a trailing backslash is appended if absent. An empty string clears the base path. Nothing in the body touches a handle table. Counterpart of SFileGetBasePath (004160a0).
+#if !defined(_WIN32) && D2_OS_MAC
+int32_t __stdcall SFileSetBasePath(const char * szText);
+#else
 int32_t __stdcall SFileSetBasePath(char * szText);
+#endif
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SFileSetDataChunkSize"
 // @wasnamed SFILE_GetMaxFileHandles
 // @basis behaviour-confirmed, and a hard contradiction of the old name in BOTH halves. It is a setter, not a getter - it writes its argument into the global. And the value is a chunk size, not a handle count: the argument is rejected unless it is a power of two ((n-1) & n == 0), and downstream the global is used as the read granularity in SFILE_ReadFile (nChunkCount = <global>) and as a byte-rate numerator in SFILE_AsyncIOWorkerThread (<global> * 1000 / gnSFileAsyncIOPriority). A maximum-file-handle count would need neither a power-of-two constraint nor a role in the read loop. NOTE: the global itself is still named gnSFileMaxFileHandles and inherits the same error; it should read gnSFileDataChunkSize.
@@ -376,11 +380,19 @@ int __stdcall SFileAuthenticateArchive(struct D2ArchiveStrc * pArchive, uint32_t
 BOOL __stdcall SFileDdaGetPos(struct D2MPQFileStrc * pFile, uint32_t * pdwCurrentPos, uint32_t * pdwEndPos);
 // @sourcefile .\SOURCE\SFILE.CPP
 // @blizzard SFileOpenFileEx (SFILE.CPP)
+#if !defined(_WIN32) && D2_OS_MAC
+int __stdcall SFileOpenFileEx(struct D2ArchiveStrc * pArchive, const char * szFileName, uint32_t dwFlags, void * * phFile);
+#else
 int __stdcall SFileOpenFileEx(struct D2ArchiveStrc * pArchive, char * szFileName, uint32_t dwFlags, void * * phFile);
+#endif
 // @blizzard SFileCloseFile (SFILE.CPP)
 int __stdcall SFileCloseFile(struct D2MPQFileStrc * pMPQFile);
 // @blizzard SFileOpenFile (SFILE.CPP)
+#if !defined(_WIN32) && D2_OS_MAC
+int32_t __stdcall SFileOpenFile(const char * szFilename, struct D2MPQFileStrc * * ppFile);
+#else
 int32_t __stdcall SFileOpenFile(char * szFilename, struct D2MPQFileStrc * * ppFile);
+#endif
 // @blizzard SFileCloseArchive (SFILE.CPP)
 int __stdcall SFileCloseArchive(struct D2ArchiveStrc * pArchive);
 // Shuts down async I/O subsystem by setting gbSFileAsyncIOShutdown shutdown flag, waiting for gpCurrentAsyncIORequest to finish (10ms polling, timeout when worker thread dies), then iterating gSFileStreamRecordList.pNext linked list to unlink, decrement refcount, and free all pending async file requests. Frees file record data when refcount hits zero.
@@ -403,15 +415,27 @@ BOOL __stdcall SFileDdaBeginEx(struct D2MPQFileStrc * hFile, uint32_t dwBufferBy
 // @wasnamed SFILE_LoadFileToMemory
 // @basis behaviour-confirmed as part of a three-way arity lock. The real API has exactly one 5/7/8-parameter family: SFileLoadFile(filename, buffer, bytes, extrabytes, callback) = 5, SFileLoadFileEx(archive, filename, buffer, bytes, extrabytes, flags, callback) = 7, SFileLoadFileEx2(... , readflags) = 8. This is the 5-parameter member; it forwards to the 8-parameter worker with archive = NULL, flags = SFILE_GetOpenFlags() and readflags = 0, which is exactly the set of defaults the 5-parameter signature implies. Note its first parameter is the FILENAME - it is currently mistyped D2ArchiveStrc *, and lands in the worker's filename slot.
 // @seealso SFileLoadFileEx 0041b680, SFileLoadFileEx2 0041af60
+#if !defined(_WIN32) && D2_OS_MAC
+uint32_t __stdcall SFileLoadFile(const char * pArchive, void * * ppOutBuffer, DWORD * pdwOutSize, uint32_t nSize, LPOVERLAPPED nReadCtx);
+#else
 uint32_t __stdcall SFileLoadFile(char * pArchive, void * * ppOutBuffer, DWORD * pdwOutSize, uint32_t nSize, LPOVERLAPPED nReadCtx);
+#endif
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SFileLoadFileEx"
 // @wasnamed SFILE_LoadFileToMemory2
 // @basis behaviour-confirmed as part of a three-way arity lock. 7 parameters, positionally identical to SFileLoadFileEx(archive, filename, buffer, bytes, extrabytes, flags, callback); the body forwards them unchanged to the 8-parameter worker with readflags = 0, which is exactly what distinguishes Ex from Ex2.
 // @seealso SFileLoadFile 0041b650, SFileLoadFileEx2 0041af60
+#if !defined(_WIN32) && D2_OS_MAC
+uint32_t __stdcall SFileLoadFileEx(struct D2ArchiveStrc * pArchive, const char * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, uint32_t nExtraPadBytes, uint32_t nSearchScope, LPOVERLAPPED nReadCtx);
+#else
 uint32_t __stdcall SFileLoadFileEx(struct D2ArchiveStrc * pArchive, char * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, uint32_t nExtraPadBytes, uint32_t nSearchScope, LPOVERLAPPED nReadCtx);
+#endif
 // @sourcefile .\SOURCE\SFILE.CPP
 // @blizzard SFileOpenArchive (SFILE.CPP)
+#if !defined(_WIN32) && D2_OS_MAC
+int __stdcall SFileOpenArchive(const char * szArchiveName, int * pUserData, uint32_t nFlags, struct D2ArchiveStrc * * ppArchive);
+#else
 int __stdcall SFileOpenArchive(char * szArchiveName, int * pUserData, uint32_t nFlags, struct D2ArchiveStrc * * ppArchive);
+#endif
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 // Initializes a 4-element stream buffer structure by copying 4 sequential parameters into consecutive fields (param1→field[0], param2→field[1], param3→field[2], param4→field[3]). Used for stream buffer initialization in custom calling convention (ECX register for destination pointer).

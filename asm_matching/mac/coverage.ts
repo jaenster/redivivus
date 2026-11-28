@@ -89,7 +89,14 @@ const unitRows = readTsv(UNITS).slice(1).map((r): Unit => ({
     file: r[4], redivivus: r[5] ?? "", evidence: r[6] ?? "",
 }));
 const units = unitRows.filter((u) => u.kind !== "override");
-const overrides = new Map(unitRows.filter((u) => u.kind === "override").map((u) => [u.lo, u]));
+// an override names one function (lo only) or every function of [lo, hi)
+const overrideRows = unitRows.filter((u) => u.kind === "override");
+const overrideOf = (a: number) => overrideRows.find((u) => a >= u.lo && a < u.hi);
+// coverage/path-exceptions.tsv: a body that is at none of the paths the evidence allows, with the reason
+// it stays where it is. The key is an address, a body file, or a folder ending in "/".
+const PATH_EXCEPTIONS = join(HERE, "coverage/path-exceptions.tsv");
+const pathExceptions = existsSync(PATH_EXCEPTIONS) ? readTsv(PATH_EXCEPTIONS).slice(1).map((r) => ({ match: r[0], reason: r[1] ?? "", used: 0 })) : [];
+for (const e of pathExceptions) if (!e.reason) { console.error(`path-exceptions.tsv: ${e.match} has no reason`); process.exit(2); }
 
 // ---- our sources: the address tags, as cmp.ts reads them ----
 interface Tag { addr: number; file: string; defined: boolean }
@@ -145,8 +152,80 @@ function redivivusPath(orig: string): string {
     return "Source/" + orig.replace(/^StormMac\/Storm Mac\//, "StormMac/").replace(/ /g, "");
 }
 
+// ---- the shared tree's files: Windows address -> the file whose source map lists it ----
+// A Mac-only function in a shared module belongs to the file of the functions around it. The shared
+// tree's file names are the Windows reconstruction's (its own case and, in places, its own names), so
+// for those rows the expected file is read from the source maps of the neighbours' Windows twins.
+const winFile = new Map<string, string>();
+for (const root of SOURCE_ROOTS) for (const file of walk(join(REPO, root)).filter((f) => f.endsWith(".cpp.map"))) {
+    try {
+        const m = JSON.parse(readFileSync(file, "utf8"));
+        for (const fn of m.functions ?? []) if (fn.address && m.file) winFile.set(String(fn.address).toLowerCase().padStart(8, "0"), m.file);
+    } catch { /* not a source map */ }
+}
+const fnIndex = new Map(fns.map((f, i) => [f.addr, i]));
+// the tree files of the nearest paired functions before and after, "" where there is none
+function twinBracket(f: Fn): [string, string] {
+    const i = fnIndex.get(f.addr) ?? -1;
+    let before = "", after = "";
+    for (let j = i - 1; j >= 0 && !before; j--) before = (fns[j].twin && winFile.get(fns[j].twin)) || "";
+    for (let j = i + 1; j < fns.length && !after; j++) after = (fns[j].twin && winFile.get(fns[j].twin)) || "";
+    return [before, after];
+}
+
+// ---- at_path: is the body where the evidence puts it ----
+// yes        the evidence names one file (a __FILE__ literal, the file map, a bracket of either) and the
+//            body is there; in a shared module, the file of the paired functions on both sides
+// dir        no evidence names the file ("<folder>/?") and the body sits in that folder, or in the file
+//            units.tsv chose for the unit
+// range      the evidence is "A|B" (between functions of two files) and the body is A, B or a file of
+//            their folder that sorts between them (ignoring case and extension); in a shared module,
+//            the file of the paired function on one side
+// exception  none of these, with the reason coverage/path-exceptions.tsv gives
+// no         anything else
+const base = (p: string) => p.slice(p.lastIndexOf("/") + 1).replace(/\.[^.]*$/, "").toLowerCase();
+const folder = (p: string) => p.slice(0, p.lastIndexOf("/") + 1);
+function atPathOf(f: Fn, red: string, chosen: boolean, sharedModule: boolean, body: string): { at: string; note: string; pe?: { match: string; reason: string; used: number } } {
+    const parts = red.split("|");
+    let at = "no";
+    if (parts.length === 1 && red !== "?" && !red.endsWith("?")) at = body === red ? (chosen ? "dir" : "yes") : "no";
+    else if (parts.length === 1 && red !== "?") at = folder(body) === red.slice(0, -1) ? "dir" : "no";
+    else if (parts.length === 2) {
+        const [a, b] = parts;
+        if (body === a || body === b) at = "range";
+        else {
+            const dirs = [a, b].filter((p) => p !== "?").map((p) => p.endsWith("?") ? p.slice(0, -1) : folder(p));
+            const lo = a.endsWith("?") ? "" : base(a), hi = b.endsWith("?") ? "\uffff" : base(b), k = base(body);
+            if (dirs.length && dirs.every((d) => d === folder(body)) && lo <= k && k <= hi) at = "range";
+        }
+    }
+    if (at === "no" && sharedModule) {
+        const [before, after] = twinBracket(f);
+        if (before && before === after && body === before) at = "yes";
+        else if ((before && body === before) || (after && body === after)) at = "range";
+        if (at !== "no") return { at, note: `the tree file of its paired neighbours: ${before === after ? before : before + "|" + after}` };
+    }
+    if (at !== "no") return { at, note: "" };
+    const a8 = hex(f.addr);
+    const pe = pathExceptions.find((q) => q.match === a8) ?? pathExceptions.find((q) => q.match === body)
+        ?? pathExceptions.find((q) => q.match.endsWith("/") && body.startsWith(q.match));
+    if (pe) return { at: "exception", note: pe.reason, pe };
+    return { at, note: "" };
+}
+// the body a row names: the tagged definition at the evidence's path, else one atPathOf accepts, else the
+// first (a call site's comment can carry the address too, and a twin's file may tag the Mac address)
+function pickBody(f: Fn, ts: Tag[], red: string, chosen: boolean, sharedModule: boolean) {
+    const defs = ts.filter((t) => t.defined);
+    const def = defs.find((t) => red.split("|").includes(t.file))
+        ?? defs.find((t) => !["no", "exception"].includes(atPathOf(f, red, chosen, sharedModule, t.file).at)) ?? defs[0];
+    if (!def) return { def, ap: { at: "-", note: "" } };
+    const ap = atPathOf(f, red, chosen, sharedModule, def.file);
+    if (ap.pe) ap.pe.used++;
+    return { def, ap };
+}
+
 // ---- one row per function in a unit ----
-interface Row { reason: string; fn: Fn; unit: Unit; file: string; fileEvidence: string; cls: string; redivivus: string; status: string; bodyFile: string; atPath: string }
+interface Row { reason: string; fn: Fn; unit: Unit; file: string; fileEvidence: string; cls: string; redivivus: string; status: string; bodyFile: string; atPath: string; pathNote: string }
 const rows: Row[] = [];
 for (const u of units) {
     const inUnit = fns.filter((f) => f.addr >= u.lo && f.addr < u.hi);
@@ -173,17 +252,17 @@ for (const u of units) {
         }
         let cls = u.cls;
         if (cls === "shared") cls = f.twin ? "shared" : f.cands > 0 ? "shared-unpaired" : "blizzard-mac";
-        const ov = overrides.get(f.addr);
+        const ov = overrideOf(f.addr);
         if (ov) { cls = ov.cls; file = ov.file; ev = "override"; }
         const red = cls === "third-party" ? "-" : (ov ?? u).redivivus || file.split("|").map(redivivusPath).join("|");
         const ts = tags.get(f.addr) ?? [];
-        const def = ts.find((t) => t.defined && red.split("|").includes(t.file)) ?? ts.find((t) => t.defined);
+        const chosen = !!(ov ?? u).redivivus && /\?$/.test(file);
+        const { def, ap } = pickBody(f, ts, red, chosen, u.cls === "shared" && cls === "blizzard-mac");
         let status = def ? "body" : "missing";
         const c = cmp.get(f.addr);
         if (def && c === "SAME") status = "match";
         else if (def && c === "DIFF") status = "nonmatch";
-        const atPath = !def ? "-" : red.split("|").includes(def.file) ? "yes" : "no";
-        rows.push({ reason: reasons.get(f.addr) ?? "", fn: f, unit: u, file, fileEvidence: ev, cls, redivivus: red, status, bodyFile: def?.file ?? "", atPath });
+        rows.push({ reason: reasons.get(f.addr) ?? "", fn: f, unit: u, file, fileEvidence: ev, cls, redivivus: red, status, bodyFile: def?.file ?? "", atPath: ap.at, pathNote: ap.note });
     });
 }
 
@@ -206,20 +285,19 @@ for (const f of fns) {
     const ev = f.literals.length ? "__FILE__" : file !== "?" ? "file-map" : "";
     const red = u.cls === "third-party" || u.cls === "compiler" ? "-" : redivivusPath(file);
     const ts = tags.get(f.addr) ?? [];
-    const def = ts.find((t) => t.defined && red.split("|").includes(t.file)) ?? ts.find((t) => t.defined);
+    const { def, ap } = pickBody(f, ts, red, false, true);
     let status = def ? "body" : "missing";
     const c = cmp.get(f.addr);
     if (def && c === "SAME") status = "match";
     else if (def && c === "DIFF") status = "nonmatch";
-    const atPath = !def ? "-" : red.split("|").includes(def.file) ? "yes" : "no";
     const unit: Unit = { lo: f.addr, hi: f.addr + 1, kind: "unpaired", cls: u.cls, file, redivivus: red, evidence: u.evidence };
-    rows.push({ reason: reasons.get(f.addr) ?? "", fn: { ...f, twin: u.win }, unit, file, fileEvidence: ev || "unpaired", cls: u.cls, redivivus: red, status, bodyFile: def?.file ?? "", atPath });
+    rows.push({ reason: reasons.get(f.addr) ?? "", fn: { ...f, twin: u.win }, unit, file, fileEvidence: ev || "unpaired", cls: u.cls, redivivus: red, status, bodyFile: def?.file ?? "", atPath: ap.at, pathNote: ap.note });
 }
 rows.sort((a, b) => a.fn.addr - b.fn.addr);
 
-const header = ["addr", "name", "bytes", "orig_file", "file_evidence", "redivivus", "class", "status", "body_file", "at_path", "win_twin", "reason"];
+const header = ["addr", "name", "bytes", "orig_file", "file_evidence", "redivivus", "class", "status", "body_file", "at_path", "win_twin", "reason", "path_note"];
 writeFileSync(out, [header.join("\t"), ...rows.map((r) => [hex(r.fn.addr), r.fn.name, r.fn.bytes, r.file, r.fileEvidence,
-    r.redivivus, r.cls, r.status, r.bodyFile, r.atPath, r.fn.twin, r.reason].join("\t"))].join("\n") + "\n");
+    r.redivivus, r.cls, r.status, r.bodyFile, r.atPath, r.fn.twin, r.reason, r.pathNote].join("\t"))].join("\n") + "\n");
 
 // ---- summary ----
 const pct = (n: number, d: number) => (d ? (100 * n / d).toFixed(1) : "0.0") + "%";
@@ -244,6 +322,12 @@ for (const [f, p] of verbose ? files : files.slice(0, 15)) {
 }
 if (!verbose && files.length > 15) console.log(`  ... ${files.length - 15} more files (-v lists them)`);
 const misplaced = bm.filter((r) => r.atPath === "no").length;
+const atCount = new Map<string, number>();
+for (const r of bm) if (has(r)) atCount.set(r.atPath, (atCount.get(r.atPath) ?? 0) + 1);
+console.log(`== at_path ${["yes", "dir", "range", "exception", "no"].map((k) => `${k} ${atCount.get(k) ?? 0}`).join(", ")}`);
+if (verbose) for (const r of bm.filter((r) => r.atPath === "no")) console.log(`   not at path: ${hex(r.fn.addr)} ${r.fn.name} ${r.bodyFile} (evidence ${r.redivivus})`);
+const unusedExceptions = pathExceptions.filter((pe) => !pe.used);
+if (unusedExceptions.length) console.log(`== ${unusedExceptions.length} path-exceptions.tsv rows match no body: ${unusedExceptions.map((pe) => pe.match).join(" ")}`);
 const matches = rows.filter((r) => r.status === "match").length;
 console.log(`== coverage ${bm.filter(has).length}/${bm.length} blizzard-mac functions with a body (${pct(bm.filter(has).length, bm.length)})` +
     (misplaced ? `, ${misplaced} of them outside the mapped path` : ""));

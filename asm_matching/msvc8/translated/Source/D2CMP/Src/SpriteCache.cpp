@@ -106,7 +106,7 @@ void __stdcall SPRITECACHE_Init(BOOL bFreeAll) {
 
     TileProjects::Free();
 }
-
+// 1.14d mac: 00134d0f
 BOOL __stdcall SPRITECACHE_AllocEntry(D2TileLibraryEntryStrc * pTile, uint32_t dwFlags, uint32_t dwReserved) {
     D2TileLibraryEntryStrc* pTileSlot;
     if (pTile->pLruNode) {

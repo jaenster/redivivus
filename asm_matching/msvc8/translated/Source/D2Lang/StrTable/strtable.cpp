@@ -966,6 +966,7 @@ void __stdcall STRTABLE_FormatNumber(uint16_t * wszText, uint32_t nValue, int32_
     Unicode::UNISYS::STRING_CopyWideString(wszText, wszFallback);
 }
 
+#if !D2_OS_MAC
 void __stdcall STRTABLE_FormatInt64(uint16_t * wszText, int32_t nValueLo, int32_t nValueHi, int32_t nMaxLen) {
     int nOutPos2;
     bool bNeedNeg;
@@ -1024,6 +1025,7 @@ void __stdcall STRTABLE_FormatInt64(uint16_t * wszText, int32_t nValueLo, int32_
     UTF8_ConvertToWideChar(wszFallback, "*", 2);
     Unicode::UNISYS::STRING_CopyWideString(wszText, wszFallback);
 }
+#endif
 
 void __stdcall STRTABLE_FormatUInt64WithAbbrev(uint16_t * wszText, uint32_t dwValueLo, uint32_t dwValueHi, int32_t nMaxLen) {
     int nNextOutPos;

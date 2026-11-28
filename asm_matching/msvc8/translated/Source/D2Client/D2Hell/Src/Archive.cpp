@@ -286,6 +286,7 @@ uintptr_t __fastcall ARCHIVE_RemoveNode(StormLinkedListStrc * pThis, int, StormL
     return nValue;
 }
 
+#if !D2_OS_MAC
 // NOTE: Callee-saved register params inferred (medium confidence): param_esi (ESI): LPOVERLAPPED, param_edi (EDI): LPOVERLAPPED, param_ebx (EBX): LPOVERLAPPED
 // @sourcefile SOURCE\D2HELL\Src\Archive.cpp
 void ARCHIVE_WriteMemoryCheckReport() {
@@ -446,6 +447,7 @@ void ARCHIVE_WriteMemoryCheckReport() {
       bFoundNextBlock = Storm::Source::SMem::SMemFindNextBlock(nHeapId, pBlock, &pBlock, (int*)&sBlockInfo);
     } while (true);
 }
+#endif
 
 void __fastcall ReadByteShortOrDword(D2BitBufferStrc * pBitBuffer) {
     uint32_t bSizeBit = Fog::BitBuffer::ReadUnsigned(pBitBuffer, 1);

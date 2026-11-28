@@ -99,8 +99,10 @@ It writes `coverage.tsv`, one row per function of the Mac-only regions:
 |`redivivus`|where that file lives here: spaces dropped, `StormMac/Storm Mac/` is `Source/StormMac/`|
 |`class`|`blizzard-mac` (the goal), `third-party` (crashy, `mach_override`, MoreFiles, zlib, blast, RAD Bink, the CRT start), `shared` (paired with a Windows function, the shared source covers it), `shared-unpaired` (in a shared file, unpaired, but the pairer found a Windows body candidate, or `unpaired.tsv` says a Windows function does the same), `compiler` (`unpaired.tsv` only: thunks, stubs, static initialisers)|
 |`status`|`missing`; `body` (a definition tagged `// 1.14d mac: <addr>` exists); `match` / `nonmatch` (`cmp.ts` SAME / DIFF)|
-|`body_file`, `at_path`|where the tagged body is, and whether that is the mapped path; when an address is tagged in several files (a Windows twin's file carries the Mac address too), the body at the mapped path is the one named, and a `cmp.ts` SAME or DIFF row outranks a NOOBJ or MISSING row of another file|
+|`body_file`|where the tagged body is; when an address is tagged in several files (a Windows twin's file carries the Mac address too, a call site's comment names it), the body at the mapped path is the one named, else one `at_path` accepts, and a `cmp.ts` SAME or DIFF row outranks a NOOBJ or MISSING row of another file|
+|`at_path`|whether the body is where the evidence puts it: `yes` the evidence names one file and the body is there (in a shared module: the tree file of the paired functions on both sides, read from their Windows twins' source maps, since the shared tree's names and case are the Windows reconstruction's); `dir` no evidence names the file (`<folder>/?`) and the body sits in that folder, or in the file `units.tsv` chose for the unit; `range` the evidence is `A\|B` and the body is A, B, or a file of their folder that sorts between them ignoring case and extension (in a shared module: the file of the paired function on one side); `exception` none of these, with the reason from `coverage/path-exceptions.tsv` in `path_note`; `no` anything else|
 |`win_twin`|the paired `Game.exe` address|
+|`reason`, `path_note`|the `reasons.tsv` class of a non-identical function; why `at_path` is `exception`, or which tree file a shared-module row was placed by|
 
 The summary is the coverage, `blizzard-mac` rows with a body over all `blizzard-mac`
 rows, per original file, and the match count. Nothing is read from Ghidra when it
@@ -108,7 +110,13 @@ runs. The inputs are checked in under `coverage/`:
 
 - `units.tsv`: the Mac-only regions cut into units, each with its class and file
   or folder and the evidence. A unit of kind `anchors` takes each function's file
-  from its own `__FILE__` literal or the file map and brackets the rest.
+  from its own `__FILE__` literal or the file map and brackets the rest. An `override`
+  names one function, or every function of `[lo, hi)` when `hi` is given. Where no
+  binary records a unit's file, `file` ends in `?` and `redivivus` names the file
+  chosen here; such a body counts as `dir`, never `yes`.
+- `path-exceptions.tsv`: a body at none of the paths its evidence allows, by address,
+  file or folder, with the reason it stays there. `coverage.ts` names the rows that
+  match no body. The goal is `no` = 0 with every exception explained.
 - `functions.tsv`: the clean program's functions (address, extent, name, the
   `__FILE__` literals each references) with the Windows twin, the pairer's
   candidate count and the file map's path. Rebuild it after a Ghidra naming pass:

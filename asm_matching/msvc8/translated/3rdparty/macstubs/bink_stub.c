@@ -11,6 +11,8 @@
 
 typedef void *HBINK;
 
+void BinkSetMemory(void *(*pfnMalloc)(unsigned long), void (*pfnFree)(void *)) { (void)pfnMalloc; (void)pfnFree; }
+void *BinkOpen(void *pRefNum, unsigned nFlags) { (void)pRefNum; (void)nFlags; return 0; }
 int BinkSetSoundSystem(void *(*pfnOpen)(unsigned), unsigned nParam) { (void)pfnOpen; (void)nParam; return 0; }
 void *BinkOpenDirectSound(unsigned nParam) { (void)nParam; return 0; }
 void BinkClose(HBINK hBink) { (void)hBink; }

@@ -12,13 +12,18 @@
 #if !defined(_WIN32) && D2_OS_MAC
 
 void fp_fatal(const char* szFormat, ...);
-// 1.14d mac: 002eff85
-void LOGFILE_WriteStringToFile(const char* szFormat, ...);
 
+namespace D2gfx { namespace D2GFX {
 // 1.14d mac: 002b19a2
 void D2GFX_InitializeWindowSize(void);
+}}
+using D2gfx::D2GFX::D2GFX_InitializeWindowSize;
+struct tagPALETTEENTRY;
+namespace D2gfx { namespace D2GFX {
 // 1.14d mac: 002b5170
-void D2GFX_SetPalette(void* pPalette);
+void D2GFX_SetPalette(tagPALETTEENTRY* pPalette);
+}}
+using D2gfx::D2GFX::D2GFX_SetPalette;
 void FUN_002b1983(void);
 
 // 1.14d mac: 005cbb80
@@ -33,14 +38,41 @@ int g_bMacFullScreen;
 int nResolutionMode;
 // 1.14d mac: 005cbb98
 int g_nMacWindow;
+// 1.14d mac: 005cbb9c
+int g_nMacScreenSide;
 // 1.14d mac: 003c8144
-int D2GFXRenderedData[16];
+// Defined by the shared D2GFX.cpp (initialised there).
+extern int D2GFXRenderedData[];
 // 1.14d mac: 003c8148
 int g_bMacHardware;
+namespace D2OpenGL {
+namespace Renderer {
+extern void* OpenGLFunctionTable[57];
+}
+}
+
+// The helper table's slots (D2GFXMacHelper.cpp and D2GFXMacTiles.cpp).
+void fpFillYBufferTable(void* pBits, int nPitch, int nHeight, int n0C);
+void fpDrawVisTile(const uint8_t* pSrc, int nX, int nY);
+void FUN_002b38f3(const uint8_t* pSrc, int nX, int nY, uint8_t nLight);
+void fpDrawGroundTile(const MacGroundTile* pTile, int nScreenX, int nScreenY, const uint8_t* pLights);
+void fpDrawWallTile(const uint8_t* pSrc, int nX, int nY, const uint32_t* pCornerLights);
+void fpDrawBlendedVisTile(const uint8_t* pSrc, int nX, int nY, uint8_t nAlpha);
+void fpDrawRoofTile(const uint8_t* pSrc, int nX, int nY, const int* pCornerLights, uint8_t nAlpha);
+
 // 1.14d mac: 003c815c
-extern void* g_apMacHelperTable[];
+// What the renderer's InitPerspective takes: the surface, tile and palette slots, then a flag.
+void* g_apMacHelperTable[8] = {(void*)fpFillYBufferTable,
+                               (void*)fpDrawVisTile,
+                               (void*)FUN_002b38f3,
+                               (void*)fpDrawGroundTile,
+                               (void*)fpDrawWallTile,
+                               (void*)fpDrawBlendedVisTile,
+                               (void*)fpDrawRoofTile,
+                               (void*)1};
 // 1.14d mac: 003c817c
-extern MacRendererFunctions* g_apMacRenderers[];
+// Renderer function tables by renderer mode; mode 5 is the OpenGL one (003ce6ec).
+MacRendererFunctions* g_apMacRenderers[8] = {0, 0, 0, 0, 0, (MacRendererFunctions*)&D2OpenGL::Renderer::OpenGLFunctionTable, 0, 0};
 
 // 1.14d mac: 002b4b72
 // Step 2 creates the window; step 1 releases the renderer and loads the one of the given mode.
@@ -69,7 +101,7 @@ int D2GFX_SwitchModule(int eMode, int bFullScreen, int nStep) {
             RENDERER_CurrentRenderedFunctions = 0;
             MacRendererFunctions* pRenderer = g_apMacRenderers[eMode];
             if (pRenderer == 0) {
-                LOGFILE_WriteStringToFile("Unsupported video mode - %d", eMode);
+                LOGFILE_WriteStringToFile((char*)"Unsupported video mode - %d", eMode);
                 szFormat = "D2GfxSwitchModule: *** sLoadGfxDLLFromType failed.";
             } else {
                 RENDERER_CurrentRenderedFunctions = pRenderer;
@@ -96,7 +128,7 @@ int D2GFX_SwitchModule(int eMode, int bFullScreen, int nStep) {
         fp_fatal("D2GfxSwitchModule was given an unknown step!");
         return 0;
     }
-    LOGFILE_WriteStringToFile(szFormat);
+    LOGFILE_WriteStringToFile((char*)szFormat);
     return 0;
 }
 

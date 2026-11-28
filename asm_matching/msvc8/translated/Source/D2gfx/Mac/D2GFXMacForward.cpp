@@ -10,9 +10,24 @@
 
 #if !defined(_WIN32) && D2_OS_MAC
 
+struct EventRecord;
+struct Point;
+
 // 1.14d mac: 002b5122
 void D2GFX_DrawLine(int nXStart, int nYStart, int nXEnd, int nYEnd, uint32_t nColor, uint32_t nAlpha) {
     RENDERER_CurrentRenderedFunctions->pfnDrawLine(nXStart, nYStart, nXEnd, nYEnd, nColor, nAlpha);
+}
+
+// 1.14d mac: 002b5c1c
+// A renderer is installed and the display is windowed: the state's fullscreen flag
+// (005cbb90) is the dword at 0xC from 005cbb84, the cell the binary addresses it by (the state
+// starts with the init option, g_nRendererInitOption).
+int FUN_002b5c1c(void) {
+    int bResult = 0;
+    if (RENDERER_CurrentRenderedFunctions != 0) {
+        bResult = (&g_nRendererInitOption)[3] == 0;
+    }
+    return bResult;
 }
 
 // 1.14d mac: 002b5d9a
@@ -21,25 +36,26 @@ int FUN_002b5d9a(void) {
 }
 
 // 1.14d mac: 002b5da4
-int FUN_002b5da4(void) {
+// This and the next two forward their one argument to the renderer slot.
+int FUN_002b5da4(EventRecord* pEvent) {
     if (RENDERER_CurrentRenderedFunctions != 0) {
-        return RENDERER_CurrentRenderedFunctions->pfnSlot2C();
+        return RENDERER_CurrentRenderedFunctions->pfnSlot2C(pEvent);
     }
     return 0;
 }
 
 // 1.14d mac: 002b5dc3
-int FUN_002b5dc3(void) {
+int FUN_002b5dc3(Point* pPoint) {
     if (RENDERER_CurrentRenderedFunctions != 0) {
-        return RENDERER_CurrentRenderedFunctions->pfnSlot30();
+        return RENDERER_CurrentRenderedFunctions->pfnSlot30(pPoint);
     }
     return 0;
 }
 
 // 1.14d mac: 002b5de2
-int FUN_002b5de2(void) {
+int FUN_002b5de2(Point* pPoint) {
     if (RENDERER_CurrentRenderedFunctions != 0) {
-        return RENDERER_CurrentRenderedFunctions->pfnSlot34();
+        return RENDERER_CurrentRenderedFunctions->pfnSlot34(pPoint);
     }
     return 0;
 }

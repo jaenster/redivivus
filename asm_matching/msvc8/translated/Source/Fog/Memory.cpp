@@ -236,7 +236,9 @@ static void __stdcall InsertBlockIntoSortedArray(D2PoolBlockStrc * pBlock, D2Poo
       pSortedArray = (D2PoolBlockEntryStrc*)realloc(nManager->pBlocks, nHi * sizeof(D2PoolBlockEntryStrc));
       nManager->pBlocks = pSortedArray;
       if (!pSortedArray) {
+#if !D2_OS_MAC
         OutOfMemoryHandler("(1) Pool Blocks overflowed at %d", nManager->nTotalBlocks);
+#endif
         Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), 0x261);
         exit(-1);
       }
@@ -296,7 +298,9 @@ static void __stdcall RemoveBlockFromSortedArray(D2PoolBlockStrc * pBlock, D2Poo
             pArrayElem = (D2PoolBlockEntryStrc*)realloc(nManager->pBlocks, nCount * sizeof(D2PoolBlockEntryStrc));
             nManager->pBlocks = pArrayElem;
             if (!pArrayElem) {
+#if !D2_OS_MAC
               OutOfMemoryHandler("(1) Pool Blocks overflowed at %d", nManager->nTotalBlocks);
+#endif
               Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), 0x2b4);
               exit(-1);
             }
@@ -324,7 +328,9 @@ static LPVOID * __stdcall AllocatePoolBlock(D2PoolStrc * pPool, D2PoolManagerStr
       pReallocResult = (D2PoolBlockEntryStrc*)realloc(nManager->pBlocks, nNewCapacity * sizeof(D2PoolBlockEntryStrc));
       nManager->pBlocks = pReallocResult;
       if (!pReallocResult) {
+#if !D2_OS_MAC
         OutOfMemoryHandler("(1) Pool Blocks overflowed at %d", nManager->nTotalBlocks);
+#endif
         Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), 0x2ff);
         exit(-1);
       }
@@ -344,7 +350,9 @@ static LPVOID * __stdcall AllocatePoolBlock(D2PoolStrc * pPool, D2PoolManagerStr
       return (LPVOID*)&pBlockHeader->pCommit;
     }
 
+#if !D2_OS_MAC
     OutOfMemoryHandler("(2) nPoolBlocks = %d/%d  nBlockSize = %d  nUsageTableSize = %d", nManager->nBlocks, nManager->nTotalBlocks, pPool->nSize, nNewCapacity);
+#endif
     Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), 800);
     exit(-1);
 }
@@ -395,7 +403,9 @@ union D2PoolOverflowHeader {
 void * __fastcall POOL_AllocOverflowBlock(D2PoolManagerStrc * pMemory, int32_t nSize, char * szFile, int32_t nFileLine) {
     uint8_t* pNode = (uint8_t*)malloc(nSize + sizeof(D2PoolOverflowHeader));
     if (!pNode) {
+#if !D2_OS_MAC
       OutOfMemoryHandler("(3) Pool Blocks overflowed at %d", pMemory->nBlocks);
+#endif
       Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), 0x388);
       exit(-1);
     }
@@ -466,7 +476,9 @@ void * __fastcall ReallocTrackedAllocation(D2PoolManagerStrc * pManager, void * 
 
     void* pNewAlloc = realloc(pAllocBase, nNewSize + sizeof(D2PoolOverflowHeader));
     if (!pNewAlloc) {
+#if !D2_OS_MAC
       OutOfMemoryHandler("Unable to allocate free block of %d", nNewSize);
+#endif
       Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), 0x421);
       exit(-1);
     }
@@ -704,7 +716,9 @@ void InitializePoolSystem(D2PoolManagerStrc * * pPoolManager, char * szName, int
     } else {
       if ((int)pGlobalPoolSystem.nManagers >= 8) {
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pGlobalPoolSystem.pSync);
+#if !D2_OS_MAC
         OutOfMemoryHandler("Insufficient pre-allocated pool systems");
+#endif
 #if !D2_OS_MAC
         /* ULONG_PTR * lpArguments for RaiseException */ /* DWORD nNumberOfArguments for RaiseException */ /* DWORD dwExceptionFlags for RaiseException */ /* DWORD dwExceptionCode for RaiseException */ RaiseException(0xe0000001, 0, 0, nullptr);
 #endif

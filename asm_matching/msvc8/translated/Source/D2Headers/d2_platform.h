@@ -335,7 +335,9 @@ typedef uintptr_t DWORD_PTR;
 typedef uintptr_t ULONG_PTR;
 typedef WORD LANGID;
 typedef long HRESULT;
+#if !D2_OS_MAC
 typedef unsigned short ATOM;
+#endif
 
 // Pointer and handle types
 typedef void* LPVOID;
@@ -346,8 +348,10 @@ typedef void* HANDLE;
 #endif
 typedef void* HMODULE;
 typedef void* HINSTANCE;
+#if !D2_OS_MAC
 typedef void* HWND;
 typedef void* HDC;
+#endif
 typedef void* HBITMAP;
 typedef void* HFONT;
 typedef void* HBRUSH;
@@ -357,12 +361,16 @@ typedef void* HCURSOR;
 typedef void* HICON;
 typedef void* HMENU;
 typedef void* HPALETTE;
+#if !D2_OS_MAC
 typedef void* HRGN;
+#endif
 typedef void* HRSRC;
 typedef void* HGLOBAL;
+#if !D2_OS_MAC
 typedef intptr_t LRESULT;
 typedef uintptr_t WPARAM;
 typedef intptr_t LPARAM;
+#endif
 typedef uint16_t LANGID;
 #if !D2_OS_MAC
 typedef intptr_t (__stdcall *FARPROC)();
@@ -443,28 +451,38 @@ extern "C" {
 DWORD GetTickCount();
 #endif
 void Sleep(DWORD dwMilliseconds);
+#if !D2_OS_MAC
 BOOL QueryPerformanceCounter(LARGE_INTEGER* lpPerformanceCount);
 BOOL QueryPerformanceFrequency(LARGE_INTEGER* lpFrequency);
 int wsprintfA(LPSTR lpOut, LPCSTR lpFmt, ...);
+#endif
 int wsprintfW(LPWSTR lpOut, LPCWSTR lpFmt, ...);
+#if !D2_OS_MAC
 DWORD GetLastError();
+#endif
 #if !D2_OS_MAC
 void SetLastError(DWORD dwErrCode);
 #endif
+#if !D2_OS_MAC
 DWORD GetCurrentThreadId();
+#endif
 DWORD GetCurrentProcessId();
+#if !D2_OS_MAC
 void OutputDebugStringA(LPCSTR lpOutputString);
 HMODULE GetModuleHandleA(LPCSTR lpModuleName);
 FARPROC GetProcAddress(HMODULE hModule, LPCSTR lpProcName);
 HMODULE LoadLibraryA(LPCSTR lpLibFileName);
 BOOL FreeLibrary(HMODULE hLibModule);
+#endif
 HANDLE GetProcessHeap();
 LPVOID HeapAlloc(HANDLE hHeap, DWORD dwFlags, SIZE_T dwBytes);
 BOOL HeapFree(HANDLE hHeap, DWORD dwFlags, LPVOID lpMem);
+#if !D2_OS_MAC
 void InitializeCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
 void EnterCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
 void LeaveCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
 void DeleteCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
+#endif
 #if !D2_OS_MAC
 HANDLE CreateThread(LPSECURITY_ATTRIBUTES lpThreadAttributes, SIZE_T dwStackSize, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID lpParameter, DWORD dwCreationFlags, LPDWORD lpThreadId);
 #endif
@@ -473,13 +491,19 @@ DWORD WaitForSingleObject(HANDLE hHandle, DWORD dwMilliseconds);
 BOOL CloseHandle(HANDLE hObject);
 #endif
 void ExitProcess(UINT uExitCode);
+#if !D2_OS_MAC
 int MessageBoxA(HWND hWnd, LPCSTR lpText, LPCSTR lpCaption, UINT uType);
 LPVOID VirtualAlloc(LPVOID lpAddress, SIZE_T dwSize, DWORD flAllocationType, DWORD flProtect);
 BOOL VirtualFree(LPVOID lpAddress, SIZE_T dwSize, DWORD dwFreeType);
+#endif
 }
 
 BOOL IsBadCodePtr(FARPROC lpfn);
+#if D2_OS_MAC
+BOOL IsBadReadPtr(const void* lp, SIZE_T ucb);
+#else
 BOOL IsBadReadPtr(const void* lp, UINT ucb);
+#endif
 BOOL IsBadWritePtr(LPVOID lp, UINT ucb);
 HANDLE CreateEventA(LPSECURITY_ATTRIBUTES lpEventAttributes, BOOL bManualReset, BOOL bInitialState, LPCSTR lpName);
 BOOL SetEvent(HANDLE hEvent);
@@ -487,8 +511,13 @@ BOOL ResetEvent(HANDLE hEvent);
 void PostQuitMessage(int nExitCode);
 BOOL PostMessageA(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 int GetSystemMetrics(int nIndex);
+#if D2_OS_MAC
+BOOL SetWindowPos(HWND hWnd, HWND hWndInsertAfter, int X, int Y, int cx, int cy, BYTE uFlags);
+BOOL ShowWindow(HWND hWnd, UINT nCmdShow);
+#else
 BOOL SetWindowPos(HWND hWnd, HWND hWndInsertAfter, int X, int Y, int cx, int cy, UINT uFlags);
 BOOL ShowWindow(HWND hWnd, int nCmdShow);
+#endif
 BOOL DestroyWindow(HWND hWnd);
 HWND CreateWindowExA(DWORD dwExStyle, LPCSTR lpClassName, LPCSTR lpWindowName, DWORD dwStyle, int X, int Y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam);
 BOOL GetClientRect(HWND hWnd, LPRECT lpRect);
@@ -572,7 +601,9 @@ typedef void (*GrProc)();
 extern "C" {
 double CRT_Floor(...);
 double CRT_Ceil(...);
+#if !D2_OS_MAC
 char* _strrev(char*);
+#endif
 }
 
 
@@ -788,8 +819,10 @@ static inline int32_t InterlockedIncrement(volatile int32_t* p) { return ++(*p);
 static inline int32_t InterlockedDecrement(volatile int32_t* p) { return --(*p); }
 #endif
 HANDLE CreateEventW(LPSECURITY_ATTRIBUTES lpEventAttributes, BOOL bManualReset, BOOL bInitialState, LPCWSTR lpName);
+#if !D2_OS_MAC
 DWORD WaitForMultipleObjects(DWORD nCount, const HANDLE* lpHandles, BOOL bWaitAll, DWORD dwMilliseconds);
 LRESULT SendMessageA(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
+#endif
 #endif
 
 static inline uint32_t FloatToLong(int32_t lo, int32_t hi) {
@@ -842,18 +875,28 @@ static inline errno_t _strncpy_s(char* dst, size_t dsz, const char* src, size_t 
 #ifndef _WIN32
 BOOL WriteFile(HANDLE hFile, LPCVOID lpBuffer, DWORD nBytes, LPDWORD lpBytesWritten, LPOVERLAPPED lpOverlapped);
 BOOL ReadFile(HANDLE hFile, LPVOID lpBuffer, DWORD nBytes, LPDWORD lpBytesRead, LPOVERLAPPED lpOverlapped);
+#if !D2_OS_MAC
 HANDLE CreateFileA(LPCSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpSec, DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplate);
+#endif
 DWORD SetFilePointer(HANDLE hFile, LONG lDistanceToMove, PLONG lpDistanceToMoveHigh, DWORD dwMoveMethod);
 DWORD GetFileSize(HANDLE hFile, LPDWORD lpFileSizeHigh);
+#if !D2_OS_MAC
 DWORD GetFileAttributesA(LPCSTR lpFileName);
 DWORD GetModuleFileNameA(HMODULE hModule, LPSTR lpFilename, DWORD nSize);
+#endif
 void GetLocalTime(LPSYSTEMTIME lpSystemTime);
 HANDLE GetCurrentProcess();
 SHORT GetKeyState(int nVirtKey);
+#if D2_OS_MAC
+BOOL SetRect(LPRECT lprc, int left, int top, int right, int bottom);
+#else
 void SetRect(LPRECT lprc, int left, int top, int right, int bottom);
 int WSAGetLastError();
 int WSACleanup();
+#endif
+#if !D2_OS_MAC
 DWORD timeGetTime(void);
+#endif
 #endif
 
 
@@ -954,7 +997,13 @@ extern "C" uint32_t _ValidateEH3RN(void* pRegistration);
 extern "C" void __fastcall __security_check_cookie(uintptr_t nCookie);
 extern "C" void ___report_gsfailure(void);
 extern "C" void CallDestructExceptionObject(int* pExceptionObject);
+#if D2_OS_MAC
+// The Mac vtables hold the C++ runtime's pure-virtual trap (___cxa_pure_virtual).
+extern "C" void __cxa_pure_virtual(void);
+#define _purecall __cxa_pure_virtual
+#else
 extern "C" int _purecall(void);
+#endif
 extern "C" void __stdcall _eh_vector_constructor_iterator_(void* pArray, uint32_t nElementSize, int nCount, void (__fastcall *pfnConstructor)(void*), void (__fastcall *pfnDestructor)(void*));
 extern "C" void __stdcall _eh_vector_destructor_iterator_(void* pArray, uint32_t nElementSize, int nCount, void (__fastcall *pfnDestructor)(void*));
 extern "C" uint64_t __ftol2(void);

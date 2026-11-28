@@ -2393,12 +2393,16 @@ void RENDERING_ToggleLowQuality_Thunk() {
     D2gfx::D2GFX::D2GFX_ToggleLowQuality();
 }
 
+#if !D2_OS_MAC
 void __fastcall WARDEN_FreeModuleLibraries_Thunk_Unref_0047f940(D2WardenModuleStrc * pWardenModule) {
     Warden::WARDEN_FreeModuleLibraries(pWardenModule);
 }
+#endif
 
+#if !D2_OS_MAC
 void __fastcall WARDEN_FreeModuleLibraries_Thunk_Unref_0047fbe0(D2WardenModuleStrc * pWardenModule) {
     Warden::WARDEN_FreeModuleLibraries(pWardenModule);
 }
+#endif
 
 }}} // namespace D2Client::Source::ClientEngine

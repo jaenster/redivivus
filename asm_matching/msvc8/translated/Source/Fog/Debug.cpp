@@ -953,6 +953,7 @@ void __stdcall WriteCrashDumpViaThread() {
 }
 #endif
 
+#if !D2_OS_MAC
 // lpStartAddress parameter of CreateThread
 DWORD __stdcall DEBUG_CrashDumpRequestThreadProc(void * lpThreadParam) {
     DebugThread();
@@ -965,6 +966,7 @@ DWORD __stdcall DEBUG_CrashDumpRequestThreadProc(void * lpThreadParam) {
 
     return 0;
 }
+#endif
 
 #if !D2_OS_MAC
 bool __fastcall CrashDumpWriterThread(LPCSTR szDumpPath, char * szComment, _EXCEPTION_POINTERS * pExceptionPointers, DWORD dwThreadId) {
@@ -1177,6 +1179,7 @@ void __fastcall FormatAddressDebugString(D2CrashFrameStrc * pAddrInfo, D2FogAddr
     }
 }
 
+#if !D2_OS_MAC
 void __fastcall EnumerateAndDumpAllFunctions(fnCrashOutputLine pOutputCallback, ::Report * pReport) {
     char* pszLine;
     uint32_t nLineLen;
@@ -1196,6 +1199,7 @@ void __fastcall EnumerateAndDumpAllFunctions(fnCrashOutputLine pOutputCallback, 
 
     qsort(sModuleTable.aEntries, 0, sizeof(D2FogDebugModuleEntryStrc), CompareUintDescending);
 }
+#endif
 
 static void InitializeDebugInfoTable(D2FogDebugModuleTableStrc * pTable) {
     D2FogDebugModuleEntryStrc* pEntryBase = pTable->aEntries;
@@ -1219,6 +1223,7 @@ static void InitializeDebugInfoTable(D2FogDebugModuleTableStrc * pTable) {
     } while (nRemaining >= 0);
 }
 
+#if !D2_OS_MAC
 void __fastcall CRASH_DumpThreadContext(DWORD dwThreadId, void * pContext, fnCrashOutputLine pOutputCallback, ::Report * pReport, char bIncludeThreadName, char bIncludeStackInfo, uint32_t nMaxFrames) {
     D2CrashFrameStrc aFrames[128];
     int nFrameCountClamped = 0x7f;
@@ -1244,6 +1249,7 @@ void __fastcall CRASH_DumpThreadContext(DWORD dwThreadId, void * pContext, fnCra
 
     CRASH_FormatStackTrace(dwThreadId, aFrames, nFrameCount, pOutputCallback, pReport, bIncludeThreadName, bIncludeStackInfo);
 }
+#endif
 
 #if !D2_OS_MAC
 // Format stack trace for crash dump. Captures thread context if bIncludeThreadName set, iterates frames and calls callback for each formatted address line. If bIncludeStackInfo set, includes stack space usage info.
@@ -2451,6 +2457,7 @@ void __fastcall FullStackWalkWithAnnotations(HANDLE hThread, CONTEXT * pContext)
 }
 #endif
 
+#if !D2_OS_MAC
 void __fastcall WriteCrashDump(uint32_t dwHeader0, uint32_t dwHeader1, uint32_t dwRecordType, int32_t nDwordCount, void * pData) {
     D2CrashDumpRecordStrc sRecord;
     char szDumpPath[260];
@@ -2467,7 +2474,9 @@ void __fastcall WriteCrashDump(uint32_t dwHeader0, uint32_t dwHeader1, uint32_t 
       fclose(_File);
     }
 }
+#endif
 
+#if !D2_OS_MAC
 // @sourcefile .\Src\Exceptions.cpp
 BOOL __fastcall LoadPreviousCrashDump(uint8_t * pOutBuffer, int * pnBufferSize) {
     int nResult;
@@ -2556,6 +2565,7 @@ BOOL __fastcall LoadPreviousCrashDump(uint8_t * pOutBuffer, int * pnBufferSize) 
 
     return 0;
 }
+#endif
 
 #if !D2_OS_MAC
 void HandleExceptionWithStackDump(uint32_t dwUnused, _EXCEPTION_POINTERS * pExceptionPointers) {

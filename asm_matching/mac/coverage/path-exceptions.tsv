@@ -1,0 +1,13 @@
+# Bodies that sit at none of the paths their evidence allows, and why they stay there. Read by coverage.ts:
+# a blizzard-mac row whose at_path would be "no" becomes "exception" with this reason in path_note.
+#
+# match   an address (8 hex digits), a body file, or a folder ending in "/" (first match wins in that order)
+# reason  why the body is where it is. An exception is a statement that no evidence places the file, never
+#         a way to silence a body that evidence does place: move that body instead.
+match	reason
+Source/StormMac/SOURCE/SMSG.cpp	the Mac binary has no __FILE__ for SMSG: SMSG.CPP is the Windows twins' file name (file map), whose case the Mac binary does not confirm, so the file keeps .cpp like SLOG, SMEM and SRGN (units.tsv)
+Source/D2Client/Warden/WardenMac.cpp	no __FILE__; the four empty Warden hooks sit between D2Client's CUnitEvent and D2CMP's CelCmp functions, where the Windows build calls WardenClient.cpp, which the Mac binary does not have and the Mac target leaves out (cmake/mac.cmake); the file is ours
+Source/D2gfx/Mac/MACDISPLAYGamma.cpp	no __FILE__, and the binary links these between Fog's functions (FOG_BuildGammaRamp after ErrorManager.cpp, the MACDISPLAY_ gamma pair between Fog's QServer and Bnclient's SHA functions): no module of the shared tree holds them, so they sit with the Mac display glue under a name of ours
+Source/D2gfx/Mac/MacSupport.mm	no __FILE__; MAC_SpawnProcess and MAC_GetSharedSupportPath follow RAD Bink at the end of the image, beside no Blizzard file: the Objective-C file and its folder are ours
+Source/D2gfx/Mac/	no __FILE__ names a D2gfx file or folder; the binary interleaves these Mac-only functions with D2GFX.cpp's, and the split into separate units follows how each reaches its globals (direct for its own, through a PIC cell otherwise, Source/D2gfx/Mac/README.md), so they are not part of D2GFX.cpp; file and folder names are ours
+Source/D2Hell/Mac/MACSEC.cpp	no __FILE__; MACSEC_* and the list instantiations before it follow D2Hell/SRC/Archive.cpp's functions (D2Lang's follow), but the shared tree has no D2Hell/SRC folder (Windows keeps Archive.cpp's functions in D2HellRoot.cpp), so the file and its folder are ours

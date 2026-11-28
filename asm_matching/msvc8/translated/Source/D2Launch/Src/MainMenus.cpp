@@ -4235,13 +4235,17 @@ static D2ControlStrc * gpCtlBnetPasswordOkButton = 0; D2_STATIC_GUARD(gpCtlBnetP
 
 namespace D2Launch { namespace MainMenus {
 
+#if !D2_OS_MAC
 void __fastcall FORMS_DestroyEncoderContext_Thunk_Unref_0041f930(uint32_t * pEncoder) {
     Storm::Source::SComp::COMPRESS_DestroyEncoderContext((D2CompressEncoderStrc*)pEncoder);
 }
+#endif
 
+#if !D2_OS_MAC
 void __fastcall FORMS_DestroyEncoderContext_Thunk_Unref_0041f940(uint32_t * pEncoder) {
     Storm::Source::SComp::COMPRESS_DestroyEncoderContext((D2CompressEncoderStrc*)pEncoder);
 }
+#endif
 
 uint16_t __fastcall Unreferenced_0042e5c0(uint16_t nValue) {
     return _rotl16(nValue, 8);
@@ -8640,14 +8644,18 @@ int32_t __fastcall fAPPMODE_launcher_ReturnAppMode_Caller(D2IniConfigStrc * pD2I
         D2IniData_launcher->bSKIPTOBNET = false;
         D2IniData_launcher->padding_0x35F[0] = 1;
         D2Win::D2GFX::D2GFX_SetVideoMode(1);
+#if !D2_OS_MAC
         D2gfx::D2GFX::D2GFX_UpdateWindowSize(1);
+#endif
         OogCurrentCharSelectionMode = nSkipToOpen ? CHAR_SELECTION_BNET_OPEN_Unsure : CHAR_SELECTION_BNET;
         UIMENU_MainMenuAgain();
       } else {
         if (!D2IniData_launcher->padding_0x35F[0]) {
           OogCurrentCharSelectionMode = CHAR_SELECTION_SP;
           D2Win::D2GFX::D2GFX_SetVideoMode(1);
+#if !D2_OS_MAC
           D2gfx::D2GFX::D2GFX_UpdateWindowSize(1);
+#endif
           /* Show intro and first screen without menus */ PlaysBlizzardNorthCutScene();
           D2IniData_launcher->padding_0x35F[0] = 1;
         } else {
@@ -9788,9 +9796,9 @@ int MAINMENU_ReturnTrue() {
 #endif
 
 #if !defined(_WIN32) && D2_OS_MAC
-namespace D2Hell {
-int FUN_002b692a(void);
-}
+}} // namespace D2Launch::MainMenus
+int ARCHIVE_UnmountCdVolumes(void);
+namespace D2Launch { namespace MainMenus {
 
 BOOL MAINMENU_PollInsertCdDialog();
 
@@ -9820,7 +9828,7 @@ BOOL MAINMENU_PollInsertCdDialog() {
       D2Win::Src::D2WinArchive::MPQ_UnloadAllMediaMpqFiles();
       D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
     } else {
-      D2Hell::FUN_002b692a();
+      ::ARCHIVE_UnmountCdVolumes();
     }
 
     if (gbCinematicsMenuShown || (::fpInsertPlayCd & 1)) {

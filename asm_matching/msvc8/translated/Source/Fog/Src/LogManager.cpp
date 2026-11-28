@@ -2,6 +2,9 @@
 
 #include "Source/Fog/Src/LogManager.h"
 #include "Source/Fog/Memory.h"
+#if D2_OS_MAC
+#include "Source/Fog/Debug.h"
+#endif
 #include "Source/Fog/Source/SFile.h"
 #include "Source/Fog/Src/ErrorManager.h"
 #include "Source/D2Headers/d2_platform.h"
@@ -612,6 +615,7 @@ uint32_t __fastcall DispatchCpuidCall(int32_t nLeaf) {
     return pCpuidResult[2];
 }
 
+#if !D2_OS_MAC
 void __stdcall LogCpuInfo() {
     // Static local variables (originally global data)
     static char * gaCpuVendorNames[5] = { (char*)"Unknown", (char*)"Intel", (char*)"AMD", (char*)"Cyrix", nullptr }; D2_STATIC_GUARD(gaCpuVendorNames, "Fog::Src::LogManager::LogCpuInfo::gaCpuVendorNames");
@@ -656,6 +660,7 @@ void __stdcall LogCpuInfo() {
 
     LOGFILE_WriteStringToFile(Format);
 }
+#endif
 
 BOOL __stdcall GetLoggerState_Stub() {
     return 0;
@@ -886,7 +891,6 @@ FILE * __fastcall FindOrOpenLogFileSlot(uint8_t * szFileName, uint32_t * pnSlotI
 }
 
 #if !D2_OS_MAC
-// 1.14d mac: 002efde7
 void __fastcall FILETOOLS_GetUserMyDocumentsDiabloIIGameLogsFolder(char * szGameLogsPath, int32_t nGameLogsPathLength) {
     char szMyDocuments[260];
     *szGameLogsPath = '\0';
@@ -895,6 +899,17 @@ void __fastcall FILETOOLS_GetUserMyDocumentsDiabloIIGameLogsFolder(char * szGame
       Storm::Source::SSTR::SStrCopy(szGameLogsPath, szMyDocuments, nGameLogsPathLength);
       Source::SFile::SFILE_EnsurePathEndsWithBackslash(szGameLogsPath, nGameLogsPathLength);
       Storm::Source::SSTR::SStrPack(szGameLogsPath, "Diablo II\\GameLogs\\", nGameLogsPathLength);
+      Source::SFile::SafeCreateDirectoryTree(szGameLogsPath);
+    }
+}
+#else
+// 1.14d mac: 002efde7
+// The Mac build keeps its logs beside the executable: the module directory and "\logs\".
+void __fastcall FILETOOLS_GetUserMyDocumentsDiabloIIGameLogsFolder(char * szGameLogsPath, int32_t nGameLogsPathLength) {
+    *szGameLogsPath = '\0';
+    BOOL bGotModuleDir = ::Fog::Debug::FILETOOLS_GetExecutableFolderPath(szGameLogsPath, nGameLogsPathLength);
+    if (bGotModuleDir) {
+      Storm::Source::SSTR::SStrPack(szGameLogsPath, "\\logs\\", nGameLogsPathLength);
       Source::SFile::SafeCreateDirectoryTree(szGameLogsPath);
     }
 }
@@ -1704,19 +1719,29 @@ void __fastcall EnqueueFormattedLogMessage(char * szText, int32_t nPriority, int
     int** pPrevLink;
     char szFormatted[4096];
     void* pSavedEsp;
+#if !D2_OS_MAC
     EH4_EXCEPTION_REGISTRATION tSehFrame;
+#endif
     int* pNext;
+#if !D2_OS_MAC
     tSehFrame.TryLevel = -2;
     tSehFrame.ExceptionHandler = _except_handler4;
     tSehFrame.Next = (EH4_EXCEPTION_REGISTRATION*)ExceptionList;
     tSehFrame.EncodedScopeTable = DEFAULT_SECURITY_COOKIE ^ 0x700c98;
+#endif
+#if !D2_OS_MAC
     ExceptionList = &tSehFrame;
+#endif
     if (!gLogWriterThreadStopFlag && gLogManagerInitialized) {
       int nPayloadSize;
+#if !D2_OS_MAC
       tSehFrame.TryLevel = 0;
+#endif
       vsnprintf(szFormatted, 0x1000, szFormat, vaArgs);
       szFormatted[0xfff] = '\0';
+#if !D2_OS_MAC
       tSehFrame.TryLevel = -2;
+#endif
       if (bAppendNewline == 1) {
         Storm::Source::SSTR::SStrPack(szFormatted, "\n", 0x1000);
       }
@@ -1753,7 +1778,9 @@ void __fastcall EnqueueFormattedLogMessage(char * szText, int32_t nPriority, int
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gLogMessageQueueCS);
     }
 
+#if !D2_OS_MAC
     ExceptionList = tSehFrame.Next;
+#endif
 }
 
 // 1.14d mac: 002efad4
@@ -1855,6 +1882,7 @@ void LOGMGR_DeleteHighResTimerLock() {
     /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&gHighResTimerCS);
 }
 
+#if !D2_OS_MAC
 // Atomic 64-bit store of *pllValue into *pllTarget: LOCK CMPXCHG8B retried until it succeeds, so the old value is never kept (ECX=target, EDX=value).
 // @renamed-from AtomicCompareExchange64 (asm 004107be JNZ loops back to the CMPXCHG8B)
 void __fastcall Atomic64Store(int64_t * pllTarget, int64_t * pllValue) {
@@ -1872,7 +1900,9 @@ void __fastcall Atomic64Store(int64_t * pllTarget, int64_t * pllValue) {
       }
     } while (!bMatched);
 }
+#endif
 
+#if !D2_OS_MAC
 // Atomic 64-bit read of *pllSource into *pllResult via LOCK CMPXCHG8B: the comparand EDX:EAX is the don't-care ECX:EBX, and either path leaves the current value in EDX:EAX (ECX=result, EDX=source). The EBX half is not a parameter: callers at 00410a1c and 00410a9a set only ECX and EDX.
 // @renamed-from AtomicExchange64 (it never changes *pllSource)
 // [override: replace]
@@ -1892,6 +1922,7 @@ void __fastcall Atomic64Load(int64_t * pllResult, int64_t * pllSource) {
     D2_AtomicCompareExchange((int64_t*)pllSource, &llValue, (int64_t)0); // 004107d8
     *(int64_t*)pllResult = llValue;                                  // 004107dc / 004107de
 }
+#endif
 
 #if !D2_OS_MAC
 ULONGLONG __stdcall GetFreeDiskSpaceForSavePath() {
@@ -1948,7 +1979,16 @@ int __stdcall IsWindowsNT() {
 }
 #endif
 
+#if D2_OS_MAC
 // 1.14d mac: 002f7257
+// The Mac build keeps no atomic 64-bit timestamp: the start time and tick are two plain stores.
+void InitHighResTimer() {
+    InitializeCriticalSection(&gHighResTimerCS);
+    __time32_t nStartSeconds = _time32(nullptr);
+    gHighResTimerInitTimestamp.dwTick = GetTickCount();
+    gHighResTimerInitTimestamp.nSeconds = nStartSeconds;
+}
+#else
 void InitHighResTimer() {
     /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ InitializeCriticalSection(&gHighResTimerCS);
     int64_t qwTestTarget = 0;
@@ -1967,6 +2007,7 @@ void InitHighResTimer() {
     ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x3c);
     exit(-1);
 }
+#endif
 
 // Returns the current wall-clock second count in EAX (base seconds + elapsed ticks/1000). Takes no arguments: the former EBX parameter was a phantom propagated from AtomicExchange64's don't-care comparand.
 // 1.14d mac: 002f72b8
@@ -1977,7 +2018,11 @@ uint32_t LOGMGR_GetHighResolutionTime() {
     D2HighResTimestampStrc tRefresh;
     D2HighResTimestampStrc tBase;
     DWORD dwNowTick = GetTickCount();
+#if D2_OS_MAC
+    tBase = gHighResTimerInitTimestamp;
+#else
     Atomic64Load((int64_t*)&tBase, (int64_t*)&gHighResTimerInitTimestamp);
+#endif
     if (dwNowTick - tBase.dwTick > 30000) {
 #if !D2_OS_MAC
       HANDLE hThread;
@@ -1991,11 +2036,24 @@ uint32_t LOGMGR_GetHighResolutionTime() {
 
       tRefresh.nSeconds = _time32(nullptr);
       tRefresh.dwTick = GetTickCount();
+#if D2_OS_MAC
+      gHighResTimerInitTimestamp = tRefresh;
+#else
       Atomic64Store((int64_t*)&gHighResTimerInitTimestamp, (int64_t*)&tRefresh);
+#endif
     }
 
     return (dwNowTick - tBase.dwTick) / 1000 + tBase.nSeconds;
 }
+
+#if D2_OS_MAC
+// 1.14d mac: 002f731d
+// The Mac build has no Windows NT: the check the init code makes (the error manager, the QServer's
+// local mode) is this stub, always zero.
+int __stdcall IsWindowsNT() {
+    return 0;
+}
+#endif
 
 void __stdcall LOGMANAGER_UnwindDestructor_NoOp_Unref_00413740() {
 

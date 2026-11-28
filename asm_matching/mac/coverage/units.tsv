@@ -26,29 +26,31 @@ lo	hi	kind	class	file	redivivus	evidence
 00003242	000035c0	fixed	third-party	3rdParty/crashy/?	-	crashy::Report, shared with Windows Fog::_3rdparty::crashy
 000035c0	00008fc0	fixed	third-party	3rdParty/crashy/?	-	CRASHY_*: Mach exception ports, MIG mach_exc_server, signal thread
 00008fc0	000095fc	fixed	third-party	3rdParty/crashy/contrib/mach_star/mach_override/mach_override.c	-	__FILE__ 0030d797 in 00009047
-000095fc	0001e2fd	anchors	blizzard-mac	StormMac/Storm Mac/SOURCE/?		Storm proper, __FILE__ STORM/SBig/SBLT/SBMP/SCMD/SCODE/SCOMP/SEVT/SFILE/SGDI/SNET/SSTR/SSignature/STRANS/SVID
+000095fc	0001e2fd	anchors	blizzard-mac	StormMac/Storm Mac/SOURCE/?		Storm proper, __FILE__ STORM/SBig/SBLT/SBMP/SCMD/SCODE/SCOMP/SEVT/SFILE/SGDI/SNET/SSTR/SSignature/STRANS/SVID. SERR, SLOG, SMEM, SMSG and SRGN have no __FILE__ in the Mac binary: their names come from the Windows twins' files (file map; SRGN from the address order only), so their case is not the Mac binary's; SERR.CPP follows the file map's spelling, SLOG/SMEM/SMSG/SRGN keep .cpp
+00009d2e	0000a629	override	blizzard-mac	StormMac/Storm Mac/SOURCE/?	Source/StormMac/SOURCE/unknown_sha1.cpp	the SHA-1 class (Pump, Initialize, Append, Finalize): a unit of its own in the PPC Storm 1.10 beta; no 1.14d literal names it, it sits between STORM.CPP's last function and SBig.cpp's first; the file name is ours
 0001e2fd	000216b0	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?		Win32 Mac shim (Storm::Win32Mac): Mem_*, FPMessageBox, WIN32MAC_Initialize, Edit_WndProc; beta files FPMem/fp_assert/MessageBox/WinCompat
-000216b0	00021a94	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	Source/StormMac/Win32Mac/Source/Win32/unknown_events.cpp	Source/StormMac/README.md: a beta unit linked before Win32_Files.cpp, name unrecorded
+000216b0	00021a94	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	Source/StormMac/Win32Mac/Source/Win32/Win32_Events.cpp	Source/StormMac/README.md: a beta unit linked before Win32_Files.cpp; no binary records the name, the file name is ours
 00021a94	00022ca8	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/Win32_Files.cpp		beta __sinit_Win32_Files_cpp, same functions in the same order
 00022ca8	00025660	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?		Win32 Mac shim: GDI on QuickDraw, input, ListBox
-00025660	000257bc	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	Source/StormMac/Win32Mac/Source/Win32/unknown_closehandle.cpp	Source/StormMac/README.md, name unrecorded
-000257bc	00026d14	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	Source/StormMac/Win32Mac/Source/Win32/unknown_handles.cpp	Source/StormMac/README.md: ends with the static initialiser 00026c70
+00025660	000257bc	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	Source/StormMac/Win32Mac/Source/Win32/Win32_CloseHandle.cpp	Source/StormMac/README.md, no binary records the name: the file name is ours
+000257bc	00026d14	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	Source/StormMac/Win32Mac/Source/Win32/Win32_Handles.cpp	Source/StormMac/README.md: ends with the static initialiser 00026c70; no binary records the name, the file name is ours
 00026d14	000289b8	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?		Win32 Mac shim: GetAsyncKeyState, ListBox_WndProc, heap
-000289b8	00028e09	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	Source/StormMac/Win32Mac/Source/Win32/unknown_memory.cpp	Source/StormMac/README.md, name unrecorded
-00028e09	00029968	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	Source/StormMac/Win32Mac/Source/Win32/unknown_messages.cpp	Source/StormMac/README.md, name unrecorded
-00029968	00029b68	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	Source/StormMac/Win32Mac/Source/Win32/unknown_priv.cpp	Source/StormMac/README.md, name unrecorded
+000289b8	00028e09	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	Source/StormMac/Win32Mac/Source/Win32/Win32_Memory.cpp	Source/StormMac/README.md, no binary records the name: the file name is ours
+00028e09	00029968	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	Source/StormMac/Win32Mac/Source/Win32/Win32_Messages.cpp	Source/StormMac/README.md, no binary records the name: the file name is ours
+00029968	00029b68	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	Source/StormMac/Win32Mac/Source/Win32/Win32_Priv.cpp	Source/StormMac/README.md, no binary records the name: the file name is ours
 00029b68	0002b1fe	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/Win32_Process.cpp		beta __sinit_Win32_Process_cpp, same order
+0002ab8e		override	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	Source/StormMac/Win32Mac/Source/Win32/Win32_CommandLine.mm	GetCommandLine, the one Objective-C function (NSProcessInfo) inside the Win32_Process.cpp run, so a unit of its own; no binary records its name, the file name is ours
 0002b1fe	0002bdea	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?		Win32 Mac shim: MessageBox, sockets stubs, Interlocked
-0002bdea	0002c0ee	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	Source/StormMac/Win32Mac/Source/Win32/unknown_threads.cpp	Source/StormMac/README.md: a beta unit linked before Win32_utils.cpp
+0002bdea	0002c0ee	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	Source/StormMac/Win32Mac/Source/Win32/Win32_Threads.cpp	Source/StormMac/README.md: a beta unit linked before Win32_utils.cpp; no binary records the name, the file name is ours
 0002c0ee	0002c670	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/Win32_TimeAndDate.cpp		beta __sinit_Win32_TimeAndDate_cpp, same order
 0002c670	0002eae0	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/Win32_utils.cpp		__FILE__ 0030ece4 + its static initialiser 0002ea70
 0002eae0	00033cef	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?		Win32 Mac shim: window manager, regions, keyboard, DirectDraw/IDirectSound COM shims
-00033cef	00036035	fixed	blizzard-mac	StormMac/Storm Mac/?		SaveFileFromMem (a PPC Storm module), InternetConfig, StormMacInit, Dlg_* Carbon menus
+00033cef	00036035	fixed	blizzard-mac	StormMac/Storm Mac/?		SaveFileFromMem (a PPC Storm module), InternetConfig, StormMacInit, Dlg_* Carbon menus; no binary records the file or the folder below Storm Mac/, the files sit at its root (Source/StormMac/) under names of ours
 00036035	000360c2	anchors	blizzard-mac	StormMac/Storm Mac/SOURCE/?		__FILE__ SDRAW_VidDriver.CPP in 00036035
 000360c2	00036830	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?		Win32 Mac: PathToFSSpecCreateDirs, MemFile2
-00036830	00036dc7	fixed	blizzard-mac	StormMac/Storm Mac/?		MACCURSOR_*, MACDISPLAY_*
+00036830	00036dc7	fixed	blizzard-mac	StormMac/Storm Mac/?		MACCURSOR_*, MACDISPLAY_*; no binary records the file or the folder below Storm Mac/, the files sit at its root (Source/StormMac/) under names of ours
 00036dc7	00036fd3	fixed	third-party	MoreFiles/IterateDirectory.c	-	Apple MoreFiles sample code: IterateDirectory, IterateDirectoryLevel, FSpIterateDirectory
-00036fd3	000371f9	fixed	blizzard-mac	StormMac/Storm Mac/?		Accel_DeleteAcceleratorList, MACCURSOR_InitCursor, MACDISPLAY_FindBestDisplayMode
+00036fd3	000371f9	fixed	blizzard-mac	StormMac/Storm Mac/?		Accel_DeleteAcceleratorList, MACCURSOR_InitCursor, MACDISPLAY_FindBestDisplayMode; no binary records the file or the folder below Storm Mac/, the files sit at its root (Source/StormMac/) under names of ours
 000371f9	00039fdf	fixed	third-party	3rdParty/zlib/?	-	zlib 1.2.8 (version string, "invalid distance code"), pairs with Windows Storm::_3rdparty::zlib
 00039fdf	0003a696	fixed	third-party	3rdParty/blast/blast.c	-	PKWare DCL decoder blast.c (Mark Adler): blast, blast_construct, blast_bits, blast_decode
 0003a696	0003e30a	anchors	blizzard-mac	StormMac/Storm Mac/SOURCE/?		SReg plus its Mac backend, __FILE__ SRegMac.mm; stpl.h template instances
@@ -64,7 +66,9 @@ lo	hi	kind	class	file	redivivus	evidence
 0019f2b6	0019f900	fixed	blizzard-mac	MacSpecific/Source/Mac Shell/D2FlamingLogo.cpp		__FILE__ 0031a9d3 in FLAMINGLOGO_Init/Shutdown; the Baal AI starts at 0019f900
 0019ebbe		override	shared	?	-	ApplicationMain: paired with Windows 00405c30; the Mac calls are D2_OS_MAC blocks in the shared body
 002b0e04	002b1888	anchors	blizzard-mac	MacSpecific/Source/CD2Textures/?		__FILE__ CD2Textures.cpp in 4 functions
-002b1888	002b78f4	anchors	shared	?		D2gfx on the Mac: software tile drawers, the renderer dispatchers with Mac slots 11-13 and 16-21, MACGFX_*, MACSEC_*
+002b1888	002b6584	anchors	shared	?		D2gfx on the Mac: software tile drawers, the renderer dispatchers with Mac slots 11-13 and 16-21, MACGFX_*; no __FILE__ names a D2gfx file, the paired functions are D2GFX.cpp's (their Windows twins), the Mac-only ones between them have no file evidence (Source/D2gfx/Mac/README.md)
+002b6584	002b78f4	anchors	shared	?		D2Hell's file layer (__FILE__ D2Hell/SRC/Archive.cpp) and, after it, MACSEC_* (no __FILE__, D2Lang follows)
+002b692a		override	blizzard-mac	D2Hell/SRC/Archive.cpp		bracketed by the Archive.cpp __FILE__ users 002b6888 and 002b69ff; the file map's Bnclient/ prefix is not the Mac literal (../D2Hell/SRC/Archive.cpp)
 002de2d0	002e710f	anchors	blizzard-mac	D2OpenGL/Src/?		the Mac GL renderer, __FILE__ COGLAGPTextures/oglBlocks/oglPerspective/oglSmack/oglSprite/oglVertex
 002ef7cd	002ef7ce	fixed	blizzard-mac	Fog/Src/ErrorManager.cpp		FOG_MacGetBlizzardSupportPath: a D2_OS_MAC addition, between ErrorManager.cpp __FILE__ users
 002f7324	002f744e	fixed	blizzard-mac	?		MACDISPLAY_SetGammaRamp, MACDISPLAY_RestoreGammaRamp, linked inside Fog
