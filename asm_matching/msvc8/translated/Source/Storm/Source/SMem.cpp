@@ -1212,11 +1212,13 @@ BOOL __stdcall SMemHeapFree(HSHEAP nHeapId, uint32_t dwFlags, void * pObject) {
 
 #if D2_ARCH_X64 || D2_ARCH_ARM64
     if (SMEM_HeapFromBlock(pBlock)->nHash != nHeapId) {
-#else
-    if (((D2FogHeapDescStrc*)((uintptr_t)*(uint16_t*)&pBlock->uLink << 0x10))->nHash != nHeapId) {
-#endif
       return 0;
     }
+#else
+    if (((D2FogHeapDescStrc*)((uintptr_t)*(uint16_t*)&pBlock->uLink << 0x10))->nHash != nHeapId) {
+      return 0;
+    }
+#endif
 
     D2FogHeapDescStrc* pHeap = SMEM_LockHeapByBlockPtr((uint32_t*)&nObject, pBlock);
     SMEM_SatisfyFreeRequest(pObject, pHeap, pBlock);
@@ -1254,11 +1256,13 @@ int32_t __stdcall SMemHeapSize(HSHEAP nHeapId, uint32_t dwFlags, void * pObject)
     }
 #if D2_ARCH_X64 || D2_ARCH_ARM64
     if (SMEM_HeapFromBlock(pBlock)->nHash != nHeapId) {
-#else
-    if (*(int*)(((uintptr_t)*(uint16_t*)&pBlock->uLink << 0x10) + offsetof(D2FogHeapDescStrc, nHash)) != nHeapId) {
-#endif
       return -1;
     }
+#else
+    if (*(int*)(((uintptr_t)*(uint16_t*)&pBlock->uLink << 0x10) + offsetof(D2FogHeapDescStrc, nHash)) != nHeapId) {
+      return -1;
+    }
+#endif
 
     SMemGetBlockDataAndSize((uint8_t*)nBlockAddr, (int*)&nObject, (int*)&nHeapId, pBlock);
     return nObject;
@@ -1656,11 +1660,13 @@ uint32_t * __stdcall SMemHeapReAlloc(uint32_t nHeapId, uint32_t dwAllocFlags, ui
         }
 #if D2_ARCH_X64 || D2_ARCH_ARM64
         if (SMEM_HeapFromBlock(pBlockHeader)->nHash != nHeapId) {
-#else
-        if (*(uint32_t*)(((uintptr_t)*(uint16_t*)&pBlockHeader->uLink << 0x10) + offsetof(D2FogHeapDescStrc, nHash)) != nHeapId) {
-#endif
           return nullptr;
         }
+#else
+        if (*(uint32_t*)(((uintptr_t)*(uint16_t*)&pBlockHeader->uLink << 0x10) + offsetof(D2FogHeapDescStrc, nHash)) != nHeapId) {
+          return nullptr;
+        }
+#endif
 
         pHeap = SMEM_LockHeapByBlockPtr(&nHeapId, pBlockHeader);
         pResult = SMemReallocCore((int*)&nHeapId, pHeap, pResult, pBlockHeader, (uint8_t)dwAllocFlags, nAllocSize);
@@ -1778,4 +1784,4 @@ void __stdcall SMemZero(void * pMemory, size_t nSize) {
 
 static void * keep_00411740 = (0 ? (SMemFindHeapByHash(*(uint32_t * *)0, *(int32_t *)0, *(uint32_t *)0), (void *)0) : (void *)0);
 
-} // namespace Storm::Source::SMem
+}}} // namespace Storm::Source::SMem
