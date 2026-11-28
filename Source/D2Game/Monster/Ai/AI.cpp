@@ -15586,27 +15586,13 @@ void __fastcall AITHINK_Fn1_BloodHawk(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
 // Server-side monster AI tick for the Fallen (and the shaman-revive interaction). Runs the AITHINK event timer, then scans the unit's room and adjacent rooms for a nearby (collision dist < 0xf) dead monster corpse; if found it flags the AI general (dwArg0=1), frees the current AI, applies combat/monstats, and walks toward the target — leading into a flee/revive reaction with a seeded sound chance. In Neutral mode, depending on whether already in combat and on per-difficulty MonStats columns (read off TreasureClass offsets) and seeded RNG rolls, it either spawns a minion + creates an AI command, commands a walk-to-target, does a random-offset walk, or selects an end action (CalledOnEndAiFunction1 codes 4/5/9) — including handling an existing AI command (cmd id 1). Falls through to PlanNextAiMove(10) to schedule the next think.
 // 1.14d mac: 0028da0d
 void __fastcall AITHINK_Fn1_Fallen(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
-    D2UnitStrc* pCorpse;
-    uint32_t nCorpseDistance;
-    int32_t bRelocated;
-    D2MonsterAiCmdStrc* nAiCmdId;
-    BOOL BVar2;
-    D2UnitStrc* pOwnerUnit;
-    uint32_t nRandRoll;
-    uint32_t* pRoomUnitGUID;
-    D2AiCmdArgumentsStrc sAiCmdArgs;
-    int nRoomSlotIdx;
-    D2RoomStrc** ppAdjacentRooms;
-    int nAdjacentRoomCount;
-    D2MonStatsTxt* pMonStats;
-    int nCurRoom;
     D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
     if (!pUnit) {
       return;
     }
 
     eD2MonsterAnimMode eAnimMode = pUnit->eAnimMode.eMonsterMode;
-    if (!(eAnimMode != Death && eAnimMode != eD2MonsterAnimMode_ns::Dead)) {
+    if (eAnimMode == Death || eAnimMode == eD2MonsterAnimMode_ns::Dead) {
       return;
     }
 
@@ -15618,131 +15604,101 @@ void __fastcall AITHINK_Fn1_Fallen(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
 
     int32_t nPosX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
     int32_t nPosY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
+    D2RoomStrc** ppAdjacentRooms;
+    int nAdjacentRoomCount;
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pCurRoom, &ppAdjacentRooms, &nAdjacentRoomCount);
-    if (nAdjacentRoomCount) {
-      uint32_t DVar1;
-      do {
-        pRoomUnitGUID = (*ppAdjacentRooms)->nLastDeadGUIDs;
-        nRoomSlotIdx = 0;
-        do {
-          pCorpse = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, *pRoomUnitGUID);
-          if (pCorpse && pCorpse->eAnimMode.ePlayerMode == Death) {
-            nCorpseDistance = GetCollisionDistanceFromXY(pCorpse, nPosX, nPosY);
-            if (nCorpseDistance < 0xf) {
-              pAiGeneral->dwArg0 = 1;
-              Ai::AiGeneral::FreeAi(pGame, pUnit);
-              AITACTICS_SetPathOverrides(pUnit, 0, 0x32, '\0');
-              bRelocated = WalkTowardsUnitOffset(pGame, pUnit, pAiParam->pTarget, '\f', 1);
-              if (bRelocated) {
-                DVar1 = D2_SeedRoll(&pUnit->sSeed);
-                if (0 < (int)(DVar1 % 0x14)) {
-                  return;
-                }
-
-                UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x11, nullptr);
-                return;
-              }
-
-              nAdjacentRoomCount = 1;
-              break;
-            }
-          }
-
-          nRoomSlotIdx++;
-          pRoomUnitGUID++;
-        } while (nRoomSlotIdx < 4);
-
-        ppAdjacentRooms++;
-        nAdjacentRoomCount--;
-      } while (nAdjacentRoomCount);
-
-      nAdjacentRoomCount = 0;
-    }
-    if (eAnimMode == eD2MonsterAnimMode_ns::Neutral) {
-      nRoomSlotIdx = pAiParam->bEngagedInCombat;
-      nCurRoom = pAiParam->nDistanceToTarget;
-      pCorpse = pAiParam->pTarget;
-      pMonStats = pAiParam->pMonStats;
-      nAiCmdId = Ai::AiGeneral::GetAiCmd(pUnit);
-      if (!nAiCmdId) {
-        if (!nRoomSlotIdx) {
-          BVar2 = MONSTERAI_IsMonsterAttacking(pUnit);
-          if (BVar2) {
-            MONSTERAI_CommandWalkToUnit(pGame, pUnit, pCorpse, 0);
-            return;
-          }
-        }
-        if (nCurRoom < 0xf) {
-          pOwnerUnit = Ai::AiGeneral::GetOwnerUnit(pUnit);
-          if (pOwnerUnit == pUnit) {
-            nRandRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
-            if ((int)nRandRoll < (int)pMonStats->aip[0][pGame->nDifficulty]) {
-              sAiCmdArgs.nCmdId = 1;
-              Ai::AiGeneral::CreateMinion(pGame, pUnit, &sAiCmdArgs);
-              Ai::AiGeneral::CreateAiCmdAndFill(pGame, pUnit, &sAiCmdArgs);
-              AI_ChangeModeAndTargetUnit(pGame, pUnit, 9, pCorpse);
-              return;
-            }
-          }
-        }
-        if (nRoomSlotIdx) {
-          if (pAiGeneral->dwArg0 || (nRandRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100) , (int)nRandRoll < (int)pMonStats->aip[2][pGame->nDifficulty])) {
-            pAiGeneral->dwArg0 = 0;
-            nRandRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
-            if ((int)nRandRoll < (int)pMonStats->aip[3][pGame->nDifficulty]) {
-              AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pCorpse);
-              return;
-            }
-
-            AI_ChangeModeAndTargetUnit(pGame, pUnit, 5, pCorpse);
-            return;
-          }
-
-          nRandRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
-          if ((int)nRandRoll < 0x1e) {
-            AI_ChangeModeAndTargetUnit(pGame, pUnit, 9, pCorpse);
-            return;
-          }
-        } else {
-          if (nCurRoom <= (int)pMonStats->aip[1][pGame->nDifficulty]) {
-            MONSTERAI_CommandWalkToUnit(pGame, pUnit, pCorpse, 7);
-            return;
-          }
-
-          nRandRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
-          if ((int)nRandRoll < 0x1e) {
-            WalkRandomOffset(pGame, pUnit, 3);
-            return;
-          }
-        }
-      } else {
-        if (nAiCmdId->nCmdArg[0] == 1) {
-          if (nRoomSlotIdx) {
-            nRandRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
-            if (!((int)nRandRoll >= (int)pMonStats->aip[2][pGame->nDifficulty])) {
-              nRandRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
-              if ((int)nRandRoll < (int)pMonStats->aip[3][pGame->nDifficulty]) {
-                AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pCorpse);
-                return;
-              }
-
-              AI_ChangeModeAndTargetUnit(pGame, pUnit, 5, pCorpse);
-              return;
-            }
-
-            PlanNextAiMove(pGame, pUnit, 5);
-            return;
-          }
-
-          bRelocated = MONSTERAI_CommandWalkToUnit(pGame, pUnit, pCorpse, 0);
-          if (bRelocated) {
-            return;
-          }
-
+    while (nAdjacentRoomCount) {
+      uint32_t* pDeadGUID = (*ppAdjacentRooms)->nLastDeadGUIDs;
+      for (int i = 0; i < 4; i++, pDeadGUID++) {
+        D2UnitStrc* pCorpse = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, *pDeadGUID);
+        if (pCorpse && pCorpse->eAnimMode.ePlayerMode == Death && (uint32_t)GetCollisionDistanceFromXY(pCorpse, nPosX, nPosY) < 0xf) {
+          pAiGeneral->dwArg0 = 1;
           Ai::AiGeneral::FreeAi(pGame, pUnit);
+          AITACTICS_SetPathOverrides(pUnit, 0, 0x32, '\0');
+          if (WalkTowardsUnitOffset(pGame, pUnit, pAiParam->pTarget, '\f', 1)) {
+            if ((int)(D2_SeedRoll(&pUnit->sSeed) % 0x14) < 1) {
+              UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, 0x11, nullptr);
+            }
+            return;
+          }
+
+          nAdjacentRoomCount = 1;
+          break;
+        }
+      }
+
+      ppAdjacentRooms++;
+      nAdjacentRoomCount--;
+    }
+
+    if (eAnimMode == eD2MonsterAnimMode_ns::Neutral) {
+      int nDistanceToTarget = pAiParam->nDistanceToTarget;
+      BOOL bEngagedInCombat = pAiParam->bEngagedInCombat;
+      D2UnitStrc* pTarget = pAiParam->pTarget;
+      D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
+      D2SeedStrc* pSeed = &pUnit->sSeed;
+      D2MonsterAiCmdStrc* pAiCmd = Ai::AiGeneral::GetAiCmd(pUnit);
+      if (!pAiCmd) {
+        if (!bEngagedInCombat && MONSTERAI_IsMonsterAttacking(pUnit)) {
+          MONSTERAI_CommandWalkToUnit(pGame, pUnit, pTarget, 0);
           return;
         }
+        if (nDistanceToTarget < 0xf && Ai::AiGeneral::GetOwnerUnit(pUnit) == pUnit && (int)D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100) < pMonStats->aip[0][pGame->nDifficulty]) {
+          D2AiCmdArgumentsStrc sAiCmdArgs;
+          sAiCmdArgs.nCmdId = 1;
+          Ai::AiGeneral::CreateMinion(pGame, pUnit, &sAiCmdArgs);
+          Ai::AiGeneral::CreateAiCmdAndFill(pGame, pUnit, &sAiCmdArgs);
+          AI_ChangeModeAndTargetUnit(pGame, pUnit, 9, pTarget);
+          return;
+        }
+        if (bEngagedInCombat) {
+          if (pAiGeneral->dwArg0 || (int)D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100) < pMonStats->aip[2][pGame->nDifficulty]) {
+            pAiGeneral->dwArg0 = 0;
+            if ((int)D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100) < pMonStats->aip[3][pGame->nDifficulty]) {
+              AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pTarget);
+              return;
+            }
 
+            AI_ChangeModeAndTargetUnit(pGame, pUnit, 5, pTarget);
+            return;
+          }
+          if ((int)D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100) < 0x1e) {
+            AI_ChangeModeAndTargetUnit(pGame, pUnit, 9, pTarget);
+          } else {
+            PlanNextAiMove(pGame, pUnit, 10);
+          }
+          return;
+        } else if (nDistanceToTarget > pMonStats->aip[1][pGame->nDifficulty]) {
+          if ((int)D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100) < 0x1e) {
+            WalkRandomOffset(pGame, pUnit, 3);
+          } else {
+            PlanNextAiMove(pGame, pUnit, 10);
+          }
+          return;
+        } else {
+          MONSTERAI_CommandWalkToUnit(pGame, pUnit, pTarget, 7);
+          return;
+        }
+      } else if (pAiCmd->nCmdArg[0] == 1) {
+        if (bEngagedInCombat) {
+          if ((int)D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100) < pMonStats->aip[2][pGame->nDifficulty]) {
+            if ((int)D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100) < pMonStats->aip[3][pGame->nDifficulty]) {
+              AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pTarget);
+              return;
+            }
+
+            AI_ChangeModeAndTargetUnit(pGame, pUnit, 5, pTarget);
+            return;
+          }
+
+          PlanNextAiMove(pGame, pUnit, 5);
+          return;
+        }
+        if (!MONSTERAI_CommandWalkToUnit(pGame, pUnit, pTarget, 0)) {
+          Ai::AiGeneral::FreeAi(pGame, pUnit);
+        }
+        return;
+      } else {
         Ai::AiGeneral::FreeAi(pGame, pUnit);
       }
     }

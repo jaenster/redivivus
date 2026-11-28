@@ -2217,8 +2217,10 @@ int32_t __stdcall GetDefense(D2UnitStrc * pUnit) {
     return nBaseArmor;
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit);
+
 static inline int32_t GetToHitFactorInline(D2UnitStrc * pUnit) {
-    if (pUnit->eUnitType != UNIT_PLAYER) {
+    if (GetTypeInline(pUnit) != UNIT_PLAYER) {
       return 0;
     }
 
