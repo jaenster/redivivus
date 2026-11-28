@@ -2734,10 +2734,6 @@ int __stdcall UTF16_ToUTF8(uint8_t * pbUTF8, int nOutMaxChars, uint16_t * pszUTF
 }
 
 int __stdcall UTF8_CalculateUTF16Length(char * szText, int nMaxBytes, int * pnBytesRead) {
-    char* pCur;
-    uint32_t uByteCount;
-    uint32_t uCodepoint;
-    char cByte;
     if (!nMaxBytes || !szText) {
       if (pnBytesRead) {
         *pnBytesRead = 0;
@@ -2745,61 +2741,50 @@ int __stdcall UTF8_CalculateUTF16Length(char * szText, int nMaxBytes, int * pnBy
 
       return -1;
     }
-    if (nMaxBytes == 0x7fffffff) {
-      pCur = (char*)-1;
-    } else {
-      pCur = szText + nMaxBytes;
-    }
 
+    char* pStart = szText;
+    char* pEnd = nMaxBytes == 0x7fffffff ? (char*)-1 : szText + nMaxBytes;
     int nUTF16Len = 0;
-    char* pEndInner = szText;
     while (true) {
-      int iAccum;
-      if (pEndInner >= pCur) {
+      if (szText >= pEnd) {
         nUTF16Len = -1;
         break;
       }
 
-      cByte = *pEndInner;
-      uCodepoint = (uint32_t)gaUTF8ByteCountTable[cByte];
-      if (pEndInner + uCodepoint >= pCur) {
-        nUTF16Len = -1 - uCodepoint;
+      uint32_t nExtraBytes = gaUTF8ByteCountTable[*szText];
+      if (szText + nExtraBytes >= pEnd) {
+        nUTF16Len = -1 - nExtraBytes;
         break;
       }
 
-      iAccum = 0;
-      switch (uCodepoint) {
+      uint32_t uCodepoint = 0;
+      switch (nExtraBytes) {
         case 5:
-          pEndInner++;
-        iAccum = (int)cByte << 6;
+          uCodepoint += *szText++;
+          uCodepoint <<= 6;
         case 4:
-          cByte = *pEndInner;
-        pEndInner++;
-        iAccum = (iAccum + cByte) * 0x40;
+          uCodepoint += *szText++;
+          uCodepoint <<= 6;
         case 3:
-          cByte = *pEndInner;
-        pEndInner++;
-        iAccum = (iAccum + cByte) * 0x40;
+          uCodepoint += *szText++;
+          uCodepoint <<= 6;
         case 2:
-          cByte = *pEndInner;
-        pEndInner++;
-        iAccum = (iAccum + cByte) * 0x40;
+          uCodepoint += *szText++;
+          uCodepoint <<= 6;
         case 1:
-          cByte = *pEndInner;
-        pEndInner++;
-        iAccum = (iAccum + cByte) * 0x40;
+          uCodepoint += *szText++;
+          uCodepoint <<= 6;
         case 0:
-          iAccum += *pEndInner;
-        pEndInner++;
+          uCodepoint += *szText++;
       }
 
-      uByteCount = iAccum - gdwUTF8ConversionTab[uCodepoint];
-      if (uByteCount <= 0xffff) {
+      uCodepoint -= gdwUTF8ConversionTab[nExtraBytes];
+      if (uCodepoint <= 0xffff) {
         nUTF16Len++;
-        if (iAccum == gdwUTF8ConversionTab[uCodepoint]) {
+        if (!uCodepoint) {
           break;
         }
-      } else if (uByteCount > 0x10ffff) {
+      } else if (uCodepoint > 0x10ffff) {
         nUTF16Len++;
       } else {
         nUTF16Len += 2;
@@ -2807,7 +2792,7 @@ int __stdcall UTF8_CalculateUTF16Length(char * szText, int nMaxBytes, int * pnBy
     }
 
     if (pnBytesRead) {
-      *pnBytesRead = (int)(pEndInner - szText);
+      *pnBytesRead = szText - pStart;
     }
 
     return nUTF16Len;
@@ -2914,7 +2899,6 @@ int __stdcall UTF8_ToUTF16(short * pszUTF16Out, int nOutMaxChars, uint8_t * pbUT
 }
 
 uint32_t __stdcall UTF8_DecodeNextChar(uint8_t * pbText, int * pnBytesRead) {
-    int nContinuationBytesNeeded;
     if (pnBytesRead) {
       *pnBytesRead = 0;
     }
@@ -2922,47 +2906,40 @@ uint32_t __stdcall UTF8_DecodeNextChar(uint8_t * pbText, int * pnBytesRead) {
       return -1;
     }
 
-    uint8_t bByte = *pbText;
-    uint32_t dwCodepoint = (uint32_t)bByte;
+    uint32_t dwCodepoint = *pbText++;
     if (!dwCodepoint) {
       return -1;
     }
     if (pnBytesRead) {
       (*pnBytesRead)++;
     }
-    if ((bByte & 0xfe) == 0xfc) {
-      dwCodepoint &= 1;
-      nContinuationBytesNeeded = 5;
-    } else if ((bByte & 0xfc) == 0xf8) {
-      dwCodepoint &= 3;
-      nContinuationBytesNeeded = 4;
-    } else if ((bByte & 0xf8) == 0xf0) {
-      dwCodepoint &= 7;
-      nContinuationBytesNeeded = 3;
-    } else if ((bByte & 0xf0) == 0xe0) {
-      dwCodepoint &= 0xf;
-      nContinuationBytesNeeded = 2;
-    } else {
-      if ((bByte & 0xe0) != 0xc0) {
-        if (!(bByte & 0x80)) {
-          return dwCodepoint;
-        }
 
-        return 0x80000000;
+    int nContinuationBytes;
+    if ((dwCodepoint & 0xfe) == 0xfc) {
+      dwCodepoint &= 1;
+      nContinuationBytes = 5;
+    } else if ((dwCodepoint & 0xfc) == 0xf8) {
+      dwCodepoint &= 3;
+      nContinuationBytes = 4;
+    } else if ((dwCodepoint & 0xf8) == 0xf0) {
+      dwCodepoint &= 7;
+      nContinuationBytes = 3;
+    } else if ((dwCodepoint & 0xf0) == 0xe0) {
+      dwCodepoint &= 0xf;
+      nContinuationBytes = 2;
+    } else if ((dwCodepoint & 0xe0) == 0xc0) {
+      dwCodepoint &= 0x1f;
+      nContinuationBytes = 1;
+    } else {
+      if (!(dwCodepoint & 0x80)) {
+        return dwCodepoint;
       }
 
-      dwCodepoint &= 0x1f;
-      nContinuationBytesNeeded = 1;
+      return 0x80000000;
     }
 
-    int nContinuationCount = 0;
-    if (!nContinuationBytesNeeded) {
-      return dwCodepoint;
-    }
-
-    while (true) {
-      pbText++;
-      bByte = *pbText;
+    for (int i = 0; i < nContinuationBytes; i++) {
+      uint8_t bByte = *pbText++;
       if (!bByte) {
         return -1;
       }
@@ -2970,17 +2947,13 @@ uint32_t __stdcall UTF8_DecodeNextChar(uint8_t * pbText, int * pnBytesRead) {
         (*pnBytesRead)++;
       }
       if ((bByte & 0xc0) != 0x80) {
-        break;
+        return 0x80000000;
       }
 
-      dwCodepoint = bByte & 0x3f | dwCodepoint << 6;
-      nContinuationCount++;
-      if (nContinuationCount >= nContinuationBytesNeeded) {
-        return dwCodepoint;
-      }
+      dwCodepoint = dwCodepoint << 6 | bByte & 0x3f;
     }
 
-    return 0x80000000;
+    return dwCodepoint;
 }
 
 void __stdcall UTF8_EncodeChar(uint32_t uCodepoint, uint8_t * pbOut) {
