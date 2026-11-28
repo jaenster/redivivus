@@ -2899,7 +2899,6 @@ int __stdcall UTF8_ToUTF16(short * pszUTF16Out, int nOutMaxChars, uint8_t * pbUT
 }
 
 uint32_t __stdcall UTF8_DecodeNextChar(uint8_t * pbText, int * pnBytesRead) {
-    int nContinuationBytesNeeded;
     if (pnBytesRead) {
       *pnBytesRead = 0;
     }
@@ -2907,47 +2906,40 @@ uint32_t __stdcall UTF8_DecodeNextChar(uint8_t * pbText, int * pnBytesRead) {
       return -1;
     }
 
-    uint8_t bByte = *pbText;
-    uint32_t dwCodepoint = (uint32_t)bByte;
+    uint32_t dwCodepoint = *pbText++;
     if (!dwCodepoint) {
       return -1;
     }
     if (pnBytesRead) {
       (*pnBytesRead)++;
     }
-    if ((bByte & 0xfe) == 0xfc) {
-      dwCodepoint &= 1;
-      nContinuationBytesNeeded = 5;
-    } else if ((bByte & 0xfc) == 0xf8) {
-      dwCodepoint &= 3;
-      nContinuationBytesNeeded = 4;
-    } else if ((bByte & 0xf8) == 0xf0) {
-      dwCodepoint &= 7;
-      nContinuationBytesNeeded = 3;
-    } else if ((bByte & 0xf0) == 0xe0) {
-      dwCodepoint &= 0xf;
-      nContinuationBytesNeeded = 2;
-    } else {
-      if ((bByte & 0xe0) != 0xc0) {
-        if (!(bByte & 0x80)) {
-          return dwCodepoint;
-        }
 
-        return 0x80000000;
+    int nContinuationBytes;
+    if ((dwCodepoint & 0xfe) == 0xfc) {
+      dwCodepoint &= 1;
+      nContinuationBytes = 5;
+    } else if ((dwCodepoint & 0xfc) == 0xf8) {
+      dwCodepoint &= 3;
+      nContinuationBytes = 4;
+    } else if ((dwCodepoint & 0xf8) == 0xf0) {
+      dwCodepoint &= 7;
+      nContinuationBytes = 3;
+    } else if ((dwCodepoint & 0xf0) == 0xe0) {
+      dwCodepoint &= 0xf;
+      nContinuationBytes = 2;
+    } else if ((dwCodepoint & 0xe0) == 0xc0) {
+      dwCodepoint &= 0x1f;
+      nContinuationBytes = 1;
+    } else {
+      if (!(dwCodepoint & 0x80)) {
+        return dwCodepoint;
       }
 
-      dwCodepoint &= 0x1f;
-      nContinuationBytesNeeded = 1;
+      return 0x80000000;
     }
 
-    int nContinuationCount = 0;
-    if (!nContinuationBytesNeeded) {
-      return dwCodepoint;
-    }
-
-    while (true) {
-      pbText++;
-      bByte = *pbText;
+    for (int i = 0; i < nContinuationBytes; i++) {
+      uint8_t bByte = *pbText++;
       if (!bByte) {
         return -1;
       }
@@ -2955,17 +2947,13 @@ uint32_t __stdcall UTF8_DecodeNextChar(uint8_t * pbText, int * pnBytesRead) {
         (*pnBytesRead)++;
       }
       if ((bByte & 0xc0) != 0x80) {
-        break;
+        return 0x80000000;
       }
 
-      dwCodepoint = bByte & 0x3f | dwCodepoint << 6;
-      nContinuationCount++;
-      if (nContinuationCount >= nContinuationBytesNeeded) {
-        return dwCodepoint;
-      }
+      dwCodepoint = dwCodepoint << 6 | bByte & 0x3f;
     }
 
-    return 0x80000000;
+    return dwCodepoint;
 }
 
 void __stdcall UTF8_EncodeChar(uint32_t uCodepoint, uint8_t * pbOut) {
