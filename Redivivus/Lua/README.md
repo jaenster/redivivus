@@ -166,9 +166,14 @@ Mods screen restarts the game and at exit.
   copies; override the caller.
 - Static functions are reachable: each table is compiled into its own Source unit (the
   `.ov.cpp` `#include`s the unit), which takes the unit's place in a mods build.
-- Cost: a function nobody overrides runs five nops; a patched one called on a thread whose state
-  does not override it costs the thunk's check; an overridden call one entry into Lua (see the
-  host test's `--bench-override`).
+- Cost: a function nobody overrides runs five nops (no difference measurable in the server's frame
+  time); a patched one called on a thread whose state does not override it costs the thunk's check
+  (6 ns on arm64, 12 to 25 ns for i686 under emulation); an overridden call is one guarded entry
+  into Lua, 150 ns on arm64 and about 0.7 to 1.2 us for i686 where x86 is emulated (Wine on an
+  Apple Mac, Windows on ARM). The host test's `--bench-override` measures it.
+- The time budget of an entry is dated by the watchdog, which looks every quarter of a budget: an
+  entry is stopped between one and one and a quarter budgets after it started, and arming one reads
+  no clock.
 - The registry is generated and committed; after a regen of `Source/` run `node tools/src/gen.ts`
   (the mods build fails at compile time when a signature changed).
 
