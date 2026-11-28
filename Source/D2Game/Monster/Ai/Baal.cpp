@@ -562,6 +562,14 @@ static int32_t __stdcall AI_Baal_SelectActionWeighted(::SGAMEDATA * pGame, D2AiG
     return 1;
 }
 
+// GetType as its callers inlined it: two returns, the value in a register of its own.
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+
 // Evaluates and returns the next combat action index for Baal's AI. When nCombatAiState==0 and no target (pUnit2 null): checks collision at Baal's current position and returns 4 if blocked, else 1 with 8% chance or 1. When a target is present: determines if the target's player-object is in the Throne Room within 75 units, measures distance to anchor point, tests melee range and wall collision, then delegates to AI_BAAL_CloneChooseAction (melee), AI_Baal_SelectActionWeighted (wall), or AI_BAAL_ThroneRoomChooseAction. Returns the chosen action index.
 // 1.14d mac: 0019ff05
 static int32_t __stdcall AI_BaalEvaluateCombatAction(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2AiGeneralStrc * pAiGeneral, int32_t nBestScore, int32_t nCandidateCount, D2MonsterAiCmdStrc * pAnchorAiCmd, D2UnitStrc * pUnit2) {
@@ -621,7 +629,7 @@ static int32_t __stdcall AI_BaalEvaluateCombatAction(D2UnitStrc * pUnit, ::SGAME
     }
 
     _bInThroneRoom = 0;
-    if (pUnit2->eUnitType == UNIT_PLAYER) {
+    if (GetTypeInline(pUnit2) == UNIT_PLAYER) {
       nFoundGUID = PLAYER::Player::GetPlayerUniqueId(pUnit2);
       pFoundUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_OBJECT, nFoundGUID);
       if (pFoundUnit) {
