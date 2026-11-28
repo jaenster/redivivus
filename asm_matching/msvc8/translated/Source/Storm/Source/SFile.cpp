@@ -1413,17 +1413,17 @@ DWORD __stdcall SFileSetFilePointer(D2MPQFileStrc * pMPQFile, int32_t nDistanceT
     }
 
     switch (dwMoveMethod) {
-      case FILE_BEGIN:
+      case 0: /* FILE_BEGIN */
         pFileSlot->nFilePos = nDistanceToMove;
         break;
-      case FILE_CURRENT:
+      case 1: /* FILE_CURRENT */
         if (nDistanceToMove < 0 && pFileSlot->nFilePos < (uint32_t)-nDistanceToMove) {
           pFileSlot->nFilePos = 0;
         } else {
           pFileSlot->nFilePos += nDistanceToMove;
         }
         break;
-      case FILE_END:
+      case 2: /* FILE_END */
         if (nDistanceToMove < 0 && pFileSlot->pBlockEntry->dwFileSize < (uint32_t)-nDistanceToMove) {
           pFileSlot->nFilePos = 0;
         } else {

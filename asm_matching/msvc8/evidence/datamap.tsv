@@ -238,7 +238,7 @@ symbol	address	uses	other_addresses
 ?InvChar@Panel@UI@D2Client@@3PAUDC6@@A	007bef64	3	
 ?Invwarn@Panel@UI@D2Client@@3PAUDC6@@A	007bef24	4	
 ?IsBattleNetServer@@3HA	00883d54	4	
-?ItemTypeOnHand@Cursor@D2Client@@3HA	007a6af0	19	
+?ItemTypeOnHand@Cursor@D2Client@@3HA	007a6af0	21	
 ?KeyClassic@_net_sid@Bnclient@@3PADA	00882744	6	
 ?KeyExpansion@_net_sid@Bnclient@@3PADA	0088274c	2	
 ?KeyOwner@_net_sid@Bnclient@@3PADA	00882750	6	
@@ -250,17 +250,17 @@ symbol	address	uses	other_addresses
 ?MISSILESSRVDOFUNCS@?1??MissileSrvDo@MissilesMode@MISSILES@D2Game@@YGXPAUSGAMEDATA@@PAUD2UnitStrc@@@Z@4PAP6IH01@ZA	0073c768	1	
 ?MPLIST@?1??UNIT_GetMaxAvailableMPCharCode@Drop@Items@ITEMS@D2Game@@YIHPAUD2UnitStrc@@@Z@4PAIA	00731f60	2	
 ?MPLISTSIZE@?1??UNIT_GetMaxAvailableMPCharCode@Drop@Items@ITEMS@D2Game@@YIHPAUD2UnitStrc@@@Z@4HA	00731f70	1	
-?MPQ_d2Xmusic@D2WinArchive@Src@D2Win@@3PAUD2FogArchiveStrc@@A	007d5604	6	
-?MPQ_d2Xtalk@D2WinArchive@Src@D2Win@@3PAUD2FogArchiveStrc@@A	007d5618	3	
+?MPQ_d2Xmusic@D2WinArchive@Src@D2Win@@3PAUD2FogArchiveStrc@@A	007d5604	7	
+?MPQ_d2Xtalk@D2WinArchive@Src@D2Win@@3PAUD2FogArchiveStrc@@A	007d5618	5	
 ?MPQ_d2Xvideo@D2WinArchive@Src@D2Win@@3PAUD2FogArchiveStrc@@A	007d562c	5	
-?MPQ_d2char@D2WinArchive@Src@D2Win@@3PAUD2FogArchiveStrc@@A	007d5610	4	007d5618:1
+?MPQ_d2char@D2WinArchive@Src@D2Win@@3PAUD2FogArchiveStrc@@A	007d5610	6	
 ?MPQ_d2data@@3PAUD2FogArchiveStrc@@A	008829dc	10	
 ?MPQ_d2data@D2WinArchive@Src@D2Win@@3PAUD2FogArchiveStrc@@A	007d561c	4	
 ?MPQ_d2delta@D2WinArchive@Src@D2Win@@3PAUD2FogArchiveStrc@@A	007d560c	3	
 ?MPQ_d2exp@@3PAUD2FogArchiveStrc@@A	008829e4	3	
 ?MPQ_d2exp@D2WinArchive@Src@D2Win@@3PAUD2FogArchiveStrc@@A	007d5634	4	
 ?MPQ_d2kfixup@D2WinArchive@Src@D2Win@@3PAUD2FogArchiveStrc@@A	007d5620	3	
-?MPQ_d2music@D2WinArchive@Src@D2Win@@3PAUD2FogArchiveStrc@@A	007d5628	4	
+?MPQ_d2music@D2WinArchive@Src@D2Win@@3PAUD2FogArchiveStrc@@A	007d5628	5	
 ?MPQ_d2sfx@D2WinArchive@Src@D2Win@@3PAUD2FogArchiveStrc@@A	007d5608	4	
 ?MPQ_d2speech@D2WinArchive@Src@D2Win@@3PAUD2FogArchiveStrc@@A	007d5624	4	
 ?MPQ_d2video@D2WinArchive@Src@D2Win@@3PAUD2FogArchiveStrc@@A	007d5614	3	
@@ -286,11 +286,11 @@ symbol	address	uses	other_addresses
 ?PreferredClosedRealm@@3PADA	00779a40	22	
 ?QServerClientBucketById@@3PAPAUD2ClientStrc@@A	008842a8	9	
 ?REGISTRY_CmdLine@?1??D2INIT_CheckCommandLineOrLoadItFromRegistry@Main@Game@@YIXPAPAD@Z@4PADA	0074c728	4	
-?RENDERER_CurrentRenderedFunctions@@3PAUD2RendererFunctionsStrc@@A	007c8cc0	58	
+?RENDERER_CurrentRenderedFunctions@@3PAUD2RendererFunctionsStrc@@A	007c8cc0	60	
 ?RENDERER_SelectedRendererCore@@3PAUD2RendererCoreStrc@@A	007c9134	42	
 ?RENDERER_WINDOWED_hPalette@@3PAUHPALETTE__@@A	0098a160	4	
-?RENDERER_nWindowHeight@@3HA	007c913c	53	007c9138:2,007c9154:1
-?RENDERER_nWindowWidth@@3HA	007c9138	74	007c913c:3
+?RENDERER_nWindowHeight@@3HA	007c913c	57	007c9138:2,007c9154:1
+?RENDERER_nWindowWidth@@3HA	007c9138	78	007c913c:3
 ?RackTypeCount@?1??OBJECTS_SpawnArmorStandOrWeaponRack@Objects@D2Game@@YGXPAUSGAMEDATA@@PAUD2RoomStrc@@PAUD2DrlgRoomCoordsStrc@@H@Z@4HA	00731eb0	1	
 ?RandomObjectsInit@?1??SERVER_InitUnitObject@Objects@D2Game@@YIPAUD2UnitStrc@@PAUSGAMEDATA@@PAUD2RoomStrc@@HHHH@Z@4PAP6IPAU4@01HHHH@ZA	00731d28	2	
 ?RealmDNS@?1??BattleConnectFastest@BnSend@Bnclient@@YGHXZ@4PADA	008818e8	4	
@@ -311,13 +311,13 @@ symbol	address	uses	other_addresses
 ?STATESCLTEVENTFUNC@?1??AttachClientStateHandler@Skills@SKILLS@D2Client@@YIPAUD2CUnitEventStrc@@PAUD2UnitStrc@@HHHIHH@Z@4PAP6IHH00III@ZA	00727db4	1	
 ?STATESREMFUNC@?1??STATES_DispatchRemFunc@PlrSkills@UNIT@D2Client@@YIXPAUD2UnitStrc@@I@Z@4PAP6IX0I@ZA	0072a710	1	
 ?STATESSETFUNC@?1??STATES_DispatchSetFunc@PlrSkills@UNIT@D2Client@@YIXPAUD2UnitStrc@@I@Z@4PAP6IX0I@ZA	0072a690	1	
-?ScreenSizeX@ui@UI@D2Client@@3HA	0071146c	181	
-?ScreenSizeY@Inv@UI@D2Client@@3HA	00711470	139	007a285c:84
+?ScreenSizeX@ui@UI@D2Client@@3HA	0071146c	182	
+?ScreenSizeY@Inv@UI@D2Client@@3HA	00711470	140	007a285c:84
 ?ServerLoadingComplete@Game@GAME@D2Client@@3HA	007a061c	26	
 ?ServerSideUnitHashTables@CUnit@UNIT@D2Client@@3PAY0IA@PAUD2UnitStrc@@A	007a5e70	30	
 ?SettedUp@Record@GAME@D2Client@@3HA	007a2780	2	
 ?TokenHashMapBucketSize@Src@Fog@@3HA	0074c3e0	2	
-?TotalCurrentChars@CharSel@D2Launch@@3HA	00779dc4	12	
+?TotalCurrentChars@CharSel@D2Launch@@3HA	00779dc4	13	
 ?WEATHER_bCanMud@?1??WeatherEffects@Weather@Draw@D2Client@@YGXXZ@4HA	007a8a40	2	
 ?WEATHER_bCanRain@?1??WeatherEffects@Weather@Draw@D2Client@@YGXXZ@4HA	007a8a44	2	
 ?WinMain_hInstance@Main@Game@@3PAUHINSTANCE__@@A	0074c718	3	
@@ -408,13 +408,13 @@ symbol	address	uses	other_addresses
 ?base_length@?1??compress_block@trees@zlib@_3rdparty@Storm@@YGXPAUct_data@@0PAUdeflate_state@@@Z@4PAHA	006d16d8	1	
 ?btn@Panel@UI@D2Client@@3PAUDC6@@A	007bef7c	3	
 ?cRed@Party@UI@D2Client@@3EA	007bf034	5	
-?ctrlpnl_popbelt@Panel@UI@D2Client@@3PAUDC6@@A	007bef10	3	
+?ctrlpnl_popbelt@Panel@UI@D2Client@@3PAUDC6@@A	007bef10	4	
 ?dbase@?1??inflate_table@inftrees@zlib@_3rdparty@Storm@@YIHHPAGIPAPAUinflate_code@@PAI0@Z@4PAGA	006d3928	1	
 ?dext@?1??inflate_table@inftrees@zlib@_3rdparty@Storm@@YIHHPAGIPAPAUinflate_code@@PAI0@Z@4PAGA	006d3968	1	
 ?disableFlags@UnDecorator@@0KA	0096e258	36	
 ?dwCurrentThreadId@crashy@_3rdparty@Fog@@3IA	00992b1c	2	
 ?dwCycleLastSecond@@3IA	00731010	1	
-?dwLastErrorCode@@3IA	007790f4	2	
+?dwLastErrorCode@@3KA	007790f4	2	
 ?eD2ClientAppMode_0070ef18@?1??pfModes_Save@Game@GAME@D2Client@@YGIXZ@4IA	0070ef18	2	
 ?eD2GSGameType_007a0610@@3IA	007a0610	28	
 ?eLevelId_ActLevels@?1??RollChestDrops@ObjectsMode@Objects@D2Game@@YIPAPAUD2UnitStrc@@PAUD2ObjectOperateFnArg@@I@Z@4PAY01IA	006e1988	1	
@@ -449,7 +449,7 @@ symbol	address	uses	other_addresses
 ?gCmdLineOptionTable@?1??LoadDataForGameAndSetupServer@ClientModeInGame@D2Client@@YGHPAUD2IniConfigStrc@@@Z@4PAP6GHXZA	006d5be0	1	
 ?gConnectLongTimeoutStartTick@@3HA	007a0524	3	
 ?gCoord_Dummy@?1??DRLGPATH_ClearPathPosition@Path@PATH@D2Common@@YGXPAUD2DynamicPathStrc@@@Z@4UtagPOINT@@A	006eb7c8	2	
-?gCursorAnimationFrame@@3HA	007a6ae0	21	
+?gCursorAnimationFrame@@3HA	007a6ae0	22	
 ?gD3DFloorTextureCache@@3UD3DFloorCacheStrc@@A	0096fc9c	3	
 ?gD3DGenericTextureCache@@3UD3DTextureCacheSetStrc@@A	00970ec8	21	
 ?gD3DSubtileTextureCache@@3UD3DSubtileCacheStrc@@A	0096fc80	3	
@@ -481,7 +481,7 @@ symbol	address	uses	other_addresses
 ?gLogMessageQueueCount@@3HA	0075d140	2	
 ?gMCPGameListBuffer@@3PAEA	00799318	2	
 ?gMonLvl_U_UniqueMonsterLevelChance2@?1??MONSTER_ApplyDifficultyScaling@MONSTERS@Monsters@D2Common@@YGXPAUD2UnitStrc@@HE@Z@4PAY04HA	006ea9f0	1	
-?gMpqArchiveList@SFile@Source@Storm@@3UStormLinkedListStrc@@A	00708354	10	
+?gMpqArchiveList@SFile@Source@Storm@@3UStormLinkedListStrc@@A	00708354	11	
 ?gName@UnDecorator@@0PBDB	0096e248	176	
 ?gPaletteAct1@@3PAEA	007ee468	3	
 ?gPaletteActNeutral@@3PAEA	00831b68	1	
@@ -489,7 +489,7 @@ symbol	address	uses	other_addresses
 ?gQServerClientByIdCs@@3U_RTL_CRITICAL_SECTION@@A	008846a8	18	
 ?gQServerClientTablesInitialized@Clients@GAME@D2Game@@3HA	008846d8	7	
 ?gQuestLog@@3UD2QuestLogStrc@@A	007bf298	168	
-?gRenderBufferPitch@@3HA	007d544c	6	
+?gRenderBufferPitch@@3HA	007d544c	10	
 ?gRoomLightPulse@D2Client@@3UD2ClientLightPulseStrc@@A	007a742c	14	
 ?gSFileAsyncReqQueue@SFile@Source@Storm@@3UStormLinkedListStrc@@A	00708360	11	
 ?gSFileAudioStreamList@SFile@Source@Storm@@3UStormLinkedListStrc@@A	00708378	10	
@@ -549,9 +549,7 @@ symbol	address	uses	other_addresses
 ?g_IDEAKeySchedules@Bnclient@@3PAEA	00882878	4	
 ?g_OriginalGammaRamp@@3PAY0BAA@GA	0096fcb8	1	
 ?g_SMemCachedHeapNameHash@?1??SMEM_GetHandleByCaller@SMem@Source@Storm@@YAIPADI@Z@4IA	007768a8	2	
-?gdwSMemCachedHeapNameSeed@?1??SMEM_GetHandleByCaller@SMem@Source@Storm@@YAIPADI@Z@4IA	007768b0	2	
 ?g_SMemCachedHeapNamePtr@?1??SMEM_GetHandleByCaller@SMem@Source@Storm@@YAIPADI@Z@4PADA	007768b4	2	
-?gdwSMemCachedHeapNamePrefix@?1??SMEM_GetHandleByCaller@SMem@Source@Storm@@YAIPADI@Z@4IA	007768ac	2	
 ?g_SMemHeapStatsCount@?1??SMemResetHeapStats@SMem@Fog@@YGXXZ@4IA	007768a4	1	
 ?g_UIFlagInitDrawMouseDown@Draw@UI@D2Client@@3PAUD2UIFlagInitStrc@@A	006d5f28	3	
 ?g_UIFlagInitDrawPanel1@@3PAUD2UIFlagInitStrc@@A	0070fa84	2	
@@ -622,6 +620,7 @@ symbol	address	uses	other_addresses
 ?gaArmorDurabilityWeights@?1??DAMAGE_ReduceEquipmentDurability@SUnitDmg@UNIT@D2Game@@YGXPAUSGAMEDATA@@PAUD2UnitStrc@@1@Z@4PAHA	00732b90	3	
 ?gaAuraEnchantedTable@?1??AuraEnchanted@Umod@Monsters@D2Game@@YIXPAUD2UnitStrc@@HH@Z@4PAUD2AuraEnchantedStrc@@A	0073bf68	11	
 ?gaAutoMapRenderingLayerVisibilityArray2@?1??UI_DrawPlayerStateOverlays@ui@UI@D2Client@@YGXXZ@4HA	007111d0	1	
+?gaBaalWaveSkillIndexTable@?1??AITHINK_Fn0_SpecialMounting@AI@Monster@D2Game@@YIXPAUSGAMEDATA@@PAUD2UnitStrc@@PAUD2AiParamStrc@@@Z@4PAHA	006e34e0	3	
 ?gaBnSendRawBytesHeader@BnSend@Bnclient@@3PAEA	006def80	1	
 ?gaBodyPartOffsetDir@?1??Skills_SrvDoFunc_088_FireMissileFromBodyPart@SkillMonst@SKILLS@D2Game@@YIHPAUSGAMEDATA@@PAUD2UnitStrc@@IH@Z@4PAEA	006e3188	1	
 ?gaCDKeyCharLookup@?1??BNSEND_CalculateCDKeyChecksum@BnSend@Bnclient@@YAXPADPAI@Z@4PAEA	006df238	2	
@@ -649,7 +648,7 @@ symbol	address	uses	other_addresses
 ?gaDC6CharCreatePaladin@@3PAPAUDC6@@A	00779858	7	
 ?gaDC6CharCreateSorceress@@3PAPAUDC6@@A	00779844	7	
 ?gaDC6CharCreateSorceressSel@@3PAPAUDC6@@A	0077989c	5	
-?gaDirectDrawDitherPaletteRemap@@3PAEA	007c8cc8	19	
+?gaDirectDrawDitherPaletteRemap@@3PAEA	007c8cc8	21	
 ?gaDrlgCatacombsReplacements_A@?1??DRLGMAZE_ReplaceCatacombsRooms@Maze@Drlg@D2Common@@YAXPAUD2DrlgLevelStrc@@@Z@4PAUD2DrlgReplaceRoomStrc@@A	006efc68	1	
 ?gaDrlgCatacombsReplacements_B@?1??DRLGMAZE_ReplaceCatacombsRooms@Maze@Drlg@D2Common@@YAXPAUD2DrlgLevelStrc@@@Z@4PAUD2DrlgReplaceRoomStrc@@A	006efca8	1	
 ?gaDrlgCatacombsRollRooms_A@?1??RollRooms@Maze@Drlg@D2Common@@YAXPAUD2DrlgLevelStrc@@@Z@4PAUD2DrlgReplaceRoomStrc@@A	006efb68	1	
@@ -674,21 +673,20 @@ symbol	address	uses	other_addresses
 ?gaGlidePaletteTable@?1??SetPaletteTable@Renderer@D2Direct3D@@YIXPAPAE@Z@4PAPAEA	0096f280	2	
 ?gaGlidePaletteTableData@?1??SetPaletteTable@Glide@Renderer@D2Glide@@YIXPAPAE@Z@4PAPAEA	0087e980	2	
 ?gaGlideSmackerVertices@Glide@Renderer@D2Glide@@3PAUD2GlideVertexStrc@@A	00880b78	4	
-?gaGroundTileRowOffsets@D2GFX@D2gfx@@3PAHA	0072dbc0	1	
-?gaGroundTileRowWidths@D2GFX@D2gfx@@3PAHA	0072db84	1	
-?gaGroundTileSrcPointers@D2GFX@D2gfx@@3PAHA	0072db48	1	
+?gaGroundTileRowOffsets@D2GFX@D2gfx@@3PAHA	0072db48	2	0072dbc0:1
+?gaGroundTileRowWidths@D2GFX@D2gfx@@3PAHA	0072db84	3	
+?gaGroundTileSrcPointers@D2GFX@D2gfx@@3PAHA	0072dbc0	2	0072db48:1
 ?gaHirelingStatLabelX@?1??INV_DrawHirelingStatLabels@Inv@UI@D2Client@@YGXXZ@4PAUD2HirelingStatLabelStrc@@A	006d9ae8	4	
 ?gaInvHighlightColors@Inv@UI@D2Client@@3PAEA	007bcad8	5	
 ?gaInventoryWarningBodyLocs@?1??DRAW_EquipmentNeedArrows@Panel@UI@D2Client@@YGXXZ@4PAIA	00722374	1	
 ?gaItemClearCommandTable@?1??ITEM_ClearFlagsAndCommands@UNIT@D2Game@@YIXPAUSGAMEDATA@@PAUD2UnitStrc@@@Z@4PAIA	00738c70	1	
 ?gaItemPaletteTransformData@@3PAEA	00842710	3	
 ?gaItemWeaponClassCodes@?1??ITEM_GetWeaponAnimClass@Items@ITEMS@D2Common@@YGFPAUD2UnitStrc@@@Z@4PAUD2ItemWeaponClassCodeStrc@@A	007446a0	2	
-?gaLanguageNames@?1??WriteCrashReportProcessInfo@ErrorManager@Src@Fog@@YI_NPAUReport@@@Z@4PAPADA	00706618	2	
 ?gaLanguageNames_0072a300@UnitSnd@UNIT@D2Client@@3PAPADA	0072a300	1	
 ?gaLastSentPacketBuffer@?1??NET_D2GS_CLIENT_Send@Msg@GAME@D2Client@@YGXPAEH@Z@4PADA	007bb3b8	3	
 ?gaLeapArcParticleOffsetZ@?1??SKILL_CreateLeapArcParticle@SkillsBar@SKILLS@D2Client@@YIXPAUD2UnitStrc@@PAUD2SkillStrc@@@Z@4PAUD2LeapArcSegmentStrc@@A	006dae70	3	
 ?gaLevelAmbientMusicPlayedFlags@UnitSnd@UNIT@D2Client@@3PAHA	007c78b8	3	
-?gaLightMapCells@LightMap@Draw@D2Client@@3PAUD2LightMapCellStrc@@A	007b0e68	4	
+?gaLightMapCells@LightMap@Draw@D2Client@@3PAUD2LightMapCellStrc@@A	007b0e68	5	
 ?gaLowestSetBitIndex@@3UD2SMemTablesStrc@@A	006ce798	5	
 ?gaMapAiDirectionHandlers@?1??AI_Monster_ExecuteMapAiBehavior@AI@Monster@D2Game@@YI_NPAUSGAMEDATA@@PAUD2UnitStrc@@PAUD2AiParamStrc@@@Z@4PAP6I_N01PAXPAUD2PathPosStrc@@@ZA	00741d74	1	
 ?gaMcpSocketCallbackHandlers@?1??MCPCONNECT_SocketCallback_Dispatch@McpConnect@D2MCPClient@@YIHPAEHPAX@Z@4PAP6IHPADI@ZA	0070ed68	1	
@@ -723,7 +721,7 @@ symbol	address	uses	other_addresses
 ?gaOutJungPresetOffsetByLevel@OutJung@Drlg@D2Common@@3PAHA	006f2370	1	
 ?gaOutJungSpecialPresetRandOffsets@?1??BuildJungle@OutJung@Drlg@D2Common@@YIXPAUD2DrlgLevelStrc@@@Z@4PAY02HA	006f2328	1	
 ?gaOutPlaceAdjacentRoadIndex@@3PAHA	006f0fe8	1	
-?gaPaletteColorLUT@D2GFX@D2gfx@@3PAY0BAA@EA	007d2348	35	
+?gaPaletteColorLUT@D2GFX@D2gfx@@3PAY0BAA@EA	007d2348	37	
 ?gaPaletteCurrentBuffer@?1??D2GFX_SetPalette@D2GFX@D2gfx@@YGXPAUtagPALETTEENTRY@@@Z@4PAU4@A	007c9378	2	
 ?gaPaletteEntries@@3PAUtagPALETTEENTRY@@A	00880d40	14	
 ?gaPaletteTableLocal@?1??SetPaletteTable@DirectDraw@Renderer@D2DDraw@@YIXPAPAE@Z@4PAPAEA	00880c20	2	
@@ -794,12 +792,14 @@ symbol	address	uses	other_addresses
 ?gaWallNeighborOrientTable@Drlg@D2Common@@3PAEA	006f2700	1	
 ?gaWanderingMonsterClassIds@?1??MONSTER_InitWanderingMonsterRegion@Spawn@Monsters@D2Game@@YGXPAUD2MonsterRegionStrc@@PAUSGAMEDATA@@PAUD2LevelsTxt@@PAUD2RoomStrc@@@Z@4PAHA	00731b2c	1	
 ?gaWardenModuleLoadData@?1??WARDEN_ResolveAndLoadModule@Warden@D2Client@@YGHPAXPAE@Z@4PAEA	006d74b0	1	
+?gaWarpOffsetTable@?1??RelocateAndApplySyncWarp@PlayerMsg@PLAYER@D2Game@@YGHPAUSGAMEDATA@@PAUD2UnitStrc@@II@Z@4PAUD2WarpChanceStrc@@A	006e1064	1	
+?gaWildernessLevelSeedOffsets@@3PAHA	006f1258	2	
 ?gaaCursorAutoOpenInventoryTypes@?1??ITEM_HandleItemCursorAssign@UNIT@D2Client@@YIXPAUD2GSPacketSrv0x3F@@@Z@4PAIA	00727a40	2	
 ?gabHuffmanCodeLengths@SSComp@Source@Fog@@3PAEA	007076c0	1	
 ?gabSrpModulusN@?1??NET_SID_CLIENT_InitializeSRP@_net_sid@Bnclient@@YGXXZ@4PAEA	0073016c	1	
-?gadwBitMasks@BitBuffer@Fog@@3PAIA	006ce268	289	0096f398:1
+?gadwBitMasks@BitBuffer@Fog@@3PAIA	006ce268	303	0096f398:1
 ?gadwHealingPotionCodes@?1??ITEM_CheckIfBothItemsAreSameTypeOfPotions@Items@ITEMS@D2Common@@YGHPAUD2UnitStrc@@0@Z@4PAIA	00744684	2	
-?gadwInvBitMasks@BitBuffer@Fog@@3PAIA	006ce2e8	9	
+?gadwInvBitMasks@BitBuffer@Fog@@3PAIA	006ce2e8	10	
 ?gadwManaPotionCodes@?1??ITEM_CheckIfBothItemsAreSameTypeOfPotions@Items@ITEMS@D2Common@@YGHPAUD2UnitStrc@@0@Z@4PAIA	0074466c	2	
 ?gadwRejuvPotionCodes@?1??ITEM_CheckIfBothItemsAreSameTypeOfPotions@Items@ITEMS@D2Common@@YGHPAUD2UnitStrc@@0@Z@4PAIA	00744660	2	
 ?ganMissileRingCosOffsets@@3PAHA	006dacc0	4	
@@ -851,6 +851,7 @@ symbol	address	uses	other_addresses
 ?gbDebugMemoryInitialized@?1??SErrReportNamedResourceLeak@SErr@Source@Storm@@YGXPAD0@Z@4IA	00779204	2	
 ?gbExitingGamePadding@?1??pfModes_EnterGame@Game@GAME@D2Client@@YGIXZ@4HA	007a0644	1	
 ?gbGammaRampInitialized@?1??D2GFX_CalculateGammaRamp@D2GFX@D2gfx@@YANXZ@4IA	007c9358	2	
+?gbGammaRampInitialized_b@?1??D2GFX_EndScene@D2GFX@D2gfx@@YGHXZ@4IA	007c9370	2	
 ?gbGfxWindowCreated@D2GFX@D2Win@@3IA	007d55dc	3	
 ?gbGlideGlobalLightBlue@Glide@Renderer@D2Glide@@3EA	00880b59	2	
 ?gbGlideGlobalLightGreen@Glide@Renderer@D2Glide@@3EA	00880b58	2	
@@ -871,7 +872,7 @@ symbol	address	uses	other_addresses
 ?gbLanGameListEntryNamePadding2@OOGUtilities@D2Multi@@3PAUD2GameListEntryStrc@@A	0077bdc8	7	
 ?gbLanGameListEntryNamePadding@OOGUtilities@D2Multi@@3PAUD2GameListEntryStrc@@A	0078a440	3	
 ?gbLanguageCodeCached@?1??MISC_GetLanguageCode@strtable@StrTable@D2Lang@@YGIXZ@4EA	008829f0	2	
-?gbLightmapColorEnabled@LightMap@Draw@D2Client@@3IA	00712b8c	3	
+?gbLightmapColorEnabled@LightMap@Draw@D2Client@@3IA	00712b8c	4	
 ?gbLoadBarColorInitialized@?1??Draw_UI_LoadGame@Draw@UI@D2Client@@YIXH@Z@4EA	007a2a70	3	
 ?gbLoadBarOutlineColor@?1??Draw_UI_LoadGame@Draw@UI@D2Client@@YIXH@Z@4EA	007a2a71	2	
 ?gbLoadBinFiles@?1??LoadTxt@D2Comp@Src@D2Win@@YGPAXPAUD2PoolManagerStrc@@PADPAUD2BinFieldInputStrc@@PAIH@Z@4IA	0072ef2c	2	
@@ -885,8 +886,9 @@ symbol	address	uses	other_addresses
 ?gbPlayingCutScene@@3IA	0087efd0	3	
 ?gbQuestReconnectMode@D2Game@@3EA	0073150c	1	
 ?gbSFileSeekOptimization@SFile@Source@Storm@@3IA	00708350	1	
-?gbSSystemErrorDialogActive@@3IA	007790e4	1	
-?gbSSystemShutdownInProgress@@3IA	007790f0	1	
+?gbSMemReuseCachedHeapNameHash@?1??SMEM_GetHandleByCaller@SMem@Source@Storm@@YAIPADI@Z@4HA	00708340	2	
+?gbSSystemErrorDialogActive@@3HA	007790e4	1	
+?gbSSystemShutdownInProgress@@3HA	007790f0	1	
 ?gbSaveFileWritingEnabled@PlayerSave@PLAYER@D2Game@@3HA	007310cc	1	
 ?gbScreenResolutionChangeInitInProgress@?1??CLIENT_SetScreenResolution@ClientModeInGame@D2Client@@YIXK@Z@4HA	00711474	1	
 ?gbSkillDescDamageFontAdjusted@?1??DRAW_UI_STAT_Damage@SkillDesc@UI@D2Client@@YIXPAUD2UnitStrc@@@Z@4EA	007c8ca4	2	
@@ -904,6 +906,8 @@ symbol	address	uses	other_addresses
 ?gbWindowDeactivated@?1??D2WIN_HandleActivation@D2WinMain@Src@D2Win@@YGXPAUD2UIMouseMsgStrc@@@Z@4IA	007d55fc	3	
 ?gbWindowed@@3HA	007d55b4	2	
 ?gbWorldstoneShakeFired@?1??CLIENT_CheckWorldstoneShake@ClientEngine@Source@D2Client@@YIXPAUD2RoomStrc@@@Z@4IA	007a746c	3	
+?gdFrameSleepRemainder@?1??D2GFX_EndScene@D2GFX@D2gfx@@YGHXZ@4NA	007c9360	5	
+?gdFrameStartTime@?1??D2GFX_EndScene@D2GFX@D2gfx@@YGHXZ@4NA	007c9368	3	
 ?gdwAnimModeValidFlagsTable@?1??SKILLS_ValidateAnimModeForMonster@Skills@D2Common@@YGHHH@Z@4PAIA	006eb348	1	
 ?gdwAppMode@ClientModeInGame@D2Client@@3IA	0070ee4c	4	
 ?gdwBinkVideoClickTime@?1??D3D_PlayBinkVideo@d3dFloorCache@D2Direct3D@@YIXPADHP6GXXZ@Z@4IA	00989c24	1	
@@ -932,6 +936,7 @@ symbol	address	uses	other_addresses
 ?gdwGameJoinRequestTick@@3IA	0077bbf0	2	
 ?gdwHostGameThreadId@?1??pfModes_EnterGame@Game@GAME@D2Client@@YGIXZ@4IA	007a05f0	1	
 ?gdwJoinGameListRefreshTick@?1??UIMENU_JoinGame@OOGUtilities@D2Multi@@YGXXZ@4IA	00798cf0	2	
+?gdwLastCharListClickTick@?1??CHARSEL_HandleCharListClick@CharSel@D2Launch@@YGHPAUD2ControlMsg@@@Z@4IA	00779dec	2	
 ?gdwLastChatSendTick@@3IA	00798f50	8	
 ?gdwLastDrawTickTimestamp@?1??DRAW_CheckTickRateLimiter@ui@UI@D2Client@@YGHXZ@4IA	007a313c	2	
 ?gdwLastPacketSendTick@?1??NET_D2GS_CLIENT_Send@Msg@GAME@D2Client@@YGXPAEH@Z@4IA	007bb5b8	3	
@@ -964,7 +969,8 @@ symbol	address	uses	other_addresses
 ?gdwQuestDataIntialMask@?1??Q05_Callback00_NpcActivate@A1Q5@QUESTS@Quests@D2Game@@YIXPAUD2QuestDataStrc@@PAUD2QuestArgStrc@@@Z@4PAHA	007382ac	1	
 ?gdwSFileCompressionMethod@?1??CrcBuffer@SFile@Source@Storm@@YIXPAEHPAIE@Z@4PAIA	00708448	1	
 ?gdwSLogLastTime@?1??SLOG_OutputTime@SLog@Source@Storm@@YGXHPAUD2SLogStrc@@@Z@4IA	007792f0	2	
-?gbSMemReuseCachedHeapNameHash@?1??SMEM_GetHandleByCaller@SMem@Source@Storm@@YAIPADI@Z@4HA	00708340	2	
+?gdwSMemCachedHeapNamePrefix@?1??SMEM_GetHandleByCaller@SMem@Source@Storm@@YAIPADI@Z@4IA	007768ac	2	
+?gdwSMemCachedHeapNameSeed@?1??SMEM_GetHandleByCaller@SMem@Source@Storm@@YAIPADI@Z@4IA	007768b0	2	
 ?gdwSoundChannelIndex@UnitSnd@UNIT@D2Client@@3IA	007c88bc	6	
 ?gdwSoundHeaderCacheIndex@@3PAUD2CutsceneDescStrc@@A	00721d98	1	
 ?gdwSpellSelThrottleTick@?1??Unreferenced_004ab7b0@SpellSel@UI@D2Client@@YAHXZ@4IA	007c0c54	2	
@@ -1020,7 +1026,7 @@ symbol	address	uses	other_addresses
 ?gnCelDataCacheInitFlag@?1??GFX_InitCelDataCache@SpriteCache@SRC@D2CMP@@YGXPAUD2PoolManagerStrc@@III@Z@4IA	00741ef8	1	
 ?gnCharSelCreateNewButtonClickCount@@3IA	00779ddc	1	
 ?gnCharSelLoadedCharCount@@3IA	00779dd8	4	
-?gnCharSelSelectedIndex@@3IA	00779c6c	9	00779dc8:1
+?gnCharSelSelectedIndex@@3IA	00779c6c	10	00779dc8:1
 ?gnChatInputTextCursorPosition@@3IA	007bb5e8	3	
 ?gnChatInputTextLength@@3HA	007bb5ec	2	
 ?gnChatRoomListPrevSelectedBase@?1??CHATDLG_OnTimerRequestLadderData@ChatDlg@D2Multi@@YGHPAUD2ControlMsg@@@Z@4IA	0070cd64	2	
@@ -1050,7 +1056,9 @@ symbol	address	uses	other_addresses
 ?gnD3DTextureCapFlags@Renderer@D2Direct3D@@3IA	0096f3a8	6	006ce278:1
 ?gnDDrawFlipState@@3IA	00881294	4	
 ?gnDDrawPaletteSize@@3IA	00881298	2	
+?gnDDrawRenderWidth@@3IA	008812a0	2	
 ?gnDDrawSurfaceHeight@@3IA	00881260	3	
+?gnDDrawSurfaceXMin@@3IA	0088129c	1	
 ?gnDebugMemoryInitFlag@?1??SErrReportNamedResourceLeak@SErr@Source@Storm@@YGXPAD0@Z@4HA	00779200	2	
 ?gnDialogCounter@Dialog@UI@D2Client@@3HA	007c0e4c	3	
 ?gnDialogCounter_b@Dialog@UI@D2Client@@3IA	007c0e5c	6	
@@ -1134,10 +1142,10 @@ symbol	address	uses	other_addresses
 ?gnLastOpenPanelId@@3IA	007a2868	3	
 ?gnLastPacketTickTimestamp@?1??UI_DrawPlayerStateOverlays@ui@UI@D2Client@@YGXXZ@4IA	007a289c	1	
 ?gnLastRenderBufferWidth@?1??fpFillYBufferTable@D2gfx@@YIXPAXHHH@Z@4IA	007d557c	2	
-?gnLightmapBufferState@LightMap@Draw@D2Client@@3HA	007b0a58	4	
-?gnLightmapInterpolationState@@3PAIA	007b0a64	7	
+?gnLightmapBufferState@LightMap@Draw@D2Client@@3HA	007b0a58	5	
+?gnLightmapInterpolationState@@3PAIA	007b0a64	8	
 ?gnLightmapQualityLevel@?1??LIGHTMAP_GetQualityLevel@LightMap@Draw@D2Client@@YGHXZ@4HA	007b567c	4	
-?gnLightmapWorldRefreshFlag@LightMap@Draw@D2Client@@3HA	007b0a54	4	
+?gnLightmapWorldRefreshFlag@LightMap@Draw@D2Client@@3HA	007b0a54	5	
 ?gnLightningFuryBoltCount@?1??SKILLAMZ_CreateLightningFuryBolts@SkillBar@SKILLS@D2Game@@YGIPAUSGAMEDATA@@IPAUD2UnitStrc@@@Z@4HA	00741b54	1	
 ?gnLocalSaveFileCount@?1??CHARSEL_EnumerateLocalSaves@CharSel@D2Launch@@YGHXZ@4HA	00779de0	2	
 ?gnMCPConnectionRestoreResult@@3IA	0077bd60	5	
@@ -1151,6 +1159,8 @@ symbol	address	uses	other_addresses
 ?gnMercenaryDamageMultiplier@?1??Skills_CltDoFunc_Mon_RandomDualMissile@SkillsMon@SKILLS@D2Client@@YIHPAUD2UnitStrc@@IH@Z@4PAEA	006dbaa0	1	
 ?gnMercenaryMaxHireCount@?1??Skills_CltDoFunc_Mon_PeriodicMissile@SkillsMon@SKILLS@D2Client@@YIHPAUD2UnitStrc@@IH@Z@4PAEA	006dbb38	1	
 ?gnMinTileDrawY@D2gfx@@3HA	007d232c	1	
+?gnMinTileScreenY@D2gfx@@3HA	007c97a0	2	
+?gnMinTileScreenY_b@D2gfx@@3HA	007d2334	2	
 ?gnMiniPanelClickedButton@@3IA	007bc974	2	
 ?gnMissileCalcMethodCount@?1??MISSILE_EvalMissileCalc@Missile@Units@D2Common@@YGHPAUD2UnitStrc@@0IHH@Z@4HA	00745848	1	
 ?gnMissileCollisionOffsetByType@?1??MISSILE_CltHitFn14_IceShatter@Missile@UNIT@D2Client@@YIHPAUD2UnitStrc@@0@Z@4PAHA	006dafe8	1	
@@ -1174,7 +1184,7 @@ symbol	address	uses	other_addresses
 ?gnMouseWorldXBorder@?1??DRAW_UpdateMouseWorldOffsets@Path@UI@D2Client@@YGXXZ@4HA	007a5204	3	
 ?gnMusicBufferSize@?1??SOUND_InitMusicBuffer@Sound@D2Sound@@YIXH@Z@4IA	008817a0	2	
 ?gnNetworkSendState@BnDownload@Bnclient@@3IA	00881c50	9	
-?gnNotifyEnabled@@3IA	0077bd54	3	
+?gnNotifyEnabled@@3IA	0077bd54	4	
 ?gnNpcDialogOptionData_725c04@?1??NPCMENU_FindNextUnhandledMessage@npcmenu@UI@D2Client@@YIGF@Z@4HA	00725c04	1	
 ?gnNpcMenuActiveMode@npcmenu@UI@D2Client@@3EA	007c0c69	17	
 ?gnNpcMenuMercHireCost1@npcmenu@UI@D2Client@@3IA	007c0c60	2	
@@ -1259,6 +1269,8 @@ symbol	address	uses	other_addresses
 ?gnTextOverheadCounter@Text@UI@D2Client@@3IA	007bf20e	2	
 ?gnTextSystemInitFlag@UseItem@UI@D2Client@@3IA	007c5488	4	
 ?gnTextureMemoryUsageBytes@@3UD2RenderStatisticsStrc@@A	007c90c8	2	
+?gnTileClipLeft@D2gfx@@3HA	007ca318	2	
+?gnTileClipRight@D2gfx@@3HA	007d233c	2	
 ?gnTileClipXMax@D2gfx@@3HA	007c9784	1	
 ?gnTileClipYMin@D2gfx@@3HA	007c978c	1	
 ?gnTileInnerClipXMax_b@D2gfx@@3HA	007d2328	1	
@@ -1323,7 +1335,7 @@ symbol	address	uses	other_addresses
 ?gpCtlGameNameLabelOrQueueStatus@OOGUtilities@D2Multi@@3PAUD2WinTextBox@@A	00798bf4	7	
 ?gpCtlJoinGameLabel@OOGUtilities@D2Multi@@3PAUD2WinTextBox@@A	00798bdc	3	
 ?gpCtlLobbyAccountList@@3PAUD2ControlStrc@@A	0077bc44	2	
-?gpCurrentChatRoomContext@@3PAUD2ChannelUserStrc@@A	00798f48	9	
+?gpCurrentChatRoomContext@@3PAUD2ChannelUserStrc@@A	00798f48	10	
 ?gpCurrentDialog@ui@UI@D2Client@@3PAUSpinnerWrapper@@A	007a27a4	5	
 ?gpCurrentExceptionContext@@3PAXA	00992b14	2	
 ?gpCurrentExceptionFilter@@3P6IHPAUD2CrashReportStrc@@PAX@ZA	00992b10	3	
@@ -1374,7 +1386,7 @@ symbol	address	uses	other_addresses
 ?gpDC6Unidentified_0077bc24@?1??LAUNCHER_FreeLauncherImages@ChatDlg@D2Multi@@YGXXZ@4PAUDC6@@A	0077bc24	2	
 ?gpDC6WideButtonBlank@@3PAUDC6@@A	0077bd18	3	
 ?gpDC6YesNoButtonBlank@@3PAUDC6@@A	0077bd30	3	
-?gpDDrawBackBuffer@@3PAUIDirectDrawSurface1@@A	0088127c	4	
+?gpDDrawBackBuffer@@3PAUIDirectDrawSurface1@@A	0088127c	6	
 ?gpDDrawComObject@?1??Release@DirectDraw@Renderer@D2DDraw@@YAHXZ@4PAUIUnknown@@A	00881274	2	
 ?gpDDrawPrimarySurface@@3PAUIDirectDrawSurface1@@A	00881278	15	
 ?gpDialog@Dialog@UI@D2Client@@3PAUD2DialogStrc@@A	007a27a0	6	
@@ -1402,9 +1414,9 @@ symbol	address	uses	other_addresses
 ?gpItemTypeTableContext@?1??D2COMMON_Set_gpItemTypeTableContext@Logging@D2Common@@YIXI@Z@4_KA	0096ca50	1	
 ?gpLauncherImageResource2@@3PAUDC6@@A	0077bd2c	3	
 ?gpLightMap@LightMap@Draw@D2Client@@3PAUD2LightMapStrc@@A	007b5668	9	
-?gpLineBufferTileArray@D2GFX@D2gfx@@3PAY1CA@CA@EA	007ca320	4	
+?gpLineBufferTileArray@D2GFX@D2gfx@@3PAY1CA@CA@EA	007ca320	5	
 ?gpLoadingScreenDC6@@3PAUDC6@@A	007a2888	8	
-?gpLobbyForm0@@3UD2LobbyControlsStrc@@A	0077b058	80	
+?gpLobbyForm0@@3UD2LobbyControlsStrc@@A	0077b058	84	
 ?gpMainMenuCreditTimerControl@?1??MAINMENU_InitCreditsScreen@MainMenus@D2Launch@@YGHPAUD2ControlMsg@@@Z@4PAUD2ControlStrc@@A	00779968	2	
 ?gpMessageLogDC6@Object@UNIT@D2Client@@3PAUDC6@@A	007c546c	3	
 ?gpMusicStreamBuffer@D2SoundFast@Src@D2Sound@@3PAUD2SoundSmpStrc@@A	00881794	10	008817a8:1,0072f874:1
@@ -1428,7 +1440,7 @@ symbol	address	uses	other_addresses
 ?gpOutOfGameBackgroundDC6@@3PAUDC6@@A	007d55b0	3	
 ?gpPaletteBlendLookupTable@D2gfx@@3PAPAEA	007d5578	1	
 ?gpPaletteTable@@3PAPAEA	007c9150	17	
-?gpPentSpinCursorDC6@@3PAUDC6@@A	0087e96c	4	
+?gpPentSpinCursorDC6@@3PAUDC6@@A	0087e96c	5	
 ?gpPerspectiveLookupTable@Glide@Renderer@D2Glide@@3PAHA	00880b6c	5	
 ?gpPreviousExceptionFilter@?1??CRASH_SetExceptionHandler@File@Fog@@YIXP6IHPAUD2CrashReportStrc@@PAX@Z1I@Z@4P6GJPAU_EXCEPTION_POINTERS@@@ZA	00992b18	3	
 ?gpProfileCloseButton@OOGUtilities@D2Multi@@3PAUD2ControlStrc@@A	00798c8c	2	
@@ -1446,7 +1458,7 @@ symbol	address	uses	other_addresses
 ?gpProfileViewSex@OOGUtilities@D2Multi@@3PAUD2WinTextBox@@A	00798c6c	2	
 ?gpRealmCharListCache@@3PAUD2RealmCharListCacheEntryStrc@@A	00779de8	7	
 ?gpRealmQueryResultBuffer@?1??MAINMENU_QueryAndBuildRealmList@MainMenus@D2Launch@@YGXXZ@4PAEA	007795c0	2	
-?gpRenderBackBufferBits@@3PAEA	007c9154	24	
+?gpRenderBackBufferBits@@3PAEA	007c9154	25	
 ?gpRosterPlayers@Roster@GAME@D2Client@@3PAUD2RosterStrc@@A	007bb5c0	17	
 ?gpServerMemHeap@Memory@Fog@@3IA	00708000	4	
 ?gpSevtBreakCmdListHead@@3UStormLinkedListStrc@@A	007088e8	13	
@@ -1508,7 +1520,7 @@ symbol	address	uses	other_addresses
 ?gszBNetChatInputBuffer@BnDownload@Bnclient@@3PADA	00881e60	1	
 ?gszClipboardTextBuffer@?1??D2WINEDITBOX_GetClipboardText@D2WinEditBox@Src@D2Win@@YGPADXZ@4PADA	00841b80	2	
 ?gszCrashLogTempDir@@3PADA	00992708	1	
-?gszCurrentChannelName@@3PADA	00798d30	5	
+?gszCurrentChannelName@@3PADA	00798d30	6	
 ?gszErrorStringBuffer@?1??SERR_GetString@SErr@Source@Storm@@YAPAPADH@Z@4PADA	00779100	2	
 ?gszModuleFileName@?1??fAPPMODE_client_ReturnAppMode@ClientModeInGame@D2Client@@YGHPAUHINSTANCE__@@PAUD2IniConfigStrc@@@Z@4PADA	007a0320	1	
 ?gszOOGRequestedGameName@OOGUtilities@D2Multi@@3PADA	00798ab8	2	
@@ -1578,7 +1590,7 @@ symbol	address	uses	other_addresses
 ?nColor@@3UtagRGBQUAD@@A	007beef8	2	
 ?nCurrentInteractedNpcClassId@_Interaction@D2Client@@3HA	007c0d2d	7	
 ?nCurrentInteractedNpcGUID@_Interaction@D2Client@@3HA	007c0d25	71	
-?nCursorDataIndex@Cursor@D2Client@@3HA	007a6adc	20	
+?nCursorDataIndex@Cursor@D2Client@@3HA	007a6adc	21	
 ?nD2GSConnectionType@Server@Game@D2Net@@3IA	00882d10	4	
 ?nD2PlayerClassID@@3EA	007a0522	21	
 ?nFreedLightMapsCounter@?1??FreeLightMap@LightMap@Draw@D2Client@@YIXPAUD2LightMapStrc@@@Z@4HA	007b5670	1	
@@ -1593,11 +1605,11 @@ symbol	address	uses	other_addresses
 ?nNextGUID@?1??CreateMissileOrMonster@CUnit@UNIT@D2Client@@YIPAUD2UnitStrc@@HHHIH@Z@4IA	00711f30	4	
 ?nPalleteAct@?1??PALETTE_SetAct@Pallete@D2CMP@@YGXH@Z@4IA	00741f08	1	
 ?nPlayerInventoryPageSize@?1??UNITS_GetInventoryRecordId@Units@D2Common@@YGHPAUD2UnitStrc@@EH@Z@4IA	0074457c	1	
-?nPosX@D2WinMain@Src@D2Win@@3HA	007d55a4	11	
-?nPosY@D2WinMain@Src@D2Win@@3HA	007d55a8	12	
+?nPosX@D2WinMain@Src@D2Win@@3HA	007d55a4	12	
+?nPosY@D2WinMain@Src@D2Win@@3HA	007d55a8	13	
 ?nRawSaveBufferSize@Save@D2Game@@3IA	007a5228	3	
-?nScreenMode@Inv@UI@D2Client@@3IA	007a5218	50	
-?nSelectedCharIndex@CharSel@D2Launch@@3HA	0070cc00	18	00779dc4:1
+?nScreenMode@Inv@UI@D2Client@@3IA	007a5218	54	
+?nSelectedCharIndex@CharSel@D2Launch@@3HA	0070cc00	22	00779dc4:1
 ?nSelectedUnitGUID@_Selection@D2Client@@3HA	007a6a78	5	
 ?nShrineDispatchTableSize@Object@UNIT@D2Client@@3HA	0072779c	4	
 ?nTxtAutoMapSize@?1??TXT_AllocTxt_automap@LvlTbls@DATATBLS@D2Common@@YIXPAUD2PoolManagerStrc@@@Z@4HA	0096ca2c	1	
@@ -1705,7 +1717,7 @@ symbol	address	uses	other_addresses
 ?pWndProcB@D2GFX@D2Win@@3P6GJPAUHWND__@@IIJ@ZA	007d55d8	5	
 ?pZNameList@UnDecorator@@0PAVReplicator@@A	0096e240	7	
 ?pfModes@?1??fAPPMODE_client_ReturnAppMode@ClientModeInGame@D2Client@@YGHPAUHINSTANCE__@@PAUD2IniConfigStrc@@@Z@4PAP6GIXZA	0070ee54	1	
-?prgbq_00989c40@@3PAUtagRGBQUAD@@A	00989c40	4	
+?prgbq_00989c40@@3PAUtagRGBQUAD@@A	00989c40	6	
 ?rInitialWindowRect@@3UtagRECT@@A	007c9160	4	
 ?runbutton@Panel@UI@D2Client@@3PAUDC6@@A	007bef0c	4	
 ?sLanguageCode@_FONT@D2Win@@3PADA	00841d8c	22	
@@ -1713,12 +1725,12 @@ symbol	address	uses	other_addresses
 ?sPredefinedDataUnknown@?1??MONSTER_SpawnPredefinedAtUnit@Create@Monster@D2Game@@YIHPAUSGAMEDATA@@PAUD2RoomStrc@@HHPAUD2UnitStrc@@HG@Z@4PAHA	0073d4f0	1	
 ?sgpAutomapLayer@Automap@UI@D2Client@@3PAUD2AutomapLayerStrc@@A	007a5160	3	007a5164:1
 ?sgpAutomapLayerEx@Automap@UI@D2Client@@3PAUD2AutomapLayerStrc@@A	007a5164	3	007a5160:1
-?sgpDrlgAct@Game@GAME@D2Client@@3PAUD2DrlgActStrc@@A	007a0634	46	
+?sgpDrlgAct@Game@GAME@D2Client@@3PAUD2DrlgActStrc@@A	007a0634	47	
 ?sgpTxtLvlMaze@LvlTbls@DATATBLS@D2Common@@3PAUD2LvlMazeTxt@@A	0096ca08	3	
 ?sgpTxtLvlSub@LvlTbls@DATATBLS@D2Common@@3PAUD2LvlSubTxt@@A	0096ca10	5	
 ?sgpTxtObjects@ObjectTbls@DATATBLS@D2Common@@3PAUD2ObjectsTxt@@A	0096d470	5	
-?sgptDataTable@Items@ITEMS@D2Common@@3PAUD2DataTableTxtStrc@@A	00744304	1213	
-?sgtDataTable@MonsterTbls@DATATBLS@D2Common@@3UD2DataTableTxtStrc@@A	0096bc30	729	0096bc2c:1,0096bc28:1,0096bc20:1
+?sgptDataTable@Items@ITEMS@D2Common@@3PAUD2DataTableTxtStrc@@A	00744304	1232	
+?sgtDataTable@MonsterTbls@DATATBLS@D2Common@@3UD2DataTableTxtStrc@@A	0096bc30	733	0096bc2c:1,0096bc28:1,0096bc20:1
 ?sinTable_f32@@3PAMA	00707800	2	
 ?skillpoints@Panel@UI@D2Client@@3PAUDC6@@A	007bef20	3	
 ?static_bl_desc@?1??_tr_init@trees@zlib@_3rdparty@Storm@@YIXPAUdeflate_state@@@Z@4Ustatic_tree_desc@@A	0070891c	1	
@@ -1830,7 +1842,8 @@ _QServerClientBucketByName	00883ea8	5
 _QServerNextToken	00731000	6	
 _RENDERER_WINDOWED_hDIBitmap	0098a164	6	
 _RENDERER_WINDOWED_hDebugFont	0098a170	3	
-_RENDERER_WINDOWED_nScaleWidth	0098a16c	2	
+_RENDERER_WINDOWED_nScaleOffsetY	0098a168	1	
+_RENDERER_WINDOWED_nScaleWidth	0098a16c	3	
 _SAVEFILE	0077ac10	25	
 _SHRINESCOUNT	00732eac	1	
 _SKILLCLTDOFUNCS	00727ba8	4	
@@ -1911,7 +1924,7 @@ ___sbh_pHeaderList	00993b34	10
 ___sbh_pHeaderScan	00993b3c	4	
 ___sbh_sizeHeaderList	00993b40	3	
 ___sbh_threshold	00993b38	2	
-___security_cookie	00749de0	292	
+___security_cookie	00749de0	296	
 ___security_cookie_complement	00749de4	3	
 ___sse2_available	00994c88	4	
 ___type_info_root_node	0096e010	4	
@@ -1971,6 +1984,7 @@ __real@3fc99999a0000000	006e5ef0	1
 __real@3fe0000000000000	006cef10	3	006e5e38:1
 __real@3ff0000000000000	006ceef0	1	
 __real@40000000	006deb0c	1	
+__real@4014000000000000	006dc670	1	
 __real@4024000000000000	006cd040	2	
 __real@403e99a027525461	006ccc10	1	
 __real@404e000000000000	006e5e40	1	
@@ -2084,7 +2098,7 @@ _bAutoMapRevealAll	007a51a0	2
 _bCharacterCreationInProgress	00779330	7	
 _bDebugSymbolsInitialized	0098a6b0	5	
 _bEnableCrashDumps	0098a6b1	1	
-_bRecursionClick	007a5264	1	
+_bRecursionClick	007a5264	3	
 _configuration_table	006d0280	11	
 _cp_0075d040	0075d040	4	
 _ctrlbreak_action	0096de7c	1	
@@ -2133,7 +2147,7 @@ _gPaletteAct5	00821b68	1
 _gPaletteDataBase	0081ea68	3	
 _gPaletteDataMenuInGame	0081e568	1	
 _gPaletteMenuInGame	007d6368	1	
-_gPaletteTransitionTable	007b5c10	1	
+_gPaletteTransitionTable	007b5c10	2	
 _gPaletteTransposeBase	007d5668	2	
 _gPaletteUnits	0081e468	1	
 _gPathDirectionTable	006f1518	8	
@@ -2209,18 +2223,17 @@ _g_bSIDFlag2	00882538	5
 _g_bSIDProtocolReady	00882528	4	
 _g_bWhisperDelivered	008846e4	1	
 _g_bWhisperSquelched	008846e0	1	
-_g_dwErrorState	0074f0c8	4	
+_g_dwErrorState	0074f0c8	5	
 _g_dwProductId	00730190	2	
 _g_nBNetClientToken	008818c0	2	
 _g_nBNetConnectionState	008818e0	4	
 _g_nBNetServerToken	008818bc	6	
 _g_nBNetThreadInitFlag	00881c04	3	
-_g_nCharSelNavigationIndex	00779dc8	17	00779c6c:1
+_g_nCharSelNavigationIndex	00779dc8	18	00779c6c:1
 _g_nLadderFilterMode	0070cd62	34	
 _g_nMCPGameDifficulty	00798f58	2	
 _g_nMCPJoinTimestamp	00799104	2	
 _g_nMemoryCounter	00883d3c	1	
-_g_nProjectId	0074d868	1	
 _g_nRealmLogonResult	0072ffa8	8	
 _g_nSIDResponseCount1	008822a0	4	
 _g_nSIDResponseCount2	008822a4	10	
@@ -2248,16 +2261,9 @@ _g_pfnMCPGameListCompleteCallback	00799304	1
 _g_pfnMCPMessageCallback	00799308	2	
 _g_srpCredentials	00882680	18	
 _g_srpSaltVerifier	00882640	8	
-_g_szApplicationName	0074d870	1	
-_g_szAssignments	0074d888	1	
-_g_szBuildNumber	0074d87c	1	
 _g_szCurrentChannelName	00882028	2	
 _g_szMCPGameName	00799294	2	
 _g_szMCPGamePassword	00798f60	2	
-_g_szMilestone	0074d878	1	
-_g_szModuleName	0074d874	1	
-_g_szPlatform	0074d880	1	
-_g_szPrimaryAssignment	0074d884	1	
 _g_szStoredUsername	00882540	2	
 _gaActiveUnitSlots	007a7470	11	
 _gaAnimImgCharCreateByClass	0077956c	21	
@@ -2271,8 +2277,8 @@ _gaArcaneStarYPos	007b57e8	1
 _gaAutomapXMarkerPolyline	006d6638	8	
 _gaBnetCdKeyCharDecodeTable	006d59f0	3	
 _gaCelCmpDirectionLookupByDirectionAndFrame	006e45a0	1	
-_gaCharSelExpansionIconControls	00779b40	1	
-_gaCharSelScreenSlotControls	00779a20	19	
+_gaCharSelExpansionIconControls	00779b40	2	
+_gaCharSelScreenSlotControls	00779a20	20	
 _gaChatDlgHistoryBuffer	0077b1d8	5	
 _gaChatHistoryBuffer	007bb840	3	
 _gaClientCmdLineArgs	006d5be8	1	
@@ -2339,7 +2345,7 @@ _gaOutRoomPathDirectionDelta	006f2840	1
 _gaPaletteBlendEntries	007d5458	5	
 _gaPaletteMaskData	008e9830	2	
 _gaPanelBeltArrowsNeeded	007befb4	4	
-_gaPanelBeltColors	007bef6c	5	
+_gaPanelBeltColors	007bef6c	11	
 _gaPanelImageLoadFlags	007bef30	22	
 _gaPathDirectionStepDeltas	006eb490	2	
 _gaPlayerAnimModeCheckTable	006e8a00	2	
@@ -2369,13 +2375,15 @@ _gaTextStaticPopupRect	007bf1d0	2
 _gaUIFlagInitMessageHandlers	0070f7e4	4	
 _gaUIFlagInitQuestScrollHandlers	006d61b0	2	
 _gaUIFlagInitTable	006d6084	10	
+_gaUTF8ByteCountTable	006fcca0	1	
 _gaUnitSoundTable	00727ed8	2	
 _gaUnitSoundTableByClassId	0072a008	2	
 _gaUnitTypeInteractSizes	006eb3dc	2	
-_gaUtf8DecodeTable	007309b8	2	
+_gaUtf8DecodeTable	007309b8	4	
 _gaWaypointListEntries	007bf03c	2	
 _gaWaypointRowLayout	007224e4	1	
 _gaYBufferRowOffsets	007c97a8	3	
+_gaaBeltSlotHotkeyCommands	00722404	3	
 _gaaCelDrawFuncTable	006e3688	1	
 _gabBeltSlotHasItem	007befb0	5	
 _gabWardenEmbeddedModuleHash	006d8768	2	
@@ -2403,7 +2411,7 @@ _gbClientConnectionShutdown	00882d00	2
 _gbConnectionLost	007a5238	2	
 _gbCtrlKeyDown	007d55e4	4	
 _gbCursorAnimationPending	0070fa9c	3	
-_gbCursorVisible	0072dc3c	4	
+_gbCursorVisible	0072dc3c	5	
 _gbCutsceneActive	007bc9d4	2	
 _gbDDrawPaletteSet	00881268	3	
 _gbDDrawWindowInitialized	00881264	6	
@@ -2455,7 +2463,7 @@ _gbMiniPanelSinglePlayer	007bc978	12
 _gbMinimapClickValid	007a0680	4	
 _gbMouseButtonDown	007d55e0	3	
 _gbMouseButtonEventPending	007a0658	8	
-_gbMouseInWindow	007d55f0	1	
+_gbMouseInWindow	007d55f0	3	
 _gbNpcMenuRandomDialogSeed	007c0c6a	3	
 _gbNpcMenuShopOpened	007c0dd8	1	007c0c6b:1
 _gbNpcMenuShopTransactionActive	007c0de9	2	
@@ -2466,8 +2474,8 @@ _gbPalShiftRandTransformLoaded	007bb380	1
 _gbPaletteGammaShiftEnabled	0072de50	4	
 _gbPaletteLoaded	008e9934	7	
 _gbPaletteMaskEnabled	008e9d40	2	
-_gbPanelBeltAnimating	007bef9c	4	
-_gbPanelBeltSlotHovered	007befa0	1	
+_gbPanelBeltAnimating	007bef9c	5	
+_gbPanelBeltSlotHovered	007befa0	5	
 _gbPanelBorderDrawn	007befec	2	
 _gbPanelRunButtonPressed	007befd8	2	
 _gbPendingDelayedSoundPlay	007c89fc	3	
@@ -2532,6 +2540,7 @@ _gdwQServerStartTime	007a0464	2
 _gdwQuestResurrectDismissThrottle	007a2790	3	
 _gdwTextPopupExpireTime	007bf1ac	1	
 _gdwUICtrlConfigKeyBindTimestamp	007c02c8	3	
+_gdwUTF8ConversionTab	006fcc88	1	
 _gdwWarpFadeExpireTime	007c89cc	5	
 _geAmbientMusicLevelId	007c89dc	1	
 _geCutsceneAmbientMusicSoundId	007c89d8	4	
@@ -2557,7 +2566,7 @@ _gnAsyncDataPriorityDeferDepth	0075af8c	4
 _gnAuraDamageScale_ManaAbsorb	006e3120	1	
 _gnAutoItemTypeTCCount	0096d4b0	2	
 _gnAutoMapCellPriority	007a3150	6	
-_gnBeltPanelState	00722354	8	
+_gnBeltPanelState	00722354	16	
 _gnBeltSlotUnderCursor	0072235c	9	
 _gnBeltTooltipX	00722360	4	
 _gnBeltTooltipY	00722364	4	
@@ -2570,16 +2579,16 @@ _gnBinkGlideYOffset	00880c04	1
 _gnBlizzardSoundPlayed	00712b4c	1	
 _gnBnetConnectionSuccessFlag	00779990	5	
 _gnBorderType	007a5210	3	
-_gnChannelUserCount	00798f40	1	
-_gnChannelUserListScrollOffset	00798f44	1	
-_gnChannelUserTotalCount	00798f3c	1	
+_gnChannelUserCount	00798f40	4	
+_gnChannelUserListScrollOffset	00798f44	5	
+_gnChannelUserTotalCount	00798f3c	5	
 _gnCharScreenInputState	007a5248	7	
 _gnCharScreenOkButtonPressed	007a524c	6	
 _gnCharSelBNetLoadState	00779dac	8	
 _gnCharSelImageOffset	00779c74	2	
 _gnCharSelLoadMoreEntryIndex	0070cc04	2	
 _gnCharSelLoadingEntryIndex	0070cc08	1	
-_gnCharSelScreenSlotCount	0070cc0c	11	
+_gnCharSelScreenSlotCount	0070cc0c	13	
 _gnCharSelScrollOffset	00779dd4	4	
 _gnCharSlotYPositions	007799fc	4	
 _gnChatHistoryEntryCount	0077bd50	4	
@@ -2626,8 +2635,8 @@ _gnDrlgMemoryMax	006f18d8	2
 _gnEscMenuSelectedIndex	007bc938	21	
 _gnEscMenuSliderValue	007bc94c	1	
 _gnExcelRecordFieldNotFound	0074c3d8	4	
-_gnFastCmpEffectMapMaxRow	008e9e88	2	
-_gnFastCmpEffectMapMinRow	008e9d48	2	
+_gnFastCmpEffectMapMaxRow	008e9d48	4	
+_gnFastCmpEffectMapMinRow	008e9e88	4	
 _gnFieldDataTableSize	0096d660	1	
 _gnFieldTableHalfHeight	0096d668	4	
 _gnFieldTableHalfWidth	0096d664	2	0096d654:2
@@ -2641,8 +2650,9 @@ _gnGfxThrottleUpdateFrame	007a8910	6
 _gnGfxThrottleUpdateFrameCountDynamic	007a8920	4	
 _gnGlideBinkSurfaceType	00880c14	1	
 _gnGlideTMUId	00880bf8	6	
-_gnHireDisplayMode	007beecc	12	
-_gnHireIconHoverIndex	007beee8	5	
+_gnHireDisplayMode	007beecc	13	
+_gnHireIconDrawX	007beed4	1	
+_gnHireIconHoverIndex	007beee8	9	
 _gnHireIconHoverX	007beedc	3	
 _gnHitClassTxtLinkHandle	0087d820	2	
 _gnImmunityText1Color	007a2f30	2	
@@ -2709,7 +2719,7 @@ _gnNpcMenuNpcClassId	007c0db8	5	007c0db4:1
 _gnNpcMenuNpcSoundIndex	007c0db4	5	007c0db8:1
 _gnNpcMenuPreviousGold	007c0d3f	1	
 _gnNpcMenuRepairCostGold	007c0c77	4	
-_gnNpcMenuScrollMessageHead	007c0dae	4	
+_gnNpcMenuScrollMessageHead	007c0dae	5	
 _gnNpcMenuShopMode	007c0db0	6	
 _gnNpcMenuShopTransactionCost	007c0ded	2	
 _gnNpcMenuTradeActionGold	007c0c79	2	
@@ -2718,7 +2728,7 @@ _gnPaletteGammaShiftState	007d5638	3
 _gnPaletteIndexCounter	007d563c	1	
 _gnPaletteLoadedFlag	00779970	5	
 _gnPaletteMaxIndex	008e902c	3	
-_gnPanelBeltRowsExpanded	007bef98	6	
+_gnPanelBeltRowsExpanded	007bef98	10	
 _gnPathCalcDirectionVectorX_Pad0	006eb7d4	1	
 _gnPathCalcDirectionVectorY_Pad0	006eb7d8	1	
 _gnPendingGameInfoCharIndex	0070ebd8	4	
@@ -2761,7 +2771,7 @@ _gnSoundBufferMaxBytes	007bc9cc	1
 _gnSoundChannelCount	007c545c	3	
 _gnSoundChannelIndex	007c8c88	1	
 _gnSoundChannelPlaybackState	007c8c8c	1	
-_gnSoundEffectSampleCount	008817fc	9	
+_gnSoundEffectSampleCount	008817fc	10	
 _gnSoundEvictedAudioVolume	007bc9c4	2	
 _gnSoundGlobalVolume	0072f9b0	4	
 _gnSoundHardwareAcceleration	0072f830	3	
@@ -2829,8 +2839,8 @@ _gpCacheBlockTable	00881884	3
 _gpCacheBufferPoolFirst	0088188c	3	
 _gpCacheFileHeader	00881880	3	
 _gpCelPixelDataFreeCallback	008e8cb8	4	
-_gpChannelUserLinkedListHead	00798f38	3	
-_gpChannelUserListHead	00798f34	5	
+_gpChannelUserLinkedListHead	00798f38	7	
+_gpChannelUserListHead	00798f34	8	
 _gpCharSelAccountNameInputControl	007799bc	9	
 _gpCharSelDeleteButton	007799f0	2	
 _gpCharSelExitButton	007799f8	8	
@@ -2969,7 +2979,7 @@ _gpInvShopTab2Image	007bcc38	4
 _gpInvShopTabImage	007bcb04	6	
 _gpInvStashImage1	007bcc2c	6	
 _gpInvStashImage2	007bcc3c	5	
-_gpItemTypesTxt	0087d82c	1	
+_gpItemTypesTxt	0087d82c	2	
 _gpLvlTypeTileLibraries	0096ca1c	2	
 _gpMainMenuCreditsLineTextBox	00779964	11	
 _gpMainMenuCreditsPairLeftTextBox	0077995c	10	
@@ -2989,9 +2999,9 @@ _gpOverHeadStrc	007bf250	10
 _gpOverHeadUnitClassId	007bf234	2	
 _gpOverHeadUnitGUID	007bf206	2	
 _gpPalShiftEntryListHead	007b957c	6	
-_gpPanelBeltHoverItem	007befa8	9	007befac:2
+_gpPanelBeltHoverItem	007befa8	10	007befac:2
 _gpPanelBeltLastHoverItem	007befac	4	007befa8:2
-_gpPanelBeltSlot	007bef94	13	
+_gpPanelBeltSlot	007bef94	14	
 _gpPanelBorderImage	007beff0	4	
 _gpPanelMenuButton	007befd0	2	
 _gpPartyAcceptButton	007bf030	1	
@@ -3010,7 +3020,7 @@ _gpRealmQueryData	008818cc	6
 _gpRosterOther	007bb5c4	4	
 _gpSFileExplodeWorkBuffer	0077903c	2	
 _gpSFileOpenCallbackParam	00779064	1	
-_gpSSystemThreadContextCallback	007790c0	3	
+_gpSSystemThreadContextCallback	007790c0	7	
 _gpScompTempBuffer	0077920c	5	
 _gpSkillDescAttackFuncTable	0072d7f8	2	
 _gpSoundChannelsArray	007c5460	3	
@@ -3033,13 +3043,13 @@ _gpUnicodeCodeToMapTable	00882b2c	3
 _gpUnicodeKamapToCodeTable	00882b24	3	
 _gpUniqueCursorDC6	0087e844	1	
 _gpWardenResponseData	007bc988	6	007bc98c:1
-_gpWavFileCacheListHead	00881800	5	
+_gpWavFileCacheListHead	00881800	6	
 _gpaAutoMapRelated	0096c8d0	5	
 _gpaCharNameBuffers	0077934c	10	
 _gpaCharSelCharacterList	00779d94	6	
 _gpaCharSelectDisplay	00779b60	5	
 _gpaDrlgLvlSubPresetFiles	0096ca24	3	
-_gpaSoundEffectBuffers	008817dc	11	
+_gpaSoundEffectBuffers	008817dc	13	
 _gpfnChatDlgCallback	0077bda4	9	
 _gpfnFontGetCharWidth	00841da0	3	
 _gpfnMouseLeftButtonAltHandler	007a740c	2	
@@ -3072,7 +3082,6 @@ _gsUIFlagInit2	00724780	5
 _gsUIFlagInit3	0072478c	5	
 _gsUITextFlagInit	00722600	6	
 _gszCDKeyInUseByUsername	00882428	4	
-_gszCrashReportProcessPath	0074e8c8	9	
 _gszLadderCharNameFilter	0077b040	3	
 _gszLastTcpIpAddress	007795f8	6	
 _gszLocalSaveFilenameBuffer	00779b68	7	
@@ -3081,6 +3090,7 @@ _gszSystemGlobalString	0098a280	2
 _gszUnicodeKorean_1	006fd1c0	2	
 _gszUnicodeLatin1_1	006fcdc0	2	
 _gszUnicodeLatin2_1	006fcfc0	2	
+_guStringAlignmentTemp	007788d8	1	
 _gwFontHeightDefault	008426e0	3	
 _gwKeyNameBuffer	007a741c	8	
 _gwLastGameInfoRequestId	0077bbe0	1	
@@ -3102,12 +3112,12 @@ _lpCaption_006cc848	006cc848	1
 _lpCriticalSection_0074c830	0074c830	1	
 _lpCriticalSection_0074d848	0074d848	1	
 _lpCriticalSection_0075cfbc	0075cfbc	5	
-_lpCriticalSection_00779068	00779068	62	
+_lpCriticalSection_00779068	00779068	69	
 _lpCriticalSection_00779080	00779080	4	
 _lpCriticalSection_007790cc	007790cc	4	
 _lpCriticalSection_00779214	00779214	8	
 _lpCriticalSection_0077930c	0077930c	16	
-_lpCriticalSection_008817c4	008817c4	2	
+_lpCriticalSection_008817c4	008817c4	6	
 _lpCriticalSection_00881860	00881860	7	
 _lpCriticalSection_00881894	00881894	4	
 _lpCriticalSection_0088caa8	0088caa8	9	
@@ -3149,7 +3159,7 @@ _nameTable	006fa838	5
 _over	0074af48	2	
 _pAutoMapLvlTbls	0096ca28	5	
 _pBetaRealmNames	00779df0	10	
-_pCursorItem	007a6abc	7	
+_pCursorItem	007a6abc	8	
 _pD2AsyncDataStrc	0075af9c	8	
 _pD2CompItemsLinker	0087d824	2	
 _pD2PacketClient_from_0xAF	00882cdc	4	
@@ -3206,6 +3216,7 @@ _sgpTxtArena	0096d608	4
 _sgpTxtCharTemplate	0096d600	5	
 _sgpUnknownSequence	007bc998	8	
 _szBnNewsChannelName	0072ff80	2	
+_szProduct	0074d86c	1	
 _szSFileBasePath	00778f28	10	
 _szWindowClassName	007c9344	1	
 _term_action	0096de84	1	

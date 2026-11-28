@@ -3126,63 +3126,49 @@ void __stdcall Unreferenced_005049d0() {
 
 // 1.14d mac: 00040daa
 int32_t __stdcall D2COMP_IsItemTypeDescendant(int32_t nItemType, int32_t nAncestorType) {
-    int nQueueCount;
-    int nQueueHead[64];
-    short int sEquiv2;
     if (!nAncestorType) {
       return 1;
     }
+
     if (!nItemType) {
       return 0;
     }
 
-    nQueueHead[0] = nItemType;
-    int nQueueTail = 1;
-    while (true) {
-      int iVar1;
-      iVar1 = nQueueHead[nQueueTail - 1];
-      if (nAncestorType == iVar1) {
+    int aTypeStack[64];
+    aTypeStack[0] = nItemType;
+    int nCount = 1;
+    do {
+      int nType = aTypeStack[nCount - 1];
+      nCount--;
+      if (nAncestorType == nType) {
         return 1;
       }
 
-      nQueueCount = nQueueTail - 1;
 #if D2_ARCH_X64 || D2_ARCH_ARM64
       // The 1.14d itemtypes/weapons/armor/misc .bin records are 0xec/0x250 bytes, read here with the
       // older 0xe4/0x1a8 strides, so the item types are misread and can index far outside the table.
       // The 32-bit build reads that out-of-range memory unnoticed; on x64 it is unmapped, so such an
       // index is taken to have no parent types.
-      if ((uint32_t)iVar1 >= gnD2CompCompressionBufferSize) {
-        if (nQueueCount >= 0x40) {
-          break;
-        }
-        nQueueTail = nQueueCount;
-        if (!nQueueCount) {
-          return 0;
-        }
+      if ((uint32_t)nType >= gnD2CompCompressionBufferSize) {
         continue;
       }
 #endif
-      if (gpItemTypesTxt[iVar1].equiv1) {
-        sEquiv2 = gpItemTypesTxt[iVar1].equiv2;
-        nQueueHead[nQueueTail - 1] = (int)gpItemTypesTxt[iVar1].equiv1;
-        nQueueCount = nQueueTail;
-        if (sEquiv2) {
-          nQueueHead[nQueueTail] = (int)sEquiv2;
-          nQueueCount = nQueueTail + 1;
+      if (gpItemTypesTxt[nType].equiv1) {
+        aTypeStack[nCount] = gpItemTypesTxt[nType].equiv1;
+        nCount++;
+        if (gpItemTypesTxt[nType].equiv2) {
+          aTypeStack[nCount] = gpItemTypesTxt[nType].equiv2;
+          nCount++;
         }
       }
-      if (nQueueCount >= 0x40) {
-        break;
-      }
 
-      nQueueTail = nQueueCount;
-      if (!nQueueCount) {
-        return 0;
+      if (nCount >= 0x40) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb52);
+        exit(-1);
       }
-    }
+    } while (nCount);
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb52);
-    exit(-1);
+    return 0;
 }
 
 // 1.14d mac: 00041531

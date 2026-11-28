@@ -4,10 +4,10 @@ start	end	name	tu	symbol	method	detail
 00401070	0040108d	Fog::_3rdparty::crashy::Constructor	3rdparty/crashy/Report	?Constructor@crashy@_3rdparty@Fog@@YIPAUReport@@PAU4@H@Z	sourcemap	sourcemap Report.cpp.map (bare name)
 00401090	004010c9	Fog::_3rdparty::crashy::ScalarDeletingDestructor	3rdparty/crashy/Report	?ScalarDeletingDestructor@crashy@_3rdparty@Fog@@YIPAUReport@@PAU4@HI@Z	sourcemap	sourcemap Report.cpp.map (bare name)
 004010d0	004010f2	Fog::_3rdparty::crashy::Destructor	3rdparty/crashy/Report	?Destructor@crashy@_3rdparty@Fog@@YIXPAUReport@@H@Z	sourcemap	sourcemap Report.cpp.map (bare name)
-00401100	004011ed	Fog::_3rdparty::crashy::Open	3rdparty/crashy/Report	?Open@crashy@_3rdparty@Fog@@YICPAUReport@@HPAD@Z	sourcemap	sourcemap Report.cpp.map (bare name)
-004011f0	0040120e	Fog::_3rdparty::crashy::Close	3rdparty/crashy/Report	?Close@crashy@_3rdparty@Fog@@YICPAUReport@@H@Z	sourcemap	sourcemap Report.cpp.map (bare name)
-00401210	00401219	Fog::_3rdparty::crashy::IsOpen	3rdparty/crashy/Report	?IsOpen@crashy@_3rdparty@Fog@@YI_NPAUReport@@H@Z	sourcemap	sourcemap Report.cpp.map (bare name)
-00401220	00401375	Fog::_3rdparty::crashy::AddAttachment	3rdparty/crashy/Report	?AddAttachment@crashy@_3rdparty@Fog@@YICPAUReport@@HPADC@Z	sourcemap	sourcemap Report.cpp.map (bare name)
+00401100	004011ed	Fog::_3rdparty::crashy::Open	3rdparty/crashy/Report	?Open@crashy@_3rdparty@Fog@@YACPAUReport@@PAD@Z	sourcemap	sourcemap Report.cpp.map (bare name)
+004011f0	0040120e	Fog::_3rdparty::crashy::Close	3rdparty/crashy/Report	?Close@crashy@_3rdparty@Fog@@YACPAUReport@@@Z	sourcemap	sourcemap Report.cpp.map (bare name)
+00401210	00401219	Fog::_3rdparty::crashy::IsOpen	3rdparty/crashy/Report	?IsOpen@crashy@_3rdparty@Fog@@YA_NPAUReport@@@Z	sourcemap	sourcemap Report.cpp.map (bare name)
+00401220	00401375	Fog::_3rdparty::crashy::AddAttachment	3rdparty/crashy/Report	?AddAttachment@crashy@_3rdparty@Fog@@YACPAUReport@@PADC@Z	sourcemap	sourcemap Report.cpp.map (bare name)
 00401380	0040139c	Fog::_3rdparty::crashy::Printf	3rdparty/crashy/Report	?Printf@crashy@_3rdparty@Fog@@YAHPAUReport@@PADZZ	sourcemap	sourcemap Report.cpp.map (bare name)
 004013a0	004013b1	Fog::_3rdparty::crashy::isDebuggerPresent	3rdparty/crashy/crashyRoot	?isDebuggerPresent@crashy@_3rdparty@Fog@@YGIXZ	sourcemap	sourcemap crashyRoot.cpp.map
 004013c0	004013cf	Fog::_3rdparty::crashy::SYSTEM_Win32TerminateProcess	3rdparty/crashy/crashyRoot	?SYSTEM_Win32TerminateProcess@crashy@_3rdparty@Fog@@YIXI@Z	sourcemap	sourcemap crashyRoot.cpp.map
@@ -324,7 +324,7 @@ start	end	name	tu	symbol	method	detail
 0040eb70	0040eb78	Fog::THREADING_EnterCriticalSection_Thunk	Source/Fog/FogRoot	?THREADING_EnterCriticalSection_Thunk@Fog@@YIXPAX@Z	sourcemap	sourcemap FogRoot.cpp.map
 0040eb80	0040eb88	Fog::THREADING_LeaveCriticalSection_Thunk	Source/Fog/FogRoot	?THREADING_LeaveCriticalSection_Thunk@Fog@@YIXPAX@Z	sourcemap	sourcemap FogRoot.cpp.map
 0040eb90	0040ebc1	Fog::Src::LogManager::InitLogFilePathPointers	Source/Fog/Src/LogManager	?InitLogFilePathPointers@LogManager@Src@Fog@@YIXPAPAEI@Z	sourcemap	sourcemap LogManager.cpp.map
-0040ebd0	0040ecbb	Fog::Src::LogManager::OpenLogFileWithTimestamp	Source/Fog/Src/LogManager	?OpenLogFileWithTimestamp@LogManager@Src@Fog@@YIPAU_iobuf@@PADPAU_SYSTEMTIME@@0PAI0H@Z	sourcemap	sourcemap LogManager.cpp.map
+0040ebd0	0040ecbb	Fog::Src::LogManager::OpenLogFileWithTimestamp	Source/Fog/Src/LogManager	?OpenLogFileWithTimestamp@LogManager@Src@Fog@@YIPAU_iobuf@@PADPAU_SYSTEMTIME@@0PAH0H@Z	sourcemap	sourcemap LogManager.cpp.map
 0040ecc0	0040ed38	Fog::Src::LogManager::WriteLogFileHeader	Source/Fog/Src/LogManager	?WriteLogFileHeader@LogManager@Src@Fog@@YIXPAU_iobuf@@PAU_SYSTEMTIME@@@Z	sourcemap	sourcemap LogManager.cpp.map
 0040ed40	0040edde	Fog::Src::LogManager::WriteRealmStartupHeader	Source/Fog/Src/LogManager	?WriteRealmStartupHeader@LogManager@Src@Fog@@YIXPAU_iobuf@@@Z	sourcemap	sourcemap LogManager.cpp.map
 0040ede0	0040effd	Fog::Src::LogManager::FindOrOpenLogFileSlot	Source/Fog/Src/LogManager	?FindOrOpenLogFileSlot@LogManager@Src@Fog@@YIPAU_iobuf@@PAEPAI@Z	sourcemap	sourcemap LogManager.cpp.map
@@ -420,11 +420,11 @@ start	end	name	tu	symbol	method	detail
 004117a0	004117ca	Storm::Source::SMem::SMEM_Warning	Source/Storm/Source/SMem	?SMEM_Warning@SMem@Source@Storm@@YGXPAIHK@Z	sourcemap	sourcemap SMem.cpp.map
 004117d0	004117ef	Storm::Source::SMem::SMEM_UnlockHeap	Source/Storm/Source/SMem	?SMEM_UnlockHeap@SMem@Source@Storm@@YAXPAH@Z	sourcemap	sourcemap SMem.cpp.map
 004117f0	00411905	Storm::Source::SMem::SMEM_AllocateHeap	Source/Storm/Source/SMem	?SMEM_AllocateHeap@SMem@Source@Storm@@YGPAUD2FogHeapDescStrc@@HIHIIIPAI@Z	sourcemap	sourcemap SMem.cpp.map
-00411910	00411994	Storm::Source::SMem::SMEM_CheckValidBlock	Source/Storm/Source/SMem	?SMEM_CheckValidBlock@SMem@Source@Storm@@YAHPAUD2FogHeapBlockHdrStrc@@HPAIH@Z	sourcemap	sourcemap SMem.cpp.map
+00411910	00411994	Storm::Source::SMem::SMEM_CheckValidBlock	Source/Storm/Source/SMem	?SMEM_CheckValidBlock@SMem@Source@Storm@@YAHPAXHPADH@Z	sourcemap	sourcemap SMem.cpp.map
 004119b0	00411a15	Storm::Source::SMem::SMemCalculateAllocationLayout	Source/Storm/Source/SMem	?SMemCalculateAllocationLayout@SMem@Source@Storm@@YGXIPAH000@Z	sourcemap	sourcemap SMem.cpp.map
 00411a20	00411a50	Storm::Source::SMem::SMEM_ComputePageSize	Source/Storm/Source/SMem	?SMEM_ComputePageSize@SMem@Source@Storm@@YGXXZ	sourcemap	sourcemap SMem.cpp.map
 00411a50	00411a79	Storm::Source::SMem::SMemWriteBlockHeader	Source/Storm/Source/SMem	?SMemWriteBlockHeader@SMem@Source@Storm@@YGXEHPAUD2FogHeapDescStrc@@PAUD2FogHeapBlockHdrStrc@@H@Z	sourcemap	sourcemap SMem.cpp.map
-00411a80	00411a95	Storm::Source::SMem::SMEM_FreeHeap	Source/Storm/Source/SMem	?SMEM_FreeHeap@SMem@Source@Storm@@YIXPAPAX@Z	sourcemap	sourcemap SMem.cpp.map
+00411a80	00411a95	Storm::Source::SMem::SMEM_FreeHeap	Source/Storm/Source/SMem	?SMEM_FreeHeap@SMem@Source@Storm@@YIXPAPAUD2FogHeapDescStrc@@@Z	sourcemap	sourcemap SMem.cpp.map
 00411aa0	00411b8f	Storm::Source::SMem::SMEM_FreeHeapBlock	Source/Storm/Source/SMem	?SMEM_FreeHeapBlock@SMem@Source@Storm@@YAXPAUD2FogHeapBlockHdrStrc@@PAUD2FogHeapDescStrc@@@Z	sourcemap	sourcemap SMem.cpp.map
 00411b90	00411bc1	Storm::Source::SMem::SMemGetBlockDataAndSize	Source/Storm/Source/SMem	?SMemGetBlockDataAndSize@SMem@Source@Storm@@YAXPAEPAH1PAUD2FogHeapBlockHdrStrc@@@Z	sourcemap	sourcemap SMem.cpp.map
 00411bd0	00411c15	Storm::Source::SMem::SMemCommitMorePages	Source/Storm/Source/SMem	?SMemCommitMorePages@SMem@Source@Storm@@YAHHPAUD2FogHeapDescStrc@@@Z	sourcemap	sourcemap SMem.cpp.map
@@ -434,29 +434,29 @@ start	end	name	tu	symbol	method	detail
 00411d40	00411d92	Storm::Source::SMem::SMemSetDebugFlags	Source/Storm/Source/SMem	?SMemSetDebugFlags@SMem@Source@Storm@@YGXIE@Z	sourcemap	sourcemap SMem.cpp.map
 00411da0	00411db4	Storm::Source::SMem::Unreferenced_00411da0	Source/Storm/Source/SMem	?Unreferenced_00411da0@SMem@Source@Storm@@YAHXZ	sourcemap	sourcemap SMem.cpp.map
 00411dc0	00411ef2	Storm::Source::SMem::SMEM_CombineFreeBlocks	Source/Storm/Source/SMem	?SMEM_CombineFreeBlocks@SMem@Source@Storm@@YAXPAUD2FogHeapDescStrc@@@Z	sourcemap	sourcemap SMem.cpp.map
-00411f00	00411ff7	Storm::Source::SMem::SMEM_DestroyHeap	Source/Storm/Source/SMem	?SMEM_DestroyHeap@SMem@Source@Storm@@YIPAPAXPAPAX@Z	sourcemap	sourcemap SMem.cpp.map
+00411f00	00411ff7	Storm::Source::SMem::SMEM_DestroyHeap	Source/Storm/Source/SMem	?SMEM_DestroyHeap@SMem@Source@Storm@@YIPAPAUD2FogHeapDescStrc@@PAPAU4@@Z	sourcemap	sourcemap SMem.cpp.map
 00412000	00412080	Storm::Source::SMem::SMEM_FreeEmptyHeaps	Source/Storm/Source/SMem	?SMEM_FreeEmptyHeaps@SMem@Source@Storm@@YGXXZ	sourcemap	sourcemap SMem.cpp.map
 00412080	004121cb	Storm::Source::SMem::SMemReallocInPlace	Source/Storm/Source/SMem	?SMemReallocInPlace@SMem@Source@Storm@@YGHPAUD2FogHeapBlockHdrStrc@@HIPAUD2FogHeapDescStrc@@@Z	sourcemap	sourcemap SMem.cpp.map
 004121d0	00412237	Storm::Source::SMem::SMemShrinkBlock	Source/Storm/Source/SMem	?SMemShrinkBlock@SMem@Source@Storm@@YGXPAUD2FogHeapBlockHdrStrc@@HIPAUD2FogHeapDescStrc@@@Z	sourcemap	sourcemap SMem.cpp.map
-00412240	004122e1	Storm::Source::SMem::SMemDestroy	Source/Storm/Source/SMem	?SMemDestroy@SMem@Source@Storm@@YGIXZ	sourcemap	sourcemap SMem.cpp.map
-004122f0	004124a9	Storm::Source::SMem::SMemFindNextBlock	Source/Storm/Source/SMem	?SMemFindNextBlock@SMem@Source@Storm@@YGHIPAEPAPAGPAH@Z	sourcemap	sourcemap SMem.cpp.map
+00412240	004122e1	Storm::Source::SMem::SMemDestroy	Source/Storm/Source/SMem	?SMemDestroy@SMem@Source@Storm@@YGHXZ	sourcemap	sourcemap SMem.cpp.map
+004122f0	004124a9	Storm::Source::SMem::SMemFindNextBlock	Source/Storm/Source/SMem	?SMemFindNextBlock@SMem@Source@Storm@@YGHIPAEPAPAEPAH@Z	sourcemap	sourcemap SMem.cpp.map
 004124b0	0041264a	Storm::Source::SMem::SMemFindNextHeap	Source/Storm/Source/SMem	?SMemFindNextHeap@SMem@Source@Storm@@YGHIPAIPAUSMemHeapDetailsStrc@@@Z	sourcemap	sourcemap SMem.cpp.map
 00412650	00412703	Storm::Source::SMem::SMemFree	Source/Storm/Source/SMem	?SMemFree@SMem@Source@Storm@@YGHPAXPADHK@Z	sourcemap	sourcemap SMem.cpp.map
-00412710	00412755	Storm::Source::SMem::SMemGetHeapByCaller	Source/Storm/Source/SMem	?SMemGetHeapByCaller@SMem@Source@Storm@@YGIPAHI@Z	sourcemap	sourcemap SMem.cpp.map
+00412710	00412755	Storm::Source::SMem::SMemGetHeapByCaller	Source/Storm/Source/SMem	?SMemGetHeapByCaller@SMem@Source@Storm@@YGIPADI@Z	sourcemap	sourcemap SMem.cpp.map
 00412760	004127d9	Storm::Source::SMem::SMemGetHeapByPtr	Source/Storm/Source/SMem	?SMemGetHeapByPtr@SMem@Source@Storm@@YGIPAE@Z	sourcemap	sourcemap SMem.cpp.map
-004127e0	00412864	Storm::Source::SMem::SMemGetSize	Source/Storm/Source/SMem	?SMemGetSize@SMem@Source@Storm@@YGHPAXPAIH@Z	sourcemap	sourcemap SMem.cpp.map
+004127e0	00412864	Storm::Source::SMem::SMemGetSize	Source/Storm/Source/SMem	?SMemGetSize@SMem@Source@Storm@@YGHPAXPADH@Z	sourcemap	sourcemap SMem.cpp.map
 00412870	004129c4	Storm::Source::SMem::SMemHeapCreate	Source/Storm/Source/SMem	?SMemHeapCreate@SMem@Source@Storm@@YGIHII@Z	sourcemap	sourcemap SMem.cpp.map
 004129d0	00412a5e	Storm::Source::SMem::SMemHeapDestroy	Source/Storm/Source/SMem	?SMemHeapDestroy@SMem@Source@Storm@@YGHI@Z	sourcemap	sourcemap SMem.cpp.map
-00412a60	00412b0e	Storm::Source::SMem::SMemHeapFree	Source/Storm/Source/SMem	?SMemHeapFree@SMem@Source@Storm@@YGIIIPAX@Z	sourcemap	sourcemap SMem.cpp.map
+00412a60	00412b0e	Storm::Source::SMem::SMemHeapFree	Source/Storm/Source/SMem	?SMemHeapFree@SMem@Source@Storm@@YGHIIPAX@Z	sourcemap	sourcemap SMem.cpp.map
 00412b10	00412b9f	Storm::Source::SMem::SMemHeapSize	Source/Storm/Source/SMem	?SMemHeapSize@SMem@Source@Storm@@YGHIIPAX@Z	sourcemap	sourcemap SMem.cpp.map
 00412ba0	00412e37	Storm::Source::SMem::SMEM_AllocateHeapBlock	Source/Storm/Source/SMem	?SMEM_AllocateHeapBlock@SMem@Source@Storm@@YGPAIIEPAUD2FogHeapDescStrc@@@Z	sourcemap	sourcemap SMem.cpp.map
 00412e40	00412f2c	Storm::Source::SMem::SMEM_SatisfyAllocRequest	Source/Storm/Source/SMem	?SMEM_SatisfyAllocRequest@SMem@Source@Storm@@YGPAIPAUD2FogHeapDescStrc@@IIPAH@Z	sourcemap	sourcemap SMem.cpp.map
-00412f30	0041301a	Storm::Source::SMem::SMemReallocCore	Source/Storm/Source/SMem	?SMemReallocCore@SMem@Source@Storm@@YGPAIPAHPAI1PAGEI@Z	sourcemap	sourcemap SMem.cpp.map
+00412f30	0041301a	Storm::Source::SMem::SMemReallocCore	Source/Storm/Source/SMem	?SMemReallocCore@SMem@Source@Storm@@YGPAIPAHPAUD2FogHeapDescStrc@@PAXPAUD2FogHeapBlockHdrStrc@@EI@Z	sourcemap	sourcemap SMem.cpp.map
 00413020	004130f2	Storm::Source::SMem::SMemAlloc	Source/Storm/Source/SMem	?SMemAlloc@SMem@Source@Storm@@YGPAXIPADII@Z	sourcemap	sourcemap SMem.cpp.map
 00413100	00413247	Storm::Source::SMem::SMemDumpState	Source/Storm/Source/SMem	?SMemDumpState@SMem@Source@Storm@@YGHP6GXIPAD@ZI@Z	sourcemap	sourcemap SMem.cpp.map
 00413250	0041330c	Storm::Source::SMem::SMemHeapAlloc	Source/Storm/Source/SMem	?SMemHeapAlloc@SMem@Source@Storm@@YGPAIIII@Z	sourcemap	sourcemap SMem.cpp.map
 00413310	004133c4	Storm::Source::SMem::SMemHeapReAlloc	Source/Storm/Source/SMem	?SMemHeapReAlloc@SMem@Source@Storm@@YGPAIIIPAII@Z	sourcemap	sourcemap SMem.cpp.map
-004133d0	00413484	Storm::Source::SMem::SMemReAlloc	Source/Storm/Source/SMem	?SMemReAlloc@SMem@Source@Storm@@YGPAIPAIIPADHI@Z	sourcemap	sourcemap SMem.cpp.map
+004133d0	00413484	Storm::Source::SMem::SMemReAlloc	Source/Storm/Source/SMem	?SMemReAlloc@SMem@Source@Storm@@YGPAXPAXIPADHI@Z	sourcemap	sourcemap SMem.cpp.map
 00413490	004134c8	Storm::Source::SSTR::SStrChr	Source/Storm/Source/SSTR	?SStrChr@SSTR@Source@Storm@@YGPADPADD@Z	sourcemap	sourcemap SSTR.cpp.map
 004134d0	0041350e	Storm::Source::SSTR::SStrChrR	Source/Storm/Source/SSTR	?SStrChrR@SSTR@Source@Storm@@YGPADPADD@Z	sourcemap	sourcemap SSTR.cpp.map
 00413510	0041354d	Storm::Source::SSTR::SSTR_FindChar	Source/Storm/Source/SSTR	?SSTR_FindChar@SSTR@Source@Storm@@YGPADPADDH@Z	sourcemap	sourcemap SSTR.cpp.map
@@ -491,7 +491,7 @@ start	end	name	tu	symbol	method	detail
 00414b00	00414c6a	Storm::Source::SReg::SREG_InternalLoadEntry	Source/Storm/Source/SReg	?SREG_InternalLoadEntry@SReg@Source@Storm@@YGHPAKPAEPADEKPBD0@Z	sourcemap	sourcemap SReg.cpp.map
 00414c70	00414d8a	Storm::Source::SReg::SREG_InternalSaveEntry	Source/Storm/Source/SReg	?SREG_InternalSaveEntry@SReg@Source@Storm@@YGHPADPBDIPAEII@Z	sourcemap	sourcemap SReg.cpp.map
 00414d90	00414dd8	Storm::Source::SReg::SRegDeleteValue	Source/Storm/Source/SReg	?SRegDeleteValue@SReg@Source@Storm@@YGHPADPBDK@Z	sourcemap	sourcemap SReg.cpp.map
-00414de0	00414e43	Storm::Source::SReg::SRegLoadData	Source/Storm/Source/SReg	?SRegLoadData@SReg@Source@Storm@@YGHPAIPADHPAEKPAPAI@Z	sourcemap	sourcemap SReg.cpp.map
+00414de0	00414e43	Storm::Source::SReg::SRegLoadData	Source/Storm/Source/SReg	?SRegLoadData@SReg@Source@Storm@@YGHPAD0HPAEKPAK@Z	sourcemap	sourcemap SReg.cpp.map
 00414e50	00414f0b	Storm::Source::SReg::SRegLoadString	Source/Storm/Source/SReg	?SRegLoadString@SReg@Source@Storm@@YGHPAD0H0K@Z	sourcemap	sourcemap SReg.cpp.map
 00414f10	00414ff9	Storm::Source::SReg::SRegLoadValue	Source/Storm/Source/SReg	?SRegLoadValue@SReg@Source@Storm@@YGHPAD0EPAH@Z	sourcemap	sourcemap SReg.cpp.map
 00415000	0041506a	Storm::Source::SReg::SRegSaveData	Source/Storm/Source/SReg	?SRegSaveData@SReg@Source@Storm@@YGHPADPBDIPAEK@Z	sourcemap	sourcemap SReg.cpp.map
@@ -507,7 +507,7 @@ start	end	name	tu	symbol	method	detail
 004152d0	00415327	Storm::Source::SFile::SFILE_Decrypt	Source/Storm/Source/SFile	?SFILE_Decrypt@SFile@Source@Storm@@YAXPAIII@Z	sourcemap	sourcemap SFile.cpp.map
 00415330	0041538b	Storm::Source::SFile::SFILE_Hash	Source/Storm/Source/SFile	?SFILE_Hash@SFile@Source@Storm@@YGIHPAD@Z	sourcemap	sourcemap SFile.cpp.map
 00415390	004154b0	Storm::Source::SFile::SFILE_InitializeHashSource	Source/Storm/Source/SFile	?SFILE_InitializeHashSource@SFile@Source@Storm@@YAXI@Z	sourcemap	sourcemap SFile.cpp.map
-004154b0	0041555c	Storm::Source::SFile::SFILE_ReadFileChecked	Source/Storm/Source/SFile	?SFILE_ReadFileChecked@SFile@Source@Storm@@YGHPAHPAXIPAI1PAKH@Z	sourcemap	sourcemap SFile.cpp.map
+004154b0	0041555c	Storm::Source::SFile::SFILE_ReadFileChecked	Source/Storm/Source/SFile	?SFILE_ReadFileChecked@SFile@Source@Storm@@YGHPAHPAXIPAD1PAKH@Z	sourcemap	sourcemap SFile.cpp.map
 00415560	004155a7	Storm::Source::SFile::SFILE_SyncReadFile	Source/Storm/Source/SFile	?SFILE_SyncReadFile@SFile@Source@Storm@@YGHPAXIPAIHPAUD2MPQFileStrc@@@Z	sourcemap	sourcemap SFile.cpp.map
 004155b0	004155c7	Storm::Source::SFile::SFILE_GetBlockTableEntry	Source/Storm/Source/SFile	?SFILE_GetBlockTableEntry@SFile@Source@Storm@@YAPAUD2MPQBlockEntryStrc@@PAUD2ArchiveStrc@@H@Z	sourcemap	sourcemap SFile.cpp.map
 004155d0	0041569f	Storm::Source::SFile::SFILE_SearchHashTable	Source/Storm/Source/SFile	?SFILE_SearchHashTable@SFile@Source@Storm@@YGIPAUD2ArchiveStrc@@FDPAD@Z	sourcemap	sourcemap SFile.cpp.map
@@ -749,7 +749,7 @@ start	end	name	tu	symbol	method	detail
 0041c1f0	0041c293	Storm::Source::SErr::SERR_UndecorateObjectName	Source/Storm/Source/SErr	?SERR_UndecorateObjectName@SErr@Source@Storm@@YGHPADH0@Z	sourcemap	sourcemap SErr.cpp.map
 0041c2a0	0041c2a6	Storm::WindowHandle::SERR_GetLastError	Source/Storm/WindowHandle	?SERR_GetLastError@WindowHandle@Storm@@YGKXZ	sourcemap	sourcemap WindowHandle.cpp.map
 0041c2b0	0041c2b6	Storm::WindowHandle::SERR_IsErrorDialogActive	Source/Storm/WindowHandle	?SERR_IsErrorDialogActive@WindowHandle@Storm@@YGIXZ	sourcemap	sourcemap WindowHandle.cpp.map
-0041c2c0	0041c2ed	Storm::Source::SErr::SErrPrepareAppFatal	Source/Storm/Source/SErr	?SErrPrepareAppFatal@SErr@Source@Storm@@YGXPAXI@Z	sourcemap	sourcemap SErr.cpp.map
+0041c2c0	0041c2ed	Storm::Source::SErr::SErrPrepareAppFatal	Source/Storm/Source/SErr	?SErrPrepareAppFatal@SErr@Source@Storm@@YGXPADH@Z	sourcemap	sourcemap SErr.cpp.map
 0041c2f0	0041c332	Storm::Source::SErr::SErrRegisterMessageSource	Source/Storm/Source/SErr	?SErrRegisterMessageSource@SErr@Source@Storm@@YGHGPAUHINSTANCE__@@I@Z	sourcemap	sourcemap SErr.cpp.map
 0041c340	0041c356	Storm::Source::SErr::SErrSetLastError	Source/Storm/Source/SErr	?SErrSetLastError@SErr@Source@Storm@@YGXK@Z	sourcemap	sourcemap SErr.cpp.map
 0041c360	0041c36f	Storm::Source::SSystem::SSYSTEM_SetShutdownFlag	Source/Storm/Source/SSystem	?SSYSTEM_SetShutdownFlag@SSystem@Source@Storm@@YGXH@Z	sourcemap	sourcemap SSystem.cpp.map
@@ -781,8 +781,8 @@ start	end	name	tu	symbol	method	detail
 0041c900	0041c9b8	Storm::Source::SErr::SErrRegisterHandler	Source/Storm/Source/SErr	?SErrRegisterHandler@SErr@Source@Storm@@YGXP6GHIPADPAXH0@Z@Z	sourcemap	sourcemap SErr.cpp.map
 0041c9c0	0041ca0e	Storm::Source::SErr::TSList_HANDLER_Clear	Source/Storm/Source/SErr	?TSList_HANDLER_Clear@SErr@Source@Storm@@YIXPAUStormLinkedListStrc@@@Z	sourcemap	sourcemap SErr.cpp.map
 0041ca10	0041ca7a	Storm::Source::SErr::SSYSTEM_ListRemoveAndFree	Source/Storm/Source/SErr	?SSYSTEM_ListRemoveAndFree@SErr@Source@Storm@@YIPAUHANDLER@@PAUStormLinkedListStrc@@HPAUStormLinkStrc@@@Z	sourcemap	sourcemap SErr.cpp.map
-0041caf0	0041cfb0	Storm::Source::SErr::SErrDisplayError	Source/Storm/Source/SErr	?SErrDisplayError@SErr@Source@Storm@@YGHIPAIHPAEHI@Z	sourcemap	sourcemap SErr.cpp.map
-0041cfb0	0041d00a	Storm::Source::SErr::SErrDisplayErrorFmt	Source/Storm/Source/SErr	?SErrDisplayErrorFmt@SErr@Source@Storm@@YAXIPAIHHIPADZZ	sourcemap	sourcemap SErr.cpp.map
+0041caf0	0041cfb0	Storm::Source::SErr::SErrDisplayError	Source/Storm/Source/SErr	?SErrDisplayError@SErr@Source@Storm@@YGHIPADH0HI@Z	sourcemap	sourcemap SErr.cpp.map
+0041cfb0	0041d00a	Storm::Source::SErr::SErrDisplayErrorFmt	Source/Storm/Source/SErr	?SErrDisplayErrorFmt@SErr@Source@Storm@@YAXIPADHHI0ZZ	sourcemap	sourcemap SErr.cpp.map
 0041d010	0041d110	Storm::Source::SErr::SErrReportNamedResourceLeak	Source/Storm/Source/SErr	?SErrReportNamedResourceLeak@SErr@Source@Storm@@YGXPAD0@Z	sourcemap	sourcemap SErr.cpp.map
 0041d110	0041d154	Storm::Source::SErr::SErrUnregisterHandler	Source/Storm/Source/SErr	?SErrUnregisterHandler@SErr@Source@Storm@@YGXP6GHIPADPAXH0@Z@Z	sourcemap	sourcemap SErr.cpp.map
 0041d160	0041d1e0	Storm::Source::SErr::SErrDisplayAppFatal	Source/Storm/Source/SErr	?SErrDisplayAppFatal@SErr@Source@Storm@@YAXPADZZ	sourcemap	sourcemap SErr.cpp.map
@@ -2120,7 +2120,7 @@ start	end	name	tu	symbol	method	detail
 0044dd90	0044ddb4	TSLink<>::NextLink	Source/D2Client/Game/stpl_SGAMEDATA	?NextLink@?$TSLink@USGAMEDATA@@@@QAEPAV1@H@Z	sourcemap	sourcemap stpl_SGAMEDATA.cpp.map (bare name)
 0044ddd0	0044de02	TSLink<>::LINKEDLIST_UnlinkSelf_Unref_0044ddd0	Source/D2Client/Game/stpl_SGAMEDATA	?LINKEDLIST_UnlinkSelf_Unref_0044ddd0@?$TSLink@USGAMEDATA@@@@SIXPAUStormLinkStrc@@@Z	sourcemap	sourcemap stpl_SGAMEDATA.cpp.map (bare name)
 0044de10	0044de23	USGAMEDATA::TSGrowableArray<>::OperatorIndex	Source/D2Client/Game/stpl_SGAMEDATA	?OperatorIndex@?$TSGrowableArray@V?$TSExplicitList@USGAMEDATA@@$0?CCCCCCCD@@@@@QAEPAV?$TSExplicitList@USGAMEDATA@@$0?CCCCCCCD@@@I@Z	sourcemap	sourcemap stpl_SGAMEDATA.cpp.map (bare name)
-0044de40	0044de46	USGAMEDATA::TSGrowableArray<>::Unreferenced_0044de40	Source/D2Client/Game/stpl_SGAMEDATA	?Unreferenced_0044de40@?$TSGrowableArray@V?$TSExplicitList@USGAMEDATA@@$0?CCCCCCCD@@@@@SAIXZ	sourcemap	sourcemap stpl_SGAMEDATA.cpp.map (bare name)
+0044de40	0044de46	USGAMEDATA::TSGrowableArray<>::Unreferenced_0044de40	Source/D2Client/Game/stpl_SGAMEDATA	?Unreferenced_0044de40@?$TSGrowableArray@V?$TSExplicitList@USGAMEDATA@@$0?CCCCCCCD@@@@@SAHXZ	sourcemap	sourcemap stpl_SGAMEDATA.cpp.map (bare name)
 0044de50	0044de5e	D2Common::Drlg::DrlgGrid::ResetGrid_Unref_0044de50	Source/D2Common/Drlg/DrlgGrid	?ResetGrid_Unref_0044de50@DrlgGrid@Drlg@D2Common@@YIXPAUD2DrlgGridStrc@@@Z	sourcemap	sourcemap DrlgGrid.cpp.map
 0044de60	0044de84	NextLink_Unreferenced	Source/D2Client/Game/stpl_SGAMEDATA	?NextLink_Unreferenced@@YIPAV?$TSLink@USGAMEDATA@@@@PAV1@HH@Z	sourcemap	sourcemap stpl_SGAMEDATA.cpp.map
 0044de90	0044dec2	Storm::Source::SEVT::LINKEDLIST_UnlinkSelf_Unref_0044de90	Source/Storm/Source/SEVT	?LINKEDLIST_UnlinkSelf_Unref_0044de90@SEVT@Source@Storm@@YIXPAUStormLinkStrc@@@Z	sourcemap	sourcemap SEVT.cpp.map
@@ -3548,7 +3548,7 @@ start	end	name	tu	symbol	method	detail
 00480490	0048049a	D2Client::UNIT::Path::thunk_PATH_SnapPositionToTile	Source/D2Client/Unit/Path	?thunk_PATH_SnapPositionToTile@Path@UNIT@D2Client@@YIXPAUD2UnitStrc@@@Z	sourcemap	sourcemap Path.cpp.map
 004804a0	004804cf	D2Client::UNIT::Path::PATH_SetTargetAndCalculate	Source/D2Client/Unit/Path	?PATH_SetTargetAndCalculate@Path@UNIT@D2Client@@YIIPAUD2UnitStrc@@HH@Z	sourcemap	sourcemap Path.cpp.map
 004804d0	004804dc	D2Client::UNIT::Path::Unreferenced_004804d0	Source/D2Client/Unit/Path	?Unreferenced_004804d0@Path@UNIT@D2Client@@YAHXZ	sourcemap	sourcemap Path.cpp.map
-004804e0	00480771	D2Client::UNIT::Path::PATH_MoveUnitToPoint	Source/D2Client/Unit/Path	?PATH_MoveUnitToPoint@Path@UNIT@D2Client@@YIXPAUD2UnitStrc@@GHIHH@Z	sourcemap	sourcemap Path.cpp.map
+004804e0	00480771	D2Client::UNIT::Path::PATH_MoveUnitToPoint	Source/D2Client/Unit/Path	?PATH_MoveUnitToPoint@Path@UNIT@D2Client@@YIXPAUD2UnitStrc@@GGIHH@Z	sourcemap	sourcemap Path.cpp.map
 00480780	004807b9	D2Client::UNIT::Path::PATH_SetTargetUnitAndCalculate	Source/D2Client/Unit/Path	?PATH_SetTargetUnitAndCalculate@Path@UNIT@D2Client@@YIIPAUD2UnitStrc@@IH@Z	sourcemap	sourcemap Path.cpp.map
 004807c0	00480803	D2Client::UNIT::Path::PATH_StepAndCreateTrailEffects	Source/D2Client/Unit/Path	?PATH_StepAndCreateTrailEffects@Path@UNIT@D2Client@@YIIPAUD2UnitStrc@@@Z	sourcemap	sourcemap Path.cpp.map
 00480810	00480930	D2Client::UNIT::Path::CLIENT_UpdateUnitFrame	Source/D2Client/Unit/Path	?CLIENT_UpdateUnitFrame@Path@UNIT@D2Client@@YIXPAUD2UnitStrc@@@Z	sourcemap	sourcemap Path.cpp.map
@@ -3576,7 +3576,7 @@ start	end	name	tu	symbol	method	detail
 004817f0	004817f6	D2Client::Sound::SoundHdr::SOUNDHDR_GetGlobal0	Source/D2Client/Sound/SoundHdr	?SOUNDHDR_GetGlobal0@SoundHdr@Sound@D2Client@@YGHXZ	sourcemap	sourcemap SoundHdr.cpp.map
 00481800	00481806	D2Client::Sound::SoundHdr::SOUNDHDR_GetGlobal1	Source/D2Client/Sound/SoundHdr	?SOUNDHDR_GetGlobal1@SoundHdr@Sound@D2Client@@YGHXZ	sourcemap	sourcemap SoundHdr.cpp.map
 00481810	00481816	D2Client::Sound::SoundHdr::SOUNDHDR_GetGlobal2	Source/D2Client/Sound/SoundHdr	?SOUNDHDR_GetGlobal2@SoundHdr@Sound@D2Client@@YGPAHXZ	sourcemap	sourcemap SoundHdr.cpp.map
-00481820	00481826	D2Client::Sound::SoundHdr::SOUNDHDR_GetGlobal3	Source/D2Client/Sound/SoundHdr	?SOUNDHDR_GetGlobal3@SoundHdr@Sound@D2Client@@YGHXZ	sourcemap	sourcemap SoundHdr.cpp.map
+00481820	00481826	D2Client::Sound::SoundHdr::SOUNDHDR_GetGlobal3	Source/D2Client/Sound/SoundHdr	?SOUNDHDR_GetGlobal3@SoundHdr@Sound@D2Client@@YGIXZ	sourcemap	sourcemap SoundHdr.cpp.map
 00481830	0048183a	D2Client::Sound::SoundHdr::Cleanup	Source/D2Client/Sound/SoundHdr	?Cleanup@SoundHdr@Sound@D2Client@@YGXXZ	sourcemap	sourcemap SoundHdr.cpp.map
 00481840	00481847	D2Client::Sound::SoundHdr::SOUNDHDR_SetGlobal4	Source/D2Client/Sound/SoundHdr	?SOUNDHDR_SetGlobal4@SoundHdr@Sound@D2Client@@YIXI@Z	sourcemap	sourcemap SoundHdr.cpp.map
 00481850	00481851	D2Client::Sound::SoundHdr::SOUNDHDR_Nop	Source/D2Client/Sound/SoundHdr	?SOUNDHDR_Nop@SoundHdr@Sound@D2Client@@YGXXZ	sourcemap	sourcemap SoundHdr.cpp.map
@@ -4811,7 +4811,7 @@ start	end	name	tu	symbol	method	detail
 004c1be0	004c1be5	D2Client::UNIT::thunk_ITEM_RecalcAllEquippedItems_Unref_004c1be0	Source/D2Client/Unit/Item	?thunk_ITEM_RecalcAllEquippedItems_Unref_004c1be0@UNIT@D2Client@@YAXPAUD2UnitStrc@@@Z	sourcemap	sourcemap Item.cpp.map (bare name)
 004c1bf0	004c1c0a	D2Client::UNIT::ITEM_CltRecalcAllEquippedItems2	Source/D2Client/Unit/Item	?ITEM_CltRecalcAllEquippedItems2@UNIT@D2Client@@YIXPAUD2GSPacketSrv0x48@@@Z	sourcemap	sourcemap Item.cpp.map (bare name)
 004c1c10	004c1c1a	D2Client::UNIT::ITEM_RecalcAllEquippedItems_ECX	Source/D2Client/Unit/Item	?ITEM_RecalcAllEquippedItems_ECX@UNIT@D2Client@@YIXPAUD2UnitStrc@@@Z	sourcemap	sourcemap Item.cpp.map (bare name)
-004c1c20	004c1c41	D2Client::UNIT::ITEM_SaveWeaponHandClassId	Source/D2Client/Unit/Item	?ITEM_SaveWeaponHandClassId@UNIT@D2Client@@YAXDPAUD2UnitStrc@@@Z	sourcemap	sourcemap Item.cpp.map (bare name)
+004c1c20	004c1c41	D2Client::UNIT::ITEM_SaveWeaponHandClassId	Source/D2Client/Unit/Item	?ITEM_SaveWeaponHandClassId@UNIT@D2Client@@YAXPAUD2UnitStrc@@D@Z	sourcemap	sourcemap Item.cpp.map (bare name)
 004c1c50	004c1c90	D2Client::UNIT::ITEM_SetItemInBodyLocation	Source/D2Client/Unit/Item	?ITEM_SetItemInBodyLocation@UNIT@D2Client@@YIIPAUD2InventoryStrc@@PAUD2UnitStrc@@I@Z	sourcemap	sourcemap Item.cpp.map (bare name)
 004c1c90	004c1d53	D2Client::UNIT::ITEM_RemoveEquippedItemForSwap	Source/D2Client/Unit/Item	?ITEM_RemoveEquippedItemForSwap@UNIT@D2Client@@YGXPAUD2UnitStrc@@0@Z	sourcemap	sourcemap Item.cpp.map (bare name)
 004c1d60	004c1e17	D2Client::UNIT::SOUND_GetIdFromUnit	Source/D2Client/Unit/Item	?SOUND_GetIdFromUnit@UNIT@D2Client@@YIHPAUD2UnitStrc@@@Z	sourcemap	sourcemap Item.cpp.map (bare name)
@@ -5544,7 +5544,7 @@ start	end	name	tu	symbol	method	detail
 004e9590	004e95bb	D2Client::UI::SkillDesc::SKILLDESC_CalcDualWieldWithARState	Source/D2Client/UI/SkillDesc	?SKILLDESC_CalcDualWieldWithARState@SkillDesc@UI@D2Client@@YIXPAUD2UnitStrc@@PAUD2SkillStrc@@PAUD2SkillsTxt@@HPAH333@Z	sourcemap	sourcemap SkillDesc.cpp.map
 004e95c0	004e960b	D2Client::UI::SkillDesc::SKILLDESC_CalcDualWieldSimple	Source/D2Client/UI/SkillDesc	?SKILLDESC_CalcDualWieldSimple@SkillDesc@UI@D2Client@@YIXPAUD2UnitStrc@@PAUD2SkillStrc@@PAUD2SkillsTxt@@HPAH333@Z	sourcemap	sourcemap SkillDesc.cpp.map
 004e9610	004e9656	D2Client::UI::SkillDesc::SKILLDESC_DrawDamageWithRange	Source/D2Client/UI/SkillDesc	?SKILLDESC_DrawDamageWithRange@SkillDesc@UI@D2Client@@YIXPAUD2UnitStrc@@PAH11HHPAUD2SkillStrc@@I0@Z	sourcemap	sourcemap SkillDesc.cpp.map
-004e9660	004e96d1	D2Client::UI::SkillDesc::SKILLDESC_DrawElemDamageWithRange	Source/D2Client/UI/SkillDesc	?SKILLDESC_DrawElemDamageWithRange@SkillDesc@UI@D2Client@@YGXPAUD2UnitStrc@@PAH110PAUD2SkillStrc@@H@Z	sourcemap	sourcemap SkillDesc.cpp.map
+004e9660	004e96d1	D2Client::UI::SkillDesc::SKILLDESC_DrawElemDamageWithRange	Source/D2Client/UI/SkillDesc	?SKILLDESC_DrawElemDamageWithRange@SkillDesc@UI@D2Client@@YGXPAUD2UnitStrc@@PAH11PAUD2SkillStrc@@0H@Z	sourcemap	sourcemap SkillDesc.cpp.map
 004e96e0	004e9870	D2Client::UI::SkillDesc::SKILLDESC_DrawDamageNumbers	Source/D2Client/UI/SkillDesc	?SKILLDESC_DrawDamageNumbers@SkillDesc@UI@D2Client@@YGXHHHHHH@Z	sourcemap	sourcemap SkillDesc.cpp.map
 004e9870	004e9935	D2Client::UI::SkillDesc::SKILLDESC_DrawTwoLineText	Source/D2Client/UI/SkillDesc	?SKILLDESC_DrawTwoLineText@SkillDesc@UI@D2Client@@YIXPAG0HHHHH@Z	sourcemap	sourcemap SkillDesc.cpp.map
 004e9940	004e99ea	D2Client::UI::SkillDesc::SKILLDESC_DrawSingleNumber	Source/D2Client/UI/SkillDesc	?SKILLDESC_DrawSingleNumber@SkillDesc@UI@D2Client@@YGXHHHHH@Z	sourcemap	sourcemap SkillDesc.cpp.map
@@ -5583,7 +5583,7 @@ start	end	name	tu	symbol	method	detail
 004ec540	004ec61f	D2Client::UI::SkillDesc::SKILLDESC_FormatMissileDamage	Source/D2Client/UI/SkillDesc	?SKILLDESC_FormatMissileDamage@SkillDesc@UI@D2Client@@YGHHHGPAG@Z	sourcemap	sourcemap SkillDesc.cpp.map
 004ec620	004ec6e8	D2Client::UI::SkillDesc::SKILLDESC_DescLine16_MissileDamage	Source/D2Client/UI/SkillDesc	?SKILLDESC_DescLine16_MissileDamage@SkillDesc@UI@D2Client@@YGXPAUD2UnitStrc@@PAUD2SkillsTxt@@HHPAG@Z	sourcemap	sourcemap SkillDesc.cpp.map
 004ec6f0	004ec732	D2Client::UI::SkillDesc::SKILLDESC_DescLine1B_AppendDamage	Source/D2Client/UI/SkillDesc	?SKILLDESC_DescLine1B_AppendDamage@SkillDesc@UI@D2Client@@YGXPAUD2UnitStrc@@HHPAG@Z	sourcemap	sourcemap SkillDesc.cpp.map
-004ec740	004ec7d8	D2Client::UI::SkillDesc::SKILLDESC_DescLine1A_SkillDamage	Source/D2Client/UI/SkillDesc	?SKILLDESC_DescLine1A_SkillDamage@SkillDesc@UI@D2Client@@YGXPAGPAUD2SkillsTxt@@HHPAUD2UnitStrc@@@Z	sourcemap	sourcemap SkillDesc.cpp.map
+004ec740	004ec7d8	D2Client::UI::SkillDesc::SKILLDESC_DescLine1A_SkillDamage	Source/D2Client/UI/SkillDesc	?SKILLDESC_DescLine1A_SkillDamage@SkillDesc@UI@D2Client@@YGXPAGPAUD2SkillsTxt@@PAUD2UnitStrc@@HH@Z	sourcemap	sourcemap SkillDesc.cpp.map
 004ec7e0	004ec8f7	D2Client::UI::SkillDesc::SKILLDESC_DescLine3F_SignedPctRange	Source/D2Client/UI/SkillDesc	?SKILLDESC_DescLine3F_SignedPctRange@SkillDesc@UI@D2Client@@YGHHGHHGPAG@Z	sourcemap	sourcemap SkillDesc.cpp.map
 004ec900	004ec9f7	D2Client::UI::SkillDesc::SKILLDESC_DescLine2A_DecimalRange	Source/D2Client/UI/SkillDesc	?SKILLDESC_DescLine2A_DecimalRange@SkillDesc@UI@D2Client@@YGHHGHHGPAGH@Z	sourcemap	sourcemap SkillDesc.cpp.map
 004eca00	004ecb0c	D2Client::UI::SkillDesc::SKILLDESC_DescLine40_DecimalLabel	Source/D2Client/UI/SkillDesc	?SKILLDESC_DescLine40_DecimalLabel@SkillDesc@UI@D2Client@@YGHGHHGPAGH@Z	sourcemap	sourcemap SkillDesc.cpp.map
@@ -5992,8 +5992,8 @@ start	end	name	tu	symbol	method	detail
 004fe350	004fe3a9	D2Win::Src::D2WinEditBox::Mouse	Source/D2Win/Src/D2WinEditBox	?Mouse@D2WinEditBox@Src@D2Win@@YGHPAUD2ControlMsg@@@Z	sourcemap	sourcemap D2WinEditBox.cpp.map
 004fe3b0	004fe708	D2Win::Src::D2WinEditBox::D2WINEDITBOX_PlaceCaretAtPoint	Source/D2Win/Src/D2WinEditBox	?D2WINEDITBOX_PlaceCaretAtPoint@D2WinEditBox@Src@D2Win@@YGHPAUD2ControlMsg@@HH@Z	sourcemap	sourcemap D2WinEditBox.cpp.map
 004fe710	004fe770	D2Win::Src::D2WinEditBox::Push	Source/D2Win/Src/D2WinEditBox	?Push@D2WinEditBox@Src@D2Win@@YGHPAUD2ControlMsg@@@Z	sourcemap	sourcemap D2WinEditBox.cpp.map
-004fe770	004fe78f	D2Win::Src::D2WinEditBox::D2WINEDITBOX_FilterDigitChar	Source/D2Win/Src/D2WinEditBox	?D2WINEDITBOX_FilterDigitChar@D2WinEditBox@Src@D2Win@@YGHIIPAD@Z	sourcemap	sourcemap D2WinEditBox.cpp.map
-004fe790	004fe7b7	D2Win::Src::D2WinEditBox::D2WINEDITBOX_FilterLetterChar	Source/D2Win/Src/D2WinEditBox	?D2WINEDITBOX_FilterLetterChar@D2WinEditBox@Src@D2Win@@YGIIIPAD@Z	sourcemap	sourcemap D2WinEditBox.cpp.map
+004fe770	004fe78f	D2Win::Src::D2WinEditBox::D2WINEDITBOX_FilterDigitChar	Source/D2Win/Src/D2WinEditBox	?D2WINEDITBOX_FilterDigitChar@D2WinEditBox@Src@D2Win@@YGHPAU1@HPAD@Z	sourcemap	sourcemap D2WinEditBox.cpp.map
+004fe790	004fe7b7	D2Win::Src::D2WinEditBox::D2WINEDITBOX_FilterLetterChar	Source/D2Win/Src/D2WinEditBox	?D2WINEDITBOX_FilterLetterChar@D2WinEditBox@Src@D2Win@@YGHPAU1@HPAD@Z	sourcemap	sourcemap D2WinEditBox.cpp.map
 004fe7c0	004fe9e4	D2Win::Src::D2WinEditBox::D2WINEDITBOX_UpdateCursorPosition	Source/D2Win/Src/D2WinEditBox	?D2WINEDITBOX_UpdateCursorPosition@D2WinEditBox@Src@D2Win@@YAXPAU1@@Z	sourcemap	sourcemap D2WinEditBox.cpp.map
 004fe9f0	004fead5	D2Win::Src::D2WinEditBox::D2WINEDITBOX_HandleDelete	Source/D2Win/Src/D2WinEditBox	?D2WINEDITBOX_HandleDelete@D2WinEditBox@Src@D2Win@@YAXPAU1@@Z	sourcemap	sourcemap D2WinEditBox.cpp.map
 004feae0	004ff050	D2Win::Src::D2WinEditBox::D2WINEDITBOX_HandleKeyPress	Source/D2Win/Src/D2WinEditBox	?D2WINEDITBOX_HandleKeyPress@D2WinEditBox@Src@D2Win@@YIHPAU1@E@Z	sourcemap	sourcemap D2WinEditBox.cpp.map
@@ -6585,8 +6585,8 @@ start	end	name	tu	symbol	method	detail
 005193c0	005193df	Bnclient::Cache::CACHE_FreeMem	Source/Bnclient/Cache	?CACHE_FreeMem@Cache@Bnclient@@YIHPAXI@Z	sourcemap	sourcemap Cache.cpp.map
 005193e0	005198b3	Bnclient::Cache::CACHE_Open	Source/Bnclient/Cache	?CACHE_Open@Cache@Bnclient@@YGHXZ	sourcemap	sourcemap Cache.cpp.map
 005198c0	00519916	Bnclient::Cache::CACHE_Rebuild	Source/Bnclient/Cache	?CACHE_Rebuild@Cache@Bnclient@@YGXXZ	sourcemap	sourcemap Cache.cpp.map
-00519920	00519da2	Bnclient::Cache::CACHE_ReadData	Source/Bnclient/Cache	?CACHE_ReadData@Cache@Bnclient@@YIHPADPAIPAPAIPAK@Z	sourcemap	sourcemap Cache.cpp.map
-00519db0	0051a46d	Bnclient::Cache::CACHE_WriteData	Source/Bnclient/Cache	?CACHE_WriteData@Cache@Bnclient@@YIHPADPBXIPAIIH@Z	sourcemap	sourcemap Cache.cpp.map
+00519920	00519da2	Bnclient::Cache::CACHE_ReadData	Source/Bnclient/Cache	?CACHE_ReadData@Cache@Bnclient@@YIHPADPAU_FILETIME@@PAPAIPAK@Z	sourcemap	sourcemap Cache.cpp.map
+00519db0	0051a46d	Bnclient::Cache::CACHE_WriteData	Source/Bnclient/Cache	?CACHE_WriteData@Cache@Bnclient@@YIHPADPBXIPAU_FILETIME@@IH@Z	sourcemap	sourcemap Cache.cpp.map
 0051a470	0051a47a	Bnclient::Debug::DEBUG_GetTime32	Source/Bnclient/Debug	?DEBUG_GetTime32@Debug@Bnclient@@YGJPAJ@Z	sourcemap	sourcemap Debug.cpp.map
 0051a480	0051a481	Bnclient::Debug::DEBUG_Trace	Source/Bnclient/Debug	?DEBUG_Trace@Debug@Bnclient@@YAXPADZZ	sourcemap	sourcemap Debug.cpp.map
 0051a490	0051a53d	Bnclient::BnSend::NET_SID_CLIENT_Send_0x1E_ClientId2	Source/Bnclient/BnSend	?NET_SID_CLIENT_Send_0x1E_ClientId2@BnSend@Bnclient@@YGHXZ	sourcemap	sourcemap BnSend.cpp.map
@@ -10362,7 +10362,7 @@ start	end	name	tu	symbol	method	detail
 005c33d0	005c33f5	D2Game::SKILLS::SkillNec::Unreferenced_005c33d0	Source/D2Game/Skills/SkillNec	?Unreferenced_005c33d0@SkillNec@SKILLS@D2Game@@YIHH@Z	sourcemap	sourcemap SkillNec.cpp.map
 005c3400	005c3414	D2Game::SKILLS::SkillNec::SKILLNEC_IsReviveOrRaiseSkeleton	Source/D2Game/Skills/SkillNec	?SKILLNEC_IsReviveOrRaiseSkeleton@SkillNec@SKILLS@D2Game@@YIII@Z	sourcemap	sourcemap SkillNec.cpp.map
 005c3420	005c34a3	D2Game::SKILLS::SkillNec::SKILLNEC_ValidateAttackableTarget	Source/D2Game/Skills/SkillNec	?SKILLNEC_ValidateAttackableTarget@SkillNec@SKILLS@D2Game@@YIIPAUSGAMEDATA@@PAUD2UnitStrc@@1@Z	sourcemap	sourcemap SkillNec.cpp.map
-005c34b0	005c3538	D2Game::SKILLS::SkillNec::SKILLNEC_AssignCurseAiBehavior	Source/D2Game/Skills/SkillNec	?SKILLNEC_AssignCurseAiBehavior@SkillNec@SKILLS@D2Game@@YIXPAUSGAMEDATA@@HPAUD2UnitStrc@@HH@Z	sourcemap	sourcemap SkillNec.cpp.map
+005c34b0	005c3538	D2Game::SKILLS::SkillNec::SKILLNEC_AssignCurseAiBehavior	Source/D2Game/Skills/SkillNec	?SKILLNEC_AssignCurseAiBehavior@SkillNec@SKILLS@D2Game@@YIXPAUSGAMEDATA@@PAUD2UnitStrc@@1HH@Z	sourcemap	sourcemap SkillNec.cpp.map
 005c3540	005c35ba	D2Game::SKILLS::SkillNec::SKILLNEC_ClampResistPenalty	Source/D2Game/Skills/SkillNec	?SKILLNEC_ClampResistPenalty@SkillNec@SKILLS@D2Game@@YIHPAUD2UnitStrc@@IH@Z	sourcemap	sourcemap SkillNec.cpp.map
 005c35c0	005c3795	D2Game::SKILLS::SkillNec::SKILLNEC_ApplyCurseToUnit	Source/D2Game/Skills/SkillNec	?SKILLNEC_ApplyCurseToUnit@SkillNec@SKILLS@D2Game@@YIHPAUD2UnitStrc@@PAUD2NecroSkillArgStrc@@@Z	sourcemap	sourcemap SkillNec.cpp.map
 005c37a0	005c37bd	D2Game::SKILLS::SkillNec::SKILLNEC_ApplyCurseDifficultyDivisor	Source/D2Game/Skills/SkillNec	?SKILLNEC_ApplyCurseDifficultyDivisor@SkillNec@SKILLS@D2Game@@YAHEH@Z	sourcemap	sourcemap SkillNec.cpp.map
@@ -11338,7 +11338,7 @@ start	end	name	tu	symbol	method	detail
 00604bf0	00604c1d	D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetTileDataPtr	Source/D2CMP/Dungeon/Dungeon	?TILEPROJECT_GetTileDataPtr@Dungeon@DUNGEON@D2CMP@@YGHPAUD2TileLibraryEntryStrc@@@Z	sourcemap	sourcemap Dungeon.cpp.map
 00604c20	00604c4d	D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetAnimatedTileDataPtr	Source/D2CMP/Dungeon/Dungeon	?TILEPROJECT_GetAnimatedTileDataPtr@Dungeon@DUNGEON@D2CMP@@YGHPAUD2TileLibraryEntryStrc@@@Z	sourcemap	sourcemap Dungeon.cpp.map
 00604c50	00604c7d	D2CMP::DUNGEON::Dungeon::GetSubIndex	Source/D2CMP/Dungeon/Dungeon	?GetSubIndex@Dungeon@DUNGEON@D2CMP@@YGHPAUD2TileLibraryEntryStrc@@@Z	sourcemap	sourcemap Dungeon.cpp.map
-00604c80	00604cac	D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetTileOrientationIndex	Source/D2CMP/Dungeon/Dungeon	?TILEPROJECT_GetTileOrientationIndex@Dungeon@DUNGEON@D2CMP@@YGIPAI@Z	sourcemap	sourcemap Dungeon.cpp.map
+00604c80	00604cac	D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetTileOrientationIndex	Source/D2CMP/Dungeon/Dungeon	?TILEPROJECT_GetTileOrientationIndex@Dungeon@DUNGEON@D2CMP@@YGHPAUD2TileLibraryEntryStrc@@@Z	sourcemap	sourcemap Dungeon.cpp.map
 00604cb0	00604ce0	D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetRoofHeightIndex	Source/D2CMP/Dungeon/Dungeon	?TILEPROJECT_GetRoofHeightIndex@Dungeon@DUNGEON@D2CMP@@YGHPAUD2TileLibraryEntryStrc@@@Z	sourcemap	sourcemap Dungeon.cpp.map
 00604ce0	00604d10	D2CMP::DUNGEON::Dungeon::TILE_GetTileFlags	Source/D2CMP/Dungeon/Dungeon	?TILE_GetTileFlags@Dungeon@DUNGEON@D2CMP@@YGPAEPAUD2TileLibraryEntryStrc@@@Z	sourcemap	sourcemap Dungeon.cpp.map
 00604d10	00604d40	D2CMP::TILEPROJECT_GetSoundIndexIndex	Source/D2CMP/D2CMPRoot	?TILEPROJECT_GetSoundIndexIndex@D2CMP@@YGHPAUD2TileLibraryEntryStrc@@@Z	sourcemap	sourcemap D2CMPRoot.cpp.map
@@ -11983,7 +11983,7 @@ start	end	name	tu	symbol	method	detail
 00622350	00622398	D2Common::Units::CheckObjectPortalFlag	Source/D2Common/Units/Units	?CheckObjectPortalFlag@Units@D2Common@@YGHPAUD2UnitStrc@@E@Z	sourcemap	sourcemap Units.cpp.map (bare name)
 006223a0	006223ea	D2Common::Units::GetOverlayHeight	Source/D2Common/Units/Units	?GetOverlayHeight@Units@D2Common@@YGHPAUD2UnitStrc@@@Z	sourcemap	sourcemap Units.cpp.map (bare name)
 006223f0	00622519	D2Common::Units::GetDefense	Source/D2Common/Units/Units	?GetDefense@Units@D2Common@@YGHPAUD2UnitStrc@@@Z	sourcemap	sourcemap Units.cpp.map (bare name)
-00622520	00622555	D2Common::Units::GetToHitFactorInline	Source/D2Common/Units/Units	?GetToHitFactorInline@Units@D2Common@@YAHPAUD2UnitStrc@@@Z	bracket	between 006223f0 and 00622560
+00622520	00622555	D2Common::Units::GetToHitFactorInline	Source/D2Common/Units/Units	?GetToHitFactorInline@Units@D2Common@@YAHPAUD2UnitStrc@@@Z	exact	identical code, 18 insns
 00622560	006225ed	D2Common::Units::GetAttackRate	Source/D2Common/Units/Units	?GetAttackRate@Units@D2Common@@YGHPAUD2UnitStrc@@@Z	sourcemap	sourcemap Units.cpp.map (bare name)
 006225f0	00622719	D2Common::Units::HasShield	Source/D2Common/Units/Units	?HasShield@Units@D2Common@@YIHPAUD2UnitStrc@@@Z	sourcemap	sourcemap Units.cpp.map (bare name)
 00622720	00622826	D2Common::Units::GetBlockRate	Source/D2Common/Units/Units	?GetBlockRate@Units@D2Common@@YGHPAUD2UnitStrc@@H@Z	sourcemap	sourcemap Units.cpp.map (bare name)

@@ -4,10 +4,10 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00401070	0040108d	Fog::_3rdparty::crashy::Constructor	3rdparty/crashy/Report	sourcemap	8	8	0	1.000	MATCH	1 refs unverified	29	0
 00401090	004010c9	Fog::_3rdparty::crashy::ScalarDeletingDestructor	3rdparty/crashy/Report	sourcemap	21	21	0	1.000	MATCH	1 refs unverified	57	0
 004010d0	004010f2	Fog::_3rdparty::crashy::Destructor	3rdparty/crashy/Report	sourcemap	12	12	0	1.000	MATCH	1 refs unverified	34	0
-00401100	004011ed	Fog::_3rdparty::crashy::Open	3rdparty/crashy/Report	sourcemap	92	98	0	0.526	OUR+6		126	35
-004011f0	0040120e	Fog::_3rdparty::crashy::Close	3rdparty/crashy/Report	sourcemap	12	12	0	1.000	MATCH		30	0
-00401210	00401219	Fog::_3rdparty::crashy::IsOpen	3rdparty/crashy/Report	sourcemap	4	4	0	1.000	MATCH		9	0
-00401220	00401375	Fog::_3rdparty::crashy::AddAttachment	3rdparty/crashy/Report	sourcemap	117	119	0	0.314	OUR+2		110	23
+00401100	004011ed	Fog::_3rdparty::crashy::Open	3rdparty/crashy/Report	sourcemap	92	97	0	0.508	OUR+5		118	39
+004011f0	0040120e	Fog::_3rdparty::crashy::Close	3rdparty/crashy/Report	sourcemap	12	15	0	0.741	OUR+3		28	2
+00401210	00401219	Fog::_3rdparty::crashy::IsOpen	3rdparty/crashy/Report	sourcemap	4	8	0	0.667	OUR+4		9	0
+00401220	00401375	Fog::_3rdparty::crashy::AddAttachment	3rdparty/crashy/Report	sourcemap	117	119	0	0.280	OUR+2		97	22
 00401380	0040139c	Fog::_3rdparty::crashy::Printf	3rdparty/crashy/Report	sourcemap	13	13	0	1.000	MATCH	1 refs unverified	28	0
 004013a0	004013b1	Fog::_3rdparty::crashy::isDebuggerPresent	3rdparty/crashy/crashyRoot	sourcemap	6	6	0	1.000	MATCH		17	0
 004013c0	004013cf	Fog::_3rdparty::crashy::SYSTEM_Win32TerminateProcess	3rdparty/crashy/crashyRoot	sourcemap	5	5	0	1.000	MATCH		15	0
@@ -56,7 +56,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00402ee0	00402fdf	Fog::Debug::EnumerateAndDumpAllFunctions	Source/Fog/Debug	sourcemap	71	35	0	0.434	OUR-36		73	33
 00402fe0	00403036	Fog::Debug::InitializeDebugInfoTable	Source/Fog/Debug	sourcemap	26	21	0	0.043	OUR-5		1	66
 00403040	00403067	Fog::File::CONTAINER_InitializeBuffer	Source/Fog/File	sourcemap	20	20	0	1.000	MATCH		39	0
-00403070	004030fe	Fog::Debug::CRASH_DumpThreadContext	Source/Fog/Debug	sourcemap	55	0	0	0.000	QUARANTINE	C2664 'vc8_tc::same' : cannot convert parameter 1 from 'int (__cdecl *)(CONTEXT *,DWORD,D2CrashFrameStrc *,uint32_t)' to 'int'	0	0
+00403070	004030fe	Fog::Debug::CRASH_DumpThreadContext	Source/Fog/Debug	sourcemap	55	55	0	1.000	MATCH		142	0
 00403100	004032e4	Fog::Debug::CRASH_FormatStackTrace	Source/Fog/Debug	sourcemap	140	137	0	0.332	OUR-3		99	207
 004032f0	00403a15	Fog::File::CRASH_DumpRegisters	Source/Fog/File	sourcemap	490	416	0	0.594	OUR-74		796	545
 00403a20	00403ab7	Fog::File::CRASH_EnumerateThreads	Source/Fog/File	sourcemap	61	61	0	1.000	MATCH	3 refs unverified	151	0
@@ -169,7 +169,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00407980	00407990	Fog::Src::ErrorManager::FILETOOLS_WriteOneStringToFile	Source/Fog/Src/ErrorManager	sourcemap	6	6	0	1.000	MATCH		16	0
 00407990	00407a11	Fog::Src::ErrorManager::GetParentProcessId	Source/Fog/Src/ErrorManager	sourcemap	46	46	0	1.000	MATCH	4 refs unverified	129	0
 00407a20	00407a71	Fog::Src::ErrorManager::GetModuleFileNameForProcess	Source/Fog/Src/ErrorManager	sourcemap	39	39	0	1.000	MATCH	1 refs unverified	81	0
-00407a80	00407dc6	Fog::Src::ErrorManager::WriteCrashReportProcessInfo	Source/Fog/Src/ErrorManager	sourcemap	264	264	0	1.000	MATCH	20 refs unverified	838	0
+00407a80	00407dc6	Fog::Src::ErrorManager::WriteCrashReportProcessInfo	Source/Fog/Src/ErrorManager	sourcemap	264	267	0	0.923	OUR+3		830	6
 00407dd0	00407dd3	Fog::Src::ErrorManager::Unreferenced_00407dd0	Source/Fog/Src/ErrorManager	sourcemap	2	2	0	1.000	MATCH		3	0
 00407de0	00407f1e	Fog::Src::ErrorManager::InitializeSystemInfo	Source/Fog/Src/ErrorManager	sourcemap	81	81	0	1.000	MATCH	13 refs unverified	318	0
 00407f20	00407f6d	Fog::Src::ErrorManager::EXIT_AtExit	Source/Fog/Src/ErrorManager	sourcemap	19	19	0	1.000	MATCH	4 refs unverified	77	0
@@ -191,8 +191,8 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00408220	0040829d	Fog::Src::ErrorManager::OutputDebugStringIfCapsLock	Source/Fog/Src/ErrorManager	sourcemap	40	40	0	1.000	MATCH	1 refs unverified	125	0
 004082a0	004082b8	Fog::Src::ErrorManager::FormatDebugOutputVariadic	Source/Fog/Src/ErrorManager	sourcemap	13	13	0	1.000	MATCH		24	0
 004082c0	004082d6	Fog::Src::ErrorManager::FormatDebugOutputLogOnly	Source/Fog/Src/ErrorManager	sourcemap	12	12	0	1.000	MATCH		22	0
-004082e0	00408658	Fog::Src::ErrorManager::DumpLog	Source/Fog/Src/ErrorManager	sourcemap	239	235	0	0.633	OUR-4		518	252
-00408660	004088bc	Fog::Src::ErrorManager::CRASH_FillupCrashTxt	Source/Fog/Src/ErrorManager	sourcemap	161	161	734	0.466	INSN_COUNT_MATCH	68 refs differ; 4 refs unverified	311	168
+004082e0	00408658	Fog::Src::ErrorManager::DumpLog	Source/Fog/Src/ErrorManager	sourcemap	239	239	1010	0.657	INSN_COUNT_MATCH	116 refs differ; 10 refs unverified	521	250
+00408660	004088bc	Fog::Src::ErrorManager::CRASH_FillupCrashTxt	Source/Fog/Src/ErrorManager	sourcemap	161	167	0	0.506	OUR+6		309	150
 004088c0	004088f8	Fog::Src::ErrorManager::CheckErrorDuringError	Source/Fog/Src/ErrorManager	sourcemap	19	19	0	0.947	MATCH	2 refs unverified	56	0
 00408900	00408a29	Fog::Src::ErrorManager::FOG_ErrorHandler	Source/Fog/Src/ErrorManager	sourcemap	86	86	0	0.988	MATCH	5 refs unverified	297	0
 00408a30	00408a5a	Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_AssertionFailure	Source/Fog/Src/ErrorManager	sourcemap	14	14	0	0.929	MATCH	1 refs unverified	42	0
@@ -212,7 +212,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 004095d0	004095d1	Fog::Src::ErrorManager::StubHook2_Unref_004095d0	Source/Fog/Src/ErrorManager	sourcemap	1	1	0	1.000	MATCH		1	0
 004095e0	004096fc	Fog::Memory::AllocatePoolBlock	Source/Fog/Memory	sourcemap	97	97	0	0.990	MATCH	2 refs unverified	284	0
 00409700	0040976e	Fog::Memory::FindOrCreateBlockWithFreeSlots	Source/Fog/Memory	sourcemap	47	49	0	0.583	OUR+2		70	34
-00409770	0040980e	Fog::Memory::POOL_AllocOverflowBlock	Source/Fog/Memory	sourcemap	54	48	0	0.706	OUR-6		114	9
+00409770	0040980e	Fog::Memory::POOL_AllocOverflowBlock	Source/Fog/Memory	sourcemap	54	54	0	0.981	MATCH	1 refs unverified	158	0
 00409810	004098a9	Fog::Memory::FreeTrackedAllocation	Source/Fog/Memory	sourcemap	59	54	0	0.478	OUR-5		62	30
 004098b0	004099be	Fog::Memory::ReallocTrackedAllocation	Source/Fog/Memory	sourcemap	96	96	253	0.594	INSN_COUNT_MATCH	13 refs differ; 1 refs unverified	148	84
 004099d0	00409a53	Fog::Memory::FindBlockContainingAddress	Source/Fog/Memory	sourcemap	56	54	0	0.800	OUR-2		107	7
@@ -440,7 +440,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 004121d0	00412237	Storm::Source::SMem::SMemShrinkBlock	Source/Storm/Source/SMem	sourcemap	42	42	18	0.810	INSN_COUNT_MATCH		80	12
 00412240	004122e1	Storm::Source::SMem::SMemDestroy	Source/Storm/Source/SMem	sourcemap	50	50	0	1.000	MATCH	5 refs unverified	161	0
 004122f0	004124a9	Storm::Source::SMem::SMemFindNextBlock	Source/Storm/Source/SMem	sourcemap	170	160	0	0.388	OUR-10		186	101
-004124b0	0041264a	Storm::Source::SMem::SMemFindNextHeap	Source/Storm/Source/SMem	sourcemap	138	131	0	0.476	OUR-7		211	125
+004124b0	0041264a	Storm::Source::SMem::SMemFindNextHeap	Source/Storm/Source/SMem	sourcemap	138	133	0	0.583	OUR-5		249	103
 00412650	00412703	Storm::Source::SMem::SMemFree	Source/Storm/Source/SMem	sourcemap	62	62	0	1.000	MATCH	4 refs unverified	179	0
 00412710	00412755	Storm::Source::SMem::SMemGetHeapByCaller	Source/Storm/Source/SMem	sourcemap	24	24	0	1.000	MATCH	2 refs unverified	69	0
 00412760	004127d9	Storm::Source::SMem::SMemGetHeapByPtr	Source/Storm/Source/SMem	sourcemap	45	45	0	1.000	MATCH	2 refs unverified	121	0
@@ -464,7 +464,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00413590	004135d0	Storm::Source::SSTR::SStrCmpI	Source/Storm/Source/SSTR	sourcemap	32	32	0	1.000	MATCH		64	0
 004135d0	00413731	Storm::Source::SSTR::SStrCopy	Source/Storm/Source/SSTR	sourcemap	136	146	0	0.404	OUR+10		147	115
 00413740	00413741	Fog::Src::LogManager::LOGMANAGER_UnwindDestructor_NoOp_Unref_00413740	Source/Fog/Src/LogManager	sourcemap	1	1	0	1.000	MATCH		1	0
-00413750	004137f2	Storm::Source::SSTR::SStrLen	Source/Storm/Source/SSTR	sourcemap	72	89	0	0.435	OUR+17		68	68
+00413750	004137f2	Storm::Source::SSTR::SStrLen	Source/Storm/Source/SSTR	sourcemap	72	72	0	1.000	MATCH	1 refs unverified	162	0
 00413800	004139f6	Storm::Source::SSTR::SStrPack	Source/Storm/Source/SSTR	sourcemap	186	195	0	0.226	OUR+9		110	117
 00413a00	00413a31	Storm::Source::SSTR::D2vsprintf	Source/Storm/Source/SSTR	sourcemap	21	21	0	1.000	MATCH		49	0
 00413a40	00413a76	Storm::Source::SSTR::SStrPrintf	Source/Storm/Source/SSTR	sourcemap	27	27	0	1.000	MATCH		54	0
@@ -475,7 +475,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00413ce0	00413db8	Storm::Source::SSTR::SStrHash	Source/Storm/Source/SSTR	sourcemap	79	79	0	1.000	MATCH	4 refs unverified	216	0
 00413dc0	00413f2f	Storm::Source::SSTR::SSTR_HashString64	Source/Storm/Source/SSTR	sourcemap	131	162	0	0.177	OUR+31		66	83
 00413f30	00414144	Storm::Source::SSTR::SSTR_bjhash	Source/Storm/Source/SSTR	sourcemap	189	189	0	1.000	MATCH		487	0
-00414150	004141d3	Storm::Source::SSTR::SStrHashHT	Source/Storm/Source/SSTR	sourcemap	44	47	0	0.418	OUR+3		58	26
+00414150	004141d3	Storm::Source::SSTR::SStrHashHT	Source/Storm/Source/SSTR	sourcemap	44	44	0	1.000	MATCH	1 refs unverified	124	0
 004141e0	004141f3	Storm::Source::SSTR::SStrUpper	Source/Storm/Source/SSTR	sourcemap	8	8	0	1.000	MATCH		19	0
 00414200	00414213	Storm::Source::SSTR::SStrLower	Source/Storm/Source/SSTR	sourcemap	8	8	0	1.000	MATCH		19	0
 00414220	00414252	Storm::Source::SSTR::_Pow_int	Source/Storm/Source/SSTR	sourcemap	25	25	0	1.000	MATCH		50	0
@@ -544,7 +544,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 004164a0	004164af	Storm::Source::SFile::SFileSetAsyncBudget	Source/Storm/Source/SFile	sourcemap	6	6	0	1.000	MATCH	1 refs unverified	15	0
 004164b0	0041656a	Storm::Source::SFile::SFileSetBasePath	Source/Storm/Source/SFile	sourcemap	63	63	0	1.000	MATCH	5 refs unverified	186	0
 00416570	00416598	Storm::Source::SFile::SFileSetDataChunkSize	Source/Storm/Source/SFile	sourcemap	17	17	0	1.000	MATCH	1 refs unverified	40	0
-004165a0	004166a6	Storm::Source::SFile::SFileSetFilePointer	Source/Storm/Source/SFile	sourcemap	88	82	0	0.612	OUR-6		178	40
+004165a0	004166a6	Storm::Source::SFile::SFileSetFilePointer	Source/Storm/Source/SFile	sourcemap	88	88	0	1.000	MATCH	4 refs unverified	262	0
 004166b0	004166cd	Storm::Source::SFile::SFileSetIoErrorMode	Source/Storm/Source/SFile	sourcemap	9	9	0	1.000	MATCH	2 refs unverified	29	0
 004166d0	004166e1	Storm::Source::SFile::SFileSetLocale	Source/Storm/Source/SFile	sourcemap	6	6	0	1.000	MATCH	1 refs unverified	17	0
 004166f0	004166f7	D2MCPClient::McpConnect::SFILE_GetSearchLocale	Source/D2MCPClient/Src/McpConnect	sourcemap	2	2	0	1.000	MATCH	1 refs unverified	7	0
@@ -700,7 +700,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00419980	0041999c	Storm::Source::SFile::SFileOpenFile	Source/Storm/Source/SFile	sourcemap	12	12	0	1.000	MATCH		28	0
 004199a0	00419a4c	Storm::Source::SFile::AUDIOSTREAM_Destructor	Source/Storm/Source/SFile	sourcemap	63	62	0	0.560	OUR-1		106	25
 00419a50	00419a7b	Storm::Source::SFile::SFILE_DeleteAudioStream	Source/Storm/Source/SFile	sourcemap	18	18	0	1.000	MATCH		43	0
-00419a80	00419b85	Storm::Source::SFile::SFileCloseArchive	Source/Storm/Source/SFile	sourcemap	83	87	0	0.694	OUR+4		213	43
+00419a80	00419b85	Storm::Source::SFile::SFileCloseArchive	Source/Storm/Source/SFile	sourcemap	83	83	0	1.000	MATCH	4 refs unverified	261	0
 00419b90	00419bd0	Storm::Source::SFile::SFILE_AudioStreamListDeleteNode	Source/Storm/Source/SFile	sourcemap	28	28	0	0.964	MATCH	1 refs unverified	64	0
 00419bd0	00419bf1	Storm::Source::SFile::SFILE_ReleaseAudioStream	Source/Storm/Source/SFile	sourcemap	12	12	0	1.000	MATCH		33	0
 00419c00	00419f2d	Storm::Source::SFile::SFILE_CheckAudioStreams	Source/Storm/Source/SFile	sourcemap	284	283	0	0.367	OUR-1		303	354
@@ -785,9 +785,9 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 0041cfb0	0041d00a	Storm::Source::SErr::SErrDisplayErrorFmt	Source/Storm/Source/SErr	sourcemap	35	35	0	1.000	MATCH	1 refs unverified	90	0
 0041d010	0041d110	Storm::Source::SErr::SErrReportNamedResourceLeak	Source/Storm/Source/SErr	sourcemap	76	76	0	1.000	MATCH	6 refs unverified	256	0
 0041d110	0041d154	Storm::Source::SErr::SErrUnregisterHandler	Source/Storm/Source/SErr	sourcemap	26	26	0	1.000	MATCH	2 refs unverified	68	0
-0041d160	0041d1e0	Storm::Source::SErr::SErrDisplayAppFatal	Source/Storm/Source/SErr	sourcemap	39	43	0	0.634	OUR+4		83	25
+0041d160	0041d1e0	Storm::Source::SErr::SErrDisplayAppFatal	Source/Storm/Source/SErr	sourcemap	39	39	0	1.000	MATCH	5 refs unverified	128	0
 0041d1e0	0041d1f2	Storm::Source::SErr::SErrReportResourceLeak	Source/Storm/Source/SErr	sourcemap	8	8	0	1.000	MATCH		18	0
-0041d200	0041d294	Storm::Source::SMem::SMemCmp	Source/Storm/Source/SMem	sourcemap	63	54	0	0.308	OUR-9		31	16
+0041d200	0041d294	Storm::Source::SMem::SMemCmp	Source/Storm/Source/SMem	sourcemap	63	63	0	1.000	MATCH		148	0
 0041d2a0	0041d2bb	Storm::Source::SMem::SMemCopy	Source/Storm/Source/SMem	sourcemap	12	12	0	1.000	MATCH	1 refs unverified	27	0
 0041d2c0	0041d2dc	Storm::Source::SMem::SMemFill	Source/Storm/Source/SMem	sourcemap	12	12	0	1.000	MATCH		28	0
 0041d2e0	0041d2fb	Storm::Source::SMem::SMemMove	Source/Storm/Source/SMem	sourcemap	12	12	0	1.000	MATCH	1 refs unverified	27	0
@@ -872,7 +872,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 0041f510	0041f69d	Storm::Source::SComp::COMPRESS_EncodeSymbol	Source/Storm/Source/SComp	sourcemap	141	140	0	0.505	OUR-1		238	109
 0041f6a0	0041f73a	Storm::Source::SComp::COMPRESS_DestroyEncoderContext	Source/Storm/Source/SComp	sourcemap	54	52	0	0.509	OUR-2		84	58
 0041f740	0041f84c	Storm::Source::SComp::HUFFMAN_DecompressBlock	Source/Storm/Source/SComp	sourcemap	104	91	0	0.605	OUR-13		153	67
-0041f850	0041f915	Storm::Source::SComp::COMPRESS_EncodeBuffer	Source/Storm/Source/SComp	sourcemap	71	94	0	0.558	OUR+23		127	51
+0041f850	0041f915	Storm::Source::SComp::COMPRESS_EncodeBuffer	Source/Storm/Source/SComp	sourcemap	71	71	0	1.000	MATCH		197	0
 0041f920	0041f92c	Storm::Source::SComp::HUFFMAN_Constructor	Source/Storm/Source/SComp	sourcemap	6	6	0	1.000	MATCH		12	0
 0041f930	0041f935	D2Launch::MainMenus::FORMS_DestroyEncoderContext_Thunk_Unref_0041f930	Source/D2Launch/Src/MainMenus	sourcemap	1	1	0	1.000	MATCH		5	0
 0041f940	0041f945	D2Launch::MainMenus::FORMS_DestroyEncoderContext_Thunk_Unref_0041f940	Source/D2Launch/Src/MainMenus	sourcemap	1	1	0	1.000	MATCH		5	0
@@ -1336,7 +1336,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 004309b0	004309bb	D2Launch::MainMenus::LAUNCHER_SetExitAppModeResult	Source/D2Launch/Src/MainMenus	sourcemap	2	2	0	1.000	MATCH	1 refs unverified	11	0
 004309c0	00430a1a	D2Launch::MainMenus::MAINMENU_AddRealmToList	Source/D2Launch/Src/MainMenus	sourcemap	30	30	0	0.967	MATCH	3 refs unverified	90	0
 00430a20	00430af2	D2Launch::MainMenus::MAINMENU_FreeRealmList	Source/D2Launch/Src/MainMenus	sourcemap	55	55	0	0.982	MATCH	8 refs unverified	210	0
-00430b00	00430b38	D2Launch::MainMenus::MAINMENU_CompareRealmNames	Source/D2Launch/Src/MainMenus	sourcemap	27	50	0	0.208	OUR+23		12	34
+00430b00	00430b38	D2Launch::MainMenus::MAINMENU_CompareRealmNames	Source/D2Launch/Src/MainMenus	sourcemap	27	27	0	1.000	MATCH		56	0
 00430b40	00430b46	D2Launch::MainMenus::MAINMENU_GetRealmCount	Source/D2Launch/Src/MainMenus	sourcemap	2	2	0	1.000	MATCH	1 refs unverified	6	0
 00430b50	00430b7e	D2Launch::MainMenus::MAINMENU_GetRealmName	Source/D2Launch/Src/MainMenus	sourcemap	14	14	0	0.929	MATCH	2 refs unverified	46	0
 00430b80	00430baf	D2Launch::MainMenus::MAINMENU_GetRealmDescription	Source/D2Launch/Src/MainMenus	sourcemap	14	14	0	0.929	MATCH	2 refs unverified	47	0
@@ -1546,7 +1546,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 0043a800	0043a94b	D2Launch::CharSel::UIMENU_ChangeHavingMultipleRealmsAsia123	Source/D2Launch/Src/CharSel	sourcemap	90	90	0	1.000	MATCH	14 refs unverified	331	0
 0043a950	0043a99f	D2Launch::CharSel::ChangeClosedRealmChoice	Source/D2Launch/Src/CharSel	sourcemap	16	16	0	1.000	MATCH	5 refs unverified	79	0
 0043a9a0	0043a9c1	D2Launch::CharSel::CHARSEL_OpenRealmChangeDialog	Source/D2Launch/Src/CharSel	sourcemap	7	7	0	1.000	MATCH	2 refs unverified	33	0
-0043a9d0	0043aaa1	D2Launch::CharSel::CHARSEL_HandleCharListClick	Source/D2Launch/Src/CharSel	sourcemap	66	70	0	0.603	OUR+4		120	47
+0043a9d0	0043aaa1	D2Launch::CharSel::CHARSEL_HandleCharListClick	Source/D2Launch/Src/CharSel	sourcemap	66	66	0	1.000	MATCH	13 refs unverified	209	0
 0043aab0	0043abf8	D2Launch::CharSel::CHARSEL_ParseRealmCharList	Source/D2Launch/Src/CharSel	sourcemap	112	114	0	0.584	OUR+2		207	47
 0043ac00	0043ad01	D2Launch::CharSel::CHARSEL_OnPressPumpRealmCharListLoad	Source/D2Launch/Src/CharSel	sourcemap	64	64	0	1.000	MATCH	12 refs unverified	257	0
 0043ad10	0043adab	D2Launch::CharSel::CHARSEL_RequestRealmCharList	Source/D2Launch/Src/CharSel	sourcemap	48	48	0	0.979	MATCH	7 refs unverified	155	0
@@ -1579,7 +1579,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 0043c6b0	0043c74c	D2Launch::Launcher::LAUNCHER_WriteSaveFileToD2s	Source/D2Launch/Launcher	sourcemap	49	49	0	1.000	MATCH	3 refs unverified	156	0
 0043c750	0043c892	D2Launch::Launcher::LAUNCHER_DeleteCharacterFiles	Source/D2Launch/Launcher	sourcemap	100	100	0	0.990	MATCH	1 refs unverified	322	0
 0043c8a0	0043ca91	D2Launch::Launcher::LAUNCHER_LoadCharacterAppearanceFromD2s	Source/D2Launch/Launcher	sourcemap	148	147	0	0.515	OUR-1		253	170
-0043caa0	0043cbd4	D2Launch::Launcher::UpdateSaveFileToExpansion	Source/D2Launch/Launcher	sourcemap	101	93	0	0.732	OUR-8		253	20
+0043caa0	0043cbd4	D2Launch::Launcher::UpdateSaveFileToExpansion	Source/D2Launch/Launcher	sourcemap	101	101	0	1.000	MATCH		308	0
 0043cbe0	0043cbec	D2Multi::ChatDlg::AppModeMultiplayerInit	Source/D2Multi/Src/ChatDlg	sourcemap	3	3	0	0.667	MATCH	2 refs unverified	12	0
 0043cbf0	0043cbf1	D2Multi::ChatDlg::AppModeMultiplayerShutdown	Source/D2Multi/Src/ChatDlg	sourcemap	1	1	0	1.000	MATCH		1	0
 0043cc00	0043cc1d	D2Multi::ChatDlg::LAUNCHER_StringManipUtility	Source/D2Multi/Src/ChatDlg	sourcemap	12	12	0	1.000	MATCH		29	0
@@ -1796,7 +1796,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00446d90	004471a2	D2Multi::ComCallback::COMCALLBACK_CreateChannelUser	Source/D2Multi/Src/ComCallback	sourcemap	319	307	0	0.355	OUR-12		408	417
 004471b0	0044738e	D2Multi::ComCallback::COMCALLBACK_FormatChannelUserData	Source/D2Multi/Src/ComCallback	sourcemap	149	149	0	1.000	MATCH	1 refs unverified	478	0
 004473f0	004473f6	D2MCPClient::McpConnect::NET_MCP_CLIENT_IncomingReturn_Unref_004473f0	Source/D2MCPClient/Src/McpConnect	sourcemap	2	2	0	1.000	MATCH		6	0
-00447400	00447556	D2Multi::ComCallback::COMCALLBACK_AddOrUpdateChannelUser	Source/D2Multi/Src/ComCallback	sourcemap	125	123	0	0.685	OUR-2		244	70
+00447400	00447556	D2Multi::ComCallback::COMCALLBACK_AddOrUpdateChannelUser	Source/D2Multi/Src/ComCallback	sourcemap	125	125	0	1.000	MATCH	8 refs unverified	339	0
 00447560	004476eb	D2Multi::ComCallback::COMCALLBACK_FormatChatMessage	Source/D2Multi/Src/ComCallback	sourcemap	151	151	0	0.993	MATCH	5 refs unverified	395	0
 004476f0	004476f6	D2MCPClient::McpConnect::NET_MCP_CLIENT_IncomingReturn_Unref_004476f0	Source/D2MCPClient/Src/McpConnect	sourcemap	2	2	0	1.000	MATCH		6	0
 00447700	00447725	D2Multi::ComCallback::COMCALLBACK_HandleGameListError	Source/D2Multi/Src/ComCallback	sourcemap	12	12	0	1.000	MATCH	1 refs unverified	37	0
@@ -1816,7 +1816,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00448150	004481a1	D2Multi::ComCallback::COMCALLBACK_AppendServerMessage	Source/D2Multi/Src/ComCallback	sourcemap	23	23	0	1.000	MATCH		81	0
 004481b0	004481e7	D2Multi::ComCallback::COMCALLBACK_AppendChatWithColor	Source/D2Multi/Src/ComCallback	sourcemap	18	18	0	1.000	MATCH		55	0
 004481f0	00448369	D2Multi::ComCallback::COMCALLBACK_BroadcastChatMessage	Source/D2Multi/Src/ComCallback	sourcemap	126	126	0	1.000	MATCH	2 refs unverified	377	0
-00448370	004484df	D2Multi::ComCallback::COMCALLBACK_HandleWhisperMessage	Source/D2Multi/Src/ComCallback	sourcemap	127	118	0	0.702	OUR-9		232	68
+00448370	004484df	D2Multi::ComCallback::COMCALLBACK_HandleWhisperMessage	Source/D2Multi/Src/ComCallback	sourcemap	127	127	0	1.000	MATCH	1 refs unverified	357	0
 004484e0	00448534	D2Multi::ComCallback::COMCALLBACK_AppendErrorMessage	Source/D2Multi/Src/ComCallback	sourcemap	23	23	0	1.000	MATCH		84	0
 00448540	00448594	D2Multi::ComCallback::COMCALLBACK_AppendInfoMessage	Source/D2Multi/Src/ComCallback	sourcemap	23	23	0	1.000	MATCH		84	0
 004485a0	0044860f	D2Multi::ComCallback::COMCALLBACK_HandleInfoRequest1	Source/D2Multi/Src/ComCallback	sourcemap	30	30	0	1.000	MATCH		111	0
@@ -1827,7 +1827,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00448920	00448a51	D2Multi::ComCallback::COMCALLBACK_HandleWhisperReply	Source/D2Multi/Src/ComCallback	sourcemap	102	106	0	0.760	OUR+4		225	44
 00448a60	00448ac6	D2Multi::ComCallback::COMCALLBACK_ValidateEmoteTarget	Source/D2Multi/Src/ComCallback	sourcemap	29	29	0	1.000	MATCH		102	0
 00448ad0	00448bcb	D2Multi::ComCallback::COMCALLBACK_ProcessEmoteCommand	Source/D2Multi/Src/ComCallback	sourcemap	77	77	0	1.000	MATCH		248	0
-00448bd0	00448c6d	D2Multi::ComCallback::COMCALLBACK_ScrollChannelUserList	Source/D2Multi/Src/ComCallback	sourcemap	53	61	0	0.404	OUR+8		72	51
+00448bd0	00448c6d	D2Multi::ComCallback::COMCALLBACK_ScrollChannelUserList	Source/D2Multi/Src/ComCallback	sourcemap	53	53	0	1.000	MATCH	9 refs unverified	157	0
 00448c70	00448e2c	D2Multi::ComCallback::COMCALLBACK_HandleUserListClick	Source/D2Multi/Src/ComCallback	sourcemap	145	141	0	0.587	OUR-4		272	60
 00448e30	00448f5b	D2Multi::ComCallback::COMCALLBACK_HandleGameListError1	Source/D2Multi/Src/ComCallback	sourcemap	87	87	0	0.989	MATCH	8 refs unverified	299	0
 00448f60	00449050	D2Multi::ComCallback::COMCALLBACK_HandleGameListError2	Source/D2Multi/Src/ComCallback	sourcemap	69	69	0	0.986	MATCH	7 refs unverified	240	0
@@ -1835,7 +1835,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00449330	0044934a	D2Multi::ComCallback::COMCALLBACK_AddChannelUser	Source/D2Multi/Src/ComCallback	sourcemap	11	11	0	1.000	MATCH		26	0
 00449350	004493b6	D2Multi::ComCallback::COMCALLBACK_OnChannelUserJoined	Source/D2Multi/Src/ComCallback	sourcemap	37	37	0	1.000	MATCH	1 refs unverified	102	0
 004493c0	004493db	D2Multi::ComCallback::COMCALLBACK_OnChannelUserJoinedCallback	Source/D2Multi/Src/ComCallback	sourcemap	11	11	0	1.000	MATCH		27	0
-004493e0	0044959e	D2Multi::ComCallback::COMCALLBACK_RemoveChannelUser	Source/D2Multi/Src/ComCallback	sourcemap	138	130	0	0.552	OUR-8		277	102
+004493e0	0044959e	D2Multi::ComCallback::COMCALLBACK_RemoveChannelUser	Source/D2Multi/Src/ComCallback	sourcemap	138	138	0	1.000	MATCH	7 refs unverified	446	0
 004495a0	0044968b	D2Multi::ComCallback::COMCALLBACK_ClearAllChannelUsers	Source/D2Multi/Src/ComCallback	sourcemap	67	67	0	1.000	MATCH	8 refs unverified	235	0
 00449690	004496a5	D2Multi::ComCallback::COMCALLBACK_HandleChannelUserLeave	Source/D2Multi/Src/ComCallback	sourcemap	8	8	0	1.000	MATCH		21	0
 004496b0	004497b6	D2Multi::ComCallback::COMCALLBACK_HandleJoinedChannel	Source/D2Multi/Src/ComCallback	sourcemap	74	74	0	1.000	MATCH	8 refs unverified	254	0
@@ -2485,7 +2485,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 0045bdd0	0045be25	D2Client::Archive::ARCHIVE_AllocNode	Source/D2Client/D2Hell/Src/Archive	sourcemap	34	34	0	0.971	MATCH	1 refs unverified	85	0
 0045be30	0045be81	D2Client::Archive::ARCHIVE_FreeNode	Source/D2Client/D2Hell/Src/Archive	sourcemap	32	32	0	1.000	MATCH		81	0
 0045be90	0045befa	D2Client::Archive::ARCHIVE_RemoveNode	Source/D2Client/D2Hell/Src/Archive	sourcemap	44	44	0	0.977	MATCH	1 refs unverified	106	0
-0045bf00	0045c2f8	D2Client::Archive::ARCHIVE_WriteMemoryCheckReport	Source/D2Client/D2Hell/Src/Archive	sourcemap	337	345	0	0.384	OUR+8		427	284
+0045bf00	0045c2f8	D2Client::Archive::ARCHIVE_WriteMemoryCheckReport	Source/D2Client/D2Hell/Src/Archive	sourcemap	337	345	0	0.384	OUR+8		427	278
 0045c300	0045c339	D2Client::Archive::ReadByteShortOrDword	Source/D2Client/D2Hell/Src/Archive	sourcemap	27	27	0	1.000	MATCH		57	0
 0045c340	0045c363	D2Client::Archive::ReadByteOrShort	Source/D2Client/D2Hell/Src/Archive	sourcemap	17	17	0	1.000	MATCH		35	0
 0045c370	0045c38c	D2Game::Archive::RollRandomSeed	Source/D2Game/Archive	sourcemap	14	14	0	1.000	MATCH		28	0
@@ -2527,7 +2527,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 0045cef0	0045cf36	D2Client::GAME::SCmd::NET_D2GS_CLIENT_RecvNpcStateToEntity	Source/D2Client/Game/SCmd	sourcemap	22	22	0	1.000	MATCH		70	0
 0045cf40	0045cfa8	D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x6B_UNITCHANGE_MONSTERXYPOSITION	Source/D2Client/Game/SCmd	sourcemap	36	36	0	1.000	MATCH		104	0
 0045cfb0	0045d010	D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x6C_UNITCHANGE_MONSTERIDPOSITION	Source/D2Client/Game/SCmd	sourcemap	34	34	0	1.000	MATCH		96	0
-0045d010	0045d09f	D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x6D_UNITCHANGE_MONSTERNEUTRAL	Source/D2Client/Game/SCmd	sourcemap	50	50	20	0.880	INSN_COUNT_MATCH		126	6
+0045d010	0045d09f	D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x6D_UNITCHANGE_MONSTERNEUTRAL	Source/D2Client/Game/SCmd	sourcemap	50	50	0	1.000	MATCH		143	0
 0045d0a0	0045d0a1	D2Client::GAME::SCmd::SCMD_Rcv0x6E_UnitIgnore	Source/D2Client/Game/SCmd	sourcemap	1	1	0	1.000	MATCH		1	0
 0045d0b0	0045d0b1	D2Client::GAME::SCmd::SCMD_Rcv0x6F_UnitIgnore	Source/D2Client/Game/SCmd	sourcemap	1	1	0	1.000	MATCH		1	0
 0045d0c0	0045d0c1	D2Client::GAME::SCmd::SCMD_Rcv0x70_UnitIgnore	Source/D2Client/Game/SCmd	sourcemap	1	1	0	1.000	MATCH		1	0
@@ -2554,11 +2554,11 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 0045d880	0045d8b2	D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x20	Source/D2Client/Game/SCmd	sourcemap	24	24	0	1.000	MATCH		50	0
 0045d8c0	0045d8fa	D2Client::GAME::SCmd::SCMD_DecodeRelativeCoordinates	Source/D2Client/Game/SCmd	sourcemap	19	19	0	1.000	MATCH		58	0
 0045d900	0045d9a6	D2Client::GAME::SCmd::DecodeIncoming0x18	Source/D2Client/Game/SCmd	sourcemap	61	61	0	1.000	MATCH		166	0
-0045d9b0	0045da88	D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x18_PLAYERCOMMONSTATCHANGE_BIG	Source/D2Client/Game/SCmd	sourcemap	81	82	0	0.920	OUR+1		204	7
+0045d9b0	0045da88	D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x18_PLAYERCOMMONSTATCHANGE_BIG	Source/D2Client/Game/SCmd	sourcemap	81	81	6	0.988	INSN_COUNT_MATCH		213	0
 0045da90	0045db1a	D2Client::GAME::SCmd::DecodeIncoming0x95	Source/D2Client/Game/SCmd	sourcemap	51	51	0	1.000	MATCH		138	0
-0045db20	0045dbda	D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x95_PLAYERCOMMONSTATCHANGE_MEDIUM	Source/D2Client/Game/SCmd	sourcemap	69	70	0	0.921	OUR+1		176	7
+0045db20	0045dbda	D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x95_PLAYERCOMMONSTATCHANGE_MEDIUM	Source/D2Client/Game/SCmd	sourcemap	69	69	6	0.986	INSN_COUNT_MATCH		183	0
 0045dbe0	0045dc4c	D2Client::GAME::SCmd::DecodeIncoming0x96	Source/D2Client/Game/SCmd	sourcemap	41	41	0	1.000	MATCH		108	0
-0045dc50	0045dcc3	D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x96_UpdateStaminaAndPosition	Source/D2Client/Game/SCmd	sourcemap	44	45	0	0.921	OUR+1		110	3
+0045dc50	0045dcc3	D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x96_UpdateStaminaAndPosition	Source/D2Client/Game/SCmd	sourcemap	44	44	0	1.000	MATCH		115	0
 0045dcd0	0045dd10	D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x21_SETSKILLLEVEL	Source/D2Client/Game/SCmd	sourcemap	25	25	0	1.000	MATCH		64	0
 0045dd10	0045dd56	D2Client::GAME::SCmd::NET_D2GS_CLIENT_RecvSkillTabBonusDelta	Source/D2Client/Game/SCmd	sourcemap	29	29	0	1.000	MATCH		70	0
 0045dd60	0045dda9	D2Client::GAME::SCmd::NET_D2GS_CLIENT_Incoming0x94_SETALLSKILLS	Source/D2Client/Game/SCmd	sourcemap	31	31	0	1.000	MATCH		73	0
@@ -2715,7 +2715,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00462ba0	00462c1d	D2Client::UNIT::Player::ClickMapRightSkill	Source/D2Client/Unit/Player	sourcemap	39	39	0	1.000	MATCH	1 refs unverified	125	0
 00462c20	00462c9d	D2Client::UNIT::Player::INPUT_HandleRightClickRepeat	Source/D2Client/Unit/Player	sourcemap	39	39	0	1.000	MATCH	1 refs unverified	125	0
 00462ca0	00462cf3	D2Client::UNIT::Player::INPUT_HandleRightClickWithPet	Source/D2Client/Unit/Player	sourcemap	32	32	0	1.000	MATCH		83	0
-00462d00	00462ed8	D2Client::UNIT::Player::ClickMap	Source/D2Client/Unit/Player	sourcemap	158	167	0	0.923	OUR+9		418	26
+00462d00	00462ed8	D2Client::UNIT::Player::ClickMap	Source/D2Client/Unit/Player	sourcemap	158	158	0	1.000	MATCH	2 refs unverified	445	0
 00462ee0	00462f56	D2Client::UNIT::Player::PLAYER_GetWeaponTypeForAnimation	Source/D2Client/Unit/Player	sourcemap	53	53	0	1.000	MATCH		118	0
 00462f60	004630d7	D2Client::UNIT::Player::PLAYER_HandlePlayerDeath	Source/D2Client/Unit/Player	sourcemap	134	134	0	0.993	MATCH	1 refs unverified	375	0
 004630e0	00463126	D2Client::UNIT::Player::PLAYER_GetAppearanceBytes	Source/D2Client/Unit/Player	sourcemap	34	26	0	0.533	OUR-8		35	24
@@ -2794,7 +2794,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00464d20	00464d8c	D2Client::UNIT::CUnit::CUNIT_IsItemInUnitInventory	Source/D2Client/Unit/CUnit	sourcemap	43	43	0	0.977	MATCH	1 refs unverified	108	0
 00464d90	00464e12	D2Client::UNIT::CUnit::CUNIT_IsItemInAnyInventory	Source/D2Client/Unit/CUnit	sourcemap	48	48	0	1.000	MATCH	2 refs unverified	130	0
 00464e50	00464eb6	D2Client::UNIT::CUnit::UnitDoOverlay	Source/D2Client/Unit/CUnit	sourcemap	46	46	0	1.000	MATCH		102	0
-00464ec0	00464f6f	D2Client::UNIT::CUnit::SKILL_IsTargetOwnedPet	Source/D2Client/Unit/CUnit	sourcemap	64	72	0	0.662	OUR+8		122	39
+00464ec0	00464f6f	D2Client::UNIT::CUnit::SKILL_IsTargetOwnedPet	Source/D2Client/Unit/CUnit	sourcemap	64	64	0	1.000	MATCH	2 refs unverified	175	0
 00464f70	00465063	D2Client::UNIT::CUnit::SKILL_IsTargetAlliedUnit	Source/D2Client/Unit/CUnit	sourcemap	83	83	0	1.000	MATCH	4 refs unverified	243	0
 00465070	004653f6	D2Client::UNIT::CUnit::CLIENT_SyncPathFromServer	Source/D2Client/Unit/CUnit	sourcemap	282	302	0	0.476	OUR+20		381	348
 00465400	00465413	D2Client::UNIT::CUnit::GetPlayerUnitPartyId	Source/D2Client/Unit/CUnit	sourcemap	7	7	0	1.000	MATCH		19	0
@@ -2810,7 +2810,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00465ee0	00465efa	D2Client::UNIT::CUnit::RemoveObjectFromServerObjectTable	Source/D2Client/Unit/CUnit	sourcemap	11	11	0	1.000	MATCH	1 refs unverified	26	0
 00465f00	00465f1a	D2Client::UNIT::CUnit::UNITS_RemoveFromClientHashTable	Source/D2Client/Unit/CUnit	sourcemap	11	11	0	1.000	MATCH	1 refs unverified	26	0
 00465f20	00465fc1	D2Client::UNIT::CUnit::FinalizeCreation	Source/D2Client/Unit/CUnit	sourcemap	57	57	43	0.877	INSN_COUNT_MATCH	4 refs differ; 2 refs unverified	151	0
-00465fd0	004661b8	D2Client::UNIT::CUnit::InitCommonData	Source/D2Client/Unit/CUnit	sourcemap	165	163	0	0.774	OUR-2		361	21
+00465fd0	004661b8	D2Client::UNIT::CUnit::InitCommonData	Source/D2Client/Unit/CUnit	sourcemap	165	165	0	0.994	MATCH	2 refs unverified	464	0
 004661c0	004661fc	D2Client::UNIT::CUnit::UNIT_CreateWarp	Source/D2Client/Unit/CUnit	sourcemap	33	33	0	1.000	MATCH		60	0
 00466200	004662ff	D2Client::UNIT::CUnit::UNIT_CreatePlayer	Source/D2Client/Unit/CUnit	sourcemap	93	93	0	1.000	MATCH	1 refs unverified	255	0
 00466300	00466360	D2Client::UNIT::CUnit::CreateObject	Source/D2Client/Unit/CUnit	sourcemap	47	47	0	1.000	MATCH		96	0
@@ -2854,7 +2854,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00468010	0046802c	D2Client::Cursor::CURSOR_SetCursorItem	Source/D2Client/Engine/Cursor	sourcemap	6	6	0	1.000	MATCH	4 refs unverified	28	0
 00468030	00468036	D2Client::Cursor::CURSOR_GetAnimationFrame	Source/D2Client/Engine/Cursor	sourcemap	2	2	0	1.000	MATCH	1 refs unverified	6	0
 00468040	0046806a	D2Client::Cursor::UI_SetCursorToSpecialIcon	Source/D2Client/Engine/Cursor	sourcemap	9	9	0	1.000	MATCH	4 refs unverified	42	0
-00468070	004680a0	D2Client::Cursor::ITEM_SetItemOnHand	Source/D2Client/Engine/Cursor	sourcemap	9	8	0	0.588	OUR-1		39	5
+00468070	004680a0	D2Client::Cursor::ITEM_SetItemOnHand	Source/D2Client/Engine/Cursor	sourcemap	9	9	0	1.000	MATCH	5 refs unverified	48	0
 004680a0	004680a6	D2Client::Cursor::GetCursorItem	Source/D2Client/Engine/Cursor	sourcemap	2	2	0	1.000	MATCH	1 refs unverified	6	0
 004680b0	0046816c	D2Client::Cursor::UI_InitializeCursor	Source/D2Client/Engine/Cursor	sourcemap	57	57	0	1.000	MATCH	15 refs unverified	188	0
 00468170	004681b1	D2Client::Cursor::UI_FreeCursor	Source/D2Client/Engine/Cursor	sourcemap	18	18	0	1.000	MATCH	4 refs unverified	65	0
@@ -3172,7 +3172,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00474550	00474601	D2Client::Draw::LightMap::ROOM_GetAmbientLightColor	Source/D2Client/Draw/dLightMap	sourcemap	69	69	0	1.000	MATCH	2 refs unverified	177	0
 00474610	00474785	D2Client::Draw::LightMap::LIGHTMAP_InitFromPlayerAndRooms	Source/D2Client/Draw/dLightMap	sourcemap	134	140	0	0.533	OUR+6		196	130
 00474790	004747b4	D2Client::Draw::LightMap::LIGHTMAP_ClearToBlack	Source/D2Client/Draw/dLightMap	sourcemap	14	14	13	0.857	INSN_COUNT_MATCH		32	0
-004747c0	004748c7	D2Client::Draw::LightMap::LIGHTMAP_AddLightToCell	Source/D2Client/Draw/dLightMap	sourcemap	81	82	0	0.896	OUR+1		246	14
+004747c0	004748c7	D2Client::Draw::LightMap::LIGHTMAP_AddLightToCell	Source/D2Client/Draw/dLightMap	sourcemap	81	81	0	1.000	MATCH	5 refs unverified	263	0
 004748d0	00474a2b	D2Client::Draw::LightMap::LIGHTMAP_ApplyPointLight	Source/D2Client/Draw/dLightMap	sourcemap	117	119	0	0.559	OUR+2		190	77
 00474a70	00474b4e	D2Client::Draw::LightMap::LIGHTMAP_SampleGridToBuffer	Source/D2Client/Draw/dLightMap	sourcemap	80	77	0	0.433	OUR-3		102	26
 00474b50	00474bfd	D2Client::Draw::LightMap::LIGHTMAP_ComputeInterpolationDir	Source/D2Client/Draw/dLightMap	sourcemap	60	60	0	1.000	MATCH	11 refs unverified	173	0
@@ -3189,11 +3189,11 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00475aa0	00475b1b	D2Client::GAME::View::DRAW_CoordIsInCoord	Source/D2Client/Game/View	sourcemap	40	40	0	1.000	MATCH	5 refs unverified	123	0
 00475b20	00475b3d	D2Client::GAME::View::DrawLight	Source/D2Client/Game/View	sourcemap	9	9	0	1.000	MATCH	3 refs unverified	29	0
 00475b40	00475b7c	D2Client::GAME::View::VIEW_Init	Source/D2Client/Game/View	sourcemap	15	15	0	0.933	MATCH	4 refs unverified	60	0
-00475b80	00475c21	D2Client::GAME::View::VIEW_AllocByteTable	Source/D2Client/Game/View	sourcemap	62	64	0	0.524	OUR+2		83	54
+00475b80	00475c21	D2Client::GAME::View::VIEW_AllocByteTable	Source/D2Client/Game/View	sourcemap	62	62	0	1.000	MATCH		161	0
 00475c30	00475c3a	D2Client::GAME::View::Unreferenced_00475c30	Source/D2Client/Game/View	sourcemap	4	4	0	1.000	MATCH		10	0
 00475c40	00475d1b	D2Client::GAME::View::VIEW_AllocPalettePointerTable	Source/D2Client/Game/View	sourcemap	76	77	0	0.627	OUR+1		111	66
 00475d20	00475d2a	D2Client::GAME::View::Unreferenced_00475d20	Source/D2Client/Game/View	sourcemap	4	4	0	1.000	MATCH		10	0
-00475d30	00475dde	D2Client::GAME::View::VIEW_AllocPalettePointerTable2	Source/D2Client/Game/View	sourcemap	66	68	0	0.597	OUR+2		106	50
+00475d30	00475dde	D2Client::GAME::View::VIEW_AllocPalettePointerTable2	Source/D2Client/Game/View	sourcemap	66	66	0	1.000	MATCH	1 refs unverified	174	0
 00475de0	00475dea	D2Client::GAME::View::Unreferenced_00475de0	Source/D2Client/Game/View	sourcemap	4	4	0	1.000	MATCH		10	0
 00475df0	00475ea9	D2Client::GAME::View::VIEW_InitLookupTables	Source/D2Client/Game/View	sourcemap	49	49	0	0.980	MATCH	12 refs unverified	185	0
 00475eb0	00475ee3	D2Client::GAME::View::VIEW_FreeDC6Images	Source/D2Client/Game/View	sourcemap	11	11	0	1.000	MATCH	4 refs unverified	51	0
@@ -3548,7 +3548,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00480490	0048049a	D2Client::UNIT::Path::thunk_PATH_SnapPositionToTile	Source/D2Client/Unit/Path	sourcemap	4	4	0	1.000	MATCH		10	0
 004804a0	004804cf	D2Client::UNIT::Path::PATH_SetTargetAndCalculate	Source/D2Client/Unit/Path	sourcemap	22	22	0	1.000	MATCH		47	0
 004804d0	004804dc	D2Client::UNIT::Path::Unreferenced_004804d0	Source/D2Client/Unit/Path	sourcemap	4	4	0	1.000	MATCH		12	0
-004804e0	00480771	D2Client::UNIT::Path::PATH_MoveUnitToPoint	Source/D2Client/Unit/Path	sourcemap	216	210	0	0.441	OUR-6		260	226
+004804e0	00480771	D2Client::UNIT::Path::PATH_MoveUnitToPoint	Source/D2Client/Unit/Path	sourcemap	216	204	0	0.500	OUR-12		278	255
 00480780	004807b9	D2Client::UNIT::Path::PATH_SetTargetUnitAndCalculate	Source/D2Client/Unit/Path	sourcemap	30	30	0	1.000	MATCH		57	0
 004807c0	00480803	D2Client::UNIT::Path::PATH_StepAndCreateTrailEffects	Source/D2Client/Unit/Path	sourcemap	26	26	0	1.000	MATCH		67	0
 00480810	00480930	D2Client::UNIT::Path::CLIENT_UpdateUnitFrame	Source/D2Client/Unit/Path	sourcemap	92	92	0	1.000	MATCH		268	0
@@ -3675,7 +3675,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00487000	0048722a	D2Client::UI::Inv::INV_UpdateItemUnderCursor	Source/D2Client/UI/Inv	sourcemap	197	190	0	0.553	OUR-7		301	145
 00487230	00487391	D2Client::UI::Inv::INV_UpdateBodySlotUnderCursor	Source/D2Client/UI/Inv	sourcemap	122	122	0	1.000	MATCH	22 refs unverified	353	0
 004873a0	0048773d	D2Client::UI::Inv::INV_HandleMouseMove	Source/D2Client/UI/Inv	sourcemap	290	262	0	0.616	OUR-28		547	111
-00487740	00487981	D2Client::UI::Inv::ClickItemRight	Source/D2Client/UI/Inv	sourcemap	200	200	2	0.990	INSN_MATCH	14 refs unverified	573	4
+00487740	00487981	D2Client::UI::Inv::ClickItemRight	Source/D2Client/UI/Inv	sourcemap	200	200	0	1.000	MATCH	14 refs unverified	577	0
 00487990	004879c8	D2Client::UI::Inv::INV_ResetHoverAndContextState	Source/D2Client/UI/Inv	sourcemap	13	13	0	1.000	MATCH	10 refs unverified	56	0
 004879d0	00487a10	D2Client::UI::Inv::INV_ClearItemDescription	Source/D2Client/UI/Inv	sourcemap	15	15	0	1.000	MATCH	11 refs unverified	64	0
 00487a10	00487b30	D2Client::UI::Inv::INV_SetShopPageFromNpc	Source/D2Client/UI/Inv	sourcemap	95	99	0	0.711	OUR+4		211	63
@@ -3818,7 +3818,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 004936e0	0049375d	D2Client::UI::Hireables::INPUT_HireableHireClick	Source/D2Client/UI/Hireables	sourcemap	39	39	118	0.718	INSN_COUNT_MATCH	7 refs differ; 2 refs unverified	90	11
 00493760	00493839	D2Client::UI::Hireables::UI_HandleHirelingTooltipHoverTimer	Source/D2Client/UI/Hireables	sourcemap	64	65	0	0.450	OUR+1		128	52
 00493840	004938de	D2Client::UI::Hireables::UI_ToggleHirelingIconsVisibility	Source/D2Client/UI/Hireables	sourcemap	48	48	0	1.000	MATCH	8 refs unverified	158	0
-004938e0	004939ac	D2Client::UI::Hireables::INPUT_HireableLongPress	Source/D2Client/UI/Hireables	sourcemap	62	59	0	0.678	OUR-3		140	53
+004938e0	004939ac	D2Client::UI::Hireables::INPUT_HireableLongPress	Source/D2Client/UI/Hireables	sourcemap	62	62	0	1.000	MATCH	6 refs unverified	204	0
 004939b0	004939f7	D2Client::UI::Hireables::UI_InitializeHirelingIconsUI	Source/D2Client/UI/Hireables	sourcemap	21	21	0	1.000	MATCH	2 refs unverified	71	0
 00493a00	00493af1	D2Client::UI::Hireables::DrawHealthBar	Source/D2Client/UI/Hireables	sourcemap	81	81	0	1.000	MATCH	8 refs unverified	241	0
 00493b00	00493b4f	D2Client::UI::Hireables::UI_DrawHirelingNameFromUnit	Source/D2Client/UI/Hireables	sourcemap	31	31	0	1.000	MATCH		79	0
@@ -3906,7 +3906,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00498e80	00498e8d	D2Client::UI::Panel::PANEL_SetBottomPanelGlobals1	Source/D2Client/UI/Panel	sourcemap	4	4	0	1.000	MATCH	2 refs unverified	13	0
 00498e90	00498e9b	D2Client::UI::Panel::PANEL_SetBottomPanelGlobals2	Source/D2Client/UI/Panel	sourcemap	2	2	0	1.000	MATCH	1 refs unverified	11	0
 00498ea0	0049903b	D2Client::UI::Panel::PANEL_DrawGoldAmount	Source/D2Client/UI/Panel	sourcemap	150	150	0	1.000	MATCH	6 refs unverified	411	0
-00499040	0049944c	D2Client::UI::Panel::PANEL_DrawBottomPanel	Source/D2Client/UI/Panel	sourcemap	298	296	0	0.855	OUR-2		892	83
+00499040	0049944c	D2Client::UI::Panel::PANEL_DrawBottomPanel	Source/D2Client/UI/Panel	sourcemap	298	298	0	0.997	MATCH	36 refs unverified	1006	0
 00499450	004994fa	D2Client::UI::Panel::DRAW_UI_BordersAndOrbsAndFillers	Source/D2Client/UI/Panel	sourcemap	44	44	0	1.000	MATCH	3 refs unverified	170	0
 00499500	0049969f	D2Client::UI::Panel::INPUT_PanelLeftClickDown	Source/D2Client/UI/Panel	sourcemap	129	131	0	0.600	OUR+2		265	84
 004996a0	00499ba9	D2Client::UI::Panel::INPUT_PanelLeftClickUp	Source/D2Client/UI/Panel	sourcemap	404	359	0	0.561	OUR-45		763	228
@@ -4320,7 +4320,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 004b1670	004b1676	D2Client::UI::npcmenu::GetInteractedUnitClassId	Source/D2Client/UI/npcmenu	sourcemap	2	2	0	1.000	MATCH	1 refs unverified	6	0
 004b1680	004b179f	D2Client::UI::npcmenu::NPCMENU_SelectRandomDialogOption	Source/D2Client/UI/npcmenu	sourcemap	107	107	0	1.000	MATCH	3 refs unverified	284	0
 004b17a0	004b17cf	D2Client::UI::npcmenu::NPCMENU_RandomizeAllNpcDialogs	Source/D2Client/UI/npcmenu	sourcemap	16	16	0	0.875	MATCH	4 refs unverified	47	0
-004b1830	004b18bc	D2Client::UI::npcmenu::NPCMENU_FindNextUnhandledMessage	Source/D2Client/UI/npcmenu	sourcemap	53	53	88	0.736	INSN_COUNT_MATCH	5 refs differ; 4 refs unverified	103	12
+004b1830	004b18bc	D2Client::UI::npcmenu::NPCMENU_FindNextUnhandledMessage	Source/D2Client/UI/npcmenu	sourcemap	53	53	0	0.962	MATCH	5 refs unverified	140	0
 004b18c0	004b1964	D2Client::UI::npcmenu::NPCMENU_ScrollCompleteShowNextMessage	Source/D2Client/UI/npcmenu	sourcemap	45	45	0	1.000	MATCH	8 refs unverified	164	0
 004b1970	004b197a	D2Client::UI::npcmenu::Unreferenced_004b1970	Source/D2Client/UI/npcmenu	sourcemap	2	2	0	1.000	MATCH	1 refs unverified	10	0
 004b1980	004b19a0	D2Client::UI::npcmenu::NPCMENU_AddHandledMessageId	Source/D2Client/UI/npcmenu	sourcemap	7	7	0	1.000	MATCH	3 refs unverified	32	0
@@ -4549,7 +4549,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 004b9da0	004b9e04	D2Client::Sound::SOUND_IsChannelAvailable	Source/D2Client/Sound/SoundInst	sourcemap	44	44	0	1.000	MATCH		100	0
 004b9e10	004b9e84	D2Client::Units::IsUnitDistanceLowerThan700	Source/D2Client/Sound/SoundInst	sourcemap	44	60	0	0.596	OUR+16		75	23
 004b9e90	004b9ea2	D2Client::Sound::SOUND_FindChannelForSound	Source/D2Client/Sound/SoundInst	sourcemap	9	9	0	1.000	MATCH		18	0
-004b9eb0	004b9ee1	D2Client::Sound::Unreferenced_004b9eb0	Source/D2Client/Sound/SoundInst	sourcemap	16	16	3	0.812	INSN_COUNT_MATCH		45	0
+004b9eb0	004b9ee1	D2Client::Sound::Unreferenced_004b9eb0	Source/D2Client/Sound/SoundInst	sourcemap	16	16	0	1.000	MATCH		49	0
 004b9ef0	004ba020	D2Client::Sound::SOUND_StopChannelGracefully	Source/D2Client/Sound/SoundInst	sourcemap	111	108	0	0.521	OUR-3		188	42
 004ba020	004ba75c	D2Client::Sound::SOUND_UpdateAllChannels	Source/D2Client/Sound/SoundInst	sourcemap	594	600	0	0.407	OUR+6		878	628
 004ba760	004ba78d	D2Client::Sound::SOUND_StopUnitSound	Source/D2Client/Sound/SoundInst	sourcemap	16	16	0	1.000	MATCH		45	0
@@ -4840,8 +4840,8 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 004c2ad0	004c2c75	D2Client::UNIT::HandleItemPutInContainer	Source/D2Client/Unit/Item	sourcemap	157	168	0	0.757	OUR+11		339	62
 004c2c80	004c2e87	D2Client::UNIT::HandleItemRemoveFromContainer	Source/D2Client/Unit/Item	sourcemap	181	192	0	0.681	OUR+11		392	96
 004c2e90	004c3068	D2Client::UNIT::HandleItemEquip	Source/D2Client/Unit/Item	sourcemap	169	170	0	0.720	OUR+1		337	116
-004c3070	004c337c	D2Client::UNIT::HandleItemIndirectSwapBodyItem	Source/D2Client/Unit/Item	sourcemap	251	260	0	0.595	OUR+9		466	169
-004c3380	004c35eb	D2Client::UNIT::HandleItemUnequip	Source/D2Client/Unit/Item	sourcemap	214	215	0	0.821	OUR+1		502	75
+004c3070	004c337c	D2Client::UNIT::HandleItemIndirectSwapBodyItem	Source/D2Client/Unit/Item	sourcemap	251	260	0	0.599	OUR+9		468	169
+004c3380	004c35eb	D2Client::UNIT::HandleItemUnequip	Source/D2Client/Unit/Item	sourcemap	214	215	0	0.839	OUR+1		514	63
 004c35f0	004c375e	D2Client::UNIT::ITEM_HandleSwapBodyEquipItem	Source/D2Client/Unit/Item	sourcemap	127	127	45	0.874	INSN_COUNT_MATCH	1 refs unverified	323	34
 004c3760	004c3918	D2Client::UNIT::ITEM_HandleSwapBodyUnequipItem	Source/D2Client/Unit/Item	sourcemap	152	152	0	0.993	MATCH	1 refs unverified	440	0
 004c3920	004c397e	D2Client::UNIT::HandleItemSwapBodyItem	Source/D2Client/Unit/Item	sourcemap	41	41	0	1.000	MATCH		94	0
@@ -4952,7 +4952,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 004c9db0	004c9ffb	D2Client::SKILLS::SkillsPal::Skills_CltDoFunc_Pal_Charge	Source/D2Client/Skills/SkillsPal	sourcemap	228	228	0	1.000	MATCH		587	0
 004ca000	004ca02c	D2Client::SKILLS::SkillsPal::SKILL_StopAndClearUninterruptable	Source/D2Client/Skills/SkillsPal	sourcemap	20	20	0	1.000	MATCH		44	0
 004ca030	004ca05f	D2Client::SKILLS::SkillsPal::Skills_CltDoFunc_State_OpenWounds	Source/D2Client/Skills/SkillsPal	sourcemap	14	14	0	1.000	MATCH	2 refs unverified	47	0
-004ca060	004ca1fd	D2Client::SKILLS::SkillsPal::SKILL_ExecuteItemCast	Source/D2Client/Skills/SkillsPal	sourcemap	153	150	0	0.686	OUR-3		280	72
+004ca060	004ca1fd	D2Client::SKILLS::SkillsPal::SKILL_ExecuteItemCast	Source/D2Client/Skills/SkillsPal	sourcemap	153	153	0	1.000	MATCH	3 refs unverified	413	0
 004ca200	004ca22c	D2Client::SKILLS::SkillsPal::SKILL_ExecuteItemCastOnUnit	Source/D2Client/Skills/SkillsPal	sourcemap	22	22	0	1.000	MATCH		44	0
 004ca230	004ca265	D2Client::SKILLS::SkillsPal::SKILL_ExecuteItemCastAtCoords	Source/D2Client/Skills/SkillsPal	sourcemap	28	28	0	1.000	MATCH		53	0
 004ca280	004ca2b4	D2Client::SOUND_ClearGlobalState	Source/D2Client/D2ClientRoot	sourcemap	12	12	0	1.000	MATCH	6 refs unverified	52	0
@@ -4963,7 +4963,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 004ca410	004ca4b1	D2Client::UNIT::UnitSnd::TxtGetSoundIdLineFromUnit	Source/D2Client/Unit/UnitSnd	sourcemap	66	66	0	1.000	MATCH	1 refs unverified	161	0
 004ca4c0	004ca4fa	D2Client::UNIT::UnitSnd::UNITSND_GetSkillCastSound	Source/D2Client/Unit/UnitSnd	sourcemap	17	17	0	0.941	MATCH	2 refs unverified	58	0
 004ca500	004ca553	D2Client::UNIT::UnitSnd::UNITSND_GetSkillStartSound	Source/D2Client/Unit/UnitSnd	sourcemap	25	25	0	0.960	MATCH	2 refs unverified	83	0
-004ca560	004ca805	D2Client::UNIT::UnitSnd::UNITSND_ResolveSoundFromFlags	Source/D2Client/Unit/UnitSnd	sourcemap	154	154	4	0.987	INSN_MATCH	1 refs unverified	425	0
+004ca560	004ca805	D2Client::UNIT::UnitSnd::UNITSND_ResolveSoundFromFlags	Source/D2Client/Unit/UnitSnd	sourcemap	154	154	0	0.994	MATCH	1 refs unverified	428	0
 004ca810	004ca86f	D2Client::UNIT::UnitSnd::UNITSND_GetHitSound	Source/D2Client/Unit/UnitSnd	sourcemap	21	21	0	0.952	MATCH	1 refs unverified	74	0
 004ca870	004ca897	D2Client::UNIT::UnitSnd::UNITSND_GetSfxDataListHead	Source/D2Client/Unit/UnitSnd	sourcemap	12	12	0	0.917	MATCH	1 refs unverified	39	0
 004ca8a0	004ca8cb	D2Client::UNIT::UnitSnd::AllocUnitSfxData	Source/D2Client/Unit/UnitSnd	sourcemap	12	12	0	0.917	MATCH	1 refs unverified	43	0
@@ -5048,7 +5048,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 004ce050	004ce132	D2Client::UNIT::Missile::MISSILE_CreateTrailMissile	Source/D2Client/Unit/Missile	sourcemap	83	83	0	1.000	MATCH		226	0
 004ce140	004ce316	D2Client::UNIT::Missile::MISSILE_SpawnRandomScatter	Source/D2Client/Unit/Missile	sourcemap	176	177	0	0.708	OUR+1		324	104
 004ce320	004ce41f	D2Client::UNIT::Missile::MISSILE_CreatePeriodicTrail	Source/D2Client/Unit/Missile	sourcemap	98	98	0	1.000	MATCH		255	0
-004ce420	004ce4a3	D2Client::UNIT::Missile::MISSILE_SetupFallingZPos	Source/D2Client/Unit/Missile	sourcemap	55	55	23	0.600	INSN_MATCH	1 refs unverified	82	40
+004ce420	004ce4a3	D2Client::UNIT::Missile::MISSILE_SetupFallingZPos	Source/D2Client/Unit/Missile	sourcemap	55	55	0	1.000	MATCH	1 refs unverified	131	0
 004ce4b0	004ce526	D2Client::UNIT::Missile::MISSILE_SetupDescentAnim	Source/D2Client/Unit/Missile	sourcemap	48	48	0	1.000	MATCH	1 refs unverified	118	0
 004ce530	004ce649	D2Client::UNIT::Missile::MISSILE_CreateRandomOffset	Source/D2Client/Unit/Missile	sourcemap	115	115	0	1.000	MATCH		281	0
 004ce650	004ce84c	D2Client::UNIT::Missile::MISSILE_CreateMultiShatter	Source/D2Client/Unit/Missile	sourcemap	186	186	0	1.000	MATCH	1 refs unverified	508	0
@@ -5467,7 +5467,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 004e4120	004e4130	D2Client::_Utils::RollRandomNumberTimesTwo	Source/D2Client/Utils	sourcemap	7	7	0	1.000	MATCH		16	0
 004e4130	004e4156	D2Client::_Utils::CalculateHypotenuse	Source/D2Client/Utils	sourcemap	15	15	0	1.000	MATCH	1 refs unverified	38	0
 004e4160	004e417b	D2Client::_Utils::CalculateHypotenusePowered	Source/D2Client/Utils	sourcemap	12	12	0	1.000	MATCH		27	0
-004e4180	004e41db	D2Client::Sound::SOUND_PlayFootstepSound	Source/D2Client/Sound/Sound	sourcemap	49	53	0	0.745	OUR+4		71	16
+004e4180	004e41db	D2Client::Sound::SOUND_PlayFootstepSound	Source/D2Client/Sound/Sound	sourcemap	49	49	0	1.000	MATCH		91	0
 004e41e0	004e41fa	D2Client::Sound::Unreferenced_004e41e0	Source/D2Client/Sound/Sound	sourcemap	9	9	0	1.000	MATCH	1 refs unverified	26	0
 004e4200	004e4211	D2Client::Sound::Unreferenced_004e4200	Source/D2Client/Sound/Sound	sourcemap	6	6	0	1.000	MATCH		17	0
 004e4220	004e423a	D2Client::Sound::Unreferenced_004e4220	Source/D2Client/Sound/Sound	sourcemap	9	9	0	1.000	MATCH		26	0
@@ -5488,8 +5488,8 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 004e6410	004e655b	D2Client::UI::SkillDesc::SKILLDESC_AppendStatBuffText	Source/D2Client/UI/SkillDesc	sourcemap	102	90	0	0.708	OUR-12		237	17
 004e6560	004e6672	D2Client::UI::SkillDesc::SKILLDESC_AppendItemBuffText	Source/D2Client/UI/SkillDesc	sourcemap	99	99	0	1.000	MATCH	3 refs unverified	264	0
 004e6680	004e6718	D2Client::UI::SkillDesc::SKILLDESC_AppendSetBonusTextByStateValue	Source/D2Client/UI/SkillDesc	sourcemap	61	61	0	1.000	MATCH	3 refs unverified	152	0
-004e6720	004e67c3	D2Client::UI::SkillDesc::SKILLDESC_FormatMagicPrefixDesc	Source/D2Client/UI/SkillDesc	sourcemap	58	53	0	0.883	OUR-5		134	7
-004e67d0	004e6844	D2Client::UI::SkillDesc::SKILLDESC_FormatMagicSuffixDesc	Source/D2Client/UI/SkillDesc	sourcemap	48	47	0	0.968	OUR-1		112	0
+004e6720	004e67c3	D2Client::UI::SkillDesc::SKILLDESC_FormatMagicPrefixDesc	Source/D2Client/UI/SkillDesc	sourcemap	58	58	0	1.000	MATCH		163	0
+004e67d0	004e6844	D2Client::UI::SkillDesc::SKILLDESC_FormatMagicSuffixDesc	Source/D2Client/UI/SkillDesc	sourcemap	48	48	0	1.000	MATCH		116	0
 004e6850	004e6c4f	D2Client::UI::SkillDesc::SKILLDESC_BuildMagicAffixDesc	Source/D2Client/UI/SkillDesc	sourcemap	281	281	0	0.996	MATCH	1 refs unverified	1023	0
 004e6c50	004e6c68	D2Common::DATATBLS::MonsterTbls::CheckMonStatId	Source/D2Game/Monsters/Spawn	sourcemap	8	8	0	1.000	MATCH	1 refs unverified	24	0
 004e6c70	004e6c9b	D2Common::DATATBLS::DataTbls::GetSkillParam4	Source/D2Game/Missiles/MissilesMode	sourcemap	13	13	0	1.000	MATCH	1 refs unverified	43	0
@@ -5549,7 +5549,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 004e9870	004e9935	D2Client::UI::SkillDesc::SKILLDESC_DrawTwoLineText	Source/D2Client/UI/SkillDesc	sourcemap	57	57	0	1.000	MATCH	12 refs unverified	197	0
 004e9940	004e99ea	D2Client::UI::SkillDesc::SKILLDESC_DrawSingleNumber	Source/D2Client/UI/SkillDesc	sourcemap	55	55	0	1.000	MATCH	3 refs unverified	170	0
 004e99f0	004e9d18	D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgPhysical	Source/D2Client/UI/SkillDesc	sourcemap	301	301	0	0.987	MATCH	4 refs unverified	808	0
-004e9d20	004ea00b	D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgElemental	Source/D2Client/UI/SkillDesc	sourcemap	266	256	0	0.743	OUR-10		547	66
+004e9d20	004ea00b	D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgElemental	Source/D2Client/UI/SkillDesc	sourcemap	266	256	0	0.747	OUR-10		549	66
 004ea010	004ea16a	D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgWithElem	Source/D2Client/UI/SkillDesc	sourcemap	131	131	0	1.000	MATCH		346	0
 004ea170	004ea23f	D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgType1	Source/D2Client/UI/SkillDesc	sourcemap	86	86	0	1.000	MATCH		207	0
 004ea240	004ea30f	D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgType2	Source/D2Client/UI/SkillDesc	sourcemap	86	86	0	1.000	MATCH		207	0
@@ -5560,14 +5560,14 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 004ea990	004eaa2e	D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgAuraElem	Source/D2Client/UI/SkillDesc	sourcemap	64	64	0	1.000	MATCH		158	0
 004eaa30	004eaa98	D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgDualWield	Source/D2Client/UI/SkillDesc	sourcemap	47	47	0	1.000	MATCH		104	0
 004eaaa0	004ead5e	D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgComplex	Source/D2Client/UI/SkillDesc	sourcemap	250	250	0	0.984	MATCH	4 refs unverified	702	0
-004ead60	004eae64	D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgElem2H	Source/D2Client/UI/SkillDesc	sourcemap	99	99	4	0.990	INSN_COUNT_MATCH		258	0
+004ead60	004eae64	D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgElem2H	Source/D2Client/UI/SkillDesc	sourcemap	99	99	0	1.000	MATCH		260	0
 004eae70	004eaf86	D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgElem2HAlt	Source/D2Client/UI/SkillDesc	sourcemap	108	108	16	0.852	INSN_MATCH		249	25
 004eaf90	004eb237	D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgRanged	Source/D2Client/UI/SkillDesc	sourcemap	248	248	0	0.984	MATCH	4 refs unverified	679	0
 004eb240	004eb28d	D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgSimple	Source/D2Client/UI/SkillDesc	sourcemap	37	37	0	1.000	MATCH		77	0
 004eb290	004eb390	D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgPoisonRange	Source/D2Client/UI/SkillDesc	sourcemap	97	97	0	1.000	MATCH		256	0
 004eb390	004eb455	D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgBow	Source/D2Client/UI/SkillDesc	sourcemap	71	71	0	1.000	MATCH		197	0
 004eb460	004eb632	D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgThrow	Source/D2Client/UI/SkillDesc	sourcemap	170	170	0	1.000	MATCH		466	0
-004eb640	004eb830	D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgKick	Source/D2Client/UI/SkillDesc	sourcemap	186	190	0	0.777	OUR+4		406	70
+004eb640	004eb830	D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgKick	Source/D2Client/UI/SkillDesc	sourcemap	186	190	0	0.782	OUR+4		408	70
 004eb830	004eb933	D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgFist	Source/D2Client/UI/SkillDesc	sourcemap	102	102	0	1.000	MATCH		259	0
 004eb940	004eba2e	D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgTrap	Source/D2Client/UI/SkillDesc	sourcemap	91	91	0	1.000	MATCH	1 refs unverified	238	0
 004eba30	004ebb50	D2Client::UI::SkillDesc::SKILLDESC_DrawSkillDmgConversion	Source/D2Client/UI/SkillDesc	sourcemap	110	110	0	1.000	MATCH		288	0
@@ -5583,7 +5583,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 004ec540	004ec61f	D2Client::UI::SkillDesc::SKILLDESC_FormatMissileDamage	Source/D2Client/UI/SkillDesc	sourcemap	74	74	0	1.000	MATCH		223	0
 004ec620	004ec6e8	D2Client::UI::SkillDesc::SKILLDESC_DescLine16_MissileDamage	Source/D2Client/UI/SkillDesc	sourcemap	67	67	0	1.000	MATCH		174	0
 004ec6f0	004ec732	D2Client::UI::SkillDesc::SKILLDESC_DescLine1B_AppendDamage	Source/D2Client/UI/SkillDesc	sourcemap	28	29	0	0.491	OUR+1		27	8
-004ec740	004ec7d8	D2Client::UI::SkillDesc::SKILLDESC_DescLine1A_SkillDamage	Source/D2Client/UI/SkillDesc	sourcemap	46	46	9	0.848	INSN_COUNT_MATCH		116	8
+004ec740	004ec7d8	D2Client::UI::SkillDesc::SKILLDESC_DescLine1A_SkillDamage	Source/D2Client/UI/SkillDesc	sourcemap	46	46	0	1.000	MATCH		128	0
 004ec7e0	004ec8f7	D2Client::UI::SkillDesc::SKILLDESC_DescLine3F_SignedPctRange	Source/D2Client/UI/SkillDesc	sourcemap	87	87	0	1.000	MATCH		279	0
 004ec900	004ec9f7	D2Client::UI::SkillDesc::SKILLDESC_DescLine2A_DecimalRange	Source/D2Client/UI/SkillDesc	sourcemap	79	79	0	1.000	MATCH		247	0
 004eca00	004ecb0c	D2Client::UI::SkillDesc::SKILLDESC_DescLine40_DecimalLabel	Source/D2Client/UI/SkillDesc	sourcemap	80	80	0	1.000	MATCH		268	0
@@ -5603,10 +5603,10 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 004edc40	004edc9b	D2Client::UI::SkillDesc::SKILLDESC_DescLineB_SignedFormat	Source/D2Client/UI/SkillDesc	sourcemap	38	38	0	1.000	MATCH		91	0
 004edca0	004eddc1	D2Client::UI::SkillDesc::SKILLDESC_DescLineE_PerLevelBonus	Source/D2Client/UI/SkillDesc	sourcemap	106	105	0	0.398	OUR-1		95	68
 004eddd0	004ede93	D2Client::UI::SkillDesc::SKILLDESC_DescLine30_DamageMinMax	Source/D2Client/UI/SkillDesc	sourcemap	84	83	0	0.802	OUR-1		143	23
-004edea0	004eeef4	D2Client::UI::SkillDesc::SKILLDESC_ProcessDescLine	Source/D2Client/UI/SkillDesc	sourcemap	1403	1380	0	0.469	OUR-23		1748	612
+004edea0	004eeef4	D2Client::UI::SkillDesc::SKILLDESC_ProcessDescLine	Source/D2Client/UI/SkillDesc	sourcemap	1403	1380	0	0.470	OUR-23		1751	608
 004eef00	004ef408	D2Client::UI::SkillDesc::SKILLDESC_BuildSkillTooltip	Source/D2Client/UI/SkillDesc	sourcemap	362	364	0	0.829	OUR+2		1090	133
 004ef410	004ef98b	D2Client::UI::SkillDesc::SKILLDESC_BuildSkillTooltip_NoMaxLevelCheck	Source/D2Client/UI/SkillDesc	sourcemap	384	388	0	0.725	OUR+4		1106	219
-004ef990	004efc14	D2Client::UI::SkillDesc::SKILLDESC_BuildSkillShortTooltip	Source/D2Client/UI/SkillDesc	sourcemap	182	182	503	0.824	INSN_COUNT_MATCH	32 refs differ; 2 refs unverified	533	75
+004ef990	004efc14	D2Client::UI::SkillDesc::SKILLDESC_BuildSkillShortTooltip	Source/D2Client/UI/SkillDesc	sourcemap	182	182	0	1.000	MATCH	3 refs unverified	644	0
 004efc20	004efc4b	D2Common::Skills::GetSkilParam1	Source/D2Client/SKILLS	sourcemap	13	13	0	1.000	MATCH	1 refs unverified	43	0
 004efc50	004efc7b	D2Common::Skills::GetSkilParam2	Source/D2Game/Skills/SkillNec	sourcemap	13	13	0	1.000	MATCH	1 refs unverified	43	0
 004efc80	004efcab	D2Common::Skills::GetSkilParam3	Source/D2Game/Skills/SkillDruid	sourcemap	13	13	0	1.000	MATCH	1 refs unverified	43	0
@@ -5764,7 +5764,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 004f60f0	004f610f	D2gfx::D2GFX::D2GFX_BeginScene	Source/D2gfx/Src/D2GFX	sourcemap	13	13	0	1.000	MATCH	1 refs unverified	31	0
 004f6110	004f6127	D2gfx::D2GFX::D2GFX_GetPerformanceFrequency	Source/D2gfx/Src/D2GFX	sourcemap	10	10	0	1.000	MATCH		23	0
 004f6130	004f6190	D2gfx::D2GFX::D2GFX_CalculateGammaRamp	Source/D2gfx/Src/D2GFX	sourcemap	30	30	0	1.000	MATCH	6 refs unverified	96	0
-004f6190	004f624e	D2gfx::D2GFX::D2GFX_EndScene	Source/D2gfx/Src/D2GFX	sourcemap	54	60	0	0.614	OUR+6		140	26
+004f6190	004f624e	D2gfx::D2GFX::D2GFX_EndScene	Source/D2gfx/Src/D2GFX	sourcemap	54	54	0	1.000	MATCH	14 refs unverified	190	0
 004f6250	004f6264	D2gfx::D2GFX::D2GFX_GetBackBuffer	Source/D2gfx/Src/D2GFX	sourcemap	8	8	0	1.000	MATCH	1 refs unverified	20	0
 004f6270	004f627d	D2gfx::D2GFX::D2GFX_IsWindowActive	Source/D2gfx/Src/D2GFX	sourcemap	4	4	0	1.000	MATCH	1 refs unverified	13	0
 004f6280	004f629a	D2gfx::D2GFX::D2GFX_DrawRect	Source/D2gfx/Src/D2GFX	sourcemap	9	9	0	1.000	MATCH	1 refs unverified	26	0
@@ -5817,9 +5817,9 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 004f82d0	004f84e4	D2gfx::fpDrawBlendedVisTile	Source/D2gfx/D2GfxHelperStrc	sourcemap	174	191	0	0.236	OUR+17		132	132
 004f84f0	004f880c	D2gfx::fpDrawRoofTile	Source/D2gfx/D2GfxHelperStrc	sourcemap	255	260	0	0.140	OUR+5		123	147
 004f8810	004f8841	D2gfx::D2GFXHELPER_DrawGroundTileDispatch1	Source/D2gfx/D2GfxHelperStrc	sourcemap	18	18	0	1.000	MATCH	1 refs unverified	49	0
-004f8850	004f88aa	D2gfx::D2GFXHELPER_DrawGroundTileDispatch2	Source/D2gfx/D2GfxHelperStrc	sourcemap	46	39	0	0.682	OUR-7		53	12
-004f88b0	004f89e3	D2gfx::D2GFXHELPER_DrawGroundTileWithLight	Source/D2gfx/D2GfxHelperStrc	sourcemap	110	109	0	0.265	OUR-1		71	115
-004f89f0	004f8b7a	D2gfx::D2GFXHELPER_DrawGroundTileWithPerspectiveLight	Source/D2gfx/D2GfxHelperStrc	sourcemap	140	143	0	0.290	OUR+3		80	93
+004f8850	004f88aa	D2gfx::D2GFXHELPER_DrawGroundTileDispatch2	Source/D2gfx/D2GfxHelperStrc	sourcemap	46	46	0	1.000	MATCH		90	0
+004f88b0	004f89e3	D2gfx::D2GFXHELPER_DrawGroundTileWithLight	Source/D2gfx/D2GfxHelperStrc	sourcemap	110	110	0	1.000	MATCH	10 refs unverified	304	0
+004f89f0	004f8b7a	D2gfx::D2GFXHELPER_DrawGroundTileWithPerspectiveLight	Source/D2gfx/D2GfxHelperStrc	sourcemap	140	140	0	1.000	MATCH	11 refs unverified	386	0
 004f8b80	004f8db1	D2gfx::fpDrawGroundTile	Source/D2gfx/D2GfxHelperStrc	sourcemap	171	188	0	0.234	OUR+17		152	253
 004f8dc0	004f8dd0	D2gfx::D2GFX_SetupRenderFunctions	Source/D2gfx/D2GfxHelperStrc	sourcemap	3	3	0	1.000	MATCH	1 refs unverified	16	0
 004f8dd0	004f8dd1	D2gfx::Unreferenced_004f8dd0	Source/D2gfx/D2GfxHelperStrc	sourcemap	1	1	0	1.000	MATCH		1	0
@@ -5883,7 +5883,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 004fa520	004fa54e	D2Win::Src::D2WinMain::D2GFX_PreSetupBeforeCreatingWindow	Source/D2Win/Src/D2WinMain	sourcemap	18	18	0	1.000	MATCH	1 refs unverified	46	0
 004fa550	004fa582	D2Win::Src::D2WinMain::FreeInGameGFX	Source/D2Win/Src/D2WinMain	sourcemap	11	11	0	1.000	MATCH	2 refs unverified	50	0
 004fa590	004fa6a9	D2Win::Src::D2WinMain::MessagePump	Source/D2Win/Src/D2WinMain	sourcemap	89	89	0	1.000	MATCH	9 refs unverified	281	0
-004fa6b0	004fa75d	D2Win::Src::D2WinMain::MOUSE_CaptureMousePosition	Source/D2Win/Src/D2WinMain	sourcemap	58	79	0	0.394	OUR+21		79	77
+004fa6b0	004fa75d	D2Win::Src::D2WinMain::MOUSE_CaptureMousePosition	Source/D2Win/Src/D2WinMain	sourcemap	58	58	0	1.000	MATCH	5 refs unverified	173	0
 004fa760	004fa79f	D2Win::Src::D2WinMain::INPUT_FormEscapeKey	Source/D2Win/Src/D2WinMain	sourcemap	25	25	0	1.000	MATCH	2 refs unverified	63	0
 004fa7a0	004fa833	D2Win::Src::D2WinMain::TakeScreenshot	Source/D2Win/Src/D2WinMain	sourcemap	52	52	0	1.000	MATCH	2 refs unverified	147	0
 004fa840	004fa85d	D2Win::Src::D2WinMain::D2WIN_TakeScreenshotMsgHandler	Source/D2Win/Src/D2WinMain	sourcemap	8	8	0	1.000	MATCH		29	0
@@ -5900,7 +5900,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 004fad10	004fad6f	D2Win::Src::D2WinArchive::MPQ_LoadVideoMpqFiles	Source/D2Win/Src/D2WinArchive	sourcemap	38	38	0	1.000	MATCH	2 refs unverified	95	0
 004fad70	004fadf3	D2Win::Src::D2WinArchive::MPQ_UnloadAllMediaMpqFiles	Source/D2Win/Src/D2WinArchive	sourcemap	34	34	0	1.000	MATCH	12 refs unverified	131	0
 004fae00	004faeb1	D2Win::Src::D2WinArchive::MPQ_UnloadAllDataMpqFiles	Source/D2Win/Src/D2WinArchive	sourcemap	44	44	0	1.000	MATCH	16 refs unverified	177	0
-004faec0	004fb008	D2Win::Src::D2WinArchive::MPQ_LoadAllMediaMpqFiles	Source/D2Win/Src/D2WinArchive	sourcemap	91	91	124	0.813	INSN_COUNT_MATCH	13 refs differ; 13 refs unverified	272	23
+004faec0	004fb008	D2Win::Src::D2WinArchive::MPQ_LoadAllMediaMpqFiles	Source/D2Win/Src/D2WinArchive	sourcemap	91	91	0	1.000	MATCH	15 refs unverified	328	0
 004fb010	004fb0b2	D2Win::Src::D2WinPalette::D2WINPALETTE_LoadPalettes	Source/D2Win/Src/D2WinPalette	sourcemap	34	34	0	1.000	MATCH	14 refs unverified	159	0
 004fb0c0	004fb0cb	D2Win::Src::D2WinPalette::D2WINPAL_GetActPalettePointer	Source/D2Win/Src/D2WinPalette	sourcemap	4	4	0	1.000	MATCH	1 refs unverified	11	0
 004fb0d0	004fb130	D2Win::Src::D2WinPalette::DRAW_SetOrReloadPalleteMain	Source/D2Win/Src/D2WinPalette	sourcemap	23	23	0	1.000	MATCH	9 refs unverified	96	0
@@ -5936,7 +5936,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 004fbee0	004fbf2b	D2Win::Src::D2WinTextBox::D2WINTEXTBOX_TruncateStringToFitWidth	Source/D2Win/Src/D2WinTextBox	sourcemap	33	33	0	1.000	MATCH		75	0
 004fbf30	004fc2ed	D2Win::Src::D2WinTextBox::Draw	Source/D2Win/Src/D2WinTextBox	sourcemap	323	321	0	0.550	OUR-2		542	320
 004fc2f0	004fc3ed	D2Win::Src::D2WinTextBox::Push	Source/D2Win/Src/D2WinTextBox	sourcemap	86	86	0	0.988	MATCH	4 refs unverified	253	0
-004fc3f0	004fc5a0	D2Win::Src::D2WinTextBox::Key	Source/D2Win/Src/D2WinTextBox	sourcemap	144	143	0	0.348	OUR-1		168	95
+004fc3f0	004fc5a0	D2Win::Src::D2WinTextBox::Key	Source/D2Win/Src/D2WinTextBox	sourcemap	144	144	0	0.993	MATCH	3 refs unverified	400	0
 004fc5a0	004fc5da	D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetScrollbarMaxValue	Source/D2Win/Src/D2WinTextBox	sourcemap	16	16	0	0.938	MATCH	1 refs unverified	58	0
 004fc5e0	004fc61a	D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetScrollbarMaxRange	Source/D2Win/Src/D2WinTextBox	sourcemap	16	16	0	0.938	MATCH	1 refs unverified	58	0
 004fc620	004fc65a	D2Win::Src::D2WinTextBox::D2WINTEXTBOX_RefreshScrollbar	Source/D2Win/Src/D2WinTextBox	sourcemap	16	16	0	0.938	MATCH	1 refs unverified	58	0
@@ -6002,7 +6002,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 004ff620	004ffbe1	D2Win::Src::D2WinEditBox::Draw	Source/D2Win/Src/D2WinEditBox	sourcemap	437	452	0	0.360	OUR+15		624	431
 004ffbf0	004ffe0e	D2Win::Src::D2WinEditBox::PushFlag0x8	Source/D2Win/Src/D2WinEditBox	sourcemap	167	172	0	0.667	OUR+5		385	120
 004ffe10	004ffe4f	D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi	Source/D2Win/Src/D2WinEditBox	sourcemap	21	21	0	1.000	MATCH		63	0
-004ffe50	005001c1	D2Win::Src::D2WinEditBox::DrawFlag0x8	Source/D2Win/Src/D2WinEditBox	sourcemap	275	295	0	0.772	OUR+20		679	190
+004ffe50	005001c1	D2Win::Src::D2WinEditBox::DrawFlag0x8	Source/D2Win/Src/D2WinEditBox	sourcemap	275	275	0	0.996	MATCH	3 refs unverified	881	0
 005001d0	005002fa	D2Win::#0Src::D2WinEditBox	Source/D2Win/Src/D2WinEditBox	sourcemap	88	88	0	1.000	MATCH	2 refs unverified	298	0
 00500300	00500307	D2Win::FORMS_DestroyD2WinAnimImage	Source/D2Win/D2WinAnimImage	sourcemap	3	3	0	1.000	MATCH		7	0
 00500310	00500335	D2Win::D2WINANIMIMAGE_GetCurrentState	Source/D2Win/D2WinAnimImage	sourcemap	12	12	0	0.917	MATCH	1 refs unverified	37	0
@@ -6101,7 +6101,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00504570	00504912	D2Win::Src::D2Comp::D2COMP_AllocTxt_Items	Source/D2Win/Src/D2Comp	sourcemap	211	210	0	0.546	OUR-1		428	420
 00504920	005049c4	D2Win::Src::D2Comp::D2COMP_LoadItemTypesTxt	Source/D2Win/Src/D2Comp	sourcemap	44	44	0	1.000	MATCH	4 refs unverified	164	0
 005049d0	00504a1c	D2Win::Src::D2Comp::Unreferenced_005049d0	Source/D2Win/Src/D2Comp	sourcemap	19	19	0	1.000	MATCH	6 refs unverified	76	0
-00504a20	00504ae1	D2Win::Src::D2Comp::D2COMP_IsItemTypeDescendant	Source/D2Win/Src/D2Comp	sourcemap	66	75	0	0.383	OUR+9		72	52
+00504a20	00504ae1	D2Win::Src::D2Comp::D2COMP_IsItemTypeDescendant	Source/D2Win/Src/D2Comp	sourcemap	66	66	0	0.985	MATCH	2 refs unverified	190	0
 00504af0	00504d2d	D2Win::Src::D2Comp::D2COMP_ResolveWeaponClass	Source/D2Win/Src/D2Comp	sourcemap	227	222	0	0.352	OUR-5		176	80
 00504d30	00504d5d	D2Win::Src::D2Comp::D2COMP_SetSelectionAndAuraImages	Source/D2Win/Src/D2Comp	sourcemap	14	14	0	1.000	MATCH	4 refs unverified	45	0
 00504d60	00504f7e	D2Win::Src::D2Comp::D2COMP_ValidateEquippedItemForClass	Source/D2Win/Src/D2Comp	sourcemap	186	186	0	1.000	MATCH	21 refs unverified	542	0
@@ -6146,10 +6146,10 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 005070a0	005070c8	D2Win::Src::D2WinList::D2WINLIST_GetItemCount	Source/D2Win/Src/D2WinList	sourcemap	12	12	0	0.917	MATCH	1 refs unverified	40	0
 005070d0	00507131	D2Win::Src::D2WinList::D2WINLIST_LoadPentSpinCursor	Source/D2Win/Src/D2WinList	sourcemap	26	26	0	0.962	MATCH	3 refs unverified	97	0
 00507140	00507156	D2Win::Src::D2WinList::D2WINLIST_FreePentSpinCursor	Source/D2Win/Src/D2WinList	sourcemap	4	4	0	1.000	MATCH	2 refs unverified	22	0
-00507160	005072e5	D2Win::Src::D2WinList::Draw	Source/D2Win/Src/D2WinList	sourcemap	129	133	0	0.580	OUR+4		219	106
+00507160	005072e5	D2Win::Src::D2WinList::Draw	Source/D2Win/Src/D2WinList	sourcemap	129	129	0	0.992	MATCH	2 refs unverified	389	0
 005072f0	005073a7	D2Win::Src::D2WinList::Push	Source/D2Win/Src/D2WinList	sourcemap	61	61	0	0.984	MATCH	5 refs unverified	183	0
 005073b0	00507414	D2Win::Src::D2WinList::ListCheck	Source/D2Win/Src/D2WinList	sourcemap	33	33	0	0.970	MATCH	1 refs unverified	100	0
-00507420	005075d6	D2Win::Src::D2WinList::Key	Source/D2Win/Src/D2WinList	sourcemap	158	149	0	0.730	OUR-9		351	63
+00507420	005075d6	D2Win::Src::D2WinList::Key	Source/D2Win/Src/D2WinList	sourcemap	158	158	0	0.994	MATCH	1 refs unverified	435	0
 005075e0	005077ea	D2Win::#0Src::D2WinList	Source/D2Win/Src/D2WinList	sourcemap	150	148	0	0.819	OUR-2		430	45
 005077f0	00507845	D2Win::Forms::D2WINLIST_AddListItemFromCharName	Source/D2Win/Forms	sourcemap	31	31	0	1.000	MATCH		85	0
 00507850	00507899	D2Win::Src::D2WinAccountList::D2WINACCOUNTLIST_FreeAllEntries	Source/D2Win/Src/D2WinAccountList	sourcemap	25	25	0	0.960	MATCH	1 refs unverified	73	0
@@ -6158,7 +6158,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 005079c0	00507a07	D2Win::Src::D2WinAccountList::D2WINACCOUNTLIST_GetSelectedAccountName	Source/D2Win/Src/D2WinAccountList	sourcemap	24	24	0	0.958	MATCH	1 refs unverified	68	0
 00507a10	00507ae2	D2Win::Src::D2WinAccountList::Push	Source/D2Win/Src/D2WinAccountList	sourcemap	76	76	0	0.987	MATCH	5 refs unverified	210	0
 00507af0	00507b21	D2Win::Src::D2WinAccountList::FORMS_DestroyD2WinAccountList	Source/D2Win/Src/D2WinAccountList	sourcemap	17	17	0	0.941	MATCH	1 refs unverified	49	0
-00507b30	00507c9f	D2Win::Src::D2WinAccountList::Draw	Source/D2Win/Src/D2WinAccountList	sourcemap	123	136	0	0.494	OUR+13		188	142
+00507b30	00507c9f	D2Win::Src::D2WinAccountList::Draw	Source/D2Win/Src/D2WinAccountList	sourcemap	123	123	0	0.992	MATCH	3 refs unverified	367	0
 00507ca0	00507d65	D2Win::#0Src::D2WinAccountList	Source/D2Win/Src/D2WinAccountList	sourcemap	72	72	0	1.000	MATCH	2 refs unverified	197	0
 00507d70	00507da6	D2Win::Forms::PROGRESSBAR_SetProgress	Source/D2Win/Forms	sourcemap	18	18	0	0.944	MATCH	1 refs unverified	54	0
 00507db0	00507db7	D2Win::Src::D2WinProgressBar::FORMS_DestroyD2WinProgressBar	Source/D2Win/Src/D2WinProgressBar	sourcemap	3	3	0	1.000	MATCH		7	0
@@ -6354,7 +6354,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00511720	005117ed	D2DDraw::Renderer::DirectDraw::BeginScene	Source/D2DDraw/Renderer/DirectDraw	sourcemap	63	63	0	0.984	MATCH	9 refs unverified	205	0
 005117f0	00511865	D2DDraw::Renderer::DirectDraw::EndScene1	Source/D2DDraw/Renderer/DirectDraw	sourcemap	36	36	0	0.972	MATCH	5 refs unverified	117	0
 00511870	00511970	D2DDraw::Renderer::DirectDraw::EndScene2	Source/D2DDraw/Renderer/DirectDraw	sourcemap	103	103	33	0.971	INSN_COUNT_MATCH	4 refs differ; 11 refs unverified	245	0
-00511970	00511a7c	D2DDraw::Renderer::DirectDraw::GetBackBuffer	Source/D2DDraw/Renderer/DirectDraw	sourcemap	97	93	0	0.421	OUR-4		101	32
+00511970	00511a7c	D2DDraw::Renderer::DirectDraw::GetBackBuffer	Source/D2DDraw/Renderer/DirectDraw	sourcemap	97	97	0	1.000	MATCH	8 refs unverified	268	0
 00511a80	00511b04	D2DDraw::Renderer::DirectDraw::InternalReleaseWindow	Source/D2DDraw/Renderer/DirectDraw	sourcemap	48	48	0	1.000	MATCH	10 refs unverified	132	0
 00511b10	00511b26	D2DDraw::Renderer::DirectDraw::BeginCutScene	Source/D2DDraw/Renderer/DirectDraw	sourcemap	6	6	0	1.000	MATCH	1 refs unverified	22	0
 00511b30	00511b60	D2DDraw::Renderer::DirectDraw::RENDERER_DDRAW_DestroyWindow	Source/D2DDraw/Renderer/DirectDraw	sourcemap	12	12	0	1.000	MATCH	3 refs unverified	48	0
@@ -6364,7 +6364,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00511cd0	00511cd5	D2DDraw::Renderer::DirectDraw::thunk_Release	Source/D2DDraw/Renderer/DirectDraw	sourcemap	1	1	0	1.000	MATCH		5	0
 00511ce0	00511d65	D2DDraw::Renderer::DirectDraw::InitPerspective	Source/D2DDraw/Renderer/DirectDraw	sourcemap	33	33	0	1.000	MATCH	9 refs unverified	133	0
 00511d70	00511de8	D2DDraw::Renderer::DirectDraw::RENDERER_DIRECTDRAW_GetPalettePointer	Source/D2DDraw/Renderer/DirectDraw	sourcemap	25	25	0	1.000	MATCH	7 refs unverified	90	0
-00511df0	00511e10	D2DDraw::ddSprite::RENDERER_DDRAW_SetHorizontalBounds	Source/D2DDraw/Src/ddSprite	sourcemap	7	6	0	0.462	OUR-1		23	5
+00511df0	00511e10	D2DDraw::ddSprite::RENDERER_DDRAW_SetHorizontalBounds	Source/D2DDraw/Src/ddSprite	sourcemap	7	7	0	1.000	MATCH	3 refs unverified	32	0
 00511e10	00511e73	D2DDraw::ddSprite::RENDERER_DDRAW_IsDC6OffScreen	Source/D2DDraw/Src/ddSprite	sourcemap	41	41	0	1.000	MATCH	2 refs unverified	99	0
 00511e80	00511fad	D2DDraw::ddSprite::RENDERER_DDRAW_ComputeDC6ClipRect	Source/D2DDraw/Src/ddSprite	sourcemap	111	111	0	0.991	MATCH	3 refs unverified	301	0
 00511fb0	00512098	D2DDraw::ddSprite::DrawImage	Source/D2DDraw/Src/ddSprite	sourcemap	89	92	0	0.552	OUR+3		136	40
@@ -6444,7 +6444,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00514d90	00514daf	D2Sound::Src::D2SoundFast::SOUND_SetOptionsMusic	Source/D2Sound/Src/D2SoundFast	sourcemap	11	11	0	1.000	MATCH	1 refs unverified	31	0
 00514db0	00514e0a	D2Sound::Src::D2SoundFast::SOUND_InitSoundEffectBuffers	Source/D2Sound/Src/D2SoundFast	sourcemap	24	24	0	1.000	MATCH	4 refs unverified	90	0
 00514e10	00514eb2	D2Sound::Src::D2SoundFast::SOUND_LoadWavFile	Source/D2Sound/Src/D2SoundFast	sourcemap	55	55	0	1.000	MATCH	3 refs unverified	162	0
-00514ec0	00514fb0	D2Sound::Src::D2SoundFast::SOUND_PlaySoundEffect	Source/D2Sound/Src/D2SoundFast	sourcemap	77	93	0	0.659	OUR+16		191	18
+00514ec0	00514fb0	D2Sound::Src::D2SoundFast::SOUND_PlaySoundEffect	Source/D2Sound/Src/D2SoundFast	sourcemap	77	77	0	1.000	MATCH	8 refs unverified	227	0
 00514fb0	00514fe1	D2Sound::Src::D2SoundFast::SOUND_IsAnySoundEffectPlaying	Source/D2Sound/Src/D2SoundFast	sourcemap	18	18	0	1.000	MATCH	3 refs unverified	49	0
 00514ff0	00515014	D2Sound::Src::D2SoundFast::Unreferenced_00514ff0	Source/D2Sound/Src/D2SoundFast	sourcemap	12	12	0	1.000	MATCH	3 refs unverified	36	0
 00515020	00515056	D2Sound::Src::D2SoundFast::SOUND_FadeOutAllSoundEffects	Source/D2Sound/Src/D2SoundFast	sourcemap	18	18	0	1.000	MATCH	3 refs unverified	54	0
@@ -6555,7 +6555,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00518390	005183bb	Bnclient::BNGatewayAccess::SkipToEOL	Source/Bnclient/BNetGW	sourcemap	19	19	0	1.000	MATCH		43	0
 005183c0	005183eb	Bnclient::BNGatewayAccess::SkipEOL	Source/Bnclient/BNetGW	sourcemap	19	19	0	1.000	MATCH		43	0
 005183f0	005184b7	Bnclient::BNGatewayAccess::FindSection	Source/Bnclient/BNetGW	sourcemap	84	84	0	0.988	MATCH	1 refs unverified	199	0
-005184c0	00518572	Bnclient::BNGatewayAccess::FindKey	Source/Bnclient/BNetGW	sourcemap	80	77	0	0.497	OUR-3		77	69
+005184c0	00518572	Bnclient::BNGatewayAccess::FindKey	Source/Bnclient/BNetGW	sourcemap	80	80	0	1.000	MATCH		175	0
 00518580	005186c6	Bnclient::BNGatewayAccess::PickClosestZone	Source/Bnclient/BNetGW	sourcemap	123	131	0	0.575	OUR+8		203	102
 005186d0	00518850	Bnclient::BNGatewayAccess::Load	Source/Bnclient/BNetGW	sourcemap	126	140	0	0.451	OUR+14		202	83
 00518850	00518b59	Bnclient::BNGatewayAccess::UpdateGatewaysFromIni	Source/Bnclient/BNetGW	sourcemap	272	264	0	0.563	OUR-8		444	227
@@ -6607,7 +6607,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 0051ac20	0051ac46	Bnclient::BnSend::BNSEND_FreeChannelListData	Source/Bnclient/BnSend	sourcemap	9	9	0	1.000	MATCH	2 refs unverified	38	0
 0051ac50	0051ac93	Bnclient::BnSend::NET_SID_CLIENT_Send_0x0B_GetChannelList	Source/Bnclient/BnSend	sourcemap	25	25	0	1.000	MATCH	1 refs unverified	67	0
 0051aca0	0051ad66	Bnclient::BnSend::NET_SID_CLIENT_Send_0x0C_JoinChannel	Source/Bnclient/BnSend	sourcemap	62	59	0	0.661	OUR-3		140	40
-0051ad70	0051ae05	Bnclient::BnSend::BNSEND_EncodePacketEscape	Source/Bnclient/BnSend	sourcemap	63	70	0	0.226	OUR+7		24	3
+0051ad70	0051ae05	Bnclient::BnSend::BNSEND_EncodePacketEscape	Source/Bnclient/BnSend	sourcemap	63	63	0	1.000	MATCH		149	0
 0051ae10	0051af1d	Bnclient::BnSend::NET_SID_CLIENT_Send_0x0B_GetChannelList_0x0A_EnterChat	Source/Bnclient/BnSend	sourcemap	84	84	0	1.000	MATCH	1 refs unverified	266	0
 0051af20	0051af35	Bnclient::BnSend::NET_SID_CLIENT_Send_0x10_LeaveChat	Source/Bnclient/BnSend	sourcemap	9	9	0	1.000	MATCH		21	0
 0051af40	0051b008	Bnclient::BnSend::NET_SID_CLIENT_Send_0x0E_ChatCommand	Source/Bnclient/BnSend	sourcemap	63	54	0	0.701	OUR-9		148	25
@@ -6825,7 +6825,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00522530	0052256a	Bnclient::_net_sid::NET_SID_CLIENT_SetCDKeyNibble	Source/Bnclient/net_sid	sourcemap	25	25	0	1.000	MATCH		58	0
 00522570	00522592	Bnclient::_net_sid::Unreferenced_00522570	Source/Bnclient/net_sid	sourcemap	14	14	0	1.000	MATCH		34	0
 005225a0	005225d6	Bnclient::_net_sid::NET_SID_CLIENT_SetCDKeyBit	Source/Bnclient/net_sid	sourcemap	23	23	0	1.000	MATCH		54	0
-005225e0	00522642	Bnclient::_net_sid::NET_SID_CLIENT_BigNumMultiplyAccumulate	Source/Bnclient/net_sid	sourcemap	47	45	0	0.304	OUR-2		22	3
+005225e0	00522642	Bnclient::_net_sid::NET_SID_CLIENT_BigNumMultiplyAccumulate	Source/Bnclient/net_sid	sourcemap	47	47	0	1.000	MATCH		98	0
 00522650	005226c1	Bnclient::_net_sid::NET_SID_CLIENT_ExpandCdKeyToBase5	Source/Bnclient/net_sid	sourcemap	39	39	0	1.000	MATCH	1 refs unverified	105	0
 005226d0	00522976	Bnclient::_net_sid::NET_SID_CLIENT_PermuteBitsLFSR	Source/Bnclient/net_sid	sourcemap	254	319	0	0.108	OUR+65		67	197
 00522980	00522add	Bnclient::_net_sid::NET_SID_CLIENT_SubstitutionBoxShuffle	Source/Bnclient/net_sid	sourcemap	118	110	0	0.202	OUR-8		54	167
@@ -6853,7 +6853,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00524280	005242b5	Bnclient::_net_sid::NET_SID_CLIENT_InitSHAContext	Source/Bnclient/grid	sourcemap	12	12	0	1.000	MATCH	1 refs unverified	53	0
 005242f0	00524357	Bnclient::_net_sid::NET_SID_CLIENT_IDEAMultInverse	Source/Bnclient/grid	sourcemap	50	50	0	1.000	MATCH		103	0
 00524360	005243dd	Bnclient::_net_sid::NET_SID_CLIENT_IDEAExpandKey	Source/Bnclient/grid	sourcemap	41	41	0	1.000	MATCH		125	0
-005243e0	0052453d	Bnclient::_net_sid::NET_SID_CLIENT_IDEAInvertKey	Source/Bnclient/grid	sourcemap	113	87	0	0.300	OUR-26		93	30
+005243e0	0052453d	Bnclient::_net_sid::NET_SID_CLIENT_IDEAInvertKey	Source/Bnclient/grid	sourcemap	113	113	0	1.000	MATCH	1 refs unverified	349	0
 00524540	0052473a	Bnclient::_net_sid::NET_SID_CLIENT_IDEACrypt	Source/Bnclient/grid	sourcemap	192	200	0	0.179	OUR+8		73	64
 00524740	00524755	Bnclient::_net_sid::NET_SID_CLIENT_ClearIDEAContexts	Source/Bnclient/grid	sourcemap	6	6	0	1.000	MATCH	1 refs unverified	21	0
 00524760	0052477d	Bnclient::NET_SID_CLIENT_IDEAEncryptDecrypt	Source/Bnclient/grid	sourcemap	11	11	0	1.000	MATCH	1 refs unverified	29	0
@@ -6885,7 +6885,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00525920	005259b9	D2Lang::StrTable::strtable::STRTABLE_LoadStringTableFile	Source/D2Lang/StrTable/strtable	sourcemap	56	56	0	0.982	MATCH	2 refs unverified	153	0
 005259c0	00525faf	D2Lang::StrTable::strtable::TABLES_LoadStrings	Source/D2Lang/StrTable/strtable	sourcemap	412	405	0	0.470	OUR-7		735	268
 00525fb0	005260fb	D2Lang::UI_FormatNumberWithCommas	Source/D2Lang/D2LangRoot	sourcemap	115	114	0	0.568	OUR-1		192	76
-00526100	0052618b	D2Lang::UTF8_DecodeNextChar	Source/D2Lang/D2LangRoot	sourcemap	57	68	0	0.304	OUR+11		41	34
+00526100	0052618b	D2Lang::UTF8_DecodeNextChar	Source/D2Lang/D2LangRoot	sourcemap	57	57	0	1.000	MATCH	2 refs unverified	139	0
 00526190	005261fc	D2Lang::EncodeUTF8CodePoint	Source/D2Lang/D2LangRoot	sourcemap	45	49	0	0.106	OUR+4		6	13
 00526200	00526292	D2Lang::UTF8_GetNextCharWidth	Source/D2Lang/D2LangRoot	sourcemap	61	61	0	1.000	MATCH	2 refs unverified	146	0
 005262a0	005262ef	D2Lang::UTF8_GetStringLength	Source/D2Lang/D2LangRoot	sourcemap	38	38	0	1.000	MATCH		79	0
@@ -6950,7 +6950,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00528660	005286c2	Bnclient::SRP::SRP_ClientGenerateVerifier	Source/Bnclient/SRP/SRP	sourcemap	40	40	0	1.000	MATCH		98	0
 005286d0	00528756	Bnclient::SRP::SRP_GenerateAccountCredentials	Source/Bnclient/SRP/SRP	sourcemap	51	51	0	1.000	MATCH		134	0
 00528760	00528882	Bnclient::SRP::SRP_ClientKeyExchange	Source/Bnclient/SRP/SRP	sourcemap	105	105	0	1.000	MATCH	1 refs unverified	290	0
-00528890	00528962	Bnclient::SRP::SRP_ClientVerifyServerProof	Source/Bnclient/SRP/SRP	sourcemap	82	72	0	0.403	OUR-10		83	23
+00528890	00528962	Bnclient::SRP::SRP_ClientVerifyServerProof	Source/Bnclient/SRP/SRP	sourcemap	82	82	0	1.000	MATCH	1 refs unverified	210	0
 00528970	005289e2	Bnclient::SRP::SRP_ParseChallenge	Source/Bnclient/SRP/SRP	sourcemap	43	43	0	1.000	MATCH		114	0
 005289f0	00528ab3	Bnclient::SRP::SRP_ServerComputePublicB	Source/Bnclient/SRP/SRP	sourcemap	71	71	0	1.000	MATCH		195	0
 00528ac0	00528c53	Bnclient::SRP::SRP_ClientVerifyAndComputeKey	Source/Bnclient/SRP/SRP	sourcemap	141	98	0	0.661	OUR-43		246	45
@@ -6974,7 +6974,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 0052a430	0052a46c	Bnclient::SHA::SHA1_BigIntMulValue	Source/Bnclient/SRP/SHA	sourcemap	28	28	0	1.000	MATCH		60	0
 0052a470	0052a4ac	Bnclient::SHA::SHA1_BigIntDivValue	Source/Bnclient/SRP/SHA	sourcemap	28	28	0	1.000	MATCH		60	0
 0052a4b0	0052a4c2	Bnclient::SHA::SHA1_BigIntMod	Source/Bnclient/SRP/SHA	sourcemap	9	9	0	1.000	MATCH		18	0
-0052a4d0	0052a55b	Bnclient::SHA::SHA1_BigIntModToInt	Source/Bnclient/SRP/SHA	sourcemap	56	43	0	0.626	OUR-13		66	25
+0052a4d0	0052a55b	Bnclient::SHA::SHA1_BigIntModToInt	Source/Bnclient/SRP/SHA	sourcemap	56	56	0	1.000	MATCH		139	0
 0052a560	0052a581	Bnclient::SHA::SHA1_BigIntMulMod	Source/Bnclient/SRP/SHA	sourcemap	17	17	0	1.000	MATCH		33	0
 0052a590	0052a5a6	Bnclient::SHA::SHA1_BigIntPowMod	Source/Bnclient/SRP/SHA	sourcemap	11	11	0	1.000	MATCH		22	0
 0052a5b0	0052a5f0	Bnclient::SHA::SHA1_BigIntPowModValue	Source/Bnclient/SRP/SHA	sourcemap	30	30	0	1.000	MATCH		64	0
@@ -7438,8 +7438,8 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00539310	00539316	D2Game::GAME::Clients::GetRealm	Source/D2Game/Game/Clients	sourcemap	3	3	0	1.000	MATCH		6	0
 00539320	00539324	D2Game::GAME::Clients::SetRealm	Source/D2Game/Game/Clients	sourcemap	2	2	0	1.000	MATCH		4	0
 00539330	0053935a	D2Game::GAME::Clients::CLIENT_GetPlayerBasicsData	Source/D2Game/Game/Clients	sourcemap	12	12	0	0.917	MATCH	1 refs unverified	42	0
-00539360	005393e9	D2Game::GAME::Clients::RecordSyncWarpTimestamp	Source/D2Game/Game/Clients	sourcemap	48	56	0	0.327	OUR+8		45	29
-005393f0	00539470	D2Game::GAME::Clients::CheckSyncWarpRateExceeded	Source/D2Game/Game/Clients	sourcemap	45	50	0	0.400	OUR+5		50	36
+00539360	005393e9	D2Game::GAME::Clients::RecordSyncWarpTimestamp	Source/D2Game/Game/Clients	sourcemap	48	48	0	0.979	MATCH	1 refs unverified	137	0
+005393f0	00539470	D2Game::GAME::Clients::CheckSyncWarpRateExceeded	Source/D2Game/Game/Clients	sourcemap	45	45	0	0.978	MATCH	1 refs unverified	128	0
 00539470	0053949a	D2Game::GAME::Clients::CLIENT_GetLangId	Source/D2Game/Game/Clients	sourcemap	12	12	0	0.917	MATCH	1 refs unverified	42	0
 005394a0	0053975f	D2Game::GAME::Clients::CLIENT_PlacePlayerInRoom	Source/D2Game/Game/Clients	sourcemap	246	246	0	0.996	MATCH	1 refs unverified	703	0
 00539760	00539a2b	D2Game::GAME::Clients::CLIENT_LoadCharacterAndSendGameData	Source/D2Game/Game/Clients	sourcemap	257	257	0	0.981	MATCH	6 refs unverified	712	0
@@ -7716,7 +7716,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00541860	00541877	D2Game::UNIT::Monster::GetAiGeneral	Source/D2Game/Unit/Monster	sourcemap	11	11	0	1.000	MATCH		23	0
 00541890	005418b6	D2Game::UNIT::SUnitInactive::SUNITINACTIVE_FreeInactiveMonster	Source/D2Game/Unit/SUnitInactive	sourcemap	12	12	0	1.000	MATCH		38	0
 005418c0	00541968	D2Game::UNIT::SUnitInactive::SUNITINACTIVE_FindAndRemoveInactiveUnitsByRoom	Source/D2Game/Unit/SUnitInactive	sourcemap	63	68	0	0.718	OUR+5		130	27
-00541990	00541abc	D2Game::UNIT::SUnitInactive::SUNITINACTIVE_RestoreInactiveItem	Source/D2Game/Unit/SUnitInactive	sourcemap	122	124	0	0.683	OUR+2		219	51
+00541990	00541abc	D2Game::UNIT::SUnitInactive::SUNITINACTIVE_RestoreInactiveItem	Source/D2Game/Unit/SUnitInactive	sourcemap	122	122	0	0.992	MATCH	1 refs unverified	300	0
 00541ac0	00541b0f	D2Game::UNIT::SUnitInactive::SUNITINACTIVE_RestoreInactiveItemList	Source/D2Game/Unit/SUnitInactive	sourcemap	32	32	0	1.000	MATCH		76	0
 00541b10	00541c4f	D2Game::UNIT::SUnitInactive::SUNITINACTIVE_SerializeAndDeactivateItem	Source/D2Game/Unit/SUnitInactive	sourcemap	96	96	0	1.000	MATCH	2 refs unverified	319	0
 00541c50	00541ccb	D2Game::UNIT::SUnitInactive::SUNITINACTIVE_RemoveInactiveMonsterByClassId	Source/D2Game/Unit/SUnitInactive	sourcemap	46	46	0	1.000	MATCH		123	0
@@ -7997,7 +7997,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 0054ca10	0054cb0e	D2Game::PLAYER::PlayerMsg::SCMD_0x59_CommandNPC	Source/D2Game/Player/PlayerMsg	sourcemap	96	96	0	1.000	MATCH	2 refs unverified	254	0
 0054cb10	0054cc30	D2Game::PLAYER::PlayerMsg::ValidateSyncWarpPath	Source/D2Game/Player/PlayerMsg	sourcemap	119	119	0	1.000	MATCH		288	0
 0054cc30	0054cc3c	D2Game::PLAYER::PlayerMsg::PLRMODES_StatExpireCallback_ClearState	Source/D2Game/Player/PlayerMsg	sourcemap	5	5	0	1.000	MATCH		12	0
-0054cc40	0054cd43	D2Game::PLAYER::PlayerMsg::RelocateAndApplySyncWarp	Source/D2Game/Player/PlayerMsg	sourcemap	101	102	0	0.601	OUR+1		170	77
+0054cc40	0054cd43	D2Game::PLAYER::PlayerMsg::RelocateAndApplySyncWarp	Source/D2Game/Player/PlayerMsg	sourcemap	101	101	0	0.990	MATCH	2 refs unverified	259	0
 0054cd50	0054ce6c	D2Game::PLAYER::PlayerMsg::SCMD_0x5F_SyncPosition	Source/D2Game/Player/PlayerMsg	sourcemap	110	110	0	0.991	MATCH	1 refs unverified	284	0
 0054ce70	0054cec6	D2Game::PLAYER::PlayerMsg::SCMD_0x60_WeaponSwap	Source/D2Game/Player/PlayerMsg	sourcemap	38	38	0	1.000	MATCH		86	0
 0054ced0	0054d130	D2Game::PLAYER::PlayerMsg::MERC_SwapEquippedItem	Source/D2Game/Player/PlayerMsg	sourcemap	234	234	540	0.573	INSN_COUNT_MATCH	49 refs differ	363	87
@@ -8040,7 +8040,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 0054f770	0054f85b	D2Game::Objects::OBJECT_SelectRandomShrineType	Source/D2Game/Objects/Objects	sourcemap	86	86	0	0.988	MATCH	1 refs unverified	235	0
 0054f860	0054f8b4	D2Game::Objects::Objects_InitFn10	Source/D2Game/Objects/Objects	sourcemap	33	33	0	1.000	MATCH		84	0
 0054f8c0	0054f9c6	D2Game::Objects::Objects_InitFn28_GoldPlaceholder	Source/D2Game/Objects/Objects	sourcemap	100	100	0	1.000	MATCH		262	0
-0054f9d0	0054fb26	D2Game::Objects::Objects_InitFn01_Shrine	Source/D2Game/Objects/Objects	sourcemap	128	128	190	0.688	INSN_COUNT_MATCH	2 refs differ	236	62
+0054f9d0	0054fb26	D2Game::Objects::Objects_InitFn01_Shrine	Source/D2Game/Objects/Objects	sourcemap	128	128	0	1.000	MATCH		342	0
 0054fb30	0054fb31	D2Game::Objects::Objects_InitFn05_Door_Unref_0054fb30	Source/D2Game/Objects/Objects	sourcemap	1	1	0	1.000	MATCH		1	0
 0054fb40	0054fb89	D2Game::Objects::Objects_InitFn22_Fire	Source/D2Game/Objects/Objects	sourcemap	26	26	0	1.000	MATCH		73	0
 0054fb90	0054fbad	D2Game::Objects::Objects_InitFn24_FloorTrap	Source/D2Game/Objects/Objects	sourcemap	11	11	0	1.000	MATCH		29	0
@@ -8325,7 +8325,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 0055f5d0	0055f63b	D2Game::ITEMS::ItemMode::ITEMMODE_GetSocketCount	Source/D2Game/Items/ItemMode	sourcemap	47	47	0	1.000	MATCH		107	0
 0055f640	0055f6df	D2Game::ITEMS::ItemMode::ITEMMODE_FindBookWithSpaceForScroll	Source/D2Game/Items/ItemMode	sourcemap	73	73	0	1.000	MATCH		159	0
 0055f6e0	0055f733	D2Game::ITEMS::ItemMode::ITEMMODE_AddItemQuantity	Source/D2Game/Items/ItemMode	sourcemap	36	36	0	1.000	MATCH		83	0
-0055f740	0055f844	D2Game::ITEMS::ItemMode::ITEMMODE_HandleItemDurability	Source/D2Game/Items/ItemMode	sourcemap	110	107	0	0.664	OUR-3		184	31
+0055f740	0055f844	D2Game::ITEMS::ItemMode::ITEMMODE_HandleItemDurability	Source/D2Game/Items/ItemMode	sourcemap	110	110	0	1.000	MATCH		260	0
 0055f850	0055f8fe	D2Game::ITEMS::ItemMode::ITEMMODE_BreakItem	Source/D2Game/Items/ItemMode	sourcemap	71	71	0	1.000	MATCH		174	0
 0055f900	0055f9b5	D2Game::ITEMS::ItemMode::ITEMMODE_ProcessItemFlags	Source/D2Game/Items/ItemMode	sourcemap	74	74	0	1.000	MATCH		181	0
 0055f9c0	0055fa3e	D2Game::ITEMS::ItemMode::ITEMMODE_ResetBookScrollSkillQuantity	Source/D2Game/Items/ItemMode	sourcemap	52	52	0	1.000	MATCH		126	0
@@ -8491,7 +8491,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 0056bec0	0056bfdc	D2Game::SKILLS::SkillsServer::SKILLS_UseChargedSkillCharge	Source/D2Game/Skills/SkillsServer	sourcemap	108	96	0	0.618	OUR-12		188	34
 0056bfe0	0056c10c	D2Game::SKILLS::SkillsServer::CalculateManaUse	Source/D2Game/Skills/SkillsServer	sourcemap	115	102	0	0.737	OUR-13		211	38
 0056c110	0056c15e	D2Game::SKILLS::SkillsServer::SKILLS_DeductManaCost	Source/D2Game/Skills/SkillsServer	sourcemap	38	38	0	1.000	MATCH		78	0
-0056c160	0056c207	D2Game::SKILLS::SkillsServer::SKILL_CheckManaForCast	Source/D2Game/Skills/SkillsServer	sourcemap	74	96	0	0.388	OUR+22		68	27
+0056c160	0056c207	D2Game::SKILLS::SkillsServer::SKILL_CheckManaForCast	Source/D2Game/Skills/SkillsServer	sourcemap	74	74	0	1.000	MATCH		167	0
 0056c210	0056c298	D2Game::SKILLS::SkillsServer::SKILLS_FindUnitsInRange	Source/D2Game/Skills/SkillsServer	sourcemap	54	54	0	1.000	MATCH		136	0
 0056c2a0	0056c2c5	D2Game::SKILLS::SkillsServer::SKILLS_FreeUnitFindData	Source/D2Game/Skills/SkillsServer	sourcemap	15	15	0	1.000	MATCH		37	0
 0056c2d0	0056c307	D2Game::SKILLS::SkillsServer::SKILLS_SetSrvDoFuncAndAttackTarget	Source/D2Game/Skills/SkillsServer	sourcemap	24	24	0	1.000	MATCH		55	0
@@ -8735,7 +8735,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00577f30	00577fd8	D2Game::UNIT::SUNITNPC::SUNITNPC_HandleBuyConfirmation	Source/D2Game/Unit/SUNITNPC	sourcemap	68	68	0	0.985	MATCH	1 refs unverified	168	0
 00577fe0	00578050	D2Game::UNIT::SUNITNPC::NPC_ValidateAndProcessMercHire	Source/D2Game/Unit/SUNITNPC	sourcemap	49	49	0	1.000	MATCH		112	0
 00578050	0057845d	D2Game::UNIT::SUNITNPC::SUNITNPC_ProcessRepair	Source/D2Game/Unit/SUNITNPC	sourcemap	382	386	0	0.326	OUR+4		328	76
-00578460	0057860d	D2Game::UNIT::SUNITNPC::SUNITNPC_HandleIdentify	Source/D2Game/Unit/SUNITNPC	sourcemap	162	152	0	0.478	OUR-10		228	87
+00578460	0057860d	D2Game::UNIT::SUNITNPC::SUNITNPC_HandleIdentify	Source/D2Game/Unit/SUNITNPC	sourcemap	162	162	0	1.000	MATCH		429	0
 00578610	0057863b	D2Game::UNIT::SUNITNPC::UnitHasItemInInventory	Source/D2Game/Unit/SUNITNPC	sourcemap	18	18	0	1.000	MATCH		43	0
 00578640	00578692	D2Game::UNIT::SUNITNPC::SUNITNPC_CheckCanIdentify	Source/D2Game/Unit/SUNITNPC	sourcemap	35	35	0	1.000	MATCH		82	0
 005786a0	0057878e	D2Game::UNIT::SUNITNPC::SUNITNPC_RepairAndRecharge	Source/D2Game/Unit/SUNITNPC	sourcemap	82	82	0	1.000	MATCH		238	0
@@ -8746,7 +8746,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00578ca0	00578d21	D2Game::UNIT::SUNITNPC::HealByPlayerPetsByNPC	Source/D2Game/Unit/SUNITNPC	sourcemap	56	56	0	1.000	MATCH		129	0
 00578d30	00578e65	D2Game::UNIT::SUNITNPC::HealByPlayerByNPC	Source/D2Game/Unit/SUNITNPC	sourcemap	120	120	0	1.000	MATCH		309	0
 00578e70	00578ecb	D2Game::UNIT::SUNITNPC::SUNITNPC_OnInteractHeal	Source/D2Game/Unit/SUNITNPC	sourcemap	30	30	0	1.000	MATCH	1 refs unverified	91	0
-00578ed0	0057902e	D2Game::UNIT::SUNITNPC::ExecutePrayUnused	Source/D2Game/Unit/SUNITNPC	sourcemap	134	130	0	0.568	OUR-4		192	66
+00578ed0	0057902e	D2Game::UNIT::SUNITNPC::ExecutePrayUnused	Source/D2Game/Unit/SUNITNPC	sourcemap	134	134	0	1.000	MATCH		350	0
 00579030	00579089	D2Game::UNIT::SUNITNPC::SUNITNPC_DiscardTradeListRolls	Source/D2Game/Unit/SUNITNPC	sourcemap	41	41	0	1.000	MATCH		89	0
 00579090	00579125	D2Game::UNIT::SUNITNPC::SUNITNPC_HandleResurrect	Source/D2Game/Unit/SUNITNPC	sourcemap	62	63	0	0.512	OUR+1		93	43
 00579130	00579177	D2Game::UNIT::SUNITNPC::SUNITNPC_CloseNpcInteraction	Source/D2Game/Unit/SUNITNPC	sourcemap	34	34	0	1.000	MATCH		71	0
@@ -8764,14 +8764,14 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 0057aa00	0057aa5c	D2Game::UNIT::SUnitDmg::DAMAGE_ApplyManaToUnit	Source/D2Game/Unit/SUnitDmg	sourcemap	46	46	0	1.000	MATCH		92	0
 0057aa60	0057aa95	D2Game::UNIT::SUnitDmg::DAMAGE_DrainManaFromUnit	Source/D2Game/Unit/SUnitDmg	sourcemap	25	25	0	1.000	MATCH		53	0
 0057aaa0	0057aad7	D2Game::UNIT::SUnitDmg::DAMAGE_DrainStaminaFromUnit	Source/D2Game/Unit/SUnitDmg	sourcemap	26	26	0	1.000	MATCH		55	0
-0057aae0	0057ac45	D2Game::UNIT::SUnitDmg::DAMAGE_ApplyStun	Source/D2Game/Unit/SUnitDmg	sourcemap	127	127	11	0.929	INSN_COUNT_MATCH	1 refs unverified	324	28
+0057aae0	0057ac45	D2Game::UNIT::SUnitDmg::DAMAGE_ApplyStun	Source/D2Game/Unit/SUnitDmg	sourcemap	127	127	0	0.992	MATCH	1 refs unverified	357	0
 0057ac50	0057ad7e	D2Game::UNIT::SUnitDmg::DAMAGE_ApplyPoison	Source/D2Game/Unit/SUnitDmg	sourcemap	121	126	0	0.599	OUR+5		183	78
 0057ad80	0057adcc	D2Game::UNIT::SUnitDmg::DAMAGE_OnColdExpire	Source/D2Game/Unit/SUnitDmg	sourcemap	31	31	0	1.000	MATCH		76	0
 0057add0	0057aefe	D2Game::UNIT::SUnitDmg::DAMAGE_ApplyBurning	Source/D2Game/Unit/SUnitDmg	sourcemap	121	126	0	0.599	OUR+5		183	78
 0057af30	0057af71	D2Game::UNIT::SUnitDmg::DAMAGE_GetMonsterColdEffect	Source/D2Game/Unit/SUnitDmg	sourcemap	19	19	0	1.000	MATCH	1 refs unverified	65	0
-0057af80	0057b165	D2Game::UNIT::SUnitDmg::DAMAGE_ApplyCold	Source/D2Game/Unit/SUnitDmg	sourcemap	179	179	9	0.933	INSN_COUNT_MATCH	1 refs unverified	460	20
+0057af80	0057b165	D2Game::UNIT::SUnitDmg::DAMAGE_ApplyCold	Source/D2Game/Unit/SUnitDmg	sourcemap	179	179	0	1.000	MATCH	1 refs unverified	485	0
 0057b170	0057b221	D2Game::UNIT::SUnitDmg::SUNITDMG_StatExpireCallback_ResumeAI	Source/D2Game/Unit/SUnitDmg	sourcemap	69	69	0	1.000	MATCH		177	0
-0057b230	0057b41b	D2Game::UNIT::SUnitDmg::DAMAGE_ApplyFreeze	Source/D2Game/Unit/SUnitDmg	sourcemap	186	186	14	0.914	INSN_COUNT_MATCH	1 refs unverified	441	45
+0057b230	0057b41b	D2Game::UNIT::SUnitDmg::DAMAGE_ApplyFreeze	Source/D2Game/Unit/SUnitDmg	sourcemap	186	186	0	0.995	MATCH	1 refs unverified	491	0
 0057b420	0057b62e	D2Game::UNIT::SUnitDmg::DAMAGE_CalculatePhysicalDamage	Source/D2Game/Unit/SUnitDmg	sourcemap	197	201	0	0.563	OUR+4		314	99
 0057b630	0057b655	D2Game::UNIT::SUnitDmg::DAMAGE_ApplyDemonBonus	Source/D2Game/Unit/SUnitDmg	sourcemap	16	16	0	1.000	MATCH		37	0
 0057b660	0057b69e	D2Game::UNIT::SUnitDmg::DAMAGE_ApplyUndeadBonusDamage	Source/D2Game/Unit/SUnitDmg	sourcemap	26	26	0	1.000	MATCH		62	0
@@ -9337,7 +9337,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00594270	00594273	D2Game::Quests::QUESTS::A1Q4::CUBE_SpecialOutput_Quest_Unused2	Source/D2Game/Quests/A1Q4	sourcemap	2	2	0	1.000	MATCH		3	0
 00594280	00594283	D2Game::Quests::QUESTS::A1Q4::CUBE_SpecialOutput_Quest_Unused3	Source/D2Game/Quests/A1Q4	sourcemap	2	2	0	1.000	MATCH		3	0
 00594290	005942ba	D2Game::Quests::QUESTS::A1Q4::Objects_InitFn61_CainPortal	Source/D2Game/Quests/A1Q4	sourcemap	17	17	0	1.000	MATCH		42	0
-005942c0	00594357	D2Game::Quests::QUESTS::A1Q4::Q04_UpdateCainPortalInTown	Source/D2Game/Quests/A1Q4	sourcemap	57	62	0	0.605	OUR+5		94	51
+005942c0	00594357	D2Game::Quests::QUESTS::A1Q4::Q04_UpdateCainPortalInTown	Source/D2Game/Quests/A1Q4	sourcemap	57	57	0	1.000	MATCH		151	0
 00594360	005943af	D2Game::Quests::QUESTS::A1Q4::Q04_GetCainPortalCoordinates	Source/D2Game/Quests/A1Q4	sourcemap	24	24	0	1.000	MATCH		79	0
 005943b0	0059444b	D2Game::Quests::QUESTS::A1Q4::Q04_SpawnCainCage	Source/D2Game/Quests/A1Q4	sourcemap	51	51	0	1.000	MATCH		155	0
 00594450	005944a7	D2Game::Quests::QUESTS::A1Q4::Q04_GetCainPosition	Source/D2Game/Quests/A1Q4	sourcemap	31	31	0	1.000	MATCH		87	0
@@ -9520,7 +9520,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 0059b6e0	0059b708	D2Game::Quests::QUESTS::A2Q4::Q12_CheckJerhynGateOpen	Source/D2Game/Quests/A2Q4	sourcemap	14	14	0	1.000	MATCH		40	0
 0059b710	0059b7cf	D2Game::Quests::QUESTS::A2Q4::BlockHaremRoomForPlayerAccess	Source/D2Game/Quests/A2Q4	sourcemap	70	70	0	1.000	MATCH		191	0
 0059b7d0	0059b81a	D2Game::Quests::QUESTS::A2Q4::Objects_InitFn30_HaremBlocker	Source/D2Game/Quests/A2Q4	sourcemap	29	29	0	1.000	MATCH		74	0
-0059b820	0059b8a7	D2Game::Quests::QUESTS::A2Q4::Q12_CheckDistanceToHaremBlocker	Source/D2Game/Quests/A2Q4	sourcemap	54	54	12	0.907	INSN_COUNT_MATCH		122	8
+0059b820	0059b8a7	D2Game::Quests::QUESTS::A2Q4::Q12_CheckDistanceToHaremBlocker	Source/D2Game/Quests/A2Q4	sourcemap	54	54	0	1.000	MATCH		135	0
 0059b8b0	0059b8e3	D2Game::Quests::QUESTS::A2Q4::Q12_IsSanctuaryComplete	Source/D2Game/Quests/A2Q4	sourcemap	18	18	0	1.000	MATCH		51	0
 0059b8f0	0059b93c	D2Game::Quests::QUESTS::A2Q4::Q12_GetSummonerCoords	Source/D2Game/Quests/A2Q4	sourcemap	29	29	0	1.000	MATCH		76	0
 0059b940	0059b961	D2Game::Quests::QUESTS::A2Q4::Q12_CheckJustCompleted	Source/D2Game/Quests/A2Q4	sourcemap	13	13	0	1.000	MATCH		33	0
@@ -9651,7 +9651,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 005a0500	005a05f9	D2Game::Monsters::MONSTER_SelectChampionMod	Source/D2Game/Monster/Monsters	sourcemap	83	96	0	0.413	OUR+13		85	102
 005a0600	005a0756	D2Game::Monsters::MONUMOD_RollRandomModifier	Source/D2Game/Monster/Monsters	sourcemap	122	131	0	0.419	OUR+9		137	134
 005a0760	005a0923	D2Game::Monsters::MONSTER_RollAndAssignUMods	Source/D2Game/Monster/Monsters	sourcemap	133	125	0	0.674	OUR-8		302	93
-005a0930	005a09d7	D2Game::Monsters::MONSTER_TransferEnchantments	Source/D2Game/Monster/Monsters	sourcemap	68	71	0	0.288	OUR+3		43	85
+005a0930	005a09d7	D2Game::Monsters::MONSTER_TransferEnchantments	Source/D2Game/Monster/Monsters	sourcemap	68	68	0	1.000	MATCH	2 refs unverified	167	0
 005a09e0	005a0ba9	D2Game::Monsters::SERVER_SpawnMonsterInternal	Source/D2Game/Monster/Monsters	sourcemap	194	193	0	0.749	OUR-1		316	67
 005a0bb0	005a0bf5	D2Game::Monsters::MONSTER_GetMinion1MonstatId	Source/D2Game/Monster/Monsters	sourcemap	26	25	0	0.745	OUR-1		63	4
 005a0c00	005a0cdc	D2Game::Monsters::MONSTER_SpawnMinionsForBoss	Source/D2Game/Monster/Monsters	sourcemap	81	81	0	1.000	MATCH	1 refs unverified	220	0
@@ -9660,7 +9660,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 005a0dc0	005a0e40	D2Game::Monsters::Umod::MONUMOD_ApplyHpBonus	Source/D2Game/Monsters/Umod	sourcemap	53	53	8	0.868	INSN_MATCH		116	12
 005a0e40	005a0e80	D2Game::Monsters::Umod::MONUMOD_ApplyChampionLevelBonus	Source/D2Game/Monsters/Umod	sourcemap	28	28	0	1.000	MATCH		64	0
 005a0e80	005a1075	D2Game::Monsters::Umod::MONUMOD_ApplyChampionStats	Source/D2Game/Monsters/Umod	sourcemap	182	182	0	1.000	MATCH	2 refs unverified	501	0
-005a1080	005a11e1	D2Game::Monsters::Umod::MONUMOD_ApplyGhostly	Source/D2Game/Monsters/Umod	sourcemap	126	119	0	0.522	OUR-7		198	53
+005a1080	005a11e1	D2Game::Monsters::Umod::MONUMOD_ApplyGhostly	Source/D2Game/Monsters/Umod	sourcemap	126	126	0	1.000	MATCH	1 refs unverified	353	0
 005a11f0	005a1227	D2Game::Monsters::Umod::MONUMOD_ApplyFanatic	Source/D2Game/Monsters/Umod	sourcemap	28	28	0	1.000	MATCH		55	0
 005a1230	005a127c	D2Game::Monsters::Umod::MONUMOD_ApplyPossessed	Source/D2Game/Monsters/Umod	sourcemap	34	34	0	1.000	MATCH		76	0
 005a1280	005a1325	D2Game::Monsters::Umod::MONUMOD_ApplyBerserk	Source/D2Game/Monsters/Umod	sourcemap	63	63	0	1.000	MATCH		165	0
@@ -9696,7 +9696,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 005a2ee0	005a3037	D2Game::Monsters::MONSTER_BugLightningDeathBolts	Source/D2Game/Monster/Monsters	sourcemap	125	125	0	0.992	MATCH	3 refs unverified	336	0
 005a3040	005a30a4	D2Game::Monsters::UMOD_SetRandomElementalDamage	Source/D2Game/Monster/Monsters	sourcemap	40	40	0	0.950	MATCH	3 refs unverified	100	0
 005a30b0	005a30d1	D2Game::Monsters::UMOD_SetRandomElementalForMissile	Source/D2Game/Monster/Monsters	sourcemap	15	15	0	1.000	MATCH		33	0
-005a30e0	005a3242	D2Game::Monsters::MONSTER_StealPotionFromBelt	Source/D2Game/Monster/Monsters	sourcemap	129	128	0	0.576	OUR-1		212	95
+005a30e0	005a3242	D2Game::Monsters::MONSTER_StealPotionFromBelt	Source/D2Game/Monster/Monsters	sourcemap	129	129	0	0.992	MATCH	1 refs unverified	354	0
 005a3250	005a348d	D2Game::Monsters::MONSTER_DispatchSpecialDeath	Source/D2Game/Monster/Monsters	sourcemap	55	55	0	1.000	MATCH		201	0
 005a3490	005a360a	D2Game::Monsters::MONSTER_QueenPoisonCloudDeath	Source/D2Game/Monster/Monsters	sourcemap	136	136	0	0.993	MATCH	1 refs unverified	375	0
 005a3610	005a37cb	D2Game::Monsters::MONSTER_MissileSplitOnHit	Source/D2Game/Monster/Monsters	sourcemap	151	151	0	1.000	MATCH	2 refs unverified	443	0
@@ -9817,7 +9817,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 005a8670	005a8730	D2Game::GAME::Event::Dispatch::Monster::MONSTER_UpdateSkillCastAnimation	Source/D2Game/Game/Event/Dispatch/Monster	sourcemap	72	72	0	1.000	MATCH		192	0
 005a8730	005a87a1	D2Game::MISSILES::MissilesMode::SrvDoFunc::fpMissileDoSrvFuncHandler	Source/D2Game/Missiles/MissilesMode/SrvDoFunc	sourcemap	44	44	0	1.000	MATCH		113	0
 005a87b0	005a87e6	D2Game::MISSILES::MissilesMode::SrvDoFunc::fpMissileSrvDoFuncData_MonsterOnly	Source/D2Game/Missiles/MissilesMode/SrvDoFunc	sourcemap	29	29	0	1.000	MATCH		54	0
-005a87f0	005a8842	D2Game::MISSILES::MissilesMode::SrvDoFunc::fpMissileSrvDoFuncData_PlayerOrAllyMonster	Source/D2Game/Missiles/MissilesMode/SrvDoFunc	sourcemap	39	54	0	0.581	OUR+15		60	10
+005a87f0	005a8842	D2Game::MISSILES::MissilesMode::SrvDoFunc::fpMissileSrvDoFuncData_PlayerOrAllyMonster	Source/D2Game/Missiles/MissilesMode/SrvDoFunc	sourcemap	39	39	0	1.000	MATCH		82	0
 005a8850	005a888c	D2Game::MISSILES::MissilesMode::SrvDoFunc::fpMissileSrvDoFuncData_PlayerOrMonster	Source/D2Game/Missiles/MissilesMode/SrvDoFunc	sourcemap	32	32	0	1.000	MATCH		60	0
 005a8890	005a88d2	D2Game::MISSILES::MissilesMode::SrvDoFunc::fpMissileSrvDoFuncData_MissileFlagCheck	Source/D2Game/Missiles/MissilesMode/SrvDoFunc	sourcemap	21	21	0	1.000	MATCH	2 refs unverified	66	0
 005a88e0	005a890a	D2Game::MISSILES::MissilesMode::MISSILE_RollAttackHit	Source/D2Game/Missiles/MissilesMode	sourcemap	19	19	0	1.000	MATCH		42	0
@@ -9841,7 +9841,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 005a9d80	005a9e08	D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_SpawnRadialSubMissiles	Source/D2Game/Missiles/MissilesMode	sourcemap	55	55	0	1.000	MATCH	1 refs unverified	136	0
 005a9e10	005a9f8c	D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_AreaSplashDamage	Source/D2Game/Missiles/MissilesMode	sourcemap	143	143	0	1.000	MATCH	2 refs unverified	380	0
 005a9f90	005a9faa	D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_WallHitDelegateToAreaDamage	Source/D2Game/Missiles/MissilesMode	sourcemap	11	11	0	1.000	MATCH		26	0
-005a9fb0	005aa175	D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_HealTarget	Source/D2Game/Missiles/MissilesMode	sourcemap	174	174	81	0.793	INSN_COUNT_MATCH	6 refs differ; 1 refs unverified	386	51
+005a9fb0	005aa175	D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_HealTarget	Source/D2Game/Missiles/MissilesMode	sourcemap	174	174	0	1.000	MATCH	1 refs unverified	453	0
 005aa180	005aa1b4	D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_BlockSelfHitByState	Source/D2Game/Missiles/MissilesMode	sourcemap	24	24	0	1.000	MATCH		52	0
 005aa1c0	005aa241	D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_SpawnMonsterAtHit	Source/D2Game/Missiles/MissilesMode	sourcemap	48	48	0	1.000	MATCH	1 refs unverified	129	0
 005aa250	005aa45b	D2Game::MISSILES::MissilesMode::Missiles_SrvHitFunc_AreaDamageWithSpawnPattern	Source/D2Game/Missiles/MissilesMode	sourcemap	190	190	0	1.000	MATCH	2 refs unverified	523	0
@@ -9981,7 +9981,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 005b1900	005b1989	D2Game::GAME::Targets::CreateUnitNode	Source/D2Game/Game/Targets	sourcemap	53	53	0	1.000	MATCH		137	0
 005b1990	005b1a1a	D2Game::GAME::Targets::AddNodeToTable	Source/D2Game/Game/Targets	sourcemap	51	51	0	1.000	MATCH		138	0
 005b1a20	005b1a8c	D2Game::GAME::Targets::UNIT_FreeUnitNodes	Source/D2Game/Game/Targets	sourcemap	38	38	0	1.000	MATCH		108	0
-005b1a90	005b1b6d	D2Game::GAME::Targets::MONSTER_FreeUnitNodes	Source/D2Game/Game/Targets	sourcemap	69	67	0	0.382	OUR-2		69	38
+005b1a90	005b1b6d	D2Game::GAME::Targets::MONSTER_FreeUnitNodes	Source/D2Game/Game/Targets	sourcemap	69	69	0	1.000	MATCH		218	0
 005b1b70	005b1bb2	D2Game::GAME::Targets::TARGETS_FreeAllUnitNodes	Source/D2Game/Game/Targets	sourcemap	26	26	0	1.000	MATCH		66	0
 005b1bc0	005b1bfe	D2Game::Monster::Create::MONSTER_FindUnitInPartySlot	Source/D2Game/Monster/Create	sourcemap	23	23	0	1.000	MATCH		62	0
 005b1c00	005b1c41	D2Game::Monster::Create::MONSTER_SetClearPartyFlags	Source/D2Game/Monster/Create	sourcemap	28	31	0	0.542	OUR+3		42	9
@@ -10202,7 +10202,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 005ba9e0	005baa66	D2Game::Quests::QUESTS::A3Q4::Q21_Callback14_PlayerJoinedGame	Source/D2Game/Quests/A3Q4	sourcemap	50	50	0	1.000	MATCH		134	0
 005baa70	005bab60	D2Game::Quests::QUESTS::A3Q4::Q21_InitData	Source/D2Game/Quests/A3Q4	sourcemap	49	49	0	1.000	MATCH	1 refs unverified	240	0
 005bab60	005bac64	D2Game::Quests::QUESTS::A3Q4::Q21_Callback08_MonsterKilled	Source/D2Game/Quests/A3Q4	sourcemap	85	85	0	1.000	MATCH		260	0
-005bac70	005bacec	D2Game::Quests::QUESTS::A3Q5::Q21_CheckGoldenBirdDropConditions	Source/D2Game/Quests/A3Q5	sourcemap	48	48	10	0.854	INSN_COUNT_MATCH	1 refs unverified	109	10
+005bac70	005bacec	D2Game::Quests::QUESTS::A3Q5::Q21_CheckGoldenBirdDropConditions	Source/D2Game/Quests/A3Q5	sourcemap	48	48	0	0.979	MATCH	1 refs unverified	124	0
 005bacf0	005bad13	D2Game::Quests::QUESTS::A3Q5::Q22_OnCouncilMemberKilled	Source/D2Game/Quests/A3Q5	sourcemap	14	14	0	1.000	MATCH		35	0
 005bad20	005bad3f	D2Game::Quests::QUESTS::A3Q5::Q22_IsGoldenBirdQuestActive	Source/D2Game/Quests/A3Q5	sourcemap	11	11	0	1.000	MATCH		31	0
 005bad40	005bad55	D2Game::Quests::QUESTS::A3Q5::Q21_ClearGoldenBirdQuestFlag	Source/D2Game/Quests/A3Q5	sourcemap	7	7	0	1.000	MATCH		21	0
@@ -10364,7 +10364,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 005c3420	005c34a3	D2Game::SKILLS::SkillNec::SKILLNEC_ValidateAttackableTarget	Source/D2Game/Skills/SkillNec	sourcemap	57	57	0	1.000	MATCH		131	0
 005c34b0	005c3538	D2Game::SKILLS::SkillNec::SKILLNEC_AssignCurseAiBehavior	Source/D2Game/Skills/SkillNec	sourcemap	50	50	0	1.000	MATCH	1 refs unverified	136	0
 005c3540	005c35ba	D2Game::SKILLS::SkillNec::SKILLNEC_ClampResistPenalty	Source/D2Game/Skills/SkillNec	sourcemap	46	46	0	1.000	MATCH		103	0
-005c35c0	005c3795	D2Game::SKILLS::SkillNec::SKILLNEC_ApplyCurseToUnit	Source/D2Game/Skills/SkillNec	sourcemap	181	179	0	0.911	OUR-2		451	10
+005c35c0	005c3795	D2Game::SKILLS::SkillNec::SKILLNEC_ApplyCurseToUnit	Source/D2Game/Skills/SkillNec	sourcemap	181	180	0	0.970	OUR-1		460	4
 005c37a0	005c37bd	D2Game::SKILLS::SkillNec::SKILLNEC_ApplyCurseDifficultyDivisor	Source/D2Game/Skills/SkillNec	sourcemap	14	14	0	1.000	MATCH		29	0
 005c37c0	005c39b6	D2Game::SKILLS::SkillNec::Skills_SrvDoFunc_030_CastCurseAoE	Source/D2Game/Skills/SkillNec	sourcemap	153	153	0	1.000	MATCH	3 refs unverified	502	0
 005c39c0	005c3af2	D2Game::SKILLS::SkillNec::SKILLNEC_ApplyDimVision	Source/D2Game/Skills/SkillNec	sourcemap	100	100	0	1.000	MATCH	3 refs unverified	306	0
@@ -10535,13 +10535,13 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 005cf3a0	005cf6ad	D2Game::SKILLS::SkillPal::Skills_SrvDoFunc_066_Conviction	Source/D2Game/Skills/SkillPal	sourcemap	243	243	0	1.000	MATCH	2 refs unverified	781	0
 005cf6b0	005cf89f	D2Game::SKILLS::SkillPal::SKILPAL_SrvStFn31_Charge	Source/D2Game/Skills/SkillPal	sourcemap	191	191	0	1.000	MATCH	1 refs unverified	495	0
 005cf8c0	005cf8f9	D2Game::SKILLS::SkillPal::SKILLPAL_GetAttackFrameIndex	Source/D2Game/Skills/SkillPal	sourcemap	28	28	0	1.000	MATCH		57	0
-005cf900	005cfd1c	D2Game::SKILLS::SkillPal::Skills_SrvDoFunc_067_Charge	Source/D2Game/Skills/SkillPal	sourcemap	385	387	0	0.915	OUR+2		1024	28
+005cf900	005cfd1c	D2Game::SKILLS::SkillPal::Skills_SrvDoFunc_067_Charge	Source/D2Game/Skills/SkillPal	sourcemap	385	385	0	1.000	MATCH	1 refs unverified	1052	0
 005cfd20	005cfe0e	D2Game::SKILLS::SkillPal::SKILLPAL_RollRandomDamage	Source/D2Game/Skills/SkillPal	sourcemap	101	104	0	0.712	OUR+3		189	27
 005cfe10	005d003e	D2Game::SKILLS::SkillPal::SKILPAL_SrvStFn35_Vengeance	Source/D2Game/Skills/SkillPal	sourcemap	199	199	0	1.000	MATCH	1 refs unverified	558	0
 005d0040	005d0174	D2Game::SKILLS::SkillPal::Skills_SrvDoFunc_073_BlessedHammer	Source/D2Game/Skills/SkillPal	sourcemap	121	121	0	1.000	MATCH	1 refs unverified	308	0
 005d0180	005d019b	D2Game::SKILLS::SkillPal::SKILPAL_SrvStFn36_HolyShield	Source/D2Game/Skills/SkillPal	sourcemap	11	11	0	1.000	MATCH		27	0
 005d01a0	005d02a3	D2Game::SKILLS::SkillPal::SKILLPAL_OnConversionExpire	Source/D2Game/Skills/SkillPal	sourcemap	101	101	0	1.000	MATCH		256	0
-005d02b0	005d034a	D2Game::SKILLS::SkillPal::SKILLPAL_CanConvertTarget	Source/D2Game/Skills/SkillPal	sourcemap	58	63	0	0.694	OUR+5		110	23
+005d02b0	005d034a	D2Game::SKILLS::SkillPal::SKILLPAL_CanConvertTarget	Source/D2Game/Skills/SkillPal	sourcemap	58	58	0	1.000	MATCH	1 refs unverified	154	0
 005d0350	005d0664	D2Game::SKILLS::SkillPal::Skills_SrvDoFunc_079_Conversion	Source/D2Game/Skills/SkillPal	sourcemap	295	293	0	0.714	OUR-2		572	114
 005d0670	005d0765	D2Game::SKILLS::SkillPal::Skills_SrvDoFunc_080_FistOfTheHeavens	Source/D2Game/Skills/SkillPal	sourcemap	91	91	0	1.000	MATCH	2 refs unverified	245	0
 005d0770	005d07bc	D2Game::SKILLS::SkillPal::SKILLPAL_OnFreezeExpire	Source/D2Game/Skills/SkillPal	sourcemap	31	31	0	1.000	MATCH		76	0
@@ -10564,7 +10564,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 005d1c30	005d1ccd	D2Game::SKILLS::SkillEMonst::SKILLSOR_GetMeteorSubMissileCount	Source/D2Game/Skills/SkillEMonst	sourcemap	57	57	0	0.982	MATCH	3 refs unverified	157	0
 005d1cd0	005d1d6a	D2Game::SKILLS::SkillEMonst::Skills_SrvDoFunc_130_SpawnSubMissiles	Source/D2Game/Skills/SkillEMonst	sourcemap	64	64	0	1.000	MATCH	1 refs unverified	154	0
 005d1d70	005d1e08	D2Game::SKILLS::SkillEMonst::SKILLEMONST_ApplyAuraBuff	Source/D2Game/Skills/SkillEMonst	sourcemap	52	52	0	1.000	MATCH	1 refs unverified	152	0
-005d1e10	005d1f67	D2Game::SKILLS::SkillEMonst::SKILLEMONST_TransformMonsterClass	Source/D2Game/Skills/SkillEMonst	sourcemap	123	121	0	0.803	OUR-2		271	55
+005d1e10	005d1f67	D2Game::SKILLS::SkillEMonst::SKILLEMONST_TransformMonsterClass	Source/D2Game/Skills/SkillEMonst	sourcemap	123	123	0	1.000	MATCH	1 refs unverified	343	0
 005d1f70	005d2088	D2Game::SKILLS::SkillEMonst::Skills_SrvDoFunc_131_ConditionalTransformOrBuff	Source/D2Game/Skills/SkillEMonst	sourcemap	104	104	0	1.000	MATCH	1 refs unverified	280	0
 005d2090	005d2131	D2Game::SKILLS::SkillEMonst::Skills_SrvDoFunc_132_FireClassUpgradedMissile	Source/D2Game/Skills/SkillEMonst	sourcemap	67	67	0	1.000	MATCH	1 refs unverified	161	0
 005d2140	005d21a1	D2Game::SKILLS::SkillEMonst::SKILLMONST_CanImpregnateTarget	Source/D2Game/Skills/SkillEMonst	sourcemap	38	38	0	1.000	MATCH	1 refs unverified	97	0
@@ -10592,7 +10592,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 005d3310	005d331c	D2Game::SKILLSASS_StatExpireCallback_ClearState2	Source/D2Game/D2GameRoot	sourcemap	5	5	0	1.000	MATCH		12	0
 005d3320	005d348a	D2Game::SKILLS::SkillAss::SKILLASS_AddChargeUpStack	Source/D2Game/Skills/SkillAss	sourcemap	145	145	0	0.993	MATCH	3 refs unverified	362	0
 005d3490	005d35cc	D2Game::SKILLS::SkillAss::Skills_SrvDoFunc_034_ChargeUpStackMelee	Source/D2Game/Skills/SkillAss	sourcemap	111	111	0	1.000	MATCH	1 refs unverified	316	0
-005d35d0	005d367f	D2Game::SKILLS::SkillAss::Skills_SrvDoFunc_035_ElementalChargeRelease	Source/D2Game/Skills/SkillAss	sourcemap	73	76	0	0.658	OUR+3		115	17
+005d35d0	005d367f	D2Game::SKILLS::SkillAss::Skills_SrvDoFunc_035_ElementalChargeRelease	Source/D2Game/Skills/SkillAss	sourcemap	73	73	0	1.000	MATCH		175	0
 005d3680	005d3785	D2Game::SKILLS::SkillAss::SKILLBAR_HandleWarCryStun	Source/D2Game/Skills/SkillAss	sourcemap	86	86	0	1.000	MATCH	3 refs unverified	261	0
 005d3790	005d387a	D2Game::SKILLS::SkillAss::SKILLASS_AddChargeUpDamageRange	Source/D2Game/Skills/SkillAss	sourcemap	87	86	0	0.474	OUR-1		113	54
 005d3880	005d3969	D2Game::SKILLS::SkillAss::SKILLASS_ApplyChargeUpDamage	Source/D2Game/Skills/SkillAss	sourcemap	81	81	0	1.000	MATCH	2 refs unverified	233	0
@@ -10622,7 +10622,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 005d5d70	005d5e02	D2Game::SKILLS::SkillAss::Skills_SrvDoFunc_043_ChargeRelease_ScatterMissiles	Source/D2Game/Skills/SkillAss	sourcemap	64	64	0	1.000	MATCH	1 refs unverified	146	0
 005d5e10	005d6015	D2Game::SKILLS::SkillAss::SKILLASS_CreateSummon	Source/D2Game/Skills/SkillAss	sourcemap	197	198	0	0.770	OUR+1		424	69
 005d6020	005d616e	D2Game::SKILLS::SkillAss::Skills_SrvDoFunc_044_SummonBladeSentinel	Source/D2Game/Skills/SkillAss	sourcemap	131	131	0	1.000	MATCH	1 refs unverified	334	0
-005d6170	005d61f2	D2Game::SKILLS::SkillAss::Skills_SrvDoFunc_045_SummonTrapSentry	Source/D2Game/Skills/SkillAss	sourcemap	56	62	0	0.576	OUR+6		71	19
+005d6170	005d61f2	D2Game::SKILLS::SkillAss::Skills_SrvDoFunc_045_SummonTrapSentry	Source/D2Game/Skills/SkillAss	sourcemap	56	56	0	1.000	MATCH	1 refs unverified	130	0
 005d6200	005d6322	D2Game::SKILLS::SkillAss::SKILLASS_SkillMeleeAttack	Source/D2Game/Skills/SkillAss	sourcemap	98	98	0	1.000	MATCH	1 refs unverified	290	0
 005d6330	005d6340	D2Game::SKILLS::SkillAss::SKILLASS_SrvStFn25_DragonClaw	Source/D2Game/Skills/SkillAss	sourcemap	7	7	0	1.000	MATCH		16	0
 005d6340	005d6408	D2Game::SKILLS::SkillAss::Skills_SrvDoFunc_046_DragonClaw	Source/D2Game/Skills/SkillAss	sourcemap	85	85	0	1.000	MATCH		200	0
@@ -10632,7 +10632,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 005d68a0	005d69aa	D2Game::SKILLS::SkillAss::Skills_SrvDoFunc_048_BladeFury	Source/D2Game/Skills/SkillAss	sourcemap	100	100	0	1.000	MATCH		266	0
 005d69b0	005d69cb	D2Game::SKILLS::SkillAss::SKILLSASS_StatExpireCallback_ClearStateSetFlag	Source/D2Game/Skills/SkillAss	sourcemap	11	11	0	1.000	MATCH		27	0
 005d69d0	005d6b58	D2Game::SKILLS::SkillAss::SKILLASS_SrvStFn26_BladeFury	Source/D2Game/Skills/SkillAss	sourcemap	154	160	0	0.764	OUR+6		328	27
-005d6b60	005d6ce7	D2Game::SKILLS::SkillAss::SKILLASS_EquipSummonItems	Source/D2Game/Skills/SkillAss	sourcemap	139	142	0	0.719	OUR+3		281	104
+005d6b60	005d6ce7	D2Game::SKILLS::SkillAss::SKILLASS_EquipSummonItems	Source/D2Game/Skills/SkillAss	sourcemap	139	139	0	1.000	MATCH		391	0
 005d6cf0	005d6e64	D2Game::SKILLS::SkillAss::SKILLASS_ApplyLevelScaledBuffs	Source/D2Game/Skills/SkillAss	sourcemap	132	132	0	1.000	MATCH	3 refs unverified	372	0
 005d6e70	005d7086	D2Game::SKILLS::SkillAss::Skills_SrvDoFunc_049_SummonShadowClone	Source/D2Game/Skills/SkillAss	sourcemap	196	196	0	1.000	MATCH	3 refs unverified	534	0
 005d7090	005d717e	D2Game::SKILLS::SkillAss::SKILLASS_SrvStFn27_DragonTail	Source/D2Game/Skills/SkillAss	sourcemap	96	94	0	0.695	OUR-2		160	47
@@ -10678,10 +10678,10 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 005d9f70	005da01f	D2Game::SKILLS::SkillBar::SKILL_InitTransportPath	Source/D2Game/Skills/SkillBar	sourcemap	71	71	0	1.000	MATCH		175	0
 005da020	005da11b	D2Game::SKILLS::SkillBar::SKILLBAR_CalculateChargePath	Source/D2Game/Skills/SkillBar	sourcemap	97	97	0	1.000	MATCH		251	0
 005da120	005da362	D2Game::SKILLS::SkillBar::SKILLBAR_UpdateLeap	Source/D2Game/Skills/SkillBar	sourcemap	209	209	0	1.000	MATCH	1 refs unverified	578	0
-005da370	005da485	D2Game::SKILLS::SkillBar::Skills_SrvDoFunc_077_Leap	Source/D2Game/Skills/SkillBar	sourcemap	114	110	0	0.562	OUR-4		159	47
+005da370	005da485	D2Game::SKILLS::SkillBar::Skills_SrvDoFunc_077_Leap	Source/D2Game/Skills/SkillBar	sourcemap	114	114	0	1.000	MATCH	1 refs unverified	277	0
 005da490	005da538	D2Game::SKILLS::SkillBar::SKILLBAR_AcquireNextTarget	Source/D2Game/Skills/SkillBar	sourcemap	74	74	0	1.000	MATCH		168	0
 005da540	005da65b	D2Game::SKILLS::SkillBar::SKILLBAR_SrvStFn41_LeapAttack	Source/D2Game/Skills/SkillBar	sourcemap	121	121	0	1.000	MATCH		283	0
-005da660	005da7df	D2Game::SKILLS::SkillBar::SKILLBAR_WhirlwindHitCycle	Source/D2Game/Skills/SkillBar	sourcemap	145	146	0	0.935	OUR+1		368	11
+005da660	005da7df	D2Game::SKILLS::SkillBar::SKILLBAR_WhirlwindHitCycle	Source/D2Game/Skills/SkillBar	sourcemap	145	145	0	1.000	MATCH	2 refs unverified	383	0
 005da7e0	005da8ae	D2Game::SKILLS::SkillBar::Skills_SrvDoFunc_078_LeapAttack	Source/D2Game/Skills/SkillBar	sourcemap	88	88	0	1.000	MATCH		206	0
 005da8b0	005da8e4	D2Game::SKILLS::SkillAma::SKILLAMA_SrvStFn04_ArrowAttack	Source/D2Game/Skills/SkillAma	sourcemap	22	22	0	1.000	MATCH		52	0
 005da8f0	005da932	D2Game::SKILLS::SkillAma::SKILLAMA_SrvStFn05_Jab	Source/D2Game/Skills/SkillAma	sourcemap	26	26	0	1.000	MATCH	1 refs unverified	66	0
@@ -10741,7 +10741,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 005dd480	005dd503	D2Game::Monster::AI::MONSTERAI_CanSwitchAi	Source/D2Game/Monster/Ai/AI	sourcemap	53	53	0	1.000	MATCH		131	0
 005dd510	005dd604	D2Game::Monster::AI::MONSTERAI_ValidateSwitchTarget	Source/D2Game/Monster/Ai/AI	sourcemap	95	95	0	1.000	MATCH		244	0
 005dd610	005dd7e8	D2Game::Monster::AI::MONSTERAI_FindSwitchAiTarget	Source/D2Game/Monster/Ai/AI	sourcemap	167	166	0	0.745	OUR-1		318	79
-005dd7f0	005ddc2c	D2Game::Monster::AI::MONSTERAI_FindBestTarget	Source/D2Game/Monster/Ai/AI	sourcemap	375	380	0	0.392	OUR+5		425	245
+005dd7f0	005ddc2c	D2Game::Monster::AI::MONSTERAI_FindBestTarget	Source/D2Game/Monster/Ai/AI	sourcemap	375	380	0	0.397	OUR+5		436	234
 005ddc30	005ddcf8	D2Game::Monster::AI::FindTargetAndDistance	Source/D2Game/Monster/Ai/AI	sourcemap	89	89	0	1.000	MATCH		200	0
 005ddd00	005dde44	D2Game::Monster::AI::MONSTERAI_ApplyTerrorToMonster	Source/D2Game/Monster/Ai/AI	sourcemap	106	106	0	1.000	MATCH		324	0
 005dde50	005dde77	D2Game::Monster::AI::MONSTERAI_FindTargetInRange	Source/D2Game/Monster/Ai/AI	sourcemap	19	19	0	1.000	MATCH		39	0
@@ -10806,10 +10806,10 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 005e0430	005e0490	D2Game::Monster::AI::MONSTERAI_FindAlliedMonsterToHeal	Source/D2Game/Monster/Ai/AI	sourcemap	42	42	0	1.000	MATCH		96	0
 005e0490	005e0971	D2Game::Monster::AI::AI_Fn1_HighPriest	Source/D2Game/Monster/Ai/AI	sourcemap	436	436	0	1.000	MATCH	2 refs unverified	1249	0
 005e0980	005e0c78	D2Game::Monster::AI::AI_Fn1_DesertTurret	Source/D2Game/Monster/Ai/AI	sourcemap	273	265	0	0.130	OUR-8		74	76
-005e0c80	005e0f58	D2Game::Monster::AI::AI_Fn1_Megademon	Source/D2Game/Monster/Ai/AI	sourcemap	262	268	0	0.762	OUR+6		556	44
+005e0c80	005e0f58	D2Game::Monster::AI::AI_Fn1_Megademon	Source/D2Game/Monster/Ai/AI	sourcemap	262	262	0	1.000	MATCH		728	0
 005e0f60	005e1072	D2Game::Monster::AI::AI_Fn1_ArcaneTower	Source/D2Game/Monster/Ai/AI	sourcemap	94	94	0	1.000	MATCH		274	0
 005e1080	005e1249	D2Game::Monster::AI::AI_Fn1_PantherJavelin	Source/D2Game/Monster/Ai/AI	sourcemap	175	175	9	0.994	INSN_MATCH		455	0
-005e1250	005e1535	D2Game::Monster::AI::AI_Fn1_FetishBlowgun	Source/D2Game/Monster/Ai/AI	sourcemap	286	286	30	0.906	INSN_MATCH		658	80
+005e1250	005e1535	D2Game::Monster::AI::AI_Fn1_FetishBlowgun	Source/D2Game/Monster/Ai/AI	sourcemap	286	286	18	0.948	INSN_MATCH		696	42
 005e1540	005e171c	D2Game::Monster::AI::AI_Fn1_ReanimatedHorde	Source/D2Game/Monster/Ai/AI	sourcemap	184	184	0	1.000	MATCH		476	0
 005e1720	005e17d1	D2Game::Monster::AI::MONSTERAI_FindUnassignedImpInRange	Source/D2Game/Monster/Ai/AI	sourcemap	70	68	0	0.638	OUR-2		105	26
 005e17e0	005e1856	D2Game::Monster::AI::MONSTERAI_UpdateClosestTarget	Source/D2Game/Monster/Ai/AI	sourcemap	53	53	0	1.000	MATCH		118	0
@@ -10818,13 +10818,13 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 005e1b60	005e1d2b	D2Game::Monster::AI::AI_Fn1_Minion	Source/D2Game/Monster/Ai/AI	sourcemap	176	176	0	1.000	MATCH		459	0
 005e1d30	005e1dfa	D2Game::Monster::AI::AI_Fn1_SuicideMinion	Source/D2Game/Monster/Ai/AI	sourcemap	80	87	0	0.359	OUR+7		49	69
 005e1e00	005e2117	D2Game::Monster::AI::AI_Fn1_Succubus	Source/D2Game/Monster/Ai/AI	sourcemap	287	284	0	0.767	OUR-3		628	82
-005e2120	005e260a	D2Game::Monster::AI::AI_Fn1_SuccubusWitch	Source/D2Game/Monster/Ai/AI	sourcemap	450	448	0	0.846	OUR-2		1113	130
+005e2120	005e260a	D2Game::Monster::AI::AI_Fn1_SuccubusWitch	Source/D2Game/Monster/Ai/AI	sourcemap	450	450	0	1.000	MATCH		1258	0
 005e2610	005e26cd	D2Game::Monster::AI::HirelingRandomMoveCheck	Source/D2Game/Monster/Ai/AI	sourcemap	81	81	0	1.000	MATCH		189	0
 005e26d0	005e279a	D2Game::Monster::AI::AI_Overseer_FindMinionCallback	Source/D2Game/Monster/Ai/AI	sourcemap	72	72	0	1.000	MATCH	1 refs unverified	202	0
 005e27a0	005e2b61	D2Game::Monster::AI::AI_Fn1_Overseer	Source/D2Game/Monster/Ai/AI	sourcemap	341	341	1068	0.466	INSN_COUNT_MATCH	30 refs differ	395	219
 005e2b70	005e2bcf	D2Game::Monster::AI::AI_MinionSpawner_CountMinionsCallback	Source/D2Game/Monster/Ai/AI	sourcemap	37	37	0	1.000	MATCH	1 refs unverified	95	0
 005e2bd0	005e2cd0	D2Game::Monster::AI::AITHINK_Fn1_MinionSpawner	Source/D2Game/Monster/Ai/AI	sourcemap	91	91	0	1.000	MATCH		256	0
-005e2cd0	005e2d72	D2Game::Monster::AI::AITHINK_Fn0_SpecialMounting	Source/D2Game/Monster/Ai/AI	sourcemap	60	77	0	0.248	OUR+17		38	87
+005e2cd0	005e2d72	D2Game::Monster::AI::AITHINK_Fn0_SpecialMounting	Source/D2Game/Monster/Ai/AI	sourcemap	60	60	0	1.000	MATCH	3 refs unverified	156	0
 005e2d80	005e2fcd	D2Game::Monster::AI::AITHINK_Fn1_SpecialMounting	Source/D2Game/Monster/Ai/AI	sourcemap	197	195	0	0.617	OUR-2		301	161
 005e2fd0	005e2fe3	D2Game::Monster::AI::AITHINK_Fn0_Imp	Source/D2Game/Monster/Ai/AI	sourcemap	7	7	0	1.000	MATCH		19	0
 005e2ff0	005e34bf	D2Game::Monster::AI::AITHINK_Fn1_Imp	Source/D2Game/Monster/Ai/AI	sourcemap	424	423	0	0.796	OUR-1		953	222
@@ -10836,7 +10836,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 005e3900	005e392a	D2Game::Monster::AI::MONSTERAI_CheckAdjacentUnit	Source/D2Game/Monster/Ai/AI	sourcemap	19	19	0	1.000	MATCH		42	0
 005e3930	005e3e94	D2Game::Monster::AI::HirelingFollowOwnerAction	Source/D2Game/Monster/Ai/AI	sourcemap	492	525	0	0.338	OUR+33		403	244
 005e3ea0	005e45d0	D2Game::Monster::AI::AI_Pet_ExecuteMovementBehavior	Source/D2Game/Monster/Ai/AI	sourcemap	662	706	0	0.629	OUR+44		1141	358
-005e45d0	005e482e	D2Game::Monster::AI::AI_Pet_EvaluateMovementPriority	Source/D2Game/Monster/Ai/AI	sourcemap	239	238	0	0.763	OUR-1		562	16
+005e45d0	005e482e	D2Game::Monster::AI::AI_Pet_EvaluateMovementPriority	Source/D2Game/Monster/Ai/AI	sourcemap	239	239	0	1.000	MATCH		606	0
 005e4830	005e4ab2	D2Game::Monster::AI::AI_Pet_ThinkCombatAndFollow	Source/D2Game/Monster/Ai/AI	sourcemap	270	277	0	0.592	OUR+7		401	153
 005e4ac0	005e4ce7	D2Game::Monster::AI::AITHINK4_PetThinkCastSkillAndFollow	Source/D2Game/Monster/Ai/AI	sourcemap	227	231	0	0.541	OUR+4		310	108
 005e4cf0	005e4d28	D2Game::Monster::AI::AITHINK_Fn1_NecroPet	Source/D2Game/Monster/Ai/AI	sourcemap	26	26	0	1.000	MATCH		56	0
@@ -10883,7 +10883,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 005e7f80	005e8020	D2Game::Monster::AI::AITHINK_Fn1_MinionReset	Source/D2Game/Monster/Ai/AI	sourcemap	61	61	0	0.984	MATCH	1 refs unverified	160	0
 005e8020	005e80de	D2Game::Monster::AI::AITHINK_Fn1_SpecialDimVision	Source/D2Game/Monster/Ai/AI	sourcemap	74	74	0	1.000	MATCH	2 refs unverified	190	0
 005e80e0	005e8139	D2Game::Monster::AI::AI_Fn0_SpecialTerror	Source/D2Game/Monster/Ai/AI	sourcemap	35	35	0	1.000	MATCH		89	0
-005e8140	005e8331	D2Game::Monster::AI::AITHINK_Fn1_SpecialTerror	Source/D2Game/Monster/Ai/AI	sourcemap	200	199	0	0.742	OUR-1		407	73
+005e8140	005e8331	D2Game::Monster::AI::AITHINK_Fn1_SpecialTerror	Source/D2Game/Monster/Ai/AI	sourcemap	200	200	0	1.000	MATCH		497	0
 005e8340	005e8479	D2Game::Monster::AI::AITHINK_Fn1_SpecialTaunt	Source/D2Game/Monster/Ai/AI	sourcemap	133	133	2	0.985	INSN_MATCH		307	6
 005e8480	005e8528	D2Game::Monster::AI::DiabloAi_ResetInfernoAndReattach	Source/D2Game/Monster/Ai/AI	sourcemap	69	69	0	1.000	MATCH		168	0
 005e8530	005e8807	D2Game::Monster::AI::CalculateRiskAncientsAndDiablo	Source/D2Game/Monster/Ai/AI	sourcemap	256	256	0	1.000	MATCH	3 refs unverified	727	0
@@ -10922,7 +10922,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 005eb970	005ec694	D2Game::Monster::AI::AITHINK_Fn1_ShadowMaster	Source/D2Game/Monster/Ai/AI	sourcemap	1068	1041	0	0.454	OUR-27		1500	1039
 005ec6a0	005ec6b3	D2Game::Monster::AI::AITHINK_Fn0_VineInit	Source/D2Game/Monster/Ai/AI	sourcemap	7	7	0	1.000	MATCH		19	0
 005ec6c0	005ec8b5	D2Game::Monster::AI::AITHINK_Fn1_Vines	Source/D2Game/Monster/Ai/AI	sourcemap	193	193	0	1.000	MATCH		501	0
-005ec8c0	005ecb6a	D2Game::Monster::AI::AITHINK_Fn1_CycleOfLife	Source/D2Game/Monster/Ai/AI	sourcemap	247	247	81	0.968	INSN_COUNT_MATCH	4 refs differ; 1 refs unverified	657	18
+005ec8c0	005ecb6a	D2Game::Monster::AI::AITHINK_Fn1_CycleOfLife	Source/D2Game/Monster/Ai/AI	sourcemap	247	247	0	1.000	MATCH	1 refs unverified	682	0
 005ecb70	005ecbbc	D2Game::Monster::AI::AITHINK_Fn0_Raven	Source/D2Game/Monster/Ai/AI	sourcemap	30	30	0	1.000	MATCH		76	0
 005ecbc0	005ecc0d	D2Game::Monster::AI::MONSTERAI_CommandWalkToUnitWithCombat	Source/D2Game/Monster/Ai/AI	sourcemap	34	34	0	1.000	MATCH		77	0
 005ecc10	005eced5	D2Game::Monster::AI::AITHINK_Fn1_Raven	Source/D2Game/Monster/Ai/AI	sourcemap	280	276	0	0.320	OUR-4		173	90
@@ -10953,7 +10953,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 005ef320	005ef5dd	D2Game::Monster::AI::AI_Fn1_BaalThrone	Source/D2Game/Monster/Ai/AI	sourcemap	244	245	0	0.687	OUR+1		504	25
 005ef5e0	005ef61e	D2Game::Monster::AI::Baal::AI_Baal_IsPortalInRange	Source/D2Game/Monster/Ai/Baal	sourcemap	27	27	0	1.000	MATCH		62	0
 005ef620	005ef70b	D2Game::Monster::AI::AITHINK_Fn1_BaalToStairs	Source/D2Game/Monster/Ai/AI	sourcemap	91	91	0	0.989	MATCH	1 refs unverified	235	0
-005ef710	005ef817	D2Game::Monster::AI::AITHINK_Fn1_BaalTaunt	Source/D2Game/Monster/Ai/AI	sourcemap	106	99	0	0.780	OUR-7		202	37
+005ef710	005ef817	D2Game::Monster::AI::AITHINK_Fn1_BaalTaunt	Source/D2Game/Monster/Ai/AI	sourcemap	106	106	0	1.000	MATCH		263	0
 005ef820	005ef908	D2Game::Monster::AI::AITHINK_Fn1_BaalTentacle	Source/D2Game/Monster/Ai/AI	sourcemap	84	84	83	0.560	INSN_COUNT_MATCH		127	92
 005ef910	005efa49	D2Game::Monster::AI::AITHINK_Fn1_BaalMinion	Source/D2Game/Monster/Ai/AI	sourcemap	109	109	0	1.000	MATCH		313	0
 005efa50	005efa89	D2Game::Monster::AI::AI_PutridDefiler_FindHostCallback	Source/D2Game/Monster/Ai/AI	sourcemap	27	27	0	1.000	MATCH		57	0
@@ -10963,18 +10963,18 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 005efe20	005eff50	D2Game::Monster::AI::AITHINK_Fn1_Zombie	Source/D2Game/Monster/Ai/AI	sourcemap	122	122	0	1.000	MATCH		304	0
 005eff50	005f00d5	D2Game::Monster::AI::AITHINK_Fn1_Bighead	Source/D2Game/Monster/Ai/AI	sourcemap	156	156	3	0.981	INSN_MATCH		380	9
 005f00e0	005f02b4	D2Game::Monster::AI::AITHINK_Fn1_BloodHawk	Source/D2Game/Monster/Ai/AI	sourcemap	184	186	0	0.735	OUR+2		355	86
-005f02c0	005f06a8	D2Game::Monster::AI::AITHINK_Fn1_Fallen	Source/D2Game/Monster/Ai/AI	sourcemap	367	367	258	0.801	INSN_COUNT_MATCH	11 refs differ	794	107
+005f02c0	005f06a8	D2Game::Monster::AI::AITHINK_Fn1_Fallen	Source/D2Game/Monster/Ai/AI	sourcemap	367	367	0	1.000	MATCH		1000	0
 005f06b0	005f06f9	D2Game::Monster::AI::MONSTERAI_FindNearestEvilMonster	Source/D2Game/Monster/Ai/AI	sourcemap	33	33	0	1.000	MATCH		73	0
 005f0700	005f0a20	D2Game::Monster::AI::AITHINK_Fn1_SandRaider	Source/D2Game/Monster/Ai/AI	sourcemap	295	295	0	1.000	MATCH		800	0
 005f0a20	005f0af3	D2Game::Monster::AI::AITHINK_Fn1_Wraith	Source/D2Game/Monster/Ai/AI	sourcemap	86	86	0	1.000	MATCH		211	0
 005f0b00	005f0cc1	D2Game::Monster::AI::AITHINK_Fn1_CorruptRogue	Source/D2Game/Monster/Ai/AI	sourcemap	177	177	0	1.000	MATCH		449	0
-005f0cd0	005f1137	D2Game::Monster::AI::AITHINK_Fn1_Baboon	Source/D2Game/Monster/Ai/AI	sourcemap	415	427	0	0.846	OUR+12		983	119
+005f0cd0	005f1137	D2Game::Monster::AI::AITHINK_Fn1_Baboon	Source/D2Game/Monster/Ai/AI	sourcemap	415	415	0	1.000	MATCH		1127	0
 005f1140	005f129c	D2Game::Monster::AI::AITHINK_Fn1_QuillRat	Source/D2Game/Monster/Ai/AI	sourcemap	141	139	0	0.400	OUR-2		130	27
 005f12a0	005f1371	D2Game::Monster::AI::AITHINK_Fn1_Goatman	Source/D2Game/Monster/Ai/AI	sourcemap	85	85	0	1.000	MATCH		209	0
-005f1380	005f1431	D2Game::Monster::AI::MONSTERAI_FindFallenForRevival	Source/D2Game/Monster/Ai/AI	sourcemap	65	69	0	0.746	OUR+4		137	37
+005f1380	005f1431	D2Game::Monster::AI::MONSTERAI_FindFallenForRevival	Source/D2Game/Monster/Ai/AI	sourcemap	65	65	0	1.000	MATCH	1 refs unverified	177	0
 005f1440	005f1747	D2Game::Monster::AI::AITHINK_Fn1_FallenShaman	Source/D2Game/Monster/Ai/AI	sourcemap	286	286	0	1.000	MATCH		775	0
 005f1750	005f17f5	D2Game::Monster::AI::SandMaggotAi_CastDelayedSkill	Source/D2Game/Monster/Ai/AI	sourcemap	66	66	0	1.000	MATCH		165	0
-005f1800	005f1b51	D2Game::Monster::AI::AITHINK_Fn1_SandMaggot	Source/D2Game/Monster/Ai/AI	sourcemap	300	302	0	0.767	OUR+2		656	125
+005f1800	005f1b51	D2Game::Monster::AI::AITHINK_Fn1_SandMaggot	Source/D2Game/Monster/Ai/AI	sourcemap	300	300	0	1.000	MATCH		849	0
 005f1b60	005f1dd2	D2Game::Monster::AI::AITHINK_Fn1_ClawViper	Source/D2Game/Monster/Ai/AI	sourcemap	231	231	0	1.000	MATCH		626	0
 005f1de0	005f209a	D2Game::Monster::AI::AITHINK_Fn1_ClawViperEx	Source/D2Game/Monster/Ai/AI	sourcemap	255	255	0	1.000	MATCH		698	0
 005f20a0	005f22ac	D2Game::Monster::AI::AITHINK_Fn1_SandLeaper	Source/D2Game/Monster/Ai/AI	sourcemap	201	201	0	1.000	MATCH		524	0
@@ -10996,7 +10996,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 005f4a70	005f4fcf	D2Game::Monster::AI::AITHINK_Fn1_Vampire	Source/D2Game/Monster/Ai/AI	sourcemap	468	526	0	0.308	OUR+58		372	368
 005f4fd0	005f5034	D2Game::Monster::AI::BatDemonAi_HandleThrowCompletion	Source/D2Game/Monster/Ai/AI	sourcemap	42	42	0	1.000	MATCH		100	0
 005f5040	005f53d6	D2Game::Monster::AI::AITHINK_Fn1_BatDemon	Source/D2Game/Monster/Ai/AI	sourcemap	355	355	0	1.000	MATCH		918	0
-005f53e0	005f56c1	D2Game::Monster::AI::AITHINK_Fn1_Fetish	Source/D2Game/Monster/Ai/AI	sourcemap	282	284	0	0.792	OUR+2		593	69
+005f53e0	005f56c1	D2Game::Monster::AI::AITHINK_Fn1_Fetish	Source/D2Game/Monster/Ai/AI	sourcemap	282	282	0	1.000	MATCH		737	0
 005f56d0	005f582c	D2Game::Monster::AI::AITHINK_Fn1_HellMeteor	Source/D2Game/Monster/Ai/AI	sourcemap	122	122	0	1.000	MATCH		348	0
 005f5830	005f5a17	D2Game::Monster::AI::AndarielAi_DecideSkillCast	Source/D2Game/Monster/Ai/AI	sourcemap	183	183	0	1.000	MATCH		487	0
 005f5a20	005f5d42	D2Game::Monster::AI::AITHINK_Fn1_CorruptArcher	Source/D2Game/Monster/Ai/AI	sourcemap	300	300	0	1.000	MATCH		802	0
@@ -11025,8 +11025,8 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 005f8260	005f85bb	D2Game::Monster::AI::AITHINK_Fn1_FrogDemon	Source/D2Game/Monster/Ai/AI	sourcemap	319	303	0	0.540	OUR-16		452	105
 005f85c0	005f89aa	D2Game::Monster::AI::AI_Fn1_Summoner	Source/D2Game/Monster/Ai/AI	sourcemap	358	364	0	0.565	OUR+6		563	393
 005f89b0	005f8c7c	D2Game::Monster::AI::AI_Fn1_Izual	Source/D2Game/Monster/Ai/AI	sourcemap	253	248	0	0.335	OUR-5		194	164
-005f8c80	005f8f78	D2Game::Monster::AI::AI_Fn1_UberIzual	Source/D2Game/Monster/Ai/AI	sourcemap	274	274	458	0.781	INSN_COUNT_MATCH	18 refs differ; 1 refs unverified	580	6
-005f8f80	005f9267	D2Game::Monster::AI::AI_Fn1_Tentacle	Source/D2Game/Monster/Ai/AI	sourcemap	255	253	0	0.677	OUR-2		482	217
+005f8c80	005f8f78	D2Game::Monster::AI::AI_Fn1_UberIzual	Source/D2Game/Monster/Ai/AI	sourcemap	274	274	0	1.000	MATCH	1 refs unverified	760	0
+005f8f80	005f9267	D2Game::Monster::AI::AI_Fn1_Tentacle	Source/D2Game/Monster/Ai/AI	sourcemap	255	255	0	1.000	MATCH		743	0
 005f9270	005f9482	D2Game::Monster::AI::AI_Fn1_TentacleHead	Source/D2Game/Monster/Ai/AI	sourcemap	185	186	0	0.528	OUR+1		247	129
 005f9490	005f96b3	D2Game::Monster::AI::AI_Fn1_GargoyleTrap	Source/D2Game/Monster/Ai/AI	sourcemap	207	208	0	0.583	OUR+1		363	119
 005f96c0	005f994b	D2Game::Monster::AI::AI_Fn1_SkeletonMage	Source/D2Game/Monster/Ai/AI	sourcemap	246	246	18	0.992	INSN_COUNT_MATCH		647	0
@@ -11037,7 +11037,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 005f9e30	005fa00a	D2Game::Monster::AI::AI_Monster_CastDirectionalSkillAtTarget	Source/D2Game/Monster/Ai/AI	sourcemap	178	171	0	0.487	OUR-7		279	84
 005fa010	005fa273	D2Game::Monster::AI::AI_Fn1_VileMother	Source/D2Game/Monster/Ai/AI	sourcemap	223	223	0	1.000	MATCH	1 refs unverified	611	0
 005fa280	005fa37d	D2Game::Monster::AI::AI_Fn1_VileDog	Source/D2Game/Monster/Ai/AI	sourcemap	105	105	0	1.000	MATCH		253	0
-005fa380	005fa68d	D2Game::Monster::AI::AI_Fn1_FingerMage	Source/D2Game/Monster/Ai/AI	sourcemap	280	304	0	0.716	OUR+24		563	144
+005fa380	005fa68d	D2Game::Monster::AI::AI_Fn1_FingerMage	Source/D2Game/Monster/Ai/AI	sourcemap	280	280	0	1.000	MATCH		781	0
 005fa690	005fa70b	D2Game::Monster::AI::MONSTERAI_FindCorpseForRaising	Source/D2Game/Monster/Ai/AI	sourcemap	51	51	0	1.000	MATCH		123	0
 005fa710	005faa8d	D2Game::Monster::AI::AI_Fn1_Regurgitator	Source/D2Game/Monster/Ai/AI	sourcemap	337	329	0	0.736	OUR-8		619	124
 005faa90	005fab77	D2Game::Monster::AI::AI_Fn1_DoomKnight	Source/D2Game/Monster/Ai/AI	sourcemap	95	95	0	1.000	MATCH		231	0
@@ -11058,11 +11058,11 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 005fc000	005fc063	D2Game::Monster::AI::Baal::AI_BAAL_IsUnitInRange	Source/D2Game/Monster/Ai/Baal	sourcemap	38	38	0	0.974	MATCH	1 refs unverified	99	0
 005fc070	005fc0bd	D2Game::Monster::AI::Baal::AI_BAAL_IsSkillPowerful	Source/D2Game/Monster/Ai/Baal	sourcemap	30	30	0	1.000	MATCH		77	0
 005fc0c0	005fc130	D2Game::Monster::AI::Baal::AI_BAAL_HasPowerfulSkill	Source/D2Game/Monster/Ai/Baal	sourcemap	47	47	0	1.000	MATCH		112	0
-005fc130	005fc1bb	D2Game::Monster::AI::Baal::AI_BAAL_SelectWeightedAction	Source/D2Game/Monster/Ai/Baal	sourcemap	62	60	0	0.754	OUR-2		110	17
-005fc1c0	005fc2ff	D2Game::Monster::AI::Baal::AI_BAAL_CloneChooseAction	Source/D2Game/Monster/Ai/Baal	sourcemap	111	113	0	0.723	OUR+2		251	23
-005fc300	005fc44e	D2Game::Monster::AI::Baal::AI_BAAL_ThroneRoomChooseAction	Source/D2Game/Monster/Ai/Baal	sourcemap	113	113	332	0.504	INSN_COUNT_MATCH	4 refs differ	208	61
-005fc450	005fc62e	D2Game::Monster::AI::Baal::AI_Baal_SelectActionWeighted	Source/D2Game/Monster/Ai/Baal	sourcemap	155	152	0	0.306	OUR-3		144	246
-005fc630	005fc822	D2Game::Monster::AI::Baal::AI_BaalEvaluateCombatAction	Source/D2Game/Monster/Ai/Baal	sourcemap	201	197	0	0.744	OUR-4		401	77
+005fc130	005fc1bb	D2Game::Monster::AI::Baal::AI_BAAL_SelectWeightedAction	Source/D2Game/Monster/Ai/Baal	sourcemap	62	62	0	1.000	MATCH		139	0
+005fc1c0	005fc2ff	D2Game::Monster::AI::Baal::AI_BAAL_CloneChooseAction	Source/D2Game/Monster/Ai/Baal	sourcemap	111	111	0	1.000	MATCH		319	0
+005fc300	005fc44e	D2Game::Monster::AI::Baal::AI_BAAL_ThroneRoomChooseAction	Source/D2Game/Monster/Ai/Baal	sourcemap	113	113	0	1.000	MATCH		334	0
+005fc450	005fc62e	D2Game::Monster::AI::Baal::AI_Baal_SelectActionWeighted	Source/D2Game/Monster/Ai/Baal	sourcemap	155	155	0	1.000	MATCH		478	0
+005fc630	005fc822	D2Game::Monster::AI::Baal::AI_BaalEvaluateCombatAction	Source/D2Game/Monster/Ai/Baal	sourcemap	201	201	0	1.000	MATCH		498	0
 005fc830	005fc851	D2Game::Monster::AI::Baal::AI_BAAL_CountLivingMinions	Source/D2Game/Monster/Ai/Baal	sourcemap	15	15	0	1.000	MATCH		33	0
 005fc860	005fcb59	D2Game::Monster::AI::Baal::AI_Baal_SpawnClone	Source/D2Game/Monster/Ai/Baal	sourcemap	293	274	0	0.568	OUR-19		425	147
 005fcb60	005fcf2c	D2Game::Monster::AI::Baal::AI_Baal_ExecuteAction	Source/D2Game/Monster/Ai/Baal	sourcemap	369	365	0	0.768	OUR-4		651	95
@@ -11113,7 +11113,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 005fee60	005fee66	D2CMP::SRC::SpriteCache::CELDATACACHE_GetMemUsage	Source/D2CMP/Src/SpriteCache	sourcemap	2	2	0	1.000	MATCH	1 refs unverified	6	0
 005fee70	005fee76	D2CMP::SRC::SpriteCache::CELDATACACHE_GetMemLimit	Source/D2CMP/Src/SpriteCache	sourcemap	2	2	0	1.000	MATCH	1 refs unverified	6	0
 005fee80	005fee89	D2CMP::SRC::SpriteCache::Unreferenced_005fee80	Source/D2CMP/Src/SpriteCache	sourcemap	4	4	0	1.000	MATCH		9	0
-005fee90	005ff058	D2CMP::SRC::SpriteCache::GFX_AllocSpriteCache	Source/D2CMP/Src/SpriteCache	sourcemap	151	65	0	0.324	OUR-86		99	83
+005fee90	005ff058	D2CMP::SRC::SpriteCache::GFX_AllocSpriteCache	Source/D2CMP/Src/SpriteCache	sourcemap	151	151	0	1.000	MATCH		456	0
 005ff060	005ff0cf	D2CMP::SRC::SpriteCache::SPRITECACHE_EvictOldest	Source/D2CMP/Src/SpriteCache	sourcemap	38	38	0	1.000	MATCH		111	0
 005ff0f0	005ff162	D2CMP::SRC::SpriteCache::SPRITECACHE_AddToLRU	Source/D2CMP/Src/SpriteCache	sourcemap	53	53	105	0.528	INSN_COUNT_MATCH		58	44
 005ff1b0	005ff299	D2CMP::SRC::SpriteCache::SPRITECACHE_RemoveFromLRU	Source/D2CMP/Src/SpriteCache	sourcemap	90	85	0	0.331	OUR-5		76	103
@@ -11163,7 +11163,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00601410	0060144e	D2CMP::SRC::CelCmp::CELCMP_FreeCelFileMemory	Source/D2CMP/Src/CelCmp	sourcemap	19	19	0	0.947	MATCH	1 refs unverified	62	0
 00601450	006014b9	D2CMP::SRC::CelCmp::CELCMP_InvokeFormatSpecificCleanup	Source/D2CMP/Src/CelCmp	sourcemap	39	39	0	0.974	MATCH	2 refs unverified	105	0
 006014c0	006015c7	D2CMP::SRC::CelCmp::CELCMP_DrawCelFrame	Source/D2CMP/Src/CelCmp	sourcemap	103	97	0	0.180	OUR-6		42	22
-006015d0	00601645	D2CMP::SRC::CelCmp::CELCMP_CopyCelDataToBuffer	Source/D2CMP/Src/CelCmp	sourcemap	40	41	0	0.716	OUR+1		88	25
+006015d0	00601645	D2CMP::SRC::CelCmp::CELCMP_CopyCelDataToBuffer	Source/D2CMP/Src/CelCmp	sourcemap	40	40	0	0.975	MATCH	2 refs unverified	117	0
 00601650	00601730	D2CMP::SRC::CelCmp::CELCMP_DrawCelFrameFromGfxData	Source/D2CMP/Src/CelCmp	sourcemap	88	88	0	0.989	MATCH	2 refs unverified	224	0
 00601730	00601805	D2CMP::SRC::CelCmp::CELCMP_DrawCelFrameCentered	Source/D2CMP/Src/CelCmp	sourcemap	89	89	0	0.989	MATCH	1 refs unverified	213	0
 00601810	0060183c	D2CMP::SRC::CelCmp::CELCMP_ValidateGfxDataIndexInRange	Source/D2CMP/Src/CelCmp	sourcemap	19	19	0	1.000	MATCH		44	0
@@ -11394,7 +11394,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00608520	00608531	D2CMP::SRC::FastCmp::D2GFX_ToggleLowQuality_Unref_00608520	Source/D2CMP/Src/FastCmp	sourcemap	5	5	0	1.000	MATCH	2 refs unverified	17	0
 00608540	006089ea	D2CMP::SRC::FastCmp::FASTCMP_DecompressRLEDispatcher	Source/D2CMP/Src/FastCmp	sourcemap	498	487	0	0.345	OUR-11		347	147
 006089f0	00608bf5	D2CMP::SRC::FastCmp::FASTCMP_DecompressRLEWithEffect	Source/D2CMP/Src/FastCmp	sourcemap	162	159	0	0.312	OUR-3		154	151
-00608c00	00608d60	D2CMP::SRC::FastCmp::DRAW_DebugFillRect	Source/D2CMP/Src/FastCmp	sourcemap	112	112	188	0.509	INSN_COUNT_MATCH	8 refs differ; 8 refs unverified	150	146
+00608c00	00608d60	D2CMP::SRC::FastCmp::DRAW_DebugFillRect	Source/D2CMP/Src/FastCmp	sourcemap	112	112	0	1.000	MATCH	12 refs unverified	349	0
 00608d60	00608ed2	D2CMP::SRC::FastCmp::FASTCMP_DecompressRLEWithAlpha	Source/D2CMP/Src/FastCmp	sourcemap	143	151	0	0.313	OUR+8		113	89
 00608ee0	0060901a	D2CMP::SRC::FastCmp::FASTCMP_DecompressRLEWithPaletteConversion	Source/D2CMP/Src/FastCmp	sourcemap	112	111	0	0.646	OUR-1		200	83
 00609020	006090d1	D2CMP::SRC::LRUCache::LRUCACHE_Init	Source/D2CMP/Src/LRUCache	sourcemap	71	72	0	0.671	OUR+1		115	20
@@ -11434,7 +11434,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 0060a650	0060a743	D2CMP::SRC::Tilecmp::TILECMP_CompressSubTile	Source/D2CMP/Src/Tilecmp	sourcemap	83	83	0	0.988	MATCH	1 refs unverified	243	0
 0060a750	0060a910	D2CMP::SRC::Tilecmp::TILECMP_DeepCopyWithRecompression	Source/D2CMP/Src/Tilecmp	sourcemap	142	142	10	0.972	INSN_COUNT_MATCH	1 refs unverified	439	0
 0060a910	0060a9c8	D2CMP::SRC::Tilecmp::TILECMP_ShallowCopyZeroPointers	Source/D2CMP/Src/Tilecmp	sourcemap	63	63	0	0.984	MATCH	2 refs unverified	184	0
-0060a9d0	0060aaee	D2CMP::SRC::GfxHash::GFXHASH_UnlinkCacheEntry	Source/D2CMP/Src/GfxHash	sourcemap	89	89	6	0.955	INSN_MATCH	1 refs unverified	278	5
+0060a9d0	0060aaee	D2CMP::SRC::GfxHash::GFXHASH_UnlinkCacheEntry	Source/D2CMP/Src/GfxHash	sourcemap	89	89	2	0.966	INSN_MATCH	1 refs unverified	281	5
 0060aaf0	0060ab01	D2CMP::SRC::GfxHash::GFXHASH_InitHashTable	Source/D2CMP/Src/GfxHash	sourcemap	6	6	0	1.000	MATCH		17	0
 0060ab10	0060ab64	D2CMP::SRC::GfxHash::GFX_UnlinkCacheEntry	Source/D2CMP/Src/GfxHash	sourcemap	33	33	0	0.970	MATCH	1 refs unverified	84	0
 0060ab70	0060ab71	D2CMP::SRC::GfxHash::IGNORELIST_Initialize_Unref_0060ab70	Source/D2CMP/Src/GfxHash	sourcemap	1	1	0	1.000	MATCH		1	0
@@ -11983,7 +11983,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00622350	00622398	D2Common::Units::CheckObjectPortalFlag	Source/D2Common/Units/Units	sourcemap	25	25	0	0.960	MATCH	1 refs unverified	72	0
 006223a0	006223ea	D2Common::Units::GetOverlayHeight	Source/D2Common/Units/Units	sourcemap	29	29	0	1.000	MATCH		74	0
 006223f0	00622519	D2Common::Units::GetDefense	Source/D2Common/Units/Units	sourcemap	116	116	0	1.000	MATCH		297	0
-00622520	00622555	D2Common::Units::GetToHitFactorInline	Source/D2Common/Units/Units	bracket	18	16	0	0.706	OUR-2		49	0
+00622520	00622555	D2Common::Units::GetToHitFactorInline	Source/D2Common/Units/Units	exact	18	18	0	1.000	MATCH	1 refs unverified	53	0
 00622560	006225ed	D2Common::Units::GetAttackRate	Source/D2Common/Units/Units	sourcemap	52	52	0	0.981	MATCH	2 refs unverified	141	0
 006225f0	00622719	D2Common::Units::HasShield	Source/D2Common/Units/Units	sourcemap	60	65	0	0.336	OUR+5		50	16
 00622720	00622826	D2Common::Units::GetBlockRate	Source/D2Common/Units/Units	sourcemap	96	96	0	1.000	MATCH	3 refs unverified	262	0
@@ -12093,7 +12093,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00625a00	00625a1c	D2Common::Stats::StatsEx::STATLIST_SetOverlayPending	Source/D2Common/Stats/StatsEx	sourcemap	11	11	0	1.000	MATCH		28	0
 00625a20	00625a44	D2Common::Stats::StatsEx::STATLIST_IsOverlayPending	Source/D2Common/Stats/StatsEx	sourcemap	16	16	0	1.000	MATCH		36	0
 00625a50	00625a66	D2Common::Stats::StatsEx::STATLIST_GetStatByState	Source/D2Common/Stats/StatsEx	sourcemap	10	10	0	1.000	MATCH		22	0
-00625a70	00625b64	D2Common::Stats::StatsEx::STATLIST_SetUnitState	Source/D2Common/Stats/StatsEx	sourcemap	84	88	0	0.407	OUR+4		107	76
+00625a70	00625b64	D2Common::Stats::StatsEx::STATLIST_SetUnitState	Source/D2Common/Stats/StatsEx	sourcemap	84	84	0	1.000	MATCH	6 refs unverified	244	0
 00625b70	00625bac	D2Common::Stats::StatsEx::GetStateBitFlag	Source/D2Common/Stats/StatsEx	sourcemap	22	22	0	1.000	MATCH	1 refs unverified	60	0
 00625bb0	00625bd7	D2Common::Stats::StatsEx::GetStateFlags	Source/D2Common/Stats/StatsEx	sourcemap	16	16	0	1.000	MATCH		39	0
 00625be0	00625c21	D2Common::Stats::StatsEx::STATLIST_GetUnitGfxFlags	Source/D2Common/Stats/StatsEx	sourcemap	24	24	0	1.000	MATCH	1 refs unverified	65	0
@@ -12371,7 +12371,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00634260	006342ac	D2Common::DATATBLS::ItemTbls::TXT_RareAffixes_GetLine	Source/D2Common/DataTbls/ItemTbls	sourcemap	25	25	0	0.960	MATCH	3 refs unverified	76	0
 006342b0	00634d8e	D2Common::DATATBLS::ItemTbls::TXT_AllocTxt_uniqueitems	Source/D2Common/DataTbls/ItemTbls	sourcemap	422	422	0	0.998	MATCH	11 refs unverified	2782	0
 00634d90	00634db2	D2Common::DATATBLS::ItemTbls::ITEMTBLS_FreeUniqueItems	Source/D2Common/DataTbls/ItemTbls	sourcemap	8	8	0	1.000	MATCH	3 refs unverified	34	0
-00634dc0	00636726	D2Common::DATATBLS::ItemTbls::TXT_AllocTxt_setitems	Source/D2Common/DataTbls/ItemTbls	sourcemap	923	923	111	0.878	INSN_MATCH	4 refs differ; 19 refs unverified	5851	651
+00634dc0	00636726	D2Common::DATATBLS::ItemTbls::TXT_AllocTxt_setitems	Source/D2Common/DataTbls/ItemTbls	sourcemap	923	923	97	0.896	INSN_MATCH	4 refs differ; 19 refs unverified	5949	548
 00636730	0063676b	D2Common::DATATBLS::ItemTbls::ITEMTBLS_FreeSetsAndSetItems	Source/D2Common/DataTbls/ItemTbls	sourcemap	16	16	0	1.000	MATCH	6 refs unverified	59	0
 00636770	00636aff	D2Common::DATATBLS::ItemTbls::TXT_AllocTxt_qualityitems	Source/D2Common/DataTbls/ItemTbls	sourcemap	167	167	0	1.000	MATCH	9 refs unverified	911	0
 00636b00	00636b0c	D2Common::DATATBLS::ItemTbls::DATATBLS_UnloadQualityItemsTxt	Source/D2Common/DataTbls/ItemTbls	sourcemap	4	4	0	1.000	MATCH	1 refs unverified	12	0
@@ -12560,7 +12560,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 0063da70	0063db73	D2Common::INVENTORY::Inventory::INVENTORY_SetEquippedItemAppearance	Source/D2Common/Inventory/Inventory	sourcemap	100	100	0	0.990	MATCH	1 refs unverified	259	0
 0063db80	0063db83	D2Common::Monsters::MONSTERS::MONSTERS_OnInitMonster_NoOp_Unref_0063db80	Source/D2Common/Monsters/MONSTERS	sourcemap	1	1	0	1.000	MATCH		3	0
 0063db90	0063dbb8	D2Common::INVENTORY::Inventory::INVENTORY_CalculateSwapActionCode	Source/D2Common/Inventory/Inventory	sourcemap	16	16	0	1.000	MATCH		40	0
-0063dbc0	0063dd86	D2Common::INVENTORY::Inventory::INVENTORY_CanDualWieldItems	Source/D2Common/Inventory/Inventory	sourcemap	112	126	0	0.605	OUR+14		177	76
+0063dbc0	0063dd86	D2Common::INVENTORY::Inventory::INVENTORY_CanDualWieldItems	Source/D2Common/Inventory/Inventory	sourcemap	112	112	0	1.000	MATCH		313	0
 0063dd90	0063de54	D2Common::INVENTORY::Inventory::INVENTORY_GetEquipSwapAction	Source/D2Common/Inventory/Inventory	sourcemap	96	96	0	1.000	MATCH		196	0
 0063de60	0063df95	D2Common::INVENTORY::Inventory::INVENTORY_GetEquipActionForBodySlot	Source/D2Common/Inventory/Inventory	sourcemap	123	123	0	1.000	MATCH		278	0
 0063dfa0	0063dfca	D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem	Source/D2Common/Inventory/Inventory	sourcemap	19	18	0	0.270	OUR-1		9	7
@@ -12592,7 +12592,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 0063ea70	0063ebb5	D2Common::Monsters::MONSTERS::SummonOrSpawnMode	Source/D2Common/Monsters/MONSTERS	sourcemap	106	106	0	1.000	MATCH	2 refs unverified	325	0
 0063ebc0	0063ebc3	D2Common::Monsters::MONSTERS::MONSTERS_OnInitMonster_NoOp	Source/D2Common/Monsters/MONSTERS	sourcemap	1	1	0	1.000	MATCH		3	0
 0063ebd0	0063ec61	D2Common::Monsters::MONSTERS::MONSTERS_GetMaxLightRadiusFromEquipment	Source/D2Common/Monsters/MONSTERS	sourcemap	64	65	0	0.543	OUR+1		98	9
-0063ec70	0063edb8	D2Common::Monsters::MONSTERS::GetMonsterBaseId	Source/D2Common/Monsters/MONSTERS	sourcemap	123	112	0	0.196	OUR-11		55	65
+0063ec70	0063edb8	D2Common::Monsters::MONSTERS::GetMonsterBaseId	Source/D2Common/Monsters/MONSTERS	sourcemap	123	123	0	1.000	MATCH	2 refs unverified	328	0
 0063edc0	0063ee08	D2Common::Monsters::MONSTERS::MONSTERS_CheckMonStatFlag0xc_Bit7	Source/D2Common/Monsters/MONSTERS	sourcemap	24	24	0	1.000	MATCH	2 refs unverified	72	0
 0063ee10	0063ee83	D2Common::Monsters::MONSTERS::MONSTERS_GetUpgradeSkillsAndCount	Source/D2Common/Monsters/MONSTERS	sourcemap	38	38	130	0.395	INSN_COUNT_MATCH	13 refs differ	50	33
 0063ee90	0063eeeb	D2Common::Monsters::MONSTERS::MONSTER_GetMercType	Source/D2Common/Monsters/MONSTERS	sourcemap	34	34	0	1.000	MATCH		91	0
@@ -12651,7 +12651,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00642da0	00642f6c	D2Common::Drlg::DRLG_AllocDrlgActMisc	Source/D2Common/Drlg/Drlg	sourcemap	148	149	0	0.646	OUR+1		293	103
 00642f70	00643015	D2Common::Drlg::AddActiveCountToDrlgLevel	Source/D2Common/Drlg/Drlg	sourcemap	55	55	0	1.000	MATCH		165	0
 00643020	0064305a	D2Common::Drlg::ChangeActiveRoomBetweenLevels	Source/D2Common/Drlg/Drlg	sourcemap	25	25	0	1.000	MATCH		58	0
-00643060	006431f5	D2Common::Drlg::DRLG_FreeAdjacentLevelRoomData	Source/D2Common/Drlg/Drlg	sourcemap	133	132	0	0.385	OUR-1		141	97
+00643060	006431f5	D2Common::Drlg::DRLG_FreeAdjacentLevelRoomData	Source/D2Common/Drlg/Drlg	sourcemap	133	133	0	1.000	MATCH		405	0
 00643200	0064325e	D2Common::Drlg::DRLG_FreeInactiveLevelData	Source/D2Common/Drlg/Drlg	sourcemap	31	31	0	1.000	MATCH		94	0
 00643260	00643288	D2Common::Drlg::Transform::CoordsMapToScreen	Source/D2Common/Drlg/Transform	sourcemap	21	21	0	1.000	MATCH		40	0
 00643290	006432b4	D2Common::Drlg::Transform::DRLG_MapWorldToScreenCoords	Source/D2Common/Drlg/Transform	sourcemap	19	19	0	1.000	MATCH		36	0
@@ -12805,7 +12805,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00647320	0064752c	D2Common::Skills::SKILLS_AddOrRemoveItemSkill	Source/D2Common/Skills/Skills	sourcemap	170	170	110	0.782	INSN_COUNT_MATCH	2 refs differ; 1 refs unverified	402	69
 00647530	00647539	D2Common::Skills::thunk_SKILLS_AddOrRemoveItemSkill	Source/D2Common/Skills/Skills	sourcemap	4	4	0	1.000	MATCH		9	0
 00647540	00647634	D2Common::Skills::SKILLS_HasEnoughManaForSkill	Source/D2Common/Skills/Skills	sourcemap	98	98	0	0.990	MATCH	1 refs unverified	244	0
-00647640	0064783f	D2Common::Skills::SKILLS_HasRequiredWeaponOrQuantity	Source/D2Common/Skills/Skills	sourcemap	222	219	0	0.671	OUR-3		321	141
+00647640	0064783f	D2Common::Skills::SKILLS_HasRequiredWeaponOrQuantity	Source/D2Common/Skills/Skills	sourcemap	222	222	0	1.000	MATCH	1 refs unverified	511	0
 00647840	006478e4	D2Common::Skills::SKILLS_CheckItemChargesRemaining	Source/D2Common/Skills/Skills	sourcemap	69	69	0	1.000	MATCH		164	0
 006478f0	00647954	D2Common::Skills::SKILL_IsDelayExpired	Source/D2Common/Skills/Skills	sourcemap	45	45	0	1.000	MATCH		100	0
 00647960	00647a92	D2Common::Skills::SKILLS_CanUseSkill	Source/D2Common/Skills/Skills	sourcemap	122	122	0	0.984	MATCH	4 refs unverified	306	0
@@ -13137,8 +13137,8 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00655720	006562ae	D2Common::DATATBLS::MonsterTbls::TXT_AllocTxt_hireling	Source/D2Common/DataTbls/MonsterTbls	sourcemap	448	450	0	0.924	OUR+2		2815	118
 006562b0	006562e3	D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_FreeHirelingTxt	Source/D2Common/DataTbls/MonsterTbls	sourcemap	13	13	0	1.000	MATCH	4 refs unverified	51	0
 006562f0	0065638c	D2Common::DATATBLS::MonsterTbls::GetHirelingText	Source/D2Common/DataTbls/MonsterTbls	sourcemap	62	62	0	1.000	MATCH	4 refs unverified	156	0
-00656390	00656432	D2Common::DATATBLS::MonsterTbls::GetHirelingEntryByNameId	Source/D2Common/DataTbls/MonsterTbls	sourcemap	62	58	0	0.450	OUR-4		71	58
-00656440	006564cb	D2Common::DATATBLS::MonsterTbls::GetHirelingEntryByClassId	Source/D2Common/DataTbls/MonsterTbls	sourcemap	59	56	0	0.435	OUR-3		53	45
+00656390	00656432	D2Common::DATATBLS::MonsterTbls::GetHirelingEntryByNameId	Source/D2Common/DataTbls/MonsterTbls	sourcemap	62	62	0	1.000	MATCH	2 refs unverified	162	0
+00656440	006564cb	D2Common::DATATBLS::MonsterTbls::GetHirelingEntryByClassId	Source/D2Common/DataTbls/MonsterTbls	sourcemap	59	59	0	1.000	MATCH	2 refs unverified	139	0
 006564d0	00656575	D2Common::DATATBLS::MonsterTbls::GetHirelingEntry	Source/D2Common/DataTbls/MonsterTbls	sourcemap	66	60	0	0.492	OUR-6		73	51
 00656580	0065661e	D2Common::DATATBLS::MonsterTbls::GetHirelingDataTable	Source/D2Common/DataTbls/MonsterTbls	sourcemap	60	58	0	0.339	OUR-2		48	53
 00656620	006568ea	D2Common::DATATBLS::MonsterTbls::TXT_AllocTxt_npc	Source/D2Common/DataTbls/MonsterTbls	sourcemap	116	116	0	1.000	MATCH	3 refs unverified	714	0
@@ -13341,7 +13341,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00661880	00661992	D2Common::DATATBLS::MissileTbls::MISSILETBLS_ValidateCalcCode	Source/D2Common/DataTbls/MissileTbls	sourcemap	104	124	0	0.447	OUR+20		134	18
 006619a0	00661a2e	D2Common::DATATBLS::MissileTbls::MissileCalcLinker	Source/D2Common/DataTbls/MissileTbls	sourcemap	49	49	0	1.000	MATCH	4 refs unverified	142	0
 00661a30	00661b20	D2Common::DATATBLS::MissileTbls::MISSILETBLS_ValidateAndClampField	Source/D2Common/DataTbls/MissileTbls	sourcemap	72	72	28	0.500	INSN_MATCH	1 refs unverified	94	42
-00661b20	00663205	D2Common::DATATBLS::MissileTbls::TXT_AllocTxt_missiles	Source/D2Common/DataTbls/MissileTbls	sourcemap	821	822	0	0.975	OUR+1		5762	79
+00661b20	00663205	D2Common::DATATBLS::MissileTbls::TXT_AllocTxt_missiles	Source/D2Common/DataTbls/MissileTbls	sourcemap	821	822	0	0.962	OUR+1		5677	124
 00663210	00663267	D2Common::DATATBLS::MissileTbls::MISSILETBLS_FreeTxt	Source/D2Common/DataTbls/MissileTbls	sourcemap	26	26	0	1.000	MATCH	7 refs unverified	87	0
 00663270	006632b9	D2Common::DATATBLS::MissileTbls::MISSILETBLS_CalculateVelocity	Source/D2Common/DataTbls/MissileTbls	sourcemap	24	24	0	1.000	MATCH	2 refs unverified	73	0
 006632c0	00663303	D2Common::Merc::MERC_GetWeaponAnimIndex	Source/D2Common/Merc	sourcemap	27	27	0	1.000	MATCH	2 refs unverified	64	0
@@ -13715,14 +13715,14 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00677030	00677094	D2Common::Drlg::DRLGPLACE_ACT5_ValidatePlacementList3	Source/D2Common/Drlg/Drlg	sourcemap	45	45	0	1.000	MATCH	1 refs unverified	100	0
 006770a0	00677104	D2Common::Drlg::DRLGPLACE_ACT4_ValidatePlacementList1	Source/D2Common/Drlg/Drlg	sourcemap	45	45	0	1.000	MATCH	1 refs unverified	100	0
 00677110	00677174	D2Common::Drlg::DRLGPLACE_ACT4_ValidatePlacementList2	Source/D2Common/Drlg/Drlg	sourcemap	45	45	0	1.000	MATCH	1 refs unverified	100	0
-00677180	006772ba	D2Common::Drlg::ACT1_fpLevelDataFn2_A	Source/D2Common/Drlg/Drlg	sourcemap	117	118	0	0.715	OUR+1		204	96
+00677180	006772ba	D2Common::Drlg::ACT1_fpLevelDataFn2_A	Source/D2Common/Drlg/Drlg	sourcemap	117	117	0	1.000	MATCH	2 refs unverified	314	0
 006772c0	006775ba	D2Common::Drlg::OutPlace::DRLGLEVEL_ParseLevelData	Source/D2Common/Drlg/OutPlace	votes	242	250	0	0.341	OUR+8		256	266
 006775c0	00677635	D2Common::Drlg::OutPlace::DRLGACT_SetWarpConnectionsBetweenTwoAreas	Source/D2Common/Drlg/OutPlace	sourcemap	48	48	0	1.000	MATCH		117	0
 00677640	00677679	D2Common::Drlg::OutPlace::DRLGLEVEL_AllocOrthForAdjacentLevel	Source/D2Common/Drlg/OutPlace	sourcemap	22	22	0	1.000	MATCH		57	0
 00677680	00677741	D2Common::Drlg::OutPlace::DRLGLEVEL_AllocDrlgLevelFromLevelIdToLevelId	Source/D2Common/Drlg/OutPlace	sourcemap	69	69	0	1.000	MATCH		193	0
 00677750	0067778a	D2Common::Drlg::OutPlace::DRLGActMisc_InitAct1	Source/D2Common/Drlg/OutPlace	sourcemap	16	16	0	0.750	MATCH	6 refs unverified	58	0
 00677790	006777c4	D2Common::Drlg::OutPlace::DRLGActMisc_InitAct2	Source/D2Common/Drlg/OutPlace	sourcemap	16	16	0	0.875	MATCH	4 refs unverified	52	0
-006777d0	00677870	D2Common::Drlg::OutPlace::DRLGOUTPLACE_CalcSubLevelPlacement	Source/D2Common/Drlg/OutPlace	sourcemap	55	84	0	0.302	OUR+29		52	31
+006777d0	00677870	D2Common::Drlg::OutPlace::DRLGOUTPLACE_CalcSubLevelPlacement	Source/D2Common/Drlg/OutPlace	sourcemap	55	55	0	1.000	MATCH		137	0
 00677870	0067787c	D2Common::Drlg::OutPlace::Unreferenced_00677870	Source/D2Common/Drlg/OutPlace	sourcemap	5	5	0	1.000	MATCH		12	0
 00677880	00678908	D2Common::Drlg::OutPlace::DRLGLEVEL_FixDrlgLevelForSpiderForest	Source/D2Common/Drlg/OutPlace	sourcemap	1360	1342	0	0.246	OUR-18		1006	1275
 00678910	006789a2	D2Common::Drlg::OutPlace::DRLGLEVEL_FixDrlgLevelForLowerKurast	Source/D2Common/Drlg/OutPlace	sourcemap	53	53	0	1.000	MATCH		146	0
@@ -13824,7 +13824,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 0067cdd0	0067cdfb	D2Common::Drlg::DrlgVer::DRLGVER_AllocVertex	Source/D2Common/Drlg/DrlgVer	sourcemap	16	16	0	1.000	MATCH		43	0
 0067ce00	0067ce1a	D2Common::Drlg::DrlgVer::DRLGVER_SetVertexFlags	Source/D2Common/Drlg/DrlgVer	sourcemap	10	10	0	1.000	MATCH		26	0
 0067ce20	0067d046	D2Common::Drlg::DrlgVer::DRLGVER_CreateVerticesFromEdges	Source/D2Common/Drlg/DrlgVer	sourcemap	195	189	0	0.396	OUR-6		229	150
-0067d050	0067d1df	D2Common::Drlg::DrlgVer::DRLGVER_CreateRoomVertices	Source/D2Common/Drlg/DrlgVer	sourcemap	148	153	0	0.817	OUR+5		338	20
+0067d050	0067d1df	D2Common::Drlg::DrlgVer::DRLGVER_CreateRoomVertices	Source/D2Common/Drlg/DrlgVer	sourcemap	148	148	0	1.000	MATCH		399	0
 0067d1e0	0067d24e	D2Common::Drlg::DrlgVer::DRLGVER_FreeVertices	Source/D2Common/Drlg/DrlgVer	sourcemap	42	42	0	1.000	MATCH		110	0
 0067d250	0067d272	D2Common::Drlg::DrlgVer::Unreferenced_0067d250	Source/D2Common/Drlg/DrlgVer	sourcemap	15	15	0	1.000	MATCH		34	0
 0067d280	0067d2cc	D2Common::Drlg::DrlgVer::GetCoordDiff	Source/D2Common/Drlg/DrlgVer	sourcemap	28	28	0	1.000	MATCH		76	0
@@ -13900,7 +13900,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00680b10	00680c77	D2Common::Drlg::DRLGOUTROOM_ComputeWallOrientations	Source/D2Common/Drlg/Drlg	sourcemap	124	124	0	1.000	MATCH	1 refs unverified	353	0
 00680c80	00680cbd	D2Common::Drlg::DRLGOUTROOM_InitAct1RoomGridCells	Source/D2Common/Drlg/Drlg	sourcemap	23	23	0	1.000	MATCH		61	0
 00680cc0	00680d70	D2Common::Drlg::DRLGOUTROOM_SnapVertexToGrid	Source/D2Common/Drlg/Drlg	sourcemap	56	56	0	1.000	MATCH		158	0
-00680d70	00680ff5	D2Common::Drlg::DRLGOUTROOM_BuildExitPointArray	Source/D2Common/Drlg/Drlg	sourcemap	163	160	0	0.768	OUR-3		443	68
+00680d70	00680ff5	D2Common::Drlg::DRLGOUTROOM_BuildExitPointArray	Source/D2Common/Drlg/Drlg	sourcemap	163	163	0	1.000	MATCH		526	0
 00681000	00681240	D2Common::Drlg::DRLGOUTROOM_ComputeExitTargetPositions	Source/D2Common/Drlg/Drlg	sourcemap	181	180	0	0.283	OUR-1		158	273
 00681240	00681418	D2Common::Drlg::DRLGOUTROOM_BuildVertexPathsWithJitter	Source/D2Common/Drlg/Drlg	sourcemap	143	143	0	1.000	MATCH	2 refs unverified	472	0
 00681420	0068148d	D2Common::Drlg::DRLGOUTROOM_LinkOutdoorRoomExits	Source/D2Common/Drlg/Drlg	sourcemap	41	41	0	1.000	MATCH		103	0
@@ -14755,7 +14755,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 006bd040	006bd06a	Fog::Src::Excel::STRUCT_CreateTxtLinkStrc	Source/Fog/Src/Excel/Excel	sourcemap	17	17	0	1.000	MATCH		42	0
 006bd070	006bd0a2	Fog::Src::Excel::STRUCT_FreeTxtLinkNode	Source/Fog/Src/Excel/Excel	sourcemap	18	18	0	1.000	MATCH		50	0
 006bd0b0	006bd125	Fog::Src::Excel::STRUCT_FreeTxtLink	Source/Fog/Src/Excel/Excel	sourcemap	42	42	0	1.000	MATCH		117	0
-006bd130	006bd17b	Fog::Src::Excel::GetClassIdFromName	Source/Fog/Src/Excel/Excel	sourcemap	39	45	0	0.571	OUR+6		42	16
+006bd130	006bd17b	Fog::Src::Excel::GetClassIdFromName	Source/Fog/Src/Excel/Excel	sourcemap	39	39	0	1.000	MATCH		75	0
 006bd180	006bd230	Fog::Src::Excel::FOG_GetTxtLinkRecord	Source/Fog/Src/Excel/Excel	sourcemap	75	62	0	0.657	OUR-13		102	12
 006bd230	006bd326	Fog::Src::Excel::FOG_AddTxtLinkRecord	Source/Fog/Src/Excel/Excel	sourcemap	94	92	0	0.785	OUR-2		199	20
 006bd330	006bd37b	Fog::Src::Excel::FOG_GetRecordField	Source/Fog/Src/Excel/Excel	sourcemap	36	36	0	1.000	MATCH	2 refs unverified	75	0
@@ -14873,7 +14873,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 006c3410	006c343f	Fog::Src::QServer::QServer98::SendToClientOnline	Source/Fog/Src/QServer/QServer98	sourcemap	19	19	0	1.000	MATCH	2 refs unverified	47	0
 006c3440	006c346e	Fog::Src::QServer::QServer98::QSERVER_AllocateConnectionStruct	Source/Fog/Src/QServer/QServer98	sourcemap	18	14	0	0.750	OUR-4		36	3
 006c3470	006c3b44	Fog::Src::QServer::QServer98::SocketThreadMain	Source/Fog/Src/QServer/QServer98	sourcemap	442	453	0	0.563	OUR+11		1034	480
-006c3b50	006c3cb0	Fog::Src::QServer::QServer98::CreateSocketOnline	Source/Fog/Src/QServer/QServer98	sourcemap	116	128	0	0.541	OUR+12		161	65
+006c3b50	006c3cb0	Fog::Src::QServer::QServer98::CreateSocketOnline	Source/Fog/Src/QServer/QServer98	sourcemap	116	116	0	1.000	MATCH	9 refs unverified	352	0
 006c3cb0	006c3d11	Storm::Source::SCMD_ConvertBool	Source/Storm/Source/SCMD	sourcemap	41	41	0	1.000	MATCH		97	0
 006c3d20	006c3d94	Storm::Source::SCMD_ConvertNumber	Source/Storm/Source/SCMD	sourcemap	49	49	0	1.000	MATCH		116	0
 006c3da0	006c3e07	Storm::Source::SCMD_ConvertString	Source/Storm/Source/SCMD	sourcemap	37	37	0	1.000	MATCH		103	0
@@ -14945,9 +14945,9 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 006c7000	006c7026	Storm::Source::SBMP::SBmpSaveImage	Source/Storm/Source/SBMP	sourcemap	18	18	0	1.000	MATCH		38	0
 006c7030	006c712b	Storm::Source::SSTR::UTF16_CalculateUTF8Length	Source/Storm/Source/SSTR	sourcemap	82	82	0	1.000	MATCH		245	0
 006c7130	006c72f0	Storm::Source::SSTR::UTF16_ToUTF8	Source/Storm/Source/SSTR	sourcemap	140	142	0	0.447	OUR+2		216	153
-006c72f0	006c740c	Storm::Source::SSTR::UTF8_CalculateUTF16Length	Source/Storm/Source/SSTR	sourcemap	88	99	0	0.417	OUR+11		108	67
+006c72f0	006c740c	Storm::Source::SSTR::UTF8_CalculateUTF16Length	Source/Storm/Source/SSTR	sourcemap	88	88	0	1.000	MATCH	2 refs unverified	257	0
 006c7410	006c75a8	Storm::Source::SSTR::UTF8_ToUTF16	Source/Storm/Source/SSTR	sourcemap	120	119	0	0.117	OUR-1		32	183
-006c75b0	006c76bb	Storm::Source::SSTR::UTF8_DecodeNextChar	Source/Storm/Source/SSTR	sourcemap	108	97	0	0.400	OUR-11		111	97
+006c75b0	006c76bb	Storm::Source::SSTR::UTF8_DecodeNextChar	Source/Storm/Source/SSTR	sourcemap	108	108	0	1.000	MATCH		267	0
 006c76c0	006c778f	Storm::Source::SSTR::UTF8_EncodeChar	Source/Storm/Source/SSTR	sourcemap	70	70	0	1.000	MATCH		207	0
 006c7790	006c77aa	Storm::Source::SSTR::UTF8_AdvanceToCharBoundary	Source/Storm/Source/SSTR	sourcemap	12	12	0	1.000	MATCH		26	0
 006c77b0	006c77c7	Storm::Source::SSTR::UTF8_StepBackOneChar	Source/Storm/Source/SSTR	sourcemap	10	1	0	0.182	OUR-9		3	0
@@ -14976,7 +14976,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 006c7d80	006c7dec	D2Gdi::Renderer::Windowed::BeginScene	Source/D2Gdi/Renderer/Windowed	sourcemap	40	40	0	0.975	MATCH	3 refs unverified	108	0
 006c7df0	006c7e25	D2Gdi::Renderer::Windowed::EndScene1	Source/D2Gdi/Renderer/Windowed	sourcemap	15	15	0	0.933	MATCH	2 refs unverified	53	0
 006c7e30	006c7eee	D2Gdi::Renderer::Windowed::EndScene2	Source/D2Gdi/Renderer/Windowed	sourcemap	64	64	0	1.000	MATCH	7 refs unverified	190	0
-006c7ef0	006c7f82	D2Gdi::Renderer::Windowed::GetBackBuffer	Source/D2Gdi/Renderer/Windowed	sourcemap	49	45	0	0.234	OUR-4		24	62
+006c7ef0	006c7f82	D2Gdi::Renderer::Windowed::GetBackBuffer	Source/D2Gdi/Renderer/Windowed	sourcemap	49	49	0	1.000	MATCH	7 refs unverified	146	0
 006c7f90	006c7fa0	D2Gdi::Renderer::Windowed::GetScreenSize	Source/D2Gdi/Renderer/Windowed	sourcemap	5	5	0	1.000	MATCH	2 refs unverified	16	0
 006c7fa0	006c7ff4	D2Gdi::Renderer::Windowed::SetPalette	Source/D2Gdi/Renderer/Windowed	sourcemap	29	29	0	1.000	MATCH	4 refs unverified	84	0
 006c8000	006c801d	D2Gdi::Renderer::Windowed::SetPaletteTable	Source/D2Gdi/Renderer/Windowed	sourcemap	10	10	0	1.000	MATCH	3 refs unverified	29	0
@@ -14998,7 +14998,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 006c81e0	006c823d	D2Gdi::Renderer::Windowed::RENDERER_WINDOWED_GetFramebufferInfo	Source/D2Gdi/Renderer/Windowed	sourcemap	31	31	0	0.968	MATCH	4 refs unverified	93	0
 006c8240	006c8246	D2Gdi::Renderer::Windowed::RENDERER_WINDOWED_GetInitFunctionsStrc	Source/D2Gdi/Renderer/Windowed	sourcemap	2	2	0	1.000	MATCH	1 refs unverified	6	0
 006c8250	006c82c8	D2Gdi::Renderer::Windowed::RENDERER_WINDOWED_GetPalettePointer	Source/D2Gdi/Renderer/Windowed	sourcemap	25	25	0	1.000	MATCH	7 refs unverified	90	0
-006c82d0	006c8301	D2Gdi::Renderer::Windowed::RENDERER_WINDOWED_UpdateScaleFactor	Source/D2Gdi/Renderer/Windowed	sourcemap	12	12	51	0.250	INSN_COUNT_MATCH	3 refs differ; 2 refs unverified	12	17
+006c82d0	006c8301	D2Gdi::Renderer::Windowed::RENDERER_WINDOWED_UpdateScaleFactor	Source/D2Gdi/Renderer/Windowed	sourcemap	12	12	0	1.000	MATCH	4 refs unverified	49	0
 006c8310	006c8373	D2Gdi::Renderer::Windowed::RENDERER_WINDOWED_ValidateDC6Visibility	Source/D2Gdi/Renderer/Windowed	sourcemap	41	41	0	1.000	MATCH	2 refs unverified	99	0
 006c8380	006c84ad	D2Gdi::Renderer::Windowed::RENDERER_WINDOWED_CalculateCropRect	Source/D2Gdi/Renderer/Windowed	sourcemap	111	111	0	0.991	MATCH	3 refs unverified	301	0
 006c84b0	006c8598	D2Gdi::Renderer::Windowed::DrawImage	Source/D2Gdi/Renderer/Windowed	sourcemap	89	92	0	0.552	OUR+3		136	40

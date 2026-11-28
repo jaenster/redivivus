@@ -410,9 +410,10 @@ void * __fastcall POOL_AllocOverflowBlock(D2PoolManagerStrc * pMemory, int32_t n
       exit(-1);
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pMemory->pSync);
-    ((D2PoolOverflowHeader*)pNode)->pNext = pMemory->pOverflow[(intptr_t)pNode % 0x3ff];
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ pMemory->pOverflow[(intptr_t)pNode % 0x3ff] = pNode;
+    int nBucket = (intptr_t)pNode % 0x3ff;
+    EnterCriticalSection(&pMemory->pSync);
+    ((D2PoolOverflowHeader*)pNode)->pNext = pMemory->pOverflow[nBucket];
+    pMemory->pOverflow[nBucket] = pNode;
     LeaveCriticalSection(&pMemory->pSync);
     return pNode + sizeof(D2PoolOverflowHeader);
 }
