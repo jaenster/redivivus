@@ -1839,7 +1839,53 @@ void __stdcall GFX_InitCelDataCache(D2PoolManagerStrc * nFlags, uint32_t dwCache
 #endif
 }
 
+#if !defined(_WIN32) && D2_BACKEND_POSIX
+// Hands every built DCC frame record to the renderer's pixel-data free callback, as
+// GFXHASH_UnlinkCacheEntry does for one entry. Leaving a game shuts the cache down without
+// releasing it (bReleaseMemory 0) and then frees the client pool the records live in. D2OpenGL
+// keeps a back-reference into each record its textures were made for and clears it when it
+// drops them, so its ClearCaches, which comes after the pool is freed, wrote into freed memory.
+// Win32Posix returns a freed pool block to the system, which made that write a fault.
+static void SPRITECACHE_ReleaseRendererRecords() {
+    pfnCelPixelDataFree pfnFreeCallback = CelCmp::CELCMP_GetPixelDataFreeCallback();
+    if (!pfnFreeCallback) {
+      return;
+    }
+
+    for (uint32_t nBucket = 0; nBucket < sizeof(gaGfxHashTable.apBuckets) / sizeof(gaGfxHashTable.apBuckets[0]); nBucket++) {
+      for (D2GfxHashEntryStrc* pEntry = gaGfxHashTable.apBuckets[nBucket]; pEntry; pEntry = pEntry->pNext) {
+        D2CelCacheBlockStrc* pCacheBlock = pEntry->pCacheBlock;
+        if (!pCacheBlock || !pCacheBlock->tDecode.pAsyncData || !pCacheBlock->tDecode.bFramesBuilt) {
+          continue;
+        }
+
+        uint8_t* pFrameDataBase = (uint8_t*)Fog::Src::AsyncData::ASYNCDATA_GetResult(pCacheBlock->tDecode.pAsyncData);
+        if (!pFrameDataBase) {
+          continue;
+        }
+
+        // SPRITECACHE_LoadAndCacheDC6 gave the frames one contiguous record array, first frame first.
+        DC6Block* pFirstFrame = (DC6Block*)(pFrameDataBase + pCacheBlock->tDecode.aDirOffsets[pCacheBlock->tDecode.nStartDir]);
+        D2GfxCellNodeStrc* pRecords = (D2GfxCellNodeStrc*)pFirstFrame->nNextBlock;
+        if (!pRecords) {
+          continue;
+        }
+
+        uint32_t nRecords = (uint32_t)pCacheBlock->tDecode.nFramesPerDir * (uint32_t)pCacheBlock->tDecode.nDirCount;
+        for (uint32_t nRecord = 0; nRecord < nRecords; nRecord++) {
+          (*pfnFreeCallback)((int*)&pRecords[nRecord]);
+        }
+      }
+    }
+}
+#endif
+
 void __stdcall SPRITECACHE_Shutdown(int32_t bReleaseMemory) {
+#if !defined(_WIN32) && D2_BACKEND_POSIX
+    if (!bReleaseMemory) {
+      SPRITECACHE_ReleaseRendererRecords();
+    }
+#endif
     if (bReleaseMemory && D2GfxMemoryStrc_0089db60.pfnReleaseEntry) {
       SPRITECACHE_ReleaseMemory(&D2GfxMemoryStrc_0089db60);
     }

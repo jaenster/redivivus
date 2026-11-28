@@ -244,7 +244,7 @@ short OGL_MacSwapContext(int nResolution, int nColorBits, int nUnused) {
         szStretched = " (stretched)";
       }
 
-      Fog::Src::LogManager::LOGFILE_WriteStringToFile("OpenGLMacSwapContext: *** Couldn\'t find resolution %dx%dx%d %fHz%s.", uVar1 >> 1 & 0x7fff, uVar1 >> 0x10, nColorBits, (double)(float)((double)((uint64_t)D2OGLDisplayModeStrc_ARRAY_00552b50[nResolution].dwRefreshFixed | 0x4330000000000000) - 4503599627370496.0) * 1.52587890625e-05, szStretched);
+      Fog::Src::LogManager::LOGFILE_WriteStringToFile("OpenGLMacSwapContext: *** Couldn\'t find resolution %dx%dx%d %fHz%s.", uVar1 >> 1 & 0x7fff, uVar1 >> 0x10, nColorBits, (double)(float)((double)(uint32_t)D2OGLDisplayModeStrc_ARRAY_00552b50[nResolution].dwRefreshFixed) * 1.52587890625e-05, szStretched);
       nResult = -0x32;
     } else {
       Boolean bSameMode;
@@ -700,9 +700,9 @@ void OGL_MacClearDisplayToBlack() {
     uint32_t nWidth = CGDisplayPixelsWide(CGDirectDisplayID_00552b2c);
     uint32_t nHeight = CGDisplayPixelsHigh(display);
     CGContextRef c = CGDisplayGetDrawingContext(display);
-    rect_00.size.width = (float)((double)((uint64_t)nWidth | 0x4330000000000000) - 4503599627370496.0);
+    rect_00.size.width = (float)((double)(uint32_t)nWidth);
     rect_00.origin = CVar1;
-    rect_00.size.height = (float)((double)((uint64_t)nHeight | 0x4330000000000000) - 4503599627370496.0);
+    rect_00.size.height = (float)((double)(uint32_t)nHeight);
     CGContextConvertRectToUserSpace(&local_24, c, rect_00);
     CGColorRef hBlackColor = CGColorGetConstantColor(*PTR__kCGColorBlack_00396398);
     CGContextSetFillColorWithColor(c, hBlackColor);

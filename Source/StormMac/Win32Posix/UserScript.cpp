@@ -13,6 +13,8 @@
 //   <ms> keyup <name>           release it
 //   <ms> shot <path>            save the next presented frame as a BMP (the renderer's side:
 //                               Win32Posix_TakeShotRequest)
+//   <ms> focus lost|gained      the window loses or regains the keyboard focus, as switching
+//                               to another application and back does
 //   <ms> quit                   ask the main window to close, as Cmd-Q does
 // The file is read again while the game runs: a line appended later as `+<ms> <verb> ...` runs
 // that long after it is read, so a run can be driven step by step (append, wait for the shot,
@@ -230,6 +232,12 @@ void RunScript() {
             Key(pWnd, t, true, false);
         } else if (!strcmp(t.szVerb, "keyup")) {
             Key(pWnd, t, false, true);
+        } else if (!strcmp(t.szVerb, "focus")) {
+            SDL_Event tEvent;
+            SDL_zero(tEvent);
+            tEvent.type = strcmp(t.szArg, "lost") ? SDL_EVENT_WINDOW_FOCUS_GAINED : SDL_EVENT_WINDOW_FOCUS_LOST;
+            tEvent.window.windowID = pWnd->nSdlId;
+            TranslateSdlEvent(tEvent);
         }
     }
 }

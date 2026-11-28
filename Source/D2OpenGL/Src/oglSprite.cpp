@@ -690,10 +690,10 @@ void OGL_DrawVerticalCropImage(D2GfxDataStrc * pData, int nX, int nY, int nSkipL
     OGL_IsPerspectiveEnabled();
     int nTexHeight = sSprite.nTexHeight;
     if (!nSkipLines) {
-      sSprite.fT0 = (float)((double)((uint64_t)(uint32_t)(sSprite.nTexHeight - nDrawLines) | 0x4330000000000000) - 4503599627370496.0) / (float)sSprite.nTexHeight;
+      sSprite.fT0 = (float)((double)(uint32_t)(sSprite.nTexHeight - nDrawLines)) / (float)sSprite.nTexHeight;
     } else {
-      sSprite.fT0 = (float)((double)((uint64_t)(uint32_t)(sSprite.nTexHeight - (nDrawLines + nSkipLines)) | 0x4330000000000000) - 4503599627370496.0) / (float)sSprite.nTexHeight;
-      sSprite.fT1 = (float)((double)((uint64_t)(uint32_t)(sSprite.nTexHeight - nSkipLines) | 0x4330000000000000) - 4503599627370496.0) / (float)sSprite.nTexHeight;
+      sSprite.fT0 = (float)((double)(uint32_t)(sSprite.nTexHeight - (nDrawLines + nSkipLines))) / (float)sSprite.nTexHeight;
+      sSprite.fT1 = (float)((double)(uint32_t)(sSprite.nTexHeight - nSkipLines)) / (float)sSprite.nTexHeight;
       nY -= nSkipLines;
     }
 

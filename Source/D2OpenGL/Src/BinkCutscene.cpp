@@ -283,7 +283,7 @@ void OGL_PlayVideoFile(char * szFile, int nResolutionMode, BYTE * pBuffer, int n
                     }
                   }
 
-                  local_38[0] = (float)((double)((uint64_t)uVar6 | 0x4330000000000000) - 4503599627370496.0) / (float)(int)DAT_00552578;
+                  local_38[0] = (float)((double)(uint32_t)uVar6) / (float)(int)DAT_00552578;
                   local_40 = (1.0 - local_38[0]) * 0.5;
                   y_00 = (1.0 - local_40) * (float)DAT_00552570;
                   local_54 = 0;

@@ -338,7 +338,8 @@ BOOL OGL_DrawShadowTile(D2TileLibraryEntryStrc * pTile, int nX, int nY, int nDra
             }
           }
 
-          iVar5 += 0x14;
+          // The record stride, 0x14 on i386: the 64-bit pixel pointer makes it 0x18.
+          iVar5 += sizeof(D2GroundSubTileStrc);
           iVar8++;
         } while (iVar8 < iVar6);
       }
@@ -532,9 +533,9 @@ BOOL OGL_DrawWallTileBlocks(D2TileLibraryEntryStrc * pTile, int nX, int nY, D2Gf
     int nMinX;
     int nMaxX;
     int nBlockCount;
-    D2GfxLightStrc local_28;
-    uint32_t local_24;
-    D2GfxLightStrc local_20;
+    // Frame slots -40..-32 are ONE object: the left, middle and right column lights, read by index per vertex.
+    // Three separate locals left the middle and right reads to whatever the compiler put beside the first.
+    D2GfxLightStrc aColumnLight[3];
     float fMinX;
     __frame0.local_14 = *(int*)PTR____stack_chk_guard_003961fc;
     BOOL BVar7 = 0;
@@ -611,7 +612,8 @@ BOOL OGL_DrawWallTileBlocks(D2TileLibraryEntryStrc * pTile, int nX, int nY, D2Gf
               }
             }
 
-            iVar5 += 0x14;
+            // The record stride, 0x14 on i386: the 64-bit pixel pointer makes it 0x18.
+            iVar5 += sizeof(D2GroundSubTileStrc);
             iVar6++;
           } while (iVar6 < nBlockCount);
         }
@@ -670,9 +672,9 @@ BOOL OGL_DrawWallTileBlocks(D2TileLibraryEntryStrc * pTile, int nX, int nY, D2Gf
             D2OGLVertexStrc_ARRAY_ARRAY_00552c94[0][2].fX = (float)__frame0.local_18;
             D2OGLVertexStrc_ARRAY_ARRAY_00552c94[0][2].fY = (float)(*piVar13 - __frame0.local_1c);
             if (fMinX <= D2OGLVertexStrc_ARRAY_ARRAY_00552c94[0][0].fX && D2OGLVertexStrc_ARRAY_ARRAY_00552c94[0][0].fX < fMaxX && 47.0 <= D2OGLVertexStrc_ARRAY_ARRAY_00552c94[0][0].fY && D2OGLVertexStrc_ARRAY_ARRAY_00552c94[0][0].fY < fScreenHeight || fMinX <= D2OGLVertexStrc_ARRAY_ARRAY_00552c94[4][0].fX && D2OGLVertexStrc_ARRAY_ARRAY_00552c94[4][0].fX < fMaxX && 47.0 <= D2OGLVertexStrc_ARRAY_ARRAY_00552c94[4][0].fY && D2OGLVertexStrc_ARRAY_ARRAY_00552c94[4][0].fY < fScreenHeight || fMinX <= D2OGLVertexStrc_ARRAY_ARRAY_00552c94[4][2].fX && D2OGLVertexStrc_ARRAY_ARRAY_00552c94[4][2].fX < fMaxX && 47.0 <= D2OGLVertexStrc_ARRAY_ARRAY_00552c94[4][2].fY && D2OGLVertexStrc_ARRAY_ARRAY_00552c94[4][2].fY < fScreenHeight || D2OGLVertexStrc_ARRAY_ARRAY_00552c94[0][2].fY < fScreenHeight && D2OGLVertexStrc_ARRAY_ARRAY_00552c94[0][2].fX < fMaxX && fMinX <= D2OGLVertexStrc_ARRAY_ARRAY_00552c94[0][2].fX && 47.0 <= D2OGLVertexStrc_ARRAY_ARRAY_00552c94[0][2].fY) {
-              local_28 = pLight[uVar9];
-              local_20 = pLight[uVar9 + 1];
-              local_24 = (((uint32_t)d2_bits_of(local_20) >> 0x10 & 0xff) + ((uint32_t)d2_bits_of(local_28) >> 0x10 & 0xff) & 0x1fe) << 0xf | (((uint32_t)d2_bits_of(local_20) >> 8 & 0xff) + ((uint32_t)d2_bits_of(local_28) >> 8 & 0xff) & 0x1fe) << 7 | ((uint32_t)d2_bits_of(local_20) & 0xff) + ((uint32_t)d2_bits_of(local_28) & 0xff) >> 1 | (((uint32_t)d2_bits_of(local_20) >> 0x18) + ((uint32_t)d2_bits_of(local_28) >> 0x18) & -2) << 0x17;
+              aColumnLight[0] = pLight[uVar9];
+              aColumnLight[2] = pLight[uVar9 + 1];
+              aColumnLight[1] = (uint32_t)((((uint32_t)d2_bits_of(aColumnLight[2]) >> 0x10 & 0xff) + ((uint32_t)d2_bits_of(aColumnLight[0]) >> 0x10 & 0xff) & 0x1fe) << 0xf | (((uint32_t)d2_bits_of(aColumnLight[2]) >> 8 & 0xff) + ((uint32_t)d2_bits_of(aColumnLight[0]) >> 8 & 0xff) & 0x1fe) << 7 | ((uint32_t)d2_bits_of(aColumnLight[2]) & 0xff) + ((uint32_t)d2_bits_of(aColumnLight[0]) & 0xff) >> 1 | (((uint32_t)d2_bits_of(aColumnLight[2]) >> 0x18) + ((uint32_t)d2_bits_of(aColumnLight[0]) >> 0x18) & -2) << 0x17);
               OGL_BindWallBlockTexture(pTile->pSubTiles + iVar15);
               uVar9 = 0;
               do {
@@ -693,7 +695,7 @@ BOOL OGL_DrawWallTileBlocks(D2TileLibraryEntryStrc * pTile, int nX, int nY, D2Gf
                 pVertex = (D2OGLVertexStrc*)&D2OGLVertexStrc_ARRAY_ARRAY_00552c94[uVar9][0].fX;
                 do {
                   pVertex->fX += fOffsetX;
-                  OGL_ApplyColorLighting(pVertex, (&local_28)[iVar6]);
+                  OGL_ApplyColorLighting(pVertex, aColumnLight[iVar6]);
                   pVertex->nAlpha = nAlpha;
                   pVertex++;
                   iVar6++;

@@ -948,9 +948,15 @@ void __stdcall D2WIN_HandleActivation(D2UIMouseMsgStrc * pMsg) {
       }
 
       gbWindowDeactivated = 1;
+#if !defined(_WIN32) && D2_BACKEND_POSIX
+      // Full screen on Win32Posix is a window over the desktop in the desktop's mode, with no display
+      // mode to give back, so losing the focus is handled as the windowed game handles it: the
+      // window stays shown. Reporting it would minimise the window and pause the renderer.
+#else
       if (gbWindowed != 1) {
         D2gfx::D2GFX::D2GFX_OnActivationChange(1);
       }
+#endif
     }
 
     BOOL bIsCutScene = D2gfx::D2GFX::D2GFX_CheckCutScene();
