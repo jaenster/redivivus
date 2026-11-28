@@ -253,6 +253,27 @@ int __fastcall SFILE_GetBlizzardAppDataPath(char * szOutPath, uint32_t nMaxLen) 
 }
 #endif
 
+#if !defined(_WIN32) && D2_BACKEND_POSIX
+// The POSIX twin of the body above, with the Mac's folder (FOG_MacGetBlizzardSupportPath,
+// ErrorManager.cpp): the user's application data directory - the one Win32Posix keeps the
+// install directory in, ~/Library/Application Support on macOS - with "Blizzard\" appended,
+// created, and Windows-spelled as the layer spells every path.
+int __fastcall SFILE_GetBlizzardAppDataPath(char * szOutPath, uint32_t nMaxLen) {
+    char szSupportPath[MAX_PATH];
+    if (SHGetFolderPathA(0, 0x1c, 0, 0, szSupportPath) < 0) {
+      return 0;
+    }
+
+    Storm::Source::SSTR::SStrPack(szSupportPath, "\\Blizzard", sizeof(szSupportPath));
+    if (!nMaxLen || !FOG_AppendBackslash(szSupportPath, sizeof(szSupportPath)) || !SafeCreateDirectoryTree(szSupportPath)) {
+      return 0;
+    }
+
+    Storm::Source::SSTR::SStrCopy(szOutPath, szSupportPath, nMaxLen);
+    return Storm::Source::SSTR::SStrLen(szOutPath) == Storm::Source::SSTR::SStrLen(szSupportPath);
+}
+#endif
+
 // 1.14d mac: 002ef8fd
 BOOL __stdcall GetUseDirectCommand() {
     return D2Ini_bUseDirect;

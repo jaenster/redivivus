@@ -1,0 +1,8 @@
+# Link dependencies of the modern macOS build (cmake/mac-modern.cmake, d2_modern_link_deps).
+# Written here, not vendored.
+# bink_stub.cpp     RAD Bink (proprietary): the entry points D2OpenGL's cutscene player calls.
+#                   BinkOpen finds no video, so the game skips every cutscene.
+# crashy_posix.cpp  Blizzard's crashy (no public source): the report file Fog's error manager
+#                   writes Crash.txt through, on the POSIX file calls, and the debugger check.
+# The Intel JPEG Library's three entry points come from Redivivus/x64/d2_ijl.cpp, on
+# stb_image_write (3rdparty/stb), as in the 64-bit Windows build.

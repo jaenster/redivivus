@@ -31,6 +31,8 @@ D2Srp * __fastcall SRP_ConstructContext(D2Srp * pSrp) {
 // calls srand(dwSeed) then rand(), SHA1s those 12 bytes into aRandomPoolA (this+0xc), copies
 // the 20-byte digest to aRandomPoolB (this+0x20), and clears aOutputBuffer (20 bytes) and nBytesAvailable.
 // Provenance: 1.14d asm 00527dd0..00527e60 (SHA1_Update(ctx, &sSeedEntropy, 0xc) at 00527e0c..00527e14).
+// The length is the record's size, 0xc on a 32-bit target; where the C library's __time32_t is a
+// 64-bit long the record is 16 bytes, and all of it is hashed.
 // 1.14d mac: 002f8bca
 void __fastcall SRP_InitializeRandomState(D2Srp * pThis, int, uint32_t dwSeed) {
     D2SrpSeedEntropyStrc sSeedEntropy;
@@ -40,7 +42,7 @@ void __fastcall SRP_InitializeRandomState(D2Srp * pThis, int, uint32_t dwSeed) {
     srand(dwSeed);
     sSeedEntropy.nRand = rand();
     SHA1::SHA1Init(&aShaCtx);
-    SHA1::SHA1Update(&aShaCtx, &sSeedEntropy, 0xc);
+    SHA1::SHA1Update(&aShaCtx, &sSeedEntropy, sizeof(sSeedEntropy));
     SHA1::SHA1Final(pThis->aRandomPoolA, &aShaCtx);
     memcpy(pThis->aRandomPoolB, pThis->aRandomPoolA, sizeof(pThis->aRandomPoolB));
     memset(pThis->aOutputBuffer, 0, 20 * sizeof(pThis->aOutputBuffer[0]));

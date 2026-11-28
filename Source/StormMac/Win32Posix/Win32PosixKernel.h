@@ -110,6 +110,8 @@ DWORD GetVersion(void);
 void GetSystemInfo(struct _SYSTEM_INFO* lpSystemInfo);
 BOOL TerminateProcess(HANDLE hProcess, UINT uExitCode);
 BOOL GetExitCodeProcess(HANDLE hProcess, LPDWORD lpExitCode);
+// Nonzero while a debugger traces the process.
+BOOL IsDebuggerPresent(void);
 #define GetModuleHandle GetModuleHandleA
 #define GetModuleFileName GetModuleFileNameA
 HRSRC FindResourceA(HMODULE hModule, LPCSTR lpName, LPCSTR lpType);

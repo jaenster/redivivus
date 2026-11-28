@@ -20,7 +20,16 @@
 #define STBI_WRITE_NO_STDIO
 #include "stb_image_write.h"
 
+#if defined(_WIN32)
 #include <windows.h>
+#else
+// The modern macOS build (cmake/mac-modern.cmake): the same file calls, on Win32Posix, whose
+// surface spells no file constants (the game passes their values).
+#include "Source/D2Headers/d2_platform.h"
+#define GENERIC_WRITE 0x40000000u
+#define CREATE_ALWAYS 2
+#define FILE_ATTRIBUTE_NORMAL 0x80
+#endif
 
 namespace {
 

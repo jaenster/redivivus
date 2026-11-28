@@ -97,14 +97,22 @@ target_compile_options(d2_modern_objs PRIVATE
 #                       POSIX only, no SDL, so its unit test links it alone.
 # d2_win32posix         the rest of Win32Posix (User, Sockets, DirectSound, Shell ...): every
 #                       other .cpp in the directory, picked up as it is added.
-# d2_modern             the executable: d2_modern_objs and both halves, on SDL3 and OpenGL.
-#                       Outside `all` until it links; asm_matching/mac/modern-link-probe.ts
-#                       lists what it still lacks.
+# d2_modern_link_deps   what the objects reference and neither the tree nor the layer defines:
+#                       the third-party libraries (3rdparty/modernstubs: Bink, which plays no
+#                       video, and crashy's report file) and the Intel JPEG Library on
+#                       stb_image_write (Redivivus/x64/d2_ijl.cpp, as the 64-bit Windows build).
+#                       Each unit reads its own headers: no forced include.
+# d2_modern             the executable: d2_modern_objs, both halves of the layer and the link
+#                       dependencies, on SDL3 and OpenGL. Outside `all` until it links;
+#                       asm_matching/mac/modern-link-probe.ts lists what it still lacks.
 # d2_win32posix_test    the kernel's unit test (Source/StormMac/Win32Posix/Tests).
+# d2_sockets_test       Winsock on loopback (SocketsTest.cpp): TCP, UDP, select and the codes.
+# d2_directsound_test   DirectSound's mixer and a tone on SDL's dummy audio driver.
 #
 # A layer unit is handed d2_platform.h ahead of everything, as the game's units are, unless it
 # reads Win32PosixHost.h (directly or through Win32PosixKernelPriv.h): such a unit reads the
-# host headers it needs first and the Win32 surface after them.
+# host headers it needs first and the Win32 surface after them. SocketsBsd.cpp reads neither
+# the prelude nor the surface, only the system's socket headers, and is named here.
 file(GLOB _posix_all CONFIGURE_DEPENDS LIST_DIRECTORIES false
     "${CMAKE_SOURCE_DIR}/Source/StormMac/Win32Posix/*.cpp"
     "${CMAKE_SOURCE_DIR}/Source/StormMac/Win32Posix/*.mm")
@@ -112,10 +120,11 @@ set(_posix_kernel ${_posix_all})
 list(FILTER _posix_kernel INCLUDE REGEX "/Win32Posix/Kernel[^/]*\\.cpp$")
 set(_posix_rest ${_posix_all})
 list(FILTER _posix_rest EXCLUDE REGEX "/Win32Posix/Kernel[^/]*\\.cpp$")
+set(_posix_system_only "${CMAKE_SOURCE_DIR}/Source/StormMac/Win32Posix/SocketsBsd.cpp")
 
 foreach(_src IN LISTS _posix_all)
-    file(STRINGS "${_src}" _reads_host REGEX "Win32Posix(Host|KernelPriv)\\.h" LIMIT_COUNT 1)
-    if(NOT _reads_host)
+    file(STRINGS "${_src}" _reads_host REGEX "#include \"Source/StormMac/Win32Posix/Win32Posix(Host|KernelPriv)\\.h\"" LIMIT_COUNT 1)
+    if(NOT _reads_host AND NOT _src IN_LIST _posix_system_only)
         set_source_files_properties("${_src}" PROPERTIES
             COMPILE_OPTIONS "-include;${CMAKE_SOURCE_DIR}/Source/D2Headers/d2_platform.h")
     endif()
@@ -134,6 +143,16 @@ endfunction()
 add_library(d2_win32posix_kernel OBJECT EXCLUDE_FROM_ALL ${_posix_kernel})
 d2_win32posix_setup(d2_win32posix_kernel)
 
+add_library(d2_modern_link_deps OBJECT EXCLUDE_FROM_ALL
+    "${CMAKE_SOURCE_DIR}/3rdparty/modernstubs/bink_stub.cpp"
+    "${CMAKE_SOURCE_DIR}/3rdparty/modernstubs/crashy_posix.cpp"
+    "${CMAKE_SOURCE_DIR}/Redivivus/x64/d2_ijl.cpp")
+d2_win32posix_setup(d2_modern_link_deps)
+target_include_directories(d2_modern_link_deps PRIVATE ${D2_MODERN_INCLUDE_DIRS})
+target_include_directories(d2_modern_link_deps SYSTEM PRIVATE "${CMAKE_SOURCE_DIR}/3rdparty/stb")
+# stb_image_write.h is static and only part of it is called.
+set_source_files_properties("${CMAKE_SOURCE_DIR}/Redivivus/x64/d2_ijl.cpp" PROPERTIES COMPILE_OPTIONS -Wno-unused-function)
+
 find_package(SDL3 CONFIG QUIET PATHS /opt/homebrew /usr/local)
 if(SDL3_FOUND)
     if(_posix_rest)
@@ -143,12 +162,31 @@ if(SDL3_FOUND)
         set(_posix_rest_objs $<TARGET_OBJECTS:d2_win32posix>)
     endif()
     add_executable(d2_modern EXCLUDE_FROM_ALL
-        $<TARGET_OBJECTS:d2_modern_objs> $<TARGET_OBJECTS:d2_win32posix_kernel> ${_posix_rest_objs})
+        $<TARGET_OBJECTS:d2_modern_objs> $<TARGET_OBJECTS:d2_win32posix_kernel> ${_posix_rest_objs}
+        $<TARGET_OBJECTS:d2_modern_link_deps>)
     set_target_properties(d2_modern PROPERTIES OUTPUT_NAME "Diablo II")
     target_link_libraries(d2_modern PRIVATE SDL3::SDL3 "-framework OpenGL")
+
+    add_executable(d2_directsound_test EXCLUDE_FROM_ALL
+        "${CMAKE_SOURCE_DIR}/Source/StormMac/Win32Posix/Tests/DirectSoundTest.cpp"
+        "${CMAKE_SOURCE_DIR}/Source/StormMac/Win32Posix/DirectSound.cpp"
+        $<TARGET_OBJECTS:d2_win32posix_kernel>)
+    d2_win32posix_setup(d2_directsound_test)
+    target_link_libraries(d2_directsound_test PRIVATE SDL3::SDL3)
+    set_source_files_properties("${CMAKE_SOURCE_DIR}/Source/StormMac/Win32Posix/Tests/DirectSoundTest.cpp" PROPERTIES
+        COMPILE_OPTIONS "-include;${CMAKE_SOURCE_DIR}/Source/D2Headers/d2_platform.h")
 else()
-    message(STATUS "mac-modern: no SDL3 (brew install sdl3); d2_modern is not defined")
+    message(STATUS "mac-modern: no SDL3 (brew install sdl3); d2_modern and d2_directsound_test are not defined")
 endif()
+
+add_executable(d2_sockets_test EXCLUDE_FROM_ALL
+    "${CMAKE_SOURCE_DIR}/Source/StormMac/Win32Posix/Tests/SocketsTest.cpp"
+    "${CMAKE_SOURCE_DIR}/Source/StormMac/Win32Posix/Sockets.cpp"
+    "${CMAKE_SOURCE_DIR}/Source/StormMac/Win32Posix/SocketsBsd.cpp"
+    $<TARGET_OBJECTS:d2_win32posix_kernel>)
+d2_win32posix_setup(d2_sockets_test)
+set_source_files_properties("${CMAKE_SOURCE_DIR}/Source/StormMac/Win32Posix/Tests/SocketsTest.cpp" PROPERTIES
+    COMPILE_OPTIONS "-include;${CMAKE_SOURCE_DIR}/Source/D2Headers/d2_platform.h")
 
 add_executable(d2_win32posix_test EXCLUDE_FROM_ALL
     "${CMAKE_SOURCE_DIR}/Source/StormMac/Win32Posix/Tests/KernelTest.cpp"

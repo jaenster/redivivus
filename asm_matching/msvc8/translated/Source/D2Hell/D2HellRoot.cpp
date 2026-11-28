@@ -108,6 +108,24 @@ char __fastcall D2FILE_VerifyFileSignature(LPCSTR szText) {
 }
 #endif
 
+#if !defined(_WIN32) && D2_BACKEND_POSIX
+// POSIX: the executable is started through the shell call, which does not wait for it, as
+// CreateProcessA's caller above does not.
+bool __fastcall D2FILE_CreateProcess(LPCSTR szText) {
+    return (intptr_t)ShellExecuteA((HWND)0x0, "open", szText, (LPCSTR)0x0, (LPCSTR)0x0, 1) > 0x20;
+}
+
+// POSIX: no file here carries Blizzard's signature. What the callers verify is a Windows
+// executable or DLL (SystemSurvey.exe, a check-revision DLL, a downloaded patch), signed with
+// Authenticode, which a POSIX host can neither check nor run; the Mac build checks its own Mac
+// binaries with Security.framework (MACSEC.cpp) instead. So nothing verifies, and the callers
+// take their path for an unsigned file: no System Survey, no downloaded executable launched.
+char __fastcall D2FILE_VerifyFileSignature(LPCSTR szText) {
+    (void)szText;
+    return 0;
+}
+#endif
+
 // 1.14d mac: 002b6584
 BOOL __fastcall CheckIfFileExists(D2PoolManagerStrc * pMemory, char * szFilename, D2MPQFileStrc * * ppFile, BOOL bDontLogError) {
     BOOL bFileExists;

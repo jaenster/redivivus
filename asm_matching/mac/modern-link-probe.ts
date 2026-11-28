@@ -3,8 +3,9 @@
 //
 //   node asm_matching/mac/modern-link-probe.ts --build <modern build dir> [--out <dir>]
 //
-// Build the objects first: `ninja -k 0 d2_modern_objs d2_win32posix_kernel d2_win32posix`
-// (d2_win32posix exists once the layer has units beside the kernel's). The probe links every
+// Build the objects first: `ninja -k 0 d2_modern_objs d2_win32posix_kernel d2_win32posix
+// d2_modern_link_deps` (d2_win32posix exists once the layer has units beside the kernel's;
+// d2_modern_link_deps holds the third-party stand-ins). The probe links every
 // object of those targets with Apple clang from Xcode, on the Xcode SDK, against SDL3 and
 // OpenGL, as the d2_modern target does, and reads what ld says. ld64 stops at its first failing
 // phase, so it links twice: `-undefined error` for the undefined symbols, `-undefined
@@ -65,7 +66,8 @@ function walk(dir: string, out: string[]) {
     }
 }
 const objs: string[] = [];
-for (const [t, required] of [["d2_modern_objs", true], ["d2_win32posix_kernel", true], ["d2_win32posix", false]] as const) {
+for (const [t, required] of [["d2_modern_objs", true], ["d2_win32posix_kernel", true], ["d2_win32posix", false],
+    ["d2_modern_link_deps", false]] as const) {
     const d = join(buildDir, "CMakeFiles", `${t}.dir`);
     if (!existsSync(d)) {
         if (required) { console.error(`no ${d}: build ${t} first`); process.exit(2); }

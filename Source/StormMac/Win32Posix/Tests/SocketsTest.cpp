@@ -2,8 +2,8 @@
 // Winsock declarations the game reads - TCP and UDP, blocking and non-blocking, the select()
 // sets and the WSAE* codes the shared code compares against.
 //
-// Built with the forced d2_platform.h, as a game unit is, and linked with the two layer units:
-//   clang++ ... -include Source/D2Headers/d2_platform.h SocketsTest.cpp Sockets.o SocketsBsd.o
+// Built with the forced d2_platform.h, as a game unit is, and linked with the two layer units
+// and the kernel: the d2_sockets_test target (cmake/mac-modern.cmake).
 // Exits 0 when every check passes.
 #if !defined(_WIN32) && D2_BACKEND_POSIX
 

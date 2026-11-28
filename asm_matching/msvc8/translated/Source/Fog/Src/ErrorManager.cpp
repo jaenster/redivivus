@@ -934,6 +934,51 @@ void __fastcall CRASH_FillupCrashTxt(char * szSummary, char * szReason, char * *
 }
 #endif
 
+#if !defined(_WIN32) && D2_BACKEND_POSIX
+// The POSIX twin of the two bodies above: Crash.txt through crashy's report file
+// (3rdparty/modernstubs/crashy_posix.cpp) - the process record, the summary, the line, the
+// calling thread's stack from the POSIX crash path (Win32PosixShell.h) and the attachments -
+// and then the report's path in the log and on stderr, where the others launch the error
+// reporter. There are no registers and no other threads' stacks.
+static void CRASH_WriteBacktraceLine(void * pReport, const char * szLine) {
+    _3rdparty::crashy::Printf((::Report*)pReport, "%s\n", szLine);
+}
+
+void __fastcall CRASH_FillupCrashTxt(char * szSummary, char * szReason, char * * ppszAttachPaths, uint32_t nAttachPathCount, uint32_t nLineNumber, bool bSilentFlag) {
+    static int32_t nReportsInProgress = -0x1; D2_STATIC_GUARD(nReportsInProgress, "Fog::Src::ErrorManager::CRASH_FillupCrashTxt::nReportsInProgress");
+
+    (void)szReason;
+    (void)bSilentFlag;
+    ::Report crashFile;
+    vc8_thiscall(_3rdparty::crashy::Constructor)(&crashFile);
+    if (InterlockedIncrement((LONG*)&nReportsInProgress) == 0) {
+      g_dwErrorState = 1;
+      if (_3rdparty::crashy::Open(&crashFile, (char*)"Crash.txt")) {
+        WriteCrashReportProcessInfo(&crashFile);
+        _3rdparty::crashy::Printf(&crashFile, "<Inspector.Summary:>\n%s\n<:Inspector.Summary>\n", szSummary);
+        if (nLineNumber != 0) {
+          _3rdparty::crashy::Printf(&crashFile, "<Inspector.LineNumber>%u\n", nLineNumber);
+        }
+
+        _3rdparty::crashy::Printf(&crashFile, "<Inspector.Assertion:>\n");
+        POSIX_WriteBacktrace(CRASH_WriteBacktraceLine, &crashFile, 1);
+        _3rdparty::crashy::Printf(&crashFile, "<:Inspector.Assertion>\n");
+        for (uint32_t nAttach = 0; nAttach != nAttachPathCount; nAttach++) {
+          _3rdparty::crashy::AddAttachment(&crashFile, ppszAttachPaths[nAttach], '\x01');
+        }
+
+        _3rdparty::crashy::Close(&crashFile);
+        LogManager::LOGFILE_WriteStringToFile((char*)"[CRASH] report written to %s", crashFile.szFilePath);
+        fprintf(stderr, "Diablo II: crash report written to %s\n", crashFile.szFilePath);
+      }
+    }
+
+    g_dwErrorState = 0;
+    InterlockedDecrement((LONG*)&nReportsInProgress);
+    vc8_thiscall(_3rdparty::crashy::Destructor)(&crashFile);
+}
+#endif
+
 // 1.14d mac: 002ef26d
 BOOL __fastcall CheckErrorDuringError(char * szText, int32_t nLine, char * szReason) {
     if (g_dwErrorState) {
@@ -5394,12 +5439,15 @@ void FOG_InitErrorManager(void* pUnused, char* szText, int bStoreStartupInfo) {
 #endif
 
 #if !defined(_WIN32) && D2_BACKEND_POSIX
-// The POSIX crash path: a fatal signal (Win32PosixShell.h) is written to the log, which is
-// flushed, and the process ends, as the Mac's crash callback ends in CRASHY_Exit. The full
-// report (registers, backtraces, modules) is the Windows and Mac crash libraries' and is not
-// here.
+// The POSIX crash path: a fatal signal (Win32PosixShell.h) is written to the log and to
+// Crash.txt (CRASH_FillupCrashTxt), the log is flushed, and the process ends, as the Mac's
+// crash callback ends in CRASHY_Exit. Registers, other threads and the module list are the
+// Windows and Mac crash libraries' and are not here.
 static void ERRORMANAGER_OnPosixCrash(int nSignal, void* pFaultAddress) {
+    char szSummary[0x80];
     LogManager::LOGFILE_WriteStringToFile((char*)"[CRASH] signal %d at %p", nSignal, pFaultAddress);
+    snprintf(szSummary, sizeof(szSummary), "Signal %d at %p", nSignal, pFaultAddress);
+    CRASH_FillupCrashTxt(szSummary, szSummary, nullptr, 0, 0, false);
     LogManager::ExitOrCrashCleanUpJmp();
     _Exit(-1);
 }

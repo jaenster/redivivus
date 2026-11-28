@@ -4,8 +4,9 @@
 // ends. The mixed samples are checked with the device paused (DirectSoundMixer.h), then a
 // generated tone plays through the real device stream for the cursor to move in real time.
 //
-// Run with SDL's dummy audio driver: SDL_AUDIO_DRIVER=dummy ./directsound_test (it sets it
-// when the variable is unset). Exits 0 when every check passes.
+// The d2_directsound_test target (cmake/mac-modern.cmake). Run with SDL's dummy audio driver:
+// SDL_AUDIO_DRIVER=dummy ./d2_directsound_test (it sets it when the variable is unset). Exits 0
+// when every check passes.
 #if !defined(_WIN32) && D2_BACKEND_POSIX
 
 #include "Source/StormMac/Win32Posix/DirectSoundMixer.h"

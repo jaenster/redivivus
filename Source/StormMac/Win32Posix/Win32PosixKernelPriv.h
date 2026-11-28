@@ -67,8 +67,13 @@ void Dispatcher_Signal(Object* pObject, bool bSignaled);  // takes the lock
 void SetError(DWORD dwError);
 DWORD ErrorFromErrno(int nErrno);
 
+// The user's home directory, and the directory applications keep their data in:
+// ~/Library/Application Support on macOS, XDG_DATA_HOME (default ~/.local/share) elsewhere.
+// POSIX paths without the trailing slash.
+std::string HomeDir();
+std::string AppSupportDir();
 // The directories: the install directory (D2_INSTALL_DIR, default
-// ~/Library/Application Support/Diablo II), and the one the MPQs are read from (D2_MPQ_DIR,
+// AppSupportDir()/Diablo II), and the one the MPQs are read from (D2_MPQ_DIR,
 // else MpqDir in [Paths] of Win32Posix.ini in the install directory, else the install
 // directory). Both are POSIX paths without the trailing slash, created on first use.
 const std::string& InstallDir();

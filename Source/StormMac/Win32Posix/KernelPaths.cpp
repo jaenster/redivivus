@@ -24,8 +24,6 @@
 
 namespace Win32Posix {
 
-namespace {
-
 std::string HomeDir() {
     const char* szHome = getenv("HOME");
     if (szHome && *szHome) {
@@ -34,6 +32,17 @@ std::string HomeDir() {
     struct passwd* pEntry = getpwuid(getuid());
     return pEntry && pEntry->pw_dir ? pEntry->pw_dir : "/tmp";
 }
+
+std::string AppSupportDir() {
+#if defined(__APPLE__)
+    return HomeDir() + "/Library/Application Support";
+#else
+    const char* szData = getenv("XDG_DATA_HOME");
+    return szData && *szData ? std::string(szData) : HomeDir() + "/.local/share";
+#endif
+}
+
+namespace {
 
 void MakeDirs(const std::string& sPath) {
     for (size_t i = 1; i <= sPath.size(); ++i) {
@@ -164,7 +173,7 @@ const std::string& InstallDir() {
     static const std::string sDir = [] {
         const char* szEnv = getenv("D2_INSTALL_DIR");
         std::string s = szEnv && *szEnv ? StripTrailingSlash(szEnv)
-                                        : HomeDir() + "/Library/Application Support/Diablo II";
+                                        : AppSupportDir() + "/Diablo II";
         MakeDirs(s);
         char szReal[PATH_MAX];
         return std::string(realpath(s.c_str(), szReal) ? szReal : s.c_str());

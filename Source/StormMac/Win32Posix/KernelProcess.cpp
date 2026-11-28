@@ -20,6 +20,9 @@
 #include <string.h>
 #include <strings.h>
 #include <unistd.h>
+#if defined(__APPLE__)
+#include <sys/sysctl.h>
+#endif
 
 #include "Source/StormMac/Win32Posix/Win32PosixKernelPriv.h"
 
@@ -229,6 +232,36 @@ BOOL TerminateProcess(HANDLE hProcess, UINT uExitCode) {
         return FALSE;
     }
     _exit((int)uExitCode);
+}
+
+BOOL IsDebuggerPresent(void) {
+#if defined(__APPLE__)
+    // The kernel's process record says whether the process is traced (P_TRACED).
+    int aMib[4] = {CTL_KERN, KERN_PROC, KERN_PROC_PID, getpid()};
+    struct kinfo_proc tInfo;
+    size_t nSize = sizeof(tInfo);
+    memset(&tInfo, 0, sizeof(tInfo));
+    if (sysctl(aMib, sizeof(aMib) / sizeof(aMib[0]), &tInfo, &nSize, nullptr, 0) != 0) {
+        return FALSE;
+    }
+    return (tInfo.kp_proc.p_flag & P_TRACED) != 0;
+#else
+    // Linux: the tracer's pid in /proc/self/status, 0 when none.
+    static const char szTracerKey[] = "TracerPid:";
+    FILE* pStatus = fopen("/proc/self/status", "r");
+    char szLine[256];
+    BOOL bTraced = FALSE;
+    while (pStatus && fgets(szLine, sizeof(szLine), pStatus)) {
+        if (strncmp(szLine, szTracerKey, sizeof(szTracerKey) - 1) == 0) {
+            bTraced = atoi(szLine + sizeof(szTracerKey) - 1) != 0;
+            break;
+        }
+    }
+    if (pStatus) {
+        fclose(pStatus);
+    }
+    return bTraced;
+#endif
 }
 
 BOOL GetExitCodeProcess(HANDLE hProcess, LPDWORD lpExitCode) {

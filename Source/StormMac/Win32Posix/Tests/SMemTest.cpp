@@ -11,6 +11,7 @@
 #if !defined(_WIN32) && D2_BACKEND_POSIX
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "Source/Storm/Source/SMem.h"
@@ -283,11 +284,10 @@ void TestSlotReuse() {
     }
 }
 
-// Heaps created, used and destroyed from several threads at once, so the slot claims and
-// releases of different buckets race. SMemHeapCreate itself is serialised: it returns its
-// static id counter after leaving the bucket lock, so a concurrent create can hand both
-// callers the same id (as in 1.14d).
-CRITICAL_SECTION g_tCreateLock;
+// Heaps created, used and destroyed from several threads at once, so the creates, the slot
+// claims and the releases of different buckets race. In 1.14d SMemHeapCreate returns its
+// static id counter after leaving the bucket lock, so a concurrent create could hand two
+// callers one id; the POSIX build takes the id atomically, and no two live heaps share one.
 
 uint32_t ThreadBlockSize(int k) {
     return (uint32_t)(16 + k * 40);
@@ -296,9 +296,8 @@ uint32_t ThreadBlockSize(int k) {
 DWORD __stdcall HeapThread(LPVOID pParam) {
     int* pnFailures = (int*)pParam;
     for (int i = 0; i < 3000; i++) {
-        EnterCriticalSection(&g_tCreateLock);
         HSHEAP h = SMemHeapCreate(0, 0x1000, 0);
-        LeaveCriticalSection(&g_tCreateLock);
+        if (h < 0x80000000) (*pnFailures)++;
         uint8_t* aBlocks[16];
         for (int k = 0; k < 16; k++) {
             uint32_t nSize = ThreadBlockSize(k);
@@ -316,7 +315,6 @@ DWORD __stdcall HeapThread(LPVOID pParam) {
 
 void TestThreads() {
     HANDLE aThreads[8];
-    InitializeCriticalSection(&g_tCreateLock);
     int aFailures[8] = {};
     for (int n = 0; n < 8; n++) {
         aThreads[n] = CreateThread(nullptr, 0, HeapThread, &aFailures[n], 0, nullptr);
@@ -329,6 +327,48 @@ void TestThreads() {
     }
 }
 
+// Heaps created from several threads at once and kept, then destroyed: every id is unique.
+const int kIdThreads = 8;
+const int kIdsPerThread = 500;
+HSHEAP g_aCreatedIds[kIdThreads][kIdsPerThread];
+
+DWORD __stdcall CreateIdsThread(LPVOID pParam) {
+    HSHEAP* pIds = (HSHEAP*)pParam;
+    for (int i = 0; i < kIdsPerThread; i++) {
+        pIds[i] = SMemHeapCreate(0, 0x1000, 0);
+    }
+    return 0;
+}
+
+int CompareIds(const void* pA, const void* pB) {
+    HSHEAP a = *(const HSHEAP*)pA, b = *(const HSHEAP*)pB;
+    return a < b ? -1 : a > b;
+}
+
+void TestConcurrentIds() {
+    HANDLE aThreads[kIdThreads];
+    for (int n = 0; n < kIdThreads; n++) {
+        aThreads[n] = CreateThread(nullptr, 0, CreateIdsThread, g_aCreatedIds[n], 0, nullptr);
+        CHECK(aThreads[n] != nullptr);
+    }
+    for (int n = 0; n < kIdThreads; n++) {
+        CHECK(WaitForSingleObject(aThreads[n], 0xffffffff) == 0);
+        CloseHandle(aThreads[n]);
+    }
+    HSHEAP* pIds = &g_aCreatedIds[0][0];
+    const int nIds = kIdThreads * kIdsPerThread;
+    qsort(pIds, nIds, sizeof(HSHEAP), CompareIds);
+    int nDuplicates = 0;
+    for (int i = 1; i < nIds; i++) {
+        nDuplicates += pIds[i] == pIds[i - 1];
+    }
+    CHECK(pIds[0] >= 0x80000000);
+    CHECK(nDuplicates == 0);
+    for (int i = 0; i < nIds; i++) {
+        CHECK(SMemHeapDestroy(pIds[i]));
+    }
+}
+
 }  // namespace
 
 int main() {
@@ -337,6 +377,7 @@ int main() {
     TestCallerHeaps();
     TestSlotReuse();
     TestThreads();
+    TestConcurrentIds();
     // The point of the test on arm64: the heaps live above 4 GB.
     if (sizeof(void*) == 8) {
         CHECK(g_nHighestHeap > 0xffffffffu);

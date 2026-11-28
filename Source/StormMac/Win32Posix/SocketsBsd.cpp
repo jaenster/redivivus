@@ -2,8 +2,8 @@
 // system socket headers, so it must be built without the forced d2_platform.h: Winsock's
 // records there share the BSD ones' names (sockaddr, in_addr, hostent, fd_set) and Winsock's
 // entry points share their signatures (socket, inet_addr, gethostbyname). cmake/mac-modern.cmake
-// leaves the forced include off a unit whose text names Win32PosixHost.h; this one names it here
-// for that reason only and reads neither it nor any other part of the Win32 surface.
+// names this unit among those built without the forced include; it reads no part of the Win32
+// surface.
 //
 // What differs between the two, and what this unit does about it:
 //   - the sockaddr: Winsock's starts with a 16-bit family, BSD's with a length byte and an

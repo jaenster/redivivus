@@ -1120,6 +1120,17 @@ HSHEAP __stdcall SMemHeapCreate(int32_t nReserved, uint32_t nMaxSize, uint32_t d
 
     do {
       uint32_t nBucketIndex;
+#if !defined(_WIN32) && D2_BACKEND_POSIX
+      // The id is taken from the shared counter in one atomic step, and the heap is made and
+      // returned under that id with the bucket's lock held throughout: the Windows body
+      // increments the counter unlocked and returns its value after the lock is released, so
+      // two threads creating heaps at once can be handed one id.
+      uint32_t nNextId = __atomic_load_n(&gnSMemHeapIdCounter, __ATOMIC_RELAXED);
+      do {
+        nHeapId = nNextId + 1 ? nNextId + 1 : 0x80000000;
+      } while (!__atomic_compare_exchange_n(&gnSMemHeapIdCounter, &nNextId, nHeapId, false, __ATOMIC_SEQ_CST, __ATOMIC_RELAXED));
+      nBucketIndex = (uint8_t)nHeapId;
+#else
       gnSMemHeapIdCounter++;
       if (!gnSMemHeapIdCounter) {
         gnSMemHeapIdCounter = 0x80000000;
@@ -1127,10 +1138,16 @@ HSHEAP __stdcall SMemHeapCreate(int32_t nReserved, uint32_t nMaxSize, uint32_t d
 
       nHeapId = gnSMemHeapIdCounter;
       nBucketIndex = (uint8_t)gnSMemHeapIdCounter;
+#endif
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(DebugMemoryCriticalSection + nBucketIndex);
       pHeap = g_SMemHeapBuckets[nBucketIndex];
       while (true) {
         if (!pHeap) {
+#if !defined(_WIN32) && D2_BACKEND_POSIX
+          SMEM_AllocateHeap(0, nHeapId, nBucketIndex, 0x1000, nMaxSize, 0x10000, nullptr);
+          /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(DebugMemoryCriticalSection + nBucketIndex);
+          return nHeapId;
+#else
           /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(DebugMemoryCriticalSection + nBucketIndex);
           nHeapId = gnSMemHeapIdCounter & 0xff;
           /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(DebugMemoryCriticalSection + nHeapId);
@@ -1141,6 +1158,7 @@ HSHEAP __stdcall SMemHeapCreate(int32_t nReserved, uint32_t nMaxSize, uint32_t d
           }
 
           return gnSMemHeapIdCounter;
+#endif
         }
         if (pHeap->nHash == nHeapId) {
           break;
