@@ -906,16 +906,13 @@ void __stdcall SErrDisplayAppFatal(char * szText, ...) {
     va_list __va;
     va_start(__va, szText);
     char szFormatted[1024];
-    SERR_InternalEnterCriticalSection();
-    DWORD dwCurrentThreadId_lcl = GetCurrentThreadId();
-    uint32_t nSavedContextParam = gpSSystemThreadContextCallback.nTraceFlags;
-    void* pSavedCallback = gpSSystemThreadContextCallback.pszContext;
-    uint32_t* pContextCallback = 0;
+    uint32_t* pContextCallback = nullptr;
     uint32_t nContextParam = 0;
-    if (gpSSystemThreadContextCallback.dwThreadId == dwCurrentThreadId_lcl) {
+    SERR_InternalEnterCriticalSection();
+    if (gpSSystemThreadContextCallback.dwThreadId == GetCurrentThreadId()) {
+      pContextCallback = (uint32_t*)gpSSystemThreadContextCallback.pszContext;
+      nContextParam = gpSSystemThreadContextCallback.nTraceFlags;
       SMem::SMemZero(&gpSSystemThreadContextCallback, sizeof(gpSSystemThreadContextCallback));
-      pContextCallback = (uint32_t*)pSavedCallback;
-      nContextParam = nSavedContextParam;
     }
 
     SERR_InternalLeaveCriticalSection();

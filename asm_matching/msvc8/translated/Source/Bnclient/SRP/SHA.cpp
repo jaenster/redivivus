@@ -126,17 +126,20 @@ int32_t __fastcall SHA1_BigIntCompareValue(BigData * pBigInt, uint32_t dwValue) 
     return dwTmp;
 }
 
+#if !D2_OS_MAC
 // Thin wrapper: SBigShl(pResult, pBigSrc, nShiftBits). No callers in 1.14d.
 // Provenance: 1.14d asm 0052a330 (single call to SBigShl).
 void __fastcall SHA1_BigIntShl(BigData * pResult, BigData * pBigSrc, uint32_t nShiftBits) {
     Storm::Source::SBig::SBigShl(pResult, pBigSrc, nShiftBits);
 }
+#endif
 
 // 1.14d mac: 002f754d
 void __fastcall SHA1_BigIntAdd(BigData * pResult, BigData * pBigA, BigData * pBigB) {
     Storm::Source::SBig::SBigAdd(pResult, pBigA, pBigB);
 }
 
+#if !D2_OS_MAC
 void __fastcall SHA1_BigIntAddValue(BigData * pResult, BigData * pBigA, uint32_t dwValue) {
     BigData* pTmpBigInt;
     Storm::Source::SBig::SBigNew(&pTmpBigInt);
@@ -144,12 +147,14 @@ void __fastcall SHA1_BigIntAddValue(BigData * pResult, BigData * pBigA, uint32_t
     Storm::Source::SBig::SBigAdd(pResult, pBigA, pTmpBigInt);
     Storm::Source::SBig::SBigDel(pTmpBigInt);
 }
+#endif
 
 // 1.14d mac: 002f7556
 void __fastcall SHA1_BigIntSub(BigData * pResult, BigData * pBigIntA, BigData * pBigIntB) {
     Storm::Source::SBig::SBigSub(pResult, pBigIntA, pBigIntB);
 }
 
+#if !D2_OS_MAC
 void __fastcall SHA1_BigIntSubValue(BigData * pResult, BigData * pBigA, uint32_t dwValue) {
     BigData* pTmpBigInt;
     Storm::Source::SBig::SBigNew(&pTmpBigInt);
@@ -157,10 +162,13 @@ void __fastcall SHA1_BigIntSubValue(BigData * pResult, BigData * pBigA, uint32_t
     Storm::Source::SBig::SBigSub(pResult, pBigA, pTmpBigInt);
     Storm::Source::SBig::SBigDel(pTmpBigInt);
 }
+#endif
 
+#if !D2_OS_MAC
 void __fastcall SHA1_BigIntMul(BigData * pResult, BigData * pBigA, BigData * pBigB) {
     Storm::Source::SBig::SBigMul(pResult, pBigA, pBigB);
 }
+#endif
 
 // 1.14d mac: 002f755f
 void __fastcall SHA1_BigIntMulValue(BigData * pResult, BigData * pBigA, uint32_t dwValue) {
@@ -171,6 +179,7 @@ void __fastcall SHA1_BigIntMulValue(BigData * pResult, BigData * pBigA, uint32_t
     Storm::Source::SBig::SBigDel(pTmpBigInt);
 }
 
+#if !D2_OS_MAC
 // Divides pBigA by the unsigned dwDivisor into pResult (SBigFromUnsigned + SBigDiv at 0052a496); former name SHA1_BigIntSquare kept as a label.
 void __fastcall SHA1_BigIntDivValue(BigData * pResult, BigData * pBigA, uint32_t dwDivisor) {
     BigData* pTmpBigInt;
@@ -179,35 +188,44 @@ void __fastcall SHA1_BigIntDivValue(BigData * pResult, BigData * pBigA, uint32_t
     Storm::Source::SBig::SBigDiv(pResult, pBigA, pTmpBigInt);
     Storm::Source::SBig::SBigDel(pTmpBigInt);
 }
+#endif
 
+#if !D2_OS_MAC
 void __fastcall SHA1_BigIntMod(BigData * pResult, BigData * pBigA, BigData * pModulus) {
     Storm::Source::SBig::SBigMod(pResult, pBigA, pModulus);
 }
+#endif
 
+#if !D2_OS_MAC
 uint32_t __fastcall SHA1_BigIntModToInt(BigData * pBigInt, uint32_t dwModulus) {
-    BigData* pRemBigInt;
     BigData* pModBigInt;
+    BigData* pRemBigInt;
     Storm::Source::SBig::SBigNew(&pModBigInt);
     Storm::Source::SBig::SBigNew(&pRemBigInt);
     Storm::Source::SBig::SBigFromUnsigned(pModBigInt, dwModulus);
     Storm::Source::SBig::SBigMod(pRemBigInt, pBigInt, pModBigInt);
-    uint32_t dwResult = 0;
-    Storm::Source::SBig::SBigToBinaryBuffer(pRemBigInt, &dwResult, 4, nullptr);
+    uint8_t abResult[4];
+    abResult[0] = abResult[1] = abResult[2] = abResult[3] = 0;
+    Storm::Source::SBig::SBigToBinaryBuffer(pRemBigInt, abResult, 4, nullptr);
     Storm::Source::SBig::SBigDel(pModBigInt);
     Storm::Source::SBig::SBigDel(pRemBigInt);
-    return dwResult;
+    return abResult[0] | abResult[1] << 8 | abResult[2] << 16 | abResult[3] << 24;
 }
+#endif
 
+#if !D2_OS_MAC
 void __fastcall SHA1_BigIntMulMod(BigData * pResult, BigData * pBigA, BigData * pBigB, BigData * pModulus) {
     Storm::Source::SBig::SBigMul(pResult, pBigA, pBigB);
     Storm::Source::SBig::SBigMod(pResult, pResult, pModulus);
 }
+#endif
 
 // 1.14d mac: 002f75ab
 void __fastcall SHA1_BigIntPowMod(BigData * pResult, BigData * pBase, BigData * pExponent, BigData * pModulus) {
     Storm::Source::SBig::SBigPowMod(pResult, pBase, pExponent, pModulus);
 }
 
+#if !D2_OS_MAC
 void __fastcall SHA1_BigIntPowModValue(BigData * pResult, BigData * pBase, uint32_t dwExponent, BigData * pModulus) {
     BigData* pTmpBigInt;
     Storm::Source::SBig::SBigNew(&pTmpBigInt);
@@ -215,10 +233,13 @@ void __fastcall SHA1_BigIntPowModValue(BigData * pResult, BigData * pBase, uint3
     Storm::Source::SBig::SBigPowMod(pResult, pBase, pTmpBigInt, pModulus);
     Storm::Source::SBig::SBigDel(pTmpBigInt);
 }
+#endif
 
+#if !D2_OS_MAC
 void __fastcall Unreferenced_0052a5f0(void * pContext) {
     Storm::Source::SBig::SBigIsPrime((BigData*)pContext);
 }
+#endif
 
 // 1.14d mac: 002f75b4
 void __fastcall SHA1_BigIntFree(BigData * pBigData) {

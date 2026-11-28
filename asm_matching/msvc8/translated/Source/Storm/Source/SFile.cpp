@@ -1396,62 +1396,46 @@ void __stdcall SFileSetDataChunkSize(uint32_t nChunkSize) {
 // @basis behaviour-confirmed. Win32 SetFilePointer semantics exactly: (hFile, LONG lDistanceToMove, PLONG lpDistanceToMoveHigh, DWORD dwMoveMethod), returning the new position or 0xFFFFFFFF on failure, and rejecting a non-zero high dword with ERROR_INVALID_PARAMETER. Method 0/1/2 = FILE_BEGIN/FILE_CURRENT/FILE_END, applied to the MPQ file record's logical position field, and delegated straight to the Win32 SetFilePointer when the record wraps a plain OS handle (field 0x44 != -1). Also invalidates the record's cached sector on every move.
 // 1.14d mac: 000129bc
 DWORD __stdcall SFileSetFilePointer(D2MPQFileStrc * pMPQFile, int32_t nDistanceToMove, int * pnDistanceToMoveHigh, DWORD dwMoveMethod) {
-    DWORD dwResult;
     if (pnDistanceToMoveHigh && *pnDistanceToMoveHigh) {
       SErr::SErrSetLastError(0x57);
       return -1;
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
-    int bIsValidHandle;
+    EnterCriticalSection(&lpCriticalSection_00779068);
     D2MPQFileStrc * pFileSlot;
-    bIsValidHandle = SFILE_CheckFileHandle(pMPQFile, &pFileSlot);
-    if (!bIsValidHandle) {
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
+    if (!SFILE_CheckFileHandle(pMPQFile, &pFileSlot)) {
+      LeaveCriticalSection(&lpCriticalSection_00779068);
       return -1;
     }
     if ((intptr_t)pFileSlot->hFile != -1) {
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
-      /* DWORD dwMoveMethod for SetFilePointer */ /* PLONG lpDistanceToMoveHigh for SetFilePointer */ /* LONG lDistanceToMove for SetFilePointer */ /* HANDLE hFile for SetFilePointer */ dwResult = SetFilePointer(pFileSlot->hFile, nDistanceToMove, (PLONG)0x0, dwMoveMethod);
-      return dwResult;
-    }
-    if (!dwMoveMethod) {
-      seek_absolute:
-      pFileSlot->nFilePos = nDistanceToMove;
-    } else {
-      switch (dwMoveMethod) {
-        case 1:
-          {
-            if (!(nDistanceToMove >= 0 || pFileSlot->nFilePos >= (uint32_t)-nDistanceToMove)) {
-              break;
-            }
-
-            pFileSlot->nFilePos += nDistanceToMove;
-            goto finish_seek;
-          }
-        default:
-          {
-            goto finish_seek;
-          }
-        case 2:
-          {
-            if (nDistanceToMove >= 0 || pFileSlot->pBlockEntry->dwFileSize >= (uint32_t)-nDistanceToMove) {
-              nDistanceToMove = pFileSlot->pBlockEntry->dwFileSize + nDistanceToMove;
-              goto seek_absolute;
-            }
-
-            break;
-          }
-      }
-
-      pFileSlot->nFilePos = 0;
+      LeaveCriticalSection(&lpCriticalSection_00779068);
+      return SetFilePointer(pFileSlot->hFile, nDistanceToMove, nullptr, dwMoveMethod);
     }
 
-    finish_seek:
+    switch (dwMoveMethod) {
+      case FILE_BEGIN:
+        pFileSlot->nFilePos = nDistanceToMove;
+        break;
+      case FILE_CURRENT:
+        if (nDistanceToMove < 0 && pFileSlot->nFilePos < (uint32_t)-nDistanceToMove) {
+          pFileSlot->nFilePos = 0;
+        } else {
+          pFileSlot->nFilePos += nDistanceToMove;
+        }
+        break;
+      case FILE_END:
+        if (nDistanceToMove < 0 && pFileSlot->pBlockEntry->dwFileSize < (uint32_t)-nDistanceToMove) {
+          pFileSlot->nFilePos = 0;
+        } else {
+          pFileSlot->nFilePos = pFileSlot->pBlockEntry->dwFileSize + nDistanceToMove;
+        }
+        break;
+    }
+
     pFileSlot->nBytesRead = 0;
     pFileSlot->nBufferSize = 0;
-    dwResult = pFileSlot->nFilePos;
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
+    DWORD dwResult = pFileSlot->nFilePos;
+    LeaveCriticalSection(&lpCriticalSection_00779068);
     return dwResult;
 }
 
@@ -4111,32 +4095,23 @@ D2StormAudioStreamRec * __fastcall SFILE_DeleteAudioStream(D2StormAudioStreamRec
 
 // @blizzard SFileCloseArchive (SFILE.CPP)
 int __stdcall SFileCloseArchive(D2ArchiveStrc * pArchive) {
-    int* piVar1;
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
-    D2ArchiveStrc* pNext = pArchive;
-    int nValid = SFILE_CheckArchiveHandle(pArchive, &pArchive);
-    D2ArchiveStrc* pObject = pArchive;
-    if (!nValid) {
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
+    EnterCriticalSection(&lpCriticalSection_00779068);
+    D2ArchiveStrc* pObject;
+    if (!SFILE_CheckArchiveHandle(pArchive, &pObject)) {
+      LeaveCriticalSection(&lpCriticalSection_00779068);
       return 0;
     }
-    if (pNext) {
-      if (pNext->bDontCloseHandle) {
-        nValid = SFILE_CheckFileHandle(pArchive->bDontCloseHandle, (D2MPQFileStrc**)&pArchive);
-        if (nValid) {
+    if (pArchive) {
+      if (pArchive->bDontCloseHandle) {
+        D2MPQFileStrc* pFile;
+        if (SFILE_CheckFileHandle(pObject->bDontCloseHandle, &pFile)) {
           SFileCloseFile(pObject->bDontCloseHandle);
         }
-      } else {
-        if (pNext->pBaseArchive) {
-          pNext = pArchive->pBaseArchive;
-          if (pNext) {
-            piVar1 = &pNext->nRefCount;
-            (*piVar1)--;
-            if (!*piVar1) {
-              SFILE_FreeArchiveRecord(pNext);
-              SMem::SMemFree(pNext, "delete", -1, 0);
-            }
-          }
+      } else if (pArchive->pBaseArchive) {
+        D2ArchiveStrc* pBaseArchive = pObject->pBaseArchive;
+        if (pBaseArchive && !--pBaseArchive->nRefCount) {
+          SFILE_FreeArchiveRecord(pBaseArchive);
+          SMem::SMemFree(pBaseArchive, "delete", -1, 0);
         }
       }
     }
@@ -4146,25 +4121,21 @@ int __stdcall SFileCloseArchive(D2ArchiveStrc * pArchive) {
       pNode = (D2ArchiveStrc*)&gMpqArchiveList.head;
     }
 
-    pNext = pNode->pPrevLink;
-    if (pNext) {
+    D2ArchiveStrc* pPrevLink = pNode->pPrevLink;
+    if (pPrevLink) {
       D2ArchiveStrc** pRefCount;
       pRefCount = (D2ArchiveStrc**)D2_StormNextLink(pNode, -1);
-      *pRefCount = pNext;
+      *pRefCount = pPrevLink;
       pNode->pPrevLink->pNext = pNode->pNext;
       pNode->pPrevLink = 0;
       pNode->pNext = 0;
     }
-    if (pObject) {
-      piVar1 = &pObject->nRefCount;
-      (*piVar1)--;
-      if (!*piVar1) {
-        SFILE_FreeArchiveRecord(pObject);
-        SMem::SMemFree(pObject, "delete", -1, 0);
-      }
+    if (pObject && !--pObject->nRefCount) {
+      SFILE_FreeArchiveRecord(pObject);
+      SMem::SMemFree(pObject, "delete", -1, 0);
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
+    LeaveCriticalSection(&lpCriticalSection_00779068);
     return 1;
 }
 

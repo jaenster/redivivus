@@ -400,45 +400,32 @@ void __fastcall NET_SID_CLIENT_Send_0x0C_JoinChannel(char * szText, int32_t bFor
 }
 
 BOOL __fastcall BNSEND_EncodePacketEscape(char * szText, uint32_t nByteCount) {
-    char* pSrc;
-    if (nByteCount <= 0) {
-      return 1;
-    }
+    if (nByteCount > 0) {
+      uint32_t i = 0;
+      do {
+        if (i == 0xff) {
+          return 0;
+        }
+        if (*szText == '\0') {
+          Storm::Source::SMem::SMemCopy(szText + 2, szText + 1, 0x100);
+          nByteCount++;
+          szText[1] = 1;
+          *szText = -1;
+          szText++;
+          i++;
+        } else if (*szText == -1) {
+          Storm::Source::SMem::SMemCopy(szText + 2, szText + 1, 0x100);
+          nByteCount++;
+          szText[1] = -1;
+          *szText = -1;
+          szText++;
+          i++;
+        }
 
-    uint32_t nEscapeCount;
-    nEscapeCount = 0;
-    char* pDst;
-    pDst = szText + 2;
-    char* pSrcNext;
-    pSrcNext = szText;
-    uint32_t nRemaining;
-    nRemaining = nByteCount;
-    do {
-      pSrc = pSrcNext + 1;
-      if (nEscapeCount == 0xff) {
-        return 0;
-      }
-      if (*szText == '\0') {
-        Storm::Source::SMem::SMemCopy(pDst, pSrc, 0x100);
-        *pSrc = '\x01';
-        write_escape_marker:
-        nRemaining++;
-        *szText = -1;
+        i++;
         szText++;
-        pDst++;
-        pSrc = pSrcNext + 2;
-        nEscapeCount++;
-      } else if (*szText == -1) {
-        Storm::Source::SMem::SMemCopy(pDst, pSrc, 0x100);
-        *pSrc = -1;
-        goto write_escape_marker;
-      }
-
-      nEscapeCount++;
-      szText++;
-      pDst++;
-      pSrcNext = pSrc;
-    } while (nEscapeCount < nRemaining);
+      } while (i < nByteCount);
+    }
 
     return 1;
 }
@@ -943,10 +930,21 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x5B_ChangeEmail(char * szText1, char * szTe
     return (uint32_t)(nSendResult >= 0);
 }
 
+#if D2_OS_MAC
+// The Mac error manager keeps no crash dump file: its loader answers zero (ErrorManager.cpp, global
+// namespace; named by its symbol because this unit's namespace would hide it).
+int ERRORMANAGER_ReturnFalse(void* pOutBuffer, uint32_t* pnBufferSize) __asm__("__Z24ERRORMANAGER_ReturnFalsePvPj");
+#endif
+
+// 1.14d mac: 00057bb3
 BOOL __stdcall NET_SID_CLIENT_Send_0x5D_ReportCrash() {
     char szCrashDumpBuf[1500];
     uint32_t nCrashDumpSize = 0x5dc;
+#if D2_OS_MAC
+    BOOL bHasCrashDump = ERRORMANAGER_ReturnFalse(szCrashDumpBuf, &nCrashDumpSize);
+#else
     BOOL bHasCrashDump = Fog::Debug::LoadPreviousCrashDump((uint8_t*)szCrashDumpBuf, (int*)&nCrashDumpSize);
+#endif
     if (!bHasCrashDump) {
       return 0;
     }
