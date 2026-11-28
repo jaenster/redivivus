@@ -29,6 +29,7 @@ struct D2LuaMod {
     bool bTestGrant = false;
     bool bDriverGrant = false;
     bool bManagerGrant = false;  // redivivus:manager: the built-in mod only
+    bool bRawGrant = false;      // engine.unsafe in patch(engine): the raw tier of the overrides
     std::string sName;
     std::string sPath;  // the folder holding the mod's namespace (mods/<name>/)
     // Mods this one may require from: itself and every dependency that is loaded (required,
@@ -57,6 +58,7 @@ struct D2LuaRuntime {
     std::vector<D2LuaSettingInfo> aSettings;  // declared in the current state
     std::vector<int> aInstantiating;          // mods whose public modules the core loader is making
     bool bUiDrawing = false;                  // the host has a frame open for the UI (d2_lua_ui.h)
+    struct D2LuaOvState* pOv = nullptr;       // the functions its mods override (d2_lua_override.cpp)
 };
 
 // Read the settings file named in the description (d2_lua_settings.cpp). Plain C++.

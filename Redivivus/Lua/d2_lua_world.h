@@ -236,6 +236,15 @@ public:
 // The world of the state L belongs to, or null (the data stage, a client, a state without one).
 D2LuaWorld* D2LuaWorld_Of(lua_State* L);
 
+// Units as the overrides hand them to mods (d2_lua_override.cpp): push the handle of a unit (false
+// when the state has no world, so the caller passes it on opaque); the (type, guid) a unit handle at
+// index i names (false when it is no unit handle); whether a unit is the one a key names; the usable
+// unit of a key, or null.
+bool D2LuaWorld_PushUnit(lua_State* L, D2UnitStrc* pUnit);
+bool D2LuaWorld_HandleKey(lua_State* L, int i, int* pnType, uint32_t* pnGuid);
+bool D2LuaWorld_UnitIs(lua_State* L, D2UnitStrc* pUnit, int nType, uint32_t nGuid);
+D2UnitStrc* D2LuaWorld_FindUnit(lua_State* L, int nType, uint32_t nGuid);
+
 // The natives (handle classes Player, Monster, Unit, Room, Level; the "world" natives table of
 // the core). Bound into a server state with a world.
 extern const D2LuaApiDesc g_D2LuaApi_world;

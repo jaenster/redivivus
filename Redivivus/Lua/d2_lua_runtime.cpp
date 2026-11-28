@@ -18,6 +18,7 @@
 #include "Redivivus/Lua/d2_lua_core.h"
 #include "Redivivus/Lua/d2_lua_internal.h"
 #include "Redivivus/Lua/d2_lua_json.h"
+#include "Redivivus/Lua/d2_lua_override.h"
 #include "Redivivus/Lua/d2_lua_rt.h"
 #include "lua.hpp"
 
@@ -718,6 +719,7 @@ static bool BuildState(D2LuaRuntime* pRt) {
         pMod->sPath = tInfo.sPath;
         pMod->bTestGrant = Contains(pRt->tDesc.aTestGrant, tInfo.sName);
         pMod->bDriverGrant = Contains(pRt->tDesc.aDriverGrant, tInfo.sName);
+        pMod->bRawGrant = Contains(pRt->tDesc.aRawGrant, tInfo.sName);
         pMod->bManagerGrant = tInfo.bIntrinsic;
         pMod->aRequirable.push_back(tInfo.sName);
         pMod->aRequirable.push_back(D2LUA_INTRINSIC_MOD);
@@ -842,6 +844,14 @@ static void LoadMains(D2LuaRuntime* pRt) {
     }
 }
 
+// Every mod's patch(engine), in load order, once the mains are loaded: the overrides it makes fire
+// from then on.
+static void RunPatches(D2LuaRuntime* pRt) {
+    D2LuaOv_StateReady(pRt, false);
+    D2LuaCore_CallHost(pRt->L, "runPatch", 0, 0);
+    D2LuaOv_StateReady(pRt, true);
+}
+
 static void RunEntryFiles(D2LuaRuntime* pRt) {
     static const char* const s_apszData[] = { "settings.lua", "data.lua", "data-updates.lua", "data-final-fixes.lua" };
     if (pRt->tDesc.nSide == D2LUA_SIDE_DATA) {
@@ -858,6 +868,7 @@ static void RunEntryFiles(D2LuaRuntime* pRt) {
         return;
     }
     LoadMains(pRt);
+    RunPatches(pRt);
 }
 
 D2LuaRuntime* D2LuaRt_Create(const D2LuaRuntimeDesc& tDesc) {
@@ -869,6 +880,7 @@ D2LuaRuntime* D2LuaRt_Create(const D2LuaRuntimeDesc& tDesc) {
         delete pRt;
         return nullptr;
     }
+    D2LuaOv_StateCreated(pRt);
     RunEntryFiles(pRt);
     return pRt;
 }
@@ -1128,7 +1140,11 @@ bool D2LuaRt_ReloadGame(D2LuaRuntime* pRt, uint32_t nGame, std::string& sError) 
     D2LuaCore_ForgetInstances(L);
     pRt->nGeneration++;
     pRt->tMaps.clear();
+    // The overrides come from the mods' patch(): made again from the new modules.
+    D2LuaOv_StateReady(pRt, false);
+    D2LuaOv_ClearState(pRt);
     LoadMains(pRt);
+    RunPatches(pRt);
     bool bOk = RestoreStorage(pRt, nGame, &sStorage, sError);
     lua_pushnumber(L, (lua_Number)nGame);
     D2LuaCore_CallHost(L, "runEntries", 1, 0);
@@ -1162,6 +1178,7 @@ void D2LuaRt_Destroy(D2LuaRuntime* pRt) {
     if (!pRt) {
         return;
     }
+    D2LuaOv_StateDestroyed(pRt);
     D2LuaHost_Destroy(pRt->L);
     delete pRt;
 }

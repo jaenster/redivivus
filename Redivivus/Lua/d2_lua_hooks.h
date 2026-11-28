@@ -19,6 +19,10 @@
 //                                      form list so FORMS_DestroyLists frees them with the rest
 //   D2LUA_PALETTE_LOADED()             D2WINPAL_LoadPaletteFiles, once the new palette is set: the UI
 //                                      backend's RGB-to-palette-index cache is cleared
+//   D2LUA_GAME_SCOPE_BEGIN(pGame), D2LUA_GAME_SCOPE_END()
+//                                      around ServerGameLoop's frame and a client's in-game command:
+//                                      the thread works for that game, so function overrides on it
+//                                      run in the game's server state (d2_lua_override.h)
 //   D2LUA_WINFONT_ACCESS()             at the end of D2WinFont.cpp: defines the accessors the UI backend
 //                                      reads the selected font through (its DC6 and glyph lookup are
 //                                      file statics there)
@@ -37,6 +41,8 @@ void D2LuaEngine_Tick(SGAMEDATA* pGame);
 void D2LuaEngine_GameEnd(SGAMEDATA* pGame);
 void D2LuaEngine_UnitFreed(SGAMEDATA* pGame, D2UnitStrc* pUnit);
 void D2LuaEngine_MonsterDied(SGAMEDATA* pGame, D2UnitStrc* pUnit);
+void* D2LuaEngine_ScopeBegin(SGAMEDATA* pGame);
+void D2LuaEngine_ScopeEnd(void* pWas);
 
 void D2LuaMenu_MainMenu(D2ControlStrc** apList, int* pnCount);
 void D2LuaMenu_PaletteLoaded(void);
@@ -57,6 +63,8 @@ int D2LuaFont_ByCode(void);
 #define D2LUA_GAME_END(pGame) D2LuaEngine_GameEnd(pGame)
 #define D2LUA_UNIT_FREED(pGame, pUnit) D2LuaEngine_UnitFreed((pGame), (pUnit))
 #define D2LUA_MONSTER_DIED(pGame, pUnit) D2LuaEngine_MonsterDied((pGame), (pUnit))
+#define D2LUA_GAME_SCOPE_BEGIN(pGame) void* pLuaGameScope_ = D2LuaEngine_ScopeBegin(pGame)
+#define D2LUA_GAME_SCOPE_END() D2LuaEngine_ScopeEnd(pLuaGameScope_)
 #define D2LUA_MAIN_MENU(apList, nCount) D2LuaMenu_MainMenu((apList), &(nCount))
 #define D2LUA_PALETTE_LOADED() D2LuaMenu_PaletteLoaded()
 #define D2LUA_WINFONT_ACCESS()                                                                      \
@@ -75,6 +83,8 @@ int D2LuaFont_ByCode(void);
 #define D2LUA_GAME_END(pGame) ((void)0)
 #define D2LUA_UNIT_FREED(pGame, pUnit) ((void)0)
 #define D2LUA_MONSTER_DIED(pGame, pUnit) ((void)0)
+#define D2LUA_GAME_SCOPE_BEGIN(pGame) ((void)0)
+#define D2LUA_GAME_SCOPE_END() ((void)0)
 #define D2LUA_MAIN_MENU(apList, nCount) ((void)0)
 #define D2LUA_PALETTE_LOADED() ((void)0)
 #define D2LUA_WINFONT_ACCESS()

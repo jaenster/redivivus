@@ -120,6 +120,9 @@ foreach(list D2_SOURCES D2_HEADERS)
     list(FILTER ${list} EXCLUDE REGEX "^${D2_ROOT}/3rdparty/(zlib|blast|MoreFiles|macstubs)/")
     # The Lua host's own test program has a main(); it is a target of its own below.
     list(FILTER ${list} EXCLUDE REGEX "^${D2_ROOT}/Redivivus/Lua/test/")
+    # The override tables: each one #includes its Source unit and takes that unit's place in a
+    # mods build (d2_ov_units below), never a unit of its own.
+    list(FILTER ${list} EXCLUDE REGEX "^${D2_ROOT}/Redivivus/Lua/generated/override/")
     # The Lua tools' node_modules (packages for the generator and the mod CLI) hold no game code.
     list(FILTER ${list} EXCLUDE REGEX "/node_modules/")
     list(FILTER ${list} EXCLUDE REGEX "^${CMAKE_BINARY_DIR}/")
@@ -156,7 +159,29 @@ if(NOT REDIVIVUS_LOUD)
 endif()
 if(NOT REDIVIVUS_MODS)
     list(FILTER D2_SOURCES EXCLUDE REGEX "^${D2_SUPPORT}/Lua/")
+else()
+    # The list of the override tables, part of the Redivivus module.
+    list(APPEND D2_SOURCES "${D2_SUPPORT}/Lua/generated/override/index.gen.cpp")
 endif()
+
+# A mods build compiles each Source unit that has an override table through that table
+# (Redivivus/Lua/generated/override/<unit>.ov.cpp, which #includes the unit), in the unit's place:
+# same module, same position in the link order.
+function(d2_ov_units out)
+    set(mapped)
+    foreach(src IN LISTS ARGN)
+        set(ov "")
+        if(REDIVIVUS_MODS AND src MATCHES "^${D2_ROOT}/(Source/.*)\\.cpp$")
+            set(ov "${D2_SUPPORT}/Lua/generated/override/${CMAKE_MATCH_1}.ov.cpp")
+        endif()
+        if(ov AND EXISTS "${ov}")
+            list(APPEND mapped "${ov}")
+        else()
+            list(APPEND mapped "${src}")
+        endif()
+    endforeach()
+    set(${out} ${mapped} PARENT_SCOPE)
+endfunction()
 
 # Headers are included by tree-relative path ("Source/D2Game/Unit/SUNITNPC.h"),
 # with a handful by bare name from their own directory. link.sh puts every
@@ -223,6 +248,16 @@ if(REDIVIVUS_OPENGL AND NOT REDIVIVUS_SERVER)
 endif()
 if(REDIVIVUS_MODS)
     target_compile_definitions(d2_flags INTERFACE D2_FEATURE_MODS=1)
+    # Function overrides (Redivivus/Lua/d2_lua_override.h): five nops at every entry, entries on 16
+    # bytes so they and the three after them are one aligned 8-byte block. Nothing goes before an
+    # entry: GNU as for PE adds a symbol's offset in its COMDAT section to calls from the same
+    # object, so a label that does not start its section would be called that many bytes in.
+    # REDIVIVUS_MODS_PATCHABLE=OFF leaves them out (every override is then refused): for measuring
+    # what they cost.
+    option(REDIVIVUS_MODS_PATCHABLE "Mods: patchable function entries, which function overrides need." ON)
+    if(REDIVIVUS_MODS_PATCHABLE AND NOT MSVC)
+        target_compile_options(d2_flags INTERFACE "$<${CXX_ONLY}:-fpatchable-function-entry=5,0;-falign-functions=16>")
+    endif()
 endif()
 
 # The loud build: every game TU gets the checks, the code that reports them does
@@ -299,6 +334,7 @@ if(REDIVIVUS_MODULE_LIBRARIES)
             continue()
         endif()
         list(REMOVE_ITEM D2_UNCLAIMED ${srcs})
+        d2_ov_units(srcs ${srcs})
         add_library(${m} STATIC ${srcs})
         target_link_libraries(${m} PRIVATE d2_flags)
         if(D2_MODULE_${m}_KIND STREQUAL "ours")
@@ -342,6 +378,7 @@ if(REDIVIVUS_MODULE_LIBRARIES)
     endforeach()
     # What no module owns: globals.cpp and any root unit.
     if(D2_UNCLAIMED)
+        d2_ov_units(D2_UNCLAIMED ${D2_UNCLAIMED})
         add_library(d2_root STATIC ${D2_UNCLAIMED})
         target_link_libraries(d2_root PRIVATE d2_flags)
         target_compile_definitions(d2_root PRIVATE ${D2_ALL_MODULE_DEFS})
@@ -353,7 +390,8 @@ if(REDIVIVUS_MODULE_LIBRARIES)
         target_link_libraries(d2 PRIVATE "$<LINK_LIBRARY:WHOLE_ARCHIVE,${lib}>")
     endforeach()
 else()
-    add_executable(d2 ${D2_SOURCES})
+    d2_ov_units(_d2_units ${D2_SOURCES})
+    add_executable(d2 ${_d2_units})
     target_link_libraries(d2 PRIVATE d2_flags)
 endif()
 
@@ -450,6 +488,12 @@ if(REDIVIVUS_MODS)
     # they get LuaJIT's generated headers, and every game unit waits for the LuaJIT make.
     file(GLOB _lua_host_sources "${D2_SUPPORT}/Lua/*.cpp" "${D2_SUPPORT}/Lua/generated/*.cpp" "${D2_SUPPORT}/Lua/engine/*.cpp")
     set_property(SOURCE ${_lua_host_sources} APPEND PROPERTY INCLUDE_DIRECTORIES "${D2_LUAJIT_OUT}/src")
+    # An overridden call goes through these two on every call: optimised (they are the host's own
+    # code, none of it decompiled).
+    if(NOT MSVC)
+        set_property(SOURCE "${D2_SUPPORT}/Lua/d2_lua_override.cpp" "${D2_SUPPORT}/Lua/d2_lua_host.cpp"
+            APPEND PROPERTY COMPILE_OPTIONS -O2)
+    endif()
     add_dependencies(d2_flags luajit_make)
     include("${D2_ROOT}/cmake/lua-api.cmake")
     if(D2_LUA_API_CHECK)

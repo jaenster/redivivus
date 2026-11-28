@@ -15,6 +15,7 @@ require("redivivus:shared")` in Lua. A mod's control entry `main` exports `serve
 |`redivivus:enums`|data, server, client|-|
 |`redivivus:lualib`|data, server, client|-|
 |`redivivus:manager`|data, server, client|-|
+|`redivivus:mod`|data, server, client|-|
 |`redivivus:mods`|data, server, client|-|
 |`redivivus:server`|data, server, client|-|
 |`redivivus:shared`|data, server, client|-|
@@ -355,6 +356,47 @@ their entries. Takes effect when the game restarts. Raises when the file cannot 
 Restart the game with the mod list as it is now: this process quits as the main menu's Exit does
 and the same executable starts again with the same command line. Raises when the game cannot
 restart itself.
+
+## redivivus:mod
+
+- `export type { ClientModules, EngineFunction, Opaque, Pointer, RawClientModules, RawServerModules, RefusedFunction, ServerModules, } from "./engine-functions";`
+
+### `type RawTier<M> = M & { readonly ffi: any; };`
+
+The raw tier of a granted mod: the functions with pointers as LuaJIT FFI cdata, and `ffi` itself
+(declare a record's layout with `ffi.cdef` to read its fields; an undeclared record is an
+incomplete type).
+
+### `interface ServerEngine`
+
+The engine as a server state's `patch` gets it.
+
+- `readonly side: Side.Server;`
+- `readonly unsafe?: RawTier<RawServerModules>;` - The raw tier: the same functions with pointers as LuaJIT FFI cdata. Only there for a mod the player granted it; undefined otherwise.
+
+### `interface ClientEngine`
+
+The engine as the client state's `patch` gets it.
+
+- `readonly side: Side.Client;`
+- `readonly unsafe?: RawTier<RawClientModules>;` - The raw tier (see ServerEngine.unsafe).
+
+### `type Engine = ServerEngine | ClientEngine;`
+
+The engine of the state `patch` runs in: narrow it on `engine.side`.
+
+### `interface ModDefinition`
+
+A mod's entry points.
+
+- `patch?(this: void, engine: Engine): void;` - Once per Lua state, before anything else, with no game: override engine functions here.
+- `server?(this: void, game: Game): void;` - Once for every game this process hosts.
+- `client?(this: void, client: Client): void;` - Once for every game this client is in.
+- `menu?(this: void, menu: Menu): void;` - Once, when the main menu first comes up (the client state).
+
+### `function defineMod(definition: ModDefinition): ModDefinition;`
+
+The mod: returns its argument unchanged; it is there for the types.
 
 ## redivivus:mods
 

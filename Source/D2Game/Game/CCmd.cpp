@@ -12,6 +12,7 @@
 #include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Game/Game/Server.data.h"
+#include "Redivivus/Lua/d2_lua_hooks.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -211,7 +212,7 @@ void __fastcall NET_D2GS_SERVER_ProcessClientMessage_InGame(char * pBytes, uint3
     pClient->dwTimeOut = dwTick;
     D2UnitStrc* pUnit = Clients::CLIENTS_GetControlUnit(pClient, 0);
     if (pUnit && (pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_PLAYER) {
-      PLAYER::PlayerMsg::NET_D2GS_SERVER_HandleIncomingPacketAfterClientCheck(pGame, pUnit, pPacket, nSize);
+      D2LUA_GAME_SCOPE_BEGIN(pGame); PLAYER::PlayerMsg::NET_D2GS_SERVER_HandleIncomingPacketAfterClientCheck(pGame, pUnit, pPacket, nSize); D2LUA_GAME_SCOPE_END();
     }
 
     Server::Unlock(pGame);

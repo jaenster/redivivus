@@ -50,6 +50,9 @@ struct D2LuaRuntimeDesc {
     bool bSettingsStageOnly = false;  // data side: run settings.lua and none of the data stage files
     std::vector<std::string> aTestGrant;    // mods that may import redivivus:test (the test runner's)
     std::vector<std::string> aDriverGrant;  // scripts that may import redivivus:automation
+    // Mods whose patch(engine) gets engine.unsafe, the raw tier of the overrides (engine memory
+    // through LuaJIT's ffi): only mods the player granted it, never one that came from a server.
+    std::vector<std::string> aRawGrant;
     // The game world a server state's mods see (d2_lua_world.h), owned by the caller and alive as
     // long as the state; null for a state without one. With a world, add g_D2LuaApi_world to aApis.
     D2LuaWorld* pWorld = nullptr;

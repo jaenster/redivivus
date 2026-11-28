@@ -122,6 +122,36 @@ static void PushUnit(lua_State* L, D2LuaWorld* w, D2UnitStrc* pUnit) {
     D2LuaHandle_PushId(L, ClassOfType(nType), UnitId(nType, w->UnitGuid(pUnit)));
 }
 
+bool D2LuaWorld_PushUnit(lua_State* L, D2UnitStrc* pUnit) {
+    D2LuaWorld* w = D2LuaWorld_Of(L);
+    if (!w) {
+        return false;
+    }
+    PushUnit(L, w, pUnit);
+    return true;
+}
+
+bool D2LuaWorld_HandleKey(lua_State* L, int i, int* pnType, uint32_t* pnGuid) {
+    const char* pszClass = nullptr;
+    uint64_t nId = 0;
+    if (!D2LuaWorld_Of(L) || !D2LuaHandle_Inspect(L, i, &pszClass, &nId)
+        || (strcmp(pszClass, "Player") != 0 && strcmp(pszClass, "Monster") != 0 && strcmp(pszClass, "Unit") != 0)) {
+        return false;
+    }
+    *pnType = (int)(nId >> 32);
+    *pnGuid = (uint32_t)nId;
+    return true;
+}
+
+bool D2LuaWorld_UnitIs(lua_State* L, D2UnitStrc* pUnit, int nType, uint32_t nGuid) {
+    D2LuaWorld* w = D2LuaWorld_Of(L);
+    return w && pUnit && w->UnitType(pUnit) == nType && w->UnitGuid(pUnit) == nGuid;
+}
+
+D2UnitStrc* D2LuaWorld_FindUnit(lua_State* L, int nType, uint32_t nGuid) {
+    return (D2UnitStrc*)ResolveUnit(L, UnitId(nType, nGuid));
+}
+
 static void PushRoom(lua_State* L, D2LuaWorld* w, D2RoomStrc* pRoom) {
     if (!pRoom) {
         lua_pushnil(L);

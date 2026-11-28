@@ -59,6 +59,7 @@
 #include "Source/Storm/Storm.h"
 #include "Redivivus/Lua/d2_lua.h"
 #include "Redivivus/Lua/d2_lua_hooks.h"
+#include "Redivivus/Lua/d2_lua_override.h"
 #include "Redivivus/Lua/d2_lua_runtime.h"
 #include "Redivivus/Lua/d2_lua_ui.h"
 #include "Redivivus/Lua/engine/d2_lua_engine.h"
@@ -533,6 +534,8 @@ bool Restart(void*, std::string& sError) {
 // Relaunch the executable with the same command line; the new process waits for this one to end
 // (D2LuaMenu_WaitForPrevious) before it starts.
 void Relaunch() {
+    // Every patched entry is put back first: the process ends, and nothing it overrode stays so.
+    D2LuaOv_UndoAll();
     char szExe[MAX_PATH + 1];
     DWORD n = GetModuleFileNameA(nullptr, szExe, MAX_PATH);
     if (n == 0 || n >= MAX_PATH) {
@@ -785,11 +788,16 @@ bool EnsureClient() {
     D2LuaCatalog* pCatalog = pBoot ? const_cast<D2LuaCatalog*>(&pBoot->tCatalog) : &s_tNoCatalog;
     pCatalog->pfnRestart = Restart;
     tDesc.pCatalog = pCatalog;
+    if (pBoot) {
+        tDesc.aRawGrant = pBoot->aRawGrant;
+    }
     s_pClient = D2LuaRt_Create(tDesc);
     if (!s_pClient) {
         D2LUA_LogToGame("[mods] the client state could not start; the main menu has no mod buttons");
         return false;
     }
+    // The client's thread: its function overrides run in this state.
+    D2LuaOv_BindThread(D2LUA_SIDE_CLIENT, s_pClient);
     Host("runMenu", 0, 0);
     return true;
 }

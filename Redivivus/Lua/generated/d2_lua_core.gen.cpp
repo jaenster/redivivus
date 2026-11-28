@@ -1314,8 +1314,250 @@ static const char kChunk4[] =
     ""
     ;
 
-// internal.enumtables
+// internal.engine
 static const char kChunk5[] =
+    "local ____lualib = require(\"lualib_bundle\")\n"
+    "local __TS__StringCharAt = ____lualib.__TS__StringCharAt\n"
+    "local __TS__StringSplit = ____lualib.__TS__StringSplit\n"
+    "local ____exports = {}\n"
+    "local locked\n"
+    "local ____native = require(\"internal.native\")\n"
+    "local native = ____native.native\n"
+    "function locked(values, name)\n"
+    "    local mt = {}\n"
+    "    mt.__index = values\n"
+    "    mt.__newindex = function() return error(name .. \" is read-only\", 2) end\n"
+    "    mt.__metatable = false\n"
+    "    return setmetatable({}, mt)\n"
+    "end\n"
+    "local SIDE = native.side()\n"
+    "local ffiModule\n"
+    "local ctypes = {}\n"
+    "local uintptr\n"
+    "local function ffi()\n"
+    "    if not ffiModule then\n"
+    "        ffiModule = native.ovFfi()\n"
+    "        uintptr = ffiModule.typeof(\"uintptr_t\")\n"
+    "    end\n"
+    "    return ffiModule\n"
+    "end\n"
+    "local PRIMITIVE = {}\n"
+    "for ____, t in ipairs({\n"
+    "    \"void\",\n"
+    "    \"char\",\n"
+    "    \"short\",\n"
+    "    \"int\",\n"
+    "    \"long\",\n"
+    "    \"float\",\n"
+    "    \"double\",\n"
+    "    \"int8_t\",\n"
+    "    \"int16_t\",\n"
+    "    \"int32_t\",\n"
+    "    \"int64_t\",\n"
+    "    \"uint8_t\",\n"
+    "    \"uint16_t\",\n"
+    "    \"uint32_t\",\n"
+    "    \"uint64_t\",\n"
+    "    \"size_t\",\n"
+    "    \"intptr_t\",\n"
+    "    \"uintptr_t\",\n"
+    "    \"bool\"\n"
+    "}) do\n"
+    "    PRIMITIVE[t] = true\n"
+    "end\n"
+    "local function pointerType(name)\n"
+    "    local ct = ctypes[name]\n"
+    "    if ct ~= nil then\n"
+    "        return ct\n"
+    "    end\n"
+    "    local f = ffi()\n"
+    "    if PRIMITIVE[name] then\n"
+    "        ct = f.typeof(name .. \" *\")\n"
+    "    else\n"
+    "        local declared = pcall(function() return f.typeof((\"struct \" .. name) .. \" *\") end)\n"
+    "        if not declared then\n"
+    "            pcall(function() return f.cdef((\"struct \" .. name) .. \";\") end)\n"
+    "        end\n"
+    "        local ok, t = pcall(function() return f.typeof((\"struct \" .. name) .. \" *\") end)\n"
+    "        local ____ok_0\n"
+    "        if ok then\n"
+    "            ____ok_0 = t\n"
+    "        else\n"
+    "            ____ok_0 = f.typeof(\"uint8_t *\")\n"
+    "        end\n"
+    "        ct = ____ok_0\n"
+    "    end\n"
+    "    ctypes[name] = ct\n"
+    "    return ct\n"
+    "end\n"
+    "local function rawLayer(kinds, pointees, fn)\n"
+    "    local f = ffi()\n"
+    "    local nParams = #kinds - 1\n"
+    "    local function toCdata(k, name, v)\n"
+    "        if v == nil then\n"
+    "            return nil\n"
+    "        end\n"
+    "        if k == \"n\" or k == \"b\" then\n"
+    "            return v\n"
+    "        end\n"
+    "        return f.cast(\n"
+    "            pointerType(name),\n"
+    "            v\n"
+    "        )\n"
+    "    end\n"
+    "    local function fromCdata(k, v)\n"
+    "        if k == \"n\" or k == \"b\" or v == nil then\n"
+    "            return v\n"
+    "        end\n"
+    "        if type(v) == \"cdata\" then\n"
+    "            return tonumber(f.cast(uintptr, v))\n"
+    "        end\n"
+    "        return v\n"
+    "    end\n"
+    "    local names = {}\n"
+    "    local pi = 0\n"
+    "    do\n"
+    "        local i = 0\n"
+    "        while i < #kinds do\n"
+    "            local k = __TS__StringCharAt(kinds, i)\n"
+    "            local ____temp_4 = i + 1\n"
+    "            local ____temp_3\n"
+    "            if k == \"p\" or k == \"w\" or k == \"r\" then\n"
+    "                local ____pointees_2 = pointees\n"
+    "                local ____pi_1 = pi\n"
+    "                pi = ____pi_1 + 1\n"
+    "                ____temp_3 = ____pointees_2[____pi_1 + 1] or \"uint8_t\"\n"
+    "            else\n"
+    "                ____temp_3 = \"\"\n"
+    "            end\n"
+    "            names[____temp_4] = ____temp_3\n"
+    "            i = i + 1\n"
+    "        end\n"
+    "    end\n"
+    "    return function(next, ...)\n"
+    "        local args = {...}\n"
+    "        local cargs = {}\n"
+    "        do\n"
+    "            local i = 0\n"
+    "            while i < nParams do\n"
+    "                cargs[i + 1] = toCdata(\n"
+    "                    __TS__StringCharAt(kinds, i + 1),\n"
+    "                    names[i + 1 + 1],\n"
+    "                    args[i + 1]\n"
+    "                )\n"
+    "                i = i + 1\n"
+    "            end\n"
+    "        end\n"
+    "        local function rawNext(...)\n"
+    "            local nargs = {...}\n"
+    "            local back = {}\n"
+    "            do\n"
+    "                local i = 0\n"
+    "                while i < nParams do\n"
+    "                    back[i + 1] = fromCdata(\n"
+    "                        __TS__StringCharAt(kinds, i + 1),\n"
+    "                        nargs[i + 1]\n"
+    "                    )\n"
+    "                    i = i + 1\n"
+    "                end\n"
+    "            end\n"
+    "            return toCdata(\n"
+    "                string.sub(kinds, 1, 1),\n"
+    "                names[1],\n"
+    "                next(unpack(back, 1, nParams))\n"
+    "            )\n"
+    "        end\n"
+    "        return fromCdata(\n"
+    "            string.sub(kinds, 1, 1),\n"
+    "            fn(\n"
+    "                rawNext,\n"
+    "                unpack(cargs, 1, nParams)\n"
+    "            )\n"
+    "        )\n"
+    "    end\n"
+    "end\n"
+    "local function makeFunction(mod, id, raw)\n"
+    "    local path, kinds, refused, pointees = native.ovInfo(id)\n"
+    "    local values = {}\n"
+    "    values.path = path\n"
+    "    if refused ~= nil then\n"
+    "        values.refused = refused\n"
+    "        values.override = function() return error((path .. \" cannot be overridden: \") .. refused, 2) end\n"
+    "    else\n"
+    "        values.override = function(fn)\n"
+    "            if type(fn) ~= \"function\" then\n"
+    "                error(\n"
+    "                    (path .. \".override: expected a function, got a \") .. type(fn),\n"
+    "                    2\n"
+    "                )\n"
+    "            end\n"
+    "            local layer = fn\n"
+    "            if raw then\n"
+    "                layer = rawLayer(\n"
+    "                    kinds,\n"
+    "                    __TS__StringSplit(pointees, \"|\"),\n"
+    "                    layer\n"
+    "                )\n"
+    "            end\n"
+    "            local why = native.ovAdd(mod, id, layer, raw)\n"
+    "            if why ~= nil then\n"
+    "                error((path .. \": \") .. why, 2)\n"
+    "            end\n"
+    "        end\n"
+    "    end\n"
+    "    return locked(values, path)\n"
+    "end\n"
+    "local function makeNamespace(mod, prefix, raw, extra)\n"
+    "    local cache = {}\n"
+    "    local mt = {}\n"
+    "    mt.__index = function(_, key)\n"
+    "        if extra then\n"
+    "            local v = rawget(extra, key)\n"
+    "            if v ~= nil then\n"
+    "                return v\n"
+    "            end\n"
+    "        end\n"
+    "        if type(key) ~= \"string\" then\n"
+    "            return nil\n"
+    "        end\n"
+    "        local cached = cache[key]\n"
+    "        if cached ~= nil then\n"
+    "            return cached\n"
+    "        end\n"
+    "        local p = prefix == \"\" and key or (prefix .. \".\") .. key\n"
+    "        local kind, id = native.ovLookup(p)\n"
+    "        local v\n"
+    "        if kind == 2 then\n"
+    "            v = makeFunction(mod, id, raw)\n"
+    "        elseif kind == 1 then\n"
+    "            v = makeNamespace(mod, p, raw)\n"
+    "        else\n"
+    "            return nil\n"
+    "        end\n"
+    "        cache[key] = v\n"
+    "        return v\n"
+    "    end\n"
+    "    mt.__newindex = function() return error(prefix == \"\" and \"the engine is read-only\" or prefix .. \" is read-only\", 2) end\n"
+    "    mt.__metatable = false\n"
+    "    return setmetatable({}, mt)\n"
+    "end\n"
+    "--- The engine object for mod `mod` in this state.\n"
+    "function ____exports.makeEngine(mod)\n"
+    "    local extra = {}\n"
+    "    extra.side = SIDE\n"
+    "    if native.ovRawGranted(mod) then\n"
+    "        local raw = {}\n"
+    "        raw.ffi = ffi()\n"
+    "        extra.unsafe = makeNamespace(mod, \"\", true, raw)\n"
+    "    end\n"
+    "    return makeNamespace(mod, \"\", false, extra)\n"
+    "end\n"
+    "return ____exports\n"
+    ""
+    ;
+
+// internal.enumtables
+static const char kChunk6[] =
     "local ____lualib = require(\"lualib_bundle\")\n"
     "local __TS__ArraySort = ____lualib.__TS__ArraySort\n"
     "local ____exports = {}\n"
@@ -1356,7 +1598,7 @@ static const char kChunk5[] =
     ;
 
 // internal.events
-static const char kChunk6[] =
+static const char kChunk7[] =
     "local ____exports = {}\n"
     "local ____native = require(\"internal.native\")\n"
     "local native = ____native.native\n"
@@ -1411,7 +1653,7 @@ static const char kChunk6[] =
     ;
 
 // internal.games
-static const char kChunk7[] =
+static const char kChunk8[] =
     "local ____exports = {}\n"
     "local games = {}\n"
     "function ____exports.create(id)\n"
@@ -1467,10 +1709,14 @@ static const char kChunk7[] =
     ;
 
 // internal.host
-static const char kChunk8[] =
+static const char kChunk9[] =
+    "local ____lualib = require(\"lualib_bundle\")\n"
+    "local __TS__ArrayIncludes = ____lualib.__TS__ArrayIncludes\n"
     "local ____exports = {}\n"
     "local ai = require(\"internal.ai\")\n"
     "local channels = require(\"internal.channels\")\n"
+    "local ____engine = require(\"internal.engine\")\n"
+    "local makeEngine = ____engine.makeEngine\n"
     "local ____proxy = require(\"internal.proxy\")\n"
     "local readonly = ____proxy.readonly\n"
     "local enumtables = require(\"internal.enumtables\")\n"
@@ -1543,7 +1789,10 @@ static const char kChunk8[] =
     "    end\n"
     "    return readonly(values, \"redivivus:\" .. entry)\n"
     "end\n"
-    "--- A mod's control entry (main) has loaded: its exports.\n"
+    "local ENTRY_POINTS = {\"patch\", \"server\", \"client\", \"menu\"}\n"
+    "--- A mod's control entry (main) has loaded: its exports. The mod is its default export when it has\n"
+    "-- one (`export default defineMod({ ... })`, in Lua a returned table with `default`), else the\n"
+    "-- exports themselves (named exports, or the bare table a Lua main returns).\n"
     "function ____exports.setMain(mod, exports)\n"
     "    if exports ~= nil and type(exports) ~= \"table\" then\n"
     "        error(\n"
@@ -1551,14 +1800,41 @@ static const char kChunk8[] =
     "            0\n"
     "        )\n"
     "    end\n"
-    "    for ____, name in ipairs({\"server\", \"client\", \"menu\"}) do\n"
-    "        local ____temp_0\n"
-    "        if exports == nil then\n"
-    "            ____temp_0 = nil\n"
-    "        else\n"
-    "            ____temp_0 = rawget(exports, name)\n"
+    "    local def = exports\n"
+    "    local ____temp_0\n"
+    "    if exports == nil then\n"
+    "        ____temp_0 = nil\n"
+    "    else\n"
+    "        ____temp_0 = rawget(exports, \"default\")\n"
+    "    end\n"
+    "    local dflt = ____temp_0\n"
+    "    if dflt ~= nil then\n"
+    "        if type(dflt) ~= \"table\" then\n"
+    "            error(\n"
+    "                \"main's default export must be the mod (defineMod({ ... })), not a \" .. type(dflt),\n"
+    "                0\n"
+    "            )\n"
     "        end\n"
-    "        local fn = ____temp_0\n"
+    "        def = dflt\n"
+    "        local k = next(def)\n"
+    "        while k ~= nil do\n"
+    "            if not __TS__ArrayIncludes(ENTRY_POINTS, k) then\n"
+    "                error(\n"
+    "                    (((\"the mod has no entry point '\" .. tostring(k)) .. \"' (it has \") .. table.concat(ENTRY_POINTS, \", \")) .. \")\",\n"
+    "                    0\n"
+    "                )\n"
+    "            end\n"
+    "            k = next(def, k)\n"
+    "        end\n"
+    "    end\n"
+    "    for ____, name in ipairs(ENTRY_POINTS) do\n"
+    "        local ____temp_1\n"
+    "        if def == nil then\n"
+    "            ____temp_1 = nil\n"
+    "        else\n"
+    "            ____temp_1 = rawget(def, name)\n"
+    "        end\n"
+    "        local fn = ____temp_1\n"
     "        if fn ~= nil and type(fn) ~= \"function\" then\n"
     "            error(\n"
     "                ((\"main's export '\" .. name) .. \"' must be a function, not a \") .. type(fn),\n"
@@ -1566,12 +1842,41 @@ static const char kChunk8[] =
     "            )\n"
     "        end\n"
     "    end\n"
-    "    local ____mod_2 = mod\n"
-    "    local ____exports_1 = exports\n"
-    "    if ____exports_1 == nil then\n"
-    "        ____exports_1 = {}\n"
+    "    mains[mod] = def or ({})\n"
+    "end\n"
+    "--- Call every mod's `patch(engine)`, in load order (dependencies first, so a mod's overrides wrap\n"
+    "-- those of the mods it depends on). Once per state, before menu, server or client. A patch that\n"
+    "-- raises keeps none of its overrides.\n"
+    "function ____exports.runPatch()\n"
+    "    for ____, m in ipairs(mods.all()) do\n"
+    "        do\n"
+    "            local main = mains[m.id]\n"
+    "            local ____temp_2\n"
+    "            if main == nil then\n"
+    "                ____temp_2 = nil\n"
+    "            else\n"
+    "                ____temp_2 = rawget(main, \"patch\")\n"
+    "            end\n"
+    "            local fn = ____temp_2\n"
+    "            if fn == nil then\n"
+    "                goto __continue17\n"
+    "            end\n"
+    "            native.ovPatching(true)\n"
+    "            local status, err, trace = native.call(\n"
+    "                m.id,\n"
+    "                fn,\n"
+    "                makeEngine(m.id)\n"
+    "            )\n"
+    "            native.ovPatching(false)\n"
+    "            if status ~= 1 then\n"
+    "                if status == 0 then\n"
+    "                    native.logError(m.id, err, trace)\n"
+    "                end\n"
+    "                native.ovDropMod(m.id)\n"
+    "            end\n"
+    "        end\n"
+    "        ::__continue17::\n"
     "    end\n"
-    "    mains[____mod_2] = ____exports_1\n"
     "end\n"
     "function ____exports.newGame(id)\n"
     "    if games.find(id) then\n"
@@ -1606,11 +1911,11 @@ static const char kChunk8[] =
     "        do\n"
     "            local main = mains[m.id]\n"
     "            if not main then\n"
-    "                goto __continue19\n"
+    "                goto __continue29\n"
     "            end\n"
     "            local fn = rawget(main, exportName)\n"
     "            if fn == nil then\n"
-    "                goto __continue19\n"
+    "                goto __continue29\n"
     "            end\n"
     "            local obj = side == SIDE_SERVER and makeGame(g, m.id) or makeClient(g, m.id)\n"
     "            local status, err, trace = native.call(m.id, fn, obj)\n"
@@ -1621,7 +1926,7 @@ static const char kChunk8[] =
     "                return\n"
     "            end\n"
     "        end\n"
-    "        ::__continue19::\n"
+    "        ::__continue29::\n"
     "    end\n"
     "end\n"
     "function ____exports.endGame(id)\n"
@@ -1755,7 +2060,7 @@ static const char kChunk8[] =
     "            end\n"
     "            local fn = ____temp_5\n"
     "            if fn == nil then\n"
-    "                goto __continue47\n"
+    "                goto __continue57\n"
     "            end\n"
     "            local status, err, trace = native.call(\n"
     "                m.id,\n"
@@ -1766,7 +2071,7 @@ static const char kChunk8[] =
     "                native.logError(m.id, err, trace)\n"
     "            end\n"
     "        end\n"
-    "        ::__continue47::\n"
+    "        ::__continue57::\n"
     "    end\n"
     "end\n"
     "--- The main menu is up (true) or a screen has taken it over (false).\n"
@@ -1816,7 +2121,7 @@ static const char kChunk8[] =
     ;
 
 // internal.menu
-static const char kChunk9[] =
+static const char kChunk10[] =
     "local ____exports = {}\n"
     "local ____check = require(\"internal.check\")\n"
     "local argFunction = ____check.argFunction\n"
@@ -2109,7 +2414,7 @@ static const char kChunk9[] =
     ;
 
 // internal.mods
-static const char kChunk10[] =
+static const char kChunk11[] =
     "local ____exports = {}\n"
     "local ____native = require(\"internal.native\")\n"
     "local native = ____native.native\n"
@@ -2136,7 +2441,7 @@ static const char kChunk10[] =
     ;
 
 // internal.native
-static const char kChunk11[] =
+static const char kChunk12[] =
     "local ____exports = {}\n"
     "____exports.native = __native.core\n"
     "--- The test runner's world, when the state has one (the host test).\n"
@@ -2152,7 +2457,7 @@ static const char kChunk11[] =
     ;
 
 // internal.objects
-static const char kChunk12[] =
+static const char kChunk13[] =
     "local ____lualib = require(\"lualib_bundle\")\n"
     "local __TS__ArrayForEach = ____lualib.__TS__ArrayForEach\n"
     "local ____exports = {}\n"
@@ -2579,7 +2884,7 @@ static const char kChunk12[] =
     ;
 
 // internal.persist
-static const char kChunk13[] =
+static const char kChunk14[] =
     "local ____exports = {}\n"
     "local entries, sweeper, KEY, indexes\n"
     "local ____native = require(\"internal.native\")\n"
@@ -2698,7 +3003,7 @@ static const char kChunk13[] =
     ;
 
 // internal.points
-static const char kChunk14[] =
+static const char kChunk15[] =
     "local ____exports = {}\n"
     "local field, int, made\n"
     "local ____check = require(\"internal.check\")\n"
@@ -2813,7 +3118,7 @@ static const char kChunk14[] =
     ;
 
 // internal.probe
-static const char kChunk15[] =
+static const char kChunk16[] =
     "local ____exports = {}\n"
     "____exports.state = {first = 0, second = 0}\n"
     "return ____exports\n"
@@ -2821,7 +3126,7 @@ static const char kChunk15[] =
     ;
 
 // internal.proxy
-static const char kChunk16[] =
+static const char kChunk17[] =
     "local ____exports = {}\n"
     "local ____native = require(\"internal.native\")\n"
     "local native = ____native.native\n"
@@ -2870,7 +3175,7 @@ static const char kChunk16[] =
     ;
 
 // internal.registries
-static const char kChunk17[] =
+static const char kChunk18[] =
     "local ____lualib = require(\"lualib_bundle\")\n"
     "local __TS__ArraySplice = ____lualib.__TS__ArraySplice\n"
     "local ____exports = {}\n"
@@ -3075,7 +3380,7 @@ static const char kChunk17[] =
     ;
 
 // internal.scheduler
-static const char kChunk18[] =
+static const char kChunk19[] =
     "local ____exports = {}\n"
     "local events = require(\"internal.events\")\n"
     "local mods = require(\"internal.mods\")\n"
@@ -3266,7 +3571,7 @@ static const char kChunk18[] =
     ;
 
 // internal.settings
-static const char kChunk19[] =
+static const char kChunk20[] =
     "local ____lualib = require(\"lualib_bundle\")\n"
     "local __TS__ArraySort = ____lualib.__TS__ArraySort\n"
     "local ____exports = {}\n"
@@ -3384,7 +3689,7 @@ static const char kChunk19[] =
     ;
 
 // internal.storage
-static const char kChunk20[] =
+static const char kChunk21[] =
     "local ____exports = {}\n"
     "function ____exports.copy(value, seen)\n"
     "    if type(value) ~= \"table\" then\n"
@@ -3431,7 +3736,7 @@ static const char kChunk20[] =
     ;
 
 // internal.world
-static const char kChunk21[] =
+static const char kChunk22[] =
     "local ____lualib = require(\"lualib_bundle\")\n"
     "local __TS__ObjectAssign = ____lualib.__TS__ObjectAssign\n"
     "local ____exports = {}\n"
@@ -4055,7 +4360,7 @@ static const char kChunk21[] =
     ;
 
 // lualib_bundle
-static const char kChunk22[] =
+static const char kChunk23[] =
     "local function __TS__ArrayAt(self, relativeIndex)\n"
     "    local absoluteIndex = relativeIndex < 0 and #self + relativeIndex or relativeIndex\n"
     "    if absoluteIndex >= 0 and absoluteIndex < #self then\n"
@@ -6864,7 +7169,7 @@ static const char kChunk22[] =
     ;
 
 // redivivus.automation
-static const char kChunk23[] =
+static const char kChunk24[] =
     "local ____exports = {}\n"
     "--- True: the importer is a driver script.\n"
     "____exports.isDriver = true\n"
@@ -6873,14 +7178,14 @@ static const char kChunk23[] =
     ;
 
 // redivivus.client
-static const char kChunk24[] =
+static const char kChunk25[] =
     "local ____exports = {}\n"
     "return ____exports\n"
     ""
     ;
 
 // redivivus.data
-static const char kChunk25[] =
+static const char kChunk26[] =
     "local ____exports = {}\n"
     "local internal = require(\"internal.data\")\n"
     "local ____proxy = require(\"internal.proxy\")\n"
@@ -6898,14 +7203,21 @@ static const char kChunk25[] =
     ;
 
 // redivivus.engine-enums
-static const char kChunk26[] =
+static const char kChunk27[] =
+    "local ____exports = {}\n"
+    "return ____exports\n"
+    ""
+    ;
+
+// redivivus.engine-functions
+static const char kChunk28[] =
     "local ____exports = {}\n"
     "return ____exports\n"
     ""
     ;
 
 // redivivus.enums
-static const char kChunk27[] =
+static const char kChunk29[] =
     "local ____exports = {}\n"
     "do\n"
     "    local ____export = require(\"redivivus.engine-enums\")\n"
@@ -6920,14 +7232,14 @@ static const char kChunk27[] =
     ;
 
 // redivivus.lualib
-static const char kChunk28[] =
+static const char kChunk30[] =
     "local ____exports = {}\n"
     "return ____exports\n"
     ""
     ;
 
 // redivivus.manager
-static const char kChunk29[] =
+static const char kChunk31[] =
     "local ____exports = {}\n"
     "local ____check = require(\"internal.check\")\n"
     "local argBoolean = ____check.argBoolean\n"
@@ -6961,8 +7273,19 @@ static const char kChunk29[] =
     ""
     ;
 
+// redivivus.mod
+static const char kChunk32[] =
+    "local ____exports = {}\n"
+    "--- The mod: returns its argument unchanged; it is there for the types.\n"
+    "function ____exports.defineMod(definition)\n"
+    "    return definition\n"
+    "end\n"
+    "return ____exports\n"
+    ""
+    ;
+
 // redivivus.mods
-static const char kChunk30[] =
+static const char kChunk33[] =
     "local ____exports = {}\n"
     "local ____check = require(\"internal.check\")\n"
     "local argString = ____check.argString\n"
@@ -6989,7 +7312,7 @@ static const char kChunk30[] =
     ;
 
 // redivivus.server
-static const char kChunk31[] =
+static const char kChunk34[] =
     "local ____exports = {}\n"
     "local points = require(\"internal.points\")\n"
     "--- A subtile point.\n"
@@ -7013,7 +7336,7 @@ static const char kChunk31[] =
     ;
 
 // redivivus.shared
-static const char kChunk32[] =
+static const char kChunk35[] =
     "local ____exports = {}\n"
     "local guardStep, guardAfter, firstOf, raiseFirst\n"
     "local ai = require(\"internal.ai\")\n"
@@ -7198,7 +7521,7 @@ static const char kChunk32[] =
     ;
 
 // redivivus.test
-static const char kChunk33[] =
+static const char kChunk36[] =
     "local ____exports = {}\n"
     "local ____check = require(\"internal.check\")\n"
     "local argInteger = ____check.argInteger\n"
@@ -7262,7 +7585,7 @@ static const char kChunk33[] =
     ;
 
 // redivivus.ui
-static const char kChunk34[] =
+static const char kChunk37[] =
     "local ____exports = {}\n"
     "do\n"
     "    local ____export = require(\"ui.index\")\n"
@@ -7277,14 +7600,14 @@ static const char kChunk34[] =
     ;
 
 // ui.backend
-static const char kChunk35[] =
+static const char kChunk38[] =
     "local ____exports = {}\n"
     "return ____exports\n"
     ""
     ;
 
 // ui.control
-static const char kChunk36[] =
+static const char kChunk39[] =
     "local ____lualib = require(\"lualib_bundle\")\n"
     "local Map = ____lualib.Map\n"
     "local __TS__New = ____lualib.__TS__New\n"
@@ -7477,7 +7800,7 @@ static const char kChunk36[] =
     ;
 
 // ui.draw
-static const char kChunk37[] =
+static const char kChunk40[] =
     "local ____lualib = require(\"lualib_bundle\")\n"
     "local __TS__ArraySplice = ____lualib.__TS__ArraySplice\n"
     "local ____exports = {}\n"
@@ -7646,7 +7969,7 @@ static const char kChunk37[] =
     ;
 
 // ui.headless
-static const char kChunk38[] =
+static const char kChunk41[] =
     "local ____lualib = require(\"lualib_bundle\")\n"
     "local __TS__Class = ____lualib.__TS__Class\n"
     "local __TS__StringCharCodeAt = ____lualib.__TS__StringCharCodeAt\n"
@@ -7808,7 +8131,7 @@ static const char kChunk38[] =
     ;
 
 // ui.index
-static const char kChunk39[] =
+static const char kChunk42[] =
     "local ____exports = {}\n"
     "do\n"
     "    local ____signal = require(\"ui.signal\")\n"
@@ -7890,7 +8213,7 @@ static const char kChunk39[] =
     ;
 
 // ui.input
-static const char kChunk40[] =
+static const char kChunk43[] =
     "local ____lualib = require(\"lualib_bundle\")\n"
     "local __TS__ArrayIndexOf = ____lualib.__TS__ArrayIndexOf\n"
     "local ____exports = {}\n"
@@ -8093,7 +8416,7 @@ static const char kChunk40[] =
     ;
 
 // ui.jsx
-static const char kChunk41[] =
+static const char kChunk44[] =
     "local ____lualib = require(\"lualib_bundle\")\n"
     "local __TS__New = ____lualib.__TS__New\n"
     "local __TS__InstanceOf = ____lualib.__TS__InstanceOf\n"
@@ -8259,7 +8582,7 @@ static const char kChunk41[] =
     ;
 
 // ui.kinds
-static const char kChunk42[] =
+static const char kChunk45[] =
     "local ____lualib = require(\"lualib_bundle\")\n"
     "local __TS__StringSubstring = ____lualib.__TS__StringSubstring\n"
     "local __TS__StringCharCodeAt = ____lualib.__TS__StringCharCodeAt\n"
@@ -9100,7 +9423,7 @@ static const char kChunk42[] =
     ;
 
 // ui.layout
-static const char kChunk43[] =
+static const char kChunk46[] =
     "local ____lualib = require(\"lualib_bundle\")\n"
     "local __TS__InstanceOf = ____lualib.__TS__InstanceOf\n"
     "local Error = ____lualib.Error\n"
@@ -10094,7 +10417,7 @@ static const char kChunk43[] =
     ;
 
 // ui.markdown
-static const char kChunk44[] =
+static const char kChunk47[] =
     "local ____lualib = require(\"lualib_bundle\")\n"
     "local __TS__New = ____lualib.__TS__New\n"
     "local ____exports = {}\n"
@@ -10323,14 +10646,14 @@ static const char kChunk44[] =
     ;
 
 // ui.md.ast
-static const char kChunk45[] =
+static const char kChunk48[] =
     "local ____exports = {}\n"
     "return ____exports\n"
     ""
     ;
 
 // ui.md.block
-static const char kChunk46[] =
+static const char kChunk49[] =
     "local ____lualib = require(\"lualib_bundle\")\n"
     "local __TS__StringCharCodeAt = ____lualib.__TS__StringCharCodeAt\n"
     "local __TS__StringSubstring = ____lualib.__TS__StringSubstring\n"
@@ -10858,7 +11181,7 @@ static const char kChunk46[] =
     ;
 
 // ui.md.bytes
-static const char kChunk47[] =
+static const char kChunk50[] =
     "local ____lualib = require(\"lualib_bundle\")\n"
     "local __TS__StringCharCodeAt = ____lualib.__TS__StringCharCodeAt\n"
     "local __TS__StringSubstring = ____lualib.__TS__StringSubstring\n"
@@ -11064,7 +11387,7 @@ static const char kChunk47[] =
     ;
 
 // ui.md.index
-static const char kChunk48[] =
+static const char kChunk51[] =
     "local ____exports = {}\n"
     "do\n"
     "    local ____limits = require(\"ui.md.limits\")\n"
@@ -11098,7 +11421,7 @@ static const char kChunk48[] =
     ;
 
 // ui.md.inline
-static const char kChunk49[] =
+static const char kChunk52[] =
     "local ____lualib = require(\"lualib_bundle\")\n"
     "local __TS__StringSubstring = ____lualib.__TS__StringSubstring\n"
     "local __TS__StringCharCodeAt = ____lualib.__TS__StringCharCodeAt\n"
@@ -11621,7 +11944,7 @@ static const char kChunk49[] =
     ;
 
 // ui.md.limits
-static const char kChunk50[] =
+static const char kChunk53[] =
     "local ____exports = {}\n"
     "--- Raised when the syntax changes in a way a renderer has to know about.\n"
     "____exports.SYNTAX_VERSION = 1\n"
@@ -11658,7 +11981,7 @@ static const char kChunk50[] =
     ;
 
 // ui.md.parse
-static const char kChunk51[] =
+static const char kChunk54[] =
     "local ____exports = {}\n"
     "local ____block = require(\"ui.md.block\")\n"
     "local parseBlocks = ____block.parseBlocks\n"
@@ -11690,7 +12013,7 @@ static const char kChunk51[] =
     ;
 
 // ui.md.serialize
-static const char kChunk52[] =
+static const char kChunk55[] =
     "local ____lualib = require(\"lualib_bundle\")\n"
     "local __TS__StringCharCodeAt = ____lualib.__TS__StringCharCodeAt\n"
     "local __TS__StringSubstring = ____lualib.__TS__StringSubstring\n"
@@ -11813,7 +12136,7 @@ static const char kChunk52[] =
     ;
 
 // ui.md.text
-static const char kChunk53[] =
+static const char kChunk56[] =
     "local ____lualib = require(\"lualib_bundle\")\n"
     "local __TS__StringCharCodeAt = ____lualib.__TS__StringCharCodeAt\n"
     "local ____exports = {}\n"
@@ -11914,7 +12237,7 @@ static const char kChunk53[] =
     ;
 
 // ui.md.url
-static const char kChunk54[] =
+static const char kChunk57[] =
     "local ____lualib = require(\"lualib_bundle\")\n"
     "local __TS__StringCharCodeAt = ____lualib.__TS__StringCharCodeAt\n"
     "local __TS__StringSubstring = ____lualib.__TS__StringSubstring\n"
@@ -12086,7 +12409,7 @@ static const char kChunk54[] =
     ;
 
 // ui.recorder
-static const char kChunk55[] =
+static const char kChunk58[] =
     "local ____lualib = require(\"lualib_bundle\")\n"
     "local __TS__StringSubstring = ____lualib.__TS__StringSubstring\n"
     "local __TS__Class = ____lualib.__TS__Class\n"
@@ -12241,7 +12564,7 @@ static const char kChunk55[] =
     ;
 
 // ui.root
-static const char kChunk56[] =
+static const char kChunk59[] =
     "local ____lualib = require(\"lualib_bundle\")\n"
     "local __TS__New = ____lualib.__TS__New\n"
     "local ____exports = {}\n"
@@ -12332,7 +12655,7 @@ static const char kChunk56[] =
     ;
 
 // ui.signal
-static const char kChunk57[] =
+static const char kChunk60[] =
     "local ____lualib = require(\"lualib_bundle\")\n"
     "local __TS__Class = ____lualib.__TS__Class\n"
     "local __TS__ArrayIndexOf = ____lualib.__TS__ArrayIndexOf\n"
@@ -12806,7 +13129,7 @@ static const char kChunk57[] =
     ;
 
 // ui.text
-static const char kChunk58[] =
+static const char kChunk61[] =
     "local ____lualib = require(\"lualib_bundle\")\n"
     "local __TS__StringSubstring = ____lualib.__TS__StringSubstring\n"
     "local __TS__StringCharCodeAt = ____lualib.__TS__StringCharCodeAt\n"
@@ -13279,14 +13602,14 @@ static const char kChunk58[] =
     ;
 
 // ui.theme
-static const char kChunk59[] =
+static const char kChunk62[] =
     "local ____exports = {}\n"
     "return ____exports\n"
     ""
     ;
 
 // ui.themes.stock
-static const char kChunk60[] =
+static const char kChunk63[] =
     "local ____lualib = require(\"lualib_bundle\")\n"
     "local __TS__Class = ____lualib.__TS__Class\n"
     "local __TS__New = ____lualib.__TS__New\n"
@@ -14228,7 +14551,7 @@ static const char kChunk60[] =
     ;
 
 // ui.themes.test
-static const char kChunk61[] =
+static const char kChunk64[] =
     "local ____lualib = require(\"lualib_bundle\")\n"
     "local __TS__Class = ____lualib.__TS__Class\n"
     "local __TS__New = ____lualib.__TS__New\n"
@@ -14790,7 +15113,7 @@ static const char kChunk61[] =
     ;
 
 // ui.widget
-static const char kChunk62[] =
+static const char kChunk65[] =
     "local ____lualib = require(\"lualib_bundle\")\n"
     "local __TS__Class = ____lualib.__TS__Class\n"
     "local ____exports = {}\n"
@@ -14936,64 +15259,67 @@ const D2LuaCoreChunk g_aD2LuaCoreChunks[] = {
     { "internal.check", kChunk2, sizeof(kChunk2) - 1 },
     { "internal.context", kChunk3, sizeof(kChunk3) - 1 },
     { "internal.data", kChunk4, sizeof(kChunk4) - 1 },
-    { "internal.enumtables", kChunk5, sizeof(kChunk5) - 1 },
-    { "internal.events", kChunk6, sizeof(kChunk6) - 1 },
-    { "internal.games", kChunk7, sizeof(kChunk7) - 1 },
-    { "internal.host", kChunk8, sizeof(kChunk8) - 1 },
-    { "internal.menu", kChunk9, sizeof(kChunk9) - 1 },
-    { "internal.mods", kChunk10, sizeof(kChunk10) - 1 },
-    { "internal.native", kChunk11, sizeof(kChunk11) - 1 },
-    { "internal.objects", kChunk12, sizeof(kChunk12) - 1 },
-    { "internal.persist", kChunk13, sizeof(kChunk13) - 1 },
-    { "internal.points", kChunk14, sizeof(kChunk14) - 1 },
-    { "internal.probe", kChunk15, sizeof(kChunk15) - 1 },
-    { "internal.proxy", kChunk16, sizeof(kChunk16) - 1 },
-    { "internal.registries", kChunk17, sizeof(kChunk17) - 1 },
-    { "internal.scheduler", kChunk18, sizeof(kChunk18) - 1 },
-    { "internal.settings", kChunk19, sizeof(kChunk19) - 1 },
-    { "internal.storage", kChunk20, sizeof(kChunk20) - 1 },
-    { "internal.world", kChunk21, sizeof(kChunk21) - 1 },
-    { "lualib_bundle", kChunk22, sizeof(kChunk22) - 1 },
-    { "redivivus.automation", kChunk23, sizeof(kChunk23) - 1 },
-    { "redivivus.client", kChunk24, sizeof(kChunk24) - 1 },
-    { "redivivus.data", kChunk25, sizeof(kChunk25) - 1 },
-    { "redivivus.engine-enums", kChunk26, sizeof(kChunk26) - 1 },
-    { "redivivus.enums", kChunk27, sizeof(kChunk27) - 1 },
-    { "redivivus.lualib", kChunk28, sizeof(kChunk28) - 1 },
-    { "redivivus.manager", kChunk29, sizeof(kChunk29) - 1 },
-    { "redivivus.mods", kChunk30, sizeof(kChunk30) - 1 },
-    { "redivivus.server", kChunk31, sizeof(kChunk31) - 1 },
-    { "redivivus.shared", kChunk32, sizeof(kChunk32) - 1 },
-    { "redivivus.test", kChunk33, sizeof(kChunk33) - 1 },
-    { "redivivus.ui", kChunk34, sizeof(kChunk34) - 1 },
-    { "ui.backend", kChunk35, sizeof(kChunk35) - 1 },
-    { "ui.control", kChunk36, sizeof(kChunk36) - 1 },
-    { "ui.draw", kChunk37, sizeof(kChunk37) - 1 },
-    { "ui.headless", kChunk38, sizeof(kChunk38) - 1 },
-    { "ui.index", kChunk39, sizeof(kChunk39) - 1 },
-    { "ui.input", kChunk40, sizeof(kChunk40) - 1 },
-    { "ui.jsx", kChunk41, sizeof(kChunk41) - 1 },
-    { "ui.kinds", kChunk42, sizeof(kChunk42) - 1 },
-    { "ui.layout", kChunk43, sizeof(kChunk43) - 1 },
-    { "ui.markdown", kChunk44, sizeof(kChunk44) - 1 },
-    { "ui.md.ast", kChunk45, sizeof(kChunk45) - 1 },
-    { "ui.md.block", kChunk46, sizeof(kChunk46) - 1 },
-    { "ui.md.bytes", kChunk47, sizeof(kChunk47) - 1 },
-    { "ui.md.index", kChunk48, sizeof(kChunk48) - 1 },
-    { "ui.md.inline", kChunk49, sizeof(kChunk49) - 1 },
-    { "ui.md.limits", kChunk50, sizeof(kChunk50) - 1 },
-    { "ui.md.parse", kChunk51, sizeof(kChunk51) - 1 },
-    { "ui.md.serialize", kChunk52, sizeof(kChunk52) - 1 },
-    { "ui.md.text", kChunk53, sizeof(kChunk53) - 1 },
-    { "ui.md.url", kChunk54, sizeof(kChunk54) - 1 },
-    { "ui.recorder", kChunk55, sizeof(kChunk55) - 1 },
-    { "ui.root", kChunk56, sizeof(kChunk56) - 1 },
-    { "ui.signal", kChunk57, sizeof(kChunk57) - 1 },
-    { "ui.text", kChunk58, sizeof(kChunk58) - 1 },
-    { "ui.theme", kChunk59, sizeof(kChunk59) - 1 },
-    { "ui.themes.stock", kChunk60, sizeof(kChunk60) - 1 },
-    { "ui.themes.test", kChunk61, sizeof(kChunk61) - 1 },
-    { "ui.widget", kChunk62, sizeof(kChunk62) - 1 },
+    { "internal.engine", kChunk5, sizeof(kChunk5) - 1 },
+    { "internal.enumtables", kChunk6, sizeof(kChunk6) - 1 },
+    { "internal.events", kChunk7, sizeof(kChunk7) - 1 },
+    { "internal.games", kChunk8, sizeof(kChunk8) - 1 },
+    { "internal.host", kChunk9, sizeof(kChunk9) - 1 },
+    { "internal.menu", kChunk10, sizeof(kChunk10) - 1 },
+    { "internal.mods", kChunk11, sizeof(kChunk11) - 1 },
+    { "internal.native", kChunk12, sizeof(kChunk12) - 1 },
+    { "internal.objects", kChunk13, sizeof(kChunk13) - 1 },
+    { "internal.persist", kChunk14, sizeof(kChunk14) - 1 },
+    { "internal.points", kChunk15, sizeof(kChunk15) - 1 },
+    { "internal.probe", kChunk16, sizeof(kChunk16) - 1 },
+    { "internal.proxy", kChunk17, sizeof(kChunk17) - 1 },
+    { "internal.registries", kChunk18, sizeof(kChunk18) - 1 },
+    { "internal.scheduler", kChunk19, sizeof(kChunk19) - 1 },
+    { "internal.settings", kChunk20, sizeof(kChunk20) - 1 },
+    { "internal.storage", kChunk21, sizeof(kChunk21) - 1 },
+    { "internal.world", kChunk22, sizeof(kChunk22) - 1 },
+    { "lualib_bundle", kChunk23, sizeof(kChunk23) - 1 },
+    { "redivivus.automation", kChunk24, sizeof(kChunk24) - 1 },
+    { "redivivus.client", kChunk25, sizeof(kChunk25) - 1 },
+    { "redivivus.data", kChunk26, sizeof(kChunk26) - 1 },
+    { "redivivus.engine-enums", kChunk27, sizeof(kChunk27) - 1 },
+    { "redivivus.engine-functions", kChunk28, sizeof(kChunk28) - 1 },
+    { "redivivus.enums", kChunk29, sizeof(kChunk29) - 1 },
+    { "redivivus.lualib", kChunk30, sizeof(kChunk30) - 1 },
+    { "redivivus.manager", kChunk31, sizeof(kChunk31) - 1 },
+    { "redivivus.mod", kChunk32, sizeof(kChunk32) - 1 },
+    { "redivivus.mods", kChunk33, sizeof(kChunk33) - 1 },
+    { "redivivus.server", kChunk34, sizeof(kChunk34) - 1 },
+    { "redivivus.shared", kChunk35, sizeof(kChunk35) - 1 },
+    { "redivivus.test", kChunk36, sizeof(kChunk36) - 1 },
+    { "redivivus.ui", kChunk37, sizeof(kChunk37) - 1 },
+    { "ui.backend", kChunk38, sizeof(kChunk38) - 1 },
+    { "ui.control", kChunk39, sizeof(kChunk39) - 1 },
+    { "ui.draw", kChunk40, sizeof(kChunk40) - 1 },
+    { "ui.headless", kChunk41, sizeof(kChunk41) - 1 },
+    { "ui.index", kChunk42, sizeof(kChunk42) - 1 },
+    { "ui.input", kChunk43, sizeof(kChunk43) - 1 },
+    { "ui.jsx", kChunk44, sizeof(kChunk44) - 1 },
+    { "ui.kinds", kChunk45, sizeof(kChunk45) - 1 },
+    { "ui.layout", kChunk46, sizeof(kChunk46) - 1 },
+    { "ui.markdown", kChunk47, sizeof(kChunk47) - 1 },
+    { "ui.md.ast", kChunk48, sizeof(kChunk48) - 1 },
+    { "ui.md.block", kChunk49, sizeof(kChunk49) - 1 },
+    { "ui.md.bytes", kChunk50, sizeof(kChunk50) - 1 },
+    { "ui.md.index", kChunk51, sizeof(kChunk51) - 1 },
+    { "ui.md.inline", kChunk52, sizeof(kChunk52) - 1 },
+    { "ui.md.limits", kChunk53, sizeof(kChunk53) - 1 },
+    { "ui.md.parse", kChunk54, sizeof(kChunk54) - 1 },
+    { "ui.md.serialize", kChunk55, sizeof(kChunk55) - 1 },
+    { "ui.md.text", kChunk56, sizeof(kChunk56) - 1 },
+    { "ui.md.url", kChunk57, sizeof(kChunk57) - 1 },
+    { "ui.recorder", kChunk58, sizeof(kChunk58) - 1 },
+    { "ui.root", kChunk59, sizeof(kChunk59) - 1 },
+    { "ui.signal", kChunk60, sizeof(kChunk60) - 1 },
+    { "ui.text", kChunk61, sizeof(kChunk61) - 1 },
+    { "ui.theme", kChunk62, sizeof(kChunk62) - 1 },
+    { "ui.themes.stock", kChunk63, sizeof(kChunk63) - 1 },
+    { "ui.themes.test", kChunk64, sizeof(kChunk64) - 1 },
+    { "ui.widget", kChunk65, sizeof(kChunk65) - 1 },
     { nullptr, nullptr, 0 },
 };
 
@@ -15003,11 +15329,12 @@ static const char* const kValues2[] = { "data", nullptr };
 static const char* const kValues3[] = { "Act", "AiTargeting", "Align", "Alignment", "BlendMode", "BodyLoc", "BoxStyle", "ButtonVariant", "DamageType", "DependencyState", "Difficulty", "Direction", "DrawMode", "Event", "ExampleId", "FontRole", "ItemFlag", "ItemMode", "ItemQuality", "Justify", "LevelId", "MinionOrder", "ModState", "MonsterAiId", "MonsterId", "MonsterMode", "MonsterTypeFlag", "ObjectMode", "Outcome", "PlayerClassId", "PlayerMode", "PointKind", "QuestId", "QuestState", "SettingScope", "SettingType", "Side", "SizeMode", "SkillId", "StatId", "StateId", "StateMask", "TextAlign", "TextColour", "UIEventType", "UiFlag", "UnitType", nullptr };
 static const char* const kValues4[] = { nullptr };
 static const char* const kValues5[] = { "restart", "setEnabled", nullptr };
-static const char* const kValues6[] = { "DependencyState", "ModState", "changelog", "installedMods", "installedSettings", "readme", nullptr };
-static const char* const kValues7[] = { "AiTargeting", "Alignment", "Event", "MinionOrder", "MonsterAiId", "MonsterId", "MonsterMode", "Outcome", "PointKind", "SkillId", "StatId", "StateId", "StateMask", "UnitType", "subtile", "tile", "toSubtile", "toTile", nullptr };
-static const char* const kValues8[] = { "defineChannel", "defineSettings", "guard", "listSettings", "log", "modName", "optionalImport", "setting", "side", "t", "wait", "waitUntil", nullptr };
-static const char* const kValues9[] = { "TestUnitKind", "probe", "world", nullptr };
-static const char* const kValues10[] = { "Align", "BlendMode", "BoxStyle", "ButtonVariant", "Direction", "FontRole", "For", "Fragment", "Justify", "Markdown", "Match", "Show", "SizeMode", "Switch", "TextAlign", "TextColour", "UIEventType", "batch", "collect", "colourCode", "computed", "createRoot", "effect", "frame", "getOwner", "h", "hitTest", "layoutText", "measure", "mount", "onCleanup", "parseRuns", "plain", "read", "renderDocument", "runWithOwner", "signal", "spriteSizes", "stats", "stockArt", "stockTheme", "testFonts", "testTheme", "toWidget", "untrack", "watch", "watchCount", nullptr };
+static const char* const kValues6[] = { "defineMod", nullptr };
+static const char* const kValues7[] = { "DependencyState", "ModState", "changelog", "installedMods", "installedSettings", "readme", nullptr };
+static const char* const kValues8[] = { "AiTargeting", "Alignment", "Event", "MinionOrder", "MonsterAiId", "MonsterId", "MonsterMode", "Outcome", "PointKind", "SkillId", "StatId", "StateId", "StateMask", "UnitType", "subtile", "tile", "toSubtile", "toTile", nullptr };
+static const char* const kValues9[] = { "defineChannel", "defineSettings", "guard", "listSettings", "log", "modName", "optionalImport", "setting", "side", "t", "wait", "waitUntil", nullptr };
+static const char* const kValues10[] = { "TestUnitKind", "probe", "world", nullptr };
+static const char* const kValues11[] = { "Align", "BlendMode", "BoxStyle", "ButtonVariant", "Direction", "FontRole", "For", "Fragment", "Justify", "Markdown", "Match", "Show", "SizeMode", "Switch", "TextAlign", "TextColour", "UIEventType", "batch", "collect", "colourCode", "computed", "createRoot", "effect", "frame", "getOwner", "h", "hitTest", "layoutText", "measure", "mount", "onCleanup", "parseRuns", "plain", "read", "renderDocument", "runWithOwner", "signal", "spriteSizes", "stats", "stockArt", "stockTheme", "testFonts", "testTheme", "toWidget", "untrack", "watch", "watchCount", nullptr };
 
 // The public modules: redivivus:<entry>, the states it resolves in, the grant it needs, its exported values.
 const D2LuaCoreModule g_aD2LuaCoreModules[] = {
@@ -15017,11 +15344,12 @@ const D2LuaCoreModule g_aD2LuaCoreModules[] = {
     { "enums", "redivivus.enums", D2LUA_SIDE_DATA | D2LUA_SIDE_SERVER | D2LUA_SIDE_CLIENT, 0, kValues3 },
     { "lualib", "lualib_bundle", D2LUA_SIDE_DATA | D2LUA_SIDE_SERVER | D2LUA_SIDE_CLIENT, 0, kValues4 },
     { "manager", "redivivus.manager", D2LUA_SIDE_DATA | D2LUA_SIDE_SERVER | D2LUA_SIDE_CLIENT, D2LUA_GRANT_MANAGER, kValues5 },
-    { "mods", "redivivus.mods", D2LUA_SIDE_DATA | D2LUA_SIDE_SERVER | D2LUA_SIDE_CLIENT, 0, kValues6 },
-    { "server", "redivivus.server", D2LUA_SIDE_DATA | D2LUA_SIDE_SERVER | D2LUA_SIDE_CLIENT, 0, kValues7 },
-    { "shared", "redivivus.shared", D2LUA_SIDE_DATA | D2LUA_SIDE_SERVER | D2LUA_SIDE_CLIENT, 0, kValues8 },
-    { "test", "redivivus.test", D2LUA_SIDE_SERVER, D2LUA_GRANT_TEST, kValues9 },
-    { "ui", "redivivus.ui", D2LUA_SIDE_DATA | D2LUA_SIDE_SERVER | D2LUA_SIDE_CLIENT, 0, kValues10 },
+    { "mod", "redivivus.mod", D2LUA_SIDE_DATA | D2LUA_SIDE_SERVER | D2LUA_SIDE_CLIENT, 0, kValues6 },
+    { "mods", "redivivus.mods", D2LUA_SIDE_DATA | D2LUA_SIDE_SERVER | D2LUA_SIDE_CLIENT, 0, kValues7 },
+    { "server", "redivivus.server", D2LUA_SIDE_DATA | D2LUA_SIDE_SERVER | D2LUA_SIDE_CLIENT, 0, kValues8 },
+    { "shared", "redivivus.shared", D2LUA_SIDE_DATA | D2LUA_SIDE_SERVER | D2LUA_SIDE_CLIENT, 0, kValues9 },
+    { "test", "redivivus.test", D2LUA_SIDE_SERVER, D2LUA_GRANT_TEST, kValues10 },
+    { "ui", "redivivus.ui", D2LUA_SIDE_DATA | D2LUA_SIDE_SERVER | D2LUA_SIDE_CLIENT, 0, kValues11 },
     { nullptr, nullptr, 0, 0, nullptr },
 };
 #endif

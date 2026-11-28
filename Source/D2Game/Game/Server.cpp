@@ -1329,7 +1329,7 @@ void __fastcall UpdateActEnvironments(::SGAMEDATA * pGame) {
 // @sourcefile .\GAME\Game.cpp
 // 1.14d mac: 001ae017
 void __fastcall ServerGameLoop(::SGAMEDATA * pGame) {
-    int nUpdateTickMode = pGame->dwUpdateTick;
+    D2LUA_GAME_SCOPE_BEGIN(pGame); int nUpdateTickMode = pGame->dwUpdateTick;
     pGame->dwGameFrame++;
     /* This is most likely something from the server, as sets 0 to a nullptr which
                          will cause a crash */ if (nUpdateTickMode == 1) {
@@ -1374,7 +1374,7 @@ void __fastcall ServerGameLoop(::SGAMEDATA * pGame) {
       } while (nUpdateTickMode);
     }
 
-    /* Every 1500 frames (60 seconds) */ GAME_FreeUnusedItemsPeriodic(pGame);
+    /* Every 1500 frames (60 seconds) */ GAME_FreeUnusedItemsPeriodic(pGame); D2LUA_GAME_SCOPE_END();
 }
 
 // Sends player vital stats (life/mana/stamina/position). The client arrives in ESI - 0052d982 MOV ECX,ESI reads it on entry. Modelled as a local, the reconstruction read it uninitialised and faulted on the server thread before the packet flush, so no 0x04 SCMD_STARTACT ever reached the client.

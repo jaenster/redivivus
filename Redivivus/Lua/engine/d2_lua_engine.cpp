@@ -59,6 +59,7 @@
 #include "Source/D2Game/Unit/SUnit.h"
 #include "Source/D2Game/Unit/SUnitDmg.h"
 #include "Redivivus/Lua/d2_lua_hooks.h"
+#include "Redivivus/Lua/d2_lua_override.h"
 #include "Redivivus/Lua/d2_lua_runtime.h"
 #include "Redivivus/Lua/d2_lua_world.h"
 #include "Redivivus/Lua/engine/d2_lua_engine.h"
@@ -616,6 +617,7 @@ GameMods* Start(::SGAMEDATA* pGame, const D2LuaBootResult* pBoot) {
     tDesc.pfnLog = D2LUA_LogToGame;
     tDesc.sSettingsFile = D2LUA_SettingsFile();
     tDesc.pWorld = tMods.pWorld;
+    tDesc.aRawGrant = pBoot->aRawGrant;
     tMods.pRt = D2LuaRt_Create(tDesc);
     tMods.pWorld->pRt = tMods.pRt;
     EnterCriticalSection(&Lock());
@@ -699,9 +701,55 @@ void D2LuaEngine_Tick(::SGAMEDATA* pGame) {
     GameMods* g = Find(pGame);
     if (!g) {
         g = Start(pGame, pBoot);
+        // made inside the game's scope (ServerGameLoop): the rest of this frame is the state's
+        if (g->pRt) {
+            D2LuaOv_BindThread(D2LUA_SIDE_SERVER, g->pRt);
+        }
     }
     if (g->pRt) {
         D2LuaRt_Tick(g->pRt, kGame);
+    }
+}
+
+// The thread works for the game until the scope ends: function overrides on it run in the game's
+// server state. Returns the state bound before (scopes nest: a game's frame inside another's).
+// The scopes are also timed (outermost only): every 1000 of them the log gets their average and
+// longest, the server's time per frame and command with whatever the mods override.
+namespace {
+thread_local int t_nScopeDepth = 0;
+thread_local LARGE_INTEGER t_tScopeStart;
+thread_local double t_nScopeSum = 0, t_nScopeMax = 0;
+thread_local int t_nScopes = 0;
+}  // namespace
+
+void* D2LuaEngine_ScopeBegin(::SGAMEDATA* pGame) {
+    if (t_nScopeDepth++ == 0) {
+        QueryPerformanceCounter(&t_tScopeStart);
+    }
+    if (!s_nGames) {
+        return D2LuaOv_BindThread(D2LUA_SIDE_SERVER, nullptr);
+    }
+    GameMods* g = Find(pGame);
+    return D2LuaOv_BindThread(D2LUA_SIDE_SERVER, g ? g->pRt : nullptr);
+}
+
+void D2LuaEngine_ScopeEnd(void* pWas) {
+    D2LuaOv_BindThread(D2LUA_SIDE_SERVER, (D2LuaRuntime*)pWas);
+    if (--t_nScopeDepth == 0) {
+        LARGE_INTEGER tEnd, tFreq;
+        QueryPerformanceCounter(&tEnd);
+        QueryPerformanceFrequency(&tFreq);
+        double nUs = (double)(tEnd.QuadPart - t_tScopeStart.QuadPart) * 1e6 / (double)tFreq.QuadPart;
+        t_nScopeSum += nUs;
+        t_nScopeMax = nUs > t_nScopeMax ? nUs : t_nScopeMax;
+        if (++t_nScopes == 1000) {
+            char sz[160];
+            snprintf(sz, sizeof(sz), "[mods] server scopes: %d, %.1f us on average, %.1f us the longest", t_nScopes, t_nScopeSum / t_nScopes,
+                     t_nScopeMax);
+            D2LUA_LogToGame(sz);
+            t_nScopes = 0;
+            t_nScopeSum = t_nScopeMax = 0;
+        }
     }
 }
 

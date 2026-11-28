@@ -29,6 +29,9 @@ struct D2LuaBootResult {
     std::vector<std::string> aErrors;   // discovery errors and disabled mods, as logged
     D2LuaRuntime* pSettings = nullptr;  // the settings stage, kept for the settings screen
     D2LuaCatalog tCatalog;              // every mod found and how it stands, the settings, the mod list file
+    // Mods the player granted the raw tier of the overrides (engine.unsafe): the names listed in
+    // mods/unsafe-mods.json, { "mods": ["name", ...] }, a file only the player writes.
+    std::vector<std::string> aRawGrant;
 };
 
 void D2LuaBoot_Run(const D2LuaBootDesc& tDesc, D2LuaBootResult& tOut);

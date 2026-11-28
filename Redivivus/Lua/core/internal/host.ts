@@ -5,6 +5,7 @@ import { CallStatus } from "../native/core";
 import type { UIEventType } from "../redivivus/enums";
 import * as ai from "./ai";
 import * as channels from "./channels";
+import { makeEngine } from "./engine";
 import { readonly } from "./proxy";
 import * as enumtables from "./enumtables";
 import * as events from "./events";
@@ -50,16 +51,55 @@ export function finishModule(entry: string, exports: object, mod: number): objec
     return readonly(values, `redivivus:${entry}`);
 }
 
-/** A mod's control entry (main) has loaded: its exports. */
+const ENTRY_POINTS = ["patch", "server", "client", "menu"];
+
+/**
+ * A mod's control entry (main) has loaded: its exports. The mod is its default export when it has
+ * one (`export default defineMod({ ... })`, in Lua a returned table with `default`), else the
+ * exports themselves (named exports, or the bare table a Lua main returns).
+ */
 export function setMain(mod: number, exports: unknown): void {
     if (exports !== undefined && type(exports) !== "table") {
         error(`main must return a table of exports ({ server = function(game) ... end, client = ... }), not a ${type(exports)}`, 0);
     }
-    for (const name of ["server", "client", "menu"]) {
-        const fn = exports === undefined ? undefined : rawget(exports as object, name);
+    let def = exports as object | undefined;
+    const dflt = exports === undefined ? undefined : rawget(exports as object, "default");
+    if (dflt !== undefined) {
+        if (type(dflt) !== "table") error(`main's default export must be the mod (defineMod({ ... })), not a ${type(dflt)}`, 0);
+        def = dflt as object;
+        let [k] = next(def);
+        while (k !== undefined) {
+            if (!ENTRY_POINTS.includes(k as string)) {
+                error(`the mod has no entry point '${tostring(k)}' (it has ${ENTRY_POINTS.join(", ")})`, 0);
+            }
+            [k] = next(def, k);
+        }
+    }
+    for (const name of ENTRY_POINTS) {
+        const fn = def === undefined ? undefined : rawget(def, name);
         if (fn !== undefined && type(fn) !== "function") error(`main's export '${name}' must be a function, not a ${type(fn)}`, 0);
     }
-    mains.set(mod, (exports ?? {}) as object);
+    mains.set(mod, (def ?? {}) as object);
+}
+
+/**
+ * Call every mod's `patch(engine)`, in load order (dependencies first, so a mod's overrides wrap
+ * those of the mods it depends on). Once per state, before menu, server or client. A patch that
+ * raises keeps none of its overrides.
+ */
+export function runPatch(): void {
+    for (const m of mods.all()) {
+        const main = mains.get(m.id);
+        const fn = main === undefined ? undefined : rawget(main, "patch");
+        if (fn === undefined) continue;
+        native.ovPatching(true);
+        const [status, err, trace] = native.call(m.id, fn, makeEngine(m.id));
+        native.ovPatching(false);
+        if (status !== CallStatus.Ok) {
+            if (status === CallStatus.Error) native.logError(m.id, err, trace);
+            native.ovDropMod(m.id);
+        }
+    }
 }
 
 export function newGame(id: number): void {

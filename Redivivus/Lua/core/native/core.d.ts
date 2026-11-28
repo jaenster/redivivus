@@ -177,6 +177,45 @@ export interface NativeCore {
      * @raw D2LuaCore_Clock
      */
     clock(): number;
+    /**
+     * What an engine path ("D2Common.Skills.GetSkillLevel") names on this state's side: 0 nothing,
+     * 1 a namespace, 2 a function, with its id.
+     * @raw D2LuaCore_OvLookup
+     */
+    ovLookup(path: string): LuaMultiReturn<[number, number?]>;
+    /**
+     * A function of the override registry: its engine path, its kinds (result, then parameters:
+     * v n b w p r), why it cannot be overridden (undefined when it can), and the names of the types
+     * its pointers point to, in order, separated by "|".
+     * @raw D2LuaCore_OvInfo
+     */
+    ovInfo(id: number): LuaMultiReturn<[string, string, string | undefined, string]>;
+    /**
+     * Add an override of function `id` for mod `mod` in this state (the newest is outermost). raw:
+     * the mod's raw tier. Gives why it was refused, or undefined.
+     * @raw D2LuaCore_OvAdd
+     */
+    ovAdd(mod: number, id: number, fn: (this: void, ...args: any[]) => any, raw: boolean): string | undefined;
+    /**
+     * Drop every override of mod `mod` in this state (its patch failed).
+     * @raw D2LuaCore_OvDropMod
+     */
+    ovDropMod(mod: number): void;
+    /**
+     * Whether mod `mod` was granted the raw tier (engine.unsafe).
+     * @raw D2LuaCore_OvRawGranted
+     */
+    ovRawGranted(mod: number): boolean;
+    /**
+     * Overrides may be added (patch() runs) or not.
+     * @raw D2LuaCore_OvPatching
+     */
+    ovPatching(on: boolean): void;
+    /**
+     * LuaJIT's ffi module, for the raw tier only (never handed to a mod without the grant).
+     * @raw D2LuaCore_OvFfi
+     */
+    ovFfi(): unknown;
 }
 
 /** The functions above. */

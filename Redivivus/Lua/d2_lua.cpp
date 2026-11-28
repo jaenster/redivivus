@@ -4,10 +4,14 @@
 // ERRORMANAGER_InitErrorManager has started the log writer, and once ApplicationMain returns.
 #if D2_FEATURE_MODS
 #include <windows.h>
+#include <stdio.h>
 #include <string.h>
 
 #include "Redivivus/Lua/d2_lua.h"
 #include "Redivivus/Lua/d2_lua_boot.h"
+#include "Redivivus/Lua/d2_lua_json.h"
+#include "Redivivus/Lua/d2_lua_mods.h"
+#include "Redivivus/Lua/d2_lua_override.h"
 #include "Redivivus/Lua/generated/d2_lua_api_main.gen.h"
 #include "Source/Fog/Src/LogManager.h"
 
@@ -18,6 +22,31 @@ static std::string s_sSettingsFile;
 
 void D2LUA_LogToGame(const char* pszLine) {
     Fog::Src::LogManager::LOGMANAGER_TraceToModuleLog((char*)"", (char*)"%s", pszLine);
+}
+
+// mods/unsafe-mods.json: the mods the player lets reach engine memory through engine.unsafe.
+static void ReadRawGrants(const std::string& sFile, std::vector<std::string>& aOut) {
+    std::string sText;
+    if (!D2LuaMods_ReadFile(sFile, sText)) {
+        return;
+    }
+    D2Json tRoot;
+    std::string sError;
+    const D2Json* pMods = nullptr;
+    if (D2Json_Parse(sText.data(), sText.size(), tRoot, sError) && tRoot.eType == D2Json::Object) {
+        pMods = tRoot.Get("mods");
+    }
+    if (!pMods || pMods->eType != D2Json::Array) {
+        D2LUA_LogToGame("[mods] unsafe-mods.json: expected { \"mods\": [\"name\", ...] }; no mod has the raw tier");
+        return;
+    }
+    for (const D2Json& t : pMods->aItems) {
+        if (t.eType == D2Json::String && D2LuaMods_IsValidName(t.sValue)) {
+            aOut.push_back(t.sValue);
+            std::string sLine = "[mods] mod '" + t.sValue + "' has the raw tier of the overrides (unsafe-mods.json)";
+            D2LUA_LogToGame(sLine.c_str());
+        }
+    }
 }
 
 extern "C" void D2LUA_Boot(void) {
@@ -49,6 +78,12 @@ extern "C" void D2LUA_Boot(void) {
         tDesc.pfnLog = D2LUA_LogToGame;
         s_pBoot = new D2LuaBootResult;
         D2LuaBoot_Run(tDesc, *s_pBoot);
+        ReadRawGrants(std::string(szPath) + "\\unsafe-mods.json", s_pBoot->aRawGrant);
+        D2LUA_LogToGame(D2LuaOv_Summary().c_str());
+        std::string sNoEntry = D2LuaOv_NoEntryList(40);
+        if (!sNoEntry.empty()) {
+            D2LUA_LogToGame(("[mods] overrides refused for want of a patch area: " + sNoEntry).c_str());
+        }
     } catch (...) {
         D2LUA_LogToGame("[mods] out of memory while loading mods; no mods");
     }
@@ -64,6 +99,13 @@ const std::string& D2LUA_SettingsFile(void) {
 
 extern "C" void D2LUA_Shutdown(void) {
     D2LuaMenu_Shutdown();
+    // Whatever a state still overrides is put back before the process goes.
+    int nRestored = D2LuaOv_UndoAll();
+    D2LuaOvJournal tJournal = D2LuaOv_JournalTotals();
+    char sz[160];
+    snprintf(sz, sizeof(sz), "[mods] overrides at exit: %d entries restored now; %d patched and %d restored in all", nRestored,
+             tJournal.nPatches, tJournal.nRestores);
+    D2LUA_LogToGame(sz);
     if (s_pBoot) {
         D2LuaBoot_Close(*s_pBoot);
         delete s_pBoot;
