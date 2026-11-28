@@ -223,6 +223,7 @@ void PumpSdl() {
     while (SDL_PollEvent(&tEvent)) {
         TranslateSdlEvent(tEvent);
     }
+    RunScript();
 }
 
 // ---- taking a message ----

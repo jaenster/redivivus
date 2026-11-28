@@ -42,6 +42,9 @@ foreach(m IN LISTS D2_MODERN_MODULES)
     endif()
 endforeach()
 list(APPEND D2_MODERN_SOURCES "${CMAKE_SOURCE_DIR}/Source/globals/globals.cpp")
+# The game's C++ static initialisers in the binary's table order (the log queue and its locks,
+# Storm's lists ...), run from a constructor before main, as in the Windows build.
+list(APPEND D2_MODERN_SOURCES "${CMAKE_SOURCE_DIR}/Redivivus/d2_static_init.cpp")
 list(FILTER D2_MODERN_SOURCES EXCLUDE REGEX "/Source/(D2gfx|D2Hell)/Mac/")
 # As in the 1.14d Mac build: the Windows LNG resource loader and the Warden client are not
 # Mac code (cmake/mac.cmake); WardenMac.cpp carries the Mac's stubs.
@@ -118,8 +121,8 @@ list(FILTER _uni_sources EXCLUDE REGEX "/Source/D2Uni/Src/(dspCore|qdCore)\\.cpp
 # d2_win32posix         the rest of Win32Posix (User, Sockets, DirectSound, Shell ...): every
 #                       other .cpp in the directory, picked up as it is added.
 # d2_modern_link_deps   what the objects reference and neither the tree nor the layer defines:
-#                       the third-party libraries (3rdparty/modernstubs: Bink, which plays no
-#                       video, and crashy's report file) and the Intel JPEG Library on
+#                       the third-party libraries (3rdparty/modernstubs: Bink and Smacker, which
+#                       play no video, and crashy's report file) and the Intel JPEG Library on
 #                       stb_image_write (Redivivus/x64/d2_ijl.cpp, as the 64-bit Windows build).
 #                       Each unit reads its own headers: no forced include.
 # d2_modern             the executable: d2_modern_objs, d2_uni_objs, both halves of the layer
@@ -166,6 +169,7 @@ d2_win32posix_setup(d2_win32posix_kernel)
 
 add_library(d2_modern_link_deps OBJECT EXCLUDE_FROM_ALL
     "${CMAKE_SOURCE_DIR}/3rdparty/modernstubs/bink_stub.cpp"
+    "${CMAKE_SOURCE_DIR}/3rdparty/modernstubs/smack_stub.cpp"
     "${CMAKE_SOURCE_DIR}/3rdparty/modernstubs/crashy_posix.cpp"
     "${CMAKE_SOURCE_DIR}/Redivivus/x64/d2_ijl.cpp")
 d2_win32posix_setup(d2_modern_link_deps)
@@ -190,6 +194,12 @@ if(SDL3_FOUND)
         ${_posix_rest_objs} $<TARGET_OBJECTS:d2_modern_link_deps>)
     set_target_properties(d2_modern PROPERTIES OUTPUT_NAME "Diablo II")
     target_link_libraries(d2_modern PRIVATE SDL3::SDL3 "-framework OpenGL")
+    # The tree's packed records keep 1.14d's offsets, and on a 64-bit target the pointers in
+    # their static tables (the Txt field definitions, the DRLG level data, the chat forms)
+    # fall on 4-byte boundaries. Chained fixups cannot rebase a pointer that is not 8-byte
+    # aligned, so ld refuses them; the classic rebase opcodes can, as PE base relocations do
+    # for the same records in the 64-bit Windows build. ld still warns at each such pointer.
+    target_link_options(d2_modern PRIVATE "LINKER:-no_fixup_chains")
 
     add_executable(d2_directsound_test EXCLUDE_FROM_ALL
         "${CMAKE_SOURCE_DIR}/Source/StormMac/Win32Posix/Tests/DirectSoundTest.cpp"

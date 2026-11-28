@@ -214,5 +214,8 @@ void Win32Posix_SetWindowCreateFlags(uint64_t nFlags);
 // Relative mouse mode: the OS cursor is hidden and held, and WM_MOUSEMOVE carries a cursor
 // the layer moves by the relative motion, kept inside the client area.
 BOOL Win32Posix_SetRelativeMouse(HWND hWnd, BOOL bRelative);
+// A screenshot the run's script (D2_POSIX_SCRIPT, UserScript.cpp) asks of the renderer: true,
+// with the path, once for each "shot" step; the renderer saves the next frame it presents.
+bool Win32Posix_TakeShotRequest(char* szPath, size_t nSize);
 
 #endif  // !defined(_WIN32) && D2_BACKEND_POSIX

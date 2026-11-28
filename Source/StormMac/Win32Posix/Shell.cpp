@@ -14,6 +14,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <sys/ucontext.h>
 #include <sys/wait.h>
 #include <unistd.h>
 #include <thread>
@@ -162,20 +163,39 @@ POSIX_CRASHPROC g_pfnCrash = nullptr;
 std::atomic<int> g_nCrashing{0};
 alignas(16) char g_aAltStack[256 * 1024];
 
-void OnFatalSignal(int nSignal, siginfo_t* pInfo, void* pContext) {
-    (void)pContext;
-    // One report: a second fault (in the handler, or on another thread) takes the default
-    // action, which SA_RESETHAND has put back.
-    if (g_nCrashing.exchange(1) == 0 && g_pfnCrash) {
-        g_pfnCrash(nSignal, pInfo ? pInfo->si_addr : nullptr);
-    }
-    signal(nSignal, SIG_DFL);
-    raise(nSignal);
-}
-
 void WriteToStderr(void* pContext, const char* szLine) {
     (void)pContext;
     fprintf(stderr, "  %s\n", szLine);
+}
+
+// The faulting instruction's address, from the signal's machine context.
+void* FaultPc(void* pContext) {
+#if defined(__APPLE__) && defined(__aarch64__)
+    return pContext ? (void*)((ucontext_t*)pContext)->uc_mcontext->__ss.__pc : nullptr;
+#elif defined(__APPLE__) && defined(__x86_64__)
+    return pContext ? (void*)((ucontext_t*)pContext)->uc_mcontext->__ss.__rip : nullptr;
+#else
+    (void)pContext;
+    return nullptr;
+#endif
+}
+
+void OnFatalSignal(int nSignal, siginfo_t* pInfo, void* pContext) {
+    // One report: a second fault (in the handler, or on another thread) takes the default
+    // action, which SA_RESETHAND has put back.
+    if (g_nCrashing.exchange(1) == 0) {
+        // The signal, the address and the faulting instruction go to stderr first, with the
+        // stack, so a report survives a game handler that faults or blocks in turn.
+        fprintf(stderr, "[CRASH] signal %d, address %p, pc %p\n", nSignal, pInfo ? pInfo->si_addr : nullptr,
+                FaultPc(pContext));
+        POSIX_WriteBacktrace(WriteToStderr, nullptr, 0);
+        fflush(stderr);
+        if (g_pfnCrash) {
+            g_pfnCrash(nSignal, pInfo ? pInfo->si_addr : nullptr);
+        }
+    }
+    signal(nSignal, SIG_DFL);
+    raise(nSignal);
 }
 
 }  // namespace

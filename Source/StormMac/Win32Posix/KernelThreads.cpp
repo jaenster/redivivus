@@ -11,6 +11,7 @@
 
 #include <errno.h>
 #include <pthread.h>
+#include <string.h>
 #include <sched.h>
 #include <time.h>
 #include <unistd.h>
@@ -205,8 +206,27 @@ pthread_mutex_t* NewSectionMutex() {
     return pMutex;
 }
 
+// The game keeps its CRITICAL_SECTIONs inside packed records (Fog's pool managers at +4), so on
+// a 64-bit target the LockSemaphore slot can sit on a 4-byte boundary, where an atomic access
+// faults (SIGBUS on arm64). An aligned slot is read and claimed atomically; an unaligned one
+// under one process-wide lock, which a lock-free reader of that slot never sees half written.
+std::mutex& UnalignedSlotLock() {
+    static std::mutex tLock;
+    return tLock;
+}
+
 pthread_mutex_t* SectionMutex(LPCRITICAL_SECTION pSection) {
     HANDLE* ppSlot = &pSection->LockSemaphore;
+    if ((uintptr_t)ppSlot % alignof(HANDLE) != 0) {
+        std::lock_guard<std::mutex> tGuard(UnalignedSlotLock());
+        HANDLE pMutex;
+        memcpy(&pMutex, ppSlot, sizeof(pMutex));
+        if (!pMutex) {
+            pMutex = (HANDLE)NewSectionMutex();
+            memcpy(ppSlot, &pMutex, sizeof(pMutex));
+        }
+        return (pthread_mutex_t*)pMutex;
+    }
     pthread_mutex_t* pMutex = (pthread_mutex_t*)__atomic_load_n(ppSlot, __ATOMIC_ACQUIRE);
     if (pMutex) {
         return pMutex;

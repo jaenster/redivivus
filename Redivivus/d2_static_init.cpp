@@ -16,7 +16,9 @@
 // Run from a prioritised constructor rather than by editing the generated WinMain,
 // after Redivivus/d2_trace.cpp at 150 so a fault inside one of these still logs.
 
+#if defined(_WIN32)
 #include <windows.h>
+#endif
 
 #include "Source/globals/globals.h"
 #include "Redivivus/d2_trace.h"
