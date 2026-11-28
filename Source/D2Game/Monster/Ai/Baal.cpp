@@ -340,33 +340,25 @@ static BOOL AI_BAAL_HasPowerfulSkill(D2UnitStrc * pUnit) {
 // Weighted random action selector for Baal AI. Sums the nWeightCount weights in pnWeights, draws a random value from the unit's RNG seed (using bitmask fast-path when sum is a power of two), then walks the weight array to find which bucket the value falls in. Returns the index of the selected action (0-based); returns 1 as fallback if total weight is zero.
 // 1.14d mac: 001a116a
 static int32_t __stdcall AI_BAAL_SelectWeightedAction(int * pnWeights, int32_t nWeightCount, D2UnitStrc * pUnit) {
-    uint32_t nRandResult = 0;
+    int nTotalWeight = 0;
     int* pWeight = pnWeights;
-    int nCount = nWeightCount;
-    if (nWeightCount > 0) {
-      do {
-        nRandResult += *pWeight;
-        pWeight++;
-        nCount--;
-      } while (nCount);
+    for (int i = 0; i < nWeightCount; i++) {
+      nTotalWeight += *pWeight;
+      pWeight++;
     }
 
-    nRandResult = D2_SeedRollLimited(&pUnit->sSeed, nRandResult);
-    int nAccum = 0;
-    nCount = 0;
-    if (nWeightCount <= 0) {
-      return 1;
-    }
+    int nRandRoll = D2_SeedRollLimited(&pUnit->sSeed, nTotalWeight);
 
-    do {
-      nAccum += *pnWeights;
-      if ((int)nRandResult < nAccum) {
-        return nCount;
+    int nWeightAccum = 0;
+    pWeight = pnWeights;
+    for (int i = 0; i < nWeightCount; i++) {
+      nWeightAccum += *pWeight;
+      if (nRandRoll < nWeightAccum) {
+        return i;
       }
 
-      nCount++;
-      pnWeights++;
-    } while (nCount < nWeightCount);
+      pWeight++;
+    }
 
     return 1;
 }
