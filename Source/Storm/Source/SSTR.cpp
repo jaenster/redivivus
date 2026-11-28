@@ -1905,26 +1905,22 @@ uint32_t __fastcall SSTR_bjhash(uint8_t * pData, uint32_t nLength, uint32_t nIni
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed SSTR_HashStringCaseInsensitive
 int __stdcall SStrHashHT(uint8_t * pszText) {
-    uint32_t nLen;
     uint8_t szUpper[1024];
-    uint32_t nChar;
-    uint32_t bChar = *pszText;
     uint8_t* pWrite = szUpper;
-    for (nLen = 0; nChar = (uint32_t)(uint8_t)bChar , nChar && (pszText++ , nLen < 0x3ff); nLen++) {
-      if (nChar >= 0x61 && nChar <= 0x7a) {
-        bChar = (uint8_t)bChar - 0x20;
-      } else if (nChar == 0x2f) {
-        bChar = 0x5c;
+    uint32_t nLen;
+    uint32_t nChar;
+    for (nLen = 0; (nChar = *pszText++) != 0 && nLen < 0x3ff; nLen++) {
+      if (nChar >= 'a' && nChar <= 'z') {
+        nChar -= 0x20;
+      } else if (nChar == '/') {
+        nChar = '\\';
       }
 
-      *pWrite = (uint8_t)bChar;
-      bChar = *pszText;
-      pWrite++;
+      *pWrite++ = (uint8_t)nChar;
     }
 
     *pWrite = 0;
-    uint32_t dwHash = SSTR_bjhash(szUpper, nLen, 0);
-    return dwHash;
+    return SSTR_bjhash(szUpper, nLen, 0);
 }
 
 // @renamed-from thunk___strupr (2026-08-28, Storm PowerPC oracle pass 4)

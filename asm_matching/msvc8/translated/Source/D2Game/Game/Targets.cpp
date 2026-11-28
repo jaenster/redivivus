@@ -145,13 +145,7 @@ void __fastcall UNIT_FreeUnitNodes(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 // @sourcefile .\GAME\Targets.cpp
 // 1.14d mac: 001b4b24
 void __fastcall MONSTER_FreeUnitNodes(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    if (!pGame) {
-      return;
-    }
-    if (!pUnit) {
-      return;
-    }
-    if (pUnit->eUnitType != UNIT_PLAYER && pUnit->eUnitType != UNIT_MONSTER) {
+    if (!pGame || !pUnit || pUnit->eUnitType != UNIT_PLAYER && pUnit->eUnitType != UNIT_MONSTER) {
       return;
     }
 
@@ -160,56 +154,52 @@ void __fastcall MONSTER_FreeUnitNodes(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
       return;
     }
 
-    D2UnitNodeStrc* pHeadNode = pGame->pUnitNodes[nNodeTableIndex];
-    if (!pHeadNode) {
+    D2UnitNodeStrc* pNode = pGame->pUnitNodes[nNodeTableIndex];
+    if (!pNode) {
       return;
     }
 
-    D2UnitNodeStrc* pMemoryToFree = pHeadNode;
     if (nNodeTableIndex < 8) {
-      pMemoryToFree = pHeadNode->pPrev;
-      if (!pMemoryToFree) {
+      for (pNode = pNode->pPrev; pNode; pNode = pNode->pPrev) {
+        if (pNode->pUnit == pUnit) {
+          break;
+        }
+      }
+      if (!pNode) {
         pUnit->nNodeTableIndex = 0xb;
         return;
       }
 
-      while (pMemoryToFree->pUnit != pUnit) {
-        pMemoryToFree = pMemoryToFree->pPrev;
-        if (!pMemoryToFree) {
-          pUnit->nNodeTableIndex = 0xb;
-          return;
-        }
-      }
-
-      pMemoryToFree->pNext->pPrev = pMemoryToFree->pPrev;
-      if (pMemoryToFree->pPrev) {
-        pMemoryToFree->pPrev->pNext = pMemoryToFree->pNext;
+      pNode->pNext->pPrev = pNode->pPrev;
+      if (pNode->pPrev) {
+        pNode->pPrev->pNext = pNode->pNext;
       }
     } else {
-      D2UnitNodeStrc** ppDVar1;
-      while (pMemoryToFree->pUnit != pUnit) {
-        ppDVar1 = &pMemoryToFree->pPrev;
-        pMemoryToFree = *ppDVar1;
-        if (!*ppDVar1) {
-          pUnit->nNodeTableIndex = 0xb;
-          return;
+      D2UnitNodeStrc* pHeadNode = pNode;
+      for (; pNode; pNode = pNode->pPrev) {
+        if (pNode->pUnit == pUnit) {
+          break;
         }
       }
+      if (!pNode) {
+        pUnit->nNodeTableIndex = 0xb;
+        return;
+      }
 
-      if (pMemoryToFree == pHeadNode) {
-        pGame->pUnitNodes[nNodeTableIndex] = pMemoryToFree->pPrev;
-        if (pMemoryToFree->pPrev) {
-          pMemoryToFree->pPrev->pNext = 0;
+      if (pNode == pHeadNode) {
+        pGame->pUnitNodes[nNodeTableIndex] = pNode->pPrev;
+        if (pNode->pPrev) {
+          pNode->pPrev->pNext = nullptr;
         }
       } else {
-        pMemoryToFree->pNext->pPrev = pMemoryToFree->pPrev;
-        if (pMemoryToFree->pPrev) {
-          pMemoryToFree->pPrev->pNext = pMemoryToFree->pNext;
+        pNode->pNext->pPrev = pNode->pPrev;
+        if (pNode->pPrev) {
+          pNode->pPrev->pNext = pNode->pNext;
         }
       }
     }
 
-    D2_FREE_POOL_AT(pGame->pMemoryPool, pMemoryToFree, ".\\GAME\\Targets.cpp", 0x142);
+    D2_FREE_POOL_AT(pGame->pMemoryPool, pNode, ".\\GAME\\Targets.cpp", 0x142);
     pUnit->nNodeTableIndex = 0xb;
 }
 

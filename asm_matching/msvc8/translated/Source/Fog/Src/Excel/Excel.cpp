@@ -292,26 +292,20 @@ void __stdcall STRUCT_FreeTxtLink(D2TxtLinkStrc * pTxtLink) {
 
 // 1.14d mac: 002f256e
 int32_t __stdcall GetClassIdFromName(D2TxtLinkStrc * pTxtLink, uint32_t pItemsTxt, uint32_t dwParam3) {
-    int nMid;
-    int nHigh = pTxtLink->nRecords;
     int nLow = 0;
-    if (nHigh <= 0) {
-      return -1;
-    }
-
-    do {
-      uint32_t dwCode;
-      nMid = (nHigh - nLow) / 2 + nLow;
-      dwCode = *(uint32_t*)pTxtLink->pTxtLinkSub0x08[nMid].szItemCode;
+    int nHigh = pTxtLink->nRecords;
+    D2TxtLinkSub0x08Strc* pEntries = pTxtLink->pTxtLinkSub0x08;
+    while (nLow < nHigh) {
+      int nMid = (nHigh - nLow) / 2 + nLow;
+      uint32_t dwCode = *(uint32_t*)pEntries[nMid].szItemCode;
       if (pItemsTxt > dwCode) {
         nLow = nMid + 1;
-        nMid = nHigh;
-      } else if (dwCode <= pItemsTxt) {
-        return pTxtLink->pTxtLinkSub0x08[nMid].nRecords;
+      } else if (pItemsTxt < dwCode) {
+        nHigh = nMid;
+      } else {
+        return pEntries[nMid].nRecords;
       }
-
-      nHigh = nMid;
-    } while (nLow < nMid);
+    }
 
     return -1;
 }
