@@ -16412,110 +16412,62 @@ void __fastcall SandMaggotAi_CastDelayedSkill(::SGAMEDATA * pGame, D2UnitStrc * 
 // Per-think server AI routine for the Sand Maggot monster (__fastcall: pGame, pUnit, pAiParam). Drives a 4-phase spawn/burrow state machine stored in pMonsterAiGeneral->dwArg0 (0..3). Acquires nearest target via FindTargetAndDistance and uses the explicit pAiParam->pTarget. Casts Skill2 (burrow/spawn) when no target is engaged and a cooldown (dwArg1 vs game frame) has elapsed, Skill1 when in phase 3 with a target, and Skill3 (egg-laying, gated by dwArg2 counter and a difficulty-scaled MonStats chance) when in combat. Low life (<25%) with a near target triggers a 20%-chance Skill2 escape. Falls back to CalledOnEndAiFunction1 (engage) or SetCombatStateAndApproachTarget, scheduling the next think via ScheduleAiThink. Cooldowns/chances read from pMonStats->TreasureClass indexed by game difficulty.
 // 1.14d mac: 0028f4b6
 void __fastcall AITHINK_Fn1_SandMaggot(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
-    uint32_t DVar1;
-    uint32_t nRoll;
-    uint32_t nNearTargetDistScratch;
-    short int sCooldownFrames;
-    D2MonStatsTxt* pMonStats;
-    pMonStats = pAiParam->pMonStats;
-    int bEngagedInCombat;
-    bEngagedInCombat = pAiParam->bEngagedInCombat;
-    D2UnitStrc* pAttacker;
-    pAttacker = pAiParam->pTarget;
-    D2AiGeneralStrc* pMonsterAiGeneral;
-    pMonsterAiGeneral = pAiParam->pMonsterAiGeneral;
-    D2UnitStrc* pNearTarget;
-    pNearTarget = FindTargetAndDistance(pGame, pUnit, &nNearTargetDistScratch, nullptr);
-    int nSpawnPhase;
-    nSpawnPhase = pMonsterAiGeneral->dwArg0;
-    if (nSpawnPhase < 3) {
-      if (pAttacker) {
-        goto try_surface_attack;
-      }
-      if ((!pNearTarget || (int)nNearTargetDistScratch > 10) && pGame->dwGameFrame > pMonsterAiGeneral->dwArg1 && pMonStats->aSkill[1] >= 0) {
-        SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[1], (int)pMonStats->aSkill[1], nullptr, 0, 0);
-        ScheduleAiThink(pGame, pUnit, 0x1e);
-        sCooldownFrames = pMonStats->aip[4][pGame->nDifficulty];
-        goto enter_burrow;
-      }
-
-      check_nearby_target:
-      if (pNearTarget && (int)nNearTargetDistScratch < 0x10) {
-        goto try_surface_attack;
-      }
-      check_burrowed:
-      if (nSpawnPhase == 3) {
-        goto think_again_in_20;
-      }
-    } else {
-      if (!pAttacker) {
-        goto check_nearby_target;
-      }
-
-      try_surface_attack:
-      if (nSpawnPhase == 3) {
-        if (pGame->dwGameFrame > pMonsterAiGeneral->dwArg1 && pMonStats->aSkill[0] >= 0) {
-          SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[0], (int)pMonStats->aSkill[0], pAttacker, 0, 0);
-          ScheduleAiThink(pGame, pUnit, 0x19);
-          pMonsterAiGeneral->dwArg1 = (int)pMonStats->aip[4][pGame->nDifficulty] + pGame->dwGameFrame;
-          pMonsterAiGeneral->dwArg0 = 1;
-          return;
-        }
-
-        goto check_burrowed;
-      }
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
+    int bEngagedInCombat = pAiParam->bEngagedInCombat;
+    D2UnitStrc* pAttacker = pAiParam->pTarget;
+    D2AiGeneralStrc* pMonsterAiGeneral = pAiParam->pMonsterAiGeneral;
+    D2SeedStrc* pSeed = &pUnit->sSeed;
+    uint32_t nNearTargetDistance;
+    D2UnitStrc* pNearTarget = FindTargetAndDistance(pGame, pUnit, &nNearTargetDistance, nullptr);
+    if (pMonsterAiGeneral->dwArg0 < 3 && !pAttacker && (!pNearTarget || (int)nNearTargetDistance > 10) && pGame->dwGameFrame > pMonsterAiGeneral->dwArg1 && pMonStats->aSkill[1] >= 0) {
+      SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[1], (int)pMonStats->aSkill[1], nullptr, 0, 0);
+      ScheduleAiThink(pGame, pUnit, 0x1e);
+      pMonsterAiGeneral->dwArg1 = (int)pMonStats->aip[4][pGame->nDifficulty] + pGame->dwGameFrame;
+      pMonsterAiGeneral->dwArg0 = 3;
+      return;
     }
-
-    int32_t nLifePct;
-    nLifePct = thunk_GetCurrentLifePercentage(pUnit);
-    if (nLifePct < 0x19 && pMonStats->aSkill[1] >= 0 && (int)nNearTargetDistScratch < 7 && pGame->dwGameFrame > pMonsterAiGeneral->dwArg1) {
-      nRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
-      if ((int)nRoll < 0x14) {
-        SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[1], (int)pMonStats->aSkill[1], pAttacker, 0, 0);
-        ScheduleAiThink(pGame, pUnit, 0x1e);
-        sCooldownFrames = pMonStats->aip[4][pGame->nDifficulty];
-        enter_burrow:
-        pMonsterAiGeneral->dwArg1 = (int)sCooldownFrames + pGame->dwGameFrame;
-        pMonsterAiGeneral->dwArg0 = 3;
-        return;
-      }
+    if ((pAttacker || pNearTarget && (int)nNearTargetDistance < 0x10) && pMonsterAiGeneral->dwArg0 == 3 && pGame->dwGameFrame > pMonsterAiGeneral->dwArg1 && pMonStats->aSkill[0] >= 0) {
+      SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[0], (int)pMonStats->aSkill[0], pAttacker, 0, 0);
+      ScheduleAiThink(pGame, pUnit, 0x19);
+      pMonsterAiGeneral->dwArg1 = (int)pMonStats->aip[4][pGame->nDifficulty] + pGame->dwGameFrame;
+      pMonsterAiGeneral->dwArg0 = 1;
+      return;
     }
-    if (bEngagedInCombat) {
-      DVar1 = D2_SeedRoll(&pUnit->sSeed);
-      if ((int)(DVar1 % 100) < (int)pMonStats->aip[3][pGame->nDifficulty]) {
-        AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pAttacker);
-        return;
-      }
+    if (pMonsterAiGeneral->dwArg0 == 3) {
+      ScheduleAiThink(pGame, pUnit, 0x14);
+      return;
     }
-    if (pNearTarget && (int)nNearTargetDistScratch < 0xf) {
-      nRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
-      if ((int)nRoll < (int)pMonStats->aip[1][pGame->nDifficulty]) {
-        AI_ChangeModeAndTargetUnit(pGame, pUnit, 5, pNearTarget);
-        return;
-      }
+    if (thunk_GetCurrentLifePercentage(pUnit) < 0x19 && pMonStats->aSkill[1] >= 0 && (int)nNearTargetDistance < 7 && pGame->dwGameFrame > pMonsterAiGeneral->dwArg1 && (int)D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100) < 0x14) {
+      SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[1], (int)pMonStats->aSkill[1], pAttacker, 0, 0);
+      ScheduleAiThink(pGame, pUnit, 0x1e);
+      pMonsterAiGeneral->dwArg1 = (int)pMonStats->aip[4][pGame->nDifficulty] + pGame->dwGameFrame;
+      pMonsterAiGeneral->dwArg0 = 3;
+      return;
     }
-
-    DVar1 = D2_SeedRoll(&pUnit->sSeed);
-    if ((int32_t)(DVar1 % 100) < 0x14) {
+    if (bEngagedInCombat && (int)(D2_SeedRoll(pSeed) % 100) < (int)pMonStats->aip[3][pGame->nDifficulty]) {
+      AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pAttacker);
+      return;
+    }
+    if (pNearTarget && (int)nNearTargetDistance < 0xf && (int)D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100) < (int)pMonStats->aip[1][pGame->nDifficulty]) {
+      AI_ChangeModeAndTargetUnit(pGame, pUnit, 5, pNearTarget);
+      return;
+    }
+    if ((int)(D2_SeedRoll(pSeed) % 100) < 0x14) {
       SetCombatStateAndApproachTarget(pGame, pUnit, pAttacker, 6, 0);
       return;
     }
-    if (pMonsterAiGeneral->dwArg2 < (int)pMonStats->aip[2][pGame->nDifficulty]) {
-      nRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
-      if ((int)nRoll < (int)pMonStats->aip[0][pGame->nDifficulty]) {
-        if (pMonsterAiGeneral->dwArg0 != 2 || pMonStats->aSkill[2] < 0) {
-          SetCombatStateAndApproachTarget(pGame, pUnit, pAttacker, 6, 0);
-          pMonsterAiGeneral->dwArg0 = 2;
-          return;
-        }
-
-        pMonsterAiGeneral->dwArg2++;
-        pMonsterAiGeneral->dwArg0 = 1;
-        SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[2], (int)pMonStats->aSkill[2], pAttacker, 0, 0);
-        think_again_in_20:
-        ScheduleAiThink(pGame, pUnit, 0x14);
+    if (pMonsterAiGeneral->dwArg2 < (int)pMonStats->aip[2][pGame->nDifficulty] && (int)D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100) < (int)pMonStats->aip[0][pGame->nDifficulty]) {
+      if (pMonsterAiGeneral->dwArg0 != 2 || pMonStats->aSkill[2] < 0) {
+        SetCombatStateAndApproachTarget(pGame, pUnit, pAttacker, 6, 0);
+        pMonsterAiGeneral->dwArg0 = 2;
         return;
       }
+
+      pMonsterAiGeneral->dwArg2++;
+      pMonsterAiGeneral->dwArg0 = 1;
+      SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[2], (int)pMonStats->aSkill[2], pAttacker, 0, 0);
+      ScheduleAiThink(pGame, pUnit, 0x14);
+      return;
     }
 
     ScheduleAiThink(pGame, pUnit, 0xc);
