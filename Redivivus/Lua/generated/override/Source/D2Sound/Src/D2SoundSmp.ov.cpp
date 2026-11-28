@@ -6,7 +6,7 @@
 
 namespace D2Sound::Src::D2SoundSmp { constexpr auto d2lua_ov_12463 = &SOUNDSMP_WriteToBuffer; }
 namespace D2Sound::Src::D2SoundSmp { constexpr auto d2lua_ov_12464 = &SOUNDSMP_ClearBuffer; }
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 namespace D2Sound::Src::D2SoundSmp { constexpr auto d2lua_ov_12465 = &SOUNDSMP_CreateSoundBuffer; }
 #endif
 namespace D2Sound::Src::D2SoundSmp { constexpr auto d2lua_ov_12466 = &CallSounds; }
@@ -50,7 +50,7 @@ namespace D2Sound::Src::D2SoundSmp { constexpr auto d2lua_ov_12503 = &SOUNDSMP_C
 
 D2LUA_OV_CHECK("D2Sound.Src.D2SoundSmp.SOUNDSMP_WriteToBuffer", ::D2Sound::Src::D2SoundSmp::d2lua_ov_12463, "vpnnn");
 D2LUA_OV_CHECK("D2Sound.Src.D2SoundSmp.SOUNDSMP_ClearBuffer", ::D2Sound::Src::D2SoundSmp::d2lua_ov_12464, "npnn");
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 D2LUA_OV_CHECK("D2Sound.Src.D2SoundSmp.SOUNDSMP_CreateSoundBuffer", ::D2Sound::Src::D2SoundSmp::d2lua_ov_12465, "nnp");
 #endif
 D2LUA_OV_CHECK("D2Sound.Src.D2SoundSmp.CallSounds", ::D2Sound::Src::D2SoundSmp::d2lua_ov_12466, "pnn");
@@ -95,7 +95,7 @@ D2LUA_OV_CHECK("D2Sound.Src.D2SoundSmp.SOUNDSMP_CalculateVolumeAndPan", ::D2Soun
 static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(12463, "D2Sound.Src.D2SoundSmp.SOUNDSMP_WriteToBuffer", ::D2Sound::Src::D2SoundSmp::d2lua_ov_12463, 4, "vpnnn", "D2SoundSmpStrc"),
     D2LUA_OV(12464, "D2Sound.Src.D2SoundSmp.SOUNDSMP_ClearBuffer", ::D2Sound::Src::D2SoundSmp::d2lua_ov_12464, 4, "npnn", "IDirectSoundBuffer"),
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
     D2LUA_OV(12465, "D2Sound.Src.D2SoundSmp.SOUNDSMP_CreateSoundBuffer", ::D2Sound::Src::D2SoundSmp::d2lua_ov_12465, 4, "nnp", "D2SoundSmpStrc"),
 #endif
     D2LUA_OV(12466, "D2Sound.Src.D2SoundSmp.CallSounds", ::D2Sound::Src::D2SoundSmp::d2lua_ov_12466, 4, "pnn", "D2SoundSmpStrc"),

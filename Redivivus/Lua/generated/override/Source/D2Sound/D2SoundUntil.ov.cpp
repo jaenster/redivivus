@@ -10,16 +10,16 @@ namespace D2Sound::D2SoundUntil { constexpr auto d2lua_ov_12417 = &SOUNDUTIL_Fin
 namespace D2Sound::D2SoundUntil { constexpr auto d2lua_ov_12418 = &Unreferenced_005169f0; }
 namespace D2Sound::D2SoundUntil { constexpr auto d2lua_ov_12419 = &SOUNDUTIL_FreeLinkedList; }
 namespace D2Sound::D2SoundUntil { constexpr auto d2lua_ov_12420 = &SOUNDUTIL_AppendToLinkedList; }
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace D2Sound::D2SoundUntil { constexpr auto d2lua_ov_12421 = &SOUNDUTIL_ReadVersionResource; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace D2Sound::D2SoundUntil { constexpr auto d2lua_ov_12422 = &SOUNDUTIL_GetVersionResourceSize; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace D2Sound::D2SoundUntil { constexpr auto d2lua_ov_12423 = &SOUNDUTIL_ReadVersionResourceToBuffer; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace D2Sound::D2SoundUntil { constexpr auto d2lua_ov_12424 = &SOUNDUTIL_GetFileVersionInfo; }
 #endif
 
@@ -29,16 +29,16 @@ D2LUA_OV_CHECK("D2Sound.D2SoundUntil.SOUNDUTIL_FindInLinkedList", ::D2Sound::D2S
 D2LUA_OV_CHECK("D2Sound.D2SoundUntil.Unreferenced_005169f0", ::D2Sound::D2SoundUntil::d2lua_ov_12418, "np");
 D2LUA_OV_CHECK("D2Sound.D2SoundUntil.SOUNDUTIL_FreeLinkedList", ::D2Sound::D2SoundUntil::d2lua_ov_12419, "vp");
 D2LUA_OV_CHECK("D2Sound.D2SoundUntil.SOUNDUTIL_AppendToLinkedList", ::D2Sound::D2SoundUntil::d2lua_ov_12420, "vpn");
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("D2Sound.D2SoundUntil.SOUNDUTIL_ReadVersionResource", ::D2Sound::D2SoundUntil::d2lua_ov_12421, "nppp");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("D2Sound.D2SoundUntil.SOUNDUTIL_GetVersionResourceSize", ::D2Sound::D2SoundUntil::d2lua_ov_12422, "np");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("D2Sound.D2SoundUntil.SOUNDUTIL_ReadVersionResourceToBuffer", ::D2Sound::D2SoundUntil::d2lua_ov_12423, "vpnp");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("D2Sound.D2SoundUntil.SOUNDUTIL_GetFileVersionInfo", ::D2Sound::D2SoundUntil::d2lua_ov_12424, "npppp");
 #endif
 
@@ -49,16 +49,16 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(12418, "D2Sound.D2SoundUntil.Unreferenced_005169f0", ::D2Sound::D2SoundUntil::d2lua_ov_12418, 4, "np", "D2SoundListNodeStrc"),
     D2LUA_OV(12419, "D2Sound.D2SoundUntil.SOUNDUTIL_FreeLinkedList", ::D2Sound::D2SoundUntil::d2lua_ov_12419, 4, "vp", "D2SoundListNodeStrc"),
     D2LUA_OV(12420, "D2Sound.D2SoundUntil.SOUNDUTIL_AppendToLinkedList", ::D2Sound::D2SoundUntil::d2lua_ov_12420, 4, "vpn", "D2SoundListNodeStrc"),
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(12421, "D2Sound.D2SoundUntil.SOUNDUTIL_ReadVersionResource", ::D2Sound::D2SoundUntil::d2lua_ov_12421, 4, "nppp", "LPCSTR|uint32_t|void"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(12422, "D2Sound.D2SoundUntil.SOUNDUTIL_GetVersionResourceSize", ::D2Sound::D2SoundUntil::d2lua_ov_12422, 4, "np", "LPCSTR"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(12423, "D2Sound.D2SoundUntil.SOUNDUTIL_ReadVersionResourceToBuffer", ::D2Sound::D2SoundUntil::d2lua_ov_12423, 4, "vpnp", "LPCSTR|void"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(12424, "D2Sound.D2SoundUntil.SOUNDUTIL_GetFileVersionInfo", ::D2Sound::D2SoundUntil::d2lua_ov_12424, 4, "npppp", "LPCSTR|uint32_t|uint32_t|uint32_t"),
 #endif
     D2LUA_OV_REFUSED(-1, nullptr, nullptr, 0, nullptr, 0),

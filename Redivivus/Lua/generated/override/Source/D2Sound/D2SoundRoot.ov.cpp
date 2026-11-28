@@ -4,7 +4,7 @@
 #if D2_FEATURE_MODS
 #include "Redivivus/Lua/d2_lua_override_gen.h"
 
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if defined(_WIN32)
 namespace D2Sound { constexpr auto d2lua_ov_12405 = &SOUND_DetectLegacySoundDrivers; }
 #endif
 namespace D2Sound { constexpr auto d2lua_ov_12406 = &SOUND_GetLanguageCode; }
@@ -12,14 +12,14 @@ namespace D2Sound { constexpr auto d2lua_ov_12407 = &SOUND_GetDirectSoundDevice;
 namespace D2Sound { constexpr auto d2lua_ov_12408 = &SOUND_GetPrimaryBufferModeFlag; }
 namespace D2Sound { constexpr auto d2lua_ov_12409 = &SOUND_GetSound3DFlag; }
 namespace D2Sound { constexpr auto d2lua_ov_12410 = &SOUND_GetSoundQualityFlag; }
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32) && D2_MAC_CARBON)
 namespace D2Sound { constexpr auto d2lua_ov_12411 = &SOUND_GetEAXEnabledFlag; }
 #endif
 namespace D2Sound { constexpr auto d2lua_ov_12412 = &SOUND_GetHardwareAccelerationFlag; }
 namespace D2Sound { constexpr auto d2lua_ov_12413 = &SOUND_ToggleEAXEnvironmentPreset; }
 namespace D2Sound { constexpr auto d2lua_ov_12414 = &SOUND_GetDirectSoundErrorString; }
 
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if defined(_WIN32)
 D2LUA_OV_CHECK("D2Sound.SOUND_DetectLegacySoundDrivers", ::D2Sound::d2lua_ov_12405, "nnppn");
 #endif
 D2LUA_OV_CHECK("D2Sound.SOUND_GetLanguageCode", ::D2Sound::d2lua_ov_12406, "n");
@@ -27,7 +27,7 @@ D2LUA_OV_CHECK("D2Sound.SOUND_GetDirectSoundDevice", ::D2Sound::d2lua_ov_12407, 
 D2LUA_OV_CHECK("D2Sound.SOUND_GetPrimaryBufferModeFlag", ::D2Sound::d2lua_ov_12408, "n");
 D2LUA_OV_CHECK("D2Sound.SOUND_GetSound3DFlag", ::D2Sound::d2lua_ov_12409, "n");
 D2LUA_OV_CHECK("D2Sound.SOUND_GetSoundQualityFlag", ::D2Sound::d2lua_ov_12410, "n");
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32) && D2_MAC_CARBON)
 D2LUA_OV_CHECK("D2Sound.SOUND_GetEAXEnabledFlag", ::D2Sound::d2lua_ov_12411, "n");
 #endif
 D2LUA_OV_CHECK("D2Sound.SOUND_GetHardwareAccelerationFlag", ::D2Sound::d2lua_ov_12412, "n");
@@ -35,7 +35,7 @@ D2LUA_OV_CHECK("D2Sound.SOUND_ToggleEAXEnvironmentPreset", ::D2Sound::d2lua_ov_1
 D2LUA_OV_CHECK("D2Sound.SOUND_GetDirectSoundErrorString", ::D2Sound::d2lua_ov_12414, "pn");
 
 static const D2LuaOvEntry s_aEntries[] = {
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if defined(_WIN32)
     D2LUA_OV(12405, "D2Sound.SOUND_DetectLegacySoundDrivers", ::D2Sound::d2lua_ov_12405, 4, "nnppn", "char|char"),
 #endif
     D2LUA_OV(12406, "D2Sound.SOUND_GetLanguageCode", ::D2Sound::d2lua_ov_12406, 4, "n", ""),
@@ -43,7 +43,7 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(12408, "D2Sound.SOUND_GetPrimaryBufferModeFlag", ::D2Sound::d2lua_ov_12408, 4, "n", ""),
     D2LUA_OV(12409, "D2Sound.SOUND_GetSound3DFlag", ::D2Sound::d2lua_ov_12409, 4, "n", ""),
     D2LUA_OV(12410, "D2Sound.SOUND_GetSoundQualityFlag", ::D2Sound::d2lua_ov_12410, 4, "n", ""),
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32) && D2_MAC_CARBON)
     D2LUA_OV(12411, "D2Sound.SOUND_GetEAXEnabledFlag", ::D2Sound::d2lua_ov_12411, 4, "n", ""),
 #endif
     D2LUA_OV(12412, "D2Sound.SOUND_GetHardwareAccelerationFlag", ::D2Sound::d2lua_ov_12412, 4, "n", ""),

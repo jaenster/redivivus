@@ -20,17 +20,17 @@ namespace Fog::Source::SFile { constexpr auto d2lua_ov_13187 = &SafeCreateDirect
 namespace Fog::Source::SFile { constexpr auto d2lua_ov_13188 = &SFILE_EnsurePathEndsWithBackslash; }
 namespace Fog::Source::SFile { constexpr auto d2lua_ov_13189 = &SFILE_GetExecutableDirectory; }
 namespace Fog::Source::SFile { constexpr auto d2lua_ov_13190 = &SFILE_GetInstallPath; }
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::Source::SFile { constexpr auto d2lua_ov_13191 = &SFILE_GetBlizzardAppDataPath; }
 #endif
 namespace Fog::Source::SFile { constexpr auto d2lua_ov_13192 = &GetUseDirectCommand; }
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::Source::SFile { constexpr auto d2lua_ov_13193 = &SFILE_GetSaveGamePath; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::Source::SFile { constexpr auto d2lua_ov_13194 = &SFILE_MoveDirectoryRecursive; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::Source::SFile { constexpr auto d2lua_ov_13195 = &GetAndCreateSavePath; }
 #endif
 namespace Fog::Source::SFile { constexpr auto d2lua_ov_13196 = &Unreferenced_00407260; }
@@ -61,17 +61,17 @@ D2LUA_OV_CHECK("Fog.Source.SFile.SafeCreateDirectoryTree", ::Fog::Source::SFile:
 D2LUA_OV_CHECK("Fog.Source.SFile.SFILE_EnsurePathEndsWithBackslash", ::Fog::Source::SFile::d2lua_ov_13188, "npn");
 D2LUA_OV_CHECK("Fog.Source.SFile.SFILE_GetExecutableDirectory", ::Fog::Source::SFile::d2lua_ov_13189, "npn");
 D2LUA_OV_CHECK("Fog.Source.SFile.SFILE_GetInstallPath", ::Fog::Source::SFile::d2lua_ov_13190, "npn");
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.Source.SFile.SFILE_GetBlizzardAppDataPath", ::Fog::Source::SFile::d2lua_ov_13191, "npn");
 #endif
 D2LUA_OV_CHECK("Fog.Source.SFile.GetUseDirectCommand", ::Fog::Source::SFile::d2lua_ov_13192, "n");
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.Source.SFile.SFILE_GetSaveGamePath", ::Fog::Source::SFile::d2lua_ov_13193, "bpn");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.Source.SFile.SFILE_MoveDirectoryRecursive", ::Fog::Source::SFile::d2lua_ov_13194, "npp");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.Source.SFile.GetAndCreateSavePath", ::Fog::Source::SFile::d2lua_ov_13195, "vpn");
 #endif
 D2LUA_OV_CHECK("Fog.Source.SFile.Unreferenced_00407260", ::Fog::Source::SFile::d2lua_ov_13196, "pp");
@@ -103,17 +103,17 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(13188, "Fog.Source.SFile.SFILE_EnsurePathEndsWithBackslash", ::Fog::Source::SFile::d2lua_ov_13188, 6, "npn", "char"),
     D2LUA_OV(13189, "Fog.Source.SFile.SFILE_GetExecutableDirectory", ::Fog::Source::SFile::d2lua_ov_13189, 6, "npn", "char"),
     D2LUA_OV(13190, "Fog.Source.SFile.SFILE_GetInstallPath", ::Fog::Source::SFile::d2lua_ov_13190, 6, "npn", "LPSTR"),
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13191, "Fog.Source.SFile.SFILE_GetBlizzardAppDataPath", ::Fog::Source::SFile::d2lua_ov_13191, 6, "npn", "char"),
 #endif
     D2LUA_OV(13192, "Fog.Source.SFile.GetUseDirectCommand", ::Fog::Source::SFile::d2lua_ov_13192, 6, "n", ""),
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13193, "Fog.Source.SFile.SFILE_GetSaveGamePath", ::Fog::Source::SFile::d2lua_ov_13193, 6, "bpn", "LPSTR"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13194, "Fog.Source.SFile.SFILE_MoveDirectoryRecursive", ::Fog::Source::SFile::d2lua_ov_13194, 6, "npp", "LPCSTR|LPCSTR"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13195, "Fog.Source.SFile.GetAndCreateSavePath", ::Fog::Source::SFile::d2lua_ov_13195, 6, "vpn", "char"),
 #endif
     D2LUA_OV(13196, "Fog.Source.SFile.Unreferenced_00407260", ::Fog::Source::SFile::d2lua_ov_13196, 6, "pp", "uint32_t|uint32_t"),

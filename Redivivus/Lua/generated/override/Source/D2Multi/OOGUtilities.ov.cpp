@@ -4,14 +4,14 @@
 #if D2_FEATURE_MODS
 #include "Redivivus/Lua/d2_lua_override_gen.h"
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace D2Multi::OOGUtilities { constexpr auto d2lua_ov_12098 = &LAUNCHER_ReadRegistryValue; }
 #endif
 namespace D2Multi::OOGUtilities { constexpr auto d2lua_ov_12099 = &OOG_DisableControlCallback; }
 namespace D2Multi::OOGUtilities { constexpr auto d2lua_ov_12100 = &EDITBOX_Cb_D2WINTEXTBOX_SetSelectedLine; }
 namespace D2Multi::OOGUtilities { constexpr auto d2lua_ov_12101 = &OOG_WaitMCPThreadDonePump; }
 namespace D2Multi::OOGUtilities { constexpr auto d2lua_ov_12102 = &OOG_PollMCPCharLogonPump; }
-#if D2_OS_MAC
+#if !defined(_WIN32)
 namespace D2Multi::OOGUtilities { constexpr auto d2lua_ov_12103 = &OOGUTIL_OpenBrowserWithURL; }
 #endif
 namespace D2Multi::OOGUtilities { constexpr auto d2lua_ov_12104 = &OOGUTIL_OpenChannelDialog; }
@@ -97,14 +97,14 @@ namespace D2Multi::OOGUtilities { constexpr auto d2lua_ov_12183 = &OOGUTIL_Valid
 namespace D2Multi::OOGUtilities { constexpr auto d2lua_ov_12184 = &OOGUTIL_AppendChatText; }
 namespace D2Multi::OOGUtilities { constexpr auto d2lua_ov_12185 = &OOGUTIL_ValidateStringFilter; }
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("D2Multi.OOGUtilities.LAUNCHER_ReadRegistryValue", ::D2Multi::OOGUtilities::d2lua_ov_12098, "npppnp");
 #endif
 D2LUA_OV_CHECK("D2Multi.OOGUtilities.OOG_DisableControlCallback", ::D2Multi::OOGUtilities::d2lua_ov_12099, "np");
 D2LUA_OV_CHECK("D2Multi.OOGUtilities.EDITBOX_Cb_D2WINTEXTBOX_SetSelectedLine", ::D2Multi::OOGUtilities::d2lua_ov_12100, "npnp");
 D2LUA_OV_CHECK("D2Multi.OOGUtilities.OOG_WaitMCPThreadDonePump", ::D2Multi::OOGUtilities::d2lua_ov_12101, "nn");
 D2LUA_OV_CHECK("D2Multi.OOGUtilities.OOG_PollMCPCharLogonPump", ::D2Multi::OOGUtilities::d2lua_ov_12102, "nn");
-#if D2_OS_MAC
+#if !defined(_WIN32)
 D2LUA_OV_CHECK("D2Multi.OOGUtilities.OOGUTIL_OpenBrowserWithURL", ::D2Multi::OOGUtilities::d2lua_ov_12103, "np");
 #endif
 D2LUA_OV_CHECK("D2Multi.OOGUtilities.OOGUTIL_OpenChannelDialog", ::D2Multi::OOGUtilities::d2lua_ov_12104, "v");
@@ -191,14 +191,14 @@ D2LUA_OV_CHECK("D2Multi.OOGUtilities.OOGUTIL_AppendChatText", ::D2Multi::OOGUtil
 D2LUA_OV_CHECK("D2Multi.OOGUtilities.OOGUTIL_ValidateStringFilter", ::D2Multi::OOGUtilities::d2lua_ov_12185, "nnp");
 
 static const D2LuaOvEntry s_aEntries[] = {
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(12098, "D2Multi.OOGUtilities.LAUNCHER_ReadRegistryValue", ::D2Multi::OOGUtilities::d2lua_ov_12098, 4, "npppnp", "LPCSTR|LPCSTR|LPBYTE|LPDWORD"),
 #endif
     D2LUA_OV(12099, "D2Multi.OOGUtilities.OOG_DisableControlCallback", ::D2Multi::OOGUtilities::d2lua_ov_12099, 4, "np", "D2ControlMsg"),
     D2LUA_OV(12100, "D2Multi.OOGUtilities.EDITBOX_Cb_D2WINTEXTBOX_SetSelectedLine", ::D2Multi::OOGUtilities::d2lua_ov_12100, 4, "npnp", "D2WinEditBox|char"),
     D2LUA_OV(12101, "D2Multi.OOGUtilities.OOG_WaitMCPThreadDonePump", ::D2Multi::OOGUtilities::d2lua_ov_12101, 4, "nn", ""),
     D2LUA_OV(12102, "D2Multi.OOGUtilities.OOG_PollMCPCharLogonPump", ::D2Multi::OOGUtilities::d2lua_ov_12102, 4, "nn", ""),
-#if D2_OS_MAC
+#if !defined(_WIN32)
     D2LUA_OV(12103, "D2Multi.OOGUtilities.OOGUTIL_OpenBrowserWithURL", ::D2Multi::OOGUtilities::d2lua_ov_12103, 4, "np", "D2ControlMsg"),
 #endif
     D2LUA_OV(12104, "D2Multi.OOGUtilities.OOGUTIL_OpenChannelDialog", ::D2Multi::OOGUtilities::d2lua_ov_12104, 4, "v", ""),

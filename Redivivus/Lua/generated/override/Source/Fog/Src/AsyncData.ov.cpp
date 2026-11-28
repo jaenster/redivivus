@@ -10,13 +10,13 @@ namespace Fog::Src::AsyncData { constexpr auto d2lua_ov_13215 = &ASYNCDATA_Cance
 namespace Fog::Src::AsyncData { constexpr auto d2lua_ov_13216 = &ASYNCDATA_AllocSlot; }
 namespace Fog::Src::AsyncData { constexpr auto d2lua_ov_13217 = &STRUCT_AllocAsyncData_Line0x128; }
 namespace Fog::Src::AsyncData { constexpr auto d2lua_ov_13218 = &ASYNCDATA_IsComplete; }
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 namespace Fog::Src::AsyncData { constexpr auto d2lua_ov_13219 = &ASYNCDATA_SetPriority; }
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 namespace Fog::Src::AsyncData { constexpr auto d2lua_ov_13220 = &ASYNCDATA_HaltSetPriorityAtLine; }
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 namespace Fog::Src::AsyncData { constexpr auto d2lua_ov_13221 = &ASYNCDATA_DeferPriorityUpdates; }
 #endif
 namespace Fog::Src::AsyncData { constexpr auto d2lua_ov_13222 = &ASYNCDATA_WaitForCompletion; }
@@ -31,13 +31,13 @@ D2LUA_OV_CHECK("Fog.Src.AsyncData.ASYNCDATA_CancelAndCleanup", ::Fog::Src::Async
 D2LUA_OV_CHECK("Fog.Src.AsyncData.ASYNCDATA_AllocSlot", ::Fog::Src::AsyncData::d2lua_ov_13216, "p");
 D2LUA_OV_CHECK("Fog.Src.AsyncData.STRUCT_AllocAsyncData_Line0x128", ::Fog::Src::AsyncData::d2lua_ov_13217, "pppnnnppnpn");
 D2LUA_OV_CHECK("Fog.Src.AsyncData.ASYNCDATA_IsComplete", ::Fog::Src::AsyncData::d2lua_ov_13218, "np");
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 D2LUA_OV_CHECK("Fog.Src.AsyncData.ASYNCDATA_SetPriority", ::Fog::Src::AsyncData::d2lua_ov_13219, "vpn");
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 D2LUA_OV_CHECK("Fog.Src.AsyncData.ASYNCDATA_HaltSetPriorityAtLine", ::Fog::Src::AsyncData::d2lua_ov_13220, "vn");
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 D2LUA_OV_CHECK("Fog.Src.AsyncData.ASYNCDATA_DeferPriorityUpdates", ::Fog::Src::AsyncData::d2lua_ov_13221, "vn");
 #endif
 D2LUA_OV_CHECK("Fog.Src.AsyncData.ASYNCDATA_WaitForCompletion", ::Fog::Src::AsyncData::d2lua_ov_13222, "vp");
@@ -53,13 +53,13 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(13216, "Fog.Src.AsyncData.ASYNCDATA_AllocSlot", ::Fog::Src::AsyncData::d2lua_ov_13216, 6, "p", "D2AsyncDataSlotStrc"),
     D2LUA_OV(13217, "Fog.Src.AsyncData.STRUCT_AllocAsyncData_Line0x128", ::Fog::Src::AsyncData::d2lua_ov_13217, 6, "pppnnnppnpn", "D2AsyncData_Line0x128|D2PoolManagerStrc|char|void|D2AsyncDataCallbackStrc|char"),
     D2LUA_OV(13218, "Fog.Src.AsyncData.ASYNCDATA_IsComplete", ::Fog::Src::AsyncData::d2lua_ov_13218, 6, "np", "D2AsyncData_Line0x128"),
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
     D2LUA_OV(13219, "Fog.Src.AsyncData.ASYNCDATA_SetPriority", ::Fog::Src::AsyncData::d2lua_ov_13219, 6, "vpn", "D2AsyncData_Line0x128"),
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
     D2LUA_OV(13220, "Fog.Src.AsyncData.ASYNCDATA_HaltSetPriorityAtLine", ::Fog::Src::AsyncData::d2lua_ov_13220, 6, "vn", ""),
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
     D2LUA_OV(13221, "Fog.Src.AsyncData.ASYNCDATA_DeferPriorityUpdates", ::Fog::Src::AsyncData::d2lua_ov_13221, 6, "vn", ""),
 #endif
     D2LUA_OV(13222, "Fog.Src.AsyncData.ASYNCDATA_WaitForCompletion", ::Fog::Src::AsyncData::d2lua_ov_13222, 6, "vp", "D2AsyncData_Line0x128"),

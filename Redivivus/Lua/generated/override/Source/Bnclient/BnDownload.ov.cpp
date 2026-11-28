@@ -12,7 +12,7 @@ namespace Bnclient::BnDownload { constexpr auto d2lua_ov_51 = &NET_RecvExact; }
 namespace Bnclient::BnDownload { constexpr auto d2lua_ov_52 = &BNDOWNLOAD_GetCachedFileSize; }
 namespace Bnclient::BnDownload { constexpr auto d2lua_ov_53 = &BNDOWNLOAD_PerformCheckRevision; }
 namespace Bnclient::BnDownload { constexpr auto d2lua_ov_54 = &BNDOWNLOAD_ExtractFileFromArchive; }
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 namespace Bnclient::BnDownload { constexpr auto d2lua_ov_55 = &BNDOWNLOAD_LaunchVerifiedExecutables; }
 #endif
 namespace Bnclient::BnDownload { constexpr auto d2lua_ov_56 = &BNDOWNLOAD_UpdateProgressPercent; }
@@ -22,10 +22,10 @@ namespace Bnclient::BnDownload { constexpr auto d2lua_ov_59 = &BNDOWNLOAD_SetPat
 namespace Bnclient::BnDownload { constexpr auto d2lua_ov_60 = &BNDOWNLOAD_HasPatchFilename; }
 namespace Bnclient::BnDownload { constexpr auto d2lua_ov_61 = &BnetDownloadFile; }
 namespace Bnclient::BnDownload { constexpr auto d2lua_ov_62 = &BNDOWNLOAD_RecvFileFromSocket; }
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 namespace Bnclient::BnDownload { constexpr auto d2lua_ov_63 = &BNDOWNLOAD_ProcessPrepatchList; }
 #endif
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 namespace Bnclient::BnDownload { constexpr auto d2lua_ov_64 = &BNDOWNLOAD_ApplyPrepatch; }
 #endif
 namespace Bnclient::BnDownload { constexpr auto d2lua_ov_65 = &BnetDownloadFile_II; }
@@ -43,7 +43,7 @@ D2LUA_OV_CHECK("Bnclient.BnDownload.NET_RecvExact", ::Bnclient::BnDownload::d2lu
 D2LUA_OV_CHECK("Bnclient.BnDownload.BNDOWNLOAD_GetCachedFileSize", ::Bnclient::BnDownload::d2lua_ov_52, "npp");
 D2LUA_OV_CHECK("Bnclient.BnDownload.BNDOWNLOAD_PerformCheckRevision", ::Bnclient::BnDownload::d2lua_ov_53, "nppp");
 D2LUA_OV_CHECK("Bnclient.BnDownload.BNDOWNLOAD_ExtractFileFromArchive", ::Bnclient::BnDownload::d2lua_ov_54, "vppp");
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 D2LUA_OV_CHECK("Bnclient.BnDownload.BNDOWNLOAD_LaunchVerifiedExecutables", ::Bnclient::BnDownload::d2lua_ov_55, "npp");
 #endif
 D2LUA_OV_CHECK("Bnclient.BnDownload.BNDOWNLOAD_UpdateProgressPercent", ::Bnclient::BnDownload::d2lua_ov_56, "vnnn");
@@ -53,10 +53,10 @@ D2LUA_OV_CHECK("Bnclient.BnDownload.BNDOWNLOAD_SetPatchFilename", ::Bnclient::Bn
 D2LUA_OV_CHECK("Bnclient.BnDownload.BNDOWNLOAD_HasPatchFilename", ::Bnclient::BnDownload::d2lua_ov_60, "n");
 D2LUA_OV_CHECK("Bnclient.BnDownload.BnetDownloadFile", ::Bnclient::BnDownload::d2lua_ov_61, "nnppnnpn");
 D2LUA_OV_CHECK("Bnclient.BnDownload.BNDOWNLOAD_RecvFileFromSocket", ::Bnclient::BnDownload::d2lua_ov_62, "npnnnnp");
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 D2LUA_OV_CHECK("Bnclient.BnDownload.BNDOWNLOAD_ProcessPrepatchList", ::Bnclient::BnDownload::d2lua_ov_63, "np");
 #endif
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 D2LUA_OV_CHECK("Bnclient.BnDownload.BNDOWNLOAD_ApplyPrepatch", ::Bnclient::BnDownload::d2lua_ov_64, "np");
 #endif
 D2LUA_OV_CHECK("Bnclient.BnDownload.BnetDownloadFile_II", ::Bnclient::BnDownload::d2lua_ov_65, "np");
@@ -75,7 +75,7 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(52, "Bnclient.BnDownload.BNDOWNLOAD_GetCachedFileSize", ::Bnclient::BnDownload::d2lua_ov_52, 4, "npp", "LPCSTR|FILETIME"),
     D2LUA_OV(53, "Bnclient.BnDownload.BNDOWNLOAD_PerformCheckRevision", ::Bnclient::BnDownload::d2lua_ov_53, 4, "nppp", "uint32_t|uint32_t|uint8_t"),
     D2LUA_OV(54, "Bnclient.BnDownload.BNDOWNLOAD_ExtractFileFromArchive", ::Bnclient::BnDownload::d2lua_ov_54, 4, "vppp", "char|D2ArchiveStrc|LPCSTR"),
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
     D2LUA_OV(55, "Bnclient.BnDownload.BNDOWNLOAD_LaunchVerifiedExecutables", ::Bnclient::BnDownload::d2lua_ov_55, 4, "npp", "LPCSTR|LPCSTR"),
 #endif
     D2LUA_OV(56, "Bnclient.BnDownload.BNDOWNLOAD_UpdateProgressPercent", ::Bnclient::BnDownload::d2lua_ov_56, 4, "vnnn", ""),
@@ -85,10 +85,10 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(60, "Bnclient.BnDownload.BNDOWNLOAD_HasPatchFilename", ::Bnclient::BnDownload::d2lua_ov_60, 4, "n", ""),
     D2LUA_OV(61, "Bnclient.BnDownload.BnetDownloadFile", ::Bnclient::BnDownload::d2lua_ov_61, 4, "nnppnnpn", "char|FILETIME|uint8_t"),
     D2LUA_OV(62, "Bnclient.BnDownload.BNDOWNLOAD_RecvFileFromSocket", ::Bnclient::BnDownload::d2lua_ov_62, 4, "npnnnnp", "LPCSTR|FILETIME"),
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
     D2LUA_OV(63, "Bnclient.BnDownload.BNDOWNLOAD_ProcessPrepatchList", ::Bnclient::BnDownload::d2lua_ov_63, 4, "np", "int"),
 #endif
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
     D2LUA_OV(64, "Bnclient.BnDownload.BNDOWNLOAD_ApplyPrepatch", ::Bnclient::BnDownload::d2lua_ov_64, 4, "np", "BOOL"),
 #endif
     D2LUA_OV(65, "Bnclient.BnDownload.BnetDownloadFile_II", ::Bnclient::BnDownload::d2lua_ov_65, 4, "np", "void"),

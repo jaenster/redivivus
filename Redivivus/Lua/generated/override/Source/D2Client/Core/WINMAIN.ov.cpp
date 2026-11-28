@@ -15,7 +15,7 @@ namespace D2Client::ClientModeInGame { constexpr auto d2lua_ov_793 = &CLIENTMODE
 namespace D2Client::ClientModeInGame { constexpr auto d2lua_ov_794 = &CmdLine_SaveDefaultCommandLine; }
 namespace D2Client::ClientModeInGame { constexpr auto d2lua_ov_795 = &CmdLine_SetAppMode; }
 namespace D2Client::ClientModeInGame { constexpr auto d2lua_ov_796 = &LoadDataForGameAndSetupServer; }
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 namespace D2Client::ClientModeInGame { constexpr auto d2lua_ov_797 = &Unreferenced_0044b780; }
 #endif
 namespace D2Client::ClientModeInGame { constexpr auto d2lua_ov_798 = &D2IniData_Getter; }
@@ -41,7 +41,7 @@ D2LUA_OV_CHECK("D2Client.ClientModeInGame.CLIENTMODEIN_CmdLineCallback_ShowHelp"
 D2LUA_OV_CHECK("D2Client.ClientModeInGame.CmdLine_SaveDefaultCommandLine", ::D2Client::ClientModeInGame::d2lua_ov_794, "npp");
 D2LUA_OV_CHECK("D2Client.ClientModeInGame.CmdLine_SetAppMode", ::D2Client::ClientModeInGame::d2lua_ov_795, "npp");
 D2LUA_OV_CHECK("D2Client.ClientModeInGame.LoadDataForGameAndSetupServer", ::D2Client::ClientModeInGame::d2lua_ov_796, "np");
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 D2LUA_OV_CHECK("D2Client.ClientModeInGame.Unreferenced_0044b780", ::D2Client::ClientModeInGame::d2lua_ov_797, "v");
 #endif
 D2LUA_OV_CHECK("D2Client.ClientModeInGame.D2IniData_Getter", ::D2Client::ClientModeInGame::d2lua_ov_798, "p");
@@ -68,7 +68,7 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(794, "D2Client.ClientModeInGame.CmdLine_SaveDefaultCommandLine", ::D2Client::ClientModeInGame::d2lua_ov_794, 4, "npp", "CMDPARAMS|char"),
     D2LUA_OV(795, "D2Client.ClientModeInGame.CmdLine_SetAppMode", ::D2Client::ClientModeInGame::d2lua_ov_795, 4, "npp", "CMDPARAMS|char"),
     D2LUA_OV(796, "D2Client.ClientModeInGame.LoadDataForGameAndSetupServer", ::D2Client::ClientModeInGame::d2lua_ov_796, 4, "np", "D2IniConfigStrc"),
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
     D2LUA_OV(797, "D2Client.ClientModeInGame.Unreferenced_0044b780", ::D2Client::ClientModeInGame::d2lua_ov_797, 4, "v", ""),
 #endif
     D2LUA_OV(798, "D2Client.ClientModeInGame.D2IniData_Getter", ::D2Client::ClientModeInGame::d2lua_ov_798, 4, "p", "D2IniConfigStrc"),

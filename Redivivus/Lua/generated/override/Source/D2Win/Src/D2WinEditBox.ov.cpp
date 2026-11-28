@@ -8,10 +8,10 @@ namespace D2Win::Src::D2WinEditBox { constexpr auto d2lua_ov_12622 = &D2WINEDITB
 namespace D2Win::Src::D2WinEditBox { constexpr auto d2lua_ov_12623 = &FORMS_DestroyD2WinEditBox; }
 namespace D2Win::Src::D2WinEditBox { constexpr auto d2lua_ov_12624 = &D2WINEDITBOX_SetFilterCallback; }
 namespace D2Win::Src::D2WinEditBox { constexpr auto d2lua_ov_12625 = &D2WINEDITBOX_SetChangeCallback; }
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 namespace D2Win::Src::D2WinEditBox { constexpr auto d2lua_ov_12626 = &D2WINEDITBOX_GetClipboardText; }
 #endif
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 namespace D2Win::Src::D2WinEditBox { constexpr auto d2lua_ov_12627 = &D2WINEDITBOX_SetClipboardText; }
 #endif
 namespace D2Win::Src::D2WinEditBox { constexpr auto d2lua_ov_12628 = &D2WINEDITBOX_HasSelection; }
@@ -42,10 +42,10 @@ D2LUA_OV_CHECK("D2Win.Src.D2WinEditBox.D2WINEDITBOX_GetTextLength", ::D2Win::Src
 D2LUA_OV_CHECK("D2Win.Src.D2WinEditBox.FORMS_DestroyD2WinEditBox", ::D2Win::Src::D2WinEditBox::d2lua_ov_12623, "vp");
 D2LUA_OV_CHECK("D2Win.Src.D2WinEditBox.D2WINEDITBOX_SetFilterCallback", ::D2Win::Src::D2WinEditBox::d2lua_ov_12624, "vpp");
 D2LUA_OV_CHECK("D2Win.Src.D2WinEditBox.D2WINEDITBOX_SetChangeCallback", ::D2Win::Src::D2WinEditBox::d2lua_ov_12625, "vpp");
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 D2LUA_OV_CHECK("D2Win.Src.D2WinEditBox.D2WINEDITBOX_GetClipboardText", ::D2Win::Src::D2WinEditBox::d2lua_ov_12626, "p");
 #endif
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 D2LUA_OV_CHECK("D2Win.Src.D2WinEditBox.D2WINEDITBOX_SetClipboardText", ::D2Win::Src::D2WinEditBox::d2lua_ov_12627, "np");
 #endif
 D2LUA_OV_CHECK("D2Win.Src.D2WinEditBox.D2WINEDITBOX_HasSelection", ::D2Win::Src::D2WinEditBox::d2lua_ov_12628, "np");
@@ -77,10 +77,10 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(12623, "D2Win.Src.D2WinEditBox.FORMS_DestroyD2WinEditBox", ::D2Win::Src::D2WinEditBox::d2lua_ov_12623, 4, "vp", "D2WinEditBox"),
     D2LUA_OV(12624, "D2Win.Src.D2WinEditBox.D2WINEDITBOX_SetFilterCallback", ::D2Win::Src::D2WinEditBox::d2lua_ov_12624, 4, "vpp", "D2WinEditBox|fpD2WinEditBoxFilter"),
     D2LUA_OV(12625, "D2Win.Src.D2WinEditBox.D2WINEDITBOX_SetChangeCallback", ::D2Win::Src::D2WinEditBox::d2lua_ov_12625, 4, "vpp", "D2WinEditBox|fpD2WinEditBoxChange"),
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
     D2LUA_OV(12626, "D2Win.Src.D2WinEditBox.D2WINEDITBOX_GetClipboardText", ::D2Win::Src::D2WinEditBox::d2lua_ov_12626, 4, "p", "char"),
 #endif
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
     D2LUA_OV(12627, "D2Win.Src.D2WinEditBox.D2WINEDITBOX_SetClipboardText", ::D2Win::Src::D2WinEditBox::d2lua_ov_12627, 4, "np", "char"),
 #endif
     D2LUA_OV(12628, "D2Win.Src.D2WinEditBox.D2WINEDITBOX_HasSelection", ::D2Win::Src::D2WinEditBox::d2lua_ov_12628, 4, "np", "D2WinEditBox"),

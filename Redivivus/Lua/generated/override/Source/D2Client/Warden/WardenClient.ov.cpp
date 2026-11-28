@@ -14,12 +14,12 @@ namespace D2Client::Warden { constexpr auto d2lua_ov_4521 = &WARDEN_CbFreeModule
 namespace D2Client::Warden { constexpr auto d2lua_ov_4522 = &WARDEN_DestroyModuleObject; }
 namespace D2Client::Warden { constexpr auto d2lua_ov_4523 = &WARDEN_DecryptAndLoadModule; }
 namespace D2Client::Warden { constexpr auto d2lua_ov_4524 = &WARDEN_ResolveAndLoadModule; }
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32))
 namespace D2Client::Warden { constexpr auto d2lua_ov_4525 = &WARDEN_DownloadModule; }
 #endif
 namespace D2Client::Warden { constexpr auto d2lua_ov_4526 = &SendPacket; }
 namespace D2Client::Warden { constexpr auto d2lua_ov_4527 = &CheckModule; }
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32))
 namespace D2Client::Warden { constexpr auto d2lua_ov_4528 = &LoadModule; }
 #endif
 namespace D2Client::Warden { constexpr auto d2lua_ov_4529 = &AllocateMemory; }
@@ -46,12 +46,12 @@ D2LUA_OV_CHECK("D2Client.Warden.WARDEN_CbFreeModuleStruct", ::D2Client::Warden::
 D2LUA_OV_CHECK("D2Client.Warden.WARDEN_DestroyModuleObject", ::D2Client::Warden::d2lua_ov_4522, "ppn");
 D2LUA_OV_CHECK("D2Client.Warden.WARDEN_DecryptAndLoadModule", ::D2Client::Warden::d2lua_ov_4523, "nppn");
 D2LUA_OV_CHECK("D2Client.Warden.WARDEN_ResolveAndLoadModule", ::D2Client::Warden::d2lua_ov_4524, "npp");
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32))
 D2LUA_OV_CHECK("D2Client.Warden.WARDEN_DownloadModule", ::D2Client::Warden::d2lua_ov_4525, "nppn");
 #endif
 D2LUA_OV_CHECK("D2Client.Warden.SendPacket", ::D2Client::Warden::d2lua_ov_4526, "vppn");
 D2LUA_OV_CHECK("D2Client.Warden.CheckModule", ::D2Client::Warden::d2lua_ov_4527, "bppp");
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32))
 D2LUA_OV_CHECK("D2Client.Warden.LoadModule", ::D2Client::Warden::d2lua_ov_4528, "vpppn");
 #endif
 D2LUA_OV_CHECK("D2Client.Warden.AllocateMemory", ::D2Client::Warden::d2lua_ov_4529, "ppn");
@@ -79,12 +79,12 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(4522, "D2Client.Warden.WARDEN_DestroyModuleObject", ::D2Client::Warden::d2lua_ov_4522, 4, "ppn", "D2WardenModuleStrc|D2WardenModuleStrc"),
     D2LUA_OV(4523, "D2Client.Warden.WARDEN_DecryptAndLoadModule", ::D2Client::Warden::d2lua_ov_4523, 4, "nppn", "void|void"),
     D2LUA_OV(4524, "D2Client.Warden.WARDEN_ResolveAndLoadModule", ::D2Client::Warden::d2lua_ov_4524, 4, "npp", "void|uint8_t"),
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32))
     D2LUA_OV(4525, "D2Client.Warden.WARDEN_DownloadModule", ::D2Client::Warden::d2lua_ov_4525, 4, "nppn", "char|void"),
 #endif
     D2LUA_OV(4526, "D2Client.Warden.SendPacket", ::D2Client::Warden::d2lua_ov_4526, 4, "vppn", "WardenClient|void"),
     D2LUA_OV(4527, "D2Client.Warden.CheckModule", ::D2Client::Warden::d2lua_ov_4527, 4, "bppp", "WardenClient|uint8_t|void"),
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32))
     D2LUA_OV(4528, "D2Client.Warden.LoadModule", ::D2Client::Warden::d2lua_ov_4528, 4, "vpppn", "WardenClient|uint8_t|void"),
 #endif
     D2LUA_OV(4529, "D2Client.Warden.AllocateMemory", ::D2Client::Warden::d2lua_ov_4529, 4, "ppn", "void|WardenClient"),

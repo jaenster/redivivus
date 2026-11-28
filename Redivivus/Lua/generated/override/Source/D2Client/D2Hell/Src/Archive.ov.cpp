@@ -26,7 +26,7 @@ namespace D2Client::Archive { constexpr auto d2lua_ov_927 = &LINKEDLIST_UnlinkSe
 namespace D2Client::Archive { constexpr auto d2lua_ov_928 = &ARCHIVE_AllocNode; }
 namespace D2Client::Archive { constexpr auto d2lua_ov_929 = &ARCHIVE_FreeNode; }
 namespace D2Client::Archive { constexpr auto d2lua_ov_930 = &ARCHIVE_RemoveNode; }
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 namespace D2Client::Archive { constexpr auto d2lua_ov_931 = &ARCHIVE_WriteMemoryCheckReport; }
 #endif
 namespace D2Client::Archive { constexpr auto d2lua_ov_932 = &ReadByteShortOrDword; }
@@ -54,7 +54,7 @@ D2LUA_OV_CHECK("D2Client.Archive.LINKEDLIST_UnlinkSelf_Unref_0045bd90", ::D2Clie
 D2LUA_OV_CHECK("D2Client.Archive.ARCHIVE_AllocNode", ::D2Client::Archive::d2lua_ov_928, "ppnnn");
 D2LUA_OV_CHECK("D2Client.Archive.ARCHIVE_FreeNode", ::D2Client::Archive::d2lua_ov_929, "ppn");
 D2LUA_OV_CHECK("D2Client.Archive.ARCHIVE_RemoveNode", ::D2Client::Archive::d2lua_ov_930, "npp");
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 D2LUA_OV_CHECK("D2Client.Archive.ARCHIVE_WriteMemoryCheckReport", ::D2Client::Archive::d2lua_ov_931, "v");
 #endif
 D2LUA_OV_CHECK("D2Client.Archive.ReadByteShortOrDword", ::D2Client::Archive::d2lua_ov_932, "vp");
@@ -84,7 +84,7 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(928, "D2Client.Archive.ARCHIVE_AllocNode", ::D2Client::Archive::d2lua_ov_928, 4, "ppnnn", "StormLinkStrc|StormLinkedListStrc"),
     D2LUA_OV(929, "D2Client.Archive.ARCHIVE_FreeNode", ::D2Client::Archive::d2lua_ov_929, 4, "ppn", "int|StormLinkStrc"),
     D2LUA_OV(930, "D2Client.Archive.ARCHIVE_RemoveNode", ::D2Client::Archive::d2lua_ov_930, 4, "npp", "StormLinkedListStrc|StormLinkStrc"),
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
     D2LUA_OV(931, "D2Client.Archive.ARCHIVE_WriteMemoryCheckReport", ::D2Client::Archive::d2lua_ov_931, 4, "v", ""),
 #endif
     D2LUA_OV(932, "D2Client.Archive.ReadByteShortOrDword", ::D2Client::Archive::d2lua_ov_932, 4, "vp", "D2BitBufferStrc"),

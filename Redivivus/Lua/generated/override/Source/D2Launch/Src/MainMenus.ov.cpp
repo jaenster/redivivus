@@ -4,10 +4,10 @@
 #if D2_FEATURE_MODS
 #include "Redivivus/Lua/d2_lua_override_gen.h"
 
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 namespace D2Launch::MainMenus { constexpr auto d2lua_ov_11762 = &FORMS_DestroyEncoderContext_Thunk_Unref_0041f930; }
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 namespace D2Launch::MainMenus { constexpr auto d2lua_ov_11763 = &FORMS_DestroyEncoderContext_Thunk_Unref_0041f940; }
 #endif
 namespace D2Launch::MainMenus { constexpr auto d2lua_ov_11764 = &Unreferenced_0042e5c0; }
@@ -177,7 +177,7 @@ namespace D2Launch::MainMenus { constexpr auto d2lua_ov_11927 = &SelectedCharBne
 namespace D2Launch::MainMenus { constexpr auto d2lua_ov_11928 = &UIMENU_PlayIntroAndReturnToMainScreen; }
 namespace D2Launch::MainMenus { constexpr auto d2lua_ov_11929 = &thunk_UIMENU_MainMenu; }
 namespace D2Launch::MainMenus { constexpr auto d2lua_ov_11930 = &MAINMENU_OnPressReturnToMainMenu; }
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 namespace D2Launch::MainMenus { constexpr auto d2lua_ov_11931 = &UIMENU_AndOneMorePleaseWait; }
 #endif
 namespace D2Launch::MainMenus { constexpr auto d2lua_ov_11932 = &MAINMENUS_OnPressReturnToMainMenu_ForCreditsAndMainMenuAgain; }
@@ -239,10 +239,10 @@ namespace D2Launch::MainMenus { constexpr auto d2lua_ov_11987 = &MAINMENU_GetFla
 namespace D2Launch::MainMenus { constexpr auto d2lua_ov_11988 = &MAINMENU_GetRealmNameIfValid; }
 namespace D2Launch::MainMenus { constexpr auto d2lua_ov_11989 = &LAUNCHER_PollBNConnectionPump; }
 
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 D2LUA_OV_CHECK("D2Launch.MainMenus.FORMS_DestroyEncoderContext_Thunk_Unref_0041f930", ::D2Launch::MainMenus::d2lua_ov_11762, "vp");
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 D2LUA_OV_CHECK("D2Launch.MainMenus.FORMS_DestroyEncoderContext_Thunk_Unref_0041f940", ::D2Launch::MainMenus::d2lua_ov_11763, "vp");
 #endif
 D2LUA_OV_CHECK("D2Launch.MainMenus.Unreferenced_0042e5c0", ::D2Launch::MainMenus::d2lua_ov_11764, "nn");
@@ -412,7 +412,7 @@ D2LUA_OV_CHECK("D2Launch.MainMenus.SelectedCharBnetSingleTcpIp", ::D2Launch::Mai
 D2LUA_OV_CHECK("D2Launch.MainMenus.UIMENU_PlayIntroAndReturnToMainScreen", ::D2Launch::MainMenus::d2lua_ov_11928, "np");
 D2LUA_OV_CHECK("D2Launch.MainMenus.thunk_UIMENU_MainMenu", ::D2Launch::MainMenus::d2lua_ov_11929, "np");
 D2LUA_OV_CHECK("D2Launch.MainMenus.MAINMENU_OnPressReturnToMainMenu", ::D2Launch::MainMenus::d2lua_ov_11930, "np");
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 D2LUA_OV_CHECK("D2Launch.MainMenus.UIMENU_AndOneMorePleaseWait", ::D2Launch::MainMenus::d2lua_ov_11931, "np");
 #endif
 D2LUA_OV_CHECK("D2Launch.MainMenus.MAINMENUS_OnPressReturnToMainMenu_ForCreditsAndMainMenuAgain", ::D2Launch::MainMenus::d2lua_ov_11932, "np");
@@ -475,10 +475,10 @@ D2LUA_OV_CHECK("D2Launch.MainMenus.MAINMENU_GetRealmNameIfValid", ::D2Launch::Ma
 D2LUA_OV_CHECK("D2Launch.MainMenus.LAUNCHER_PollBNConnectionPump", ::D2Launch::MainMenus::d2lua_ov_11989, "nn");
 
 static const D2LuaOvEntry s_aEntries[] = {
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
     D2LUA_OV(11762, "D2Launch.MainMenus.FORMS_DestroyEncoderContext_Thunk_Unref_0041f930", ::D2Launch::MainMenus::d2lua_ov_11762, 4, "vp", "uint32_t"),
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
     D2LUA_OV(11763, "D2Launch.MainMenus.FORMS_DestroyEncoderContext_Thunk_Unref_0041f940", ::D2Launch::MainMenus::d2lua_ov_11763, 4, "vp", "uint32_t"),
 #endif
     D2LUA_OV(11764, "D2Launch.MainMenus.Unreferenced_0042e5c0", ::D2Launch::MainMenus::d2lua_ov_11764, 4, "nn", ""),
@@ -648,7 +648,7 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(11928, "D2Launch.MainMenus.UIMENU_PlayIntroAndReturnToMainScreen", ::D2Launch::MainMenus::d2lua_ov_11928, 4, "np", "D2ControlMsg"),
     D2LUA_OV(11929, "D2Launch.MainMenus.thunk_UIMENU_MainMenu", ::D2Launch::MainMenus::d2lua_ov_11929, 4, "np", "D2ControlMsg"),
     D2LUA_OV(11930, "D2Launch.MainMenus.MAINMENU_OnPressReturnToMainMenu", ::D2Launch::MainMenus::d2lua_ov_11930, 4, "np", "D2ControlMsg"),
-#if D2_OS_MAC
+#if D2_MAC_CARBON
     D2LUA_OV(11931, "D2Launch.MainMenus.UIMENU_AndOneMorePleaseWait", ::D2Launch::MainMenus::d2lua_ov_11931, 4, "np", "D2ControlMsg"),
 #endif
     D2LUA_OV(11932, "D2Launch.MainMenus.MAINMENUS_OnPressReturnToMainMenu_ForCreditsAndMainMenuAgain", ::D2Launch::MainMenus::d2lua_ov_11932, 4, "np", "D2ControlMsg"),

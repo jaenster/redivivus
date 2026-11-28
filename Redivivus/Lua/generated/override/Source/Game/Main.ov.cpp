@@ -5,7 +5,7 @@
 #include "Redivivus/Lua/d2_lua_override_gen.h"
 
 namespace Game::Main { constexpr auto d2lua_ov_13533 = &MISC_OperatorNewShim; }
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 namespace Game::Main { constexpr auto d2lua_ov_13534 = &MISC_GetValueFromD2Ini; }
 #endif
 namespace Game::Main { constexpr auto d2lua_ov_13535 = &Unreferenced_00405550; }
@@ -21,39 +21,39 @@ namespace Game::Main { constexpr auto d2lua_ov_13544 = &SystemSurvey_WriteProduc
 namespace Game::Main { constexpr auto d2lua_ov_13545 = &ApplicationMain; }
 namespace Game::Main { constexpr auto d2lua_ov_13546 = &ReturnTrue; }
 namespace Game::Main { constexpr auto d2lua_ov_13547 = &D2INIT_CheckCommandLineOrLoadItFromRegistry; }
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Game::Main { constexpr auto d2lua_ov_13548 = &CreateRegedit; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Game::Main { constexpr auto d2lua_ov_13549 = &ERRORMANAGER_TryGetProcAddress; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Game::Main { constexpr auto d2lua_ov_13550 = &LIB_LoadAdvapi32; }
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 namespace Game::Main { constexpr auto d2lua_ov_13551 = &CLIENT_CheckIfApplicationModeIsInCommandLineAndSetItToArgument; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Game::Main { constexpr auto d2lua_ov_13552 = &ERRORMANAGER_ServiceControlHandler; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Game::Main { constexpr auto d2lua_ov_13553 = &Unreferenced_00406470; }
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 namespace Game::Main { constexpr auto d2lua_ov_13554 = &PreInitApplication; }
 #endif
-#if !D2_OS_MAC
-namespace Game::Main { constexpr auto d2lua_ov_13555 = &main; }
+#if defined(_WIN32)
+namespace Game::Main { constexpr auto d2lua_ov_13555 = static_cast<void (__stdcall *)(DWORD, LPSTR *)>(&main); }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Game::Main { constexpr auto d2lua_ov_13556 = &StartDiablo2ServerAsService; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Game::Main { constexpr auto d2lua_ov_13557 = &WinMain; }
 #endif
 
 D2LUA_OV_CHECK("Game.Main.MISC_OperatorNewShim", ::Game::Main::d2lua_ov_13533, "pn");
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 D2LUA_OV_CHECK("Game.Main.MISC_GetValueFromD2Ini", ::Game::Main::d2lua_ov_13534, "vp");
 #endif
 D2LUA_OV_CHECK("Game.Main.Unreferenced_00405550", ::Game::Main::d2lua_ov_13535, "vp");
@@ -69,40 +69,40 @@ D2LUA_OV_CHECK("Game.Main.SystemSurvey_WriteProductLanugageToLocaleFile", ::Game
 D2LUA_OV_CHECK("Game.Main.ApplicationMain", ::Game::Main::d2lua_ov_13545, "nppn");
 D2LUA_OV_CHECK("Game.Main.ReturnTrue", ::Game::Main::d2lua_ov_13546, "n");
 D2LUA_OV_CHECK("Game.Main.D2INIT_CheckCommandLineOrLoadItFromRegistry", ::Game::Main::d2lua_ov_13547, "vp");
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Game.Main.CreateRegedit", ::Game::Main::d2lua_ov_13548, "v");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Game.Main.ERRORMANAGER_TryGetProcAddress", ::Game::Main::d2lua_ov_13549, "nppp");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Game.Main.LIB_LoadAdvapi32", ::Game::Main::d2lua_ov_13550, "n");
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 D2LUA_OV_CHECK("Game.Main.CLIENT_CheckIfApplicationModeIsInCommandLineAndSetItToArgument", ::Game::Main::d2lua_ov_13551, "npp");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Game.Main.ERRORMANAGER_ServiceControlHandler", ::Game::Main::d2lua_ov_13552, "vn");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Game.Main.Unreferenced_00406470", ::Game::Main::d2lua_ov_13553, "npp");
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 D2LUA_OV_CHECK("Game.Main.PreInitApplication", ::Game::Main::d2lua_ov_13554, "vnp");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Game.Main.main", ::Game::Main::d2lua_ov_13555, "vnp");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Game.Main.StartDiablo2ServerAsService", ::Game::Main::d2lua_ov_13556, "n");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Game.Main.WinMain", ::Game::Main::d2lua_ov_13557, "npppn");
 #endif
 
 static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(13533, "Game.Main.MISC_OperatorNewShim", ::Game::Main::d2lua_ov_13533, 4, "pn", "void"),
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
     D2LUA_OV(13534, "Game.Main.MISC_GetValueFromD2Ini", ::Game::Main::d2lua_ov_13534, 4, "vp", "D2IniConfigStrc"),
 #endif
     D2LUA_OV(13535, "Game.Main.Unreferenced_00405550", ::Game::Main::d2lua_ov_13535, 4, "vp", "char"),
@@ -118,34 +118,34 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(13545, "Game.Main.ApplicationMain", ::Game::Main::d2lua_ov_13545, 4, "nppn", "HINSTANCE|D2IniConfigStrc"),
     D2LUA_OV(13546, "Game.Main.ReturnTrue", ::Game::Main::d2lua_ov_13546, 4, "n", ""),
     D2LUA_OV(13547, "Game.Main.D2INIT_CheckCommandLineOrLoadItFromRegistry", ::Game::Main::d2lua_ov_13547, 4, "vp", "char"),
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13548, "Game.Main.CreateRegedit", ::Game::Main::d2lua_ov_13548, 4, "v", ""),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13549, "Game.Main.ERRORMANAGER_TryGetProcAddress", ::Game::Main::d2lua_ov_13549, 4, "nppp", "HMODULE|FARPROC|LPCSTR"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13550, "Game.Main.LIB_LoadAdvapi32", ::Game::Main::d2lua_ov_13550, 4, "n", ""),
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
     D2LUA_OV(13551, "Game.Main.CLIENT_CheckIfApplicationModeIsInCommandLineAndSetItToArgument", ::Game::Main::d2lua_ov_13551, 4, "npp", "eD2ApplicationMode|char"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13552, "Game.Main.ERRORMANAGER_ServiceControlHandler", ::Game::Main::d2lua_ov_13552, 4, "vn", ""),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13553, "Game.Main.Unreferenced_00406470", ::Game::Main::d2lua_ov_13553, 4, "npp", "SC_HANDLE|SC_HANDLE"),
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
     D2LUA_OV(13554, "Game.Main.PreInitApplication", ::Game::Main::d2lua_ov_13554, 4, "vnp", "char"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13555, "Game.Main.main", ::Game::Main::d2lua_ov_13555, 4, "vnp", "LPSTR"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13556, "Game.Main.StartDiablo2ServerAsService", ::Game::Main::d2lua_ov_13556, 4, "n", ""),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13557, "Game.Main.WinMain", ::Game::Main::d2lua_ov_13557, 4, "npppn", "HINSTANCE|HINSTANCE|LPSTR"),
 #endif
     D2LUA_OV_REFUSED(-1, nullptr, nullptr, 0, nullptr, 0),

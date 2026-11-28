@@ -12,7 +12,7 @@ namespace Fog::Src::QServer::QServerNT { constexpr auto d2lua_ov_13499 = &BeginA
 namespace Fog::Src::QServer::QServerNT { constexpr auto d2lua_ov_13500 = &PopAndFreeCompletedSendPacket; }
 namespace Fog::Src::QServer::QServerNT { constexpr auto d2lua_ov_13501 = &AcceptThreadMain; }
 namespace Fog::Src::QServer::QServerNT { constexpr auto d2lua_ov_13502 = &SendToClientLocal; }
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 namespace Fog::Src::QServer::QServerNT { constexpr auto d2lua_ov_13503 = &PumpIoCompletionQueueForWorker; }
 #endif
 namespace Fog::Src::QServer::QServerNT { constexpr auto d2lua_ov_13504 = &IoWorkerThreadMain; }
@@ -28,7 +28,7 @@ D2LUA_OV_CHECK("Fog.Src.QServer.QServerNT.BeginAsyncWriteForClient", ::Fog::Src:
 D2LUA_OV_CHECK("Fog.Src.QServer.QServerNT.PopAndFreeCompletedSendPacket", ::Fog::Src::QServer::QServerNT::d2lua_ov_13500, "np");
 D2LUA_OV_CHECK("Fog.Src.QServer.QServerNT.AcceptThreadMain", ::Fog::Src::QServer::QServerNT::d2lua_ov_13501, "np");
 D2LUA_OV_CHECK("Fog.Src.QServer.QServerNT.SendToClientLocal", ::Fog::Src::QServer::QServerNT::d2lua_ov_13502, "npppn");
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 D2LUA_OV_CHECK("Fog.Src.QServer.QServerNT.PumpIoCompletionQueueForWorker", ::Fog::Src::QServer::QServerNT::d2lua_ov_13503, "npnn");
 #endif
 D2LUA_OV_CHECK("Fog.Src.QServer.QServerNT.IoWorkerThreadMain", ::Fog::Src::QServer::QServerNT::d2lua_ov_13504, "np");
@@ -45,7 +45,7 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(13500, "Fog.Src.QServer.QServerNT.PopAndFreeCompletedSendPacket", ::Fog::Src::QServer::QServerNT::d2lua_ov_13500, 6, "np", "D2QServerClientConnectionStrc"),
     D2LUA_OV(13501, "Fog.Src.QServer.QServerNT.AcceptThreadMain", ::Fog::Src::QServer::QServerNT::d2lua_ov_13501, 6, "np", "D2QServerWorkerThreadContextStrc"),
     D2LUA_OV(13502, "Fog.Src.QServer.QServerNT.SendToClientLocal", ::Fog::Src::QServer::QServerNT::d2lua_ov_13502, 6, "npppn", "D2QServerStrc|D2QServerClientConnectionStrc|char"),
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
     D2LUA_OV(13503, "Fog.Src.QServer.QServerNT.PumpIoCompletionQueueForWorker", ::Fog::Src::QServer::QServerNT::d2lua_ov_13503, 6, "npnn", "D2QServerStrc"),
 #endif
     D2LUA_OV(13504, "Fog.Src.QServer.QServerNT.IoWorkerThreadMain", ::Fog::Src::QServer::QServerNT::d2lua_ov_13504, 6, "np", "D2QServerWorkerThreadContextStrc"),

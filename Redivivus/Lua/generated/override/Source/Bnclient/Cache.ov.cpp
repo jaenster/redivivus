@@ -12,7 +12,7 @@ namespace Bnclient::Cache { constexpr auto d2lua_ov_195 = &CACHE_HashString; }
 namespace Bnclient::Cache { constexpr auto d2lua_ov_196 = &CACHE_InitCryptTable; }
 namespace Bnclient::Cache { constexpr auto d2lua_ov_197 = &CACHE_FindHashEntry; }
 namespace Bnclient::Cache { constexpr auto d2lua_ov_198 = &CACHE_RemoveEntry; }
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && (D2_MAC_CARBON || D2_BACKEND_POSIX)
 namespace Bnclient::Cache { constexpr auto d2lua_ov_199 = &CACHE_BuildFilePath; }
 #endif
 namespace Bnclient::Cache { constexpr auto d2lua_ov_200 = &CACHE_DeleteFile; }
@@ -33,7 +33,7 @@ D2LUA_OV_CHECK("Bnclient.Cache.CACHE_HashString", ::Bnclient::Cache::d2lua_ov_19
 D2LUA_OV_CHECK("Bnclient.Cache.CACHE_InitCryptTable", ::Bnclient::Cache::d2lua_ov_196, "v");
 D2LUA_OV_CHECK("Bnclient.Cache.CACHE_FindHashEntry", ::Bnclient::Cache::d2lua_ov_197, "nnp");
 D2LUA_OV_CHECK("Bnclient.Cache.CACHE_RemoveEntry", ::Bnclient::Cache::d2lua_ov_198, "vp");
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && (D2_MAC_CARBON || D2_BACKEND_POSIX)
 D2LUA_OV_CHECK("Bnclient.Cache.CACHE_BuildFilePath", ::Bnclient::Cache::d2lua_ov_199, "vp");
 #endif
 D2LUA_OV_CHECK("Bnclient.Cache.CACHE_DeleteFile", ::Bnclient::Cache::d2lua_ov_200, "v");
@@ -55,7 +55,7 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(196, "Bnclient.Cache.CACHE_InitCryptTable", ::Bnclient::Cache::d2lua_ov_196, 4, "v", ""),
     D2LUA_OV(197, "Bnclient.Cache.CACHE_FindHashEntry", ::Bnclient::Cache::d2lua_ov_197, 4, "nnp", "char"),
     D2LUA_OV(198, "Bnclient.Cache.CACHE_RemoveEntry", ::Bnclient::Cache::d2lua_ov_198, 4, "vp", "char"),
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && (D2_MAC_CARBON || D2_BACKEND_POSIX)
     D2LUA_OV(199, "Bnclient.Cache.CACHE_BuildFilePath", ::Bnclient::Cache::d2lua_ov_199, 4, "vp", "LPSTR"),
 #endif
     D2LUA_OV(200, "Bnclient.Cache.CACHE_DeleteFile", ::Bnclient::Cache::d2lua_ov_200, 4, "v", ""),

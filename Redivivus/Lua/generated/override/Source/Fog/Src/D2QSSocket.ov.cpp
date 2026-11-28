@@ -15,7 +15,7 @@ namespace Fog::Src::D2QSSocket { constexpr auto d2lua_ov_13243 = &CloseSocket; }
 namespace Fog::Src::D2QSSocket { constexpr auto d2lua_ov_13244 = &ReceiveLoopCallback; }
 namespace Fog::Src::D2QSSocket { constexpr auto d2lua_ov_13245 = &QSSOCKET_ThreadEntryPoint; }
 namespace Fog::Src::D2QSSocket { constexpr auto d2lua_ov_13246 = &NET_MCP_CLIENT_CreateConnectionThread; }
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 namespace Fog::Src::D2QSSocket { constexpr auto d2lua_ov_13247 = &QSSOCKET_Initialize; }
 #endif
 namespace Fog::Src::D2QSSocket { constexpr auto d2lua_ov_13248 = &D2QSSOCKET_BlockSocketIfValid; }
@@ -38,7 +38,7 @@ D2LUA_OV_CHECK("Fog.Src.D2QSSocket.CloseSocket", ::Fog::Src::D2QSSocket::d2lua_o
 D2LUA_OV_CHECK("Fog.Src.D2QSSocket.ReceiveLoopCallback", ::Fog::Src::D2QSSocket::d2lua_ov_13244, "np");
 D2LUA_OV_CHECK("Fog.Src.D2QSSocket.QSSOCKET_ThreadEntryPoint", ::Fog::Src::D2QSSocket::d2lua_ov_13245, "np");
 D2LUA_OV_CHECK("Fog.Src.D2QSSocket.NET_MCP_CLIENT_CreateConnectionThread", ::Fog::Src::D2QSSocket::d2lua_ov_13246, "vp");
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 D2LUA_OV_CHECK("Fog.Src.D2QSSocket.QSSOCKET_Initialize", ::Fog::Src::D2QSSocket::d2lua_ov_13247, "pp");
 #endif
 D2LUA_OV_CHECK("Fog.Src.D2QSSocket.D2QSSOCKET_BlockSocketIfValid", ::Fog::Src::D2QSSocket::d2lua_ov_13248, "vp");
@@ -62,7 +62,7 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(13244, "Fog.Src.D2QSSocket.ReceiveLoopCallback", ::Fog::Src::D2QSSocket::d2lua_ov_13244, 6, "np", "D2QSSocketStrc"),
     D2LUA_OV(13245, "Fog.Src.D2QSSocket.QSSOCKET_ThreadEntryPoint", ::Fog::Src::D2QSSocket::d2lua_ov_13245, 6, "np", "D2QSSocketStrc"),
     D2LUA_OV(13246, "Fog.Src.D2QSSocket.NET_MCP_CLIENT_CreateConnectionThread", ::Fog::Src::D2QSSocket::d2lua_ov_13246, 6, "vp", "D2QSSocketStrc"),
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
     D2LUA_OV(13247, "Fog.Src.D2QSSocket.QSSOCKET_Initialize", ::Fog::Src::D2QSSocket::d2lua_ov_13247, 6, "pp", "HANDLE|D2QSSocketStrc"),
 #endif
     D2LUA_OV(13248, "Fog.Src.D2QSSocket.D2QSSOCKET_BlockSocketIfValid", ::Fog::Src::D2QSSocket::d2lua_ov_13248, 6, "vp", "D2QSSocketStrc"),

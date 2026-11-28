@@ -25,7 +25,7 @@ namespace D2Lang::StrTable::strtable { constexpr auto d2lua_ov_11625 = &MISC_Get
 namespace D2Lang::StrTable::strtable { constexpr auto d2lua_ov_11626 = &STRTABLE_GetRegistryLanguage; }
 namespace D2Lang::StrTable::strtable { constexpr auto d2lua_ov_11627 = &TABLES_GetLangAbbreviation; }
 namespace D2Lang::StrTable::strtable { constexpr auto d2lua_ov_11628 = &STRTABLE_FormatNumber; }
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 namespace D2Lang::StrTable::strtable { constexpr auto d2lua_ov_11629 = &STRTABLE_FormatInt64; }
 #endif
 namespace D2Lang::StrTable::strtable { constexpr auto d2lua_ov_11630 = &STRTABLE_FormatUInt64WithAbbrev; }
@@ -54,7 +54,7 @@ D2LUA_OV_CHECK("D2Lang.StrTable.strtable.MISC_GetLanguageCode", ::D2Lang::StrTab
 D2LUA_OV_CHECK("D2Lang.StrTable.strtable.STRTABLE_GetRegistryLanguage", ::D2Lang::StrTable::strtable::d2lua_ov_11626, "n");
 D2LUA_OV_CHECK("D2Lang.StrTable.strtable.TABLES_GetLangAbbreviation", ::D2Lang::StrTable::strtable::d2lua_ov_11627, "vpn");
 D2LUA_OV_CHECK("D2Lang.StrTable.strtable.STRTABLE_FormatNumber", ::D2Lang::StrTable::strtable::d2lua_ov_11628, "vpnn");
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 D2LUA_OV_CHECK("D2Lang.StrTable.strtable.STRTABLE_FormatInt64", ::D2Lang::StrTable::strtable::d2lua_ov_11629, "vpnnn");
 #endif
 D2LUA_OV_CHECK("D2Lang.StrTable.strtable.STRTABLE_FormatUInt64WithAbbrev", ::D2Lang::StrTable::strtable::d2lua_ov_11630, "vpnnn");
@@ -84,7 +84,7 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(11626, "D2Lang.StrTable.strtable.STRTABLE_GetRegistryLanguage", ::D2Lang::StrTable::strtable::d2lua_ov_11626, 6, "n", ""),
     D2LUA_OV(11627, "D2Lang.StrTable.strtable.TABLES_GetLangAbbreviation", ::D2Lang::StrTable::strtable::d2lua_ov_11627, 6, "vpn", "char"),
     D2LUA_OV(11628, "D2Lang.StrTable.strtable.STRTABLE_FormatNumber", ::D2Lang::StrTable::strtable::d2lua_ov_11628, 6, "vpnn", "uint16_t"),
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
     D2LUA_OV(11629, "D2Lang.StrTable.strtable.STRTABLE_FormatInt64", ::D2Lang::StrTable::strtable::d2lua_ov_11629, 6, "vpnnn", "uint16_t"),
 #endif
     D2LUA_OV(11630, "D2Lang.StrTable.strtable.STRTABLE_FormatUInt64WithAbbrev", ::D2Lang::StrTable::strtable::d2lua_ov_11630, 6, "vpnnn", "uint16_t"),

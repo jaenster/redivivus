@@ -5,18 +5,18 @@
 #include "Redivivus/Lua/d2_lua_override_gen.h"
 
 namespace D2Client::Renderer { constexpr auto d2lua_ov_1927 = &RENDERER_D3D_CopyPixelsWithStride; }
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32))
 namespace D2Client::Renderer { constexpr auto d2lua_ov_1928 = &RENDERER_D3D_CloseRegistryKey; }
 #endif
 
 D2LUA_OV_CHECK("D2Client.Renderer.RENDERER_D3D_CopyPixelsWithStride", ::D2Client::Renderer::d2lua_ov_1927, "vppnnnn");
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32))
 D2LUA_OV_CHECK("D2Client.Renderer.RENDERER_D3D_CloseRegistryKey", ::D2Client::Renderer::d2lua_ov_1928, "vp");
 #endif
 
 static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(1927, "D2Client.Renderer.RENDERER_D3D_CopyPixelsWithStride", ::D2Client::Renderer::d2lua_ov_1927, 4, "vppnnnn", "uint8_t|uint8_t"),
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32))
     D2LUA_OV(1928, "D2Client.Renderer.RENDERER_D3D_CloseRegistryKey", ::D2Client::Renderer::d2lua_ov_1928, 4, "vp", "HKEY"),
 #endif
     D2LUA_OV_REFUSED(-1, nullptr, nullptr, 0, nullptr, 0),

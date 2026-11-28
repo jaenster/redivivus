@@ -7,10 +7,10 @@
 namespace D2Sound::Sound { constexpr auto d2lua_ov_12425 = &SOUND_ReleaseEAXInterfaces; }
 namespace D2Sound::Sound { constexpr auto d2lua_ov_12426 = &SOUND_ApplyEAXEnvironment; }
 namespace D2Sound::Sound { constexpr auto d2lua_ov_12427 = &SOUND_ShutdownDirectSound; }
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 namespace D2Sound::Sound { constexpr auto d2lua_ov_12428 = &SOUND_InitDirectSound; }
 #endif
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 namespace D2Sound::Sound { constexpr auto d2lua_ov_12429 = &SOUND_Initialize; }
 #endif
 namespace D2Sound::Sound { constexpr auto d2lua_ov_12430 = &SOUND_InitMusicBuffer; }
@@ -20,10 +20,10 @@ namespace D2Sound::Sound { constexpr auto d2lua_ov_12432 = &SOUND_StopSoundThrea
 D2LUA_OV_CHECK("D2Sound.Sound.SOUND_ReleaseEAXInterfaces", ::D2Sound::Sound::d2lua_ov_12425, "v");
 D2LUA_OV_CHECK("D2Sound.Sound.SOUND_ApplyEAXEnvironment", ::D2Sound::Sound::d2lua_ov_12426, "vp");
 D2LUA_OV_CHECK("D2Sound.Sound.SOUND_ShutdownDirectSound", ::D2Sound::Sound::d2lua_ov_12427, "v");
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 D2LUA_OV_CHECK("D2Sound.Sound.SOUND_InitDirectSound", ::D2Sound::Sound::d2lua_ov_12428, "v");
 #endif
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 D2LUA_OV_CHECK("D2Sound.Sound.SOUND_Initialize", ::D2Sound::Sound::d2lua_ov_12429, "vnn");
 #endif
 D2LUA_OV_CHECK("D2Sound.Sound.SOUND_InitMusicBuffer", ::D2Sound::Sound::d2lua_ov_12430, "vn");
@@ -34,10 +34,10 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(12425, "D2Sound.Sound.SOUND_ReleaseEAXInterfaces", ::D2Sound::Sound::d2lua_ov_12425, 4, "v", ""),
     D2LUA_OV(12426, "D2Sound.Sound.SOUND_ApplyEAXEnvironment", ::D2Sound::Sound::d2lua_ov_12426, 4, "vp", "D2SoundEaxEnvironStrc"),
     D2LUA_OV(12427, "D2Sound.Sound.SOUND_ShutdownDirectSound", ::D2Sound::Sound::d2lua_ov_12427, 4, "v", ""),
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
     D2LUA_OV(12428, "D2Sound.Sound.SOUND_InitDirectSound", ::D2Sound::Sound::d2lua_ov_12428, 4, "v", ""),
 #endif
-#if D2_OS_MAC
+#if D2_MAC_CARBON
     D2LUA_OV(12429, "D2Sound.Sound.SOUND_Initialize", ::D2Sound::Sound::d2lua_ov_12429, 4, "vnn", ""),
 #endif
     D2LUA_OV(12430, "D2Sound.Sound.SOUND_InitMusicBuffer", ::D2Sound::Sound::d2lua_ov_12430, 4, "vn", ""),

@@ -16,17 +16,17 @@ namespace Fog::Src::ErrorManager { constexpr auto d2lua_ov_13273 = &StubHook1_Un
 namespace Fog::Src::ErrorManager { constexpr auto d2lua_ov_13274 = &StubHook1_Unref_00407300; }
 namespace Fog::Src::ErrorManager { constexpr auto d2lua_ov_13275 = &CrashGame; }
 namespace Fog::Src::ErrorManager { constexpr auto d2lua_ov_13276 = &FILETOOLS_WriteOneStringToFile; }
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::Src::ErrorManager { constexpr auto d2lua_ov_13277 = &GetParentProcessId; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::Src::ErrorManager { constexpr auto d2lua_ov_13278 = &GetModuleFileNameForProcess; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::Src::ErrorManager { constexpr auto d2lua_ov_13279 = &WriteCrashReportProcessInfo; }
 #endif
 namespace Fog::Src::ErrorManager { constexpr auto d2lua_ov_13280 = &Unreferenced_00407dd0; }
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::Src::ErrorManager { constexpr auto d2lua_ov_13281 = &InitializeSystemInfo; }
 #endif
 namespace Fog::Src::ErrorManager { constexpr auto d2lua_ov_13282 = &EXIT_AtExit; }
@@ -43,10 +43,10 @@ namespace Fog::Src::ErrorManager { constexpr auto d2lua_ov_13292 = &StubHook2_Un
 namespace Fog::Src::ErrorManager { constexpr auto d2lua_ov_13293 = &StubHook2_Unref_00408080; }
 namespace Fog::Src::ErrorManager { constexpr auto d2lua_ov_13294 = &GetInstructionPointer; }
 namespace Fog::Src::ErrorManager { constexpr auto d2lua_ov_13295 = &FormatDebugOutput; }
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::Src::ErrorManager { constexpr auto d2lua_ov_13300 = &DumpLog; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::Src::ErrorManager { constexpr auto d2lua_ov_13301 = &CRASH_FillupCrashTxt; }
 #endif
 namespace Fog::Src::ErrorManager { constexpr auto d2lua_ov_13302 = &CheckErrorDuringError; }
@@ -56,7 +56,7 @@ namespace Fog::Src::ErrorManager { constexpr auto d2lua_ov_13306 = &ERROR_Unreco
 namespace Fog::Src::ErrorManager { constexpr auto d2lua_ov_13307 = &ERROR_DeadlockedThread; }
 namespace Fog::Src::ErrorManager { constexpr auto d2lua_ov_13308 = &ERROR_UnrecoverableInternalError_Any; }
 namespace Fog::Src::ErrorManager { constexpr auto d2lua_ov_13309 = &ShowUnrecoverableErrorDialog; }
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::Src::ErrorManager { constexpr auto d2lua_ov_13310 = &ERRORMANAGER_InitErrorManager; }
 #endif
 namespace Fog::Src::ErrorManager { constexpr auto d2lua_ov_13311 = &StubHook2_Unref_004095d0; }
@@ -74,17 +74,17 @@ D2LUA_OV_CHECK("Fog.Src.ErrorManager.StubHook1_Unref_004072f0", ::Fog::Src::Erro
 D2LUA_OV_CHECK("Fog.Src.ErrorManager.StubHook1_Unref_00407300", ::Fog::Src::ErrorManager::d2lua_ov_13274, "vnp");
 D2LUA_OV_CHECK("Fog.Src.ErrorManager.CrashGame", ::Fog::Src::ErrorManager::d2lua_ov_13275, "v");
 D2LUA_OV_CHECK("Fog.Src.ErrorManager.FILETOOLS_WriteOneStringToFile", ::Fog::Src::ErrorManager::d2lua_ov_13276, "vpp");
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.Src.ErrorManager.GetParentProcessId", ::Fog::Src::ErrorManager::d2lua_ov_13277, "nn");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.Src.ErrorManager.GetModuleFileNameForProcess", ::Fog::Src::ErrorManager::d2lua_ov_13278, "nnpn");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.Src.ErrorManager.WriteCrashReportProcessInfo", ::Fog::Src::ErrorManager::d2lua_ov_13279, "bp");
 #endif
 D2LUA_OV_CHECK("Fog.Src.ErrorManager.Unreferenced_00407dd0", ::Fog::Src::ErrorManager::d2lua_ov_13280, "n");
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.Src.ErrorManager.InitializeSystemInfo", ::Fog::Src::ErrorManager::d2lua_ov_13281, "v");
 #endif
 D2LUA_OV_CHECK("Fog.Src.ErrorManager.EXIT_AtExit", ::Fog::Src::ErrorManager::d2lua_ov_13282, "v");
@@ -101,10 +101,10 @@ D2LUA_OV_CHECK("Fog.Src.ErrorManager.StubHook2_Unref_00408070", ::Fog::Src::Erro
 D2LUA_OV_CHECK("Fog.Src.ErrorManager.StubHook2_Unref_00408080", ::Fog::Src::ErrorManager::d2lua_ov_13293, "vn");
 D2LUA_OV_CHECK("Fog.Src.ErrorManager.GetInstructionPointer", ::Fog::Src::ErrorManager::d2lua_ov_13294, "p");
 D2LUA_OV_CHECK("Fog.Src.ErrorManager.FormatDebugOutput", ::Fog::Src::ErrorManager::d2lua_ov_13295, "vnpp");
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.Src.ErrorManager.DumpLog", ::Fog::Src::ErrorManager::d2lua_ov_13300, "npp");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.Src.ErrorManager.CRASH_FillupCrashTxt", ::Fog::Src::ErrorManager::d2lua_ov_13301, "vpppnnb");
 #endif
 D2LUA_OV_CHECK("Fog.Src.ErrorManager.CheckErrorDuringError", ::Fog::Src::ErrorManager::d2lua_ov_13302, "npnp");
@@ -114,7 +114,7 @@ D2LUA_OV_CHECK("Fog.Src.ErrorManager.ERROR_UnrecoverableInternalError_Warning", 
 D2LUA_OV_CHECK("Fog.Src.ErrorManager.ERROR_DeadlockedThread", ::Fog::Src::ErrorManager::d2lua_ov_13307, "vnn");
 D2LUA_OV_CHECK("Fog.Src.ErrorManager.ERROR_UnrecoverableInternalError_Any", ::Fog::Src::ErrorManager::d2lua_ov_13308, "vnnnn");
 D2LUA_OV_CHECK("Fog.Src.ErrorManager.ShowUnrecoverableErrorDialog", ::Fog::Src::ErrorManager::d2lua_ov_13309, "vnpnpp");
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.Src.ErrorManager.ERRORMANAGER_InitErrorManager", ::Fog::Src::ErrorManager::d2lua_ov_13310, "vppn");
 #endif
 D2LUA_OV_CHECK("Fog.Src.ErrorManager.StubHook2_Unref_004095d0", ::Fog::Src::ErrorManager::d2lua_ov_13311, "vn");
@@ -133,17 +133,17 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(13274, "Fog.Src.ErrorManager.StubHook1_Unref_00407300", ::Fog::Src::ErrorManager::d2lua_ov_13274, 6, "vnp", "HANDLE"),
     D2LUA_OV(13275, "Fog.Src.ErrorManager.CrashGame", ::Fog::Src::ErrorManager::d2lua_ov_13275, 6, "v", ""),
     D2LUA_OV(13276, "Fog.Src.ErrorManager.FILETOOLS_WriteOneStringToFile", ::Fog::Src::ErrorManager::d2lua_ov_13276, 6, "vpp", "Report|char"),
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13277, "Fog.Src.ErrorManager.GetParentProcessId", ::Fog::Src::ErrorManager::d2lua_ov_13277, 6, "nn", ""),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13278, "Fog.Src.ErrorManager.GetModuleFileNameForProcess", ::Fog::Src::ErrorManager::d2lua_ov_13278, 6, "nnpn", "LPSTR"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13279, "Fog.Src.ErrorManager.WriteCrashReportProcessInfo", ::Fog::Src::ErrorManager::d2lua_ov_13279, 6, "bp", "Report"),
 #endif
     D2LUA_OV(13280, "Fog.Src.ErrorManager.Unreferenced_00407dd0", ::Fog::Src::ErrorManager::d2lua_ov_13280, 6, "n", ""),
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13281, "Fog.Src.ErrorManager.InitializeSystemInfo", ::Fog::Src::ErrorManager::d2lua_ov_13281, 6, "v", ""),
 #endif
     D2LUA_OV(13282, "Fog.Src.ErrorManager.EXIT_AtExit", ::Fog::Src::ErrorManager::d2lua_ov_13282, 6, "v", ""),
@@ -161,15 +161,15 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(13294, "Fog.Src.ErrorManager.GetInstructionPointer", ::Fog::Src::ErrorManager::d2lua_ov_13294, 6, "p", "void"),
     D2LUA_OV(13295, "Fog.Src.ErrorManager.FormatDebugOutput", ::Fog::Src::ErrorManager::d2lua_ov_13295, 6, "vnpp", "char|va_list"),
     D2LUA_OV_REFUSED(13296, "Fog.Src.ErrorManager.OutputDebugStringSimple", nullptr, 6, "vp", 1),
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
     D2LUA_OV_REFUSED(13297, "Fog.Src.ErrorManager.OutputDebugStringIfCapsLock", nullptr, 6, "vp", 1),
 #endif
     D2LUA_OV_REFUSED(13298, "Fog.Src.ErrorManager.FormatDebugOutputVariadic", nullptr, 6, "vnp", 1),
     D2LUA_OV_REFUSED(13299, "Fog.Src.ErrorManager.FormatDebugOutputLogOnly", nullptr, 6, "vp", 1),
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13300, "Fog.Src.ErrorManager.DumpLog", ::Fog::Src::ErrorManager::d2lua_ov_13300, 6, "npp", "D2CrashReportStrc|void"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13301, "Fog.Src.ErrorManager.CRASH_FillupCrashTxt", ::Fog::Src::ErrorManager::d2lua_ov_13301, 6, "vpppnnb", "char|char|char"),
 #endif
     D2LUA_OV(13302, "Fog.Src.ErrorManager.CheckErrorDuringError", ::Fog::Src::ErrorManager::d2lua_ov_13302, 6, "npnp", "char|char"),
@@ -180,7 +180,7 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(13307, "Fog.Src.ErrorManager.ERROR_DeadlockedThread", ::Fog::Src::ErrorManager::d2lua_ov_13307, 6, "vnn", ""),
     D2LUA_OV(13308, "Fog.Src.ErrorManager.ERROR_UnrecoverableInternalError_Any", ::Fog::Src::ErrorManager::d2lua_ov_13308, 6, "vnnnn", ""),
     D2LUA_OV(13309, "Fog.Src.ErrorManager.ShowUnrecoverableErrorDialog", ::Fog::Src::ErrorManager::d2lua_ov_13309, 6, "vnpnpp", "char|char|va_list"),
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13310, "Fog.Src.ErrorManager.ERRORMANAGER_InitErrorManager", ::Fog::Src::ErrorManager::d2lua_ov_13310, 6, "vppn", "char|char"),
 #endif
     D2LUA_OV(13311, "Fog.Src.ErrorManager.StubHook2_Unref_004095d0", ::Fog::Src::ErrorManager::d2lua_ov_13311, 6, "vn", ""),

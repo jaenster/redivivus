@@ -7,11 +7,11 @@
 namespace D2gfx::D2GFX { constexpr auto d2lua_ov_12879 = &RENDERING_ToggleCurrentEngineFlags; }
 namespace D2gfx::D2GFX { constexpr auto d2lua_ov_12880 = &D2GFX_GetPerspectiveCapable_ForPerspectiveItem; }
 namespace D2gfx::D2GFX { constexpr auto d2lua_ov_12881 = &D2GFX_CheckGamma_ForGammaItem; }
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 namespace D2gfx::D2GFX { constexpr auto d2lua_ov_12882 = &thunk_D2GFX_ResetViewport; }
 #endif
 namespace D2gfx::D2GFX { constexpr auto d2lua_ov_12883 = &Unreferenced_004f5040; }
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 namespace D2gfx::D2GFX { constexpr auto d2lua_ov_12884 = &D2GFX_Release; }
 #endif
 namespace D2gfx::D2GFX { constexpr auto d2lua_ov_12885 = &D2GFX_GetRendererMode; }
@@ -45,7 +45,7 @@ namespace D2gfx::D2GFX { constexpr auto d2lua_ov_12909 = &HideOSCursor; }
 namespace D2gfx::D2GFX { constexpr auto d2lua_ov_12910 = &ShowOSCursor; }
 #endif
 namespace D2gfx::D2GFX { constexpr auto d2lua_ov_12911 = &D2GFX_GetWindowSizeByResolutionMode; }
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 namespace D2gfx::D2GFX { constexpr auto d2lua_ov_12912 = &D2GFX_CreateWindow; }
 #endif
 namespace D2gfx::D2GFX { constexpr auto d2lua_ov_12913 = &D2GFX_DestroyWindow; }
@@ -60,7 +60,7 @@ namespace D2gfx::D2GFX { constexpr auto d2lua_ov_12919 = &D2GFX_ActivateWindow; 
 #if D2_OS_MAC
 namespace D2gfx::D2GFX { constexpr auto d2lua_ov_12920 = &D2GFX_ResizeWindow; }
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 namespace D2gfx::D2GFX { constexpr auto d2lua_ov_12921 = &D2GFX_UpdateWindowSize; }
 #endif
 namespace D2gfx::D2GFX { constexpr auto d2lua_ov_12922 = &D2GFX_ClearCaches; }
@@ -70,19 +70,19 @@ namespace D2gfx::D2GFX { constexpr auto d2lua_ov_12925 = &D2GFX_CheckCutScene; }
 namespace D2gfx::D2GFX { constexpr auto d2lua_ov_12926 = &D2GFX_DecodeSmacker; }
 namespace D2gfx::D2GFX { constexpr auto d2lua_ov_12927 = &D2GFX_PlayerSmacker; }
 namespace D2gfx::D2GFX { constexpr auto d2lua_ov_12928 = &D2GFX_CloseSmacker; }
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace D2gfx::D2GFX { constexpr auto d2lua_ov_12929 = &DRAW_HideTaskbarAppBars; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace D2gfx::D2GFX { constexpr auto d2lua_ov_12930 = &D2GFX_ResetViewport; }
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 namespace D2gfx::D2GFX { constexpr auto d2lua_ov_12931 = &D2GFX_EndCutScene; }
 #endif
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 namespace D2gfx::D2GFX { constexpr auto d2lua_ov_12932 = &D2GFX_EndCutSceneReturnSceneState; }
 #endif
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 namespace D2gfx::D2GFX { constexpr auto d2lua_ov_12933 = static_cast<void (__stdcall *)(int32_t)>(&EndCutScene); }
 #endif
 namespace D2gfx::D2GFX { constexpr auto d2lua_ov_12934 = &D2GFX_BeginScene; }
@@ -143,11 +143,11 @@ namespace D2gfx::D2GFX { constexpr auto d2lua_ov_12988 = &StaticInit_gpszWindowT
 D2LUA_OV_CHECK("D2gfx.D2GFX.RENDERING_ToggleCurrentEngineFlags", ::D2gfx::D2GFX::d2lua_ov_12879, "v");
 D2LUA_OV_CHECK("D2gfx.D2GFX.D2GFX_GetPerspectiveCapable_ForPerspectiveItem", ::D2gfx::D2GFX::d2lua_ov_12880, "n");
 D2LUA_OV_CHECK("D2gfx.D2GFX.D2GFX_CheckGamma_ForGammaItem", ::D2gfx::D2GFX::d2lua_ov_12881, "n");
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 D2LUA_OV_CHECK("D2gfx.D2GFX.thunk_D2GFX_ResetViewport", ::D2gfx::D2GFX::d2lua_ov_12882, "v");
 #endif
 D2LUA_OV_CHECK("D2gfx.D2GFX.Unreferenced_004f5040", ::D2gfx::D2GFX::d2lua_ov_12883, "nnnn");
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 D2LUA_OV_CHECK("D2gfx.D2GFX.D2GFX_Release", ::D2gfx::D2GFX::d2lua_ov_12884, "n");
 #endif
 D2LUA_OV_CHECK("D2gfx.D2GFX.D2GFX_GetRendererMode", ::D2gfx::D2GFX::d2lua_ov_12885, "n");
@@ -181,7 +181,7 @@ D2LUA_OV_CHECK("D2gfx.D2GFX.HideOSCursor", ::D2gfx::D2GFX::d2lua_ov_12909, "v");
 D2LUA_OV_CHECK("D2gfx.D2GFX.ShowOSCursor", ::D2gfx::D2GFX::d2lua_ov_12910, "v");
 #endif
 D2LUA_OV_CHECK("D2gfx.D2GFX.D2GFX_GetWindowSizeByResolutionMode", ::D2gfx::D2GFX::d2lua_ov_12911, "vnpp");
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 D2LUA_OV_CHECK("D2gfx.D2GFX.D2GFX_CreateWindow", ::D2gfx::D2GFX::d2lua_ov_12912, "nnn");
 #endif
 D2LUA_OV_CHECK("D2gfx.D2GFX.D2GFX_DestroyWindow", ::D2gfx::D2GFX::d2lua_ov_12913, "n");
@@ -196,7 +196,7 @@ D2LUA_OV_CHECK("D2gfx.D2GFX.D2GFX_ActivateWindow", ::D2gfx::D2GFX::d2lua_ov_1291
 #if D2_OS_MAC
 D2LUA_OV_CHECK("D2gfx.D2GFX.D2GFX_ResizeWindow", ::D2gfx::D2GFX::d2lua_ov_12920, "nnn");
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 D2LUA_OV_CHECK("D2gfx.D2GFX.D2GFX_UpdateWindowSize", ::D2gfx::D2GFX::d2lua_ov_12921, "nn");
 #endif
 D2LUA_OV_CHECK("D2gfx.D2GFX.D2GFX_ClearCaches", ::D2gfx::D2GFX::d2lua_ov_12922, "v");
@@ -206,19 +206,19 @@ D2LUA_OV_CHECK("D2gfx.D2GFX.D2GFX_CheckCutScene", ::D2gfx::D2GFX::d2lua_ov_12925
 D2LUA_OV_CHECK("D2gfx.D2GFX.D2GFX_DecodeSmacker", ::D2gfx::D2GFX::d2lua_ov_12926, "vppn");
 D2LUA_OV_CHECK("D2gfx.D2GFX.D2GFX_PlayerSmacker", ::D2gfx::D2GFX::d2lua_ov_12927, "vp");
 D2LUA_OV_CHECK("D2gfx.D2GFX.D2GFX_CloseSmacker", ::D2gfx::D2GFX::d2lua_ov_12928, "vp");
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("D2gfx.D2GFX.DRAW_HideTaskbarAppBars", ::D2gfx::D2GFX::d2lua_ov_12929, "v");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("D2gfx.D2GFX.D2GFX_ResetViewport", ::D2gfx::D2GFX::d2lua_ov_12930, "v");
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 D2LUA_OV_CHECK("D2gfx.D2GFX.D2GFX_EndCutScene", ::D2gfx::D2GFX::d2lua_ov_12931, "v");
 #endif
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 D2LUA_OV_CHECK("D2gfx.D2GFX.D2GFX_EndCutSceneReturnSceneState", ::D2gfx::D2GFX::d2lua_ov_12932, "n");
 #endif
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 D2LUA_OV_CHECK("D2gfx.D2GFX.EndCutScene", ::D2gfx::D2GFX::d2lua_ov_12933, "vn");
 #endif
 D2LUA_OV_CHECK("D2gfx.D2GFX.D2GFX_BeginScene", ::D2gfx::D2GFX::d2lua_ov_12934, "nnnnn");
@@ -280,11 +280,11 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(12879, "D2gfx.D2GFX.RENDERING_ToggleCurrentEngineFlags", ::D2gfx::D2GFX::d2lua_ov_12879, 4, "v", ""),
     D2LUA_OV(12880, "D2gfx.D2GFX.D2GFX_GetPerspectiveCapable_ForPerspectiveItem", ::D2gfx::D2GFX::d2lua_ov_12880, 4, "n", ""),
     D2LUA_OV(12881, "D2gfx.D2GFX.D2GFX_CheckGamma_ForGammaItem", ::D2gfx::D2GFX::d2lua_ov_12881, 4, "n", ""),
-#if D2_OS_MAC
+#if D2_MAC_CARBON
     D2LUA_OV(12882, "D2gfx.D2GFX.thunk_D2GFX_ResetViewport", ::D2gfx::D2GFX::d2lua_ov_12882, 4, "v", ""),
 #endif
     D2LUA_OV(12883, "D2gfx.D2GFX.Unreferenced_004f5040", ::D2gfx::D2GFX::d2lua_ov_12883, 4, "nnnn", ""),
-#if D2_OS_MAC
+#if D2_MAC_CARBON
     D2LUA_OV(12884, "D2gfx.D2GFX.D2GFX_Release", ::D2gfx::D2GFX::d2lua_ov_12884, 4, "n", ""),
 #endif
     D2LUA_OV(12885, "D2gfx.D2GFX.D2GFX_GetRendererMode", ::D2gfx::D2GFX::d2lua_ov_12885, 4, "n", ""),
@@ -318,7 +318,7 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(12910, "D2gfx.D2GFX.ShowOSCursor", ::D2gfx::D2GFX::d2lua_ov_12910, 4, "v", ""),
 #endif
     D2LUA_OV(12911, "D2gfx.D2GFX.D2GFX_GetWindowSizeByResolutionMode", ::D2gfx::D2GFX::d2lua_ov_12911, 4, "vnpp", "int|int"),
-#if D2_OS_MAC
+#if D2_MAC_CARBON
     D2LUA_OV(12912, "D2gfx.D2GFX.D2GFX_CreateWindow", ::D2gfx::D2GFX::d2lua_ov_12912, 4, "nnn", ""),
 #endif
     D2LUA_OV(12913, "D2gfx.D2GFX.D2GFX_DestroyWindow", ::D2gfx::D2GFX::d2lua_ov_12913, 4, "n", ""),
@@ -333,7 +333,7 @@ static const D2LuaOvEntry s_aEntries[] = {
 #if D2_OS_MAC
     D2LUA_OV(12920, "D2gfx.D2GFX.D2GFX_ResizeWindow", ::D2gfx::D2GFX::d2lua_ov_12920, 4, "nnn", ""),
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
     D2LUA_OV(12921, "D2gfx.D2GFX.D2GFX_UpdateWindowSize", ::D2gfx::D2GFX::d2lua_ov_12921, 4, "nn", ""),
 #endif
     D2LUA_OV(12922, "D2gfx.D2GFX.D2GFX_ClearCaches", ::D2gfx::D2GFX::d2lua_ov_12922, 4, "v", ""),
@@ -343,19 +343,19 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(12926, "D2gfx.D2GFX.D2GFX_DecodeSmacker", ::D2gfx::D2GFX::d2lua_ov_12926, 4, "vppn", "char|D2SmackerContextStrc"),
     D2LUA_OV(12927, "D2gfx.D2GFX.D2GFX_PlayerSmacker", ::D2gfx::D2GFX::d2lua_ov_12927, 4, "vp", "D2SmackerContextStrc"),
     D2LUA_OV(12928, "D2gfx.D2GFX.D2GFX_CloseSmacker", ::D2gfx::D2GFX::d2lua_ov_12928, 4, "vp", "D2SmackerContextStrc"),
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(12929, "D2gfx.D2GFX.DRAW_HideTaskbarAppBars", ::D2gfx::D2GFX::d2lua_ov_12929, 4, "v", ""),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(12930, "D2gfx.D2GFX.D2GFX_ResetViewport", ::D2gfx::D2GFX::d2lua_ov_12930, 4, "v", ""),
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
     D2LUA_OV(12931, "D2gfx.D2GFX.D2GFX_EndCutScene", ::D2gfx::D2GFX::d2lua_ov_12931, 4, "v", ""),
 #endif
-#if D2_OS_MAC
+#if D2_MAC_CARBON
     D2LUA_OV(12932, "D2gfx.D2GFX.D2GFX_EndCutSceneReturnSceneState", ::D2gfx::D2GFX::d2lua_ov_12932, 4, "n", ""),
 #endif
-#if D2_OS_MAC
+#if D2_MAC_CARBON
     D2LUA_OV(12933, "D2gfx.D2GFX.EndCutScene", ::D2gfx::D2GFX::d2lua_ov_12933, 4, "vn", ""),
 #endif
     D2LUA_OV(12934, "D2gfx.D2GFX.D2GFX_BeginScene", ::D2gfx::D2GFX::d2lua_ov_12934, 4, "nnnnn", ""),

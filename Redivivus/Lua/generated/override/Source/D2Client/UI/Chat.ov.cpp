@@ -5,20 +5,20 @@
 #include "Redivivus/Lua/d2_lua_override_gen.h"
 
 namespace D2Client::UI::Chat { constexpr auto d2lua_ov_2451 = &CHAT_InitEmpty_Unref_00477970; }
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32) && D2_MAC_CARBON)
 namespace D2Client::UI::Chat { constexpr auto d2lua_ov_2452 = &CHAT_HandleIMECandidateList; }
 #endif
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32) && D2_MAC_CARBON)
 namespace D2Client::UI::Chat { constexpr auto d2lua_ov_2453 = &INPUT_HandleIMENotify; }
 #endif
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32) && D2_MAC_CARBON)
 namespace D2Client::UI::Chat { constexpr auto d2lua_ov_2454 = &CHAT_CheckIMELanguage; }
 #endif
 namespace D2Client::UI::Chat { constexpr auto d2lua_ov_2455 = &CHAT_ResetIMEState; }
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 namespace D2Client::UI::Chat { constexpr auto d2lua_ov_2456 = &CHAT_InitIME; }
 #endif
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 namespace D2Client::UI::Chat { constexpr auto d2lua_ov_2457 = &CHAT_ShutdownIME; }
 #endif
 namespace D2Client::UI::Chat { constexpr auto d2lua_ov_2458 = &CHAT_CompareCaseInsensitive; }
@@ -26,7 +26,7 @@ namespace D2Client::UI::Chat { constexpr auto d2lua_ov_2459 = &CHAT_DrawCursor; 
 namespace D2Client::UI::Chat { constexpr auto d2lua_ov_2460 = &CHAT_InitEmpty; }
 namespace D2Client::UI::Chat { constexpr auto d2lua_ov_2461 = &CHAT_ShutdownEmpty; }
 namespace D2Client::UI::Chat { constexpr auto d2lua_ov_2462 = &CHAT_DrawIMEComposition; }
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32) && D2_MAC_CARBON)
 namespace D2Client::UI::Chat { constexpr auto d2lua_ov_2463 = &CHAT_DrawIMECandidates; }
 #endif
 namespace D2Client::UI::Chat { constexpr auto d2lua_ov_2464 = &DRAW_UI_ChatInput; }
@@ -53,20 +53,20 @@ namespace D2Client::UI::Chat { constexpr auto d2lua_ov_2484 = &StaticInit_gwcIME
 namespace D2Client::UI::Chat { constexpr auto d2lua_ov_2485 = &StaticInit_gwcImeCompositionBuffer; }
 
 D2LUA_OV_CHECK("D2Client.UI.Chat.CHAT_InitEmpty_Unref_00477970", ::D2Client::UI::Chat::d2lua_ov_2451, "v");
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32) && D2_MAC_CARBON)
 D2LUA_OV_CHECK("D2Client.UI.Chat.CHAT_HandleIMECandidateList", ::D2Client::UI::Chat::d2lua_ov_2452, "vp");
 #endif
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32) && D2_MAC_CARBON)
 D2LUA_OV_CHECK("D2Client.UI.Chat.INPUT_HandleIMENotify", ::D2Client::UI::Chat::d2lua_ov_2453, "vp");
 #endif
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32) && D2_MAC_CARBON)
 D2LUA_OV_CHECK("D2Client.UI.Chat.CHAT_CheckIMELanguage", ::D2Client::UI::Chat::d2lua_ov_2454, "n");
 #endif
 D2LUA_OV_CHECK("D2Client.UI.Chat.CHAT_ResetIMEState", ::D2Client::UI::Chat::d2lua_ov_2455, "vp");
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 D2LUA_OV_CHECK("D2Client.UI.Chat.CHAT_InitIME", ::D2Client::UI::Chat::d2lua_ov_2456, "v");
 #endif
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 D2LUA_OV_CHECK("D2Client.UI.Chat.CHAT_ShutdownIME", ::D2Client::UI::Chat::d2lua_ov_2457, "v");
 #endif
 D2LUA_OV_CHECK("D2Client.UI.Chat.CHAT_CompareCaseInsensitive", ::D2Client::UI::Chat::d2lua_ov_2458, "npp");
@@ -74,7 +74,7 @@ D2LUA_OV_CHECK("D2Client.UI.Chat.CHAT_DrawCursor", ::D2Client::UI::Chat::d2lua_o
 D2LUA_OV_CHECK("D2Client.UI.Chat.CHAT_InitEmpty", ::D2Client::UI::Chat::d2lua_ov_2460, "v");
 D2LUA_OV_CHECK("D2Client.UI.Chat.CHAT_ShutdownEmpty", ::D2Client::UI::Chat::d2lua_ov_2461, "v");
 D2LUA_OV_CHECK("D2Client.UI.Chat.CHAT_DrawIMEComposition", ::D2Client::UI::Chat::d2lua_ov_2462, "vnn");
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32) && D2_MAC_CARBON)
 D2LUA_OV_CHECK("D2Client.UI.Chat.CHAT_DrawIMECandidates", ::D2Client::UI::Chat::d2lua_ov_2463, "v");
 #endif
 D2LUA_OV_CHECK("D2Client.UI.Chat.DRAW_UI_ChatInput", ::D2Client::UI::Chat::d2lua_ov_2464, "v");
@@ -102,20 +102,20 @@ D2LUA_OV_CHECK("D2Client.UI.Chat.StaticInit_gwcImeCompositionBuffer", ::D2Client
 
 static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(2451, "D2Client.UI.Chat.CHAT_InitEmpty_Unref_00477970", ::D2Client::UI::Chat::d2lua_ov_2451, 4, "v", ""),
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32) && D2_MAC_CARBON)
     D2LUA_OV(2452, "D2Client.UI.Chat.CHAT_HandleIMECandidateList", ::D2Client::UI::Chat::d2lua_ov_2452, 4, "vp", "HIMC"),
 #endif
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32) && D2_MAC_CARBON)
     D2LUA_OV(2453, "D2Client.UI.Chat.INPUT_HandleIMENotify", ::D2Client::UI::Chat::d2lua_ov_2453, 4, "vp", "D2UIMouseMsgStrc"),
 #endif
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32) && D2_MAC_CARBON)
     D2LUA_OV(2454, "D2Client.UI.Chat.CHAT_CheckIMELanguage", ::D2Client::UI::Chat::d2lua_ov_2454, 4, "n", ""),
 #endif
     D2LUA_OV(2455, "D2Client.UI.Chat.CHAT_ResetIMEState", ::D2Client::UI::Chat::d2lua_ov_2455, 4, "vp", "D2UIMouseMsgStrc"),
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
     D2LUA_OV(2456, "D2Client.UI.Chat.CHAT_InitIME", ::D2Client::UI::Chat::d2lua_ov_2456, 4, "v", ""),
 #endif
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
     D2LUA_OV(2457, "D2Client.UI.Chat.CHAT_ShutdownIME", ::D2Client::UI::Chat::d2lua_ov_2457, 4, "v", ""),
 #endif
     D2LUA_OV(2458, "D2Client.UI.Chat.CHAT_CompareCaseInsensitive", ::D2Client::UI::Chat::d2lua_ov_2458, 4, "npp", "char|char"),
@@ -123,7 +123,7 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(2460, "D2Client.UI.Chat.CHAT_InitEmpty", ::D2Client::UI::Chat::d2lua_ov_2460, 4, "v", ""),
     D2LUA_OV(2461, "D2Client.UI.Chat.CHAT_ShutdownEmpty", ::D2Client::UI::Chat::d2lua_ov_2461, 4, "v", ""),
     D2LUA_OV(2462, "D2Client.UI.Chat.CHAT_DrawIMEComposition", ::D2Client::UI::Chat::d2lua_ov_2462, 4, "vnn", ""),
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32) && D2_MAC_CARBON)
     D2LUA_OV(2463, "D2Client.UI.Chat.CHAT_DrawIMECandidates", ::D2Client::UI::Chat::d2lua_ov_2463, 4, "v", ""),
 #endif
     D2LUA_OV(2464, "D2Client.UI.Chat.DRAW_UI_ChatInput", ::D2Client::UI::Chat::d2lua_ov_2464, 4, "v", ""),

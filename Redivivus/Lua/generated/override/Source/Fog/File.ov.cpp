@@ -5,151 +5,151 @@
 #include "Redivivus/Lua/d2_lua_override_gen.h"
 
 namespace Fog::File { constexpr auto d2lua_ov_13090 = &CONTAINER_InitializeBuffer; }
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::File { constexpr auto d2lua_ov_13091 = &CRASH_DumpRegisters; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::File { constexpr auto d2lua_ov_13092 = &CRASH_EnumerateThreads; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::File { constexpr auto d2lua_ov_13093 = &CRASH_GetExceptionName; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::File { constexpr auto d2lua_ov_13094 = &ERRORMANAGER_UnhandledExceptionFilter; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::File { constexpr auto d2lua_ov_13095 = &CRASH_SetExceptionHandler; }
 #endif
 namespace Fog::File { constexpr auto d2lua_ov_13096 = &FILETOOLS_ExtractDirectory; }
 namespace Fog::File { constexpr auto d2lua_ov_13097 = &FILETOOLS_ExtractFilename; }
 namespace Fog::File { constexpr auto d2lua_ov_13098 = &STRING_AppendBlizzardErrorSubfolderToPath; }
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::File { constexpr auto d2lua_ov_13099 = &Unreferenced_00404100; }
 #endif
 namespace Fog::File { constexpr auto d2lua_ov_13100 = &STRING_CopyStringBounded; }
 namespace Fog::File { constexpr auto d2lua_ov_13101 = &STRING_AppendStringToString; }
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::File { constexpr auto d2lua_ov_13103 = &FILETOOLS_StartApplicationWithCommandLine_UTF8; }
 #endif
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32)
 namespace Fog::File { constexpr auto d2lua_ov_13104 = &FILETOOLS_CheckIfFileExists_UTF8; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::File { constexpr auto d2lua_ov_13105 = &FILETOOLS_OpenFile_WriteMode_UTF8; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::File { constexpr auto d2lua_ov_13106 = &FILETOOLS_CopyFile_UTF8; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::File { constexpr auto d2lua_ov_13107 = &FILETOOLS_GetTempPath_UTF8; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::File { constexpr auto d2lua_ov_13108 = &FILETOOLS_CreateDirectoryW; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::File { constexpr auto d2lua_ov_13109 = &FILETOOLS_CreateFolder_UTF8; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::File { constexpr auto d2lua_ov_13110 = &DEBUG_CaptureThreadContext; }
 #endif
 
 D2LUA_OV_CHECK("Fog.File.CONTAINER_InitializeBuffer", ::Fog::File::d2lua_ov_13090, "vpnnp");
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.File.CRASH_DumpRegisters", ::Fog::File::d2lua_ov_13091, "vnpp");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.File.CRASH_EnumerateThreads", ::Fog::File::d2lua_ov_13092, "vppn");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.File.CRASH_GetExceptionName", ::Fog::File::d2lua_ov_13093, "vpn");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.File.ERRORMANAGER_UnhandledExceptionFilter", ::Fog::File::d2lua_ov_13094, "np");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.File.CRASH_SetExceptionHandler", ::Fog::File::d2lua_ov_13095, "vppn");
 #endif
 D2LUA_OV_CHECK("Fog.File.FILETOOLS_ExtractDirectory", ::Fog::File::d2lua_ov_13096, "bpnp");
 D2LUA_OV_CHECK("Fog.File.FILETOOLS_ExtractFilename", ::Fog::File::d2lua_ov_13097, "bppn");
 D2LUA_OV_CHECK("Fog.File.STRING_AppendBlizzardErrorSubfolderToPath", ::Fog::File::d2lua_ov_13098, "bnp");
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.File.Unreferenced_00404100", ::Fog::File::d2lua_ov_13099, "ppn");
 #endif
 D2LUA_OV_CHECK("Fog.File.STRING_CopyStringBounded", ::Fog::File::d2lua_ov_13100, "nppn");
 D2LUA_OV_CHECK("Fog.File.STRING_AppendStringToString", ::Fog::File::d2lua_ov_13101, "npnp");
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.File.FILETOOLS_StartApplicationWithCommandLine_UTF8", ::Fog::File::d2lua_ov_13103, "bpp");
 #endif
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32)
 D2LUA_OV_CHECK("Fog.File.FILETOOLS_CheckIfFileExists_UTF8", ::Fog::File::d2lua_ov_13104, "bp");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.File.FILETOOLS_OpenFile_WriteMode_UTF8", ::Fog::File::d2lua_ov_13105, "pp");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.File.FILETOOLS_CopyFile_UTF8", ::Fog::File::d2lua_ov_13106, "vpp");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.File.FILETOOLS_GetTempPath_UTF8", ::Fog::File::d2lua_ov_13107, "bp");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.File.FILETOOLS_CreateDirectoryW", ::Fog::File::d2lua_ov_13108, "bp");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.File.FILETOOLS_CreateFolder_UTF8", ::Fog::File::d2lua_ov_13109, "bp");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.File.DEBUG_CaptureThreadContext", ::Fog::File::d2lua_ov_13110, "bnp");
 #endif
 
 static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(13090, "Fog.File.CONTAINER_InitializeBuffer", ::Fog::File::d2lua_ov_13090, 6, "vpnnp", "void|CONTAINER_TypeInitialValue"),
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13091, "Fog.File.CRASH_DumpRegisters", ::Fog::File::d2lua_ov_13091, 6, "vnpp", "fnCrashOutputLine|Report"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13092, "Fog.File.CRASH_EnumerateThreads", ::Fog::File::d2lua_ov_13092, 6, "vppn", "fnCrashOutputLine|Report"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13093, "Fog.File.CRASH_GetExceptionName", ::Fog::File::d2lua_ov_13093, 6, "vpn", "char"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13094, "Fog.File.ERRORMANAGER_UnhandledExceptionFilter", ::Fog::File::d2lua_ov_13094, 6, "np", "_EXCEPTION_POINTERS"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13095, "Fog.File.CRASH_SetExceptionHandler", ::Fog::File::d2lua_ov_13095, 6, "vppn", "pfnFogExceptionFilter|void"),
 #endif
     D2LUA_OV(13096, "Fog.File.FILETOOLS_ExtractDirectory", ::Fog::File::d2lua_ov_13096, 6, "bpnp", "char|char"),
     D2LUA_OV(13097, "Fog.File.FILETOOLS_ExtractFilename", ::Fog::File::d2lua_ov_13097, 6, "bppn", "char|char"),
     D2LUA_OV(13098, "Fog.File.STRING_AppendBlizzardErrorSubfolderToPath", ::Fog::File::d2lua_ov_13098, 6, "bnp", "char"),
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13099, "Fog.File.Unreferenced_00404100", ::Fog::File::d2lua_ov_13099, 6, "ppn", "LPWSTR|LPWSTR"),
 #endif
     D2LUA_OV(13100, "Fog.File.STRING_CopyStringBounded", ::Fog::File::d2lua_ov_13100, 6, "nppn", "char|char"),
     D2LUA_OV(13101, "Fog.File.STRING_AppendStringToString", ::Fog::File::d2lua_ov_13101, 6, "npnp", "char|char"),
     D2LUA_OV_REFUSED(13102, "Fog.File.STRING_FormatVarArgs", nullptr, 6, "npnp", 1),
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13103, "Fog.File.FILETOOLS_StartApplicationWithCommandLine_UTF8", ::Fog::File::d2lua_ov_13103, 6, "bpp", "LPCSTR|LPCSTR"),
 #endif
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32)
     D2LUA_OV(13104, "Fog.File.FILETOOLS_CheckIfFileExists_UTF8", ::Fog::File::d2lua_ov_13104, 6, "bp", "LPCSTR"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13105, "Fog.File.FILETOOLS_OpenFile_WriteMode_UTF8", ::Fog::File::d2lua_ov_13105, 6, "pp", "FILE|LPCSTR"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13106, "Fog.File.FILETOOLS_CopyFile_UTF8", ::Fog::File::d2lua_ov_13106, 6, "vpp", "LPCSTR|LPCSTR"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13107, "Fog.File.FILETOOLS_GetTempPath_UTF8", ::Fog::File::d2lua_ov_13107, 6, "bp", "LPSTR"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13108, "Fog.File.FILETOOLS_CreateDirectoryW", ::Fog::File::d2lua_ov_13108, 6, "bp", "LPWSTR"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13109, "Fog.File.FILETOOLS_CreateFolder_UTF8", ::Fog::File::d2lua_ov_13109, 6, "bp", "LPCSTR"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13110, "Fog.File.DEBUG_CaptureThreadContext", ::Fog::File::d2lua_ov_13110, 6, "bnp", "LPCONTEXT"),
 #endif
     D2LUA_OV_REFUSED(-1, nullptr, nullptr, 0, nullptr, 0),

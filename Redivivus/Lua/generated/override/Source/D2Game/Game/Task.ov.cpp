@@ -24,11 +24,11 @@ namespace D2Game::GAME::Task { constexpr auto d2lua_ov_7862 = &TASK_Dispatch; }
 namespace D2Game::GAME::Task { constexpr auto d2lua_ov_7863 = &TASK_ReturnTrue; }
 namespace D2Game::GAME::Task { constexpr auto d2lua_ov_7864 = &TASK_Nop; }
 namespace D2Game::GAME::Task { constexpr auto d2lua_ov_7865 = &StaticInit_CriticalSection_0088caa8; }
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 namespace D2Game::GAME::Task { constexpr auto d2lua_ov_7866 = &StaticInit_aTaskQueueCriticalSections; }
 #endif
 namespace D2Game::GAME::Task { constexpr auto d2lua_ov_7867 = &StaticFini_CriticalSection_0088caa8; }
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 namespace D2Game::GAME::Task { constexpr auto d2lua_ov_7868 = &StaticFini_aTaskQueueCriticalSections; }
 #endif
 
@@ -52,11 +52,11 @@ D2LUA_OV_CHECK("D2Game.GAME.Task.TASK_Dispatch", ::D2Game::GAME::Task::d2lua_ov_
 D2LUA_OV_CHECK("D2Game.GAME.Task.TASK_ReturnTrue", ::D2Game::GAME::Task::d2lua_ov_7863, "nw");
 D2LUA_OV_CHECK("D2Game.GAME.Task.TASK_Nop", ::D2Game::GAME::Task::d2lua_ov_7864, "vw");
 D2LUA_OV_CHECK("D2Game.GAME.Task.StaticInit_CriticalSection_0088caa8", ::D2Game::GAME::Task::d2lua_ov_7865, "v");
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 D2LUA_OV_CHECK("D2Game.GAME.Task.StaticInit_aTaskQueueCriticalSections", ::D2Game::GAME::Task::d2lua_ov_7866, "v");
 #endif
 D2LUA_OV_CHECK("D2Game.GAME.Task.StaticFini_CriticalSection_0088caa8", ::D2Game::GAME::Task::d2lua_ov_7867, "v");
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 D2LUA_OV_CHECK("D2Game.GAME.Task.StaticFini_aTaskQueueCriticalSections", ::D2Game::GAME::Task::d2lua_ov_7868, "v");
 #endif
 
@@ -81,11 +81,11 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(7863, "D2Game.GAME.Task.TASK_ReturnTrue", ::D2Game::GAME::Task::d2lua_ov_7863, 2, "nw", "D2UnitStrc"),
     D2LUA_OV(7864, "D2Game.GAME.Task.TASK_Nop", ::D2Game::GAME::Task::d2lua_ov_7864, 2, "vw", "D2UnitStrc"),
     D2LUA_OV(7865, "D2Game.GAME.Task.StaticInit_CriticalSection_0088caa8", ::D2Game::GAME::Task::d2lua_ov_7865, 2, "v", ""),
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
     D2LUA_OV(7866, "D2Game.GAME.Task.StaticInit_aTaskQueueCriticalSections", ::D2Game::GAME::Task::d2lua_ov_7866, 2, "v", ""),
 #endif
     D2LUA_OV(7867, "D2Game.GAME.Task.StaticFini_CriticalSection_0088caa8", ::D2Game::GAME::Task::d2lua_ov_7867, 2, "v", ""),
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
     D2LUA_OV(7868, "D2Game.GAME.Task.StaticFini_aTaskQueueCriticalSections", ::D2Game::GAME::Task::d2lua_ov_7868, 2, "v", ""),
 #endif
     D2LUA_OV_REFUSED(-1, nullptr, nullptr, 0, nullptr, 0),

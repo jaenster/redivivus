@@ -33,7 +33,7 @@ namespace D2Win::Src::D2WinMain { constexpr auto d2lua_ov_12743 = &INPUT_FormKey
 namespace D2Win::Src::D2WinMain { constexpr auto d2lua_ov_12744 = &INPUT_FormKeyDownHandler; }
 namespace D2Win::Src::D2WinMain { constexpr auto d2lua_ov_12745 = &INPUT_CtrlKeyDown; }
 namespace D2Win::Src::D2WinMain { constexpr auto d2lua_ov_12746 = &INPUT_CtrlKeyUp; }
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 namespace D2Win::Src::D2WinMain { constexpr auto d2lua_ov_12747 = &D2WIN_HandleSystemCommand; }
 #endif
 namespace D2Win::Src::D2WinMain { constexpr auto d2lua_ov_12748 = &D2WIN_HandleActivation; }
@@ -90,7 +90,7 @@ D2LUA_OV_CHECK("D2Win.Src.D2WinMain.INPUT_FormKeyHandler", ::D2Win::Src::D2WinMa
 D2LUA_OV_CHECK("D2Win.Src.D2WinMain.INPUT_FormKeyDownHandler", ::D2Win::Src::D2WinMain::d2lua_ov_12744, "vp");
 D2LUA_OV_CHECK("D2Win.Src.D2WinMain.INPUT_CtrlKeyDown", ::D2Win::Src::D2WinMain::d2lua_ov_12745, "vp");
 D2LUA_OV_CHECK("D2Win.Src.D2WinMain.INPUT_CtrlKeyUp", ::D2Win::Src::D2WinMain::d2lua_ov_12746, "vp");
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 D2LUA_OV_CHECK("D2Win.Src.D2WinMain.D2WIN_HandleSystemCommand", ::D2Win::Src::D2WinMain::d2lua_ov_12747, "vp");
 #endif
 D2LUA_OV_CHECK("D2Win.Src.D2WinMain.D2WIN_HandleActivation", ::D2Win::Src::D2WinMain::d2lua_ov_12748, "vp");
@@ -148,7 +148,7 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(12744, "D2Win.Src.D2WinMain.INPUT_FormKeyDownHandler", ::D2Win::Src::D2WinMain::d2lua_ov_12744, 4, "vp", "D2UIMouseMsgStrc"),
     D2LUA_OV(12745, "D2Win.Src.D2WinMain.INPUT_CtrlKeyDown", ::D2Win::Src::D2WinMain::d2lua_ov_12745, 4, "vp", "D2UIMouseMsgStrc"),
     D2LUA_OV(12746, "D2Win.Src.D2WinMain.INPUT_CtrlKeyUp", ::D2Win::Src::D2WinMain::d2lua_ov_12746, 4, "vp", "D2UIMouseMsgStrc"),
-#if D2_OS_MAC
+#if D2_MAC_CARBON
     D2LUA_OV(12747, "D2Win.Src.D2WinMain.D2WIN_HandleSystemCommand", ::D2Win::Src::D2WinMain::d2lua_ov_12747, 4, "vp", "D2UIMouseMsgStrc"),
 #endif
     D2LUA_OV(12748, "D2Win.Src.D2WinMain.D2WIN_HandleActivation", ::D2Win::Src::D2WinMain::d2lua_ov_12748, 4, "vp", "D2UIMouseMsgStrc"),

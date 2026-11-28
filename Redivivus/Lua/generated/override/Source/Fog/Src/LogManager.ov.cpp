@@ -6,16 +6,16 @@
 
 namespace Fog::Src::LogManager { constexpr auto d2lua_ov_13330 = &DetectCpuVendor; }
 namespace Fog::Src::LogManager { constexpr auto d2lua_ov_13331 = &DecodeCpuModelName; }
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::Src::LogManager { constexpr auto d2lua_ov_13332 = &GetTimestamp; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::Src::LogManager { constexpr auto d2lua_ov_13333 = &BenchmarkCpuSpeed; }
 #endif
 namespace Fog::Src::LogManager { constexpr auto d2lua_ov_13334 = &GetCpuVersionInfo; }
 namespace Fog::Src::LogManager { constexpr auto d2lua_ov_13335 = &GetCpuBrandId; }
 namespace Fog::Src::LogManager { constexpr auto d2lua_ov_13336 = &DispatchCpuidCall; }
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::Src::LogManager { constexpr auto d2lua_ov_13337 = &LogCpuInfo; }
 #endif
 namespace Fog::Src::LogManager { constexpr auto d2lua_ov_13338 = &GetLoggerState_Stub; }
@@ -28,7 +28,7 @@ namespace Fog::Src::LogManager { constexpr auto d2lua_ov_13344 = &OpenLogFileWit
 namespace Fog::Src::LogManager { constexpr auto d2lua_ov_13345 = &WriteLogFileHeader; }
 namespace Fog::Src::LogManager { constexpr auto d2lua_ov_13346 = &WriteRealmStartupHeader; }
 namespace Fog::Src::LogManager { constexpr auto d2lua_ov_13347 = &FindOrOpenLogFileSlot; }
-#if !D2_OS_MAC
+#if !(D2_MAC_CARBON || D2_BACKEND_POSIX)
 namespace Fog::Src::LogManager { constexpr auto d2lua_ov_13348 = &FILETOOLS_GetUserMyDocumentsDiabloIIGameLogsFolder; }
 #endif
 namespace Fog::Src::LogManager { constexpr auto d2lua_ov_13349 = &WriteHexDumpLogEntry; }
@@ -74,13 +74,13 @@ namespace Fog::Src::LogManager { constexpr auto d2lua_ov_13391 = &Atomic64Store;
 #if !D2_OS_MAC
 namespace Fog::Src::LogManager { constexpr auto d2lua_ov_13392 = &Atomic64Load; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::Src::LogManager { constexpr auto d2lua_ov_13393 = &GetFreeDiskSpaceForSavePath; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::Src::LogManager { constexpr auto d2lua_ov_13394 = &GetGlobalMemoryStatus; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::Src::LogManager { constexpr auto d2lua_ov_13395 = &IsWindowsNT; }
 #endif
 #if D2_OS_MAC
@@ -106,16 +106,16 @@ namespace Fog::Src::LogManager { constexpr auto d2lua_ov_13413 = &StaticFini_gLo
 
 D2LUA_OV_CHECK("Fog.Src.LogManager.DetectCpuVendor", ::Fog::Src::LogManager::d2lua_ov_13330, "n");
 D2LUA_OV_CHECK("Fog.Src.LogManager.DecodeCpuModelName", ::Fog::Src::LogManager::d2lua_ov_13331, "vnnpnnn");
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.Src.LogManager.GetTimestamp", ::Fog::Src::LogManager::d2lua_ov_13332, "n");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.Src.LogManager.BenchmarkCpuSpeed", ::Fog::Src::LogManager::d2lua_ov_13333, "n");
 #endif
 D2LUA_OV_CHECK("Fog.Src.LogManager.GetCpuVersionInfo", ::Fog::Src::LogManager::d2lua_ov_13334, "n");
 D2LUA_OV_CHECK("Fog.Src.LogManager.GetCpuBrandId", ::Fog::Src::LogManager::d2lua_ov_13335, "n");
 D2LUA_OV_CHECK("Fog.Src.LogManager.DispatchCpuidCall", ::Fog::Src::LogManager::d2lua_ov_13336, "nn");
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.Src.LogManager.LogCpuInfo", ::Fog::Src::LogManager::d2lua_ov_13337, "v");
 #endif
 D2LUA_OV_CHECK("Fog.Src.LogManager.GetLoggerState_Stub", ::Fog::Src::LogManager::d2lua_ov_13338, "n");
@@ -128,7 +128,7 @@ D2LUA_OV_CHECK("Fog.Src.LogManager.OpenLogFileWithTimestamp", ::Fog::Src::LogMan
 D2LUA_OV_CHECK("Fog.Src.LogManager.WriteLogFileHeader", ::Fog::Src::LogManager::d2lua_ov_13345, "vpp");
 D2LUA_OV_CHECK("Fog.Src.LogManager.WriteRealmStartupHeader", ::Fog::Src::LogManager::d2lua_ov_13346, "vp");
 D2LUA_OV_CHECK("Fog.Src.LogManager.FindOrOpenLogFileSlot", ::Fog::Src::LogManager::d2lua_ov_13347, "ppp");
-#if !D2_OS_MAC
+#if !(D2_MAC_CARBON || D2_BACKEND_POSIX)
 D2LUA_OV_CHECK("Fog.Src.LogManager.FILETOOLS_GetUserMyDocumentsDiabloIIGameLogsFolder", ::Fog::Src::LogManager::d2lua_ov_13348, "vpn");
 #endif
 D2LUA_OV_CHECK("Fog.Src.LogManager.WriteHexDumpLogEntry", ::Fog::Src::LogManager::d2lua_ov_13349, "vp");
@@ -174,13 +174,13 @@ D2LUA_OV_CHECK("Fog.Src.LogManager.Atomic64Store", ::Fog::Src::LogManager::d2lua
 #if !D2_OS_MAC
 D2LUA_OV_CHECK("Fog.Src.LogManager.Atomic64Load", ::Fog::Src::LogManager::d2lua_ov_13392, "vpp");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.Src.LogManager.GetFreeDiskSpaceForSavePath", ::Fog::Src::LogManager::d2lua_ov_13393, "n");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.Src.LogManager.GetGlobalMemoryStatus", ::Fog::Src::LogManager::d2lua_ov_13394, "vp");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.Src.LogManager.IsWindowsNT", ::Fog::Src::LogManager::d2lua_ov_13395, "n");
 #endif
 #if D2_OS_MAC
@@ -207,16 +207,16 @@ D2LUA_OV_CHECK("Fog.Src.LogManager.StaticFini_gLogMessageQueueHead", ::Fog::Src:
 static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(13330, "Fog.Src.LogManager.DetectCpuVendor", ::Fog::Src::LogManager::d2lua_ov_13330, 6, "n", ""),
     D2LUA_OV(13331, "Fog.Src.LogManager.DecodeCpuModelName", ::Fog::Src::LogManager::d2lua_ov_13331, 6, "vnnpnnn", "char"),
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13332, "Fog.Src.LogManager.GetTimestamp", ::Fog::Src::LogManager::d2lua_ov_13332, 6, "n", ""),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13333, "Fog.Src.LogManager.BenchmarkCpuSpeed", ::Fog::Src::LogManager::d2lua_ov_13333, 6, "n", ""),
 #endif
     D2LUA_OV(13334, "Fog.Src.LogManager.GetCpuVersionInfo", ::Fog::Src::LogManager::d2lua_ov_13334, 6, "n", ""),
     D2LUA_OV(13335, "Fog.Src.LogManager.GetCpuBrandId", ::Fog::Src::LogManager::d2lua_ov_13335, 6, "n", ""),
     D2LUA_OV(13336, "Fog.Src.LogManager.DispatchCpuidCall", ::Fog::Src::LogManager::d2lua_ov_13336, 6, "nn", ""),
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13337, "Fog.Src.LogManager.LogCpuInfo", ::Fog::Src::LogManager::d2lua_ov_13337, 6, "v", ""),
 #endif
     D2LUA_OV(13338, "Fog.Src.LogManager.GetLoggerState_Stub", ::Fog::Src::LogManager::d2lua_ov_13338, 6, "n", ""),
@@ -229,7 +229,7 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(13345, "Fog.Src.LogManager.WriteLogFileHeader", ::Fog::Src::LogManager::d2lua_ov_13345, 6, "vpp", "FILE|SYSTEMTIME"),
     D2LUA_OV(13346, "Fog.Src.LogManager.WriteRealmStartupHeader", ::Fog::Src::LogManager::d2lua_ov_13346, 6, "vp", "FILE"),
     D2LUA_OV(13347, "Fog.Src.LogManager.FindOrOpenLogFileSlot", ::Fog::Src::LogManager::d2lua_ov_13347, 6, "ppp", "FILE|uint8_t|uint32_t"),
-#if !D2_OS_MAC
+#if !(D2_MAC_CARBON || D2_BACKEND_POSIX)
     D2LUA_OV(13348, "Fog.Src.LogManager.FILETOOLS_GetUserMyDocumentsDiabloIIGameLogsFolder", ::Fog::Src::LogManager::d2lua_ov_13348, 6, "vpn", "char"),
 #endif
     D2LUA_OV(13349, "Fog.Src.LogManager.WriteHexDumpLogEntry", ::Fog::Src::LogManager::d2lua_ov_13349, 6, "vp", "D2LogRecordStrc"),
@@ -280,13 +280,13 @@ static const D2LuaOvEntry s_aEntries[] = {
 #if !D2_OS_MAC
     D2LUA_OV(13392, "Fog.Src.LogManager.Atomic64Load", ::Fog::Src::LogManager::d2lua_ov_13392, 6, "vpp", "int64_t|int64_t"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13393, "Fog.Src.LogManager.GetFreeDiskSpaceForSavePath", ::Fog::Src::LogManager::d2lua_ov_13393, 6, "n", ""),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13394, "Fog.Src.LogManager.GetGlobalMemoryStatus", ::Fog::Src::LogManager::d2lua_ov_13394, 6, "vp", "LPMEMORYSTATUS"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13395, "Fog.Src.LogManager.IsWindowsNT", ::Fog::Src::LogManager::d2lua_ov_13395, 6, "n", ""),
 #endif
 #if D2_OS_MAC

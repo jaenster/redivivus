@@ -5,13 +5,13 @@
 #include "Redivivus/Lua/d2_lua_override_gen.h"
 
 namespace Storm::Source::SSystem { constexpr auto d2lua_ov_14464 = &SSYSTEM_Shutdown; }
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 namespace Storm::Source::SSystem { constexpr auto d2lua_ov_14465 = &SSYSTEM_Initialize; }
 #endif
 namespace Storm::Source::SSystem { constexpr auto d2lua_ov_14466 = &StormGetInstance; }
 namespace Storm::Source::SSystem { constexpr auto d2lua_ov_14467 = &SSYSTEM_GetSystemOption; }
 namespace Storm::Source::SSystem { constexpr auto d2lua_ov_14468 = &SSYSTEM_SetSystemOption; }
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 namespace Storm::Source::SSystem { constexpr auto d2lua_ov_14469 = &SSYSTEM_InitializeAndReturn; }
 #endif
 namespace Storm::Source::SSystem { constexpr auto d2lua_ov_14470 = &ILT_strpbrk; }
@@ -19,18 +19,18 @@ namespace Storm::Source::SSystem { constexpr auto d2lua_ov_14471 = &__break; }
 namespace Storm::Source::SSystem { constexpr auto d2lua_ov_14472 = &SSYSTEM_SetShutdownFlag; }
 namespace Storm::Source::SSystem { constexpr auto d2lua_ov_14473 = &Unreferenced_0041c380; }
 namespace Storm::Source::SSystem { constexpr auto d2lua_ov_14474 = &TSFixedArray_Ui_Constructor; }
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 namespace Storm::Source::SSystem { constexpr auto d2lua_ov_14475 = &StaticInit_6ca890; }
 #endif
 
 D2LUA_OV_CHECK("Storm.Source.SSystem.SSYSTEM_Shutdown", ::Storm::Source::SSystem::d2lua_ov_14464, "nn");
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 D2LUA_OV_CHECK("Storm.Source.SSystem.SSYSTEM_Initialize", ::Storm::Source::SSystem::d2lua_ov_14465, "v");
 #endif
 D2LUA_OV_CHECK("Storm.Source.SSystem.StormGetInstance", ::Storm::Source::SSystem::d2lua_ov_14466, "p");
 D2LUA_OV_CHECK("Storm.Source.SSystem.SSYSTEM_GetSystemOption", ::Storm::Source::SSystem::d2lua_ov_14467, "nnpp");
 D2LUA_OV_CHECK("Storm.Source.SSystem.SSYSTEM_SetSystemOption", ::Storm::Source::SSystem::d2lua_ov_14468, "vnpn");
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 D2LUA_OV_CHECK("Storm.Source.SSystem.SSYSTEM_InitializeAndReturn", ::Storm::Source::SSystem::d2lua_ov_14469, "nn");
 #endif
 D2LUA_OV_CHECK("Storm.Source.SSystem.ILT_strpbrk", ::Storm::Source::SSystem::d2lua_ov_14470, "ppp");
@@ -38,19 +38,19 @@ D2LUA_OV_CHECK("Storm.Source.SSystem.__break", ::Storm::Source::SSystem::d2lua_o
 D2LUA_OV_CHECK("Storm.Source.SSystem.SSYSTEM_SetShutdownFlag", ::Storm::Source::SSystem::d2lua_ov_14472, "vn");
 D2LUA_OV_CHECK("Storm.Source.SSystem.Unreferenced_0041c380", ::Storm::Source::SSystem::d2lua_ov_14473, "np");
 D2LUA_OV_CHECK("Storm.Source.SSystem.TSFixedArray_Ui_Constructor", ::Storm::Source::SSystem::d2lua_ov_14474, "pp");
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 D2LUA_OV_CHECK("Storm.Source.SSystem.StaticInit_6ca890", ::Storm::Source::SSystem::d2lua_ov_14475, "v");
 #endif
 
 static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(14464, "Storm.Source.SSystem.SSYSTEM_Shutdown", ::Storm::Source::SSystem::d2lua_ov_14464, 6, "nn", ""),
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
     D2LUA_OV(14465, "Storm.Source.SSystem.SSYSTEM_Initialize", ::Storm::Source::SSystem::d2lua_ov_14465, 6, "v", ""),
 #endif
     D2LUA_OV(14466, "Storm.Source.SSystem.StormGetInstance", ::Storm::Source::SSystem::d2lua_ov_14466, 6, "p", "HMODULE"),
     D2LUA_OV(14467, "Storm.Source.SSystem.SSYSTEM_GetSystemOption", ::Storm::Source::SSystem::d2lua_ov_14467, 6, "nnpp", "uint32_t|uint32_t"),
     D2LUA_OV(14468, "Storm.Source.SSystem.SSYSTEM_SetSystemOption", ::Storm::Source::SSystem::d2lua_ov_14468, 6, "vnpn", "uint32_t"),
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
     D2LUA_OV(14469, "Storm.Source.SSystem.SSYSTEM_InitializeAndReturn", ::Storm::Source::SSystem::d2lua_ov_14469, 6, "nn", ""),
 #endif
     D2LUA_OV(14470, "Storm.Source.SSystem.ILT_strpbrk", ::Storm::Source::SSystem::d2lua_ov_14470, 6, "ppp", "char|char|char"),
@@ -58,7 +58,7 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(14472, "Storm.Source.SSystem.SSYSTEM_SetShutdownFlag", ::Storm::Source::SSystem::d2lua_ov_14472, 6, "vn", ""),
     D2LUA_OV(14473, "Storm.Source.SSystem.Unreferenced_0041c380", ::Storm::Source::SSystem::d2lua_ov_14473, 6, "np", "StormLinkStrc"),
     D2LUA_OV(14474, "Storm.Source.SSystem.TSFixedArray_Ui_Constructor", ::Storm::Source::SSystem::d2lua_ov_14474, 6, "pp", "void|void"),
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
     D2LUA_OV(14475, "Storm.Source.SSystem.StaticInit_6ca890", ::Storm::Source::SSystem::d2lua_ov_14475, 6, "v", ""),
 #endif
     D2LUA_OV_REFUSED(-1, nullptr, nullptr, 0, nullptr, 0),

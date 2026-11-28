@@ -4,10 +4,10 @@
 #if D2_FEATURE_MODS
 #include "Redivivus/Lua/d2_lua_override_gen.h"
 
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32)
 namespace D2Hell { constexpr auto d2lua_ov_11545 = &D2FILE_CreateProcess; }
 #endif
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32)
 namespace D2Hell { constexpr auto d2lua_ov_11546 = &D2FILE_VerifyFileSignature; }
 #endif
 namespace D2Hell { constexpr auto d2lua_ov_11547 = &CheckIfFileExists; }
@@ -18,27 +18,27 @@ namespace D2Hell { constexpr auto d2lua_ov_11551 = &D2FILE_ReadFile; }
 namespace D2Hell { constexpr auto d2lua_ov_11552 = &D2FILE_ReadFile_HaltTail; }
 namespace D2Hell { constexpr auto d2lua_ov_11553 = &D2FILE_OpenAndReadFile; }
 namespace D2Hell { constexpr auto d2lua_ov_11554 = &D2FILE_AllocAndLoadD2File; }
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 namespace D2Hell { constexpr auto d2lua_ov_11555 = &FindMPQOnCd; }
 #endif
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 namespace D2Hell { constexpr auto d2lua_ov_11556 = &FindMpqFromDiskOrCd; }
 #endif
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 namespace D2Hell { constexpr auto d2lua_ov_11557 = &ARCHIVE_LoadMPQ; }
 #endif
 namespace D2Hell { constexpr auto d2lua_ov_11558 = &ARCHIVE_FreeMpqFile; }
 namespace D2Hell { constexpr auto d2lua_ov_11559 = &RegisterExitFunction; }
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 namespace D2Hell { constexpr auto d2lua_ov_11560 = &FAULT_TerminateCurrentProcess; }
 #endif
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 namespace D2Hell { constexpr auto d2lua_ov_11561 = &FAULT_ShowErrorAndTerminate; }
 #endif
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 namespace D2Hell { constexpr auto d2lua_ov_11562 = &FAULT_ShowErrorMessageBox; }
 #endif
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 namespace D2Hell { constexpr auto d2lua_ov_11563 = &FAULT_FormatAndShowError; }
 #endif
 namespace D2Hell { constexpr auto d2lua_ov_11564 = &LINKEDLIST_GetNodePointer; }
@@ -64,10 +64,10 @@ namespace D2Hell { constexpr auto d2lua_ov_11586 = &D2MEM_VirtualFree; }
 namespace D2Hell { constexpr auto d2lua_ov_11587 = &D2MEM_CopyRows; }
 namespace D2Hell { constexpr auto d2lua_ov_11588 = &D2MEM_CompareBytes; }
 namespace D2Hell { constexpr auto d2lua_ov_11589 = &D2MEM_FindLowestSetBit; }
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32)
 namespace D2Hell { constexpr auto d2lua_ov_11590 = &D2FILE_VerifySignatureWinTrust; }
 #endif
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32)
 namespace D2Hell { constexpr auto d2lua_ov_11591 = &D2FILE_GetSignerOrganization; }
 #endif
 namespace D2Hell { constexpr auto d2lua_ov_11592 = &CRC32_Calculate; }
@@ -77,10 +77,10 @@ namespace D2Hell { constexpr auto d2lua_ov_11595 = &FOG_FindCharInString; }
 namespace D2Hell { constexpr auto d2lua_ov_11596 = &StaticInit_gFaultHandlerList; }
 namespace D2Hell { constexpr auto d2lua_ov_11597 = &StaticFini_gFaultHandlerList; }
 
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("D2Hell.D2FILE_CreateProcess", ::D2Hell::d2lua_ov_11545, "bp");
 #endif
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("D2Hell.D2FILE_VerifyFileSignature", ::D2Hell::d2lua_ov_11546, "np");
 #endif
 D2LUA_OV_CHECK("D2Hell.CheckIfFileExists", ::D2Hell::d2lua_ov_11547, "npppn");
@@ -91,27 +91,27 @@ D2LUA_OV_CHECK("D2Hell.D2FILE_ReadFile", ::D2Hell::d2lua_ov_11551, "vpppn");
 D2LUA_OV_CHECK("D2Hell.D2FILE_ReadFile_HaltTail", ::D2Hell::d2lua_ov_11552, "vn");
 D2LUA_OV_CHECK("D2Hell.D2FILE_OpenAndReadFile", ::D2Hell::d2lua_ov_11553, "npppn");
 D2LUA_OV_CHECK("D2Hell.D2FILE_AllocAndLoadD2File", ::D2Hell::d2lua_ov_11554, "pppppn");
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 D2LUA_OV_CHECK("D2Hell.FindMPQOnCd", ::D2Hell::d2lua_ov_11555, "npppp");
 #endif
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 D2LUA_OV_CHECK("D2Hell.FindMpqFromDiskOrCd", ::D2Hell::d2lua_ov_11556, "ppppp");
 #endif
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 D2LUA_OV_CHECK("D2Hell.ARCHIVE_LoadMPQ", ::D2Hell::d2lua_ov_11557, "ppnpn");
 #endif
 D2LUA_OV_CHECK("D2Hell.ARCHIVE_FreeMpqFile", ::D2Hell::d2lua_ov_11558, "vp");
 D2LUA_OV_CHECK("D2Hell.RegisterExitFunction", ::D2Hell::d2lua_ov_11559, "pp");
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 D2LUA_OV_CHECK("D2Hell.FAULT_TerminateCurrentProcess", ::D2Hell::d2lua_ov_11560, "v");
 #endif
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 D2LUA_OV_CHECK("D2Hell.FAULT_ShowErrorAndTerminate", ::D2Hell::d2lua_ov_11561, "vp");
 #endif
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 D2LUA_OV_CHECK("D2Hell.FAULT_ShowErrorMessageBox", ::D2Hell::d2lua_ov_11562, "np");
 #endif
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 D2LUA_OV_CHECK("D2Hell.FAULT_FormatAndShowError", ::D2Hell::d2lua_ov_11563, "vpnp");
 #endif
 D2LUA_OV_CHECK("D2Hell.LINKEDLIST_GetNodePointer", ::D2Hell::d2lua_ov_11564, "ppn");
@@ -137,10 +137,10 @@ D2LUA_OV_CHECK("D2Hell.D2MEM_VirtualFree", ::D2Hell::d2lua_ov_11586, "vp");
 D2LUA_OV_CHECK("D2Hell.D2MEM_CopyRows", ::D2Hell::d2lua_ov_11587, "vppnnnn");
 D2LUA_OV_CHECK("D2Hell.D2MEM_CompareBytes", ::D2Hell::d2lua_ov_11588, "nppn");
 D2LUA_OV_CHECK("D2Hell.D2MEM_FindLowestSetBit", ::D2Hell::d2lua_ov_11589, "nn");
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("D2Hell.D2FILE_VerifySignatureWinTrust", ::D2Hell::d2lua_ov_11590, "np");
 #endif
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("D2Hell.D2FILE_GetSignerOrganization", ::D2Hell::d2lua_ov_11591, "bppn");
 #endif
 D2LUA_OV_CHECK("D2Hell.CRC32_Calculate", ::D2Hell::d2lua_ov_11592, "npn");
@@ -151,10 +151,10 @@ D2LUA_OV_CHECK("D2Hell.StaticInit_gFaultHandlerList", ::D2Hell::d2lua_ov_11596, 
 D2LUA_OV_CHECK("D2Hell.StaticFini_gFaultHandlerList", ::D2Hell::d2lua_ov_11597, "v");
 
 static const D2LuaOvEntry s_aEntries[] = {
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(11545, "D2Hell.D2FILE_CreateProcess", ::D2Hell::d2lua_ov_11545, 6, "bp", "LPCSTR"),
 #endif
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(11546, "D2Hell.D2FILE_VerifyFileSignature", ::D2Hell::d2lua_ov_11546, 6, "np", "LPCSTR"),
 #endif
     D2LUA_OV(11547, "D2Hell.CheckIfFileExists", ::D2Hell::d2lua_ov_11547, 6, "npppn", "D2PoolManagerStrc|char|D2MPQFileStrc"),
@@ -165,27 +165,27 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(11552, "D2Hell.D2FILE_ReadFile_HaltTail", ::D2Hell::d2lua_ov_11552, 6, "vn", ""),
     D2LUA_OV(11553, "D2Hell.D2FILE_OpenAndReadFile", ::D2Hell::d2lua_ov_11553, 6, "npppn", "D2PoolManagerStrc|char|void"),
     D2LUA_OV(11554, "D2Hell.D2FILE_AllocAndLoadD2File", ::D2Hell::d2lua_ov_11554, 6, "pppppn", "void|D2PoolManagerStrc|char|uint32_t|char"),
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
     D2LUA_OV(11555, "D2Hell.FindMPQOnCd", ::D2Hell::d2lua_ov_11555, 6, "npppp", "char|int|D2ArchiveStrc|LPSTR"),
 #endif
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
     D2LUA_OV(11556, "D2Hell.FindMpqFromDiskOrCd", ::D2Hell::d2lua_ov_11556, 6, "ppppp", "D2ArchiveStrc|char|int|D2ArchiveStrc|LPSTR"),
 #endif
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
     D2LUA_OV(11557, "D2Hell.ARCHIVE_LoadMPQ", ::D2Hell::d2lua_ov_11557, 6, "ppnpn", "D2FogArchiveStrc|char|fpRequiredUserAction"),
 #endif
     D2LUA_OV(11558, "D2Hell.ARCHIVE_FreeMpqFile", ::D2Hell::d2lua_ov_11558, 6, "vp", "D2FogArchiveStrc"),
     D2LUA_OV(11559, "D2Hell.RegisterExitFunction", ::D2Hell::d2lua_ov_11559, 6, "pp", "pfnFaultError|pfnFaultError"),
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
     D2LUA_OV(11560, "D2Hell.FAULT_TerminateCurrentProcess", ::D2Hell::d2lua_ov_11560, 6, "v", ""),
 #endif
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
     D2LUA_OV(11561, "D2Hell.FAULT_ShowErrorAndTerminate", ::D2Hell::d2lua_ov_11561, 6, "vp", "LPCSTR"),
 #endif
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
     D2LUA_OV(11562, "D2Hell.FAULT_ShowErrorMessageBox", ::D2Hell::d2lua_ov_11562, 6, "np", "LPCSTR"),
 #endif
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
     D2LUA_OV(11563, "D2Hell.FAULT_FormatAndShowError", ::D2Hell::d2lua_ov_11563, 6, "vpnp", "LPCSTR|LPCSTR"),
 #endif
     D2LUA_OV(11564, "D2Hell.LINKEDLIST_GetNodePointer", ::D2Hell::d2lua_ov_11564, 6, "ppn", "StormLinkStrc|StormLinkStrc"),
@@ -206,10 +206,10 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(11579, "D2Hell.AtexitCleanup_FreeLinkedListAndCritSec", ::D2Hell::d2lua_ov_11579, 6, "v", ""),
     D2LUA_OV(11580, "D2Hell.FAULT_RegisterErrorHandler", ::D2Hell::d2lua_ov_11580, 6, "vp", "pfnStormErrorHandler"),
     D2LUA_OV(11581, "D2Hell.FAULT_LookupErrorString", ::D2Hell::d2lua_ov_11581, 6, "vnpn", "char"),
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
     D2LUA_OV_REFUSED(11582, "D2Hell.FAULT_ShowFormattedError", nullptr, 6, "vn", 1),
 #endif
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
     D2LUA_OV_REFUSED(11583, "D2Hell.FAULT_ShowFormattedErrorAndTerminate", nullptr, 6, "vn", 1),
 #endif
     D2LUA_OV_REFUSED(11584, "D2Hell.FAULT_ShowFormattedErrorWithArgs", nullptr, 6, "vn", 1),
@@ -218,10 +218,10 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(11587, "D2Hell.D2MEM_CopyRows", ::D2Hell::d2lua_ov_11587, 6, "vppnnnn", "char|uint8_t"),
     D2LUA_OV(11588, "D2Hell.D2MEM_CompareBytes", ::D2Hell::d2lua_ov_11588, 6, "nppn", "uint8_t|uint8_t"),
     D2LUA_OV(11589, "D2Hell.D2MEM_FindLowestSetBit", ::D2Hell::d2lua_ov_11589, 6, "nn", ""),
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(11590, "D2Hell.D2FILE_VerifySignatureWinTrust", ::D2Hell::d2lua_ov_11590, 6, "np", "LPCSTR"),
 #endif
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(11591, "D2Hell.D2FILE_GetSignerOrganization", ::D2Hell::d2lua_ov_11591, 6, "bppn", "LPCSTR|LPSTR"),
 #endif
     D2LUA_OV(11592, "D2Hell.CRC32_Calculate", ::D2Hell::d2lua_ov_11592, 6, "npn", "uint8_t"),

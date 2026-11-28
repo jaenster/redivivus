@@ -5,135 +5,135 @@
 #include "Redivivus/Lua/d2_lua_override_gen.h"
 
 namespace Fog::Engine::Application { constexpr auto d2lua_ov_13071 = &DEBUG_GetPEImageType; }
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::Engine::Application { constexpr auto d2lua_ov_13072 = &DEBUG_ParsePEDebugDirectory; }
 #endif
 namespace Fog::Engine::Application { constexpr auto d2lua_ov_13073 = &DEBUG_IsValidDebugDirectorySize; }
 namespace Fog::Engine::Application { constexpr auto d2lua_ov_13074 = &DEBUG_ParseDebugInfoFromMemory; }
 namespace Fog::Engine::Application { constexpr auto d2lua_ov_13075 = &DEBUG_ParseDebugDataDirectory; }
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::Engine::Application { constexpr auto d2lua_ov_13076 = &DEBUG_ParseModuleHeaders; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::Engine::Application { constexpr auto d2lua_ov_13077 = &DEBUG_AddModuleToList; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::Engine::Application { constexpr auto d2lua_ov_13078 = &DEBUG_EnumerateModulesViaPsapi; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::Engine::Application { constexpr auto d2lua_ov_13079 = &DEBUG_EnumerateModulesViaToolhelp32; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::Engine::Application { constexpr auto d2lua_ov_13080 = &DEBUG_EnumerateModulesViaPEB; }
 #endif
 namespace Fog::Engine::Application { constexpr auto d2lua_ov_13081 = &DEBUG_EnumerateModules; }
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::Engine::Application { constexpr auto d2lua_ov_13082 = &DEBUG_ExtractDebugDirectory64; }
 #endif
 namespace Fog::Engine::Application { constexpr auto d2lua_ov_13083 = &DEBUG_ExtractDebugDirectory32; }
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::Engine::Application { constexpr auto d2lua_ov_13084 = &DEBUG_ParseNB01DebugInfo; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::Engine::Application { constexpr auto d2lua_ov_13085 = &DEBUG_ParseRSDSDebugInfo; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::Engine::Application { constexpr auto d2lua_ov_13086 = &DEBUG_UnwindStackFrames; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::Engine::Application { constexpr auto d2lua_ov_13087 = &DEBUG_FormatAddressInfo; }
 #endif
 namespace Fog::Engine::Application { constexpr auto d2lua_ov_13088 = &Unreferenced_004067c0; }
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace Fog::Engine::Application { constexpr auto d2lua_ov_13089 = &PATH_GetKnownFolderPath; }
 #endif
 
 D2LUA_OV_CHECK("Fog.Engine.Application.DEBUG_GetPEImageType", ::Fog::Engine::Application::d2lua_ov_13071, "np");
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.Engine.Application.DEBUG_ParsePEDebugDirectory", ::Fog::Engine::Application::d2lua_ov_13072, "bppp");
 #endif
 D2LUA_OV_CHECK("Fog.Engine.Application.DEBUG_IsValidDebugDirectorySize", ::Fog::Engine::Application::d2lua_ov_13073, "bn");
 D2LUA_OV_CHECK("Fog.Engine.Application.DEBUG_ParseDebugInfoFromMemory", ::Fog::Engine::Application::d2lua_ov_13074, "nnpp");
 D2LUA_OV_CHECK("Fog.Engine.Application.DEBUG_ParseDebugDataDirectory", ::Fog::Engine::Application::d2lua_ov_13075, "nnppp");
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.Engine.Application.DEBUG_ParseModuleHeaders", ::Fog::Engine::Application::d2lua_ov_13076, "npp");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.Engine.Application.DEBUG_AddModuleToList", ::Fog::Engine::Application::d2lua_ov_13077, "bppnp");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.Engine.Application.DEBUG_EnumerateModulesViaPsapi", ::Fog::Engine::Application::d2lua_ov_13078, "bp");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.Engine.Application.DEBUG_EnumerateModulesViaToolhelp32", ::Fog::Engine::Application::d2lua_ov_13079, "bp");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.Engine.Application.DEBUG_EnumerateModulesViaPEB", ::Fog::Engine::Application::d2lua_ov_13080, "bp");
 #endif
 D2LUA_OV_CHECK("Fog.Engine.Application.DEBUG_EnumerateModules", ::Fog::Engine::Application::d2lua_ov_13081, "bp");
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.Engine.Application.DEBUG_ExtractDebugDirectory64", ::Fog::Engine::Application::d2lua_ov_13082, "vnppp");
 #endif
 D2LUA_OV_CHECK("Fog.Engine.Application.DEBUG_ExtractDebugDirectory32", ::Fog::Engine::Application::d2lua_ov_13083, "vnppp");
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.Engine.Application.DEBUG_ParseNB01DebugInfo", ::Fog::Engine::Application::d2lua_ov_13084, "npp");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.Engine.Application.DEBUG_ParseRSDSDebugInfo", ::Fog::Engine::Application::d2lua_ov_13085, "npp");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.Engine.Application.DEBUG_UnwindStackFrames", ::Fog::Engine::Application::d2lua_ov_13086, "npnpn");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.Engine.Application.DEBUG_FormatAddressInfo", ::Fog::Engine::Application::d2lua_ov_13087, "bnp");
 #endif
 D2LUA_OV_CHECK("Fog.Engine.Application.Unreferenced_004067c0", ::Fog::Engine::Application::d2lua_ov_13088, "n");
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Fog.Engine.Application.PATH_GetKnownFolderPath", ::Fog::Engine::Application::d2lua_ov_13089, "bpn");
 #endif
 
 static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(13071, "Fog.Engine.Application.DEBUG_GetPEImageType", ::Fog::Engine::Application::d2lua_ov_13071, 6, "np", "short"),
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13072, "Fog.Engine.Application.DEBUG_ParsePEDebugDirectory", ::Fog::Engine::Application::d2lua_ov_13072, 6, "bppp", "uint32_t|int|short"),
 #endif
     D2LUA_OV(13073, "Fog.Engine.Application.DEBUG_IsValidDebugDirectorySize", ::Fog::Engine::Application::d2lua_ov_13073, 6, "bn", ""),
     D2LUA_OV(13074, "Fog.Engine.Application.DEBUG_ParseDebugInfoFromMemory", ::Fog::Engine::Application::d2lua_ov_13074, 6, "nnpp", "uint32_t|D2FogDebugModuleEntryStrc"),
     D2LUA_OV(13075, "Fog.Engine.Application.DEBUG_ParseDebugDataDirectory", ::Fog::Engine::Application::d2lua_ov_13075, 6, "nnppp", "uint8_t|uint8_t|D2FogDebugModuleEntryStrc"),
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13076, "Fog.Engine.Application.DEBUG_ParseModuleHeaders", ::Fog::Engine::Application::d2lua_ov_13076, 6, "npp", "D2FogDebugModuleEntryStrc|short"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13077, "Fog.Engine.Application.DEBUG_AddModuleToList", ::Fog::Engine::Application::d2lua_ov_13077, 6, "bppnp", "int|LPCWSTR|short"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13078, "Fog.Engine.Application.DEBUG_EnumerateModulesViaPsapi", ::Fog::Engine::Application::d2lua_ov_13078, 6, "bp", "int"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13079, "Fog.Engine.Application.DEBUG_EnumerateModulesViaToolhelp32", ::Fog::Engine::Application::d2lua_ov_13079, 6, "bp", "int"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13080, "Fog.Engine.Application.DEBUG_EnumerateModulesViaPEB", ::Fog::Engine::Application::d2lua_ov_13080, 6, "bp", "int"),
 #endif
     D2LUA_OV(13081, "Fog.Engine.Application.DEBUG_EnumerateModules", ::Fog::Engine::Application::d2lua_ov_13081, 6, "bp", "int"),
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13082, "Fog.Engine.Application.DEBUG_ExtractDebugDirectory64", ::Fog::Engine::Application::d2lua_ov_13082, 6, "vnppp", "uint32_t|uint32_t|uint8_t"),
 #endif
     D2LUA_OV(13083, "Fog.Engine.Application.DEBUG_ExtractDebugDirectory32", ::Fog::Engine::Application::d2lua_ov_13083, 6, "vnppp", "uint32_t|uint32_t|IMAGE_OPTIONAL_HEADER32"),
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13084, "Fog.Engine.Application.DEBUG_ParseNB01DebugInfo", ::Fog::Engine::Application::d2lua_ov_13084, 6, "npp", "CV_INFO_PDB20|D2FogDebugModuleEntryStrc"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13085, "Fog.Engine.Application.DEBUG_ParseRSDSDebugInfo", ::Fog::Engine::Application::d2lua_ov_13085, 6, "npp", "CV_INFO_PDB70|D2FogDebugModuleEntryStrc"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13086, "Fog.Engine.Application.DEBUG_UnwindStackFrames", ::Fog::Engine::Application::d2lua_ov_13086, 6, "npnpn", "CONTEXT|D2CrashFrameStrc"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13087, "Fog.Engine.Application.DEBUG_FormatAddressInfo", ::Fog::Engine::Application::d2lua_ov_13087, 6, "bnp", "D2FogAddressInfoStrc"),
 #endif
     D2LUA_OV(13088, "Fog.Engine.Application.Unreferenced_004067c0", ::Fog::Engine::Application::d2lua_ov_13088, 6, "n", ""),
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(13089, "Fog.Engine.Application.PATH_GetKnownFolderPath", ::Fog::Engine::Application::d2lua_ov_13089, 6, "bpn", "LPSTR"),
 #endif
     D2LUA_OV_REFUSED(-1, nullptr, nullptr, 0, nullptr, 0),

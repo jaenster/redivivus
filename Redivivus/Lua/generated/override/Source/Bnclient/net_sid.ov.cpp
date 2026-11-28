@@ -65,7 +65,7 @@ namespace Bnclient::_net_sid { constexpr auto d2lua_ov_348 = &NET_SID_CLIENT_Inc
 namespace Bnclient::_net_sid { constexpr auto d2lua_ov_349 = &NET_SID_GetTime32_00521b40; }
 namespace Bnclient::_net_sid { constexpr auto d2lua_ov_350 = &NET_SID_CLIENT_InitializeSRP; }
 namespace Bnclient::_net_sid { constexpr auto d2lua_ov_351 = &NET_SID_CLIENT_FreeSRP; }
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32)
 namespace Bnclient::_net_sid { constexpr auto d2lua_ov_352 = &Unreferenced_00521ba0; }
 #endif
 namespace Bnclient::_net_sid { constexpr auto d2lua_ov_353 = &NET_SID_CLIENT_Send_0x50_AuthInfo; }
@@ -155,7 +155,7 @@ D2LUA_OV_CHECK("Bnclient._net_sid.NET_SID_CLIENT_IncomingPacketHandler", ::Bncli
 D2LUA_OV_CHECK("Bnclient._net_sid.NET_SID_GetTime32_00521b40", ::Bnclient::_net_sid::d2lua_ov_349, "np");
 D2LUA_OV_CHECK("Bnclient._net_sid.NET_SID_CLIENT_InitializeSRP", ::Bnclient::_net_sid::d2lua_ov_350, "v");
 D2LUA_OV_CHECK("Bnclient._net_sid.NET_SID_CLIENT_FreeSRP", ::Bnclient::_net_sid::d2lua_ov_351, "v");
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("Bnclient._net_sid.Unreferenced_00521ba0", ::Bnclient::_net_sid::d2lua_ov_352, "n");
 #endif
 D2LUA_OV_CHECK("Bnclient._net_sid.NET_SID_CLIENT_Send_0x50_AuthInfo", ::Bnclient::_net_sid::d2lua_ov_353, "n");
@@ -246,7 +246,7 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(349, "Bnclient._net_sid.NET_SID_GetTime32_00521b40", ::Bnclient::_net_sid::d2lua_ov_349, 4, "np", "__time32_t"),
     D2LUA_OV(350, "Bnclient._net_sid.NET_SID_CLIENT_InitializeSRP", ::Bnclient::_net_sid::d2lua_ov_350, 4, "v", ""),
     D2LUA_OV(351, "Bnclient._net_sid.NET_SID_CLIENT_FreeSRP", ::Bnclient::_net_sid::d2lua_ov_351, 4, "v", ""),
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(352, "Bnclient._net_sid.Unreferenced_00521ba0", ::Bnclient::_net_sid::d2lua_ov_352, 4, "n", ""),
 #endif
     D2LUA_OV(353, "Bnclient._net_sid.NET_SID_CLIENT_Send_0x50_AuthInfo", ::Bnclient::_net_sid::d2lua_ov_353, 4, "n", ""),

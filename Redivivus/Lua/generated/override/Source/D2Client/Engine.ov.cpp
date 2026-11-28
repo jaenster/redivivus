@@ -27,7 +27,7 @@ namespace D2Client::Engine { constexpr auto d2lua_ov_997 = &INPUT_CharScreenDual
 namespace D2Client::Engine { constexpr auto d2lua_ov_998 = &INPUT_CharScreenDualButtonCancel; }
 namespace D2Client::Engine { constexpr auto d2lua_ov_999 = &LOADER_FreePopupImages; }
 namespace D2Client::Engine { constexpr auto d2lua_ov_1000 = &LOADER_SetConnectionLostFlag; }
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 namespace D2Client::Engine { constexpr auto d2lua_ov_1001 = &fpGameLoopFunction; }
 #endif
 namespace D2Client::Engine { constexpr auto d2lua_ov_1002 = &fpRequiredUserAction; }
@@ -66,7 +66,7 @@ D2LUA_OV_CHECK("D2Client.Engine.INPUT_CharScreenDualButtonForce", ::D2Client::En
 D2LUA_OV_CHECK("D2Client.Engine.INPUT_CharScreenDualButtonCancel", ::D2Client::Engine::d2lua_ov_998, "vp");
 D2LUA_OV_CHECK("D2Client.Engine.LOADER_FreePopupImages", ::D2Client::Engine::d2lua_ov_999, "v");
 D2LUA_OV_CHECK("D2Client.Engine.LOADER_SetConnectionLostFlag", ::D2Client::Engine::d2lua_ov_1000, "vn");
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 D2LUA_OV_CHECK("D2Client.Engine.fpGameLoopFunction", ::D2Client::Engine::d2lua_ov_1001, "nn");
 #endif
 D2LUA_OV_CHECK("D2Client.Engine.fpRequiredUserAction", ::D2Client::Engine::d2lua_ov_1002, "n");
@@ -106,7 +106,7 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(998, "D2Client.Engine.INPUT_CharScreenDualButtonCancel", ::D2Client::Engine::d2lua_ov_998, 4, "vp", "D2UIMouseMsgStrc"),
     D2LUA_OV(999, "D2Client.Engine.LOADER_FreePopupImages", ::D2Client::Engine::d2lua_ov_999, 4, "v", ""),
     D2LUA_OV(1000, "D2Client.Engine.LOADER_SetConnectionLostFlag", ::D2Client::Engine::d2lua_ov_1000, 4, "vn", ""),
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
     D2LUA_OV(1001, "D2Client.Engine.fpGameLoopFunction", ::D2Client::Engine::d2lua_ov_1001, 4, "nn", ""),
 #endif
     D2LUA_OV(1002, "D2Client.Engine.fpRequiredUserAction", ::D2Client::Engine::d2lua_ov_1002, 4, "n", ""),

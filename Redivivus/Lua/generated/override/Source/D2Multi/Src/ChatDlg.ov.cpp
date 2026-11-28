@@ -32,7 +32,7 @@ namespace D2Multi::ChatDlg { constexpr auto d2lua_ov_12210 = &CHATDLG_FreeChatMs
 namespace D2Multi::ChatDlg { constexpr auto d2lua_ov_12211 = &StoreData; }
 namespace D2Multi::ChatDlg { constexpr auto d2lua_ov_12212 = &Unreferenced_0043e370; }
 namespace D2Multi::ChatDlg { constexpr auto d2lua_ov_12213 = &CHATDLG_ProcessPendingMessages; }
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 namespace D2Multi::ChatDlg { constexpr auto d2lua_ov_12214 = &CHATDLG_FormatFileTimeToDate; }
 #endif
 namespace D2Multi::ChatDlg { constexpr auto d2lua_ov_12215 = &CHATDLG_DisplayTimestampedMessage; }
@@ -143,7 +143,7 @@ D2LUA_OV_CHECK("D2Multi.ChatDlg.CHATDLG_FreeChatMsgNode", ::D2Multi::ChatDlg::d2
 D2LUA_OV_CHECK("D2Multi.ChatDlg.StoreData", ::D2Multi::ChatDlg::d2lua_ov_12211, "vnnp");
 D2LUA_OV_CHECK("D2Multi.ChatDlg.Unreferenced_0043e370", ::D2Multi::ChatDlg::d2lua_ov_12212, "p");
 D2LUA_OV_CHECK("D2Multi.ChatDlg.CHATDLG_ProcessPendingMessages", ::D2Multi::ChatDlg::d2lua_ov_12213, "v");
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 D2LUA_OV_CHECK("D2Multi.ChatDlg.CHATDLG_FormatFileTimeToDate", ::D2Multi::ChatDlg::d2lua_ov_12214, "vpnp");
 #endif
 D2LUA_OV_CHECK("D2Multi.ChatDlg.CHATDLG_DisplayTimestampedMessage", ::D2Multi::ChatDlg::d2lua_ov_12215, "nnp");
@@ -255,7 +255,7 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(12211, "D2Multi.ChatDlg.StoreData", ::D2Multi::ChatDlg::d2lua_ov_12211, 4, "vnnp", "char"),
     D2LUA_OV(12212, "D2Multi.ChatDlg.Unreferenced_0043e370", ::D2Multi::ChatDlg::d2lua_ov_12212, 4, "p", "D2ChatDlgUnknown_0x10"),
     D2LUA_OV(12213, "D2Multi.ChatDlg.CHATDLG_ProcessPendingMessages", ::D2Multi::ChatDlg::d2lua_ov_12213, 4, "v", ""),
-#if D2_OS_MAC
+#if D2_MAC_CARBON
     D2LUA_OV(12214, "D2Multi.ChatDlg.CHATDLG_FormatFileTimeToDate", ::D2Multi::ChatDlg::d2lua_ov_12214, 4, "vpnp", "FILETIME|char"),
 #endif
     D2LUA_OV(12215, "D2Multi.ChatDlg.CHATDLG_DisplayTimestampedMessage", ::D2Multi::ChatDlg::d2lua_ov_12215, 4, "nnp", "char"),

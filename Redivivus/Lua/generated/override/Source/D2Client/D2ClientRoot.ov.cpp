@@ -69,7 +69,7 @@ namespace D2Client { constexpr auto d2lua_ov_870 = &CLIENT_SetDefaultCharClass; 
 namespace D2Client { constexpr auto d2lua_ov_871 = &CLIENT_GetDefaultCharClass; }
 namespace D2Client { constexpr auto d2lua_ov_872 = &CLIENT_IsArenaMode; }
 namespace D2Client { constexpr auto d2lua_ov_873 = &Unreferenced_0047aa40; }
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32) && D2_MAC_CARBON)
 namespace D2Client { constexpr auto d2lua_ov_874 = &INPUT_HandleIMEComposition; }
 #endif
 namespace D2Client { constexpr auto d2lua_ov_875 = &INPUT_HandleIMEStartComposition; }
@@ -99,7 +99,7 @@ namespace D2Client { constexpr auto d2lua_ov_898 = &DRAW_WORLD_ClearWarpFadeTime
 namespace D2Client { constexpr auto d2lua_ov_899 = &CUNITEVENT_DispatchCallbacks; }
 namespace D2Client { constexpr auto d2lua_ov_900 = &UI_GetDialogLineCount; }
 namespace D2Client { constexpr auto d2lua_ov_901 = &WARDEN_DecryptBuffer; }
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32))
 namespace D2Client { constexpr auto d2lua_ov_902 = &WARDEN_DecryptModule; }
 #endif
 namespace D2Client { constexpr auto d2lua_ov_903 = &WARDEN_RC4Init; }
@@ -173,7 +173,7 @@ D2LUA_OV_CHECK("D2Client.CLIENT_SetDefaultCharClass", ::D2Client::d2lua_ov_870, 
 D2LUA_OV_CHECK("D2Client.CLIENT_GetDefaultCharClass", ::D2Client::d2lua_ov_871, "n");
 D2LUA_OV_CHECK("D2Client.CLIENT_IsArenaMode", ::D2Client::d2lua_ov_872, "n");
 D2LUA_OV_CHECK("D2Client.Unreferenced_0047aa40", ::D2Client::d2lua_ov_873, "np");
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32) && D2_MAC_CARBON)
 D2LUA_OV_CHECK("D2Client.INPUT_HandleIMEComposition", ::D2Client::d2lua_ov_874, "vp");
 #endif
 D2LUA_OV_CHECK("D2Client.INPUT_HandleIMEStartComposition", ::D2Client::d2lua_ov_875, "vp");
@@ -203,7 +203,7 @@ D2LUA_OV_CHECK("D2Client.DRAW_WORLD_ClearWarpFadeTimer", ::D2Client::d2lua_ov_89
 D2LUA_OV_CHECK("D2Client.CUNITEVENT_DispatchCallbacks", ::D2Client::d2lua_ov_899, "nnwwn");
 D2LUA_OV_CHECK("D2Client.UI_GetDialogLineCount", ::D2Client::d2lua_ov_900, "nn");
 D2LUA_OV_CHECK("D2Client.WARDEN_DecryptBuffer", ::D2Client::d2lua_ov_901, "ppn");
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32))
 D2LUA_OV_CHECK("D2Client.WARDEN_DecryptModule", ::D2Client::d2lua_ov_902, "npnpn");
 #endif
 D2LUA_OV_CHECK("D2Client.WARDEN_RC4Init", ::D2Client::d2lua_ov_903, "vppn");
@@ -278,7 +278,7 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(871, "D2Client.CLIENT_GetDefaultCharClass", ::D2Client::d2lua_ov_871, 4, "n", ""),
     D2LUA_OV(872, "D2Client.CLIENT_IsArenaMode", ::D2Client::d2lua_ov_872, 4, "n", ""),
     D2LUA_OV(873, "D2Client.Unreferenced_0047aa40", ::D2Client::d2lua_ov_873, 4, "np", "uint16_t"),
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32) && D2_MAC_CARBON)
     D2LUA_OV(874, "D2Client.INPUT_HandleIMEComposition", ::D2Client::d2lua_ov_874, 4, "vp", "D2UIMouseMsgStrc"),
 #endif
     D2LUA_OV(875, "D2Client.INPUT_HandleIMEStartComposition", ::D2Client::d2lua_ov_875, 4, "vp", "D2UIMouseMsgStrc"),
@@ -308,7 +308,7 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(899, "D2Client.CUNITEVENT_DispatchCallbacks", ::D2Client::d2lua_ov_899, 4, "nnwwn", "D2UnitStrc|D2UnitStrc"),
     D2LUA_OV(900, "D2Client.UI_GetDialogLineCount", ::D2Client::d2lua_ov_900, 4, "nn", ""),
     D2LUA_OV(901, "D2Client.WARDEN_DecryptBuffer", ::D2Client::d2lua_ov_901, 4, "ppn", "pfnWardenCreateInterface|D2WardenModuleStrc"),
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32))
     D2LUA_OV(902, "D2Client.WARDEN_DecryptModule", ::D2Client::d2lua_ov_902, 4, "npnpn", "D2WardenModuleStrc|uint32_t"),
 #endif
     D2LUA_OV(903, "D2Client.WARDEN_RC4Init", ::D2Client::d2lua_ov_903, 4, "vppn", "D2RC4StateStrc|uint8_t"),

@@ -61,7 +61,7 @@ D2LUA_OV_CHECK("Fog.Memory.FreeServerMemory", ::Fog::Memory::d2lua_ov_13153, "np
 D2LUA_OV_CHECK("Fog.Memory.ReAllocServerMemory", ::Fog::Memory::d2lua_ov_13154, "pppnpnn");
 
 static const D2LuaOvEntry s_aEntries[] = {
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV_REFUSED(13127, "Fog.Memory.OutOfMemoryHandler", nullptr, 6, "vp", 1),
 #endif
     D2LUA_OV(13128, "Fog.Memory.ComputeSizeClassIndex", ::Fog::Memory::d2lua_ov_13128, 6, "nn", ""),

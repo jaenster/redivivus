@@ -75,10 +75,10 @@ namespace D2Client::Source::ClientEngine { constexpr auto d2lua_ov_2341 = &CLIEN
 namespace D2Client::Source::ClientEngine { constexpr auto d2lua_ov_2342 = &RENDERING_TogglePerspective_Thunk; }
 namespace D2Client::Source::ClientEngine { constexpr auto d2lua_ov_2343 = &RENDERING_ToggleBlendedShadows_Thunk; }
 namespace D2Client::Source::ClientEngine { constexpr auto d2lua_ov_2344 = &RENDERING_ToggleLowQuality_Thunk; }
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace D2Client::Source::ClientEngine { constexpr auto d2lua_ov_2345 = &WARDEN_FreeModuleLibraries_Thunk_Unref_0047f940; }
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace D2Client::Source::ClientEngine { constexpr auto d2lua_ov_2346 = &WARDEN_FreeModuleLibraries_Thunk_Unref_0047fbe0; }
 #endif
 
@@ -153,10 +153,10 @@ D2LUA_OV_CHECK("D2Client.Source.ClientEngine.CLIENT_GetEffectiveClassId", ::D2Cl
 D2LUA_OV_CHECK("D2Client.Source.ClientEngine.RENDERING_TogglePerspective_Thunk", ::D2Client::Source::ClientEngine::d2lua_ov_2342, "v");
 D2LUA_OV_CHECK("D2Client.Source.ClientEngine.RENDERING_ToggleBlendedShadows_Thunk", ::D2Client::Source::ClientEngine::d2lua_ov_2343, "v");
 D2LUA_OV_CHECK("D2Client.Source.ClientEngine.RENDERING_ToggleLowQuality_Thunk", ::D2Client::Source::ClientEngine::d2lua_ov_2344, "v");
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("D2Client.Source.ClientEngine.WARDEN_FreeModuleLibraries_Thunk_Unref_0047f940", ::D2Client::Source::ClientEngine::d2lua_ov_2345, "vp");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 D2LUA_OV_CHECK("D2Client.Source.ClientEngine.WARDEN_FreeModuleLibraries_Thunk_Unref_0047fbe0", ::D2Client::Source::ClientEngine::d2lua_ov_2346, "vp");
 #endif
 
@@ -232,10 +232,10 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(2342, "D2Client.Source.ClientEngine.RENDERING_TogglePerspective_Thunk", ::D2Client::Source::ClientEngine::d2lua_ov_2342, 4, "v", ""),
     D2LUA_OV(2343, "D2Client.Source.ClientEngine.RENDERING_ToggleBlendedShadows_Thunk", ::D2Client::Source::ClientEngine::d2lua_ov_2343, 4, "v", ""),
     D2LUA_OV(2344, "D2Client.Source.ClientEngine.RENDERING_ToggleLowQuality_Thunk", ::D2Client::Source::ClientEngine::d2lua_ov_2344, 4, "v", ""),
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(2345, "D2Client.Source.ClientEngine.WARDEN_FreeModuleLibraries_Thunk_Unref_0047f940", ::D2Client::Source::ClientEngine::d2lua_ov_2345, 4, "vp", "D2WardenModuleStrc"),
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     D2LUA_OV(2346, "D2Client.Source.ClientEngine.WARDEN_FreeModuleLibraries_Thunk_Unref_0047fbe0", ::D2Client::Source::ClientEngine::d2lua_ov_2346, 4, "vp", "D2WardenModuleStrc"),
 #endif
     D2LUA_OV_REFUSED(-1, nullptr, nullptr, 0, nullptr, 0),

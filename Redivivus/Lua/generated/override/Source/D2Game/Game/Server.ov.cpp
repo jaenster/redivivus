@@ -138,10 +138,10 @@ namespace D2Game::GAME::Server { constexpr auto d2lua_ov_7789 = &QSERVER_CountOb
 namespace D2Game::GAME::Server { constexpr auto d2lua_ov_7790 = &QSERVER_BroadcastPlayerMessage; }
 namespace D2Game::GAME::Server { constexpr auto d2lua_ov_7791 = &QSERVER_BroadcastChatByServerId; }
 namespace D2Game::GAME::Server { constexpr auto d2lua_ov_7792 = &QSERVER_GetFirstActiveGame; }
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 namespace D2Game::GAME::Server { constexpr auto d2lua_ov_7793 = &QSERVER_PlayerMessageThread; }
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 namespace D2Game::GAME::Server { constexpr auto d2lua_ov_7794 = &GAME_CreatePlayerMessageThread; }
 #endif
 namespace D2Game::GAME::Server { constexpr auto d2lua_ov_7795 = &QSERVER_FindGameTokenByName; }
@@ -316,10 +316,10 @@ D2LUA_OV_CHECK("D2Game.GAME.Server.QSERVER_CountObjectsAndPlayersAllGames", ::D2
 D2LUA_OV_CHECK("D2Game.GAME.Server.QSERVER_BroadcastPlayerMessage", ::D2Game::GAME::Server::d2lua_ov_7790, "vnnp");
 D2LUA_OV_CHECK("D2Game.GAME.Server.QSERVER_BroadcastChatByServerId", ::D2Game::GAME::Server::d2lua_ov_7791, "vnp");
 D2LUA_OV_CHECK("D2Game.GAME.Server.QSERVER_GetFirstActiveGame", ::D2Game::GAME::Server::d2lua_ov_7792, "p");
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 D2LUA_OV_CHECK("D2Game.GAME.Server.QSERVER_PlayerMessageThread", ::D2Game::GAME::Server::d2lua_ov_7793, "np");
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 D2LUA_OV_CHECK("D2Game.GAME.Server.GAME_CreatePlayerMessageThread", ::D2Game::GAME::Server::d2lua_ov_7794, "vnnp");
 #endif
 D2LUA_OV_CHECK("D2Game.GAME.Server.QSERVER_FindGameTokenByName", ::D2Game::GAME::Server::d2lua_ov_7795, "np");
@@ -496,10 +496,10 @@ static const D2LuaOvEntry s_aEntries[] = {
     D2LUA_OV(7790, "D2Game.GAME.Server.QSERVER_BroadcastPlayerMessage", ::D2Game::GAME::Server::d2lua_ov_7790, 2, "vnnp", "char"),
     D2LUA_OV(7791, "D2Game.GAME.Server.QSERVER_BroadcastChatByServerId", ::D2Game::GAME::Server::d2lua_ov_7791, 2, "vnp", "char"),
     D2LUA_OV(7792, "D2Game.GAME.Server.QSERVER_GetFirstActiveGame", ::D2Game::GAME::Server::d2lua_ov_7792, 2, "p", "SGAMEDATA"),
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
     D2LUA_OV(7793, "D2Game.GAME.Server.QSERVER_PlayerMessageThread", ::D2Game::GAME::Server::d2lua_ov_7793, 2, "np", "D2PlayerMessageThreadArgsStrc"),
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
     D2LUA_OV(7794, "D2Game.GAME.Server.GAME_CreatePlayerMessageThread", ::D2Game::GAME::Server::d2lua_ov_7794, 2, "vnnp", "char"),
 #endif
     D2LUA_OV(7795, "D2Game.GAME.Server.QSERVER_FindGameTokenByName", ::D2Game::GAME::Server::d2lua_ov_7795, 2, "np", "char"),
