@@ -639,75 +639,60 @@ BOOL __fastcall Skills_CltDoFunc_State_OpenWounds(D2UnitStrc * pUnit, eD2Skills 
 // Executes a skill cast triggered by an item (e.g. charged item, wand). Saves and restores the unit's current target/SP1 and SKSRVDOFUNC flag around the cast. Handles corpse-state suppression for corpse-targeting skills, plays the item cast sound and overlay, then calls SKILL_ExecuteClientDoFunc. Returns the client do-func result.
 // 1.14d mac: 00080aec
 BOOL __fastcall SKILL_ExecuteItemCast(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t pDoFuncData, D2UnitStrc * pTargetUnit, int16_t nTargetX, int16_t nTargetY, uint16_t bHasTarget) {
-    BOOL eTargetState;
-    int32_t bCastSucceeded;
-    uint32_t nClientDoFuncResult;
-    bool bCorpseStateSet;
-    D2SkillsTxt* pSkillTxt;
-    pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
 
-    D2UnitStrc* pSavedTarget;
-    pSavedTarget = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
-    uint32_t nSavedSP1X;
-    nSavedSP1X = D2Common::PATH::DynamicPath::GetXSP1(pUnit->pPath.pDynamicPath);
-    uint32_t nSavedSP1Y;
-    nSavedSP1Y = D2Common::PATH::DynamicPath::GetYSP1(pUnit->pPath.pDynamicPath);
-    eD2UnitFlags eSavedUnitFlags;
-    eSavedUnitFlags = pUnit->eUnitFlags;
+    D2UnitStrc* pSavedTarget = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
+    uint32_t nSavedSP1X = D2Common::PATH::DynamicPath::GetXSP1(pUnit->pPath.pDynamicPath);
+    uint32_t nSavedSP1Y = D2Common::PATH::DynamicPath::GetYSP1(pUnit->pPath.pDynamicPath);
+    BOOL bSavedSrvDoFunc = pUnit->eUnitFlags >> 6 & 1;
     if (pTargetUnit) {
       D2Common::Units::SetTargetUnitForDynamicUnit(pUnit, pTargetUnit);
     } else {
       D2Common::PATH::DynamicPath::SetSP1(pUnit->pPath.pDynamicPath, nTargetX, nTargetY);
     }
+
+    uint32_t nClientDoFuncResult = 0;
     if (pSkillTxt->aFlagBytes[4] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
-      int bTargetIsActive;
-      bCorpseStateSet = false;
-      if (pTargetUnit) {
-        bTargetIsActive = UNIT::CUnit::IsActive(pTargetUnit);
-        if (bTargetIsActive) {
-          eTargetState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTargetUnit, STATE_corpse_noselect);
-          if (eTargetState) {
-            bCorpseStateSet = true;
-            D2Common::DATATBLS::ItemStats::SetState(pTargetUnit, STATE_corpse_noselect, 0);
-          }
-        }
+      BOOL bCorpseStateSet = FALSE;
+      if (pTargetUnit && UNIT::CUnit::IsActive(pTargetUnit) && D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTargetUnit, STATE_corpse_noselect)) {
+        bCorpseStateSet = TRUE;
+        D2Common::DATATBLS::ItemStats::SetState(pTargetUnit, STATE_corpse_noselect, 0);
       }
 
-      bCastSucceeded = Skills::SKILLS_CastSkillClientArgsReversed(pUnit, eSkill, pDoFuncData, -1);
-      if (!bCastSucceeded) {
-        nClientDoFuncResult = 0;
+      if (!Skills::SKILLS_CastSkillClientArgsReversed(pUnit, eSkill, pDoFuncData, -1)) {
         goto restore_caster_state;
       }
+
       if (bCorpseStateSet) {
         D2Common::DATATBLS::ItemStats::SetState(pTargetUnit, STATE_corpse_noselect, 1);
       }
     }
+
     if (pSkillTxt->ItemCastSound >= 0) {
       Sound::SOUND_PlaySound((int)pSkillTxt->ItemCastSound, pUnit, 0, 0, 0);
     }
 
-    short int nOverlayId;
-    nOverlayId = pSkillTxt->ItemCastOverlay;
-    if (nOverlayId >= 0 && (int)nOverlayId < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize) {
-      Engine::Gfx::GFX_AddOverlayToUnit(pUnit, (int)nOverlayId, 2, 0, 0, 0, 0, 0);
+    if (pSkillTxt->ItemCastOverlay >= 0 && (int)pSkillTxt->ItemCastOverlay < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize) {
+      Engine::Gfx::GFX_AddOverlayToUnit(pUnit, (int)pSkillTxt->ItemCastOverlay, 2, 0, 0, 0, 0, 0);
     }
 
     nClientDoFuncResult = Skills::SKILL_ExecuteClientDoFunc(pUnit, eSkill, pDoFuncData, (uint32_t)bHasTarget);
     restore_caster_state:
-    if (!pSavedTarget) {
-      D2Common::PATH::DynamicPath::SetSP1(pUnit->pPath.pDynamicPath, (int16_t)nSavedSP1X, (int16_t)nSavedSP1Y);
-    } else {
+    if (pSavedTarget) {
       D2Common::Units::SetTargetUnitForDynamicUnit(pUnit, pSavedTarget);
-    }
-    if (eSavedUnitFlags >> 6 & 1) {
-      pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
-      return nClientDoFuncResult;
+    } else {
+      D2Common::PATH::DynamicPath::SetSP1(pUnit->pPath.pDynamicPath, (int16_t)nSavedSP1X, (int16_t)nSavedSP1Y);
     }
 
-    pUnit->eUnitFlags &= ~UNITFLAG_SKSRVDOFUNC;
+    if (bSavedSrvDoFunc) {
+      pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
+    } else {
+      pUnit->eUnitFlags &= ~UNITFLAG_SKSRVDOFUNC;
+    }
+
     return nClientDoFuncResult;
 }
 

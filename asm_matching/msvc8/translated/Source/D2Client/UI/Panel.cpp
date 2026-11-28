@@ -1794,14 +1794,13 @@ void __stdcall PANEL_DrawGoldAmount() {
 
 // Renders bottom UI panel - belt slots, expanded rows animation, item highlights, hotkey text
 void __stdcall PANEL_DrawBottomPanel() {
-    eD2ItemTypes eItemType;
     int nBeltState;
+    BOOL bUiFlag;
     uint16_t* pwsKeyDesc;
     int32_t nRectXorLen;
     int32_t nTextWidth;
     int nRectYorW;
     int nDrawY;
-    char* pbRowVisible;
     D2BeltsTxt sBeltsTxt;
     uint16_t awsHotkeyText[100];
     D2GfxDataStrc sGfxData;
@@ -1812,58 +1811,56 @@ void __stdcall PANEL_DrawBottomPanel() {
     uint8_t byRectColor;
     eD2UnitType eUnitType;
     D2Win::Src::D2WinFont::SetAndReturnLastFont(1);
-    D2UnitStrc* pItem = UNIT::Player::GetPlayerUnit_UI();
-    D2InventoryStrc* pInventory = pItem->pInventory;
-    pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 8);
+    D2InventoryStrc* pInventory = UNIT::Player::GetPlayerUnit_UI()->pInventory;
+    D2UnitStrc* pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 8);
     if (pItem) {
-      eItemType = D2Common::ITEMS::Items::ITEM_GetItemData_wType(pItem);
-      nBeltState = gnBeltPanelState;
-      if (eItemType == ITEMTYPE_Belt) {
+      if (D2Common::ITEMS::Items::ITEM_GetItemData_wType(pItem) == ITEMTYPE_Belt) {
         nBeltState = D2Common::Units::GetBeltType(pItem);
-        if (nBeltState < 0) {
+        if (nBeltState >= 0) {
+          gnBeltPanelState = nBeltState;
+        } else {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb07);
           exit(-1);
         }
       }
     } else {
       gnBeltPanelState = 2;
-      nBeltState = gnBeltPanelState;
     }
 
-    gnBeltPanelState = nBeltState;
-    BOOL bUiFlag = ui::GetUIFlag(UI_BELTROWS);
-    if (!bUiFlag && !gbPanelBeltAnimating) {
+    if (!ui::GetUIFlag(UI_BELTROWS) && !gbPanelBeltAnimating) {
       gnPanelBeltRowsExpanded = 0;
     }
 
-    bUiFlag = ui::GetUIFlag(UI_ESCMENU);
-    if (bUiFlag) {
+    if (ui::GetUIFlag(UI_ESCMENU)) {
       gnPanelBeltRowsExpanded = 0;
     }
 
     gbPanelBeltSlotHovered = 0;
     if (gnPanelBeltRowsExpanded) {
-      aRowVisible[0] = '\x01';
+      aRowVisible[0] = 1;
       aRowVisible[1] = 1;
       aRowVisible[2] = 1;
       switch (gnBeltPanelState) {
         case 2:
-          aRowVisible[0] = '\0';
-        aRowVisible[1] = 0;
-        aRowVisible[2] = 0;
-        gbPanelBeltSlotHovered = 0;
-        break;
+          aRowVisible[0] = 0;
+          aRowVisible[1] = 0;
+          aRowVisible[2] = 0;
+          gbPanelBeltSlotHovered = 0;
+          break;
         case 1:
-
         case 4:
           aRowVisible[1] = 0;
+          aRowVisible[2] = 0;
+          gbPanelBeltSlotHovered = 1;
+          break;
         case 0:
-
         case 5:
           aRowVisible[2] = 0;
+          gbPanelBeltSlotHovered = 1;
+          break;
         default:
           gbPanelBeltSlotHovered = 1;
-        break;
+          break;
       }
 
       memset(&sGfxData, 0, sizeof(sGfxData));
@@ -1871,9 +1868,9 @@ void __stdcall PANEL_DrawBottomPanel() {
       sGfxData.nDirection = 0;
       sGfxData.nFrameNumber = 0;
       sGfxData.pDC6 = ctrlpnl_popbelt;
-      pbRowVisible = aRowVisible;
-      for (nBeltState = 0; nBeltState < 3; nBeltState++) {
-        if (*pbRowVisible != '\0') {
+      char* pbRowVisible = aRowVisible;
+      for (int i = 0; i < 3; i++) {
+        if (*pbRowVisible) {
           D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX / 2 + 0x15, Inv::ScreenSizeY - nDrawY - 0x29, -1, DRAW_SOLID, nullptr);
         }
 
