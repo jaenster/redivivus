@@ -23,6 +23,8 @@ file(GLOB_RECURSE D2_MAC_SOURCES CONFIGURE_DEPENDS LIST_DIRECTORIES false
     "${CMAKE_SOURCE_DIR}/Source/MacSpecific/Source/CD2Textures/*.cpp"
     "${CMAKE_SOURCE_DIR}/Source/D2OpenGL/Src/*.cpp")
 list(FILTER D2_MAC_SOURCES EXCLUDE REGEX "/Source/D2OpenGL/Src/(MacSdkOnWin32|D2gfxRenderer)\\.cpp$")
+# Win32Posix is the modern build's layer (cmake/mac-modern.cmake), not Storm's Mac one.
+list(FILTER D2_MAC_SOURCES EXCLUDE REGEX "/Source/StormMac/Win32Posix/")
 list(REMOVE_DUPLICATES D2_MAC_SOURCES)
 list(SORT D2_MAC_SOURCES)
 # SRegMac.mm is Objective-C++; the project enables C and C++ only.

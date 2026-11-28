@@ -303,3 +303,24 @@ probe links `crt1.10.6.o`, whose `start` calls `main`, as the original's entry d
   the Mac target and `Source/D2Client/Warden/WardenMac.cpp` carries the four empty hooks it calls
   (0012b628..0012b640).
 
+
+## Modern link probe
+
+`modern-link-probe.ts` is the same question for the modern macOS build (`cmake/mac-modern.cmake`):
+how far `d2_modern_objs` and the Win32Posix layer are from linking into `d2_modern`. It links with
+Apple clang from Xcode on the current SDK, against SDL3 and OpenGL, as the target does:
+
+```
+ninja -k 0 -C build-modern d2_modern_objs d2_win32posix_kernel d2_win32posix
+node asm_matching/mac/modern-link-probe.ts --build build-modern [--out build-modern/modern-link-probe]
+```
+
+(`d2_win32posix` is defined once the layer has units beside the kernel's.) It writes
+`modern-link-probe.tsv` (class, owner, symbol, refs, first referrer, first object), `duplicates.tsv`
+and the raw ld output. Classes: `kernel`, `user` and `sockets` (Winsock and DirectSound) - the
+Win32Posix entry points, by the header that declares them; `shell` (Win32PosixShell.h);
+`renderer` (D2OpenGL's Carbon, AGL and Core Graphics calls); `3rdparty` (Bink, the Intel JPEG
+Library, crashy); `runtime` (MSVC runtime symbols); `tree` (a game function with no body in this
+build). `D2_XCODE`, `D2_SDL3` and `D2_ARCH` override the Xcode, SDL3 prefix and slice.
+
+The kernel's unit test is `d2_win32posix_test` (`Source/StormMac/Win32Posix/Tests/KernelTest.cpp`).

@@ -90,3 +90,73 @@ target_compile_options(d2_modern_objs PRIVATE
     -Wshorten-64-to-32 -Wno-ignored-attributes -Wno-writable-strings -Wno-deprecated-declarations
     "SHELL:-include ${CMAKE_SOURCE_DIR}/Source/D2Headers/d2_platform.h"
     -Werror=implicit-function-declaration -ferror-limit=0)
+
+# ---- Win32Posix and the link ----
+#
+# d2_win32posix_kernel  the kernel half of Win32Posix (Source/StormMac/Win32Posix/Kernel*.cpp):
+#                       POSIX only, no SDL, so its unit test links it alone.
+# d2_win32posix         the rest of Win32Posix (User, Sockets, DirectSound, Shell ...): every
+#                       other .cpp in the directory, picked up as it is added.
+# d2_modern             the executable: d2_modern_objs and both halves, on SDL3 and OpenGL.
+#                       Outside `all` until it links; asm_matching/mac/modern-link-probe.ts
+#                       lists what it still lacks.
+# d2_win32posix_test    the kernel's unit test (Source/StormMac/Win32Posix/Tests).
+#
+# A layer unit is handed d2_platform.h ahead of everything, as the game's units are, unless it
+# reads Win32PosixHost.h (directly or through Win32PosixKernelPriv.h): such a unit reads the
+# host headers it needs first and the Win32 surface after them.
+file(GLOB _posix_all CONFIGURE_DEPENDS LIST_DIRECTORIES false
+    "${CMAKE_SOURCE_DIR}/Source/StormMac/Win32Posix/*.cpp"
+    "${CMAKE_SOURCE_DIR}/Source/StormMac/Win32Posix/*.mm")
+set(_posix_kernel ${_posix_all})
+list(FILTER _posix_kernel INCLUDE REGEX "/Win32Posix/Kernel[^/]*\\.cpp$")
+set(_posix_rest ${_posix_all})
+list(FILTER _posix_rest EXCLUDE REGEX "/Win32Posix/Kernel[^/]*\\.cpp$")
+
+foreach(_src IN LISTS _posix_all)
+    file(STRINGS "${_src}" _reads_host REGEX "Win32Posix(Host|KernelPriv)\\.h" LIMIT_COUNT 1)
+    if(NOT _reads_host)
+        set_source_files_properties("${_src}" PROPERTIES
+            COMPILE_OPTIONS "-include;${CMAKE_SOURCE_DIR}/Source/D2Headers/d2_platform.h")
+    endif()
+endforeach()
+
+function(d2_win32posix_setup _target)
+    set_target_properties(${_target} PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON CXX_EXTENSIONS ON)
+    target_include_directories(${_target} PRIVATE "${CMAKE_SOURCE_DIR}")
+    target_compile_definitions(${_target} PRIVATE
+        D2_OS_MAC=1 D2_BACKEND_POSIX=1 D2_MAC_CARBON=0 D2_TARGET_CLIENT=1)
+    target_compile_options(${_target} PRIVATE ${_d2_arch_flags}
+        -g -fwrapv -fpascal-strings -Wshorten-64-to-32 -Wno-ignored-attributes -Wno-writable-strings
+        -Wno-deprecated-declarations -Werror=implicit-function-declaration)
+endfunction()
+
+add_library(d2_win32posix_kernel OBJECT EXCLUDE_FROM_ALL ${_posix_kernel})
+d2_win32posix_setup(d2_win32posix_kernel)
+
+find_package(SDL3 CONFIG QUIET PATHS /opt/homebrew /usr/local)
+if(SDL3_FOUND)
+    if(_posix_rest)
+        add_library(d2_win32posix OBJECT EXCLUDE_FROM_ALL ${_posix_rest})
+        d2_win32posix_setup(d2_win32posix)
+        target_link_libraries(d2_win32posix PRIVATE SDL3::SDL3)
+        set(_posix_rest_objs $<TARGET_OBJECTS:d2_win32posix>)
+    endif()
+    add_executable(d2_modern EXCLUDE_FROM_ALL
+        $<TARGET_OBJECTS:d2_modern_objs> $<TARGET_OBJECTS:d2_win32posix_kernel> ${_posix_rest_objs})
+    set_target_properties(d2_modern PROPERTIES OUTPUT_NAME "Diablo II")
+    target_link_libraries(d2_modern PRIVATE SDL3::SDL3 "-framework OpenGL")
+    # SMem keeps its heaps below 4 GB on a 64-bit target (Storm/Source/SMem.cpp). An x86-64
+    # executable may shrink __PAGEZERO to give it that range; the arm64 kernel refuses to run
+    # one whose __PAGEZERO is under 4 GB, so the arm64 slice keeps the default.
+    if("x86_64" IN_LIST CMAKE_OSX_ARCHITECTURES)
+        target_link_options(d2_modern PRIVATE "SHELL:-Xarch_x86_64 -Wl,-pagezero_size,0x10000")
+    endif()
+else()
+    message(STATUS "mac-modern: no SDL3 (brew install sdl3); d2_modern is not defined")
+endif()
+
+add_executable(d2_win32posix_test EXCLUDE_FROM_ALL
+    "${CMAKE_SOURCE_DIR}/Source/StormMac/Win32Posix/Tests/KernelTest.cpp"
+    $<TARGET_OBJECTS:d2_win32posix_kernel>)
+d2_win32posix_setup(d2_win32posix_test)
