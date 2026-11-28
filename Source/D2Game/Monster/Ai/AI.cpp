@@ -5512,71 +5512,42 @@ void __fastcall AI_Fn1_DesertTurret(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2A
 // Server AI tick for the Megademon monster. Uses Skill1 from MonStats as a breath/inferno skill. If the target is in range and the inferno state is not active, rolls a difficulty-scaled RNG chance to cast the skill and set a cooldown timer (dwArg0). Once engaged in melee, uses a second RNG tier to either cast the skill, walk toward the target, or retreat. Clears the inferno state when target is out of range.
 // 1.14d mac: 0029d080
 void __fastcall AI_Fn1_Megademon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
-    D2SkillStrc* pSkill;
-    int nDifficulty;
-    int nSkillLevel;
-    D2SeedStrc sNewSeed;
-    int nDistanceToTarget;
-    nDistanceToTarget = pAiParam->nDistanceToTarget;
-    int bEngagedInCombat;
-    bEngagedInCombat = pAiParam->bEngagedInCombat;
-    D2MonStatsTxt* pMonStats;
-    pMonStats = pAiParam->pMonStats;
-    D2UnitStrc* pAttacker;
-    pAttacker = pAiParam->pTarget;
-    D2AiGeneralStrc* pAiGeneral;
-    pAiGeneral = pAiParam->pMonsterAiGeneral;
-    D2SeedStrc* pSeed;
-    pSeed = &pUnit->sSeed;
-    if (pMonStats->aSkill[0] < 0 || (pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, (int)pMonStats->aSkill[0], -1) , !pSkill) || (nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1) , nSkillLevel <= 0)) {
+    int nDistanceToTarget = pAiParam->nDistanceToTarget;
+    int bEngagedInCombat = pAiParam->bEngagedInCombat;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
+    D2UnitStrc* pAttacker = pAiParam->pTarget;
+    D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
+    D2SeedStrc* pSeed = &pUnit->sSeed;
+    D2SkillStrc* pSkill = pMonStats->aSkill[0] >= 0 ? D2Common::Skills::GetSkillByIdAndOwner(pUnit, (int)pMonStats->aSkill[0], -1) : nullptr;
+    int nSkillLevel = pSkill ? D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1) : 0;
+    if (nSkillLevel <= 0) {
       nSkillLevel = 1;
     }
 
-    BOOL eInfernoState;
-    eInfernoState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
-    if (pMonStats->aSkill[0] < 0 || bEngagedInCombat || nDistanceToTarget >= nSkillLevel) {
-      if (eInfernoState) {
-        D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_inferno, 0);
-      }
-    } else {
-      uint32_t uRandPct;
-      if (!eInfernoState) {
-        if (pGame->dwGameFrame > pAiGeneral->dwArg0) {
-          nDifficulty = (int)pGame->nDifficulty;
-          uRandPct = D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100);
-          if ((int)uRandPct < (int)pMonStats->aip[0][nDifficulty]) {
-            pAiGeneral->dwArg0 = (int)pMonStats->aip[5][nDifficulty] + pGame->dwGameFrame;
-            SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[0], (int)pMonStats->aSkill[0], pAttacker, 0, 0);
-            return;
-          }
-        }
-
-        goto roll_walk_to_target;
-      }
-
-      D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_inferno, 0);
-    }
-    if (bEngagedInCombat) {
-      if (pMonStats->aSkill[0] >= 0 && pGame->dwGameFrame > pAiGeneral->dwArg0) {
-        sNewSeed = D2_SEED_NEXT(*pSeed);
-        *pSeed = sNewSeed;
-        if ((int)(sNewSeed.nSeedLow % 100) < (int)pMonStats->aip[1][pGame->nDifficulty]) {
-          pAiGeneral->dwArg0 = (int)pMonStats->aip[5][pGame->nDifficulty] + pGame->dwGameFrame;
+    BOOL bInferno = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
+    if (pMonStats->aSkill[0] >= 0 && !bEngagedInCombat && nDistanceToTarget < nSkillLevel && !bInferno) {
+      if (pGame->dwGameFrame > pAiGeneral->dwArg0) {
+        int nDifficulty = (int)pGame->nDifficulty;
+        if ((int)D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100) < (int)pMonStats->aip[0][nDifficulty]) {
+          pAiGeneral->dwArg0 = (int)pMonStats->aip[5][nDifficulty] + pGame->dwGameFrame;
           SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[0], (int)pMonStats->aSkill[0], pAttacker, 0, 0);
           return;
         }
       }
-
-      sNewSeed = D2_SEED_NEXT(*pSeed);
-      *pSeed = sNewSeed;
-      if (!((int)(sNewSeed.nSeedLow % 100) >= (int)pMonStats->aip[2][pGame->nDifficulty])) {
+    } else if (bInferno) {
+      D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_inferno, 0);
+    }
+    if (bEngagedInCombat) {
+      if (pMonStats->aSkill[0] >= 0 && pGame->dwGameFrame > pAiGeneral->dwArg0 && (int)(D2_SeedRoll(pSeed) % 100) < (int)pMonStats->aip[1][pGame->nDifficulty]) {
+        pAiGeneral->dwArg0 = (int)pMonStats->aip[5][pGame->nDifficulty] + pGame->dwGameFrame;
+        SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[0], (int)pMonStats->aSkill[0], pAttacker, 0, 0);
+        return;
+      }
+      if ((int)(D2_SeedRoll(pSeed) % 100) < (int)pMonStats->aip[2][pGame->nDifficulty]) {
         AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pAttacker);
         return;
       }
-
-      sNewSeed = D2_SEED_NEXT_VAL(sNewSeed);
-      *pSeed = sNewSeed;
-      if (!((int)(sNewSeed.nSeedLow % 100) >= (int)pMonStats->aip[4][pGame->nDifficulty])) {
+      if ((int)(D2_SeedRoll(pSeed) % 100) < (int)pMonStats->aip[4][pGame->nDifficulty]) {
         SetCombatStateAndApproachTarget(pGame, pUnit, pAttacker, 3, 0);
         return;
       }
@@ -5584,17 +5555,12 @@ void __fastcall AI_Fn1_Megademon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPa
       PlanNextAiMove(pGame, pUnit, 5);
       return;
     }
-
-    roll_walk_to_target:
-    sNewSeed = D2_SEED_NEXT(*pSeed);
-    *pSeed = sNewSeed;
-    if (!((int)(sNewSeed.nSeedLow % 100) >= (int)pMonStats->aip[3][pGame->nDifficulty])) {
+    if ((int)(D2_SeedRoll(pSeed) % 100) < (int)pMonStats->aip[3][pGame->nDifficulty]) {
       MONSTERAI_CommandWalkToUnit(pGame, pUnit, pAttacker, 7);
       return;
     }
 
     PlanNextAiMove(pGame, pUnit, 10);
-    return;
 }
 
 // 1.14d mac: 0029d3ce
