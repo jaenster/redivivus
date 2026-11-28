@@ -219,43 +219,34 @@ void __stdcall MPQ_UnloadAllDataMpqFiles() {
 }
 
 BOOL __fastcall MPQ_LoadAllMediaMpqFiles(::fpRequiredUserAction fpInsertPlayCd, ::fpRequiredUserAction fpInsertExpansionCd, int32_t nZero, D2IniConfigStrc * D2IniData) {
-    bool bIniSkipExpansion;
-    D2FogArchiveStrc* pMPQ_d2char_or_Xvideo;
-    D2FogArchiveStrc* pMPQ_d2char;
-    BOOL bIsExpansion;
-    bIsExpansion = Fog::Source::SFile::GetUseDirectCommand();
-    if (bIsExpansion) {
+    if (Fog::Source::SFile::GetUseDirectCommand()) {
       fpInsertPlayCd = 0;
       fpInsertExpansionCd = 0;
     }
 
     MPQ_d2Xvideo = 0;
-    bIsExpansion = Fog::D2CheckExpansionGame();
-    if (!bIsExpansion || D2IniData && (bIsExpansion = D2IniData->pTrueFunction() , !bIsExpansion)) {
+    BOOL bLoaded;
+    if (!Fog::D2CheckExpansionGame() || D2IniData && !D2IniData->pTrueFunction()) {
       MPQ_d2char = D2Hell::ARCHIVE_LoadMPQ("d2char.mpq", nZero, fpInsertPlayCd, 1000);
-      pMPQ_d2char_or_Xvideo = D2Hell::ARCHIVE_LoadMPQ("d2music.mpq", nZero, fpInsertPlayCd, 1000);
+      MPQ_d2music = D2Hell::ARCHIVE_LoadMPQ("d2music.mpq", nZero, fpInsertPlayCd, 1000);
       MPQ_d2Xmusic = 0;
-      /* Variable used as MPQ_d2music in self if */ MPQ_d2Xtalk = 0;
-      pMPQ_d2char = MPQ_d2char;
-      MPQ_d2music = pMPQ_d2char_or_Xvideo;
+      MPQ_d2Xtalk = 0;
+      bLoaded = MPQ_d2char && MPQ_d2music;
     } else {
       MPQ_d2char = D2Hell::ARCHIVE_LoadMPQ("d2char.mpq", 0, fpInsertPlayCd, 1000);
       MPQ_d2music = D2Hell::ARCHIVE_LoadMPQ("d2music.mpq", 0, fpInsertPlayCd, 1000);
       MPQ_d2Xmusic = D2Hell::ARCHIVE_LoadMPQ("d2Xmusic.mpq", nZero, fpInsertExpansionCd, 3000);
       MPQ_d2Xtalk = D2Hell::ARCHIVE_LoadMPQ("d2Xtalk.mpq", nZero, fpInsertExpansionCd, 3000);
-      pMPQ_d2char_or_Xvideo = D2Hell::ARCHIVE_LoadMPQ("d2Xvideo.mpq", nZero, fpInsertExpansionCd, 3000);
-      MPQ_d2Xvideo = pMPQ_d2char_or_Xvideo;
-      /* Variable used as MPQ_d2Xvideo in self if */ if (!MPQ_d2char || !MPQ_d2music || (pMPQ_d2char = MPQ_d2Xtalk , !MPQ_d2Xmusic)) {
-        goto unload_and_fail;
-      }
-    }
-    if (pMPQ_d2char && pMPQ_d2char_or_Xvideo) {
-      return 1;
+      MPQ_d2Xvideo = D2Hell::ARCHIVE_LoadMPQ("d2Xvideo.mpq", nZero, fpInsertExpansionCd, 3000);
+      bLoaded = MPQ_d2char && MPQ_d2music && MPQ_d2Xmusic && MPQ_d2Xtalk && MPQ_d2Xvideo;
     }
 
-    unload_and_fail:
-    MPQ_UnloadAllMediaMpqFiles();
-    return 0;
+    if (!bLoaded) {
+      MPQ_UnloadAllMediaMpqFiles();
+      return 0;
+    }
+
+    return 1;
 }
 
 }}} // namespace D2Win::Src::D2WinArchive
