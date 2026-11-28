@@ -198,17 +198,18 @@ void __fastcall SHA1_BigIntMod(BigData * pResult, BigData * pBigA, BigData * pMo
 
 #if !D2_OS_MAC
 uint32_t __fastcall SHA1_BigIntModToInt(BigData * pBigInt, uint32_t dwModulus) {
-    BigData* pRemBigInt;
     BigData* pModBigInt;
+    BigData* pRemBigInt;
     Storm::Source::SBig::SBigNew(&pModBigInt);
     Storm::Source::SBig::SBigNew(&pRemBigInt);
     Storm::Source::SBig::SBigFromUnsigned(pModBigInt, dwModulus);
     Storm::Source::SBig::SBigMod(pRemBigInt, pBigInt, pModBigInt);
-    uint32_t dwResult = 0;
-    Storm::Source::SBig::SBigToBinaryBuffer(pRemBigInt, &dwResult, 4, nullptr);
+    uint8_t abResult[4];
+    abResult[0] = abResult[1] = abResult[2] = abResult[3] = 0;
+    Storm::Source::SBig::SBigToBinaryBuffer(pRemBigInt, abResult, 4, nullptr);
     Storm::Source::SBig::SBigDel(pModBigInt);
     Storm::Source::SBig::SBigDel(pRemBigInt);
-    return dwResult;
+    return abResult[0] | abResult[1] << 8 | abResult[2] << 16 | abResult[3] << 24;
 }
 #endif
 

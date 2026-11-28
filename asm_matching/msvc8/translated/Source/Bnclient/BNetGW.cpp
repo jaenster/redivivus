@@ -375,24 +375,24 @@ char * __fastcall FindSection(D2BNetGatewayAccessStr * pThis, int, char * szText
 // Registers: pGatewayAccess in ECX (__thiscall) is passed by the callers but not read.
 // 1.14d mac: 00055762
 char * __fastcall FindKey(D2BNetGatewayAccessStr * pGatewayAccess, int, char * szText1, char * szText2) {
-    char* pSrc = szText1;
-    char* pEnd = pSrc + strlen(pSrc);
-    pSrc = pEnd + 1;
-    int nStrLen;
-    nStrLen = (int)strlen(szText2);
-    char cCur = *szText1;
-    while (cCur != '\0' && *szText1 != ']') {
-      int nCmp;
-      nCmp = _strnicmp(szText1, szText2, (int)nStrLen);
-      if (!nCmp) {
-        return szText1 + ((int)nStrLen + 1);
+    int nTextLen = strlen(szText1);
+    int nKeyLen = strlen(szText2);
+    char* pCursor = szText1;
+    while (*pCursor != '\0' && *pCursor != ']') {
+      if (!_strnicmp(pCursor, szText2, nKeyLen)) {
+        return pCursor + nKeyLen + 1;
       }
 
-      for (; szText1 < pEnd && (cCur = *szText1 , cCur != '\0') && cCur != '\r' && cCur != '\n'; szText1++) {}
+      char* pLine = pCursor;
+      while (pLine < szText1 + nTextLen && *pLine != '\0' && *pLine != '\r' && *pLine != '\n') {
+        pLine++;
+      }
 
-      for (; szText1 < pEnd && (cCur = *szText1 , cCur != '\0') && (cCur == '\r' || cCur == '\n'); szText1++) {}
+      while (pLine < szText1 + nTextLen && *pLine != '\0' && (*pLine == '\r' || *pLine == '\n')) {
+        pLine++;
+      }
 
-      cCur = *szText1;
+      pCursor = pLine;
     }
 
     return nullptr;
