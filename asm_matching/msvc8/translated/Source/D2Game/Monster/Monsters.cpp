@@ -2004,65 +2004,49 @@ void __fastcall UMOD_SetRandomElementalForMissile(::SGAMEDATA * pGame, D2UnitStr
 // Server-side tick handler: when bShouldTrigger is set, rolls the unit's seed for a chance (>29/100) to find a player target, picks the first occupied belt slot, clones the item via serialized data, finds a drop spot near the owner, drops the clone, then consumes and removes the original belt item and re-sorts the belt column.
 // 1.14d mac: 001e8179
 void __fastcall MONSTER_StealPotionFromBelt(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger) {
-    D2UnitStrc* pBeltItem;
-    POINT ptOwnerPos;
-    POINT ptDropPos;
-    int32_t nErrorLine;
     if (!bShouldTrigger) {
       return;
     }
 
-    uint32_t nBeltSlotIdx = 0;
-    uint32_t sSeedNext = D2_SeedRoll(&pUnit->sSeed);
-    if ((int)(sSeedNext % 100) < 0x1e) {
+    if ((int)(D2_SeedRoll(&pUnit->sSeed) % 100) < 0x1e) {
       return;
     }
 
-    ::SGAMEDATA* pGameTemp = pGame;
     D2UnitStrc* pTargetPlayer = UNIT::SUnit::GetTargetEx(pGame, pUnit);
-    if (!(pTargetPlayer && pTargetPlayer->eUnitType == UNIT_PLAYER)) {
+    if (!pTargetPlayer || pTargetPlayer->eUnitType != UNIT_PLAYER) {
       return;
     }
 
     D2InventoryStrc* pInventory = pTargetPlayer->pInventory;
-    while (true) {
-      pBeltItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemInBeltSlot(pInventory, nBeltSlotIdx);
+    for (int i = 0; i < 0x10; i++) {
+      D2UnitStrc* pBeltItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemInBeltSlot(pInventory, i);
       if (pBeltItem) {
-        break;
-      }
+        if (pBeltItem->eUnitType != UNIT_ITEM || pBeltItem->eAnimMode.ePlayerMode != Walk) {
+          return;
+        }
 
-      nBeltSlotIdx++;
-      if ((int)nBeltSlotIdx >= 0x10) {
+        if (D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory)) {
+          return;
+        }
+
+        D2UnitStrc* pClonedItem = ITEMS::Items::Drop::ITEM_CloneFromSerializedData(pGame, pBeltItem, pTargetPlayer, 1);
+        POINT ptOwnerPos;
+        D2Common::Units::GetCoords(pTargetPlayer, &ptOwnerPos);
+        POINT ptDropPos;
+        D2RoomStrc* pDropRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(D2Common::Units::UNITS_GetRoom(pTargetPlayer), &ptOwnerPos, &ptDropPos, 1, 1);
+        if (!pDropRoom) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xaca);
+          exit(-1);
+        }
+
+        D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pClonedItem, ITEMFLAG_NEW, 1);
+        ITEMS::Items::Drop::DropItem(pGame, pTargetPlayer, pClonedItem, pDropRoom, ptDropPos.x, ptDropPos.y);
+        int nBeltColumn = D2Common::Units::GetXPosFromDynamicPathUnit(pBeltItem);
+        ITEMS::ItemMode::ITEMMODE_ConsumeItemAndRemove(pGame, pTargetPlayer, pBeltItem);
+        ITEMS::ItemMode::ITEMMODE_SortBeltColumn(pGame, pTargetPlayer, nBeltColumn);
         return;
       }
     }
-
-    if (!(pBeltItem->eUnitType == UNIT_ITEM && pBeltItem->eAnimMode.ePlayerMode == Walk)) {
-      return;
-    }
-
-    D2UnitStrc* pClonedItem = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
-    ::SGAMEDATA* pGameLocal = pGameTemp;
-    if (pClonedItem) {
-      return;
-    }
-
-    pClonedItem = ITEMS::Items::Drop::ITEM_CloneFromSerializedData(pGameTemp, pBeltItem, pTargetPlayer, 1);
-    D2Common::Units::GetCoords(pTargetPlayer, &ptOwnerPos);
-    uint8_t bFoundSpot = 1;
-    nBeltSlotIdx = 1;
-    POINT* pDropPos = &ptDropPos;
-    pGameTemp = (::SGAMEDATA*)ITEMS::Items::Drop::FindBestSpotToSpawnItem(D2Common::Units::UNITS_GetRoom(pTargetPlayer), &ptOwnerPos, pDropPos, nBeltSlotIdx, bFoundSpot);
-    if (!pGameTemp) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xaca);
-      exit(-1);
-    }
-
-    D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pClonedItem, ITEMFLAG_NEW, 1);
-    ITEMS::Items::Drop::DropItem(pGameLocal, pTargetPlayer, pClonedItem, (D2RoomStrc*)pGameTemp, ptDropPos.x, ptDropPos.y);
-    nErrorLine = D2Common::Units::GetXPosFromDynamicPathUnit(pBeltItem);
-    ITEMS::ItemMode::ITEMMODE_ConsumeItemAndRemove(pGameLocal, pTargetPlayer, pBeltItem);
-    ITEMS::ItemMode::ITEMMODE_SortBeltColumn(pGameLocal, pTargetPlayer, nErrorLine);
 }
 
 // Routes a monster's death event to its boss-specific handler based on nClassId. Handles Bloodraven (ranged special), Radament (ring attack), Mephisto (death missile), Izual (melee skill), Andariel (ranged short), Overseer (ranged normal), Uber Mephisto/Baal/Diablo (loot drop check), and no-op uber variants. Only triggers the handler if the unit is actually in Death anim mode (except Overseer/Uber which check null too).
