@@ -129,7 +129,14 @@ const unverified = new Set<number>();  // SAME, but with references only one sid
 const reasons = new Map<number, string>();
 if (existsSync(REASONS)) for (const r of readTsv(REASONS).slice(1)) if (r[0]) reasons.set(parseInt(r[0], 16), r[2]);
 if (cmpTsv) {
-    for (const r of readTsv(cmpTsv).slice(1)) { cmp.set(parseInt(r[1], 16), r[3]); if (r[3] === "SAME" && Number(r[5]) > 0) unverified.add(parseInt(r[1], 16)); }
+    // one address can be tagged in several files (a Windows twin's file, a declaration): a compare
+    // (SAME/DIFF) outranks a tag with no object or no function there, whatever the file order
+    for (const r of readTsv(cmpTsv).slice(1)) {
+        const a = parseInt(r[1], 16), prev = cmp.get(a);
+        if (prev === "SAME" || (prev === "DIFF" && r[3] !== "SAME")) continue;
+        cmp.set(a, r[3]);
+        if (r[3] === "SAME" && Number(r[5]) > 0) unverified.add(a); else unverified.delete(a);
+    }
 }
 
 // ---- the original path here: Source/ plus the original with its spaces dropped ----
@@ -170,7 +177,7 @@ for (const u of units) {
         if (ov) { cls = ov.cls; file = ov.file; ev = "override"; }
         const red = cls === "third-party" ? "-" : (ov ?? u).redivivus || file.split("|").map(redivivusPath).join("|");
         const ts = tags.get(f.addr) ?? [];
-        const def = ts.find((t) => t.defined);
+        const def = ts.find((t) => t.defined && red.split("|").includes(t.file)) ?? ts.find((t) => t.defined);
         let status = def ? "body" : "missing";
         const c = cmp.get(f.addr);
         if (def && c === "SAME") status = "match";
@@ -198,7 +205,8 @@ for (const f of fns) {
     const file = f.literals[0] ?? (f.fileMap && !/\.(h|hpp)$/i.test(f.fileMap) ? f.fileMap : "?");
     const ev = f.literals.length ? "__FILE__" : file !== "?" ? "file-map" : "";
     const red = u.cls === "third-party" || u.cls === "compiler" ? "-" : redivivusPath(file);
-    const def = (tags.get(f.addr) ?? []).find((t) => t.defined);
+    const ts = tags.get(f.addr) ?? [];
+    const def = ts.find((t) => t.defined && red.split("|").includes(t.file)) ?? ts.find((t) => t.defined);
     let status = def ? "body" : "missing";
     const c = cmp.get(f.addr);
     if (def && c === "SAME") status = "match";

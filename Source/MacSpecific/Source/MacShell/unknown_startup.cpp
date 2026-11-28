@@ -73,9 +73,9 @@ void FLAMINGLOGO_Shutdown(void);
 void FLAMINGLOGO_DrawFrame(ControlRef pControl);
 // 1.14d mac: 0004b543
 void D2WINMAIN_SetCursorVisible(BOOL bVisible);
-// 1.14d mac: 0006328d
 namespace D2Client {
 namespace Cursor {
+// 1.14d mac: 0006328d
 void CURSOR_SetOverrideValue(int nValue);
 }
 }

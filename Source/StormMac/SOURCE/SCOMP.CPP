@@ -622,30 +622,37 @@ static DWORD s_dwTempOwner;
 // 1.14d mac: 003f02a8
 static uint32_t s_nTempSize;
 
+// Internal linkage is in the binary (both take their arguments in ecx/edx, LLVM's fastcc), yet
+// SCompDecompress calls them out of line, which plain `static` at -Os does not give; as in
+// SBig.cpp the source-level cause is not recoverable, so noinline stands for it.
+static void* SCOMP_AcquireTempBuffer(uint32_t nSize, int32_t* pShared) __attribute__((noinline));
+static void SCOMP_ReleaseTempBuffer(void* pBuf, int32_t bShared) __attribute__((noinline));
+
 // 1.14d mac: 0000f191
 // The shared buffer when free (*pShared = 1), else a block of its own (*pShared = 0).
 static void* SCOMP_AcquireTempBuffer(uint32_t nSize, int32_t* pShared) {
     pthread_mutex_lock(&s_tTempMutex);
     DWORD dwThread = GetCurrentThreadId();
-    void* pBuffer;
-    if (s_pTempBuffer == NULL) {
+    void* pBuffer = s_pTempBuffer;
+    if (pBuffer == NULL) {
         s_nTempSize = nSize;
-        s_pTempBuffer = SMemAlloc(nSize, SCOMP_FILE, 0x69d, 0);
+        pBuffer = SMemAlloc(nSize, SCOMP_FILE, 0x69d, 0);
+        s_pTempBuffer = pBuffer;
         s_dwTempOwner = 0;
     } else if (s_dwTempOwner != 0) {
         pBuffer = SMemAlloc(nSize, SCOMP_FILE, 0x6a3, 0);
         *pShared = 0;
-        pthread_mutex_unlock(&s_tTempMutex);
-        return pBuffer;
+        goto unlock;
     }
     if (s_nTempSize < nSize) {
-        SMemFree(s_pTempBuffer, SCOMP_FILE, 0x6ac, 0);
+        SMemFree(pBuffer, SCOMP_FILE, 0x6ac, 0);
         s_nTempSize = nSize;
-        s_pTempBuffer = SMemAlloc(nSize, SCOMP_FILE, 0x6ae, 0);
+        pBuffer = SMemAlloc(nSize, SCOMP_FILE, 0x6ae, 0);
+        s_pTempBuffer = pBuffer;
     }
-    pBuffer = s_pTempBuffer;
     *pShared = 1;
     s_dwTempOwner = dwThread;
+unlock:
     pthread_mutex_unlock(&s_tTempMutex);
     return pBuffer;
 }

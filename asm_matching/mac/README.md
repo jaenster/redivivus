@@ -99,7 +99,7 @@ It writes `coverage.tsv`, one row per function of the Mac-only regions:
 |`redivivus`|where that file lives here: spaces dropped, `StormMac/Storm Mac/` is `Source/StormMac/`|
 |`class`|`blizzard-mac` (the goal), `third-party` (crashy, `mach_override`, MoreFiles, zlib, blast, RAD Bink, the CRT start), `shared` (paired with a Windows function, the shared source covers it), `shared-unpaired` (in a shared file, unpaired, but the pairer found a Windows body candidate, or `unpaired.tsv` says a Windows function does the same), `compiler` (`unpaired.tsv` only: thunks, stubs, static initialisers)|
 |`status`|`missing`; `body` (a definition tagged `// 1.14d mac: <addr>` exists); `match` / `nonmatch` (`cmp.ts` SAME / DIFF)|
-|`body_file`, `at_path`|where the tagged body is, and whether that is the mapped path|
+|`body_file`, `at_path`|where the tagged body is, and whether that is the mapped path; when an address is tagged in several files (a Windows twin's file carries the Mac address too), the body at the mapped path is the one named, and a `cmp.ts` SAME or DIFF row outranks a NOOBJ or MISSING row of another file|
 |`win_twin`|the paired `Game.exe` address|
 
 The summary is the coverage, `blizzard-mac` rows with a body over all `blizzard-mac`

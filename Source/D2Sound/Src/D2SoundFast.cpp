@@ -224,19 +224,13 @@ void __stdcall SOUND_FadeOutMusic() {
 }
 
 #if !defined(_WIN32) && D2_OS_MAC
-// 1.14d mac: 002e9952
-// Not a function of its own on Windows, where SOUND_PlayNextAmbientSound inlines it.
-static BOOL SOUNDSTRM_PlayMusicFile(char * szFile, int32_t bIsLooping) {
-    if (gpMusicStreamBuffer && D2SoundSmp::SOUNDSMP_GetEffectiveVolume() && !D2SoundSmp::SOUNDSMP_IsStreaming(gpMusicStreamBuffer) && szFile) {
-      D2SoundSmp::SOUNDSMP_Reset(gpMusicStreamBuffer);
-      D2SoundSmp::SOUNDSMP_SetVolume(gpMusicStreamBuffer, 0x6e);
-      if (D2SoundSmp::SOUNDSMP_OpenAndStreamFile(gpMusicStreamBuffer, szFile, 0, bIsLooping)) {
-        return 1;
-      }
-    }
-
-    return 0;
-}
+// The Mac binary's play step, D2SoundStrm.cpp (Windows inlines it into SOUND_PlayNextAmbientSound).
+} // namespace D2Sound::Src::D2SoundFast
+namespace D2Sound::Src::D2SoundStrm {
+BOOL SOUNDSTRM_PlayMusicFile(char * szFile, int32_t bIsLooping);
+} // namespace D2Sound::Src::D2SoundStrm
+namespace D2Sound::Src::D2SoundFast {
+using D2SoundStrm::SOUNDSTRM_PlayMusicFile;
 
 // 1.14d mac: 002e9af1
 // The ambient count is the compile-time 8 and the play step is SOUNDSTRM_PlayMusicFile.

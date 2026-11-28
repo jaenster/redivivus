@@ -605,14 +605,14 @@ void __stdcall UI_HandleMousePositionUpdate(D2UIMouseMsgStrc * pMsg) {
 #if !defined(_WIN32) && D2_OS_MAC
 namespace D2Client::Cursor {
 
-// 004403b0: the value the Mac shell's about dialog hands the cursor code.
-static int gnCursorOverrideValue = 0;
-// 004403b4: set whenever the override value is zero.
+// 004403b4: set whenever the value handed in is zero; GetMouseX and GetMouseY read it.
 static int gnCursorOverrideClear = 0;
 
 // 1.14d mac: 0006328d
+// The Mac shell's about dialog hands the cursor its initialised flag (004403b0 is
+// gnCursorInitialized: UI_FreeCursor clears it, DrawCursor tests it).
 void __stdcall CURSOR_SetOverrideValue(int nValue) {
-    gnCursorOverrideValue = nValue;
+    gnCursorInitialized = nValue;
 }
 
 // 1.14d mac: 000632a1
@@ -623,7 +623,7 @@ int __stdcall CURSOR_GetOverrideClear() {
 // 1.14d mac: 000632b2
 void __stdcall CURSOR_SetOverrideValueAndClear(int nValue) {
     gnCursorOverrideClear = (nValue == 0);
-    gnCursorOverrideValue = nValue;
+    gnCursorInitialized = nValue;
 }
 
 } // namespace D2Client::Cursor

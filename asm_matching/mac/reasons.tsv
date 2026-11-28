@@ -24,9 +24,7 @@ addr	name	reason_class	detail
 0000ebb6	Storm::HUFFMAN_InsertNewSymbol	regalloc	the call sequence and tree updates match; two stack slots are swapped and one insn fewer
 0000ed92	Storm::HUFFMAN_BuildTree	regalloc	weight-row pointer is hoisted into a register in the original; ours folds the table base into the load
 0000f0e9	Storm::SCOMP_DecompressImplode	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
-0000f191	Storm::Source::SSComp::SCOMP_AcquireTempBuffer	inline	absent from object; orig SCompDecompress calls it out of line while ours inlines its mutex and SMemAlloc body
-0000f2c1	Storm::Source::SSComp::SCOMP_ReleaseTempBuffer	inline	absent from object; orig SCompDecompress calls it out of line while ours inlines its mutex and SMemFree body
-0000f32f	Storm::Source::SSComp::SCompDecompress	inline	the original calls the temp-buffer helpers (0000f191, 0000f2c1) out of line; ours inlines them
+0000f32f	Storm::Source::SSComp::SCompDecompress	sched	helpers now called out of line as in the original; the prologue computes pSrc+1 before the flag byte in the original, and the method loop's overlap test is branched there but if-converted (sbb/and/cmov) here; a nested-if rewrite did not move it
 0000f5b0	Storm::HUFFMAN_Decompress	inline	the original inlines the rebalance and the walk more than ours: 356 vs 244 insns, same 13 calls
 0000fad8	Storm::thunk_uncompress	unverified-ref	thunk tail-jumps to an import stub the original names differently from our _uncompress; instructions otherwise identical
 0000fae1	Storm::ADPCM_Decompress	regalloc	the ADPCM step loop uses the same tables and calls; spill slots and the unrolled stereo path differ
@@ -73,8 +71,8 @@ addr	name	reason_class	detail
 00015c64	Storm::Source::SFile::SFILE_GetHashTableIndex	sched	143 vs 131 insns, 42% of the register-normalised stream aligns; same call sequence; block order and fused forms differ
 00015e0c	Storm::Source::SFile::SFILE_CdThreadProc	inline	858 vs 814 insns, 57% of the register-normalised stream aligns; calls 39 vs 39; helpers are inlined or called differently from the original
 00016a72	Storm::Source::SFile::CRITSECT_Destroy	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical; all 10 instructions are identical; 1 call target(s) cmp cannot name on our side (a destructor variant or a weak template copy in the object)
-00017278	Storm::Source::SFile::SFILE_FreeArchiveRecord	unpaired	destructor tag: cmp.ts cannot match D2ArchiveStrc::~D2ArchiveStrc to an object symbol by name
-0001737c	Storm::Source::SFile::SFILE_FreeFileRecord	unpaired	destructor tag: cmp.ts cannot match the member by name
+00017278	Storm::Source::SFile::SFILE_FreeArchiveRecord	eh	identical through the body and the first landing pad (m_link.Unlink); the original then has a second pad that calls Unlink again before __ZSt9terminatev, ours goes straight to terminate
+0001737c	Storm::Source::SFile::SFILE_FreeFileRecord	eh	identical through the body and the first landing pad (m_link.Unlink); the original then has a second pad that calls Unlink again before __ZSt9terminatev, ours goes straight to terminate
 00017484	Storm::Source::SFile::SFILE_FreeStreamRecord	pic-ref	ours' callee references are unresolved ('call ?') where the original names the D2MPQFileStrc destructor, IDirectSoundBuffer_Release and TSLink<D2StormAudioStreamRec>::Unlink; the terminate landing pad is also missing
 000174ec	Storm::Source::SFile::SFILE_FreeRequestRecord	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical; all 31 instructions are identical; 2 call target(s) cmp cannot name on our side (a destructor variant or a weak template copy in the object)
 00017700	Storm::SFILE_InitStatics	pic-ref	orig takes destructor addresses with lea of PIC fn, ours loads them with mov from &symbol (&___dso_handle, &__ZN...D1Ev)
@@ -405,8 +403,8 @@ addr	name	reason_class	detail
 00045e02	D2Win::Src::D2WinEditBox::D2WINEDITBOX_HandleMenuCommand	regalloc	the original is an internal function with register arguments (ECX, EDX); ours is external and loads them from the stack, differing from instruction 6
 0004bcf9	D2Win::D2WIN_HandleEditMenuCommand	regalloc	scratch register for the saved pointer is edx here, ecx in the original
 0005e6ac	D2Client::CLIENT_SetRendererMode	data-guess	the second global is the renderer-mode global's neighbour in the original; ours stores the paired CurrentRendingEngine
-0006328d	D2Client::Cursor::CURSOR_SetOverrideValue	pic-ref	the global is a file-local static here; the original reaches it by a PIC load through call $+5
-000632b2	D2Client::Cursor::CURSOR_SetOverrideValueAndClear	regalloc	argument copied through ecx in the original, compared in place here
+0006328d	D2Client::Cursor::CURSOR_SetOverrideValue	pic-ref	004403b0 is gnCursorInitialized, defined in the same unit in the original (direct PIC store); ours defines it in Source/globals/D2Client.cpp, so the store goes through a non-lazy pointer (one extra load)
+000632b2	D2Client::Cursor::CURSOR_SetOverrideValueAndClear	pic-ref	identical up to the gnCursorInitialized store: direct PIC in the original, a non-lazy pointer here since the global lives in Source/globals/D2Client.cpp
 0006e5b3	D2Client::GAME::Game::GAME_SetInteractionPending	pic-ref	the global is a file-local static here; the original reaches it by a PIC load through call $+5
 000726d6	D2Client::SGAMEDATA_FreeElementBlock	eh	callees differ: orig-only [__ZSt9terminatev] ours-only []; loop temporaries land in other stack slots (ebp-0x10 vs ebp-0x14)
 000749e3	D2Client::GAME::Record::RECORD_SetFlagA	pic-ref	the global is a file-local static here; the original reaches it by a PIC load through call $+5
@@ -646,7 +644,7 @@ addr	name	reason_class	detail
 002e76e9	D2Sound::SOUND_GetHardwareAccelerationFlag	data-guess	ours returns the constant 1; the original reads the renderer state flag at DAT_00552b78+0x28d and inverts it
 002e9470	D2Sound::Src::D2SoundSmp::SOUNDSMP_Set3DPosition	semantic-guess	the halt path calls _exit where the original calls FOG_GetFramePointer and fp_fatal (Unrecoverable internal error); callees differ: orig-only [FOG_GetFramePointer fp_fatal] ours-only [_exit]
 002e95bc	D2Sound::Src::D2SoundSmp::SOUNDSMP_SetEaxRoomLevel	semantic-guess	the halt path calls _exit where the original calls FOG_GetFramePointer and fp_fatal (Unrecoverable internal error); callees differ: orig-only [FOG_GetFramePointer fp_fatal] ours-only [_exit]
-002e9952	D2Sound::D2SoundStrm::SOUNDSTRM_PlayMusicFile	unpaired	the tagged body lives in Source/D2Sound/Src/D2SoundFast.cpp, not at the mapped D2SoundStrm.cpp, and cmp.ts reports no row for it
+002e9952	D2Sound::D2SoundStrm::SOUNDSTRM_PlayMusicFile	pic-ref	gpMusicStreamBuffer is reached by direct PIC in the original (same unit); ours loads it through a non-lazy pointer from Source/globals/D2Sound.cpp and keeps the pointer in esi, so every read is one indirection deeper
 002eed78	Fog::ErrorManager::FOG_InitErrorManager	stack-layout	frame is 0x42c against the original 0x41c: the original keeps the Gestalt result and the 0x400 support-path buffer in one 0x1c-byte-smaller frame; the callees it reaches are thunks on the Mac (crash init, pool init, log timer) that our direct calls skip
 002ef7cd	Fog::ErrorManager::FOG_MacGetBlizzardSupportPath	regalloc	same calls; the original keeps the PIC base in ebx and the buffer pointer in edi, ours uses edi and esi (76 vs 74 insns)
 002ef904	Fog::FOG_BuildGammaRamp	sched	instruction mix identical through the argument checks; the loop-invariant doubles are hoisted in a different order and the pow argument pair is scheduled differently (121 vs 122 insns)

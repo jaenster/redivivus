@@ -998,7 +998,7 @@ static int SFILE_GetHashTableIndex(uint32_t nUnused, const char* szFileName, D2A
 // The records' destructors (the Free...Record functions): each unlinks the record, once by
 // hand and once in the link member's own destructor.
 
-// 1.14d mac: 00017278
+// 1.14d mac: 00017278 D2ArchiveStrc::~D2ArchiveStrc[D2]
 D2ArchiveStrc::~D2ArchiveStrc() {
     if (hFile != 0 && pArchiveFile == NULL) {
         CloseHandle(hFile);
@@ -1018,7 +1018,7 @@ D2ArchiveStrc::~D2ArchiveStrc() {
     m_link.Unlink();
 }
 
-// 1.14d mac: 0001737c
+// 1.14d mac: 0001737c D2MPQFileStrc::~D2MPQFileStrc[D2]
 D2MPQFileStrc::~D2MPQFileStrc() {
     if (hFile != 0) {
         CloseHandle(hFile);
