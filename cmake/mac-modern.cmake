@@ -126,6 +126,7 @@ list(FILTER _uni_sources EXCLUDE REGEX "/Source/D2Uni/Src/(dspCore|qdCore)\\.cpp
 #                       and the link dependencies, on SDL3. Outside `all` until it links;
 #                       asm_matching/mac/modern-link-probe.ts lists what it still lacks.
 # d2_win32posix_test    the kernel's unit test (Source/StormMac/Win32Posix/Tests).
+# d2_win32posix_crt_test  the CRT path calls (fopen, stat, _findfirst ...) on Windows-spelled paths.
 # d2_sockets_test       Winsock on loopback (SocketsTest.cpp): TCP, UDP, select and the codes.
 # d2_directsound_test   DirectSound's mixer and a tone on SDL's dummy audio driver.
 #
@@ -237,3 +238,10 @@ d2_win32posix_setup(d2_smem_test)
 target_include_directories(d2_smem_test PRIVATE ${D2_MODERN_INCLUDE_DIRS})
 target_compile_options(d2_smem_test PRIVATE
     "SHELL:-include ${CMAKE_SOURCE_DIR}/Source/D2Headers/d2_platform.h")
+
+# d2_win32posix_crt_test  the CRT's path functions over the kernel's path mapping
+#                         (Win32PosixCrt.h): C:\ and backslash paths, case, relative, parents made.
+add_executable(d2_win32posix_crt_test EXCLUDE_FROM_ALL
+    "${CMAKE_SOURCE_DIR}/Source/StormMac/Win32Posix/Tests/CrtTest.cpp"
+    $<TARGET_OBJECTS:d2_win32posix_kernel>)
+d2_win32posix_setup(d2_win32posix_crt_test)

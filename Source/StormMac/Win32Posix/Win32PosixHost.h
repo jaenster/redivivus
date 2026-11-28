@@ -40,7 +40,10 @@
 #undef FD_CLR
 #define u_long Win32Posix_u_long
 #define fd_set Win32Posix_fd_set
+// The layer's own units are the ones the CRT redirects land on: fopen and stat stay the host's.
+#define WIN32POSIX_NO_CRT_REDIRECT 1
 #include "Source/D2Headers/d2_platform.h"
+#undef WIN32POSIX_NO_CRT_REDIRECT
 #undef u_long
 #undef fd_set
 #undef FD_SETSIZE

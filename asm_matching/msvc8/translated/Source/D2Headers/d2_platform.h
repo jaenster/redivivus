@@ -1140,3 +1140,9 @@ typedef uint8_t D2Row_uint8_t_32768[32768];
 
 // Shared enum constants (SOUND_NONE, UNIT_PLAYER, SKILL_Attack, etc.)
 #include "Source/D2Headers/d2_enums.h"
+
+#if !defined(_WIN32) && D2_BACKEND_POSIX
+// The Microsoft CRT's path calls over Win32Posix's path mapping; after every system header,
+// since it redirects names the host C library declares.
+#  include "Source/StormMac/Win32Posix/Win32PosixCrt.h"
+#endif
