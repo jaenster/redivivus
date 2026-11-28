@@ -13,6 +13,7 @@
 #include <thread>
 #include <vector>
 
+#include "Redivivus/Lua/d2_lua_internal.h"
 #include "Redivivus/Lua/d2_lua_override.h"
 #include "Redivivus/Lua/d2_lua_runtime.h"
 #include "Redivivus/Lua/test/d2_lua_test_util.h"
@@ -419,8 +420,55 @@ void HotTests(bool bBench) {
             }
             nOver = std::chrono::duration<double, std::nano>(Clock::now() - t0).count() / (kN / 4);
         }
-        printf("bench override: original %.1f ns/call, patched with no override on this thread %.1f ns/call, overridden %.1f ns/call (%d-bit)\n",
-               nPlain, nPatchedIdle, nOver, (int)sizeof(void*) * 8);
+        double nOverInterp = 0;
+        {
+            // the same with the JIT off: what the traces save (or cost, where a trace exits to call next())
+            Bound b(pRt, nullptr);
+            luaJIT_setmode(L, 0, LUAJIT_MODE_ENGINE | LUAJIT_MODE_OFF);
+            t0 = Clock::now();
+            for (int i = 0; i < kN / 4; i++) {
+                nSink += pHot(i);
+            }
+            nOverInterp = std::chrono::duration<double, std::nano>(Clock::now() - t0).count() / (kN / 4);
+            luaJIT_setmode(L, 0, LUAJIT_MODE_ENGINE | LUAJIT_MODE_ON);
+        }
+        printf("bench override: original %.1f ns/call, patched with no override on this thread %.1f ns/call, overridden %.1f ns/call "
+               "(interpreted %.1f) (%d-bit)\n",
+               nPlain, nPatchedIdle, nOver, nOverInterp, (int)sizeof(void*) * 8);
+        // What one guarded entry into Lua costs on its own, the bulk of an overridden call.
+        int nMod = D2LuaHost_ModId(L, "ovhot");
+        luaL_dostring(L, "ov_empty = function(a) return a end");
+        const int kE = kN / 8;
+        t0 = Clock::now();
+        for (int i = 0; i < kE; i++) {
+            lua_getglobal(L, "ov_empty");
+            lua_pushinteger(L, i);
+            int nPushed = 0;
+            D2LuaHost_CallAs(L, nMod, 1, &nPushed);
+            lua_pop(L, nPushed);
+        }
+        double nCallAs = std::chrono::duration<double, std::nano>(Clock::now() - t0).count() / kE;
+        lua_State* co = lua_newthread(L);
+        lua_State* cs = lua_newthread(L);
+        t0 = Clock::now();
+        for (int i = 0; i < kE; i++) {
+            lua_settop(co, 0);
+            lua_getglobal(co, "ov_empty");
+            lua_pushinteger(co, i);
+            int nRes = 0;
+            D2LuaHost_ResumeAs(cs, co, nMod, 1, &nRes);
+        }
+        double nResume = std::chrono::duration<double, std::nano>(Clock::now() - t0).count() / kE;
+        t0 = Clock::now();
+        for (int i = 0; i < kE; i++) {
+            lua_getglobal(L, "ov_empty");
+            lua_pushinteger(L, i);
+            lua_pcall(L, 1, 1, 0);
+            lua_pop(L, 1);
+        }
+        double nPcall = std::chrono::duration<double, std::nano>(Clock::now() - t0).count() / kE;
+        lua_pop(L, 2);
+        printf("bench entry: CallAs %.1f ns, ResumeAs %.1f ns, bare lua_pcall %.1f ns\n", nCallAs, nResume, nPcall);
         (void)nSink;
     }
     D2LuaRt_Destroy(pRt);

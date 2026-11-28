@@ -315,8 +315,51 @@ void Release(int nId) {
 
 // --- a state's overrides -------------------------------------------------------------------------------
 
+// The states bound to the calling thread. On Windows a TLS slot of the system's (a thunk reads it on
+// every call of a patched function; mingw's thread_local goes through emutls, several times slower).
+#if defined(_WIN32)
+struct ThreadStates {
+    D2LuaRuntime* pServer;
+    D2LuaRuntime* pClient;
+};
+DWORD TlsIndex() {
+    static DWORD s_nIndex = TlsAlloc();
+    return s_nIndex;
+}
+const DWORD g_nTls = TlsIndex();  // allocated before main, so the hot path never takes the static's guard
+ThreadStates* Threads(bool bCreate) {
+    ThreadStates* p = (ThreadStates*)TlsGetValue(g_nTls);
+    if (!p && bCreate) {
+        p = new ThreadStates{ nullptr, nullptr };  // one per thread that binds a state; kept for its life
+        TlsSetValue(g_nTls, p);
+    }
+    return p;
+}
+inline D2LuaRuntime* ServerOf() {
+    ThreadStates* p = Threads(false);
+    return p ? p->pServer : nullptr;
+}
+inline D2LuaRuntime* ClientOf() {
+    ThreadStates* p = Threads(false);
+    return p ? p->pClient : nullptr;
+}
+inline D2LuaRuntime*& Slot(int nSide) {
+    ThreadStates* p = Threads(true);
+    return nSide == D2LUA_SIDE_SERVER ? p->pServer : p->pClient;
+}
+#else
 thread_local D2LuaRuntime* t_pServer = nullptr;
 thread_local D2LuaRuntime* t_pClient = nullptr;
+inline D2LuaRuntime* ServerOf() {
+    return t_pServer;
+}
+inline D2LuaRuntime* ClientOf() {
+    return t_pClient;
+}
+inline D2LuaRuntime*& Slot(int nSide) {
+    return nSide == D2LUA_SIDE_SERVER ? t_pServer : t_pClient;
+}
+#endif
 
 }  // namespace
 
@@ -349,6 +392,7 @@ struct D2LuaOvState {
     size_t nPoolUsed = 0;
     int nNextTable = LUA_NOREF;           // { [id * 64 + pos] = next closure }
     D2LuaOvFrame* pTop = nullptr;         // the innermost running call
+    bool bDead = false;                   // a layer died since the last sweep
 };
 
 namespace {
@@ -389,6 +433,7 @@ void KillMod(D2LuaOvState* st, int nMod) {
         for (D2LuaOvLayer& l : c->aLayers) {
             if (l.nMod == nMod) {
                 l.bDead = true;
+                st->bDead = true;
             }
         }
     }
@@ -396,6 +441,10 @@ void KillMod(D2LuaOvState* st, int nMod) {
 
 // Drop dead layers and the chains left empty (no call is running).
 void Sweep(D2LuaOvState* st, lua_State* L) {
+    if (!st->bDead) {
+        return;
+    }
+    st->bDead = false;
     std::vector<int> aKeep;
     for (int nId : st->aIds) {
         D2LuaOvChain* c = st->aChains[(size_t)nId];
@@ -668,10 +717,11 @@ bool D2LuaOv_Begin(D2LuaOvFrame* f, int nId) {
     }
     int nSide = r->aById[(size_t)nId]->nSide;
     D2LuaRuntime* pRt = nullptr;
-    if ((nSide & D2LUA_SIDE_SERVER) && t_pServer) {
-        pRt = t_pServer;
-    } else if (nSide & D2LUA_SIDE_CLIENT) {
-        pRt = t_pClient;
+    if (nSide & D2LUA_SIDE_SERVER) {
+        pRt = ServerOf();
+    }
+    if (!pRt && (nSide & D2LUA_SIDE_CLIENT)) {
+        pRt = ClientOf();
     }
     D2LuaOvState* st = pRt ? pRt->pOv : nullptr;
     if (!st || !st->bReady || (size_t)nId >= st->aChains.size() || !st->aChains[(size_t)nId]) {
@@ -705,6 +755,13 @@ bool D2LuaOv_Begin(D2LuaOvFrame* f, int nId) {
 
 void D2LuaOv_PushNumber(D2LuaOvFrame* f, double n) {
     lua_pushnumber(f->L, n);
+    f->nArgs++;
+}
+
+void D2LuaOv_PushInteger(D2LuaOvFrame* f, int64_t n) {
+    // the values a game function passes are 32-bit: an int32 or uint32 converts without x87
+    lua_pushnumber(f->L, n >= INT32_MIN && n <= INT32_MAX ? (lua_Number)(int32_t)n
+                         : n >= 0 && n <= (int64_t)UINT32_MAX ? (lua_Number)(int32_t)(n - 2147483648LL) + 2147483648.0 : (lua_Number)n);
     f->nArgs++;
 }
 
@@ -860,18 +917,55 @@ uintptr_t ReadPointer(lua_State* L, int i, const D2LuaOvFrame* f, const void* pT
 }
 }  // namespace
 
-bool D2LuaOv_ResultNumber(D2LuaOvFrame* f, double* pn, double nMin, double nMax, bool bIntegral) {
+namespace {
+// n as an integer a C integer of nBits holds, signed or unsigned (64 bits: within 2^53); false
+// when it is not one. Through 32-bit conversions (SSE), not the x87 64-bit one, for the common case.
+bool ToInteger(double n, int nBits, int64_t* pOut) {
+    if (n != n) {
+        return false;
+    }
+    double nMin = nBits >= 64 ? -9007199254740992.0 : -(double)((uint64_t)1 << (nBits - 1));
+    double nMax = nBits >= 64 ? 9007199254740992.0 : (double)(((uint64_t)1 << nBits) - 1);
+    if (n < nMin || n > nMax) {
+        return false;
+    }
+    if (n >= -2147483648.0 && n <= 2147483647.0) {
+        int32_t k = (int32_t)n;
+        *pOut = k;
+        return (double)k == n;
+    }
+    if (n >= 0 && n <= 4294967295.0) {
+        int32_t k = (int32_t)(n - 2147483648.0);
+        *pOut = (int64_t)k + 2147483648LL;
+        return (double)k + 2147483648.0 == n;
+    }
+    int64_t k = (int64_t)n;
+    *pOut = k;
+    return (double)k == n;
+}
+}  // namespace
+
+bool D2LuaOv_ResultNumber(D2LuaOvFrame* f, double* pn) {
     lua_State* L = f->L;
     if (lua_type(L, -1) != LUA_TNUMBER) {
         char sz[64];
         snprintf(sz, sizeof(sz), "a %s where a number belongs", luaL_typename(L, -1));
         return ResultFailed(f, sz);
     }
-    double n = lua_tonumber(L, -1);
-    if ((bIntegral && n != (double)(long long)n) || n < nMin || n > nMax) {
-        return ResultFailed(f, "a number out of the result's range");
+    *pn = lua_tonumber(L, -1);
+    return true;
+}
+
+bool D2LuaOv_ResultInteger(D2LuaOvFrame* f, int64_t* pn, int nBits) {
+    lua_State* L = f->L;
+    if (lua_type(L, -1) != LUA_TNUMBER) {
+        char sz[64];
+        snprintf(sz, sizeof(sz), "a %s where a number belongs", luaL_typename(L, -1));
+        return ResultFailed(f, sz);
     }
-    *pn = n;
+    if (!ToInteger(lua_tonumber(L, -1), nBits, pn)) {
+        return ResultFailed(f, "a number that is no integer of the result's width");
+    }
     return true;
 }
 
@@ -917,15 +1011,23 @@ D2LuaOvFrame* D2LuaOv_CallFrame(lua_State* L, int nId, int nArgs) {
     return f;
 }
 
-double D2LuaOv_ArgNumber(lua_State* L, D2LuaOvFrame* f, int i, double nMin, double nMax, bool bIntegral) {
+double D2LuaOv_ArgNumber(lua_State* L, D2LuaOvFrame* f, int i) {
+    if (lua_type(L, i + 1) != LUA_TNUMBER) {
+        luaL_error(L, "next: argument %d of %s must be a number, not a %s", i + 1, Reg().aById[(size_t)f->nId]->pszPath, luaL_typename(L, i + 1));
+    }
+    return lua_tonumber(L, i + 1);
+}
+
+int64_t D2LuaOv_ArgInteger(lua_State* L, D2LuaOvFrame* f, int i, int nBits) {
     if (lua_type(L, i + 1) != LUA_TNUMBER) {
         luaL_error(L, "next: argument %d of %s must be a number, not a %s", i + 1, Reg().aById[(size_t)f->nId]->pszPath, luaL_typename(L, i + 1));
     }
     double n = lua_tonumber(L, i + 1);
-    if ((bIntegral && n != (double)(long long)n) || n < nMin || n > nMax) {
-        luaL_error(L, "next: argument %d of %s is out of its type's range (%f)", i + 1, Reg().aById[(size_t)f->nId]->pszPath, n);
+    int64_t k = 0;
+    if (!ToInteger(n, nBits, &k)) {
+        luaL_error(L, "next: argument %d of %s must be an integer of %d bits (got %f)", i + 1, Reg().aById[(size_t)f->nId]->pszPath, nBits, n);
     }
-    return n;
+    return k;
 }
 
 bool D2LuaOv_ArgBool(lua_State* L, D2LuaOvFrame* f, int i) {
@@ -946,6 +1048,12 @@ void* D2LuaOv_ArgPointer(lua_State* L, D2LuaOvFrame* f, int i, const void* pType
 
 int D2LuaOv_ReturnNumber(lua_State* L, double n) {
     lua_pushnumber(L, n);
+    return 1;
+}
+
+int D2LuaOv_ReturnInteger(lua_State* L, int64_t n) {
+    lua_pushnumber(L, n >= INT32_MIN && n <= INT32_MAX ? (lua_Number)(int32_t)n
+                      : n >= 0 && n <= (int64_t)UINT32_MAX ? (lua_Number)(int32_t)(n - 2147483648LL) + 2147483648.0 : (lua_Number)n);
     return 1;
 }
 
@@ -1019,14 +1127,14 @@ bool D2LuaOv_CanPatch(void) {
 }
 
 D2LuaRuntime* D2LuaOv_BindThread(int nSide, D2LuaRuntime* pRt) {
-    D2LuaRuntime*& slot = nSide == D2LUA_SIDE_SERVER ? t_pServer : t_pClient;
+    D2LuaRuntime*& slot = Slot(nSide);
     D2LuaRuntime* pWas = slot;
     slot = pRt;
     return pWas;
 }
 
 D2LuaRuntime* D2LuaOv_ThreadRuntime(int nSide) {
-    return nSide == D2LUA_SIDE_SERVER ? t_pServer : t_pClient;
+    return nSide == D2LUA_SIDE_SERVER ? ServerOf() : ClientOf();
 }
 
 void D2LuaOv_StateCreated(D2LuaRuntime* pRt) {
@@ -1056,6 +1164,7 @@ void D2LuaOv_ClearState(D2LuaRuntime* pRt) {
             for (D2LuaOvLayer& l : c->aLayers) {
                 l.bDead = true;
             }
+            st->bDead = true;
         }
     }
     if (st->nCalls == 0) {
@@ -1077,11 +1186,11 @@ void D2LuaOv_StateDestroyed(D2LuaRuntime* pRt) {
         }
     }
     st->aIds.clear();
-    if (t_pServer == pRt) {
-        t_pServer = nullptr;
+    if (ServerOf() == pRt) {
+        Slot(D2LUA_SIDE_SERVER) = nullptr;
     }
-    if (t_pClient == pRt) {
-        t_pClient = nullptr;
+    if (ClientOf() == pRt) {
+        Slot(D2LUA_SIDE_CLIENT) = nullptr;
     }
     delete st;
     pRt->pOv = nullptr;

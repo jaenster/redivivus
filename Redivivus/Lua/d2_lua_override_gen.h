@@ -15,7 +15,6 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#include <limits>
 #include <tuple>
 #include <type_traits>
 #include <utility>
@@ -82,13 +81,15 @@ struct D2LuaOvFrame {
 // Whether this thread's state for the function's side has an override of it; fills the frame.
 bool D2LuaOv_Begin(D2LuaOvFrame* pFrame, int nId);
 void D2LuaOv_PushNumber(D2LuaOvFrame* pFrame, double nValue);
+void D2LuaOv_PushInteger(D2LuaOvFrame* pFrame, int64_t nValue);
 void D2LuaOv_PushBool(D2LuaOvFrame* pFrame, bool bValue);
 void D2LuaOv_PushPointer(D2LuaOvFrame* pFrame, int i, const void* p, const void* pType, bool bUnit);
 // Run the chain on the pushed arguments; false when no override ran to the end (every one faulted):
 // the caller then runs the original.
 bool D2LuaOv_Invoke(D2LuaOvFrame* pFrame);
 // The result the chain returned, converted; false (logged, the mod faulted) when it is not of the type.
-bool D2LuaOv_ResultNumber(D2LuaOvFrame* pFrame, double* pnOut, double nMin, double nMax, bool bIntegral);
+bool D2LuaOv_ResultNumber(D2LuaOvFrame* pFrame, double* pnOut);
+bool D2LuaOv_ResultInteger(D2LuaOvFrame* pFrame, int64_t* pnOut, int nBits);
 bool D2LuaOv_ResultBool(D2LuaOvFrame* pFrame, bool* pbOut);
 bool D2LuaOv_ResultPointer(D2LuaOvFrame* pFrame, void** ppOut, const void* pType, bool bUnit);
 void D2LuaOv_End(D2LuaOvFrame* pFrame);
@@ -96,10 +97,12 @@ void D2LuaOv_End(D2LuaOvFrame* pFrame);
 // --- the native side of next() at the bottom of a chain ----------------------------------------------
 // The innermost frame of function nId on this state; raises when next() is called outside it.
 D2LuaOvFrame* D2LuaOv_CallFrame(lua_State* L, int nId, int nArgs);
-double D2LuaOv_ArgNumber(lua_State* L, D2LuaOvFrame* pFrame, int i, double nMin, double nMax, bool bIntegral);
+double D2LuaOv_ArgNumber(lua_State* L, D2LuaOvFrame* pFrame, int i);
+int64_t D2LuaOv_ArgInteger(lua_State* L, D2LuaOvFrame* pFrame, int i, int nBits);
 bool D2LuaOv_ArgBool(lua_State* L, D2LuaOvFrame* pFrame, int i);
 void* D2LuaOv_ArgPointer(lua_State* L, D2LuaOvFrame* pFrame, int i, const void* pType, bool bUnit);
 int D2LuaOv_ReturnNumber(lua_State* L, double nValue);
+int D2LuaOv_ReturnInteger(lua_State* L, int64_t nValue);
 int D2LuaOv_ReturnBool(lua_State* L, bool bValue);
 int D2LuaOv_ReturnPointer(lua_State* L, D2LuaOvFrame* pFrame, const void* p, const void* pType, bool bUnit);
 int D2LuaOv_ReturnNone(lua_State* L);
@@ -163,38 +166,26 @@ constexpr bool AllSupported(const char* s) {
     return *s == 0 || (*s != 'x' && AllSupported(s + 1));
 }
 
-// The range a number must lie in to become a T: an integer of T's width, signed or unsigned
-// (the engine passes -1 through unsigned parameters and back), or any number for floating point.
+// How an integer of T travels: as an int64 (no floating point in the game's units, whose x87 code
+// converts slowly), checked against T's width in d2_lua_override.cpp: a value of the width, signed
+// or unsigned (the engine passes -1 through unsigned parameters and back), wrapped as C does.
 template <class T>
-struct NumberRange {
+struct Integer {
     using U = typename std::conditional<std::is_enum<T>::value, std::underlying_type<T>, std::common_type<T>>::type::type;
-    static constexpr bool kIntegral = !std::is_floating_point<U>::value;
-    static constexpr double Min() {
-        return kIntegral ? (sizeof(U) >= 8 ? -9007199254740992.0 : -(double)((uint64_t)1 << (sizeof(U) * 8 - 1))) : -std::numeric_limits<double>::infinity();
-    }
-    static constexpr double Max() {
-        return kIntegral ? (sizeof(U) >= 8 ? 9007199254740992.0 : (double)(((uint64_t)1 << (sizeof(U) * 8)) - 1)) : std::numeric_limits<double>::infinity();
-    }
-    static T From(double v) {
-        if constexpr (kIntegral) {
-            if constexpr (sizeof(U) >= 8) {
-                return (T)(U)(int64_t)v;
-            } else {
-                // Two's complement wrap of the value into the width: -1 becomes all ones.
-                int64_t n = (int64_t)v;
-                return (T)(U)(uint64_t)n;
-            }
-        } else {
-            return (T)v;
-        }
+    static constexpr bool kFloat = std::is_floating_point<U>::value;
+    static constexpr int kBits = (int)sizeof(U) * 8;
+    static T From(int64_t n) {
+        return (T)(U)(uint64_t)n;
     }
 };
 
 template <class T>
 inline void Push(D2LuaOvFrame* f, int i, T v) {
     constexpr char k = KindOf<T>();
-    if constexpr (k == 'n') {
+    if constexpr (k == 'n' && Integer<T>::kFloat) {
         D2LuaOv_PushNumber(f, (double)v);
+    } else if constexpr (k == 'n') {
+        D2LuaOv_PushInteger(f, (int64_t)v);
     } else if constexpr (k == 'b') {
         D2LuaOv_PushBool(f, v);
     } else if constexpr (k == 'w' || k == 'p') {
@@ -208,12 +199,19 @@ template <class T>
 struct Result {
     static bool Get(D2LuaOvFrame* f, T* pOut) {
         constexpr char k = KindOf<T>();
-        if constexpr (k == 'n') {
+        if constexpr (k == 'n' && Integer<T>::kFloat) {
             double n;
-            if (!D2LuaOv_ResultNumber(f, &n, NumberRange<T>::Min(), NumberRange<T>::Max(), NumberRange<T>::kIntegral)) {
+            if (!D2LuaOv_ResultNumber(f, &n)) {
                 return false;
             }
-            *pOut = NumberRange<T>::From(n);
+            *pOut = (T)n;
+            return true;
+        } else if constexpr (k == 'n') {
+            int64_t n;
+            if (!D2LuaOv_ResultInteger(f, &n, Integer<T>::kBits)) {
+                return false;
+            }
+            *pOut = Integer<T>::From(n);
             return true;
         } else if constexpr (k == 'b') {
             return D2LuaOv_ResultBool(f, pOut);
@@ -252,8 +250,10 @@ template <class T>
 struct Arg {
     static T Get(lua_State* L, D2LuaOvFrame* f, int i) {
         constexpr char k = KindOf<T>();
-        if constexpr (k == 'n') {
-            return NumberRange<T>::From(D2LuaOv_ArgNumber(L, f, i, NumberRange<T>::Min(), NumberRange<T>::Max(), NumberRange<T>::kIntegral));
+        if constexpr (k == 'n' && Integer<T>::kFloat) {
+            return (T)D2LuaOv_ArgNumber(L, f, i);
+        } else if constexpr (k == 'n') {
+            return Integer<T>::From(D2LuaOv_ArgInteger(L, f, i, Integer<T>::kBits));
         } else if constexpr (k == 'b') {
             return D2LuaOv_ArgBool(L, f, i);
         } else if constexpr (k == 'w' || k == 'p') {
@@ -269,8 +269,10 @@ struct Arg {
 template <class T>
 inline int Return(lua_State* L, D2LuaOvFrame* f, T v) {
     constexpr char k = KindOf<T>();
-    if constexpr (k == 'n') {
+    if constexpr (k == 'n' && Integer<T>::kFloat) {
         return D2LuaOv_ReturnNumber(L, (double)v);
+    } else if constexpr (k == 'n') {
+        return D2LuaOv_ReturnInteger(L, (int64_t)v);
     } else if constexpr (k == 'b') {
         return D2LuaOv_ReturnBool(L, v);
     } else {

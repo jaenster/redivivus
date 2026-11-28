@@ -106,10 +106,11 @@ struct HostContext {
     bool bArmed = false;
     bool bHookSet = false;            // the watchdog set the hook for the current call
     std::atomic<bool> bFired{false};  // the deadline passed
-    Clock::time_point tDeadline;
+    uint64_t nArmed = 0;              // outer entries armed so far: the watchdog dates each one it sees
 
     // Mod ids and the owner stack.
     std::vector<std::string> aModNames;
+    std::vector<uint8_t> aFaulted;  // by mod id: what the registry's mods table says, for the entries' quick check
     int aOwner[kMaxOwners];
     lua_State* aOwnerThread[kMaxOwners];
     int nOwners = 0;
@@ -316,17 +317,29 @@ static void Lua_BudgetHook(lua_State* L, lua_Debug* pDebug) {
     lua_error(L);
 }
 
-// Arming and disarming take the mutex but never wake the watchdog: an idle watchdog looks again a
-// quarter of a budget later, which is before any deadline armed meanwhile can pass.
+// Arming and disarming take the mutex but read no clock and never wake the watchdog: the watchdog
+// looks at least every quarter of a budget, dates an entry the first time it sees it armed, and
+// fires a budget after that. So an entry is stopped between one and one and a quarter budgets after
+// it started, and one that ends before the watchdog looks costs no clock at all (an overridden
+// engine function is such an entry, thousands of times a second).
 static void Watchdog(HostContext* pContext) {
     std::unique_lock<std::mutex> tLock(pContext->tMutex);
+    const std::chrono::milliseconds tBudget(pContext->nBudgetMs);
+    const std::chrono::milliseconds tLook(pContext->nBudgetMs / 4 + 1);
+    uint64_t nSeen = 0;
+    Clock::time_point tSeen;
     while (!pContext->bStop) {
         if (pContext->bArmed && !pContext->bHookSet && pContext->bMemOver) {
             pContext->bHookSet = true;
             lua_sethook(pContext->L, Lua_BudgetHook, LUA_MASKCOUNT, 1);
         }
         if (pContext->bArmed && !pContext->bFired) {
-            if (Clock::now() >= pContext->tDeadline) {
+            Clock::time_point tNow = Clock::now();
+            if (pContext->nArmed != nSeen) {
+                nSeen = pContext->nArmed;
+                tSeen = tNow;
+            }
+            if (tNow >= tSeen + tBudget) {
                 pContext->bFired = true;
                 if (!pContext->bHookSet) {
                     pContext->bHookSet = true;
@@ -334,16 +347,17 @@ static void Watchdog(HostContext* pContext) {
                 }
                 continue;
             }
-            pContext->tWake.wait_until(tLock, pContext->tDeadline);
+            Clock::time_point tUntil = tSeen + tBudget;
+            pContext->tWake.wait_until(tLock, tUntil < tNow + tLook ? tUntil : tNow + tLook);
         } else {
-            pContext->tWake.wait_for(tLock, std::chrono::milliseconds(pContext->nBudgetMs / 4 + 1));
+            pContext->tWake.wait_for(tLock, tLook);
         }
     }
 }
 
 static void ArmDeadline(HostContext* pContext) {
     std::lock_guard<std::mutex> tLock(pContext->tMutex);
-    pContext->tDeadline = Clock::now() + std::chrono::milliseconds(pContext->nBudgetMs);
+    pContext->nArmed++;
     pContext->bArmed = true;
     pContext->bFired = false;
     pContext->bHookSet = false;
@@ -772,6 +786,12 @@ static int Lua_ModEnv(lua_State* L) {
 
 // Arg 1: mod name. Marks it faulted and drops its environment, then collects what it held.
 static int Lua_FaultMod(lua_State* L) {
+    HostContext* pContext = GetContext(L);
+    size_t nId = (size_t)D2LuaHost_ModId(L, luaL_checkstring(L, 1));
+    if (pContext->aFaulted.size() <= nId) {
+        pContext->aFaulted.resize(nId + 1, 0);
+    }
+    pContext->aFaulted[nId] = 1;
     lua_pushlightuserdata(L, &s_ModsKey);
     lua_rawget(L, LUA_REGISTRYINDEX);
     lua_pushvalue(L, 1);
@@ -892,10 +912,17 @@ static bool BeginEntry(HostContext* pContext) {
 // Ends the entry; when it was the outermost and it ran out of time or memory, logs it, faults the
 // mod charged for it and returns D2LUA_FAULT. Otherwise returns nResult. A deadline that passed
 // counts even when the entry then finished: it passed inside the core, which was let finish.
-static int EndEntry(lua_State* L, HostContext* pContext, bool bOuter, int nStatus, const char* pszMod, int nResult) {
+static int EndEntry(lua_State* L, HostContext* pContext, bool bOuter, int nStatus, const char* pszMod, int nResult, int nModId = -1) {
     pContext->nDepth--;
     if (!bOuter) {
         return nResult;
+    }
+    char szEntered[128];
+    if (!pszMod) {
+        // named only now, when there is something to say (the entries by id copy no name on the way in)
+        const char* p = D2LuaHost_ModName(L, nModId);
+        snprintf(szEntered, sizeof(szEntered), "%s", p ? p : "(core)");
+        pszMod = szEntered;
     }
     bool bTimedOut = DisarmDeadline(pContext);
     bool bRefused = pContext->bRefused != 0 || pContext->bMemOver || nStatus == LUA_ERRMEM;
@@ -971,10 +998,7 @@ static void PushStoredTraceback(lua_State* L) {
 int D2LuaHost_CallAs(lua_State* L, int nModId, int nArgs, int* pnPushed) {
     HostContext* pContext = GetContext(L);
     int nFunction = lua_gettop(L) - nArgs;
-    const char* pszMod = nModId >= 0 ? D2LuaHost_ModName(L, nModId) : nullptr;
-    char szMod[128];
-    snprintf(szMod, sizeof(szMod), "%s", pszMod ? pszMod : "(core)");
-    if (pszMod && D2LuaHost_IsModFaulted(L, szMod)) {
+    if (nModId >= 0 && (size_t)nModId < pContext->aFaulted.size() && pContext->aFaulted[(size_t)nModId]) {
         lua_settop(L, nFunction - 1);
         *pnPushed = 0;
         return D2LUA_CALL_DISABLED;
@@ -990,7 +1014,7 @@ int D2LuaHost_CallAs(lua_State* L, int nModId, int nArgs, int* pnPushed) {
     pContext->nOwners = nOwnerDepth;
     bool bSpent = pContext->bFired || pContext->bMemOver || pContext->bRefused || nStatus == LUA_ERRMEM;
     lua_remove(L, nFunction);  // the handler; the result or the error is on top
-    int nResult = EndEntry(L, pContext, bOuter, nStatus, szMod, D2LUA_OK);
+    int nResult = EndEntry(L, pContext, bOuter, nStatus, nullptr, D2LUA_OK, nModId);
     if (nResult == D2LUA_FAULT) {
         lua_pop(L, 1);
         PushStoredTraceback(L);
@@ -1016,11 +1040,8 @@ int D2LuaHost_CallAs(lua_State* L, int nModId, int nArgs, int* pnPushed) {
 
 int D2LuaHost_ResumeAs(lua_State* L, lua_State* co, int nModId, int nArgs, int* pnResults) {
     HostContext* pContext = GetContext(L);
-    const char* pszMod = D2LuaHost_ModName(L, nModId);
-    char szMod[128];
-    snprintf(szMod, sizeof(szMod), "%s", pszMod ? pszMod : "(core)");
     *pnResults = 0;
-    if (!pszMod || D2LuaHost_IsModFaulted(L, szMod)) {
+    if (!D2LuaHost_ModName(L, nModId) || ((size_t)nModId < pContext->aFaulted.size() && pContext->aFaulted[(size_t)nModId])) {
         lua_settop(co, 0);
         return D2LUA_CALL_DISABLED;
     }
@@ -1030,7 +1051,7 @@ int D2LuaHost_ResumeAs(lua_State* L, lua_State* co, int nModId, int nArgs, int* 
     int nStatus = lua_resume(co, nArgs);
     pContext->nOwners = nOwnerDepth;
     bool bSpent = pContext->bFired || pContext->bMemOver || pContext->bRefused || nStatus == LUA_ERRMEM;
-    int nResult = EndEntry(L, pContext, bOuter, nStatus == LUA_YIELD ? 0 : nStatus, szMod, D2LUA_OK);
+    int nResult = EndEntry(L, pContext, bOuter, nStatus == LUA_YIELD ? 0 : nStatus, nullptr, D2LUA_OK, nModId);
     if (nResult == D2LUA_FAULT) {
         lua_settop(co, 0);
         return D2LUA_CALL_FAULTED;

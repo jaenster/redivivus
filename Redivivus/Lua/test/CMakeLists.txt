@@ -29,6 +29,10 @@ add_executable(d2_lua_host_test EXCLUDE_FROM_ALL ${_lua_host_test_sources})
 # an overridden function: optimised, as in the game's build (the root CMakeLists.txt).
 set_source_files_properties("${D2_ROOT}/Redivivus/Lua/d2_lua_override.cpp" "${D2_ROOT}/Redivivus/Lua/d2_lua_host.cpp"
     PROPERTIES COMPILE_OPTIONS "-O2")
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86|i[3-6]86)$")
+    set_property(SOURCE "${D2_ROOT}/Redivivus/Lua/d2_lua_override.cpp" "${D2_ROOT}/Redivivus/Lua/d2_lua_host.cpp"
+        APPEND PROPERTY COMPILE_OPTIONS -msse2 -mfpmath=sse)
+endif()
 # The override fixture's table (#includes test/override/d2_lua_override_fixture.cpp) gets the game's
 # patchable entries on an x86 target, so the host test patches and restores real entries there.
 if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86|i[3-6]86|AMD64|x86_64|amd64)$")

@@ -493,6 +493,12 @@ if(REDIVIVUS_MODS)
     if(NOT MSVC)
         set_property(SOURCE "${D2_SUPPORT}/Lua/d2_lua_override.cpp" "${D2_SUPPORT}/Lua/d2_lua_host.cpp"
             APPEND PROPERTY COMPILE_OPTIONS -O2)
+        # Their floating point in SSE (LuaJIT needs SSE2 anyway): the x87 conversions cost more
+        # than the rest of a call where the CPU is emulated.
+        if(NOT D2_ARCH_X64)
+            set_property(SOURCE "${D2_SUPPORT}/Lua/d2_lua_override.cpp" "${D2_SUPPORT}/Lua/d2_lua_host.cpp"
+                APPEND PROPERTY COMPILE_OPTIONS -msse2 -mfpmath=sse)
+        endif()
     endif()
     add_dependencies(d2_flags luajit_make)
     include("${D2_ROOT}/cmake/lua-api.cmake")
