@@ -1862,9 +1862,18 @@ void __fastcall PreInitApplication(int32_t argc, char * * argv) {
 #else
     pD2IniData.bOPENGL = false;
 #endif
+#if !defined(_WIN32) && D2_BACKEND_POSIX
+    // Win32Posix has no Direct3D: full screen is D2Uni (mode 2) or OpenGL, never mode 6. With
+    // bD3D set, ClientInit_Renderer_D3D makes the client's engine 6, so DrawFloorTile, dRoofDraw
+    // and the wall pass build 6x6 vertex light grids, while D2Uni lights through D2gfx's
+    // fpDrawGroundTile, which reads an 8x8 grid: subtile rows 3 and 4 of every floor tile took
+    // their light from past the 6x6 grid and the floor was banded dark per tile row.
+    pD2IniData.bD3D = false;
+#else
     if (!pD2IniData.b3DFX) {
       pD2IniData.bD3D = !pD2IniData.bWINDOW;
     }
+#endif
 
     ApplicationMain(WinMain_hInstance, &pD2IniData, eAppMode);
     D2LUA_Shutdown();
