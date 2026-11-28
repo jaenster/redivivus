@@ -1835,32 +1835,22 @@ BOOL __fastcall Skills_SrvDoFunc_044_SummonBladeSentinel(::SGAMEDATA * pGame, D2
 
 // 1.14d mac: 0024b7b6
 BOOL __fastcall Skills_SrvDoFunc_045_SummonTrapSentry(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    BOOL _bHasPos;
-    bool bHasPos;
     uint32_t nTargetX;
     eD2Skills eSkillSlot;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if (!((int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
+
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    _bHasPos = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nTargetX, &eSkillSlot);
-    if (!_bHasPos) {
+    if (!SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nTargetX, &eSkillSlot)) {
       return 0;
     }
 
-    D2UnitStrc* pSummon = SKILLASS_CreateSummon(pGame, pUnit, nTargetX, eSkillSlot, pSkillTxt, eSkill, nSkillLvl);
-    return (uint32_t)(pSummon != 0);
+    return SKILLASS_CreateSummon(pGame, pUnit, nTargetX, eSkillSlot, pSkillTxt, eSkill, nSkillLvl) != nullptr;
 }
 
 // Generic Assassin skill melee attack resolver. Computes to-hit (SKILLS_CalcToHit + progressive_tohit stat), runs DAMAGE_CalculateHitCheck; on hit applies progressive damage, elemental enhancement, conversion percent, SetDamageOnEvent, offensive damage calculation, and DispatchChargeUpDamage. Always finalises with DAMAGE_CalculateAndApplyDamage.
@@ -2288,21 +2278,14 @@ BOOL __fastcall SKILLASS_SrvStFn26_BladeFury(::SGAMEDATA * pGame, D2UnitStrc * p
 
 // Equips items onto a summoned monster unit (pUnit must be UNIT_MONSTER) from a monster-equipment table keyed by the monster class id (SKILLBAR_GetVelocityAndSpreadForMissile returns the table base). Walks the matching equip rows, and for each one with a valid body-loc range uses the summoner's RNG seed to pick a random equip slot. If that grid slot is empty it resolves an item code (a literal 4-char code, or for the "    " placeholder copies the corresponding item code from the owner unit's inventory at nParam1) and calls MONSTER_CreateAndEquipItem to spawn and equip it. __fastcall, no return. NOTE: many accesses go through raw offsets on the equip-table row (pUnit->unk0x19, +0x60 owner inventory) — the equip-table row type is unmodeled.
 void __fastcall SKILLASS_EquipSummonItems(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2UnitStrc * pUnit, uint32_t eSkill, int32_t nLevel, int32_t nItemLevel, int32_t bOnInit) {
-    D2UnitStrc* pExistingItem;
-    uint32_t pItemCodeOrPool;
     D2MonEquipEntryStrc sEquipEntry;
-    uint8_t byBodyLoc;
-    short int nRowMonClass;
-    D2MonEquipTxt* pNextRow;
-    int nUnit;
-    D2UnitStrc* pMonster = pUnit;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
     }
 
     int32_t nMonStatsId = pUnit->nClassId;
     D2MonEquipTxt* pEquipTableRow = SKILLBAR_GetVelocityAndSpreadForMissile(nMonStatsId);
-    if (!(pEquipTableRow && (!bOnInit || pEquipTableRow->oninit))) {
+    if (!pEquipTableRow || (bOnInit && !pEquipTableRow->oninit)) {
       return;
     }
 
@@ -2311,50 +2294,43 @@ void __fastcall SKILLASS_EquipSummonItems(::SGAMEDATA * pGame, D2UnitStrc * pOwn
       return;
     }
 
-    short int nEquipMonClass = pEquipTableRow->monster;
-    for (; nEquipMonClass == nMonStatsId && pEquipTableRow->level > nLevel; pEquipTableRow++) {
-      nEquipMonClass = pEquipTableRow[1].monster;
+    while (pEquipTableRow->monster == nMonStatsId && pEquipTableRow->level > nLevel) {
+      pEquipTableRow++;
     }
 
-    for (nRowMonClass = pEquipTableRow->monster; nRowMonClass == nMonStatsId; pNextRow = pEquipTableRow + 1 , pEquipTableRow++ , nRowMonClass = pNextRow->monster) {
-      uint32_t nRandEquipSlot;
-      nRandEquipSlot = 0;
-      do {
-        if ((char)pEquipTableRow->loc[nRandEquipSlot] <= 0 || (char)pEquipTableRow->loc[nRandEquipSlot] >= 11) {
-          break;
-        }
+    for (; pEquipTableRow->monster == nMonStatsId; pEquipTableRow++) {
+      int nSlots = 0;
+      while (nSlots < 3 && (char)pEquipTableRow->loc[nSlots] > 0 && (char)pEquipTableRow->loc[nSlots] < 11) {
+        nSlots++;
+      }
 
-        nRandEquipSlot++;
-      } while ((int)nRandEquipSlot < 3);
-
-      if ((int)nRandEquipSlot > 0) {
-        nRandEquipSlot = D2_SeedRollLimited(&pMonster->sSeed, nRandEquipSlot);
-        byBodyLoc = pEquipTableRow->loc[nRandEquipSlot];
-        pExistingItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, (int)(char)byBodyLoc);
-        if (!pExistingItem) {
-          nUnit = (int)(char)pEquipTableRow->mod[nRandEquipSlot];
-          if (nUnit < 0 || nUnit >= 8) {
-            nUnit = 0x0;
+      if (nSlots > 0) {
+        int nSlot = D2_SeedRollLimited(&pUnit->sSeed, nSlots);
+        int nBodyLoc = (char)pEquipTableRow->loc[nSlot];
+        if (!D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, nBodyLoc)) {
+          int nQuality = (char)pEquipTableRow->mod[nSlot];
+          if (nQuality < 0 || nQuality >= 8) {
+            nQuality = 0;
           }
 
-          pItemCodeOrPool = pEquipTableRow->item[nRandEquipSlot];
-          if (pItemCodeOrPool == 0x20202020 && pOwner) {
+          uint32_t dwItemCode = pEquipTableRow->item[nSlot];
+          if (dwItemCode == 0x20202020 && pOwner) {
             if (!pOwner->pInventory) {
               continue;
             }
 
-            pExistingItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pOwner->pInventory, (int)(char)byBodyLoc);
-            if (!pExistingItem) {
+            D2UnitStrc* pOwnerItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pOwner->pInventory, nBodyLoc);
+            if (!pOwnerItem) {
               continue;
             }
 
-            pItemCodeOrPool = D2Common::ITEMS::Items::ITEM_GetItemsTxt_szCode(pExistingItem);
+            dwItemCode = D2Common::ITEMS::Items::ITEM_GetItemsTxt_szCode(pOwnerItem);
           }
 
-          sEquipEntry.dwItemCode = pItemCodeOrPool;
-          sEquipEntry.nBodyLoc = byBodyLoc;
-          sEquipEntry.nFlag = '\x01';
-          Monster::MONSTER_CreateAndEquipItem(pGame, pMonster, &sEquipEntry, nItemLevel, (eD2ItemQuality)nUnit);
+          sEquipEntry.dwItemCode = dwItemCode;
+          sEquipEntry.nBodyLoc = nBodyLoc;
+          sEquipEntry.nFlag = 1;
+          Monster::MONSTER_CreateAndEquipItem(pGame, pUnit, &sEquipEntry, nItemLevel, (eD2ItemQuality)nQuality);
         }
       }
     }

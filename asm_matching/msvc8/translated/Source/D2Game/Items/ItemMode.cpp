@@ -144,6 +144,14 @@
 #include "Source/D2Game/Monster/Ai/AI.h"
 #include "Source/D2Game/Skills/SkillAss.h"
 
+// The clamps use the Windows SDK min/max macros, as windef.h defines them for VC8.
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
@@ -3525,55 +3533,33 @@ void __fastcall ITEMMODE_AddItemQuantity(::SGAMEDATA * pGameStrc, D2UnitStrc * p
 // Attempts to add a scroll (pScroll) into a matching book (ITEMTYPE_Book) in the unit's inventory. Validates item type, socket match via ITEMMODE_GetSocketCount, and that combined quantity does not exceed max stack. If bDryRun==0, sets the new book quantity, sends 0x3E stat-update packet, and updates book skill quantity. Returns the book unit or NULL.
 // @sourcefile .\ITEMS\ItemMode.cpp
 D2UnitStrc * __fastcall ITEMMODE_HandleItemDurability(uint32_t dwParam, D2UnitStrc * pUnit, D2UnitStrc * pScroll, int32_t bDryRun) {
-    BOOL bIsScrollOrMatch;
-    eInventoryPage eInvPage;
-    D2UnitStrc* pNextItem;
-    D2UnitStrc* pBookItem;
-    eD2ItemTypes eItemType;
-    int nScrollQty;
-    int nBookQty;
-    int nMaxStack;
-    uint16_t wStatLayer;
-    uint32_t nNewBookQty = D2Common::ITEMS::Items::ITEMS_IsA(pScroll, ITEMTYPE_Scroll);
-    if (!nNewBookQty) {
+    if (!D2Common::ITEMS::Items::ITEMS_IsA(pScroll, ITEMTYPE_Scroll)) {
       return nullptr;
     }
 
     D2UnitStrc* pInvItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pUnit->pInventory);
-    do {
-      do {
-        if (!pInvItem) {
-          return nullptr;
+    while (pInvItem) {
+      D2UnitStrc* pNextItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pInvItem);
+      D2UnitStrc* pBookItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pInvItem);
+      if (D2Common::ITEMS::Items::ITEM_GetItemData_wType(pBookItem) == ITEMTYPE_Book && D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pBookItem) == INVPAGE_INVENTORY && ITEMMODE_GetSocketCount(pBookItem, pScroll)) {
+        int nScrollQty = max(1, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pScroll, UNITSTAT_quantity, 0)); // steer-ok: windef.h min/max macros
+        int nBookQty = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pBookItem, UNITSTAT_quantity, 0);
+        if (nBookQty + nScrollQty <= D2Common::ITEMS::Items::ITEM_GetMaxStack(pBookItem)) {
+          if (!bDryRun) {
+            int nNewBookQty = nBookQty + nScrollQty;
+            D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pBookItem, UNITSTAT_quantity, nNewBookQty, 0);
+            GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1905), pBookItem, true, UNITSTAT_quantity, nNewBookQty, 0);
+            ITEMMODE_UpdateBookSkillQuantity(nScrollQty, pUnit, pBookItem);
+          }
+
+          return pBookItem;
         }
-
-        pNextItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pInvItem);
-        pBookItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pInvItem);
-        eItemType = D2Common::ITEMS::Items::ITEM_GetItemData_wType(pBookItem);
-        pInvItem = pNextItem;
-      } while (eItemType != ITEMTYPE_Book || (eInvPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pBookItem) , eInvPage != INVPAGE_INVENTORY) || (nNewBookQty = ITEMMODE_GetSocketCount(pBookItem, pScroll) , !nNewBookQty));
-
-      nScrollQty = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pScroll, UNITSTAT_quantity, 0);
-      if (nScrollQty < 1) {
-        nScrollQty = 1;
-      } else {
-        nScrollQty = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pScroll, UNITSTAT_quantity, 0);
       }
 
-      nBookQty = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pBookItem, UNITSTAT_quantity, 0);
-      nMaxStack = D2Common::ITEMS::Items::ITEM_GetMaxStack(pBookItem);
-    } while (nBookQty + nScrollQty > nMaxStack);
-
-    if (!bDryRun) {
-      eD2UnitStat eStatId;
-      nNewBookQty = nBookQty + nScrollQty;
-      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pBookItem, UNITSTAT_quantity, nNewBookQty, 0);
-      wStatLayer = 0;
-      eStatId = UNITSTAT_quantity;
-      GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1905), pBookItem, true, eStatId, nNewBookQty, wStatLayer);
-      ITEMMODE_UpdateBookSkillQuantity(nScrollQty, pUnit, pBookItem);
+      pInvItem = pNextItem;
     }
 
-    return pBookItem;
+    return nullptr;
 }
 
 // @sourcefile .\ITEMS\ItemMode.cpp

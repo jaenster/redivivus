@@ -10190,14 +10190,11 @@ void __fastcall AI_Fn0_SpecialTerror(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
 // Monster AI Function1 for a feared/terrified monster. If the STATE_terror state has expired, restores the normal AI function, fires an AITHINK timer trigger and schedules the next think on the following game frame, then returns. While still feared: if the target is beyond the flee range (dwArg0, default 0x1e) it just re-plans; otherwise it computes a run speed modifier from MonStats Run/Velocity and flees from pTarget (MONSTERAI_CommandRunAwayFromUnit or WalkTowardsUnitOffset depending on a monster flag), with a one-time setup branch (dwArg2), interact-flag handling, and a random-offset walk fallback if the flee move fails.
 // 1.14d mac: 002a691d
 void __fastcall AITHINK_Fn1_SpecialTerror(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
-    uint32_t nMonFlag;
-    int32_t nClassId;
     D2UnitStrc* pTarget = pAiParam->pTarget;
     int nDistToTarget = pAiParam->nDistanceToTarget;
-    int bEngagedCopy = pAiParam->bEngagedInCombat;
+    BOOL bEngaged = pAiParam->bEngagedInCombat;
     D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
-    BOOL bHasInteractFlag = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_terror);
-    if (!bHasInteractFlag) {
+    if (!D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_terror)) {
       AttachCorrectAiFunctionToMonster(pGame, pUnit, pAiParam->pMonsterAiGeneral, 0);
       GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
       GAME::Event::SetEvent(pGame, pUnit, 2, pGame->dwGameFrame + 1, 0, 0);
@@ -10208,76 +10205,57 @@ void __fastcall AITHINK_Fn1_SpecialTerror(::SGAMEDATA * pGame, D2UnitStrc * pUni
     if (!nFleeRange) {
       nFleeRange = 0x1e;
     }
+
     if (nDistToTarget > nFleeRange) {
       PlanNextAiMove(pGame, pUnit, 10);
       return;
     }
 
     short int nVelocity = pAiParam->pMonStats->Velocity;
-    if (nVelocity <= 0 || (nDistToTarget = pAiParam->pMonStats->Run * 100 / (int)nVelocity , nDistToTarget < 100)) {
-      nClassId = 0;
+    int nRunBonus = 0;
+    if (nVelocity > 0) {
+      nRunBonus = pAiParam->pMonStats->Run * 100 / nVelocity;
+    }
+
+    if (nRunBonus < 100) {
+      nRunBonus = 0;
     } else {
-      nClassId = nDistToTarget - 100;
-      if (nClassId > 0x78) {
-        nClassId = 0x78;
+      nRunBonus -= 100;
+      if (nRunBonus > 0x78) {
+        nRunBonus = 0x78;
       }
     }
+
     if (!pAiGeneral->dwArg2) {
       pAiGeneral->dwArg2 = 1;
       MonsterAI::AI_ClearSwitchAiTargetParams(pUnit);
       GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
-      AITACTICS_SetPathOverrides(pUnit, 2, nClassId, '\0');
-      if (!pUnit) {
-        nClassId = -1;
-      } else {
-        nClassId = pUnit->nClassId;
-      }
-
-      nMonFlag = D2Common::DATATBLS::MonsterTbls::GetSomeMonsterStatFlag(nClassId, 0xf);
-      if (nMonFlag) {
+      AITACTICS_SetPathOverrides(pUnit, 2, nRunBonus, 0);
+      if (D2Common::DATATBLS::MonsterTbls::GetSomeMonsterStatFlag(!pUnit ? -1 : pUnit->nClassId, 0xf)) {
         MONSTERAI_CommandRunAwayFromUnit(pGame, pUnit, pTarget, 0x1e, 0);
         return;
       }
 
-      WalkTowardsUnitOffset(pGame, pUnit, pTarget, '\x1e', 0);
-      return;
-    }
-    if (bEngagedCopy) {
-      int32_t iVar1 = !pUnit ? -1 : pUnit->nClassId;
-      bHasInteractFlag = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetFlagsByBitOffset(iVar1, interact);
-      if (!bHasInteractFlag) {
-        if (!pUnit) {
-          iVar1 = -1;
-        } else {
-          iVar1 = pUnit->nClassId;
-        }
-
-        nMonFlag = D2Common::DATATBLS::MonsterTbls::GetSomeMonsterStatFlag(iVar1, 4);
-        if (nMonFlag) {
-          AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pTarget);
-          return;
-        }
-      }
-    }
-
-    AITACTICS_SetPathOverrides(pUnit, 2, nClassId, '\0');
-    if (!pUnit) {
-      nClassId = -1;
-    } else {
-      nClassId = pUnit->nClassId;
-    }
-
-    nMonFlag = D2Common::DATATBLS::MonsterTbls::GetSomeMonsterStatFlag(nClassId, 0xf);
-    if (nMonFlag) {
-      bEngagedCopy = MONSTERAI_CommandRunAwayFromUnit(pGame, pUnit, pTarget, 0x1e, 1);
-    } else {
-      bEngagedCopy = WalkTowardsUnitOffset(pGame, pUnit, pTarget, '\x1e', 1);
-    }
-    if (bEngagedCopy) {
+      WalkTowardsUnitOffset(pGame, pUnit, pTarget, 0x1e, 0);
       return;
     }
 
-    WalkRandomOffset(pGame, pUnit, 6);
+    if (bEngaged && !D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetFlagsByBitOffset(!pUnit ? -1 : pUnit->nClassId, interact) && D2Common::DATATBLS::MonsterTbls::GetSomeMonsterStatFlag(!pUnit ? -1 : pUnit->nClassId, 4)) {
+      AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pTarget);
+      return;
+    }
+
+    AITACTICS_SetPathOverrides(pUnit, 2, nRunBonus, 0);
+    BOOL bMoved;
+    if (D2Common::DATATBLS::MonsterTbls::GetSomeMonsterStatFlag(!pUnit ? -1 : pUnit->nClassId, 0xf)) {
+      bMoved = MONSTERAI_CommandRunAwayFromUnit(pGame, pUnit, pTarget, 0x1e, 1);
+    } else {
+      bMoved = WalkTowardsUnitOffset(pGame, pUnit, pTarget, 0x1e, 1);
+    }
+
+    if (!bMoved) {
+      WalkRandomOffset(pGame, pUnit, 6);
+    }
 }
 
 // AI think-tick for monsters that pursue a target. If target is in town or unreachable, resets AI via AttachCorrectAiFunctionToMonster and reschedules. On first approach (dwArg0==0) flees from target; once in melee range triggers attack sequence (CalledOnEndAiFunction1 mode 4); otherwise wanders toward target. Side-effect: updates dwArg0 state and retriggers AITHINK timer.
@@ -15169,54 +15147,45 @@ void __fastcall AITHINK_Fn1_BaalToStairs(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 // Baal's taunt AI tick. If the target is in Neutral mode, increments dwArg0 and casts SKILL_BaalTaunt once the counter exceeds the MonStats TreasureClass threshold; then resets dwArg0. If the target is outside the outer range threshold, teleports Baal adjacent to the target via SUNIT_RelocateUnit. Falls back to ResetCombatTargetAndIdle if within a close band but no action triggered, otherwise calls PlanNextAiMove(0x19).
 // 1.14d mac: 002b050a
 void __fastcall AITHINK_Fn1_BaalTaunt(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
-    BOOL bTargetInNeutralMode;
-    BOOL bTargetWasNeutral;
-    D2UnitStrc* pTarget;
-    pTarget = pAiParam->pTarget;
-    D2MonStatsTxt* pMonStats;
-    pMonStats = pAiParam->pMonStats;
-    int nDistanceToTarget;
-    nDistanceToTarget = pAiParam->nDistanceToTarget;
+    D2UnitStrc* pTarget = pAiParam->pTarget;
+    int nDistanceToTarget = pAiParam->nDistanceToTarget;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     if (pTarget) {
-      BOOL bRelocated;
-      bTargetInNeutralMode = FALSE;
+      BOOL bTargetNeutral = FALSE;
       switch (pTarget->eUnitType) {
         case UNIT_PLAYER:
-          case UNIT_MONSTER:
-            {
-              bTargetInNeutralMode = pTarget->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral;
-              break;
-            }
+          bTargetNeutral = pTarget->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral;
+          break;
+        case UNIT_MONSTER:
+          bTargetNeutral = pTarget->eAnimMode.eMonsterMode == eD2MonsterAnimMode_ns::Neutral;
+          break;
       }
 
-      bTargetWasNeutral = FALSE;
-      if (bTargetInNeutralMode) {
+      BOOL bTaunt = FALSE;
+      if (bTargetNeutral) {
         pAiParam->pMonsterAiGeneral->dwArg0++;
-        bTargetWasNeutral = TRUE;
-        if ((int)pMonStats->aip[1][pGame->nDifficulty] < pAiParam->pMonsterAiGeneral->dwArg0) {
-          goto taunt_or_reset;
-        }
-      } else {
-        taunt_or_reset:
+        bTaunt = pAiParam->pMonsterAiGeneral->dwArg0 > pMonStats->aip[1][pGame->nDifficulty];
+      }
+
+      if (!bTargetNeutral || bTaunt) {
         pAiParam->pMonsterAiGeneral->dwArg0 = 0;
-        if (bTargetWasNeutral) {
+        if (bTaunt) {
           SERVER_UNIT_CastSkill(pGame, pUnit, 4, SKILL_BaalTaunt, pTarget, 0, 0);
           return;
         }
       }
-      if (nDistanceToTarget > pMonStats->aip[2][pGame->nDifficulty]) {
-        bRelocated = UNIT::SUnit::SUNIT_RelocateUnit(pGame, pUnit, D2Common::Units::UNITS_GetRoom(pTarget), D2Common::Units::GetXPosFromDynamicPathUnit(pTarget), D2Common::Units::GetYPosFromDynamicPathUnit(pTarget), 0, 0);
-        if (bRelocated) {
-          goto idle;
-        }
+
+      if (nDistanceToTarget > pMonStats->aip[2][pGame->nDifficulty] && UNIT::SUnit::SUNIT_RelocateUnit(pGame, pUnit, D2Common::Units::UNITS_GetRoom(pTarget), D2Common::Units::GetXPosFromDynamicPathUnit(pTarget), D2Common::Units::GetYPosFromDynamicPathUnit(pTarget), 0, 0)) {
+        PlanNextAiMove(pGame, pUnit, 0x19);
+        return;
       }
+
       if (nDistanceToTarget > pMonStats->aip[0][pGame->nDifficulty]) {
         MONSTERAI_WalkToUnit(pGame, pUnit, pTarget);
         return;
       }
     }
 
-    idle:
     PlanNextAiMove(pGame, pUnit, 0x19);
 }
 
