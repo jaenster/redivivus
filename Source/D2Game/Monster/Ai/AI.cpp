@@ -6580,27 +6580,18 @@ void __fastcall AITHINK_Fn0_SpecialMounting(::SGAMEDATA * pGame, D2UnitStrc * pU
     // Static local variables (originally global data)
     static int gaBaalWaveSkillIndexTable[4] = { 0x2, 0x0, 0x4, 0x0 }; D2_STATIC_GUARD(gaBaalWaveSkillIndexTable, "D2Game::Monster::AI::AITHINK_Fn0_SpecialMounting::gaBaalWaveSkillIndexTable");
 
-    uint32_t seedNew = D2_SeedRoll(&pUnit->sSeed);
-    uint32_t nWaveIdx = seedNew & 1;
-    int nRetry = 0;
-    while (true) {
-      D2SkillStrc* pSkill;
+    uint32_t nWaveIdx = D2_SeedRoll(&pUnit->sSeed) & 1;
+    for (int i = 0; i < 2; i++) {
       nWaveIdx = (int)(nWaveIdx + 1) % 2;
-      pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, (int)pAiParam->pMonStats->aSkill[gaBaalWaveSkillIndexTable[nWaveIdx * 2]], -1);
-      if (pSkill) {
-        break;
-      }
-
-      nRetry++;
-      if (nRetry >= 2) {
-        pAiParam->pMonsterAiGeneral->dwArg1 = 0;
-        pAiParam->pMonsterAiGeneral->dwArg2 = 0;
+      if (D2Common::Skills::GetSkillByIdAndOwner(pUnit, (int)pAiParam->pMonStats->aSkill[gaBaalWaveSkillIndexTable[nWaveIdx * 2]], -1)) {
+        pAiParam->pMonsterAiGeneral->dwArg1 = gaBaalWaveSkillIndexTable[nWaveIdx * 2];
+        pAiParam->pMonsterAiGeneral->dwArg2 = gaBaalWaveSkillIndexTable[nWaveIdx * 2 + 1];
         return;
       }
     }
 
-    pAiParam->pMonsterAiGeneral->dwArg1 = gaBaalWaveSkillIndexTable[nWaveIdx * 2];
-    pAiParam->pMonsterAiGeneral->dwArg2 = gaBaalWaveSkillIndexTable[nWaveIdx * 2 + 1];
+    pAiParam->pMonsterAiGeneral->dwArg1 = 0;
+    pAiParam->pMonsterAiGeneral->dwArg2 = 0;
 }
 
 // AI phase-1 tick for a monster that attaches to and casts spells at its owner's target (e.g. Iron Maiden-style attached caster). If the monster has lost its STATE_attached state or has no owner, falls back to its base AI via AttachCorrectAiFunctionToMonster. Otherwise: if target is farther than 24 units, casts a ranged spell at a random offset (MonStats row 0x1ec, Skill1). If target is near and owner is alive with dwArg1 set, rolls a chance to cast a close-range skill at the target using dwArg1/dwArg2 slot; otherwise 50% chance to reposition via CalledOnEndAiFunction1, else delays 20 ticks.

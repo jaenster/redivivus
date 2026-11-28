@@ -772,8 +772,8 @@ BOOL __fastcall Skills_SrvDoFunc_067_Charge(::SGAMEDATA * pGame, D2UnitStrc * pU
         UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, eSkill);
         pHitTarget = SkillsServer::SKILLS_FindNextUnitInAreaByGUID(pGame, pUnit, 0, 0, 3, 3, nTargetGUID, nullptr);
         if (pHitTarget && D2Common::Units::IsInMeleeRange(pUnit, pHitTarget, 0)) {
-          D2Common::Skills::SKILL_SetParam1(pSkill, D2Common::Units::GetType(pHitTarget));
-          D2Common::Skills::SKILL_SetParam2(pSkill, D2Common::Units::GetGUID(pHitTarget));
+          D2Common::Skills::SKILL_SetParam1(pSkill, GetTypeInline(pHitTarget));
+          D2Common::Skills::SKILL_SetParam2(pSkill, GetGUIDInline(pHitTarget));
         } else {
           if (!pUnit || pUnit->eUnitType != UNIT_MONSTER || D2Common::DATATBLS::MonsterTbls::ValidateClassId(D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pUnit)) != 0x1b4 || D2Common::DATATBLS::MonsterTbls::ValidateClassId(D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pUnit)) != 0x1b9) {
             GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
@@ -1113,32 +1113,24 @@ static BOOL __stdcall SKILLPAL_CanConvertTarget(D2UnitStrc * pUnit, int32_t nSki
       return 0;
     }
 
-    uint32_t nAlignment = D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pUnit2);
-    if (nAlignment || !pUnit2 || pUnit2->eUnitType != UNIT_MONSTER) {
+    if (D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pUnit2) || GetTypeInline(pUnit2) != UNIT_MONSTER) {
       return 0;
     }
 
-    int32_t nAlignmentVal = D2Common::Stats::StatsEx::STATSEX_GetAlignment(pUnit2);
-    if (nAlignmentVal) {
+    if (D2Common::Stats::StatsEx::STATSEX_GetAlignment(pUnit2)) {
       return 0;
     }
 
-    BOOL bIsCorpseConsumed = SkillsServer::SKILLS_CanSwitchAi(pUnit2, 0xb);
-    if (!bIsCorpseConsumed) {
+    if (!SkillsServer::SKILLS_CanSwitchAi(pUnit2, 0xb)) {
       return 0;
     }
 
-    nAlignmentVal = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
-    if (!bRollChance) {
-      return 1;
+    int32_t nConvertChance = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
+    if (bRollChance && (int)D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100) >= nConvertChance) {
+      return 0;
     }
 
-    uint32_t nRandRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
-    if ((int)nRandRoll < nAlignmentVal) {
-      return 1;
-    }
-
-    return 0;
+    return 1;
 }
 
 // Server-side skill DoFunc 79 (Paladin Conversion). Attempts to convert the caster's current target into a temporary ally. Resolves the target (GetTargetEx) and, if a combat-queue entry exists, checks SKILLPAL_CanConvertTarget. On success: applies/refreshes the auratargetstate state-list on the target with a duration from D2GetSkillCalc(auralencalc) and an OnConversionExpire expire-function, sets a frame-12 event, frees the monster's own minions, sets the target's alignment to friendly (2), reparents it as the caster's unit-node, clears the caster's target, and strips flag-8 stat-lists. If the target's level exceeds the caster's, saves a STATE_conversion_save stat-list (conversion_level/conversion_maxhp) and rescales the target's level/HP/maxHP down to the caster via D2ApplyPercent. Returns 1 on conversion (or on plain combat-queue processing when state invalid), 0 on failure. Side effect: sets UNITFLAG_SKSRVDOFUNC on caster.

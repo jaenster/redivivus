@@ -272,24 +272,25 @@ BOOL __fastcall Skills_SrvDoFunc_034_ChargeUpStackMelee(::SGAMEDATA * pGame, D2U
 // Dragon Claw skill SrvDoFunc. Checks that the unit has two distinct non-broken weapons in both arm slots; if so, clears UNITFLAG_SKSRVDOFUNC and delegates to the ChargeUp/StackMelee handler. On odd animation frames with no valid dual-wield it sets the flag to suppress further processing. Returns 1 always.
 // 1.14d mac: 00248cd7
 BOOL __fastcall Skills_SrvDoFunc_035_ElementalChargeRelease(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    D2UnitStrc* pRightHandItem;
-    D2UnitStrc* pLeftHandItem;
-    BOOL BVar1;
-    uint32_t bIsValidWeapon;
-    bool bIsOddFrame;
     D2InventoryStrc* pInventory = pUnit->pInventory;
-    if (!pInventory || (pRightHandItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 4) , (pLeftHandItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 5) , pRightHandItem != pLeftHandItem && pRightHandItem && pLeftHandItem && (BVar1 = D2Common::ITEMS::Items::ITEM_CheckIfItemIsNotBrokenAndNotDisabled(pRightHandItem) , BVar1 && (BVar1 = D2Common::ITEMS::Items::ITEM_CheckIfItemIsNotBrokenAndNotDisabled(pLeftHandItem) , BVar1 && (bIsValidWeapon = D2Common::ITEMS::Items::ITEMS_IsA(pRightHandItem, ITEMTYPE_Weapon) , bIsValidWeapon && (bIsValidWeapon = D2Common::ITEMS::Items::ITEMS_IsA(pLeftHandItem, ITEMTYPE_Weapon) , bIsValidWeapon != 0))))))) {
-      uint32_t nSeqFrameShifted;
-      nSeqFrameShifted = pUnit->nSeqFrame >> 8 & 0x80000001;
-      bIsOddFrame = !nSeqFrameShifted;
-      if ((int)nSeqFrameShifted < 0) {
-        bIsOddFrame = (nSeqFrameShifted - 1 | -2) == -1;
-      }
-      if (bIsOddFrame) {
-        pUnit->eUnitFlags &= ~UNITFLAG_SKSRVDOFUNC;
+    if (pInventory) {
+      D2UnitStrc* pRightHandItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 4);
+      D2UnitStrc* pLeftHandItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 5);
+      if (pRightHandItem == pLeftHandItem || !pRightHandItem || !pLeftHandItem
+        || !D2Common::ITEMS::Items::ITEM_CheckIfItemIsNotBrokenAndNotDisabled(pRightHandItem)
+        || !D2Common::ITEMS::Items::ITEM_CheckIfItemIsNotBrokenAndNotDisabled(pLeftHandItem)
+        || !D2Common::ITEMS::Items::ITEMS_IsA(pRightHandItem, ITEMTYPE_Weapon)
+        || !D2Common::ITEMS::Items::ITEMS_IsA(pLeftHandItem, ITEMTYPE_Weapon)) {
+        pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
         Skills_SrvDoFunc_034_ChargeUpStackMelee(pGame, pUnit, eSkill, nSkillLvl);
         return 1;
       }
+    }
+
+    if (!((pUnit->nSeqFrame >> 8) % 2)) {
+      pUnit->eUnitFlags &= ~UNITFLAG_SKSRVDOFUNC;
+      Skills_SrvDoFunc_034_ChargeUpStackMelee(pGame, pUnit, eSkill, nSkillLvl);
+      return 1;
     }
 
     pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
