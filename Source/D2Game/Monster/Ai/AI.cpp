@@ -6211,119 +6211,63 @@ void __fastcall AI_Fn1_Succubus(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPar
 // Per-tick AI #1 for the Succubus/Witch (Vile Temptress) caster family (server-side). Spell-selection block (gated by distance, a seed roll vs MonStats.TreasureClass AI words, and the target not already carrying a stat flag 0x20, i.e. not already seduced): picks among Skill1..Skill4 by target life percentage and mana-vs-life / player checks (e.g. blood-star, seduce/mind-blast, attract reserved for players) and casts via SERVER_UNIT_CastSkill. If no cast and not yet engaged, may cast the ranged Skill5 on a found target, retreat-walk away from the target (WalkTowardsUnitOffset with negative offset), end the attack, or approach/replan. The engaged branch handles fleeing/kiting and re-engagement. Heavily seed-driven (per-difficulty probability words). No return.
 // 1.14d mac: 0029e971
 void __fastcall AI_Fn1_SuccubusWitch(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
-    int _bEngagedInCombat;
-    D2SeedStrc DVar1;
-    BOOL bEngagedInCombat;
-    int32_t nMaxMana;
-    int32_t nLifePct;
-    D2UnitStrc* pRangedTarget;
-    uint32_t uRandPct;
-    uint32_t nDistToTarget;
     uint32_t nDistanceToTarget = pAiParam->nDistanceToTarget;
-    _bEngagedInCombat = pAiParam->bEngagedInCombat;
+    int bEngagedInCombat = pAiParam->bEngagedInCombat;
     D2UnitStrc* pTarget = pAiParam->pTarget;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
     D2SeedStrc* pSeed = &pUnit->sSeed;
-    D2UnitStrc* pSelf = pUnit;
-    if (pTarget) {
-      D2StatListExStrc* pSeductionStats;
-      pSeductionStats = D2Common::Stats::StatsEx::GetStatsByFlags(pTarget, 0x20);
-      if (!pSeductionStats && (int)nDistanceToTarget < (int)pMonStats->aip[3][pGame->nDifficulty]) {
-        DVar1 = D2_SEED_NEXT(*pSeed);
-        *pSeed = DVar1;
-        if ((int)(DVar1.nSeedLow % 100) < (int)pMonStats->aip[2][pGame->nDifficulty]) {
-          if (pMonStats->aSkill[0] > 0) {
-            nLifePct = D2Common::Units::GetCurrentLifePercentage(pTarget);
-            if (nLifePct >= pMonStats->aip[6][pGame->nDifficulty]) {
-              SERVER_UNIT_CastSkill(pGame, pSelf, pMonStats->aSkMode[0], (int)pMonStats->aSkill[0], pTarget, 0, 0);
-              return;
-            }
-          }
-          if (pMonStats->aSkill[1] > 0) {
-            nLifePct = D2Common::Units::GetCurrentLifePercentage(pSelf);
-            if (nLifePct <= pMonStats->aip[7][pGame->nDifficulty]) {
-              SERVER_UNIT_CastSkill(pGame, pSelf, pMonStats->aSkMode[1], (int)pMonStats->aSkill[1], pTarget, 0, 0);
-              return;
-            }
-          }
-          if (pMonStats->aSkill[2] > 0) {
-            nLifePct = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pTarget);
-            nMaxMana = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pTarget);
-            if (nLifePct > nMaxMana || pTarget->eUnitType != UNIT_PLAYER) {
-              SERVER_UNIT_CastSkill(pGame, pSelf, pMonStats->aSkMode[2], (int)pMonStats->aSkill[2], pTarget, 0, 0);
-              return;
-            }
-          }
-          if (pMonStats->aSkill[3] > 0 && pTarget->eUnitType == UNIT_PLAYER) {
-            SERVER_UNIT_CastSkill(pGame, pSelf, pMonStats->aSkMode[3], (int)pMonStats->aSkill[3], pTarget, 0, 0);
-            return;
-          }
-        }
+    if (pTarget && !D2Common::Stats::StatsEx::GetStatsByFlags(pTarget, 0x20) && (int)nDistanceToTarget < (int)pMonStats->aip[3][pGame->nDifficulty] && (int)(D2_SeedRoll(pSeed) % 100) < (int)pMonStats->aip[2][pGame->nDifficulty]) {
+      if (pMonStats->aSkill[0] > 0 && D2Common::Units::GetCurrentLifePercentage(pTarget) >= pMonStats->aip[6][pGame->nDifficulty]) {
+        SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[0], (int)pMonStats->aSkill[0], pTarget, 0, 0);
+        return;
+      }
+      if (pMonStats->aSkill[1] > 0 && D2Common::Units::GetCurrentLifePercentage(pUnit) <= pMonStats->aip[7][pGame->nDifficulty]) {
+        SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[1], (int)pMonStats->aSkill[1], pTarget, 0, 0);
+        return;
+      }
+      if (pMonStats->aSkill[2] > 0 && (D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pTarget) > D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pTarget) || pTarget->eUnitType != UNIT_PLAYER)) {
+        SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[2], (int)pMonStats->aSkill[2], pTarget, 0, 0);
+        return;
+      }
+      if (pMonStats->aSkill[3] > 0 && pTarget->eUnitType == UNIT_PLAYER) {
+        SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[3], (int)pMonStats->aSkill[3], pTarget, 0, 0);
+        return;
       }
     }
-    if (_bEngagedInCombat) {
-      DVar1 = D2_SEED_NEXT(*pSeed);
-      *pSeed = DVar1;
-      if ((int)(DVar1.nSeedLow % 100) >= (int)pMonStats->aip[2][pGame->nDifficulty] || (nLifePct = WalkTowardsUnitOffset(pGame, pSelf, pTarget, (uint8_t)pMonStats->aip[3][pGame->nDifficulty], 1) , !nLifePct)) {
-        DVar1 = D2_SEED_NEXT(*pSeed);
-        *pSeed = DVar1;
-        if ((int)(DVar1.nSeedLow % 100) < (int)pMonStats->aip[0][pGame->nDifficulty]) {
-          AI_ChangeModeAndTargetUnit(pGame, pSelf, 4, pTarget);
+    if (bEngagedInCombat) {
+      if ((int)(D2_SeedRoll(pSeed) % 100) >= (int)pMonStats->aip[2][pGame->nDifficulty] || !WalkTowardsUnitOffset(pGame, pUnit, pTarget, (uint8_t)pMonStats->aip[3][pGame->nDifficulty], 1)) {
+        if ((int)(D2_SeedRoll(pSeed) % 100) < (int)pMonStats->aip[0][pGame->nDifficulty]) {
+          AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pTarget);
           return;
         }
 
-        PlanNextAiMove(pGame, pSelf, (int)pMonStats->aip[5][pGame->nDifficulty]);
+        PlanNextAiMove(pGame, pUnit, (int)pMonStats->aip[5][pGame->nDifficulty]);
+      }
+      return;
+    }
+    if (pMonStats->aSkill[4] >= 0 && pMonStats->aip[7][pGame->nDifficulty] > 0 && (int)(D2_SeedRoll(pSeed) % 100) < (int)pMonStats->aip[4][pGame->nDifficulty]) {
+      D2UnitStrc* pRangedTarget = FindTargetAndDistance(pGame, pUnit, &nDistanceToTarget, nullptr);
+      if (pRangedTarget && (int)D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100) < (int)pMonStats->aip[7][pGame->nDifficulty]) {
+        SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[4], (int)pMonStats->aSkill[4], pRangedTarget, 0, 0);
         return;
       }
-    } else {
-      if (pMonStats->aSkill[4] >= 0 && pMonStats->aip[7][pGame->nDifficulty] > 0) {
-        DVar1 = D2_SEED_NEXT(*pSeed);
-        *pSeed = DVar1;
-        if ((int)(DVar1.nSeedLow % 100) < (int)pMonStats->aip[4][pGame->nDifficulty]) {
-          pRangedTarget = FindTargetAndDistance(pGame, pSelf, &nDistanceToTarget, nullptr);
-          if (pRangedTarget) {
-            uRandPct = D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100);
-            if ((int)uRandPct < (int)pMonStats->aip[7][pGame->nDifficulty]) {
-              SERVER_UNIT_CastSkill(pGame, pSelf, pMonStats->aSkMode[4], (int)pMonStats->aSkill[4], pRangedTarget, 0, 0);
-              return;
-            }
-          }
-        }
-      }
-      if ((int)nDistanceToTarget < (int)pMonStats->aip[3][pGame->nDifficulty]) {
-        DVar1 = D2_SEED_NEXT(*pSeed);
-        *pSeed = DVar1;
-        if ((int)(DVar1.nSeedLow % 100) < (int)pMonStats->aip[2][pGame->nDifficulty]) {
-          nLifePct = WalkTowardsUnitOffset(pGame, pSelf, pTarget, (uint8_t)pMonStats->aip[3][pGame->nDifficulty], 1);
-          if (nLifePct) {
-            return;
-          }
-        }
-      }
-      if (pMonStats->aSkill[4] < 0) {
-        pRangedTarget = FindTargetAndDistance(pGame, pSelf, &nDistanceToTarget, nullptr);
-        if (pRangedTarget) {
-          DVar1 = D2_SEED_NEXT(*pSeed);
-          *pSeed = DVar1;
-          if ((int)(DVar1.nSeedLow % 100) < (int)pMonStats->aip[4][pGame->nDifficulty]) {
-            AI_ChangeModeAndTargetUnit(pGame, pSelf, 9, pRangedTarget);
-            return;
-          }
-        }
-      }
-
-      DVar1 = D2_SEED_NEXT(*pSeed);
-      *pSeed = DVar1;
-      if ((int)(DVar1.nSeedLow % 100) < (int)pMonStats->aip[1][pGame->nDifficulty]) {
-        MONSTERAI_CommandWalkToUnit(pGame, pSelf, pTarget, 0);
+    }
+    if ((int)nDistanceToTarget < (int)pMonStats->aip[3][pGame->nDifficulty] && (int)(D2_SeedRoll(pSeed) % 100) < (int)pMonStats->aip[2][pGame->nDifficulty] && WalkTowardsUnitOffset(pGame, pUnit, pTarget, (uint8_t)pMonStats->aip[3][pGame->nDifficulty], 1)) {
+      return;
+    }
+    if (pMonStats->aSkill[4] < 0) {
+      D2UnitStrc* pRangedTarget = FindTargetAndDistance(pGame, pUnit, &nDistanceToTarget, nullptr);
+      if (pRangedTarget && (int)(D2_SeedRoll(pSeed) % 100) < (int)pMonStats->aip[4][pGame->nDifficulty]) {
+        AI_ChangeModeAndTargetUnit(pGame, pUnit, 9, pRangedTarget);
         return;
       }
-
-      DVar1 = D2_SEED_NEXT_VAL(DVar1);
-      *pSeed = DVar1;
-      if ((int32_t)(DVar1.nSeedLow % 100) >= 0x32 || (_bEngagedInCombat = SetCombatStateAndApproachTarget(pGame, pSelf, pTarget, 6, 1) , !_bEngagedInCombat)) {
-        PlanNextAiMove(pGame, pSelf, (int)pMonStats->aip[5][pGame->nDifficulty]);
-      }
+    }
+    if ((int)(D2_SeedRoll(pSeed) % 100) < (int)pMonStats->aip[1][pGame->nDifficulty]) {
+      MONSTERAI_CommandWalkToUnit(pGame, pUnit, pTarget, 0);
+      return;
+    }
+    if ((int32_t)(D2_SeedRoll(pSeed) % 100) >= 0x32 || !SetCombatStateAndApproachTarget(pGame, pUnit, pTarget, 6, 1)) {
+      PlanNextAiMove(pGame, pUnit, (int)pMonStats->aip[5][pGame->nDifficulty]);
     }
 }
 
