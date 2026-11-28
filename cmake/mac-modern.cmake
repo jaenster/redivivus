@@ -146,12 +146,6 @@ if(SDL3_FOUND)
         $<TARGET_OBJECTS:d2_modern_objs> $<TARGET_OBJECTS:d2_win32posix_kernel> ${_posix_rest_objs})
     set_target_properties(d2_modern PROPERTIES OUTPUT_NAME "Diablo II")
     target_link_libraries(d2_modern PRIVATE SDL3::SDL3 "-framework OpenGL")
-    # SMem keeps its heaps below 4 GB on a 64-bit target (Storm/Source/SMem.cpp). An x86-64
-    # executable may shrink __PAGEZERO to give it that range; the arm64 kernel refuses to run
-    # one whose __PAGEZERO is under 4 GB, so the arm64 slice keeps the default.
-    if("x86_64" IN_LIST CMAKE_OSX_ARCHITECTURES)
-        target_link_options(d2_modern PRIVATE "SHELL:-Xarch_x86_64 -Wl,-pagezero_size,0x10000")
-    endif()
 else()
     message(STATUS "mac-modern: no SDL3 (brew install sdl3); d2_modern is not defined")
 endif()
@@ -160,3 +154,14 @@ add_executable(d2_win32posix_test EXCLUDE_FROM_ALL
     "${CMAKE_SOURCE_DIR}/Source/StormMac/Win32Posix/Tests/KernelTest.cpp"
     $<TARGET_OBJECTS:d2_win32posix_kernel>)
 d2_win32posix_setup(d2_win32posix_test)
+
+# d2_smem_test  Storm's heap (Source/Storm/Source/SMem.cpp) on the kernel: many heaps, the
+#               free lists, large blocks and reallocation, at addresses above 4 GB on arm64.
+add_executable(d2_smem_test EXCLUDE_FROM_ALL
+    "${CMAKE_SOURCE_DIR}/Source/StormMac/Win32Posix/Tests/SMemTest.cpp"
+    "${CMAKE_SOURCE_DIR}/Source/Storm/Source/SMem.cpp"
+    $<TARGET_OBJECTS:d2_win32posix_kernel>)
+d2_win32posix_setup(d2_smem_test)
+target_include_directories(d2_smem_test PRIVATE ${D2_MODERN_INCLUDE_DIRS})
+target_compile_options(d2_smem_test PRIVATE
+    "SHELL:-include ${CMAKE_SOURCE_DIR}/Source/D2Headers/d2_platform.h")

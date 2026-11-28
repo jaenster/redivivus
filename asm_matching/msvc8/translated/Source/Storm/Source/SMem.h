@@ -19,11 +19,11 @@ typedef uint32_t HSHEAP; // a Storm heap handle: the heap record's 32-bit hash (
 #endif // D2_DEFINED_HSHEAP
 #if (defined(_WIN64) || defined(__LP64__)) && !defined(D2_DEFINED_D2SMemLink)
 #define D2_DEFINED_D2SMemLink
-// A free-list link of the Storm heap: the address of the next free block. The
-// block header holds it in 32 bits, beside the heap's 16-bit address tag. On
-// x64 every SMem heap is reserved below 4 GB (SMEM_AllocateHeap), so both still
-// fit and the header keeps its 8-byte layout.
-// The x86 build spells it void * (SMem.cpp), as the original did.
+// A free-list link of the Storm heap on a 64-bit target: the next free block's
+// byte offset from its heap descriptor, so it fits the header's 32-bit link slot
+// wherever the heap is mapped, and the header keeps its 8-byte layout
+// (SMEM_LinkFromBlock in SMem.cpp). The x86 build spells it void *, the block's
+// address, as the original did.
 typedef uint32_t D2SMemLink;
 #endif // D2_DEFINED_D2SMemLink
 

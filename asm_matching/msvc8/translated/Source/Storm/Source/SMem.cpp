@@ -99,9 +99,54 @@ uint32_t __stdcall SMemExtractBucketIndex(uint32_t nHeapId) {
     return nHeapId & 0xff;
 }
 
+#if D2_ARCH_X64 || D2_ARCH_ARM64
+// A block header keeps a 16-bit heap tag beside the 0x6f6d magic, and a free block
+// keeps a 32-bit free-list link (D2SMemLink) in the same slot; the heap's bins hold
+// links too. On x86 the tag is the heap's high 16 address bits (a reservation is
+// 64 KB aligned) and a link is a block's address. A 64-bit address fits neither, so
+// here the tag is the heap's index in g_SMemHeapSlots and a link is the block's byte
+// offset from its heap descriptor. A heap reserves at most 4 GB (nReserved is 32-bit)
+// and a free block always lies inside its heap, so the offset fits; offset 0 is the
+// descriptor itself, never a block, so 0 stays the end of a list. Nothing depends on
+// where the heap is mapped, and the header keeps its 8 bytes.
+// A table, not an aligned reservation (base = block & ~(size - 1)): VirtualAlloc
+// cannot reserve at an alignment, and a reserve-free-reserve round is racy and
+// can cost twice the address space. Slot 0 stays empty, so a zero tag (a block
+// released at the write cursor) never names a heap.
+// Heaps are created and released under their bucket's lock only, and two buckets
+// may create heaps at once, so a slot is claimed by compare-and-swap.
+static D2FogHeapDescStrc * g_SMemHeapSlots[0x10000] = {0};
+
+static uint32_t SMEM_ClaimHeapSlot(D2FogHeapDescStrc * pHeap) {
+    for (uint32_t nSlot = 1; nSlot < 0x10000; nSlot++) {
+      if (!g_SMemHeapSlots[nSlot] && InterlockedCompareExchangePointer((PVOID volatile*)&g_SMemHeapSlots[nSlot], pHeap, nullptr) == nullptr) {
+        return nSlot;
+      }
+    }
+
+    return 0;
+}
+
+static inline D2FogHeapDescStrc * SMEM_HeapFromBlock(D2FogHeapBlockHdrStrc * pBlock) {
+    return g_SMemHeapSlots[(uint16_t)pBlock->uLink.dwHeapSignature];
+}
+
+static inline D2SMemLink SMEM_LinkFromBlock(D2FogHeapDescStrc * pHeap, void * pBlock) {
+    return (D2SMemLink)((char*)pBlock - (char*)pHeap);
+}
+
+static inline void * SMEM_BlockFromLink(D2FogHeapDescStrc * pHeap, D2SMemLink nLink) {
+    return nLink ? (void*)((char*)pHeap + nLink) : nullptr;
+}
+#endif
+
 // @blizzard LockHeapByBlockPtr (SMEM.CPP)
 static D2FogHeapDescStrc * __stdcall SMEM_LockHeapByBlockPtr(uint32_t * pnOutBucket, D2FogHeapBlockHdrStrc * pBlockHdr) {
+#if D2_ARCH_X64 || D2_ARCH_ARM64
+    D2FogHeapDescStrc* nHeapDescOffset = SMEM_HeapFromBlock(pBlockHdr);
+#else
     D2FogHeapDescStrc* nHeapDescOffset = (D2FogHeapDescStrc*)((uintptr_t)*(uint16_t*)&pBlockHdr->uLink * 0x10000);
+#endif
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(DebugMemoryCriticalSection + nHeapDescOffset->nBucketIndex);
     *pnOutBucket = nHeapDescOffset->nBucketIndex;
     return nHeapDescOffset;
@@ -155,48 +200,11 @@ static void SMEM_UnlockHeap(int * pnBucketIndex) {
 typedef void * D2SMemLink;
 #endif
 
-#if D2_ARCH_X64 || D2_ARCH_ARM64
-// Reserves a heap region below 4 GB. A block header keeps the high 16 bits of its
-// heap's address and a 32-bit free-list link (D2SMemLink), so on x64 the heap and
-// every block in it must have 32-bit addresses. The first free range that fits,
-// from 64 KB up, is reserved; a range taken by another thread between the query
-// and the reservation is skipped.
-static LPVOID SMEM_ReserveBelow4G(SIZE_T nReserveSize) {
-    const uintptr_t nGranule = 0x10000;
-    const uintptr_t nLimit = (uintptr_t)1 << 32;
-    uintptr_t nAddr = nGranule;
-    while (nAddr + nReserveSize <= nLimit) {
-      MEMORY_BASIC_INFORMATION mbi;
-      if (!VirtualQuery((LPCVOID)nAddr, &mbi, sizeof(mbi))) {
-        break;
-      }
-
-      uintptr_t nRegionEnd = (uintptr_t)mbi.BaseAddress + mbi.RegionSize;
-      if (mbi.State == MEM_FREE) {
-        uintptr_t nStart = (nAddr + nGranule - 1) & ~(nGranule - 1);
-        if (nStart + nReserveSize <= nRegionEnd && nStart + nReserveSize <= nLimit) {
-          LPVOID pRegion = VirtualAlloc((LPVOID)nStart, nReserveSize, MEM_RESERVE, PAGE_NOACCESS);
-          if (pRegion) {
-            return pRegion;
-          }
-        }
-      }
-
-      nAddr = nRegionEnd > nAddr ? nRegionEnd : nAddr + nGranule;
-    }
-
-    return nullptr;
-}
-#endif
 
 // @blizzard AllocateHeap (SMEM.CPP)
 static D2FogHeapDescStrc * __stdcall SMEM_AllocateHeap(int32_t nSourceLine, uint32_t dwHash, int32_t nBucketIndex, uint32_t dwPageAlignMask, uint32_t nCommitSize, uint32_t nReserveSize, uint32_t * pnName) {
     int nNameLenBytes;
-#if D2_ARCH_X64 || D2_ARCH_ARM64
-    D2FogHeapDescStrc* pHeapBlock = (D2FogHeapDescStrc*)SMEM_ReserveBelow4G(nReserveSize); // steer-ok: the x64 spelling of the one declaration below
-#else
     D2FogHeapDescStrc* pHeapBlock = (D2FogHeapDescStrc*)VirtualAlloc((LPVOID)0x0, nReserveSize, 0x2000, 1);
-#endif
     if (!pHeapBlock) {
       SMEM_FatalError(8, pnName, nSourceLine);
     }
@@ -215,6 +223,11 @@ static D2FogHeapDescStrc * __stdcall SMEM_AllocateHeap(int32_t nSourceLine, uint
     if (nAlignedHdrSize & 3U) {
       nAlignedHdrSize += 4 - (nAlignedHdrSize & 3U);
     }
+#if D2_ARCH_X64 || D2_ARCH_ARM64
+    // Block sizes are multiples of 8 and a header is 8 bytes, so a data region that
+    // starts on 8 bytes keeps every block's data on a pointer boundary.
+    nAlignedHdrSize = (nAlignedHdrSize + 7) & ~7;
+#endif
 
     pHeapBlock->nHash = dwHash;
     pHeapBlock->pNext = g_SMemHeapBuckets[nBucketIndex];
@@ -235,7 +248,17 @@ static D2FogHeapDescStrc * __stdcall SMEM_AllocateHeap(int32_t nSourceLine, uint
       pHeapBlock->szName[0] = '\0';
     }
 
+#if D2_ARCH_X64 || D2_ARCH_ARM64
+    uint32_t nSlot = SMEM_ClaimHeapSlot(pHeapBlock);
+    if (!nSlot) {
+      VirtualFree(pHeapBlock, 0, 0x8000);
+      SMEM_FatalError(8, pnName, nSourceLine);
+    }
+
+    pHeapBlock->dwSignature = (uint32_t)0x6f6d << 16 | nSlot;
+#else
     pHeapBlock->dwSignature = (uint32_t)((uint32_t)(uint16_t)0x6f6d << 16 | (uint32_t)(uint16_t)(short int)((uintptr_t)pHeapBlock >> 0x10));
+#endif
     g_SMemHeapBuckets[nBucketIndex] = pHeapBlock;
     return pHeapBlock;
 }
@@ -306,6 +329,9 @@ static void __stdcall SMemWriteBlockHeader(uint8_t byFlags, int32_t nExtraBytes,
 void __fastcall SMEM_FreeHeap(D2FogHeapDescStrc * * ppListHead) {
     D2FogHeapDescStrc* pRegion = *ppListHead;
     /* DWORD dwFreeType for VirtualFree */ /* SIZE_T dwSize for VirtualFree */ /* LPVOID lpAddress for VirtualFree */ *ppListHead = pRegion->pNext;
+#if D2_ARCH_X64 || D2_ARCH_ARM64
+    g_SMemHeapSlots[(uint16_t)pRegion->dwSignature] = nullptr;
+#endif
     VirtualFree(pRegion, 0, 0x8000);
 }
 
@@ -353,7 +379,11 @@ static void SMEM_FreeHeapBlock(D2FogHeapBlockHdrStrc * pwBlock, D2FogHeapDescStr
 #else
       pwBlock->uLink.pNextFree = (D2FogHeapBlockHdrStrc*)nHeap->aFreeBins[uBinIndex];
 #endif
+#if D2_ARCH_X64 || D2_ARCH_ARM64
+      nHeap->aFreeBins[uBinIndex] = SMEM_LinkFromBlock(nHeap, pwBlock);
+#else
       nHeap->aFreeBins[uBinIndex] = (D2SMemLink)(uintptr_t)pwBlock;
+#endif
       if (pwBlock->byFlags & 0x10 || pBlockEnd->byFlags & 2) {
         nHeap->nFragCount++;
       }
@@ -435,7 +465,11 @@ static void __stdcall SMemCoalesceFreeBlocks(int * pnUsedSize, D2FogHeapBlockHdr
       }
 
       *(D2SMemLink*)(pFreeBlock + 2) = pHeap->aFreeBins[nFreeSize];
+#if D2_ARCH_X64 || D2_ARCH_ARM64
+      pHeap->aFreeBins[nFreeSize] = SMEM_LinkFromBlock(pHeap, pFreeBlock);
+#else
       pHeap->aFreeBins[nFreeSize] = (D2SMemLink)(uintptr_t)pFreeBlock;
+#endif
       return;
     }
 
@@ -522,7 +556,11 @@ static void SMEM_CombineFreeBlocks(D2FogHeapDescStrc * pHeap) {
                 nBinIndex = 8;
               }
 
+#if D2_ARCH_X64 || D2_ARCH_ARM64
+              *ppBinTails[nBinIndex] = SMEM_LinkFromBlock(pHeap, pPrevFree);
+#else
               *ppBinTails[nBinIndex] = (D2SMemLink)(uintptr_t)pPrevFree;
+#endif
               ppBinTails[nBinIndex] = (D2SMemLink*)(pPrevFree + 2);
             }
           }
@@ -538,7 +576,11 @@ static void SMEM_CombineFreeBlocks(D2FogHeapDescStrc * pHeap) {
           nBinIndex = 8;
         }
 
+#if D2_ARCH_X64 || D2_ARCH_ARM64
+        *ppBinTails[nBinIndex] = SMEM_LinkFromBlock(pHeap, pCurFree);
+#else
         *ppBinTails[nBinIndex] = (D2SMemLink)(uintptr_t)pCurFree;
+#endif
         ppBinTails[nBinIndex] = (D2SMemLink*)(pCurFree + 2);
       }
     }
@@ -967,7 +1009,11 @@ BOOL __stdcall SMemFree(void * pObject, char * szFile, int32_t nLine, DWORD dwFl
       }
     }
 
+#if D2_ARCH_X64 || D2_ARCH_ARM64
+    D2FogHeapDescStrc* pHeap = SMEM_HeapFromBlock(pBlock);
+#else
     D2FogHeapDescStrc* pHeap = (D2FogHeapDescStrc*)((uintptr_t)*(uint16_t*)&pBlock->uLink << 0x10);
+#endif
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(DebugMemoryCriticalSection + pHeap->nBucketIndex);
     int nBucketIndex = pHeap->nBucketIndex;
     SMEM_SatisfyFreeRequest(pObject, pHeap, pBlock);
@@ -1014,7 +1060,11 @@ HSHEAP __stdcall SMemGetHeapByPtr(uint8_t * pObject) {
       }
     }
 
+#if D2_ARCH_X64 || D2_ARCH_ARM64
+    return SMEM_HeapFromBlock(pBlock)->nHash;
+#else
     return ((D2FogHeapDescStrc*)((uintptr_t)*(uint16_t*)&pBlock->uLink << 0x10))->nHash;
+#endif
 }
 
 int32_t __stdcall SMemGetSize(void * pObject, char * szSourceFile, int32_t nSourceLine) {
@@ -1160,7 +1210,11 @@ BOOL __stdcall SMemHeapFree(HSHEAP nHeapId, uint32_t dwFlags, void * pObject) {
       }
     }
 
+#if D2_ARCH_X64 || D2_ARCH_ARM64
+    if (SMEM_HeapFromBlock(pBlock)->nHash != nHeapId) {
+#else
     if (((D2FogHeapDescStrc*)((uintptr_t)*(uint16_t*)&pBlock->uLink << 0x10))->nHash != nHeapId) {
+#endif
       return 0;
     }
 
@@ -1198,7 +1252,11 @@ int32_t __stdcall SMemHeapSize(HSHEAP nHeapId, uint32_t dwFlags, void * pObject)
         pBlock = ((D2FogHeapBlockHdrStrc**)pBlock)[-1];
       }
     }
+#if D2_ARCH_X64 || D2_ARCH_ARM64
+    if (SMEM_HeapFromBlock(pBlock)->nHash != nHeapId) {
+#else
     if (*(int*)(((uintptr_t)*(uint16_t*)&pBlock->uLink << 0x10) + offsetof(D2FogHeapDescStrc, nHash)) != nHeapId) {
+#endif
       return -1;
     }
 
@@ -1230,15 +1288,27 @@ static uint32_t * __stdcall SMEM_AllocateHeapBlock(uint32_t nSize, uint8_t byFla
       SMEM_CombineFreeBlocks(pHeap);
     }
 
+#if D2_ARCH_X64 || D2_ARCH_ARM64
+    void* pFreeBinHead = SMEM_BlockFromLink(pHeap, pHeap->aFreeBins[nBinIndex]);
+#else
     void* pFreeBinHead = (void*)(uintptr_t)pHeap->aFreeBins[nBinIndex];
+#endif
     D2SMemLink* ppBinSlot = pHeap->aFreeBins + nBinIndex;
     uint32_t nBestFit = 0x7fffffff;
     while (!pFreeBinHead && ++nBinIndex < 9) {
       ppBinSlot++;
+#if D2_ARCH_X64 || D2_ARCH_ARM64
+      pFreeBinHead = SMEM_BlockFromLink(pHeap, *ppBinSlot);
+#else
       pFreeBinHead = (void*)(uintptr_t)*ppBinSlot;
+#endif
     }
 
+#if D2_ARCH_X64 || D2_ARCH_ARM64
+    uint16_t* pFreeBlock = (uint16_t*)SMEM_BlockFromLink(pHeap, *ppBinSlot);
+#else
     uint16_t* pFreeBlock = (uint16_t*)(uintptr_t)*ppBinSlot;
+#endif
     D2SMemLink* ppBestSlot = 0;
     if (pFreeBlock) {
       pAllocBlock = (D2FogHeapBlockHdrStrc*)0x10;
@@ -1256,13 +1326,21 @@ static uint32_t * __stdcall SMEM_AllocateHeapBlock(uint32_t nSize, uint8_t byFla
         }
 
         ppBinSlot = (D2SMemLink*)(pFreeBlock + 2);
+#if D2_ARCH_X64 || D2_ARCH_ARM64
+        pFreeBlock = (uint16_t*)SMEM_BlockFromLink(pHeap, *ppBinSlot);
+#else
         pFreeBlock = (uint16_t*)(uintptr_t)*ppBinSlot;
+#endif
       } while (pFreeBlock);
     }
 
     nBestFit = 0;
     if (ppBestSlot) {
+#if D2_ARCH_X64 || D2_ARCH_ARM64
+      pAllocBlock = (D2FogHeapBlockHdrStrc*)SMEM_BlockFromLink(pHeap, *ppBestSlot);
+#else
       pAllocBlock = (D2FogHeapBlockHdrStrc*)(uintptr_t)*ppBestSlot;
+#endif
       byBlockFlags = pAllocBlock->byFlags >> 4;
       *ppBestSlot = pAllocBlock->uLink.pNextFree;
       nBestFit = byBlockFlags & 1;
@@ -1329,13 +1407,24 @@ static uint32_t * __stdcall SMEM_AllocateHeapBlock(uint32_t nSize, uint8_t byFla
         }
       }
 
+#if D2_ARCH_X64 || D2_ARCH_ARM64
+      // The large-block header is 20 bytes here: 4 bytes ahead of it put the data on a
+      // pointer boundary. The debug layouts place the data against the page end instead.
+      uint32_t nAlignPad = DebugMemory || ProtectMemory ? 0 : (uint32_t)(-(int)sizeof(D2FogLargeBlockHdrStrc) & 7);
+      pDebugPage = VirtualAlloc(pDebugPage, nBinIndex + nAlignPad + nNeededTotal, 0x1000, 4);
+#else
       /* DWORD flProtect for VirtualAlloc */ /* DWORD flAllocationType for VirtualAlloc */ /* SIZE_T dwSize for VirtualAlloc */ /* LPVOID lpAddress for VirtualAlloc */ pDebugPage = VirtualAlloc(pDebugPage, nBinIndex + nNeededTotal, 0x1000, 4);
+#endif
       if (!pDebugPage) {
         SMEM_FreeHeapBlock(pAllocBlock, pHeap);
         return nullptr;
       }
 
+#if D2_ARCH_X64 || D2_ARCH_ARM64
+      pDebugHeader = (D2FogLargeBlockHdrStrc*)((char*)pDebugPage + nBinIndex + nAlignPad);
+#else
       pDebugHeader = (D2FogLargeBlockHdrStrc*)((char*)pDebugPage + nBinIndex);
+#endif
       pDebugHeader->nSize = nSize;
       pDebugHeader->pAllocBlock = pAllocBlock;
       pDebugHeader->tHdr.wBlockSize = (uint16_t)(nSize + 0xffff >> 0x10);
@@ -1565,7 +1654,11 @@ uint32_t * __stdcall SMemHeapReAlloc(uint32_t nHeapId, uint32_t dwAllocFlags, ui
         if (pBlockHeader->byFlags & 8) {
           pBlockHeader = ((D2FogHeapBlockHdrStrc**)pBlockHeader)[-1];
         }
+#if D2_ARCH_X64 || D2_ARCH_ARM64
+        if (SMEM_HeapFromBlock(pBlockHeader)->nHash != nHeapId) {
+#else
         if (*(uint32_t*)(((uintptr_t)*(uint16_t*)&pBlockHeader->uLink << 0x10) + offsetof(D2FogHeapDescStrc, nHash)) != nHeapId) {
+#endif
           return nullptr;
         }
 
@@ -1685,4 +1778,4 @@ void __stdcall SMemZero(void * pMemory, size_t nSize) {
 
 static void * keep_00411740 = (0 ? (SMemFindHeapByHash(*(uint32_t * *)0, *(int32_t *)0, *(uint32_t *)0), (void *)0) : (void *)0);
 
-}}} // namespace Storm::Source::SMem
+} // namespace Storm::Source::SMem
