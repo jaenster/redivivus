@@ -318,6 +318,9 @@ void RemoveWindowMessages(HWND hWnd);
 void TranslateSdlEvent(const SDL_Event& tEvent);
 void PumpSdl();
 
+// ---- UserScript.cpp ----
+void RunScript();  // the due steps of D2_POSIX_SCRIPT, from each pump
+
 // ---- UserKeys.cpp ----
 BYTE VirtualKeyFromSdl(SDL_Scancode nScancode, SDL_Keycode nKey);
 BYTE ScanCodeFromSdl(SDL_Scancode nScancode, bool* pbExtended);

@@ -2,6 +2,8 @@
 # Written here, not vendored.
 # bink_stub.cpp     RAD Bink (proprietary): the entry points D2OpenGL's cutscene player calls.
 #                   BinkOpen finds no video, so the game skips every cutscene.
+# smack_stub.cpp    RAD Smacker (proprietary): the entry points D2Uni's movie slot calls.
+#                   SmackOpen finds no movie, so the game skips every Smacker video.
 # crashy_posix.cpp  Blizzard's crashy (no public source): the report file Fog's error manager
 #                   writes Crash.txt through, on the POSIX file calls, and the debugger check.
 # The Intel JPEG Library's three entry points come from Redivivus/x64/d2_ijl.cpp, on

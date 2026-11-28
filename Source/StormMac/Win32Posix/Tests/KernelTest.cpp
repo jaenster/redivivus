@@ -226,6 +226,28 @@ void TestThreads() {
     LeaveCriticalSection(&tZero);
     DeleteCriticalSection(&tZero);
 
+    // A section at +4 of a packed record, as Fog's pool managers keep theirs: on a 64-bit
+    // target its lock slot is not pointer-aligned. Initialised and lazily made both work.
+    struct __attribute__((packed)) PackedSection {
+        int32_t nId;
+        CRITICAL_SECTION tSection;
+    };
+    static_assert(offsetof(PackedSection, tSection) == 4, "the section sits at +4");
+    for (int nLazy = 0; nLazy < 2; ++nLazy) {
+        PackedSection tPacked;
+        memset(&tPacked, 0, sizeof(tPacked));
+        if (!nLazy) {
+            InitializeCriticalSection(&tPacked.tSection);
+        }
+        EnterCriticalSection(&tPacked.tSection);
+        EnterCriticalSection(&tPacked.tSection);
+        CHECK(tPacked.tSection.RecursionCount == 2);
+        LeaveCriticalSection(&tPacked.tSection);
+        LeaveCriticalSection(&tPacked.tSection);
+        CHECK(tPacked.tSection.RecursionCount == 0);
+        DeleteCriticalSection(&tPacked.tSection);
+    }
+
     volatile LONG nValue = 5;
     CHECK(InterlockedIncrement(&nValue) == 6 && InterlockedExchange(&nValue, 9) == 6);
     CHECK(InterlockedCompareExchange(&nValue, 1, 9) == 9 && nValue == 1);

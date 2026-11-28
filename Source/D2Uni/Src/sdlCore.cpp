@@ -201,6 +201,16 @@ static BOOL sSdlPresent() {
     }
     sSdlConvertFrame();
     SDL_UpdateTexture(gpSdlTexture, nullptr, gpSdlFrame, gnUniScreenWidth * (int)sizeof(uint32_t));
+    char szShot[1024];
+    if (Win32Posix_TakeShotRequest(szShot, sizeof(szShot))) {
+        // The frame the game drew, at its own size, before the window's scaling.
+        SDL_Surface * pShot = SDL_CreateSurfaceFrom(gnUniScreenWidth, gnUniScreenHeight, SDL_PIXELFORMAT_ARGB8888,
+                                                    gpSdlFrame, gnUniScreenWidth * (int)sizeof(uint32_t));
+        if (!pShot || !SDL_SaveBMP(pShot, szShot)) {
+            LogPrintf("SDLPresent: screenshot %s failed: %s", szShot, SDL_GetError());
+        }
+        SDL_DestroySurface(pShot);
+    }
 
     SDL_SetRenderDrawColor(gpSdlRenderer, 0, 0, 0, 255);
     SDL_RenderClear(gpSdlRenderer);
