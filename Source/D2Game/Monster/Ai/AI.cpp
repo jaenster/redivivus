@@ -20421,77 +20421,53 @@ void __fastcall AI_Fn1_UberIzual(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPa
 // AI think phase-1 for the Tentacle monster (summoned appendage of Duriel-class bosses). Kills itself if its owner is gone. Has a 40% chance each tick to die when the owner is in Kick animation. Manages a two-state skill cycle (dwArg2 1/2): casts Skill1 when idle or when timer expires and range/combat/owner conditions require it; casts Skill2 (self-buff) when dwArg2==1 and the cooldown has elapsed. Falls back to PlanNextAiMove or CalledOnEndAiFunction1 if no skill fires.
 // 1.14d mac: 0029897b
 void __fastcall AI_Fn1_Tentacle(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
-    uint32_t uRandResult;
-    uint32_t newSeed;
-    int nDistance;
-    nDistance = pAiParam->nDistanceToTarget;
-    int bInCombat;
-    bInCombat = pAiParam->bEngagedInCombat;
-    D2UnitStrc* pTarget;
-    pTarget = pAiParam->pTarget;
-    D2AiGeneralStrc* pAiGeneral;
-    pAiGeneral = pAiParam->pMonsterAiGeneral;
-    D2MonStatsTxt* pMonStats;
-    pMonStats = pAiParam->pMonStats;
-    D2UnitStrc* pOwner;
-    pOwner = Ai::AiGeneral::GetOwnerUnit(pUnit);
+    D2SeedStrc* pSeed = &pUnit->sSeed;
+    int nDistance = pAiParam->nDistanceToTarget;
+    int bInCombat = pAiParam->bEngagedInCombat;
+    D2UnitStrc* pTarget = pAiParam->pTarget;
+    D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
+    D2UnitStrc* pOwner = Ai::AiGeneral::GetOwnerUnit(pUnit);
     if (!pOwner) {
       UNIT::SUnitDmg::SERVER_KillMonster(pGame, pUnit, nullptr, 1);
       return;
     }
 
-    eD2PlayerAnimMode eOwnerAnimMode;
-    eOwnerAnimMode = pOwner->eAnimMode.ePlayerMode;
-    if (eOwnerAnimMode == Kick) {
-      BOOL bRemoveFromOwner;
-      newSeed = D2_SeedRoll(&pUnit->sSeed);
-      if ((int32_t)(newSeed % 100) < 0x28) {
-        bRemoveFromOwner = 1;
-        pTarget = UNIT::SUnit::GetTargetEx(pGame, pOwner);
-        UNIT::SUnitDmg::SERVER_KillMonster(pGame, pUnit, pTarget, bRemoveFromOwner);
-        return;
-      }
+    eD2PlayerAnimMode eOwnerAnimMode = pOwner->eAnimMode.ePlayerMode;
+    if (eOwnerAnimMode == Kick && (int32_t)(D2_SeedRoll(pSeed) % 100) < 0x28) {
+      UNIT::SUnitDmg::SERVER_KillMonster(pGame, pUnit, UNIT::SUnit::GetTargetEx(pGame, pOwner), 1);
+      return;
     }
 
-    short int nSkill1;
-    nSkill1 = pMonStats->aSkill[0];
-    if (nSkill1 >= 0) {
-      if (!pAiGeneral->dwArg2) {
-        SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[0], (int)nSkill1, pTarget, 0, 0);
-        RestartAiThink(pGame, pUnit, 8);
-        pAiGeneral->dwArg1 = pMonStats->aip[2][pGame->nDifficulty] * 0x19 + pGame->dwGameFrame;
-        pAiGeneral->dwArg2 = 1;
-        return;
-      }
-      if (nSkill1 >= 0 && pAiGeneral->dwArg2 == 2 && pGame->dwGameFrame > pAiGeneral->dwArg1 && (nDistance > pMonStats->aip[5][pGame->nDifficulty] || !bInCombat && (uRandResult = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100) , (int)uRandResult < (int)pMonStats->aip[1][pGame->nDifficulty]) || eOwnerAnimMode == eD2PlayerAnimMode_ns::Skill2 && (uRandResult = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100) , (int)uRandResult < 0x32))) {
-        SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[0], (int)pMonStats->aSkill[0], pTarget, 0, 0);
-        RestartAiThink(pGame, pUnit, 8);
-        pAiGeneral->dwArg1 = pMonStats->aip[2][pGame->nDifficulty] * 0x19 + pGame->dwGameFrame;
-        pAiGeneral->dwArg2 = 1;
-        return;
-      }
+    if (pMonStats->aSkill[0] >= 0 && !pAiGeneral->dwArg2) {
+      SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[0], (int)pMonStats->aSkill[0], pTarget, 0, 0);
+      RestartAiThink(pGame, pUnit, 8);
+      pAiGeneral->dwArg1 = pMonStats->aip[2][pGame->nDifficulty] * 0x19 + pGame->dwGameFrame;
+      pAiGeneral->dwArg2 = 1;
+      return;
     }
-    if (pMonStats->aSkill[1] >= 0) {
-      if (pAiGeneral->dwArg2 != 1) {
-        goto attack_or_idle;
-      }
-      if (pGame->dwGameFrame > pAiGeneral->dwArg1 && (bInCombat || nDistance < pMonStats->aip[5][pGame->nDifficulty] || eOwnerAnimMode != eD2PlayerAnimMode_ns::Skill2 && (uRandResult = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100) , (int)uRandResult < 5))) {
-        SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[1], (int)pMonStats->aSkill[1], pUnit, 0, 0);
-        pAiGeneral->dwArg1 = pMonStats->aip[3][pGame->nDifficulty] * 0x19 + pGame->dwGameFrame;
-        pAiGeneral->dwArg2 = 2;
-        return;
-      }
+    if (pMonStats->aSkill[0] >= 0 && pAiGeneral->dwArg2 == 2 && pGame->dwGameFrame > pAiGeneral->dwArg1 && (nDistance > pMonStats->aip[5][pGame->nDifficulty] || !bInCombat && (int)D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100) < (int)pMonStats->aip[1][pGame->nDifficulty] || eOwnerAnimMode == eD2PlayerAnimMode_ns::Skill2 && (int)D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100) < 0x32)) {
+      SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[0], (int)pMonStats->aSkill[0], pTarget, 0, 0);
+      RestartAiThink(pGame, pUnit, 8);
+      pAiGeneral->dwArg1 = pMonStats->aip[2][pGame->nDifficulty] * 0x19 + pGame->dwGameFrame;
+      pAiGeneral->dwArg2 = 1;
+      return;
+    }
+    if (pMonStats->aSkill[1] >= 0 && pAiGeneral->dwArg2 == 1 && pGame->dwGameFrame > pAiGeneral->dwArg1 && (bInCombat || nDistance < pMonStats->aip[5][pGame->nDifficulty] || eOwnerAnimMode != eD2PlayerAnimMode_ns::Skill2 && (int)D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100) < 5)) {
+      SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[1], (int)pMonStats->aSkill[1], pUnit, 0, 0);
+      pAiGeneral->dwArg1 = pMonStats->aip[3][pGame->nDifficulty] * 0x19 + pGame->dwGameFrame;
+      pAiGeneral->dwArg2 = 2;
+      return;
     }
     if (pAiGeneral->dwArg2 == 1) {
       RestartAiThink(pGame, pUnit, (int)pMonStats->aip[4][pGame->nDifficulty]);
       return;
     }
-
-    attack_or_idle:
-    if (bInCombat && (uRandResult = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100) , (int)uRandResult < (int)pMonStats->aip[0][pGame->nDifficulty])) {
+    if (bInCombat && (int)D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100) < (int)pMonStats->aip[0][pGame->nDifficulty]) {
       AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pTarget);
       return;
     }
+
     PlanNextAiMove(pGame, pUnit, (int)pMonStats->aip[4][pGame->nDifficulty]);
 }
 
