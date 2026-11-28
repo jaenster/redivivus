@@ -138,4 +138,81 @@ BOOL TranslateMessage(const MSG* lpMsg);
 LRESULT DispatchMessageA(const MSG* lpMsg);
 #define PostMessage PostMessageA
 
+// ---- the rest of the layer's surface: not called by the game today, there for the shells,
+// tools and renderers on top of it ----
+typedef void (*TIMERPROC)(HWND, UINT, UINT_PTR, DWORD);
+struct tagCREATESTRUCTA {
+    LPVOID lpCreateParams;
+    HINSTANCE hInstance;
+    HMENU hMenu;
+    HWND hwndParent;
+    int cy;
+    int cx;
+    int y;
+    int x;
+    LONG style;
+    LPCSTR lpszName;
+    LPCSTR lpszClass;
+    DWORD dwExStyle;
+};
+typedef tagCREATESTRUCTA CREATESTRUCTA;
+WIN32POSIX_SIZE(CREATESTRUCTA, 0x30, 0x50);
+struct tagPAINTSTRUCT {
+    HDC hdc;
+    BOOL fErase;
+    RECT rcPaint;
+    BOOL fRestore;
+    BOOL fIncUpdate;
+    BYTE rgbReserved[32];
+};
+typedef tagPAINTSTRUCT PAINTSTRUCT;
+WIN32POSIX_SIZE(PAINTSTRUCT, 0x40, 0x48);
+
+LRESULT CallWindowProcA(WNDPROC lpPrevWndFunc, HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
+LONG GetWindowLongA(HWND hWnd, int nIndex);
+LONG SetWindowLongA(HWND hWnd, int nIndex, LONG dwNewLong);
+LONG_PTR GetWindowLongPtrA(HWND hWnd, int nIndex);
+LONG_PTR SetWindowLongPtrA(HWND hWnd, int nIndex, LONG_PTR dwNewLong);
+BOOL SetWindowTextA(HWND hWnd, LPCSTR lpString);
+int GetWindowTextA(HWND hWnd, LPSTR lpString, int nMaxCount);
+HWND GetParent(HWND hWnd);
+HWND GetFocus(void);
+HWND GetActiveWindow(void);
+HWND SetActiveWindow(HWND hWnd);
+HWND GetForegroundWindow(void);
+BOOL ScreenToClient(HWND hWnd, LPPOINT lpPoint);
+BOOL ClientToScreen(HWND hWnd, LPPOINT lpPoint);
+BOOL InvalidateRect(HWND hWnd, const RECT* lpRect, BOOL bErase);
+BOOL ValidateRect(HWND hWnd, const RECT* lpRect);
+HDC BeginPaint(HWND hWnd, PAINTSTRUCT* lpPaint);
+BOOL EndPaint(HWND hWnd, const PAINTSTRUCT* lpPaint);
+UINT_PTR SetTimer(HWND hWnd, UINT_PTR nIDEvent, UINT uElapse, TIMERPROC lpTimerFunc);
+BOOL KillTimer(HWND hWnd, UINT_PTR uIDEvent);
+HWND SetCapture(HWND hWnd);
+BOOL ReleaseCapture(void);
+HWND GetCapture(void);
+BOOL ClipCursor(const RECT* lpRect);
+BOOL GetClipCursor(LPRECT lpRect);
+HCURSOR SetCursor(HCURSOR hCursor);
+BOOL EnumDisplaySettingsA(LPCSTR lpszDeviceName, DWORD iModeNum, DEVMODEA* lpDevMode);
+BOOL OffsetRect(LPRECT lprc, int dx, int dy);
+BOOL InflateRect(LPRECT lprc, int dx, int dy);
+BOOL SetRectEmpty(LPRECT lprc);
+BOOL IsRectEmpty(const RECT* lprc);
+BOOL EqualRect(const RECT* lprc1, const RECT* lprc2);
+BOOL UnionRect(LPRECT lprcDst, const RECT* lprcSrc1, const RECT* lprcSrc2);
+
+// ---- the SDL3 side, for the renderer and the shell ----
+struct SDL_Window;
+// The SDL window behind a top-level HWND, or NULL.
+SDL_Window* Win32Posix_GetSdlWindow(HWND hWnd);
+// Where the window's client area lands in its drawable, in pixels: the client keeps the
+// size the game gave it and is scaled, aspect kept, into the window SDL has.
+BOOL Win32Posix_GetViewport(HWND hWnd, int* pnX, int* pnY, int* pnWidth, int* pnHeight);
+// The SDL_WindowFlags every later CreateWindowExA adds (SDL_WINDOW_OPENGL by default).
+void Win32Posix_SetWindowCreateFlags(uint64_t nFlags);
+// Relative mouse mode: the OS cursor is hidden and held, and WM_MOUSEMOVE carries a cursor
+// the layer moves by the relative motion, kept inside the client area.
+BOOL Win32Posix_SetRelativeMouse(HWND hWnd, BOOL bRelative);
+
 #endif  // !defined(_WIN32) && D2_BACKEND_POSIX
