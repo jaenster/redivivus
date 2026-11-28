@@ -2734,10 +2734,6 @@ int __stdcall UTF16_ToUTF8(uint8_t * pbUTF8, int nOutMaxChars, uint16_t * pszUTF
 }
 
 int __stdcall UTF8_CalculateUTF16Length(char * szText, int nMaxBytes, int * pnBytesRead) {
-    char* pCur;
-    uint32_t uByteCount;
-    uint32_t uCodepoint;
-    char cByte;
     if (!nMaxBytes || !szText) {
       if (pnBytesRead) {
         *pnBytesRead = 0;
@@ -2745,61 +2741,50 @@ int __stdcall UTF8_CalculateUTF16Length(char * szText, int nMaxBytes, int * pnBy
 
       return -1;
     }
-    if (nMaxBytes == 0x7fffffff) {
-      pCur = (char*)-1;
-    } else {
-      pCur = szText + nMaxBytes;
-    }
 
+    char* pStart = szText;
+    char* pEnd = nMaxBytes == 0x7fffffff ? (char*)-1 : szText + nMaxBytes;
     int nUTF16Len = 0;
-    char* pEndInner = szText;
     while (true) {
-      int iAccum;
-      if (pEndInner >= pCur) {
+      if (szText >= pEnd) {
         nUTF16Len = -1;
         break;
       }
 
-      cByte = *pEndInner;
-      uCodepoint = (uint32_t)gaUTF8ByteCountTable[cByte];
-      if (pEndInner + uCodepoint >= pCur) {
-        nUTF16Len = -1 - uCodepoint;
+      uint32_t nExtraBytes = gaUTF8ByteCountTable[*szText];
+      if (szText + nExtraBytes >= pEnd) {
+        nUTF16Len = -1 - nExtraBytes;
         break;
       }
 
-      iAccum = 0;
-      switch (uCodepoint) {
+      uint32_t uCodepoint = 0;
+      switch (nExtraBytes) {
         case 5:
-          pEndInner++;
-        iAccum = (int)cByte << 6;
+          uCodepoint += *szText++;
+          uCodepoint <<= 6;
         case 4:
-          cByte = *pEndInner;
-        pEndInner++;
-        iAccum = (iAccum + cByte) * 0x40;
+          uCodepoint += *szText++;
+          uCodepoint <<= 6;
         case 3:
-          cByte = *pEndInner;
-        pEndInner++;
-        iAccum = (iAccum + cByte) * 0x40;
+          uCodepoint += *szText++;
+          uCodepoint <<= 6;
         case 2:
-          cByte = *pEndInner;
-        pEndInner++;
-        iAccum = (iAccum + cByte) * 0x40;
+          uCodepoint += *szText++;
+          uCodepoint <<= 6;
         case 1:
-          cByte = *pEndInner;
-        pEndInner++;
-        iAccum = (iAccum + cByte) * 0x40;
+          uCodepoint += *szText++;
+          uCodepoint <<= 6;
         case 0:
-          iAccum += *pEndInner;
-        pEndInner++;
+          uCodepoint += *szText++;
       }
 
-      uByteCount = iAccum - gdwUTF8ConversionTab[uCodepoint];
-      if (uByteCount <= 0xffff) {
+      uCodepoint -= gdwUTF8ConversionTab[nExtraBytes];
+      if (uCodepoint <= 0xffff) {
         nUTF16Len++;
-        if (iAccum == gdwUTF8ConversionTab[uCodepoint]) {
+        if (!uCodepoint) {
           break;
         }
-      } else if (uByteCount > 0x10ffff) {
+      } else if (uCodepoint > 0x10ffff) {
         nUTF16Len++;
       } else {
         nUTF16Len += 2;
@@ -2807,7 +2792,7 @@ int __stdcall UTF8_CalculateUTF16Length(char * szText, int nMaxBytes, int * pnBy
     }
 
     if (pnBytesRead) {
-      *pnBytesRead = (int)(pEndInner - szText);
+      *pnBytesRead = szText - pStart;
     }
 
     return nUTF16Len;
