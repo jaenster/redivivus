@@ -18,6 +18,9 @@
 //   api/ls-plugin/                      the editor plugin, compiled to CommonJS
 //   generated/d2_lua_builtin.gen.cpp    the built-in redivivus mod's program (builtin/), compiled as a
 //                                       mod is, against the api declarations above (written first)
+//   generated/override/, core/redivivus/engine-functions.ts
+//                                       the override registry: every function of the tree's Source
+//                                       units, read from their definitions (overrides.ts)
 // The C++ is committed, so a build needs no Node; the build runs --check when Node is there.
 
 import * as fs from "node:fs";
@@ -29,6 +32,7 @@ import { LUARC, luals, lualsPath, reference } from "./docs.ts";
 import { EnumError, engineEnums } from "./enums.ts";
 import { emitCpp, GenError, loadSet, type SetConfig } from "./glue.ts";
 import { luaEnvTypings } from "./luaenv.ts";
+import { fixtureOutputs, OverrideError, overrideOutputs, summary as overrideSummary } from "./overrides.ts";
 
 const TOOLS = path.resolve(import.meta.dirname, "..");
 const LUA = path.resolve(TOOLS, "..");
@@ -106,6 +110,13 @@ function main(): number {
         // The core and the glue read these, so without --check they are written first.
         const early = luaEnvTypings(path.join(API, "lua"));
         early.set(path.join(CORE, "redivivus/engine-enums.ts"), engineEnums(path.join(CORE, "engine-enums.json"), path.join(ROOT, "Source/D2Headers/d2_enums.h"), ROOT));
+        const ov = overrideOutputs(ROOT, LUA);
+        console.log(`gen: ${overrideSummary(ov.registry)}`);
+        for (const [file, text] of ov.outputs) {
+            if (file.endsWith(".ts")) early.set(file, text);
+            else outputs.set(file, text);
+        }
+        for (const [file, text] of fixtureOutputs(ROOT, LUA)) outputs.set(file, text);
         for (const [file, text] of early) {
             outputs.set(file, text);
             if (!check && (!fs.existsSync(file) || fs.readFileSync(file, "utf8") !== text)) {
@@ -142,7 +153,7 @@ function main(): number {
             "The TypeScriptToLua runtime library (lualib_bundle.lua of typescript-to-lua 1.37.1), embedded in\n"
             + "d2_lua_core.gen.cpp and served to mods as redivivus:lualib, is under this licence:\n\n" + license);
     } catch (e) {
-        if (e instanceof GenError || e instanceof EnumError || e instanceof CoreError) {
+        if (e instanceof GenError || e instanceof EnumError || e instanceof CoreError || e instanceof OverrideError) {
             console.error(`gen: ${e.message}`);
             return 1;
         }

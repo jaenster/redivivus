@@ -83,13 +83,13 @@ function sidesOfFile(sf: ts.SourceFile): string[] {
     return side[1].trim().split(/\s+/);
 }
 
-/** The public modules, read from the core's sources (core/redivivus/*.ts but engine-enums). */
+/** The public modules, read from the core's sources (core/redivivus/*.ts but the generated engine-enums and engine-functions). */
 export function publicModules(program: ts.Program): PublicModule[] {
     const checker = program.getTypeChecker();
     const out: PublicModule[] = [];
     for (const file of fs.readdirSync(path.join(CORE, "redivivus")).filter((f) => f.endsWith(".ts")).sort()) {
         const entry = file.replace(/\.ts$/, "");
-        if (entry === "engine-enums") continue;
+        if (entry === "engine-enums" || entry === "engine-functions") continue;
         const full = path.join(CORE, "redivivus", file);
         const sf = program.getSourceFile(full);
         if (!sf) throw new CoreError(`${file} is not in the core program`);
@@ -174,7 +174,8 @@ export function buildCore(luaEnv: string): CoreBuild {
     dts.emit(undefined, (p, text) => {
         const rel = path.relative("/core-dts", p).split(path.sep).join("/");
         const source = path.join(CORE, rel.replace(/\.d\.ts$/, ".ts"));
-        if (!publicFiles.has(path.resolve(source)) && !rel.startsWith("redivivus/engine-enums") && !rel.startsWith("ui/")) return;
+        if (!publicFiles.has(path.resolve(source)) && !rel.startsWith("redivivus/engine-enums") && !rel.startsWith("redivivus/engine-functions")
+            && !rel.startsWith("ui/")) return;
         for (const m of text.matchAll(/from "(\.\.?\/[^"]+)"/g)) {
             const target = path.posix.normalize(path.posix.join(path.posix.dirname(rel), m[1]));
             if (target.startsWith("internal/")) throw new CoreError(`${rel}: the public declarations refer to ${target}; keep internal types out of the API`);

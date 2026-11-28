@@ -3,7 +3,8 @@
 # no Node. When Node (22.18 or newer, which runs TypeScript
 # directly) and the tools' packages (pnpm install in Redivivus/Lua/tools) are there, the target
 # lua_api_check runs the generator in --check mode and fails the build when a committed output
-# no longer matches its sources (Redivivus/Lua/core).
+# no longer matches its sources (Redivivus/Lua/core, and the tree's own units for the override
+# registry).
 #
 # Include once; sets D2_LUA_API_CHECK to the target's name when it exists.
 
@@ -20,6 +21,10 @@ if(D2_NODE AND EXISTS "${_lua_tools}/node_modules/typescript/package.json")
         file(GLOB_RECURSE _lua_api_inputs CONFIGURE_DEPENDS
             "${D2_ROOT}/Redivivus/Lua/core/*.ts" "${D2_ROOT}/Redivivus/Lua/core/*.json" "${_lua_tools}/src/*.ts")
         list(APPEND _lua_api_inputs "${D2_ROOT}/Source/D2Headers/d2_enums.h")
+        # The override registry is read from the tree's units, their source maps and headers.
+        file(GLOB_RECURSE _lua_api_tree CONFIGURE_DEPENDS "${D2_ROOT}/Source/*.cpp" "${D2_ROOT}/Source/*.cpp.map" "${D2_ROOT}/Source/*.h")
+        list(APPEND _lua_api_inputs ${_lua_api_tree} "${D2_ROOT}/Redivivus/Lua/test/override/d2_lua_override_fixture.cpp"
+            "${D2_ROOT}/Redivivus/Lua/test/override/d2_lua_override_fixture.h")
         add_custom_command(
             OUTPUT "${CMAKE_BINARY_DIR}/lua-api-check.stamp"
             COMMAND "${D2_NODE}" "${_lua_tools}/src/gen.ts" --check
