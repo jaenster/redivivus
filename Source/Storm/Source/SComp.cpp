@@ -4401,62 +4401,31 @@ int __thiscall HUFFMAN_DecompressBlock(D2HuffmanContextStrc * pDecoderCtx, uint8
 }
 
 int __thiscall COMPRESS_EncodeBuffer(D2CompressEncoderStrc * pHuffCtx, D2BitStreamWriterStrc * pBitStream, uint8_t * pbSrc, int32_t nSrcLen, uint32_t nTableSel) {
-    int nBitsLeft;
-    int32_t nRemainingBits;
-    uint32_t nShiftBits;
-    uint32_t nBitsAvail;
     COMPRESS_InitEncoderContext(pHuffCtx, nTableSel);
-    pHuffCtx->nReserved00 = (uint32_t)((char)nTableSel == '\0');
+    pHuffCtx->nReserved00 = (uint8_t)nTableSel == 0;
     BITSTREAM_WriteBits(pBitStream, (uint8_t)nTableSel, 8);
-    while (true) {
-      uint32_t nSymbol;
-      if (!nSrcLen) {
-        BITSTREAM_WriteLiteralByte(pHuffCtx, pBitStream, 0x100);
-        nBitsLeft = pBitStream->nBitsHeld;
-        while (nBitsLeft) {
-          if (pBitStream->nBytesRemaining) {
-            *pBitStream->pOutPtr = (uint8_t)pBitStream->nBitAccum;
-            pBitStream->pOutPtr++;
-            pBitStream->nBytesRemaining--;
-          }
-
-          nBitsAvail = pBitStream->nBitsHeld;
-          pBitStream->nBitAccum >>= 8;
-          nShiftBits = 8;
-          if (nBitsAvail <= 8) {
-            nShiftBits = nBitsAvail;
-          }
-
-          nBitsLeft = nBitsAvail - nShiftBits;
-          pBitStream->nBitsHeld = nBitsLeft;
-        }
-
-        nRemainingBits = BITBUFFER_GetRemainingBits((int*)pBitStream);
-        return nRemainingBits;
-      }
-
-      nSymbol = (uint32_t)*pbSrc;
+    uint8_t* pbCur = pbSrc;
+    while (nSrcLen) {
       nSrcLen--;
-      pbSrc++;
+      uint32_t nSymbol = *pbCur++;
       if (!pHuffCtx->apSymbolNodes[nSymbol]) {
         BITSTREAM_WriteLiteralByte(pHuffCtx, pBitStream, 0x101);
         BITSTREAM_WriteBits(pBitStream, nSymbol, 8);
         COMPRESS_EncodeSymbol(pHuffCtx, nSymbol);
         if (!pHuffCtx->nReserved00) {
           COMPRESS_UpdateFrequencies(pHuffCtx, pHuffCtx->apSymbolNodes[nSymbol]);
-          if (pHuffCtx->nReserved00) {
-            COMPRESS_UpdateFrequencies(pHuffCtx, pHuffCtx->apSymbolNodes[nSymbol]);
-          }
-        } else {
-          COMPRESS_UpdateFrequencies(pHuffCtx, pHuffCtx->apSymbolNodes[nSymbol]);
         }
       } else {
         BITSTREAM_WriteLiteralByte(pHuffCtx, pBitStream, nSymbol);
-        if (pHuffCtx->nReserved00) {
-          COMPRESS_UpdateFrequencies(pHuffCtx, pHuffCtx->apSymbolNodes[nSymbol]);
-        }
+      }
+      if (pHuffCtx->nReserved00) {
+        COMPRESS_UpdateFrequencies(pHuffCtx, pHuffCtx->apSymbolNodes[nSymbol]);
       }
     }
+
+    BITSTREAM_WriteLiteralByte(pHuffCtx, pBitStream, 0x100);
+    BITSTREAM_Flush(pBitStream);
+    return BITBUFFER_GetRemainingBits((int*)pBitStream);
 }
 
 D2CompressEncoderStrc * __fastcall HUFFMAN_Constructor(D2CompressEncoderStrc * pEncoder) {

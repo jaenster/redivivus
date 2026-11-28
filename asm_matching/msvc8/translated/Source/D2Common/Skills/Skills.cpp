@@ -3454,126 +3454,96 @@ static BOOL SKILLS_HasEnoughManaForSkill(D2UnitStrc * pUnitStrc, D2SkillStrc * p
 
 // Checks whether the unit satisfies a skill's weapon/ammo requirement before the skill can be used. If the skill record has flag 0x10 set it instead checks the skill's nQuantity (charge/ammo count > 0). Otherwise it branches on the skill record's weapon-requirement code: 2 and 4 require an equipped throwable weapon (or its item_throwable stat) in main/alt hand via INVENTORY_GetEquippedWeaponInfo + SKILLS_GetWeaponByHand; 5 requires a melee weapon of ITEMTYPE_Weapon and dual-wield capability. Any other code returns 1 (no requirement). Returns nonzero if the requirement is met, 0 otherwise.
 static uint32_t SKILLS_HasRequiredWeaponOrQuantity(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
-    uint32_t bHasAmmo;
-    D2UnitStrc* pAltWeapon;
+    D2UnitStrc* pWeapon;
     int32_t nWeaponSlot;
     int nHandedness;
-    D2UnitStrc* pWeapon;
-    short int nWeaponReqType;
     if (!pUnit || !pSkill) {
       return 0;
     }
 
-    D2SkillsTxt* pDVar1 = pSkill->pRecord;
+    D2SkillsTxt* pSkillTxt = pSkill->pRecord;
     D2InventoryStrc* pInventory = pUnit->pInventory;
-    if (!pDVar1 || !(pDVar1->aFlagBytes[4] & (uint8_t)Fog::BitBuffer::gadwBitMasks[4])) {
-      BOOL bGotWeaponInfo;
-      nWeaponReqType = pDVar1->skill;
-      switch (nWeaponReqType) {
-        case 2:
-          {
-            bHasAmmo = 0;
-            if (!pInventory) {
-              return 0;
-            }
-
-            bGotWeaponInfo = Units::CanDualWield(pUnit);
-            if (bGotWeaponInfo) {
-              bGotWeaponInfo = INVENTORY::Inventory::INVENTORY_GetEquippedWeaponInfo(pInventory, &pWeapon, &nWeaponSlot, &nHandedness);
-              if (bGotWeaponInfo) {
-                if (!nHandedness) {
-                  pWeapon = SKILLS_GetWeaponByHand(nWeaponSlot, pInventory);
-                }
-                if (pWeapon) {
-                  bHasAmmo = ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pWeapon);
-                  if (!bHasAmmo) {
-                    bHasAmmo = Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pWeapon, UNITSTAT_item_throwable, 0);
-                    return bHasAmmo;
-                  }
-                }
-              }
-            } else {
-              bGotWeaponInfo = INVENTORY::Inventory::INVENTORY_GetEquippedWeaponInfo(pInventory, &pWeapon, &nWeaponSlot, &nHandedness);
-              if (bGotWeaponInfo && nHandedness) {
-                bHasAmmo = ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pWeapon);
-                if (!bHasAmmo) {
-                  bHasAmmo = Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pWeapon, UNITSTAT_item_throwable, 0);
-                  return bHasAmmo;
-                }
-              }
-            }
-
-            break;
-          }
-        case 4:
-          {
-            bHasAmmo = 0;
-            if (!pInventory) {
-              return 0;
-            }
-
-            bGotWeaponInfo = INVENTORY::Inventory::INVENTORY_GetEquippedWeaponInfo(pInventory, &pWeapon, &nWeaponSlot, &nHandedness);
-            if (bGotWeaponInfo) {
-              if (nHandedness) {
-                pAltWeapon = SKILLS_GetWeaponByHand(nWeaponSlot, pInventory);
-                if (pAltWeapon) {
-                  bHasAmmo = ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pAltWeapon);
-                  if (!bHasAmmo) {
-                    bHasAmmo = Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pAltWeapon, UNITSTAT_item_throwable, 0);
-                  }
-                }
-              } else {
-                bHasAmmo = ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pWeapon);
-                if (!bHasAmmo) {
-                  bHasAmmo = Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pWeapon, UNITSTAT_item_throwable, 0);
-                  return bHasAmmo;
-                }
-              }
-            }
-
-            break;
-          }
-        case 5:
-          {
-            if (!pInventory) {
-              return 0;
-            }
-
-            bGotWeaponInfo = Units::CanDualWield(pUnit);
-            if (!bGotWeaponInfo) {
-              return 0;
-            }
-
-            bHasAmmo = 0;
-            bGotWeaponInfo = INVENTORY::Inventory::INVENTORY_GetEquippedWeaponInfo(pInventory, &pWeapon, &nWeaponSlot, &nHandedness);
-            if (bGotWeaponInfo) {
-              if (!nHandedness) {
-                bHasAmmo = ITEMS::Items::ITEMS_IsA(pWeapon, ITEMTYPE_Weapon);
-                return bHasAmmo;
-              }
-
-              pAltWeapon = SKILLS_GetWeaponByHand(nWeaponSlot, pInventory);
-              if (pAltWeapon) {
-                bHasAmmo = ITEMS::Items::ITEMS_IsA(pAltWeapon, ITEMTYPE_Weapon);
-                return bHasAmmo;
-              }
-            }
-
-            break;
-          }
-        default:
-          {
-            return 1;
-          }
+    if (pSkillTxt && pSkillTxt->aFlagBytes[4] & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) {
+      if (!pInventory) {
+        return 0;
       }
-    } else {
-      bHasAmmo = 0;
-      if (pInventory) {
-        return (uint32_t)(pSkill->nQuantity > 0);
-      }
+
+      return pSkill->nQuantity > 0;
     }
 
-    return bHasAmmo;
+    uint32_t bRequirementMet;
+    switch (pSkillTxt->skill) {
+      case 2:
+        bRequirementMet = 0;
+        if (!pInventory) {
+          return 0;
+        }
+
+        if (Units::CanDualWield(pUnit)) {
+          if (INVENTORY::Inventory::INVENTORY_GetEquippedWeaponInfo(pInventory, &pWeapon, &nWeaponSlot, &nHandedness)) {
+            if (!nHandedness) {
+              pWeapon = SKILLS_GetWeaponByHand(nWeaponSlot, pInventory);
+            }
+            if (pWeapon) {
+              bRequirementMet = ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pWeapon);
+              if (!bRequirementMet) {
+                bRequirementMet = Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pWeapon, UNITSTAT_item_throwable, 0);
+              }
+            }
+          }
+        } else if (INVENTORY::Inventory::INVENTORY_GetEquippedWeaponInfo(pInventory, &pWeapon, &nWeaponSlot, &nHandedness) && nHandedness) {
+          bRequirementMet = ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pWeapon);
+          if (!bRequirementMet) {
+            bRequirementMet = Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pWeapon, UNITSTAT_item_throwable, 0);
+          }
+        }
+        return bRequirementMet;
+      case 4:
+        bRequirementMet = 0;
+        if (!pInventory) {
+          return 0;
+        }
+
+        if (INVENTORY::Inventory::INVENTORY_GetEquippedWeaponInfo(pInventory, &pWeapon, &nWeaponSlot, &nHandedness)) {
+          if (nHandedness) {
+            D2UnitStrc* pAltWeapon = SKILLS_GetWeaponByHand(nWeaponSlot, pInventory);
+            if (pAltWeapon) {
+              bRequirementMet = ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pAltWeapon);
+              if (!bRequirementMet) {
+                bRequirementMet = Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pAltWeapon, UNITSTAT_item_throwable, 0);
+              }
+            }
+          } else {
+            bRequirementMet = ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pWeapon);
+            if (!bRequirementMet) {
+              bRequirementMet = Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pWeapon, UNITSTAT_item_throwable, 0);
+            }
+          }
+        }
+        return bRequirementMet;
+      case 5:
+        if (!pInventory) {
+          return 0;
+        }
+        if (!Units::CanDualWield(pUnit)) {
+          return 0;
+        }
+
+        bRequirementMet = 0;
+        if (INVENTORY::Inventory::INVENTORY_GetEquippedWeaponInfo(pInventory, &pWeapon, &nWeaponSlot, &nHandedness)) {
+          if (nHandedness) {
+            D2UnitStrc* pAltWeapon = SKILLS_GetWeaponByHand(nWeaponSlot, pInventory);
+            if (pAltWeapon) {
+              bRequirementMet = ITEMS::Items::ITEMS_IsA(pAltWeapon, ITEMTYPE_Weapon);
+            }
+          } else {
+            bRequirementMet = ITEMS::Items::ITEMS_IsA(pWeapon, ITEMTYPE_Weapon);
+          }
+        }
+        return bRequirementMet;
+      default:
+        return 1;
+    }
 }
 
 // NOTE: Callee-saved register params inferred (medium confidence): pSkillStrc (EBX): D2SkillStrc*

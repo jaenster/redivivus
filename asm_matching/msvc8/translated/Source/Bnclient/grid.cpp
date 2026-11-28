@@ -676,64 +676,44 @@ void __fastcall NET_SID_CLIENT_IDEAExpandKey(uint16_t * pUserKey, uint16_t * pEx
 
 // 1.14d mac: 0005b5ec
 void __fastcall NET_SID_CLIENT_IDEAInvertKey(uint16_t * pEncryptKey, uint16_t * pDecryptKey) {
-    uint16_t* pReadKey;
-    uint16_t* pTempWrite2;
-    uint16_t aInvKey[52];
-    uint16_t subkey0 = *pEncryptKey;
-    uint16_t subkey1 = pEncryptKey[2];
-    uint16_t subkey2 = pEncryptKey[1];
-    uint32_t invResult = NET_SID_CLIENT_IDEAMultInverse((uint32_t)pEncryptKey[3]);
-    aInvKey[0x33] = (uint16_t)invResult;
-    aInvKey[0x31] = -subkey2;
-    aInvKey[0x32] = -subkey1;
-    invResult = NET_SID_CLIENT_IDEAMultInverse((uint32_t)subkey0);
-    aInvKey[0x30] = (uint16_t)invResult;
-    int roundCounter = 7;
-    uint16_t* pSrcKey = pEncryptKey + 4;
-    uint16_t* pWrite = aInvKey + 0x30;
-    do {
-      uint16_t negAddKey;
-      pTempWrite2 = pWrite;
-      pReadKey = pSrcKey;
-      subkey0 = *pReadKey;
-      subkey1 = pReadKey[2];
-      subkey2 = pReadKey[3];
-      pTempWrite2[-1] = pReadKey[1];
-      pTempWrite2[-2] = subkey0;
-      negAddKey = -pReadKey[4];
-      invResult = NET_SID_CLIENT_IDEAMultInverse((uint32_t)pReadKey[5]);
-      pTempWrite2[-3] = (uint16_t)invResult;
-      pTempWrite2[-4] = -subkey2;
-      pTempWrite2[-5] = negAddKey;
-      invResult = NET_SID_CLIENT_IDEAMultInverse((uint32_t)subkey1);
-      roundCounter--;
-      pTempWrite2[-6] = (uint16_t)invResult;
-      pSrcKey = pReadKey + 6;
-      pWrite = pTempWrite2 - 6;
-    } while (roundCounter);
+    uint32_t t1, t2, t3;
+    uint16_t aTemp[52];
+    uint16_t* p = aTemp + 52;
+    t1 = NET_SID_CLIENT_IDEAMultInverse(*pEncryptKey++);
+    t2 = -*pEncryptKey++;
+    t3 = -*pEncryptKey++;
+    *--p = NET_SID_CLIENT_IDEAMultInverse(*pEncryptKey++);
+    *--p = t3;
+    *--p = t2;
+    *--p = t1;
+    for (int i = 1; i < 8; i++) {
+      t1 = *pEncryptKey++;
+      *--p = *pEncryptKey++;
+      *--p = t1;
+      t1 = NET_SID_CLIENT_IDEAMultInverse(*pEncryptKey++);
+      t2 = -*pEncryptKey++;
+      t3 = -*pEncryptKey++;
+      *--p = NET_SID_CLIENT_IDEAMultInverse(*pEncryptKey++);
+      *--p = t2;
+      *--p = t3;
+      *--p = t1;
+    }
 
-    subkey0 = pReadKey[6];
-    subkey1 = pReadKey[8];
-    subkey2 = pReadKey[9];
-    pTempWrite2[-7] = pReadKey[7];
-    uint16_t subkey3 = pReadKey[0xb];
-    pTempWrite2[-8] = subkey0;
-    invResult = NET_SID_CLIENT_IDEAMultInverse((uint32_t)subkey3);
-    pTempWrite2[-9] = (uint16_t)invResult;
-    pTempWrite2[-10] = -pReadKey[10];
-    pTempWrite2[-0xb] = -subkey2;
-    invResult = NET_SID_CLIENT_IDEAMultInverse((uint32_t)subkey1);
-    pTempWrite2[-0xc] = (uint16_t)invResult;
-    pWrite = aInvKey;
-    int copyCounter = 0x34;
-    uint16_t* pTempWrite = pDecryptKey;
-    do {
-      *pTempWrite = *pWrite;
-      pTempWrite++;
-      *pWrite = 0;
-      pWrite++;
-      copyCounter--;
-    } while (copyCounter);
+    t1 = *pEncryptKey++;
+    *--p = *pEncryptKey++;
+    *--p = t1;
+    t1 = NET_SID_CLIENT_IDEAMultInverse(*pEncryptKey++);
+    t2 = -*pEncryptKey++;
+    t3 = -*pEncryptKey++;
+    *--p = NET_SID_CLIENT_IDEAMultInverse(*pEncryptKey++);
+    *--p = t3;
+    *--p = t2;
+    *--p = t1;
+    p = aTemp;
+    for (int i = 0; i < 52; i++) {
+      *pDecryptKey++ = *p;
+      *p++ = 0;
+    }
 }
 
 // 1.14d mac: 0005b707

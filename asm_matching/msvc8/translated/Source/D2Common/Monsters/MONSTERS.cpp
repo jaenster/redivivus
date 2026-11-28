@@ -551,86 +551,45 @@ uint8_t __stdcall MONSTERS_GetMaxLightRadiusFromEquipment(D2UnitStrc * pUnit) {
 // Resolves which monster class ID should actually spawn in a room for a given nMonsterId, accounting for level-specific monster tables and difficulty upgrades. Looks up the base class ID via D2MonStatsTxt.BaseId, scans the level's valid monster array (LevelsTxt.mon) for a match, and if not found walks the NextInClass chain up to nUpgradeCount steps as long as the upgraded monster's level does not exceed the level cap. Returns the best matching class ID, or the original nMonsterId if no suitable upgrade is found.
 // 1.14d mac: 0017d288
 int32_t __stdcall GetMonsterBaseId(D2RoomStrc * pRoom, int32_t nMonsterId) {
-    D2MonStatsTxt* pMonStatsTxt;
-    int nMonBaseId;
-    short int* pMonArray;
+    D2LevelsTxt* pLevelsTxt = DATATBLS::LvlTbls::TXT_Levels_GetLine(DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom));
+    uint8_t nValidMonCount = pLevelsTxt->nValidMonCount;
+    if (!nValidMonCount) {
+      return nMonsterId;
+    }
+
+    D2MonStatsTxt* pMonStatsTxt = nMonsterId >= 0 && nMonsterId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? ITEMS::Items::sgptDataTable->pTxtMonStats + nMonsterId : nullptr;
+    int nBaseId = !pMonStatsTxt ? nMonsterId : pMonStatsTxt->BaseId;
+    D2MonStatsTxt* pBaseTxt = nBaseId >= 0 && nBaseId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? ITEMS::Items::sgptDataTable->pTxtMonStats + nBaseId : nullptr;
+    if (!pBaseTxt) {
+      return nMonsterId;
+    }
+
+    for (int i = 0; i < nValidMonCount; i++) {
+      int nLevelMonId = pLevelsTxt->mon[i];
+      D2MonStatsTxt* pLevelMonTxt = nLevelMonId >= 0 && nLevelMonId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? ITEMS::Items::sgptDataTable->pTxtMonStats + nLevelMonId : nullptr;
+      if ((!pLevelMonTxt ? nLevelMonId : pLevelMonTxt->BaseId) == nBaseId) {
+        return nLevelMonId;
+      }
+    }
+
+    int nNextInClass = pBaseTxt->NextInClass;
     uint32_t nUpgradeCount;
-    eD2LevelId eLevel = DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-    D2LevelsTxt* pLevelsTxt = DATATBLS::LvlTbls::TXT_Levels_GetLine(eLevel);
-    uint8_t byValidMonCount = pLevelsTxt->nValidMonCount;
-    if (!byValidMonCount) {
-      return nMonsterId;
-    }
-
-    int nInputBaseId = nMonsterId;
-    D2MonStatsTxt* pMonStatsTxt2 = nMonsterId >= 0 && nMonsterId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? ITEMS::Items::sgptDataTable->pTxtMonStats + nMonsterId : nullptr;
-    if (pMonStatsTxt2) {
-      nInputBaseId = (int)pMonStatsTxt2->BaseId;
-    }
-    if (nInputBaseId < 0) {
-      return nMonsterId;
-    }
-
-    int nMonStatsSize = ITEMS::Items::sgptDataTable->nTxtMonStatsSize;
-    if (nInputBaseId >= nMonStatsSize) {
-      return nMonsterId;
-    }
-
-    D2MonStatsTxt* pMonStatsTable = ITEMS::Items::sgptDataTable->pTxtMonStats;
-    if (!(pMonStatsTable + nInputBaseId)) {
-      return nMonsterId;
-    }
-
-    int iMonArrayIdx = 0;
-    if (byValidMonCount) {
-      int nMonArrayEntry;
-      pMonArray = pLevelsTxt->mon;
-      do {
-        nMonArrayEntry = (int)*pMonArray;
-        nMonBaseId = nMonArrayEntry;
-        if (nMonArrayEntry >= 0 && nMonArrayEntry < nMonStatsSize && pMonStatsTable + nMonArrayEntry) {
-          nMonBaseId = (int)pMonStatsTable[nMonArrayEntry].BaseId;
-        }
-        if (nMonBaseId == nInputBaseId) {
-          return nMonArrayEntry;
-        }
-
-        iMonArrayIdx++;
-        pMonArray++;
-      } while (iMonArrayIdx < (int)(uint32_t)byValidMonCount);
-    }
-
-    short int nNextInClass = pMonStatsTable[nInputBaseId].NextInClass;
     DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(nMonsterId, &nUpgradeCount, nullptr);
-    iMonArrayIdx = 0;
-    int32_t nUpgradedId = nMonsterId;
-    if ((int)nUpgradeCount <= 0) {
-      return nUpgradedId;
+    for (int i = 0; i < (int)nUpgradeCount; i++) {
+      D2MonStatsTxt* pNextTxt = nNextInClass >= 0 && nNextInClass < ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? ITEMS::Items::sgptDataTable->pTxtMonStats + nNextInClass : nullptr;
+      if (!pNextTxt) {
+        return nMonsterId;
+      }
+
+      if (pNextTxt->aLevel[0] > pLevelsTxt->MonLvlEx[0] + 1) {
+        return nMonsterId;
+      }
+
+      nMonsterId = nNextInClass;
+      nNextInClass = pNextTxt->NextInClass;
     }
 
-    do {
-      nUpgradedId = (int32_t)nNextInClass;
-      if (nUpgradedId < 0) {
-        return nMonsterId;
-      }
-      if (nUpgradedId >= ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
-        return nMonsterId;
-      }
-
-      pMonStatsTxt = ITEMS::Items::sgptDataTable->pTxtMonStats + nUpgradedId;
-      if (!pMonStatsTxt) {
-        return nMonsterId;
-      }
-      if ((int)pMonStatsTxt->aLevel[0] > pLevelsTxt->MonLvlEx[0] + 1) {
-        return nMonsterId;
-      }
-
-      nNextInClass = pMonStatsTxt->NextInClass;
-      iMonArrayIdx++;
-      nMonsterId = nUpgradedId;
-    } while (iMonArrayIdx < (int)nUpgradeCount);
-
-    return nUpgradedId;
+    return nMonsterId;
 }
 
 // 1.14d mac: 0017d49c

@@ -338,62 +338,44 @@ DWORD __stdcall SocketThreadMain(void * lpThreadParam) {
 
 // 1.14d mac: 002f5583
 BOOL __fastcall CreateSocketOnline(D2QServerStrc * pQServer, u_short nPort) {
-    u_short uPortNetOrder;
-    int nResult;
-    HANDLE hThread;
-    char optTcpNoDelay[8];
-    u_long ulNonBlocking;
-    int optReuseAddr;
     sockaddr bindAddr;
-    /* int protocol for socket */ /* int type for socket */ /* int af for socket */ pQServer->nPerIpConnectionLimit = 1;
+    pQServer->nPerIpConnectionLimit = 1;
     SOCKET s = socket(2, 1, 0);
-    if (s != -1) {
-      /* int optlen for setsockopt */ /* char * optval for setsockopt */ /* int optname for setsockopt */ /* int level for setsockopt */ /* SOCKET s for setsockopt */ pQServer->aListenSockets[0] = s;
-      optTcpNoDelay[4] = '\x01';
-      optTcpNoDelay[5] = '\0';
-      optTcpNoDelay[6] = '\0';
-      optTcpNoDelay[7] = '\0';
-      setsockopt(s, 6, 1, optTcpNoDelay + 4, 4);
-      /* int optlen for setsockopt */ optTcpNoDelay[0] = '\x01';
-      optTcpNoDelay[1] = '\0';
-      optTcpNoDelay[2] = '\0';
-      optTcpNoDelay[3] = '\0';
-      /* char * optval for setsockopt */ /* int optname for setsockopt */ /* int level for setsockopt */ /* SOCKET s for setsockopt */ setsockopt(s, 0xffff, 8, optTcpNoDelay, 4);
-      /* int optlen for setsockopt */ /* char * optval for setsockopt */ /* int optname for setsockopt */ /* int level for setsockopt */ /* SOCKET s for setsockopt */ optReuseAddr = 1;
-      setsockopt(pQServer->aListenSockets[0], 0xffff, 4, (char*)&optReuseAddr, 4);
-      /* u_long * argp for ioctlsocket */ /* long cmd for ioctlsocket */ /* SOCKET s for ioctlsocket */ ulNonBlocking = 1;
-      ioctlsocket(s, -0x7ffb9982, &ulNonBlocking);
-      memset(bindAddr.sa_data + 2, 0, 12 * sizeof(bindAddr.sa_data[0]));
-      bindAddr.sa_family = 2;
-      bindAddr.sa_data[0] = '\0';
-      bindAddr.sa_data[1] = '\0';
-      uPortNetOrder = ntohs(nPort);
-      /* int namelen for bind */ bindAddr.sa_data[0] = (char)uPortNetOrder;
-      bindAddr.sa_data[1] = (char)(uPortNetOrder >> 8);
-      /* sockaddr * addr for bind */ /* SOCKET s for bind */ pQServer->aListenPorts[0] = nPort;
-      nResult = _Wrappers::bind(pQServer->aListenSockets[0], &bindAddr, 0x10);
-      if (nResult != -1) {
-        /* int backlog for listen */ /* SOCKET s for listen */ nResult = _Wrappers::listen(s, 0x19);
-        if (nResult == -1) {
-          Safesock::closeSocket(s);
-        }
+    if (s == -1) {
+      return 0;
+    }
 
-        /* LPCSTR lpName for CreateEventA */ /* BOOL bInitialState for CreateEventA */ /* BOOL bManualReset for CreateEventA */ /* LPSECURITY_ATTRIBUTES lpEventAttributes for CreateEventA */ hThread = CreateEventA((LPSECURITY_ATTRIBUTES)0x0, 0, 0, (LPCSTR)0x0);
-        /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ pQServer->hEmptyEvent = hThread;
-#if !defined(_WIN32) && D2_MAC_CARBON
-        hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)SocketThreadMain, pQServer, 0, (LPDWORD)pQServer->aAcceptThreadIds, "sServerThread");
-#else
-        hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)SocketThreadMain, pQServer, 0, (LPDWORD)pQServer->aAcceptThreadIds);
-#endif
-        pQServer->aAcceptThreadHandles[0] = hThread;
-        ErrorManager::StubHook1(pQServer->aAcceptThreadIds[0], hThread);
-        return 1;
-      }
+    pQServer->aListenSockets[0] = s;
+    int optTcpNoDelay = 1;
+    setsockopt(s, 6, 1, (char*)&optTcpNoDelay, 4);
+    int optKeepAlive = 1;
+    setsockopt(s, 0xffff, 8, (char*)&optKeepAlive, 4);
+    int optReuseAddr = 1;
+    setsockopt(pQServer->aListenSockets[0], 0xffff, 4, (char*)&optReuseAddr, 4);
+    u_long ulNonBlocking = 1;
+    ioctlsocket(s, -0x7ffb9982, &ulNonBlocking);
+    memset(&bindAddr, 0, sizeof(bindAddr));
+    bindAddr.sa_family = 2;
+    *(u_short*)bindAddr.sa_data = ntohs(nPort);
+    pQServer->aListenPorts[0] = nPort;
+    if (_Wrappers::bind(pQServer->aListenSockets[0], &bindAddr, 0x10) == -1) {
+      Safesock::closeSocket(s);
+      return 0;
+    }
 
+    if (_Wrappers::listen(s, 0x19) == -1) {
       Safesock::closeSocket(s);
     }
 
-    return 0;
+    pQServer->hEmptyEvent = CreateEventA(nullptr, FALSE, FALSE, nullptr);
+#if !defined(_WIN32) && D2_MAC_CARBON
+    HANDLE hThread = CreateThread(nullptr, 0, (LPTHREAD_START_ROUTINE)SocketThreadMain, pQServer, 0, (LPDWORD)pQServer->aAcceptThreadIds, "sServerThread");
+#else
+    HANDLE hThread = CreateThread(nullptr, 0, (LPTHREAD_START_ROUTINE)SocketThreadMain, pQServer, 0, (LPDWORD)pQServer->aAcceptThreadIds);
+#endif
+    pQServer->aAcceptThreadHandles[0] = hThread;
+    ErrorManager::StubHook1(pQServer->aAcceptThreadIds[0], hThread);
+    return 1;
 }
 
 static void * keep_006c3440 = (0 ? (QSERVER_AllocateConnectionStruct(*(int *)0, *(uint32_t *)0, *(D2QServerStrc * *)0), (void *)0) : (void *)0);

@@ -955,21 +955,19 @@ void __fastcall GFX_AllocSpriteCache(D2GfxMemoryStrc * pGfxMemory, D2PoolManager
     pGfxMemory->pSpriteCache = pSpriteCache;
     memset(pSpriteCache, 0, sizeof(D2SpriteCache));
     // One free list through all 0x1400 entries (1.14d runs this loop five entries per pass).
-    int nSlotIndex = 0;
-    do {
-      D2SpriteCacheEntryStrc* pCacheSlot = &pGfxMemory->pSpriteCache->aEntries[nSlotIndex];
-      if (nSlotIndex < 0x13ff) {
-        pCacheSlot->pNext = pCacheSlot + 1;
+    for (int i = 0; i < 0x1400; i++) {
+      D2SpriteCacheEntryStrc* pCacheSlot = &pGfxMemory->pSpriteCache->aEntries[i];
+      if (i < 0x13ff) {
+        pCacheSlot->pNext = &pGfxMemory->pSpriteCache->aEntries[i + 1];
       }
-      if (nSlotIndex > 0) {
-        pCacheSlot->pPrev = pCacheSlot - 1;
+      if (i > 0) {
+        pCacheSlot->pPrev = &pGfxMemory->pSpriteCache->aEntries[i - 1];
       }
 
       pCacheSlot->pData = 0;
       pCacheSlot->nSize = 0;
       pCacheSlot->pOwner = 0;
-      nSlotIndex++;
-    } while (nSlotIndex < 0x1400);
+    }
 
     pGfxMemory->pFreeHead = pGfxMemory->pSpriteCache->aEntries;
     pGfxMemory->nCounter = 0;

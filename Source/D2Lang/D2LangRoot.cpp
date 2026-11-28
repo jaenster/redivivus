@@ -134,37 +134,29 @@ static int32_t __stdcall UTF8_DecodeNextChar(uint8_t * pUtf8, uint16_t * pwCharO
       return -1;
     }
 
-    uint8_t byCurByte = *pUtf8;
-    uint32_t uCodePoint = (uint32_t)(short int)(uint16_t)byCurByte;
-    uint16_t wTableMask = gaUtf8DecodeTable[0].wMask;
-    while (true) {
-      uint8_t* pbContByte;
-      if (!wTableMask) {
-        return -1;
-      }
-
+    uint16_t wLeadByte = *pUtf8;
+    int nCodePoint = (short)wLeadByte;
+    for (D2Utf8DecodeRowStrc* pRow = gaUtf8DecodeTable; pRow->wMask; pRow++) {
       nByteWidth++;
-      if ((wTableMask & byCurByte) == gaUtf8DecodeTable[nByteWidth - 1].wExpect) {
-        uCodePoint &= gaUtf8DecodeTable[nByteWidth - 1].dwCodePointMask;
-        if ((int)uCodePoint < (int)gaUtf8DecodeTable[nByteWidth - 1].dwMinValue) {
+      if ((wLeadByte & pRow->wMask) == pRow->wExpect) {
+        nCodePoint &= pRow->dwCodePointMask;
+        if (nCodePoint < (int)pRow->dwMinValue) {
           return -1;
         }
 
-        *pwCharOut = (uint16_t)uCodePoint;
+        *pwCharOut = nCodePoint;
         return nByteWidth;
       }
       if (nMaxBytes <= nByteWidth) {
         return -1;
       }
 
-      pbContByte = pUtf8 + 1;
-      pUtf8++;
-      if ((*pbContByte ^ 0x80) & 0xc0) {
-        break;
+      short nContByte = *++pUtf8 ^ 0x80;
+      if (nContByte & 0xc0) {
+        return -1;
       }
 
-      uCodePoint = uCodePoint << 6 | (int)(short int)(uint16_t)(*pbContByte ^ 0x80);
-      wTableMask = gaUtf8DecodeTable[nByteWidth].wMask;
+      nCodePoint = nCodePoint << 6 | nContByte;
     }
 
     return -1;
