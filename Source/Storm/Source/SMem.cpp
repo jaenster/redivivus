@@ -941,9 +941,9 @@ int32_t __stdcall SMemFindNextHeap(HSHEAP nCurHeapId, HSHEAP * pnNextHeapId, SMe
     nPrevHeapId = 0;
     if (nBucketIndex < 0x100) {
       D2FogHeapDescStrc* pHeap;
-      pHeapDetails = (SMemHeapDetailsStrc*)(DebugMemoryCriticalSection + nBucketIndex);
+      LPCRITICAL_SECTION pBucketLock = DebugMemoryCriticalSection + nBucketIndex;
       do {
-        /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection((LPCRITICAL_SECTION)pHeapDetails);
+        /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(pBucketLock);
         for (pHeap = g_SMemHeapBuckets[nBucketIndex]; pHeap; pHeap = pHeap->pNext) {
           if (pHeap->bActive) {
             if (nPrevHeapId == nCurHeapId && pHeap->nHash != nCurHeapId) {
@@ -954,8 +954,8 @@ int32_t __stdcall SMemFindNextHeap(HSHEAP nCurHeapId, HSHEAP * pnNextHeapId, SMe
           }
         }
 
-        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection((LPCRITICAL_SECTION)pHeapDetails);
-        pHeapDetails = (SMemHeapDetailsStrc*)(pHeapDetails->szFilename + 0x10);
+        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pBucketLock);
+        pBucketLock++;
         nBucketIndex++;
       } while (nBucketIndex < 0x100);
 

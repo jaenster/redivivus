@@ -2588,7 +2588,7 @@ void __fastcall QUEST_OnPlayerJoinGame(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
                 QUEST_ResetQuestDataForReconnect(pQuestInitEntry->nQuestNoInternal, uSavedGameOrPacket0x89.pGameSaved);
                 nQuestId_00 = pQuestInitEntry->nQuestIdReal;
                 pBitBuffer = pQuestControl->pQuestFlags;
-                (&sQuestArgs.pTarget)[pQuestInitEntry->nAct] = (D2UnitStrc*)((intptr_t)&(&sQuestArgs.pTarget)[pQuestInitEntry->nAct]->eUnitType + 1);
+                /* five per-act dword counters over sQuestArgs from pTarget (cleared above) */ ((int32_t*)&sQuestArgs.pTarget)[pQuestInitEntry->nAct]++;
                 D2Common::QuestRecord::SetQuestState(pBitBuffer, nQuestId_00, QUESTSTATE_FinishedInPreviousGame);
               }
             }

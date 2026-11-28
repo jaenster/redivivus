@@ -229,7 +229,7 @@ D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2CompressEncoderStrc {
     /* 0x3050 */ intptr_t nFreeListBack; // +0x3050: free list intrusive back-link field
     /* 0x3054 */ struct D2CompressHuffNodeStrc * pFreeListSentinel; // +0x3054: free list sentinel / head
     /* 0x3058 */ struct D2CompressHuffNodeStrc * * ppFreeListTailLink; // +0x3058: ptr-to-tail link in free list
-    /* 0x305C */ int nFreeListLinkOff; // +0x305c: intrusive list link base offset
+    /* 0x305C */ intptr_t nFreeListLinkOff; // +0x305c: intrusive list link base offset (pointer-sized, like nFreeListBack)
     /* 0x3060 */ struct D2CompressHuffNodeStrc * pSortedListRoot; // +0x3060: sorted-by-weight list root/sentinel
     /* 0x3064 */ struct D2CompressHuffNodeStrc * pWeightedListHead; // +0x3064: sorted-by-weight list head (lowest weight)
     /* 0x3068 */ int nNodeCount; // +0x3068: nodes allocated from pool so far

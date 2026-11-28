@@ -80,7 +80,9 @@ D2_PACKED_BEGIN struct __attribute__((packed)) D2AGPSlotStrc {
     /* 0x04 */ int nOwner;
 }; D2_PACKED_END
 
-D2_PACKED_BEGIN struct __attribute__((packed)) COGLAGPTextures {
+// Not packed: the head is its CD2Textures base (the CD2TEXTURES_* calls take this object as one),
+// so it keeps that record's natural layout on every ABI.
+struct COGLAGPTextures {
     /* 0x0000 */ struct COGLAGPTexturesVtable * vptr;
     /* 0x0004 */ int field_0x4;
     /* 0x0008 */ int nReserveBytes;
@@ -124,7 +126,7 @@ D2_PACKED_BEGIN struct __attribute__((packed)) COGLAGPTextures {
     /* 0xA2E8 */ int field_0xa2e8[6];
     /* 0xA300 */ int anProbeCount[6];
     /* 0xA318 */ int nPageCount;
-}; D2_PACKED_END
+};
 
 namespace D2OpenGL::COGLAGPTextures {
 

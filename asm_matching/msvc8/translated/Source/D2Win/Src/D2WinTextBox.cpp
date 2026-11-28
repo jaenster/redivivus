@@ -1340,7 +1340,7 @@ BOOL __fastcall SetText(::D2WinTextBox * pTextBox, uint16_t * szText, int32_t nL
         nVisibleLines = pTextBox->sControl.dwSizeX + pTextBox->sListState.nTextOffsetX * -2;
         if (nAlignment == 2) {
           Fog::File::CONTAINER_InitializeBuffer(wszIndent, 2, 6, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
-          memcpy(wszIndent, L"     ", sizeof(wszIndent));
+          memcpy(wszIndent, D2_U16("     "), sizeof(wszIndent));
           nStrLen = D2WinFont::DRAW_text0(wszIndent);
           nVisibleLines -= nStrLen;
         }
@@ -1513,7 +1513,7 @@ BOOL __fastcall D2WINTEXTBOX_WordWrapAndSetText(::D2WinTextBox * pTextBox, uint1
       nMaxPixelWidth = nAvailWidth;
       if (nAlignment == 2) {
         Fog::File::CONTAINER_InitializeBuffer(wszIndentBuf, 2, 6, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
-        memcpy(wszIndentBuf, L"     ", sizeof(wszIndentBuf));
+        memcpy(wszIndentBuf, D2_U16("     "), sizeof(wszIndentBuf));
         nAvailWidth -= D2WinFont::DRAW_text0(wszIndentBuf);
         nMaxPixelWidth = nAvailWidth;
       }

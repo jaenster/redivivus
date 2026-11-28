@@ -69,7 +69,9 @@ struct COGLTexturesVtable {
     /* 0x24 */ void (*ConvertPixels)(::CD2Textures *, int, int, int, int, BYTE *);
 };
 
-D2_PACKED_BEGIN struct __attribute__((packed)) COGLTextures {
+// Not packed: the head is its CD2Textures base (the CD2TEXTURES_* calls take this object as one),
+// so it keeps that record's natural layout on every ABI.
+struct COGLTextures {
     /* 0x00 */ struct COGLTexturesVtable * vptr;
     /* 0x04 */ int field_0x4;
     /* 0x08 */ int nReserveBytes;
@@ -93,7 +95,7 @@ D2_PACKED_BEGIN struct __attribute__((packed)) COGLTextures {
     /* 0x61 */ uint8_t field_0x61;
     /* 0x62 */ uint8_t field_0x62;
     /* 0x63 */ uint8_t field_0x63;
-}; D2_PACKED_END
+};
 
 namespace D2OpenGL::COGLTextures {
 

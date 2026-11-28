@@ -11,6 +11,9 @@
 #include "Source/Storm/Source/SMem.h"
 #include "Source/Fog/Src/ErrorManager.h"
 
+static_assert(offsetof(::COGLTextures, pFreeTail) == offsetof(::CD2Textures, pFreeTail), "COGLTextures is handed to the CD2TEXTURES_* functions as its CD2Textures base");
+static_assert(sizeof(void*) != 4 || sizeof(::COGLTextures) == 0x64, "COGLTextures: the 32-bit layout of the 1.14d Mac build");
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 

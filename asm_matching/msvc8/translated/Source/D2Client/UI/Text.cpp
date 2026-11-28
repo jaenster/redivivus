@@ -3133,7 +3133,8 @@ int Unreferenced_0049e390() {
 // 1.14d mac: 000f0eb2
 void __fastcall TEXT_PrintGameString(uint16_t * wMessage, uint8_t nColor) {
     ScreenMessage_t* pNewMsg = D2_NEW_AT(ScreenMessage_t, ".\\UI\\text.cpp", 0xd46);
-    memset(pNewMsg, 0, 0x24);
+    // 1.14d clears 0x24 bytes: every field before pNext and pNext's low word; pNext is set next.
+    memset(pNewMsg, 0, offsetof(ScreenMessage_t, pNext) + sizeof(uint16_t));
     pNewMsg->pNext = nullptr;
     pNewMsg->dwMessageExpiration = GetTickCount() + 10000;
     int32_t nPrevFont = D2Win::Src::D2WinFont::SetAndReturnLastFont(0xd);

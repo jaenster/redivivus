@@ -651,7 +651,7 @@ void __stdcall DRAW_UI_ChatInput() {
         case 2:
 
         case 3:
-          memcpy(wszModeLabel, L"日本語", 8);
+          memcpy(wszModeLabel, D2_U16("日本語"), 8);
         break;
       }
 

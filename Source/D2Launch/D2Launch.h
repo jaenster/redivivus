@@ -142,12 +142,14 @@ struct D2RealmCharListCacheEntryStrc {
 #endif // D2_DEFINED_D2RealmCharListCacheEntryStrc
 #ifndef D2_DEFINED_D2WinAnimImageNotifyStrc
 #define D2_DEFINED_D2WinAnimImageNotifyStrc
-struct D2WinAnimImageNotifyStrc {
+// The head of a D2ControlMsg (pControl, uMsg, wParam, uLParam): ClickOnClassCreate passes its
+// D2ControlMsg to the same handlers, so the slots follow that packed layout on every ABI.
+D2_PACKED_BEGIN struct __attribute__((packed)) D2WinAnimImageNotifyStrc {
     /* 0x00 */ struct D2WinAnimImage * pAnimImage; // Written from ESI at 005004e7 (MOV [EBP-0x24],ESI) - the animation being notified
     /* 0x04 */ uint32_t unk_04; // Not written by the only producer D2WINANIMIMAGE_UpdateFrame @00500480
-    /* 0x08 */ uint32_t unk_08; // Not written by the only producer D2WINANIMIMAGE_UpdateFrame @00500480
+    /* 0x08 */ WPARAM unk_08; // Not written by the only producer D2WINANIMIMAGE_UpdateFrame @00500480
     /* 0x0C */ BOOL bStateIsOne; // Written from ECX at 005004ea (SETZ CL on EAX==1) - the new animation state equals 1
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2WinAnimImageNotifyStrc
 
 // Functions

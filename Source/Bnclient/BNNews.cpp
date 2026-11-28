@@ -290,21 +290,22 @@ static inline uint32_t D2_RoundUp(uint32_t n, uint32_t g) {
 
 // 1.14d mac: 0005ca4a
 void __thiscall BNNEWS_EnsureCapacityWithGrowth(uint32_t * pNewsTable, uint32_t dwAdditionalCount, int bGrow) {
-    dwAdditionalCount = dwAdditionalCount + pNewsTable[1];
-    if (dwAdditionalCount <= *pNewsTable) {
+    D2BnNewsTableStrc* pTable = (D2BnNewsTableStrc*)pNewsTable;
+    dwAdditionalCount = dwAdditionalCount + pTable->nCount;
+    if (dwAdditionalCount <= pTable->nCapacity) {
       return;
     }
     if (bGrow) {
       uint32_t nGrowStep;
-      nGrowStep = pNewsTable[3];
+      nGrowStep = pTable->nGrowStep;
       if (!nGrowStep) {
-        nGrowStep = BNNEWS_RoundToPowerOfTwo((D2BnNewsTableStrc*)pNewsTable, dwAdditionalCount);
+        nGrowStep = BNNEWS_RoundToPowerOfTwo(pTable, dwAdditionalCount);
       }
 
       dwAdditionalCount = D2_RoundUp(dwAdditionalCount, nGrowStep);
     }
 
-    BNNEWS_ReallocateNewsTable((D2BnNewsTableStrc*)pNewsTable, dwAdditionalCount);
+    BNNEWS_ReallocateNewsTable(pTable, dwAdditionalCount);
 }
 
 uint32_t * __fastcall Unreferenced_0051d720(uint32_t * pData) {
@@ -339,11 +340,12 @@ BOOL __stdcall BNNEWS_Shutdown() {
 }
 
 int __fastcall BNNEWS_AllocateNewsEntry(uint32_t * pNewsTable) {
-    uint32_t nNewCount = pNewsTable[1] + 1;
-    if (nNewCount > *pNewsTable) {
-      uint32_t nPageSize = pNewsTable[3];
+    D2BnNewsTableStrc* pTable = (D2BnNewsTableStrc*)pNewsTable;
+    uint32_t nNewCount = pTable->nCount + 1;
+    if (nNewCount > pTable->nCapacity) {
+      uint32_t nPageSize = pTable->nGrowStep;
       if (!nPageSize) {
-        nPageSize = BNNEWS_RoundToPowerOfTwo((D2BnNewsTableStrc*)pNewsTable, nNewCount);
+        nPageSize = BNNEWS_RoundToPowerOfTwo(pTable, nNewCount);
       }
 
       uint32_t nNewCapacity = nNewCount;
@@ -351,10 +353,10 @@ int __fastcall BNNEWS_AllocateNewsEntry(uint32_t * pNewsTable) {
         nNewCapacity = nPageSize - nNewCount % nPageSize + nNewCount;
       }
 
-      BNNEWS_ReallocateNewsTable((D2BnNewsTableStrc*)pNewsTable, nNewCapacity);
+      BNNEWS_ReallocateNewsTable(pTable, nNewCapacity);
     }
 
-    return pNewsTable[1]++ * 0x408 + pNewsTable[2];
+    return pTable->nCount++ * 0x408 + (int)(uintptr_t)pTable->pEntries;
 }
 
 void __thiscall BNNEWS_EnsureCapacity(D2BnNewsTableStrc * pNewsTable, uint32_t dwAdditionalCount) {

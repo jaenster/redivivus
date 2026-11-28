@@ -596,7 +596,12 @@ static uint32_t __stdcall TILECMP_ExportCacheToBuffer(D2TileCmpTileSetListStrc *
         if (pCurTileSetChain) {
           pTileSetList = 0;
           do {
+#if D2_ARCH_X86
+            // &pExportHeader->pTiles[nSerializedTileSets], in the 32-bit build's form (pTileSetList counts 6 records of 0x10 per 0x60-byte entry)
             TILECMP_SerializeTileSet(pCurTileSetChain, (D2TileLibraryEntryStrc*)(((D2TileLibraryEntryStrc*)(pExportHeader->pTiles->abSubTileFlags - 0x28))->abSubTileFlags + (intptr_t)&pTileSetList[-3].nTileSetCount), (uintptr_t)pCurTileSetChain);
+#else
+            TILECMP_SerializeTileSet(pCurTileSetChain, &pExportHeader->pTiles[nSerializedTileSets], (uintptr_t)pCurTileSetChain);
+#endif
             pCurTileSetChain = pCurTileSetChain->pTileSetChain;
             nSerializedTileSets++;
             pTileSetList += 6;
@@ -737,6 +742,12 @@ void __thiscall TILECMP_DeserializeAndFixup(int32_t pThis, D2TileLibraryHeaderSt
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2dc);
       exit(-1);
     } else {
+#if D2_ARCH_X64 || D2_ARCH_ARM64
+      // Writes the whole-image form: the 0x114-byte DT1 header and 0x60-byte tile records with
+      // 32-bit offsets. TILECMP_FixupPointersInPlace reads that form on x86 only, so it is x86-only too.
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), __LINE__);
+      exit(-1);
+#elif D2_ARCH_X86
       nCalcSize = TILECMP_CalculateCacheSize(pTileSetData);
       if (!nCalcSize) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2e0);
@@ -777,6 +788,7 @@ void __thiscall TILECMP_DeserializeAndFixup(int32_t pThis, D2TileLibraryHeaderSt
         ((D2TileLibraryHeaderStrc*)nErrAddress)->dwFlags |= 6;
         return;
       }
+#endif
     }
 }
 

@@ -320,7 +320,7 @@ int __stdcall OOGUTIL_OpenBrowserWithURL(D2ControlMsg * pControlMsg) {
         strcat(szCommandLine, " ");
         strcat(szCommandLine, pszUrl);
         Storm::Source::SMem::SMemZero(&sStartupInfo, sizeof(_STARTUPINFOA));
-        sStartupInfo.cb = 0x44;
+        sStartupInfo.cb = sizeof(sStartupInfo);
         if (CreateProcessA((LPCSTR)0x0, szCommandLine, (LPSECURITY_ATTRIBUTES)0x0, (LPSECURITY_ATTRIBUTES)0x0, 0, 0x20, (LPVOID)0x0, (LPCSTR)0x0, &sStartupInfo, &sProcessInfo)) {
           CloseHandle(sProcessInfo.hThread);
           CloseHandle(sProcessInfo.hProcess);

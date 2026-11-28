@@ -11,6 +11,9 @@
 #include "Source/Fog/Fog.h"
 #include "Source/Fog/Src/ErrorManager.data.h"
 
+static_assert(offsetof(::COGLAGPTextures, pFreeTail) == offsetof(::CD2Textures, pFreeTail), "COGLAGPTextures is handed to the CD2TEXTURES_* functions as its CD2Textures base");
+static_assert(sizeof(void*) != 4 || sizeof(::COGLAGPTextures) == 0xA31C, "COGLAGPTextures: the 32-bit layout of the 1.14d Mac build");
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 #ifndef D2_ALLOC_AT

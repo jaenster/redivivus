@@ -6791,7 +6791,7 @@ void wsprintf(uint16_t * wszDest, uint16_t * wszFormat, ...) {
     pwColonSaved = pwArgDest;
     if (pwArgDest) {
       __frame0.wszTokenBuf = 0x61;
-      memcpy(wszMsToken, L"[ms]", 10);
+      memcpy(wszMsToken, D2_U16("[ms]"), 10);
       nArgIdxA = -1;
       pwArgSrc = D2Lang::Unicode::UNISYS::UNICODE_FindWideChar(wszFormat, L'a');
       if (pwArgSrc && pwArgSrc < pwArgDest) {

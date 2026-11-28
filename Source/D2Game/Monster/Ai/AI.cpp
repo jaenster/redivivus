@@ -3361,12 +3361,12 @@ D2UnitStrc * __fastcall MONSTERAI_FindBestTarget(::SGAMEDATA * pGame, D2UnitStrc
           }
         }
 
-        pRoom = (D2RoomStrc*)uSlot28.ppNodeSlot[1];
+        D2UnitNodeStrc* pSwitchNode = uSlot28.ppNodeSlot[1];
         uSlot30.pSwitchTarget = 0;
         uSlot28.nSwitchDist = 0x7fffffff;
-        if (pRoom) {
+        if (pSwitchNode) {
           do {
-            pPlayerUnit_lcl = (D2UnitStrc*)pRoom->ppRoomList;
+            pPlayerUnit_lcl = pSwitchNode->pUnit;
             if (nMonsterAct == pPlayerUnit_lcl->nAct) {
               nDist = GetCollisionDistanceFromXY(pPlayerUnit_lcl, nScanOriginX, nScanOriginY);
               if (nDist < uSlot28.nSwitchDist && (!bNeedLOS || (bCheckResult = D2Common::Units::TestCollisionWithUnit(pUnit, pPlayerUnit_lcl, 4) , !bCheckResult))) {
@@ -3375,8 +3375,8 @@ D2UnitStrc * __fastcall MONSTERAI_FindBestTarget(::SGAMEDATA * pGame, D2UnitStrc
               }
             }
 
-            pRoom = (D2RoomStrc*)pRoom->pRoomTiles;
-          } while (pRoom);
+            pSwitchNode = pSwitchNode->pPrev;
+          } while (pSwitchNode);
 
           if (uSlot30.pSwitchTarget) {
             bCheckResult = MONSTERAI_ValidateSwitchTarget(&pBestTarget, &nBestDist, uSlot30.pSwitchTarget, uSlot28.nSwitchDist, pUnit);
@@ -5692,12 +5692,12 @@ void __fastcall AI_Fn1_FetishBlowgun(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
     pTarget = pAiParam->pTarget;
     D2MonStatsTxt* pMonStats;
     pMonStats = pAiParam->pMonStats;
-    D2UnitStrc* pAiCmd;
-    pAiCmd = (D2UnitStrc*)Ai::AiGeneral::GetAiCmd(pUnit);
+    D2MonsterAiCmdStrc* pAiCmd;
+    pAiCmd = Ai::AiGeneral::GetAiCmd(pUnit);
     if (pAiCmd) {
       D2UnitStrc* pFoundUnit;
-      if (pAiCmd->pMemory == (D2PoolManagerStrc*)0x1) {
-        pFoundUnit = UNIT::SUnit::FindUnitFromTable(pGame, pAiCmd->eAnimMode.ePlayerMode, pAiCmd->nUnitGUID);
+      if (pAiCmd->nCmdArg[0] == 1) {
+        pFoundUnit = UNIT::SUnit::FindUnitFromTable(pGame, (eD2UnitType)pAiCmd->nCmdArg[2], pAiCmd->nCmdArg[1]);
         if (pFoundUnit) {
           pAiGeneral->dwArg0 = 0;
           pAiGeneral->dwArg1 = 0;
@@ -5706,13 +5706,13 @@ void __fastcall AI_Fn1_FetishBlowgun(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2
           return;
         }
       }
-      if (pAiCmd->pMemory == (D2PoolManagerStrc*)0xe) {
-        pAiCmd = UNIT::SUnit::FindUnitFromTable(pGame, pAiCmd->eAnimMode.ePlayerMode, pAiCmd->nUnitGUID);
-        if (pAiCmd) {
+      if (pAiCmd->nCmdArg[0] == 0xe) {
+        pFoundUnit = UNIT::SUnit::FindUnitFromTable(pGame, (eD2UnitType)pAiCmd->nCmdArg[2], pAiCmd->nCmdArg[1]);
+        if (pFoundUnit) {
           pAiGeneral->dwArg0 = 0;
           pAiGeneral->dwArg1 = 0;
           AITACTICS_SetPathOverrides(pUnit, 0xd, 0x32, '\0');
-          MONSTERAI_CommandWalkToUnit(pGame, pUnit, pAiCmd, 0);
+          MONSTERAI_CommandWalkToUnit(pGame, pUnit, pFoundUnit, 0);
           Ai::AiGeneral::FreeAi(pGame, pUnit);
           return;
         }
@@ -6974,7 +6974,15 @@ void __fastcall AITHINK_Fn1_Smith(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
 }
 
 // 1.14d mac: 002a04bc
-void __stdcall MONSTERAI_CheckAdjacentUnit(D2UnitStrc * pUnit, D2UnitStrc * * ppUnit) {
+// PetsForEach calls it as a pfnPetForEachCallback. The 1.14d Windows build declares it __stdcall over
+// the two stack arguments of that __fastcall call (pPetUnit, pContext); the Mac build and every other
+// ABI pass all four, so it takes the callback's own signature there.
+#if defined(_WIN32) && defined(D2_ARCH_X86)
+void __stdcall MONSTERAI_CheckAdjacentUnit(D2UnitStrc * pUnit, D2UnitStrc * * ppUnit)
+#else
+void __fastcall MONSTERAI_CheckAdjacentUnit(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2UnitStrc * pUnit, D2UnitStrc * * ppUnit)
+#endif
+{
     if (*ppUnit == pUnit) {
       return;
     }

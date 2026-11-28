@@ -49,7 +49,7 @@
 10	Source/D2Client/UI/QuestLog.cpp
 4	Source/D2Client/UI/SkillDesc.cpp
 10	Source/D2Client/UI/SpellSel.cpp
-18	Source/D2Client/UI/Text.cpp
+14	Source/D2Client/UI/Text.cpp
 4	Source/D2Client/UI/Trade.cpp
 1	Source/D2Client/UI/Waypoint.cpp
 4	Source/D2Client/UI/editbox.cpp
@@ -72,7 +72,7 @@
 2	Source/D2Common/Drlg/OutJung.cpp
 3	Source/D2Common/Drlg/OutPlace.cpp
 9	Source/D2Common/Drlg/Path.cpp
-4	Source/D2Common/Drlg/Preset.cpp
+3	Source/D2Common/Drlg/Preset.cpp
 7	Source/D2Common/Dungeon/Dungeon.cpp
 2	Source/D2Common/Inventory/Inventory.cpp
 1	Source/D2Common/Merc.cpp
@@ -104,11 +104,10 @@
 22	Source/D2Game/Player/PlayerSave.cpp
 10	Source/D2Game/Player/PlayerSave2.cpp
 7	Source/D2Game/Player/PlayerTrade.cpp
-1	Source/D2Game/Quests/A1Q3.cpp
 8	Source/D2Game/Quests/A1Q4.cpp
 1	Source/D2Game/Quests/A1Q5.cpp
 1	Source/D2Game/Quests/A2Q2.cpp
-10	Source/D2Game/Quests/QUESTS.cpp
+9	Source/D2Game/Quests/QUESTS.cpp
 2	Source/D2Game/Skills/Items.cpp
 1	Source/D2Game/Skills/SkillBar.cpp
 3	Source/D2Game/Skills/SkillNec.cpp

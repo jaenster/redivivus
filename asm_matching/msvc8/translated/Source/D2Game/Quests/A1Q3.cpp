@@ -122,7 +122,7 @@ void __fastcall Q03_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
       return;
     }
 
-    ::SGAMEDATA* pGame = (::SGAMEDATA*)pQuestData->pQuestSpecificData.pA1Q3;
+    D2QuestDataA1Q3Strc* pQuestDataEx = pQuestData->pQuestSpecificData.pA1Q3;
     if (nMsgIndex == 0xa3) {
       uint16_t nPartyId;
       /* GetQuestState(Completed=0) — bail if already done */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_ToolsOfTheTrade, QUESTSTATE_Completed);
@@ -178,7 +178,7 @@ void __fastcall Q03_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
       }
     } else if (nMsgIndex == 0x92) {
       QUEST_SetStateFlag(pQuestData, 2, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q3.cpp", 0x10c);
-      *(uint8_t*)((intptr_t)&pGame->m_hashval + 2) = 1;
+      pQuestDataEx->bCharsiNotified = 1;
       QUEST_SendNpcGossipPacket(pQuestArgs->pGame, pQuestArgs->pPlayer, pQuestArgs->pTarget);
     }
 }

@@ -4939,8 +4939,8 @@ uint32_t __stdcall MAINMENU_CheckBattleNetIPFlag() {
       return 0;
     }
 
-    uint32_t nOctet4 = 0x22;
-    sscanf(szIPBuffer, "%ld.%ld.%ld.%ld", &nOctet1, &nOctet2, &nOctet3, (long int*)&nOctet4);
+    long int nOctet4 = 0x22;
+    sscanf(szIPBuffer, "%ld.%ld.%ld.%ld", &nOctet1, &nOctet2, &nOctet3, &nOctet4);
     if (nOctet4 & 0x10) {
       return (uint32_t)((uint8_t)~(uint8_t)nOctet4 >> 7);
     }
@@ -7096,12 +7096,12 @@ BOOL __stdcall MAINMENU_DismissPopup(D2ControlStrc * pControl) {
 void __stdcall MAINMENU_PlayExpansionIntro() {
     char szVideoPath[260];
     char szRegValue[100];
-    int32_t nVerC;
-    int32_t nVerB;
+    long int nVerC;
+    long int nVerB;
     D2MPQFileStrc* pVideoFile;
     char szLangAbbrev[4];
     char szVidSuffix[8];
-    uint32_t nVerD;
+    long int nVerD;
     GetAndDispatchAllPossible();
     int32_t nCutSceneFlags = 0;
     BOOL bLoggingEnabled = Fog::Src::LogManager::GetLoggerState_Stub();
@@ -7124,8 +7124,8 @@ void __stdcall MAINMENU_PlayExpansionIntro() {
     D2gfx::D2GFX::D2GFX_PlayCutScene(szVideoPath, nCutSceneFlags, nullptr);
     nCutSceneFlags = Storm::Source::SReg::SRegLoadString("Diablo II", "Aux Battle.net", 0, szRegValue, 100);
     if (nCutSceneFlags) {
-      int32_t nVerA;
-      sscanf(szRegValue, "%ld.%ld.%ld.%ld", &nVerA, &nVerB, &nVerC, (long int*)&nVerD);
+      long int nVerA;
+      sscanf(szRegValue, "%ld.%ld.%ld.%ld", &nVerA, &nVerB, &nVerC, &nVerD);
     }
 
     nVerD |= 0x80;
@@ -7375,6 +7375,7 @@ int __stdcall EDITBOX_Cb_MAINMENU_ValidatePasswordChangeForm(void * pUnknown) {
     return 1;
 }
 
+static_assert(offsetof(D2WinAnimImageNotifyStrc, bStateIsOne) == offsetof(D2ControlMsg, uLParam), "ClickOnClassCreate hands its D2ControlMsg to the D2WinAnimImageNotifyStrc handlers");
 int __stdcall ClickOnClassCreate(D2ControlMsg * pControlMsg) {
     D2ControlStrc* pClickedAnim;
     int32_t nAnimState;
@@ -7606,7 +7607,7 @@ void __stdcall MAINMENU_QueryAndBuildRealmList() {
       return;
     }
 
-    nAllocSize = nCount * 4;
+    nAllocSize = nCount * sizeof(*g_pBNetRealmList);
     g_pBNetRealmList = (D2BNetRealmEntryStrc**)D2_ALLOC_AT(nAllocSize, ".\\Src\\MainMenus.cpp", 0x118c);
     memset(g_pBNetRealmList, 0, nAllocSize);
     for (int i = 0; i < nCount; i++) {

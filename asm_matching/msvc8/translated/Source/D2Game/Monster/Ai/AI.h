@@ -646,7 +646,11 @@ void __fastcall AITHINK_Fn1_FrozenHorror(::SGAMEDATA * pGame, struct D2UnitStrc 
 void __fastcall AITHINK_Fn1_BloodLord(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 void __fastcall AITHINK_Fn1_Spirit(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
 void __fastcall AITHINK_Fn1_Smith(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiParamStrc * pAiParam);
+#if defined(_WIN32) && defined(D2_ARCH_X86)
 void __stdcall MONSTERAI_CheckAdjacentUnit(struct D2UnitStrc * pUnit, struct D2UnitStrc * * ppUnit);
+#else
+void __fastcall MONSTERAI_CheckAdjacentUnit(::SGAMEDATA * pGame, struct D2UnitStrc * pOwner, struct D2UnitStrc * pUnit, struct D2UnitStrc * * ppUnit);
+#endif
 // Executes one of several "follow the owner" movement behaviours for a hireling/merc (or pet) relative to its owning player, dispatched by nAction (switch 0-5). Action 0: pick a free flank tile around the owner (via composite-dimension offset table) at the owner's grid and walk there. Action 1: walk to one of the owner's interacted-NPC stored coords, with combat-mode setup and AiThink retries, falling back to a random offset walk near the owner once the slot list (20 entries) is exhausted. Action 2: random short reposition near owner. Action 3: relocate the merc to a random valid monster spawn position in the owner's room (SUNIT_RelocateUnit, sets UNITFLAGEX_TELEPORTED) - used to teleport a stuck merc. Action 4: count adjacent pets and walk toward owner with an offset. Action 5: walk in a random offset around the owner. Returns 1 if an action was taken/movement issued, 0 on failure (e.g. relocate failed) or unknown action. Side effects: ApplyCombatAndMonStats, walk commands, AiThink timer triggers.
 int32_t __fastcall HirelingFollowOwnerAction(::SGAMEDATA * pGame, struct D2UnitStrc * pOwner, struct D2UnitStrc * pMerc, int32_t nAction, int32_t bRun, int32_t nVelocity, int32_t nWalkRadius);
 // Execute pet AI movement behavior (6 modes). Mode 0: explore around unit. Mode 1: follow nearby NPCs. Mode 2: random wander. Mode 3: teleport to random loc. Mode 4: check adjacent units. Mode 5: random walk around player. Returns 1 if movement started, 0 if blocked/idle.

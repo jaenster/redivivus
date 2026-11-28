@@ -1960,7 +1960,7 @@ ULONGLONG __stdcall GetFreeDiskSpaceForSavePath() {
 #if defined(_WIN32)
 void GetGlobalMemoryStatus(LPMEMORYSTATUS pMemoryStatus) {
     memset(pMemoryStatus, 0, sizeof(*pMemoryStatus));
-    /* LPMEMORYSTATUS lpBuffer for GlobalMemoryStatus */ pMemoryStatus->dwLength = 0x20;
+    /* LPMEMORYSTATUS lpBuffer for GlobalMemoryStatus */ pMemoryStatus->dwLength = sizeof(*pMemoryStatus);
     GlobalMemoryStatus(pMemoryStatus);
 }
 #endif

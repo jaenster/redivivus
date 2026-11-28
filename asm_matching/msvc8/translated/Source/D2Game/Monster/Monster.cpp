@@ -703,22 +703,22 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
       uMonTxt.pMonPropTxt = MONSTER_GetMonPropTxtRecord(pUnit->nClassId);
       /* uMonTxt now holds a D2MonPropTxt* (MONSTER_GetMonPropTxtRecord); see
                          00573d35. */ if (uMonTxt.pMonPropTxt) {
-        pRoom = (D2RoomStrc*)(uMonTxt.pMonPropTxt->entry + (intptr_t)nDifficulty);
+        D2MonPropTxtEntry* pPropEntry = uMonTxt.pMonPropTxt->entry[nDifficulty];
         nPlayerCount = 0;
         do {
-          if ((intptr_t)pRoom->ppRoomList < 0) {
+          if (pPropEntry->prop < 0) {
             break;
           }
           if ((uint8_t)uMonTxt.pMonPropTxt->chance[nDifficulty][nPlayerCount] <= '\0') {
-            D2Common::ITEMS::ItemMods::ITEMMOD_ApplyPropertyToUnitStatsExpansion(0, nullptr, pUnit, nullptr, 0, 0, (D2SetsTxtFStrc*)pRoom, 0, 0x40, nullptr);
+            D2Common::ITEMS::ItemMods::ITEMMOD_ApplyPropertyToUnitStatsExpansion(0, nullptr, pUnit, nullptr, 0, 0, (D2SetsTxtFStrc*)pPropEntry, 0, 0x40, nullptr);
           } else {
             DVar1 = D2_SeedRoll(&pUnit->sSeed);
             if ((int)(DVar1 % 100) < (int)(uint32_t)(uint8_t)uMonTxt.pMonPropTxt->chance[nDifficulty][nPlayerCount]) {
-              D2Common::ITEMS::ItemMods::ITEMMOD_ApplyPropertyToUnitStatsExpansion(0, nullptr, pUnit, nullptr, 0, 0, (D2SetsTxtFStrc*)pRoom, 0, 0x40, nullptr);
+              D2Common::ITEMS::ItemMods::ITEMMOD_ApplyPropertyToUnitStatsExpansion(0, nullptr, pUnit, nullptr, 0, 0, (D2SetsTxtFStrc*)pPropEntry, 0, 0x40, nullptr);
             }
           }
 
-          pRoom = (D2RoomStrc*)&pRoom->pRoomEx;
+          pPropEntry++;
           nPlayerCount++;
         } while (nPlayerCount < 6);
       }

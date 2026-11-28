@@ -707,7 +707,7 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
             } while (szItemCode);
           }
 
-          pBuffer += 4;
+          pBuffer += sizeof(*pFile->pTileTypeLayer);
           nWallLayerIdx++;
         } while (nWallLayerIdx < pFile->nWallLayers);
       }

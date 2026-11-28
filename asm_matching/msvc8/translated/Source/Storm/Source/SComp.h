@@ -109,7 +109,7 @@ D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2CompressEncoderStrc {
     /* 0x3050 */ intptr_t nFreeListBack; // +0x3050: free list intrusive back-link field
     /* 0x3054 */ struct D2CompressHuffNodeStrc * pFreeListSentinel; // +0x3054: free list sentinel / head
     /* 0x3058 */ struct D2CompressHuffNodeStrc * * ppFreeListTailLink; // +0x3058: ptr-to-tail link in free list
-    /* 0x305C */ int nFreeListLinkOff; // +0x305c: intrusive list link base offset
+    /* 0x305C */ intptr_t nFreeListLinkOff; // +0x305c: intrusive list link base offset (pointer-sized, like nFreeListBack)
     /* 0x3060 */ struct D2CompressHuffNodeStrc * pSortedListRoot; // +0x3060: sorted-by-weight list root/sentinel
     /* 0x3064 */ struct D2CompressHuffNodeStrc * pWeightedListHead; // +0x3064: sorted-by-weight list head (lowest weight)
     /* 0x3068 */ int nNodeCount; // +0x3068: nodes allocated from pool so far
@@ -131,16 +131,19 @@ D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2HuffmanContextStrc {
     /* 0x0000 */ uint32_t nUnused0; // unused pad
     /* 0x0004 */ int32_t nEpoch; // rebuild epoch; quick-table entries are invalid when their epoch != this
     /* 0x0008 */ D2CompressHuffNodeStrc aNodes[515]; // 0x203 tree nodes at 0x18 bytes each (ends at 0x3050)
-    /* 0x3050 */ int32_t nFreeCount; // free-list count sentinel at 0x3050
-    /* 0x3054 */ int32_t nFreeListSelf; // free-list sentinel self-ptr at 0x3054
+    /* 0x3050 */ intptr_t nFreeCount; // free-list count sentinel at 0x3050
+    /* 0x3054 */ struct D2CompressHuffNodeStrc * nFreeListSelf; // free-list sentinel self-ptr at 0x3054
     /* 0x3058 */ struct D2CompressHuffNodeStrc * nFreeListBack; // free-list sentinel back-link ~self at 0x3058
-    /* 0x305C */ int32_t nActiveCount; // active-list count at 0x305C
+    /* 0x305C */ intptr_t nActiveCount; // active-list count at 0x305C
     /* 0x3060 */ struct D2CompressHuffNodeStrc * pActiveListSelf; // active-list sentinel self-ptr at 0x3060
-    /* 0x3064 */ int32_t nActiveListBack; // active-list sentinel back-link ~self at 0x3064
+    /* 0x3064 */ struct D2CompressHuffNodeStrc * nActiveListBack; // active-list sentinel back-link ~self at 0x3064
     /* 0x3068 */ int32_t nNodeCount; // nodes allocated so far at 0x3068
     /* 0x306C */ struct D2CompressHuffNodeStrc * _pad306C[258]; // symbol-to-node lookup table (0x102 entries); same layout as D2CompressEncoderStrc.apSymbolNodes
     /* 0x3474 */ struct D2HuffQuickEntryStrc aQuickTable[128]; // 0x80 quick-decode entries at 0x3474; object size 0x3a74
 }; __pragma(pack(pop)) D2_PACKED_END
+// The decoder runs the encoder's tree code (COMPRESS_*) on itself: its head is a D2CompressEncoderStrc on every ABI.
+static_assert(offsetof(D2HuffmanContextStrc, _pad306C) == offsetof(D2CompressEncoderStrc, apSymbolNodes), "D2HuffmanContextStrc: the head must keep the D2CompressEncoderStrc layout");
+static_assert(sizeof(void*) != 4 || sizeof(D2HuffmanContextStrc) == 0x3A74, "D2HuffmanContextStrc: the 32-bit object is 0x3a74 bytes");
 
 #endif // D2_MODULE_Storm
 namespace Storm { namespace Source { namespace SComp {

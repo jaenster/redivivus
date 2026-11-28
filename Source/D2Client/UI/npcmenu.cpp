@@ -7131,7 +7131,7 @@ int __stdcall NPCMENU_BuildMercHireMenu() {
         if (pszDialogPtr) {
           Fog::File::CONTAINER_InitializeBuffer(wszMercTypeBuf, 2, 0x96, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
           pNullSentinel = 0;
-          memcpy(wszFmtCode, L"a0:%0", 0xc);
+          memcpy(wszFmtCode, D2_U16("a0:%0"), 0xc);
           Inv::wsprintf(wszMercTypeBuf, wszFmtCode, D2Common::Merc::GetMercTypeString(nMercTypeDescIdx), pNullSentinel);
           D2Lang::Unicode::UNISYS::AppendToBuffer(wszMercDesc2, wszMercTypeBuf);
         }

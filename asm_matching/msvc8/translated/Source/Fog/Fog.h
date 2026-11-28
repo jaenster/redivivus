@@ -588,6 +588,7 @@ D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2SaveFileHeaderStrc {
     /* 0xCF */ uint8_t nGuildInfo[3];
     /* 0xD2 */ uint8_t nReserved[125]; // Unused header padding bytes (zeroed on save, never read)
 }; __pragma(pack(pop)) D2_PACKED_END
+static_assert(sizeof(D2SaveFileHeaderStrc) == 0x14F, "the .d2s header is 0x14F bytes on every ABI");
 #endif // D2_DEFINED_D2SaveFileHeaderStrc
 #ifndef D2_DEFINED_D2SFileSignatureKeyStrc
 #define D2_DEFINED_D2SFileSignatureKeyStrc

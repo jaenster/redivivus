@@ -109,6 +109,7 @@ D2_PACKED_BEGIN struct __attribute__((packed)) D2SaveFileHeaderStrc {
     /* 0xCF */ uint8_t nGuildInfo[3];
     /* 0xD2 */ uint8_t nReserved[125]; // Unused header padding bytes (zeroed on save, never read)
 }; D2_PACKED_END
+static_assert(sizeof(D2SaveFileHeaderStrc) == 0x14F, "the .d2s header is 0x14F bytes on every ABI");
 
 #endif // D2_DEFINED_D2SaveFileHeaderStrc
 namespace Fog::Save {

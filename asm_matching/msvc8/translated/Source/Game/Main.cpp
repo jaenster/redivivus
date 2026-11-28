@@ -914,7 +914,7 @@ void __fastcall MISC_ParseCommandLineAndPutIntoD2IniData(char * szText, int, D2I
               case 1:
                 {
                   nConfigIdx = atoi(szArgValue);
-                  *(long int*)pCmdEnd = nConfigIdx;
+                  *(int32_t*)pCmdEnd = nConfigIdx;
                   break;
                 }
               case 2:

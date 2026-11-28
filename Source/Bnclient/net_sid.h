@@ -14,12 +14,7 @@
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
 
-// Data types
-#ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
-
-typedef long __time32_t;
-
-#endif // _WIN32
+// Data types (__time32_t comes from the Win32 CRT, or off Windows from d2_platform.h)
 
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
 struct D2CDKeyHashStrc {

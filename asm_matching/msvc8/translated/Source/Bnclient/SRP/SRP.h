@@ -73,6 +73,7 @@ D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2SrpSeedEntropyStrc {
     /* 0x04 */ uint32_t dwSeed; // copy of SRP_InitializeRandomState's dwSeed
     /* 0x08 */ int32_t nRand; // rand() after srand(dwSeed)
 }; __pragma(pack(pop)) D2_PACKED_END
+static_assert(sizeof(D2SrpSeedEntropyStrc) == 0xC, "SRP_InitializeRandomState hashes the 12-byte seed run");
 
 #endif // D2_MODULE_Bnclient
 #ifndef D2_DEFINED_TSGrowableArray_Uc

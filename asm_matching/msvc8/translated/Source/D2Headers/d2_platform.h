@@ -70,7 +70,20 @@ extern "C" void* _AddressOfReturnAddress(void);
 #    define _FILE_DEFINED 1
 #  endif
 typedef int errno_t;
-typedef long __time32_t;  // the C library's time_t
+// The CRT's 32-bit time_t. It is a 4-byte record field (the .d2s header's nCreateTime, the
+// SRP seed), and long is 8 bytes on LP64.
+#  if defined(__LP64__)
+typedef int32_t __time32_t;
+#  else
+typedef long __time32_t;
+#  endif
+#endif
+// A UTF-16 string literal, the D2 Unicode text unit (uint16_t). The Win32 wchar_t is 16 bits, so
+// L"" there; off Windows wchar_t is 32 bits and u"" is the 16-bit literal.
+#if defined(_WIN32)
+#  define D2_U16(s) L##s
+#else
+#  define D2_U16(s) u##s
 #endif
 // MSVC CRT stream layout (what Ghidra models and what D2 indexes into).
 // Claimed before <cstdio> so a UCRT toolchain cannot substitute its opaque
@@ -891,7 +904,16 @@ static inline errno_t _strncpy_s(char* dst, size_t dsz, const char* src, size_t 
 #define _fputs fputs
 #ifndef _WIN32
 #define _time64 time
+#if defined(__LP64__)
+static inline __time32_t D2_Time32(__time32_t* pTime) {
+    __time32_t nTime = (__time32_t)time(nullptr);
+    if (pTime) *pTime = nTime;
+    return nTime;
+}
+#define _time32 D2_Time32
+#else
 #define _time32 time
+#endif
 #define _difftime64 difftime
 #endif
 
