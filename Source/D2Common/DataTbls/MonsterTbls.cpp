@@ -648,8 +648,13 @@ void __fastcall DATATBLS_CompileUniqueTitleTxt(D2PoolManagerStrc * pMemory, char
     gsTxtUniqueNameTables.apTable[nTitleIdx] = pCompiledTxt;
 }
 
+// The walk steps a whole record view one table pointer at a time, so anSize[0] of the view is
+// anSize[i] only while a pointer and an int have one size: on 64-bit it would reach anSize[2]
+// and then 8 bytes past the record (the low half of pMonItemPercentTxt). There each table is
+// indexed.
 // 1.14d mac: 001480df
 void __stdcall TXT_UnloadUniqueMonsterNameTables() {
+#if D2_ARCH_X86
     D2UniqueNameTablesStrc* ppEntry = &gsTxtUniqueNameTables;
     do {
       if (ppEntry->apTable[0]) {
@@ -660,6 +665,17 @@ void __stdcall TXT_UnloadUniqueMonsterNameTables() {
 
       ppEntry = (D2UniqueNameTablesStrc*)(ppEntry->apTable + 1);
     } while ((intptr_t)ppEntry < (intptr_t)(gsTxtUniqueNameTables.apTable + _countof(gsTxtUniqueNameTables.apTable)));
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
+    for (size_t nTable = 0; nTable < _countof(gsTxtUniqueNameTables.apTable); nTable++) {
+      if (gsTxtUniqueNameTables.apTable[nTable]) {
+        DataTbls::UnloadBin(gsTxtUniqueNameTables.apTable[nTable]);
+        gsTxtUniqueNameTables.apTable[nTable] = 0;
+        gsTxtUniqueNameTables.anSize[nTable] = 0;
+      }
+    }
+#else
+#error "MonsterTbls.cpp: no record layout for this architecture"
+#endif
 }
 
 uint16_t * __fastcall Unreferenced_00653e50(D2UnitStrc * pUnit, int nTableIndex) {

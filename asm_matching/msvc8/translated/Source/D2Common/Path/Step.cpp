@@ -849,8 +849,18 @@ uint32_t __stdcall DRLGPATH_GetDirectionFromCoords(uint32_t nX, int32_t nY, int3
     return nX;
 }
 
+// The vector is written over the two From arguments: 32-bit __stdcall keeps them side by side
+// on the stack as a POINT. A 64-bit ABI spills them wherever it likes (arm64 put nFromXfp under
+// the saved frame pointer), so there the vector gets a POINT of its own.
 uint32_t __stdcall PATH_ComputeDirectionFromPreciseCoords(uint32_t nFromXfp, uint32_t nFromYfp, uint32_t nToXfp, uint32_t nToYfp) {
+#if D2_ARCH_X86
     DRLGPATH_CalcDirectionVector((POINT*)&nFromXfp, &nToYfp, nFromXfp, nFromYfp, nToXfp, nToYfp);
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
+    POINT tVector;
+    DRLGPATH_CalcDirectionVector(&tVector, &nToYfp, nFromXfp, nFromYfp, nToXfp, nToYfp);
+#else
+#error "Step.cpp: no argument layout for this architecture"
+#endif
     return nToYfp;
 }
 

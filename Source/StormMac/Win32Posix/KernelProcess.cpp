@@ -22,6 +22,7 @@
 #include <unistd.h>
 #if defined(__APPLE__)
 #include <sys/sysctl.h>
+#include <mach/mach.h>
 #endif
 
 #include "Source/StormMac/Win32Posix/Win32PosixKernelPriv.h"
@@ -362,6 +363,39 @@ void GetSystemInfo(struct _SYSTEM_INFO* lpSystemInfo) {
     lpSystemInfo->dwActiveProcessorMask = nCpus >= 64 ? ~(DWORD_PTR)0 : (((DWORD_PTR)1 << nCpus) - 1);
     lpSystemInfo->dwAllocationGranularity = 0x10000;
     lpSystemInfo->wProcessorLevel = 6;
+}
+
+// Physical memory from the kernel; the page file is the swap usage sysctl reports, the virtual
+// range the one GetSystemInfo hands out. Fields are SIZE_T, so nothing saturates on 64-bit.
+void GlobalMemoryStatus(LPMEMORYSTATUS lpBuffer) {
+    memset(lpBuffer, 0, sizeof(*lpBuffer));
+    lpBuffer->dwLength = sizeof(*lpBuffer);
+    uint64_t nTotal = 0;
+    size_t nSize = sizeof(nTotal);
+    if (sysctlbyname("hw.memsize", &nTotal, &nSize, nullptr, 0) != 0) {
+        nTotal = 0;
+    }
+    vm_statistics64_data_t tStats;
+    mach_msg_type_number_t nCount = HOST_VM_INFO64_COUNT;
+    uint64_t nAvail = 0;
+    if (host_statistics64(mach_host_self(), HOST_VM_INFO64, (host_info64_t)&tStats, &nCount) == KERN_SUCCESS) {
+        nAvail = ((uint64_t)tStats.free_count + tStats.inactive_count + tStats.purgeable_count) * (uint64_t)vm_page_size;
+    }
+    if (nAvail > nTotal) {
+        nAvail = nTotal;
+    }
+    struct xsw_usage tSwap;
+    nSize = sizeof(tSwap);
+    if (sysctlbyname("vm.swapusage", &tSwap, &nSize, nullptr, 0) != 0) {
+        memset(&tSwap, 0, sizeof(tSwap));
+    }
+    lpBuffer->dwMemoryLoad = nTotal ? (DWORD)((nTotal - nAvail) * 100 / nTotal) : 0;
+    lpBuffer->dwTotalPhys = (SIZE_T)nTotal;
+    lpBuffer->dwAvailPhys = (SIZE_T)nAvail;
+    lpBuffer->dwTotalPageFile = (SIZE_T)(nTotal + tSwap.xsu_total);
+    lpBuffer->dwAvailPageFile = (SIZE_T)(nAvail + tSwap.xsu_avail);
+    lpBuffer->dwTotalVirtual = (SIZE_T)(0x7FFFFFFEFFFFULL - 0x10000);
+    lpBuffer->dwAvailVirtual = lpBuffer->dwTotalVirtual;
 }
 
 // ---- messages and resources ----

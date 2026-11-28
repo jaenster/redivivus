@@ -25,6 +25,10 @@ int STORM_LaunchURL(char* szURL);
 // directory is created when missing.
 HRESULT SHGetFolderPathA(HWND hwnd, int nFolder, HANDLE hToken, DWORD dwFlags, LPSTR pszPath);
 
+// The system version as the Mac's Gestalt 'sysv' decimal reads (macOS 15.1 is 15.1f), or 0
+// when the kernel does not say.
+float POSIX_GetSystemVersion(void);
+
 // ---- the crash path ----
 // The fatal signals (SIGSEGV, SIGBUS, SIGILL, SIGFPE, SIGABRT) call pfnCrash once, on an
 // alternate stack, with the signal number and the faulting address: where SEH's exception

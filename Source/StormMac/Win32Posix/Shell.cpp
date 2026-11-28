@@ -6,6 +6,7 @@
 
 #include <SDL3/SDL_misc.h>
 #include <ctype.h>
+#include <dlfcn.h>
 #include <errno.h>
 #include <execinfo.h>
 #include <signal.h>
@@ -14,6 +15,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <sys/sysctl.h>
 #include <sys/ucontext.h>
 #include <sys/wait.h>
 #include <unistd.h>
@@ -180,6 +182,55 @@ void* FaultPc(void* pContext) {
 #endif
 }
 
+// The interrupted thread's registers and its frame-pointer chain, walked from the machine
+// context: backtrace() on the alternate stack can stop at the signal frame, and a leaf that
+// keeps no frame record is only visible through pc and lr. Each frame is printed as the module
+// offset atos takes (`atos -o "Diablo II" -l <base>` with the base printed here).
+void WriteFaultContext(void* pContext) {
+#if defined(__APPLE__) && defined(__aarch64__)
+    if (!pContext) {
+        return;
+    }
+    const auto& tState = ((ucontext_t*)pContext)->uc_mcontext->__ss;
+    for (int i = 0; i < 29; i += 4) {
+        fprintf(stderr, "  x%-2d %016llx  x%-2d %016llx  x%-2d %016llx  x%-2d %016llx\n", i,
+                (unsigned long long)tState.__x[i], i + 1, (unsigned long long)tState.__x[i + 1], i + 2,
+                (unsigned long long)tState.__x[i + 2], i + 3, (unsigned long long)(i + 3 < 29 ? tState.__x[i + 3] : 0));
+    }
+    fprintf(stderr, "  fp %016llx  lr %016llx  sp %016llx\n", (unsigned long long)tState.__fp,
+            (unsigned long long)tState.__lr, (unsigned long long)tState.__sp);
+    Dl_info tInfo;
+    if (dladdr((void*)tState.__pc, &tInfo) && tInfo.dli_fbase) {
+        fprintf(stderr, "  module base %p\n", tInfo.dli_fbase);
+    }
+    auto WriteFrame = [](const char* szWhat, uintptr_t nAddress) {
+        Dl_info tFrame;
+        if (dladdr((void*)nAddress, &tFrame) && tFrame.dli_sname) {
+            fprintf(stderr, "  %s %p %s + %ld\n", szWhat, (void*)nAddress, tFrame.dli_sname,
+                    (long)(nAddress - (uintptr_t)tFrame.dli_saddr));
+        } else {
+            fprintf(stderr, "  %s %p\n", szWhat, (void*)nAddress);
+        }
+    };
+    WriteFrame("lr", (uintptr_t)tState.__lr);
+    uintptr_t* pFrame = (uintptr_t*)tState.__fp;
+    for (int nDepth = 0; nDepth < 48 && pFrame && ((uintptr_t)pFrame & 7) == 0; ++nDepth) {
+        uintptr_t nReturn = pFrame[1];
+        if (!nReturn) {
+            break;
+        }
+        WriteFrame("fp", nReturn);
+        uintptr_t* pNext = (uintptr_t*)pFrame[0];
+        if (pNext <= pFrame) {
+            break;
+        }
+        pFrame = pNext;
+    }
+#else
+    (void)pContext;
+#endif
+}
+
 void OnFatalSignal(int nSignal, siginfo_t* pInfo, void* pContext) {
     // One report: a second fault (in the handler, or on another thread) takes the default
     // action, which SA_RESETHAND has put back.
@@ -189,6 +240,7 @@ void OnFatalSignal(int nSignal, siginfo_t* pInfo, void* pContext) {
         fprintf(stderr, "[CRASH] signal %d, address %p, pc %p\n", nSignal, pInfo ? pInfo->si_addr : nullptr,
                 FaultPc(pContext));
         POSIX_WriteBacktrace(WriteToStderr, nullptr, 0);
+        WriteFaultContext(pContext);
         fflush(stderr);
         if (g_pfnCrash) {
             g_pfnCrash(nSignal, pInfo ? pInfo->si_addr : nullptr);
@@ -199,6 +251,17 @@ void OnFatalSignal(int nSignal, siginfo_t* pInfo, void* pContext) {
 }
 
 }  // namespace
+
+float POSIX_GetSystemVersion(void) {
+    char szVersion[32] = "";
+    size_t nSize = sizeof(szVersion);
+    if (sysctlbyname("kern.osproductversion", szVersion, &nSize, nullptr, 0) != 0) {
+        return 0.0f;
+    }
+    int nMajor = 0, nMinor = 0;
+    sscanf(szVersion, "%d.%d", &nMajor, &nMinor);
+    return (float)nMajor + (float)nMinor / (nMinor >= 10 ? 100.0f : 10.0f);
+}
 
 void POSIX_SetCrashHandler(POSIX_CRASHPROC pfnCrash) {
     g_pfnCrash = pfnCrash;

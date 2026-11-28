@@ -108,6 +108,7 @@ BOOL GetUserNameA(LPSTR lpBuffer, LPDWORD pcbBuffer);
 LPSTR GetCommandLineA(void);
 DWORD GetVersion(void);
 void GetSystemInfo(struct _SYSTEM_INFO* lpSystemInfo);
+void GlobalMemoryStatus(LPMEMORYSTATUS lpBuffer);
 BOOL TerminateProcess(HANDLE hProcess, UINT uExitCode);
 BOOL GetExitCodeProcess(HANDLE hProcess, LPDWORD lpExitCode);
 // Nonzero while a debugger traces the process.

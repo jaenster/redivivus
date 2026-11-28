@@ -361,6 +361,10 @@ void TestMemory() {
     SYSTEM_INFO tInfo;
     GetSystemInfo(&tInfo);
     CHECK(tInfo.dwPageSize == 0x1000 && tInfo.dwAllocationGranularity == 0x10000 && tInfo.dwNumberOfProcessors >= 1);
+    MEMORYSTATUS tStatus;
+    GlobalMemoryStatus(&tStatus);
+    CHECK(tStatus.dwLength == sizeof(tStatus) && tStatus.dwTotalPhys >= 0x10000000 &&
+          tStatus.dwAvailPhys <= tStatus.dwTotalPhys && tStatus.dwMemoryLoad <= 100);
     uint8_t* pBase = (uint8_t*)VirtualAlloc(nullptr, 0x100000, MEM_RESERVE, PAGE_NOACCESS);
     CHECK(pBase && ((uintptr_t)pBase & 0xFFFF) == 0);
     MEMORY_BASIC_INFORMATION mbi;

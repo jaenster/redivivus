@@ -408,9 +408,19 @@ void __stdcall SEED_RollChampionPack(D2SeedStrc * pSeed, D2MonsterRegionFieldStr
             pComponents = pMonStats2->aComponents;
             pSlot = pMonData->aArray;
             if (!pMonData->pad) {
+              // The distance from the slot to the MonStats2 component counts: a heap pointer
+              // minus a record pointer, which a 64-bit int cannot hold.
+#if D2_ARCH_X86
               nFreeSlots = (int)((intptr_t)pComponents - (intptr_t)pSlot);
               for (nMaxRetries = 0; nMaxRetries < 0x10; nMaxRetries++) {
                 byCompCount = *(uint8_t*)(nFreeSlots + (char*)pSlot);
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
+              intptr_t nComponentDelta = (intptr_t)pComponents - (intptr_t)pSlot;
+              for (nMaxRetries = 0; nMaxRetries < 0x10; nMaxRetries++) {
+                byCompCount = *(uint8_t*)(nComponentDelta + (char*)pSlot);
+#else
+#error "SkillItem.cpp: no pointer width for this architecture"
+#endif
                 if (byCompCount <= 1) {
                   pSlot->aComponentVariants[0] = 0;
                 } else {
@@ -2325,7 +2335,7 @@ BOOL __fastcall ITEMEVENT_SlowTarget(::SGAMEDATA * pGame, uint32_t nUnitEvent, D
 // Item hit-event handler for "Cast on Attack" procs. Reads proc chance and proc skill/level from the item stat encoding. Only fires when pParam indicates an attack swing (bit 0x20 clear or pParam null). Rolls unit seed against chance; on success spawns the proc skill on the target unit via SKILL_CastOnTargetUnit, or at the caster's position via MONSTERAI_CastItemEffectSkill if no target. Self-targeted skills (flags4 bit 0x20) cast on pTarget instead.
 // 1.14d mac: 0025a3f5
 BOOL __fastcall ITEMEVENT_CastOnAttack(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
-    
+    uint32_t nCastX;
     if (!pUnit) {
       return 0;
     }
@@ -2353,16 +2363,16 @@ BOOL __fastcall ITEMEVENT_CastOnAttack(::SGAMEDATA * pGame, uint32_t nUnitEvent,
         return 1;
       }
     } else {
-      
+      uint32_t nCastY;
       nProcChance = 1;
       if (pTarget) {
         Monster::AI::SKILL_CastOnTargetUnit(pUnit, eProcSkill, nSkillLevel, pTarget, 1);
         return 1;
       }
 
-      
-      
-      Monster::AI::MONSTERAI_CastItemEffectSkill(pUnit, eProcSkill, nSkillLevel, (uint32_t)(D2Common::PATH::DynamicPath::GetXSP1(pUnit->pPath.pDynamicPath)), (uint32_t)(D2Common::PATH::DynamicPath::GetYSP1(pUnit->pPath.pDynamicPath)), nProcChance);
+      nCastY = D2Common::PATH::DynamicPath::GetYSP1(pUnit->pPath.pDynamicPath);
+      nCastX = D2Common::PATH::DynamicPath::GetXSP1(pUnit->pPath.pDynamicPath);
+      Monster::AI::MONSTERAI_CastItemEffectSkill(pUnit, eProcSkill, nSkillLevel, nCastX, nCastY, nProcChance);
     }
 
     return 1;
@@ -2407,7 +2417,7 @@ BOOL __fastcall ITEMEVENT_SkillOnGetHit(::SGAMEDATA * pGame, uint32_t nUnitEvent
 
 // 1.14d mac: 0025a6ce
 BOOL __fastcall ITEMEVENT_CastOnDeath(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
-    
+    uint32_t nCastX;
     if (!pUnit) {
       return 0;
     }
@@ -2432,10 +2442,10 @@ BOOL __fastcall ITEMEVENT_CastOnDeath(::SGAMEDATA * pGame, uint32_t nUnitEvent, 
 
     nProcChance = 0;
     if (!pTarget) {
-      
-      
-      
-      Monster::AI::MONSTERAI_CastItemEffectSkill(pUnit, eProcSkill, eSkillLevel, (uint32_t)(D2Common::PATH::DynamicPath::GetXSP1(pUnit->pPath.pDynamicPath)), (uint32_t)(D2Common::PATH::DynamicPath::GetYSP1(pUnit->pPath.pDynamicPath)), nProcChance);
+      uint32_t nCastY;
+      nCastY = D2Common::PATH::DynamicPath::GetYSP1(pUnit->pPath.pDynamicPath);
+      nCastX = D2Common::PATH::DynamicPath::GetXSP1(pUnit->pPath.pDynamicPath);
+      Monster::AI::MONSTERAI_CastItemEffectSkill(pUnit, eProcSkill, eSkillLevel, nCastX, nCastY, nProcChance);
     } else {
       Monster::AI::SKILL_CastOnTargetUnit(pUnit, eProcSkill, eSkillLevel, pTarget, 0);
     }
@@ -2701,4 +2711,4 @@ BOOL __fastcall ITEMEVENT_ApplyHitDamage(::SGAMEDATA * pGame, uint32_t nUnitEven
     return 1;
 }
 
-}}} // namespace D2Game::SKILLS::SkillItem
+} // namespace D2Game::SKILLS::SkillItem

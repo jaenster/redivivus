@@ -206,19 +206,22 @@ pthread_mutex_t* NewSectionMutex() {
     return pMutex;
 }
 
-// The game keeps its CRITICAL_SECTIONs inside packed records (Fog's pool managers at +4), so on
-// a 64-bit target the LockSemaphore slot can sit on a 4-byte boundary, where an atomic access
-// faults (SIGBUS on arm64). An aligned slot is read and claimed atomically; an unaligned one
-// under one process-wide lock, which a lock-free reader of that slot never sees half written.
-std::mutex& UnalignedSlotLock() {
-    static std::mutex tLock;
-    return tLock;
+// The game keeps CRITICAL_SECTIONs inside packed records: Fog's D2PoolManagerStrc and
+// D2MemoryManagerStrc at +4, every D2PoolStrc (+0) of a manager's pPools[] at +0x20 + i*0x30 on
+// 32-bit, the QS socket records (D2QSSocketStrc.h). On a 64-bit target the LockSemaphore slot
+// can sit on a 4-byte boundary, where an atomic access faults (SIGBUS on arm64). An aligned slot
+// is read and claimed atomically; an unaligned one under a lock picked by the section's address
+// from a stripe of them, so unrelated pools do not wait on one another, and a reader of that
+// slot never sees it half written.
+std::mutex& UnalignedSlotLock(const void* pSlot) {
+    static std::mutex aLocks[64];
+    return aLocks[((uintptr_t)pSlot >> 4) % (sizeof(aLocks) / sizeof(aLocks[0]))];
 }
 
 pthread_mutex_t* SectionMutex(LPCRITICAL_SECTION pSection) {
     HANDLE* ppSlot = &pSection->LockSemaphore;
     if ((uintptr_t)ppSlot % alignof(HANDLE) != 0) {
-        std::lock_guard<std::mutex> tGuard(UnalignedSlotLock());
+        std::lock_guard<std::mutex> tGuard(UnalignedSlotLock(ppSlot));
         HANDLE pMutex;
         memcpy(&pMutex, ppSlot, sizeof(pMutex));
         if (!pMutex) {

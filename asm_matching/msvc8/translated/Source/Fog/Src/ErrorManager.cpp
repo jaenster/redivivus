@@ -5494,7 +5494,14 @@ void __fastcall ERRORMANAGER_InitErrorManager(char * dwUnused1, char * szText, B
       }
     }
 
+    // The record the Mac fills from Gestalt 'sysv' and 'ram ': the system version as the
+    // decimal it prints, the physical memory as a DWORD (saturated above 4 GB, as the 32-bit
+    // GlobalMemoryStatus does). CLIENT_AdjustMemoryBudget exits on a machine under 23 MB.
     gSystemInfo.eOSType = 9;
+    gSystemInfo.fOSVersion = POSIX_GetSystemVersion();
+    MEMORYSTATUS memoryStatus;
+    GlobalMemoryStatus(&memoryStatus);
+    gSystemInfo.dwTotalPhysicalMemory = memoryStatus.dwTotalPhys > 0xFFFFFFFFu ? 0xFFFFFFFFu : (uint32_t)memoryStatus.dwTotalPhys;
     GetSystemInfo(&gSystemInfo.sWinSystemInfo);
     gSystemInfo.bInitialized = 1;
     LogManager::StartLogWriterThread();
