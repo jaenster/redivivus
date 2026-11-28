@@ -655,7 +655,8 @@ void __fastcall BNSEND_StoreUserProfileData(uint8_t * pbProfileData, uint32_t nD
 
     gpBNetWriteUserData = 0;
     gpBNetWriteUserData = D2_ALLOC_AT(nDataSize + 4, ".\\BnSend.cpp", 0x3bb);
-    *(size_t*)gpBNetWriteUserData = nDataSize;
+    // A 4-byte length header ahead of the data (size_t was 8 bytes on a 64-bit target).
+    *(uint32_t*)gpBNetWriteUserData = nDataSize;
     memcpy((void*)((char*)gpBNetWriteUserData + 4), pbProfileData, nDataSize);
     if (!(nDataSize != 8 && nDataSize >= 0x48)) {
       return;

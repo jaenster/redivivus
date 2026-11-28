@@ -47,6 +47,11 @@ void __fastcall SRP_InitializeRandomState(D2Srp * pThis, int, uint32_t dwSeed) {
     pThis->nBytesAvailable = 0;
 }
 
+// The end of D2Srp's aOutputBuffer, the byte the extracted session-key bytes count back from.
+// An enumerator, so it is a constant with no storage, as the literal it replaces.
+enum { kSrpOutputEnd = offsetof(D2Srp, aOutputBuffer) + sizeof(((D2Srp*)0)->aOutputBuffer) };
+static_assert(sizeof(void*) != 4 || kSrpOutputEnd == 0x48, "D2Srp: aOutputBuffer ends at 0x48 on x86");
+
 // 1.14d mac: 002f8c94
 void __fastcall SRP_ExtractSessionKeyBytes(D2Srp * * pThis, int, void * pDst, uint32_t nBytes) {
     D2Srp* nSrpBase;
@@ -56,7 +61,9 @@ void __fastcall SRP_ExtractSessionKeyBytes(D2Srp * * pThis, int, void * pDst, ui
       nSrpBase = *pThis;
       nAvail = nSrpBase->nBytesAvailable;
       while (nBytes > nAvail) {
-        memcpy(pDst, (void*)((char*)nSrpBase + (0x48 - nAvail)), nAvail);
+        // The unread tail of aOutputBuffer: its end is 0x48 on x86, 0x54 where the two BigData
+        // pointers are 8 bytes.
+        memcpy(pDst, (void*)((char*)nSrpBase + (kSrpOutputEnd - nAvail)), nAvail);
         pDst = (void*)((char*)pDst + (*pThis)->nBytesAvailable);
         nBytes -= (*pThis)->nBytesAvailable;
         SHA1::SHA1Init(&aShaCtx);
@@ -70,7 +77,7 @@ void __fastcall SRP_ExtractSessionKeyBytes(D2Srp * * pThis, int, void * pDst, ui
       }
 
       if (nBytes > 0) {
-        memcpy(pDst, (void*)((char*)*pThis + (0x48 - (*pThis)->nBytesAvailable)), nBytes);
+        memcpy(pDst, (void*)((char*)*pThis + (kSrpOutputEnd - (*pThis)->nBytesAvailable)), nBytes);
         (*pThis)->nBytesAvailable -= nBytes;
       }
     }

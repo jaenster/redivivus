@@ -129,14 +129,19 @@ int closesocket(SOCKET s);
 int connect(SOCKET s, const sockaddr* name, int namelen);
 int send(SOCKET s, const char* buf, int len, int flags);
 int recv(SOCKET s, char* buf, int len, int flags);
+int sendto(SOCKET s, const char* buf, int len, int flags, const sockaddr* to, int tolen);
+int recvfrom(SOCKET s, char* buf, int len, int flags, sockaddr* from, int* fromlen);
+int shutdown(SOCKET s, int how);
 int select(int nfds, fd_set* readfds, fd_set* writefds, fd_set* exceptfds, const timeval* timeout);
 int setsockopt(SOCKET s, int level, int optname, const char* optval, int optlen);
+int getsockopt(SOCKET s, int level, int optname, char* optval, int* optlen);
 int ioctlsocket(SOCKET s, long cmd, u_long* argp);
 int getsockname(SOCKET s, sockaddr* name, int* namelen);
 int getpeername(SOCKET s, sockaddr* name, int* namelen);
 hostent* gethostbyname(const char* name);
 int gethostname(char* name, int namelen);
-unsigned long inet_addr(const char* cp);
+// u_long, Winsock's 32 bits: the address the callers store in an in_addr.
+u_long inet_addr(const char* cp);
 char* inet_ntoa(in_addr in);
 
 // The Winsock calls the shared code reaches through _Wrappers.
