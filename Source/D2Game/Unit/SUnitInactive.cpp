@@ -204,48 +204,37 @@ static void __stdcall SUNITINACTIVE_FindAndRemoveInactiveUnitsByRoom(D2InactiveU
 
 // Deserialises a ground item from its inactive (saved-room) binary record and re-creates it as a live D2UnitStrc in pRoom. Extracts item details, calls ITEM_CreateFromSaveData, clamps the despawn frame to at most 15000 frames from now, then iterates any socketed items in the serialised stream — deserialising each and inserting into the item's inventory via PutItemInInventory and ITEMMODE_IsItemOnCursor.
 static D2UnitStrc * __stdcall SUNITINACTIVE_RestoreInactiveItem(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2InactiveItemRecordStrc * pInactiveData) {
-    int nNewDespawnFrame;
-    size_t nBytesRemaining;
-    D2UnitDataItemDetailsStrc sItemDetails;
-    int nSocketCount;
-    int iSocket;
-    D2InventoryStrc* pInventory;
-    int32_t nItemDataSize;
-    uint32_t nTotalSerializedSize = (uint32_t)(uint16_t)pInactiveData->nItemDataSize;
+    uint32_t nBytesRemaining = (uint32_t)(uint16_t)pInactiveData->nItemDataSize;
     uint8_t* pbSerializedData = pInactiveData->itemData;
-    D2Common::ITEMS::Items::ExtractItemDetails(pbSerializedData, nTotalSerializedSize, 1, &sItemDetails);
-    D2UnitStrc* pUnit = ITEMS::Items::Drop::ITEM_CreateFromSaveData(pGame, pRoom, pbSerializedData, nTotalSerializedSize, 1, &sItemDetails, &nItemDataSize, 0x60);
+    D2UnitDataItemDetailsStrc sItemDetails;
+    D2Common::ITEMS::Items::ExtractItemDetails(pbSerializedData, nBytesRemaining, 1, &sItemDetails);
+    int32_t nItemDataSize;
+    D2UnitStrc* pUnit = ITEMS::Items::Drop::ITEM_CreateFromSaveData(pGame, pRoom, pbSerializedData, nBytesRemaining, 1, &sItemDetails, &nItemDataSize, 0x60);
     if (!pUnit) {
       return pUnit;
     }
 
-    int nSavedDespawnFrame = pInactiveData->nDespawnTimer;
     pbSerializedData += nItemDataSize;
-    nBytesRemaining = nTotalSerializedSize - nItemDataSize;
-    if (!nSavedDespawnFrame || (nNewDespawnFrame = pGame->dwGameFrame + 15000 , nSavedDespawnFrame >= nNewDespawnFrame)) {
-      pUnit->pUnitData.pUnitDataObject->nLinkedPortalY = nSavedDespawnFrame;
+    nBytesRemaining -= nItemDataSize;
+    int nDespawnFrame = pInactiveData->nDespawnTimer;
+    if (nDespawnFrame && nDespawnFrame < pGame->dwGameFrame + 15000) {
+      pUnit->pUnitData.pUnitDataObject->nLinkedPortalY = pGame->dwGameFrame + 15000;
     } else {
-      pUnit->pUnitData.pUnitDataObject->nLinkedPortalY = nNewDespawnFrame;
+      pUnit->pUnitData.pUnitDataObject->nLinkedPortalY = nDespawnFrame;
     }
     if (!sItemDetails.usedSockets) {
       return pUnit;
     }
 
-    pInventory = pUnit->pInventory;
+    D2InventoryStrc* pInventory = pUnit->pInventory;
     if (!pInventory) {
       pInventory = D2Common::INVENTORY::Inventory::STRUCT_CreatePlayerInventory(nullptr, pUnit);
     }
 
-    iSocket = 0;
-    nSocketCount = sItemDetails.usedSockets;
-    if ((int)sItemDetails.usedSockets <= 0) {
-      return pUnit;
-    }
-
-    do {
-      D2UnitStrc* pSocketedItem;
+    int nSocketCount = sItemDetails.usedSockets;
+    for (int i = 0; i < nSocketCount; i++) {
       D2Common::ITEMS::Items::ExtractItemDetails(pbSerializedData, nBytesRemaining, 1, &sItemDetails);
-      pSocketedItem = ITEMS::Items::Drop::ITEM_CreateFromSaveData(pGame, nullptr, pbSerializedData, nBytesRemaining, 1, &sItemDetails, &nItemDataSize, 0x60);
+      D2UnitStrc* pSocketedItem = ITEMS::Items::Drop::ITEM_CreateFromSaveData(pGame, nullptr, pbSerializedData, nBytesRemaining, 1, &sItemDetails, &nItemDataSize, 0x60);
       if (!pSocketedItem) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x10c);
         exit(-1);
@@ -255,8 +244,7 @@ static D2UnitStrc * __stdcall SUNITINACTIVE_RestoreInactiveItem(::SGAMEDATA * pG
       nBytesRemaining -= nItemDataSize;
       D2Common::INVENTORY::Inventory::PutItemInInventory(pInventory, pSocketedItem, 1);
       ITEMS::ItemMode::ITEMMODE_ApplyItemStats(pGame, pSocketedItem, pUnit);
-      iSocket++;
-    } while (iSocket < nSocketCount);
+    }
 
     return pUnit;
 }
