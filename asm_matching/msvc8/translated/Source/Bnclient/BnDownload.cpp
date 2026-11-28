@@ -1140,7 +1140,11 @@ void __fastcall BNDOWNLOAD_InitiateFileDownload(int32_t pDownloadCtx, uint32_t d
     pThreadCtx->nUnk0x0C = eFileType;
     pThreadCtx->nUnk0x02 = 0;
     pThreadCtx->nUnk0x03 = 1;
-    pThreadCtx->dwPlatformId = 0x49583836;
+#if !defined(_WIN32) && D2_OS_MAC
+    pThreadCtx->dwPlatformId = 0x584d4143; // 'XMAC'
+#else
+    pThreadCtx->dwPlatformId = 0x49583836; // 'IX86'
+#endif
     pThreadCtx->dwProductId = 0x44324456;
     pThreadCtx->nUnk0x10 = nOpcode;
     pThreadCtx->nCachedFileSize = 0;
@@ -1457,7 +1461,11 @@ uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pPatchList, uint32_
     pThreadCtx->nSendSize = (short int)(uintptr_t)pbNameEnd - ((short int)(uintptr_t)pPatchList + 1) + 0x21;
     pThreadCtx->nUnk0x02 = '\0';
     pThreadCtx->nUnk0x03 = '\x01';
-    pThreadCtx->dwPlatformId = 0x49583836;
+#if !defined(_WIN32) && D2_OS_MAC
+    pThreadCtx->dwPlatformId = 0x584d4143; // 'XMAC'
+#else
+    pThreadCtx->dwPlatformId = 0x49583836; // 'IX86'
+#endif
     pThreadCtx->dwProductId = 0x44324456;
     pThreadCtx->nUnk0x0C = 0;
     pThreadCtx->nUnk0x10 = 0;

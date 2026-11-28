@@ -475,7 +475,11 @@ void __fastcall NET_SID_CLIENT_Send_0x0E_ChatCommand(uint8_t * szChatText) {
 // 1.14d mac: 00056b83
 int __stdcall NET_SID_CLIENT_Send_0x15_CheckAd() {
     SID_C2S_CheckAd aGameTag;
-    aGameTag.dwPlatformId = 0x49583836;
+#if !defined(_WIN32) && D2_OS_MAC
+    aGameTag.dwPlatformId = 0x584d4143; // 'XMAC'
+#else
+    aGameTag.dwPlatformId = 0x49583836; // 'IX86'
+#endif
     BOOL bIsExpansion = BnSend::D2CheckExpansionGame();
     aGameTag.dwProductId = bIsExpansion ? 0x44325850 : 0x44324456;
     aGameTag.dwLastAdId = g_dwLastAdId;
@@ -499,7 +503,11 @@ int __fastcall NET_SID_CLIENT_Send_0x21_DisplayAd(char * szDestPath, void * pPoo
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 1292, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
+#if !defined(_WIN32) && D2_OS_MAC
+    memcpy(__frame0.acStack_514, "CAMX", sizeof(__frame0.acStack_514));
+#else
     memcpy(__frame0.acStack_514, "68XI", sizeof(__frame0.acStack_514));
+#endif
     BOOL bIsExpansion = BnSend::D2CheckExpansionGame();
     __frame0.iStack_510 = bIsExpansion ? 0x44325850 : 0x44324456;
     __frame0.uStack_50c = g_dwLastAdId;
