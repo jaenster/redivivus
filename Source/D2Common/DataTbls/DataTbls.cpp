@@ -653,7 +653,7 @@ void __stdcall UnloadBin(void * pTxtTable) {
     D2_FREE_POOL_AT(nullptr, pTxtTable, ".\\DATATBLS\\DataTbls.cpp", 0x926);
 }
 
-#if D2_ARCH_X64
+#if D2_ARCH_X64 || D2_ARCH_ARM64
 // Allocates the native table with the header UnloadBin expects, copies each record's spans out of
 // the 32-bit table and frees the 32-bit table.
 void * WidenBinTable(void * pTxtTable, int32_t nRecords, int32_t nSrcStride, size_t nDstStride, const D2BinRecordSpanStrc * pSpans, int32_t nSpans) {

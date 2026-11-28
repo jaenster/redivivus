@@ -12,7 +12,7 @@ static_assert(sizeof(D2FogAddressInfoStrc) == 0x348, "the resolved-address recor
 
 #if D2_ARCH_X86
 #define FOG_CONTEXT_CONTROL 0x10001 // CONTEXT_i386 | CONTEXT_CONTROL
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
 #define FOG_CONTEXT_CONTROL CONTEXT_CONTROL
 #else
 #error "Application.cpp: no CONTEXT flags for this architecture"

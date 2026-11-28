@@ -109,7 +109,7 @@ void * __fastcall ARCHIVE_LoadDataTables(struct D2PoolManagerStrc * pMemory, cha
 void * __stdcall CompileTxt(struct D2PoolManagerStrc * pMemory, char * szTableName, struct D2BinFieldInputStrc * pBinFieldInput, int * nTxtTableSize, int32_t nEndOffset);
 // @sourcefile .\DATATBLS\DataTbls.cpp
 void __stdcall UnloadBin(void * pTxtTable);
-#if defined(_WIN64)
+#if (defined(_WIN64) || defined(__LP64__))
 // A compiled .bin table keeps the 32-bit record layout on disk. A record type that holds
 // runtime pointers is wider on a 64-bit build, so WidenBinTable copies each 32-bit record's
 // data spans into a native record and leaves the pointer fields zero. The result follows the

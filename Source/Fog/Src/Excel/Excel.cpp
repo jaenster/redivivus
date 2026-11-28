@@ -187,7 +187,7 @@ int __stdcall FOG_ParseBinField(short * pOutMapping, D2BinFieldExcelStrc * pBinF
 #if D2_ARCH_X86
               nErrorAddress = (intptr_t)pHashNode->pField - (intptr_t)pBinFieldInput;
               pOutMapping[nOutputIndex] = (short int)(nErrorAddress / 0x14);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
               pOutMapping[nOutputIndex] = (short int)(pHashNode->pField - pBinFieldInput);
 #else
 #error "Excel.cpp: no field index form for this architecture"
@@ -225,7 +225,7 @@ int __stdcall FOG_ParseBinField(short * pOutMapping, D2BinFieldExcelStrc * pBinF
         pHashNodeSlot += 3;
         nFieldCount--;
       } while (nFieldCount);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
       // On 64-bit the node has padding after nHash, so walk it as nodes.
       D2BinFieldHashNodeStrc* pFieldNode = aFieldHashNodes;
       do {

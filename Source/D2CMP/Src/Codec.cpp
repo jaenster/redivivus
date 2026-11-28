@@ -353,7 +353,7 @@ static void __stdcall CODEC_CalculateFrameBounds(uint32_t * pFrameData, int32_t 
       } while (nFramesLeft);
     }
 
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
     if (pFrameArray < pFrameArray + uVar1) {
       // The x86 body walks the component records as dwords from &nStride; on x64 the records hold
       // two pointers, so the same fields are read through the record.
@@ -772,7 +772,7 @@ BOOL __fastcall CODEC_EncodeRLE(D2CodecFrameComponentStrc * pSrcImage, DC6Block 
     uint8_t* pSrcRow = pSrcImage->pSrcRow;
 #if D2_ARCH_X86
     uint32_t nRowStride = pSrcImage->nStrideValue0; // steer-ok: one declaration per arch branch, read below
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
     // Negated below for a bottom-up image; signed so the step widens to a negative pointer offset.
     int32_t nRowStride = (int32_t)pSrcImage->nStrideValue0;
 #endif
@@ -1007,7 +1007,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
         *__frame0.uSlot338.pnDirSizeOut = (uint32_t)*pnSize;
 #if D2_ARCH_X86
         *pnSize += __frame0.local_334.nLocal_334;
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
         // The stored direction size counts 0x20-byte frame headers; the native DC6Block is wider.
         *pnSize += __frame0.local_334.nLocal_334 + aFrameHeaderInfo[3] * (sizeof(DC6Block) - 0x20);
 #endif
@@ -1344,7 +1344,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
 
         if ((void*)gCodecFrameWorkBuffer < __frame0.pComponentTableEnd) {
           pComp = gCodecFrameWorkBuffer;
-#if defined(D2_ARCH_X64)
+#if defined(D2_ARCH_X64) || defined(D2_ARCH_ARM64)
           // pComponentTableEnd is gCodecFrameWorkBuffer + aFrameHeaderInfo[3] (set above for this frame): the 32-bit
           // byte-difference form below divides by the x86 component size, so count the components directly.
           iVar6 = aFrameHeaderInfo[3];

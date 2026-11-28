@@ -276,7 +276,7 @@ static POINT gaAutomapXMarkerPolyline[13] = {
 // dwords (0x30 bytes) per tile; the record holds pointers on x64.
 #if D2_ARCH_X86
 #define D2_TILE_FROM_FLAGS(p) ((D2DrlgTileDataStrc*)(p - 5))
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
 #define D2_TILE_FROM_FLAGS(p) ((D2DrlgTileDataStrc*)((char*)(p) - offsetof(D2DrlgTileDataStrc, nFlags)))
 #endif
 
@@ -1567,7 +1567,7 @@ void __stdcall AUTOMAP_RevealRoom(D2RoomStrc * pRoom, int32_t bForceReveal, D2Au
         i++;
 #if D2_ARCH_X86
         pnTileFlags += 0xc;
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
         pnTileFlags = (int*)((char*)pnTileFlags + sizeof(D2DrlgTileDataStrc));
 #endif
       } while (i < nTileCount);
@@ -1585,7 +1585,7 @@ void __stdcall AUTOMAP_RevealRoom(D2RoomStrc * pRoom, int32_t bForceReveal, D2Au
         i++;
 #if D2_ARCH_X86
         pnTileFlags += 0xc;
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
         pnTileFlags = (int*)((char*)pnTileFlags + sizeof(D2DrlgTileDataStrc));
 #endif
       } while (i < nTileCount);

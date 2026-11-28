@@ -108,7 +108,7 @@ static int gnCursorDataCount = 0x7; D2_STATIC_GUARD(gnCursorDataCount, "gnCursor
 #if D2_ARCH_X86
 #define D2_CURSOR_NEXT_NAME(pp) ((pp) += 7)
 #define D2_CURSOR_NAME_OFFSET 24
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
 #define D2_CURSOR_NEXT_NAME(pp) ((pp) = (char**)((char*)(pp) + sizeof(D2CursorDataStrc)))
 #define D2_CURSOR_NAME_OFFSET offsetof(D2CursorDataStrc, szCursorname)
 #endif

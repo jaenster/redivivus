@@ -1931,3 +1931,27 @@ extern "C" int32_t __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstanc
     return Game::Main::WinMain(hInstance, hPrevInstance, lpCmdLine, nShowCmd);
 }
 #endif
+
+#if !defined(_WIN32) && D2_BACKEND_POSIX
+// The POSIX process entry: WinMain's client path. Windows hands WinMain the command line as one
+// string, and PreInitApplication reads it as its last argument, so the arguments are joined.
+int main(int argc, char** argv) {
+    static char szCommandLine[0x400];
+    size_t nUsed = 0;
+    for (int nArg = 1; nArg < argc; nArg++) {
+      size_t nLen = strlen(argv[nArg]);
+      if (nUsed + nLen + 2 > sizeof(szCommandLine)) {
+        break;
+      }
+      if (nUsed) {
+        szCommandLine[nUsed++] = ' ';
+      }
+      memcpy(szCommandLine + nUsed, argv[nArg], nLen);
+      nUsed += nLen;
+    }
+    szCommandLine[nUsed] = '\0';
+    char* aszArgv[2] = {argv[0], szCommandLine};
+    Game::Main::PreInitApplication(2, aszArgv);
+    return 0;
+}
+#endif

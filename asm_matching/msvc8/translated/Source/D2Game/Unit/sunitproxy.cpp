@@ -58,7 +58,7 @@ static uint8_t gbaNpcItemTableBuilt[17] = {0}; D2_STATIC_GUARD(gbaNpcItemTableBu
 // 0x14 bytes back, stepping 0x11 slots (0x44 bytes) per NPC; on x64 the offsets are the native ones.
 #if D2_ARCH_X86
 #define D2_NPC_FROM_QUEUE_SLOT(p) ((D2GameNpcStrc*)((char*)p - 0x14))
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
 #define D2_NPC_FROM_QUEUE_SLOT(p) ((D2GameNpcStrc*)((char*)p - offsetof(D2GameNpcStrc, pProxyQueue)))
 #endif
 

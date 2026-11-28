@@ -405,29 +405,29 @@ typedef BOOL (__stdcall *pfnStackWalk64)(DWORD MachineType, HANDLE hProcess, HAN
 typedef BOOL (__stdcall *pfnSymCleanup)(HANDLE hProcess);
 typedef BOOL (__stdcall *pfnSymEnumerateModules64)(HANDLE hProcess, void * EnumModulesCallback, void * UserContext);
 typedef BOOL (__stdcall *pfnSymFindFileInPath)(HANDLE hProcess, char * SearchPath, char * FileName, void * id, DWORD two, DWORD three, DWORD flags, char * FoundFile, void * callback, void * context);
-#if !defined(_WIN64) // 32-bit stdcall passes each DWORD64 as two DWORDs, low then high
+#if !(defined(_WIN64) || defined(__LP64__)) // 32-bit stdcall passes each DWORD64 as two DWORDs, low then high
 typedef BOOL (__stdcall *pfnSymGetLineFromAddr64)(HANDLE hProcess, DWORD qwAddrLow, DWORD qwAddrHigh, DWORD * pdwDisplacement, void * pLine64);
 #else
 typedef BOOL (__stdcall *pfnSymGetLineFromAddr64)(HANDLE hProcess, DWORD64 qwAddr, DWORD * pdwDisplacement, void * pLine64);
 #endif
-#if !defined(_WIN64) // 32-bit stdcall passes each DWORD64 as two DWORDs, low then high
+#if !(defined(_WIN64) || defined(__LP64__)) // 32-bit stdcall passes each DWORD64 as two DWORDs, low then high
 typedef BOOL (__stdcall *pfnSymGetModuleInfo64)(HANDLE hProcess, DWORD qwAddrLow, DWORD qwAddrHigh, void * pModuleInfo);
 #else
 typedef BOOL (__stdcall *pfnSymGetModuleInfo64)(HANDLE hProcess, DWORD64 qwAddr, void * pModuleInfo);
 #endif
-#if !defined(_WIN64) // 32-bit stdcall passes each DWORD64 as two DWORDs, low then high
+#if !(defined(_WIN64) || defined(__LP64__)) // 32-bit stdcall passes each DWORD64 as two DWORDs, low then high
 typedef BOOL (__stdcall *pfnSymGetSymFromAddr64)(HANDLE hProcess, DWORD AddressLow, DWORD AddressHigh, void * pDisplacement, void * pSymbol);
 #else
 typedef BOOL (__stdcall *pfnSymGetSymFromAddr64)(HANDLE hProcess, DWORD64 Address, void * pDisplacement, void * pSymbol);
 #endif
 typedef BOOL (__stdcall *pfnSymInitialize)(HANDLE hProcess, char * UserSearchPath, BOOL fInvadeProcess);
 typedef BOOL (__stdcall *pfnSymSetSearchPath)(HANDLE hProcess, char * SearchPath);
-#if !defined(_WIN64) // 32-bit stdcall passes each DWORD64 as two DWORDs, low then high
+#if !(defined(_WIN64) || defined(__LP64__)) // 32-bit stdcall passes each DWORD64 as two DWORDs, low then high
 typedef BOOL (__stdcall *pfnSymUnloadModule)(HANDLE hProcess, DWORD BaseOfDll);
 #else
 typedef BOOL (__stdcall *pfnSymUnloadModule)(HANDLE hProcess, DWORD64 BaseOfDll);
 #endif
-#if !defined(_WIN64) // 32-bit stdcall passes each DWORD64 as two DWORDs, low then high
+#if !(defined(_WIN64) || defined(__LP64__)) // 32-bit stdcall passes each DWORD64 as two DWORDs, low then high
 typedef BOOL (__stdcall *pfnSymUnloadModule64)(HANDLE hProcess, DWORD BaseOfDllLow, DWORD BaseOfDllHigh);
 #else
 typedef BOOL (__stdcall *pfnSymUnloadModule64)(HANDLE hProcess, DWORD64 BaseOfDll);
@@ -497,12 +497,12 @@ typedef uint32_t (__fastcall *fnSendWriteUserData)(char * szAccount, uint32_t nC
 typedef uint32_t (__fastcall *fpCelDecodeCachedByFormat)(::CELLIST * pDCCSrc, DC6 * pDCCDest);
 typedef D2UnitStrc * (__fastcall *fpMonsterAiForEach)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOther, D2MonsterAiParameterStruct * test);
 typedef uint32_t (__fastcall *fpProperties)(uint32_t param_1, D2UnitStrc * param_2, D2UnitStrc * param_3, D2SetsTxtFStrc * param_4, uint32_t param_5, int param_6, uint32_t param_7, uint32_t param_8, int param_9, uint32_t param_10, D2UnitStrc * pContextUnit);
-#if !defined(_WIN64) // 32-bit stdcall passes each DWORD64 as two DWORDs, low then high
+#if !(defined(_WIN64) || defined(__LP64__)) // 32-bit stdcall passes each DWORD64 as two DWORDs, low then high
 typedef uint64_t (__stdcall *pfnSymGetModuleBase64)(HANDLE hProcess, DWORD qwAddrLow, DWORD qwAddrHigh);
 #else
 typedef uint64_t (__stdcall *pfnSymGetModuleBase64)(HANDLE hProcess, DWORD64 qwAddr);
 #endif
-#if !defined(_WIN64) // 32-bit stdcall passes each DWORD64 as two DWORDs, low then high
+#if !(defined(_WIN64) || defined(__LP64__)) // 32-bit stdcall passes each DWORD64 as two DWORDs, low then high
 typedef uint64_t (__stdcall *pfnSymLoadModule64)(HANDLE hProcess, HANDLE hFile, char * ImageName, char * ModuleName, DWORD BaseOfDllLow, DWORD BaseOfDllHigh, DWORD SizeOfDll);
 #else
 typedef uint64_t (__stdcall *pfnSymLoadModule64)(HANDLE hProcess, HANDLE hFile, char * ImageName, char * ModuleName, DWORD64 BaseOfDll, DWORD SizeOfDll);
@@ -596,7 +596,7 @@ typedef void * (__fastcall *fnSendLogonRealmEx)(char * szRealm, char * szPass);
 typedef void * (__stdcall *fnBnetLoadAndReturn)();
 typedef void * (__stdcall *fnGetChannelNamePtr)();
 typedef void * (__fastcall *fnSendQueryRealms2)(int);
-#if !defined(_WIN64) // 32-bit stdcall passes each DWORD64 as two DWORDs, low then high
+#if !(defined(_WIN64) || defined(__LP64__)) // 32-bit stdcall passes each DWORD64 as two DWORDs, low then high
 typedef void * (__stdcall *pfnSymFunctionTableAccess64)(HANDLE hProcess, DWORD AddrBaseLow, DWORD AddrBaseHigh);
 #else
 typedef void * (__stdcall *pfnSymFunctionTableAccess64)(HANDLE hProcess, DWORD64 AddrBase);

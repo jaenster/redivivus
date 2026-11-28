@@ -17,7 +17,7 @@
 // values, and a control HWND in WM_COMMAND's lParam is a 32-bit handle sign-extended, as on WOW64.
 #if D2_ARCH_X86
 static_assert(sizeof(D2GameRecordEntryStrc) == 0x10, "D2GameRecordEntryStrc: Record.dr1 is written from memory, so the entry must be the 16 bytes on disk");
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
 struct D2GameRecordFileEntryStrc {
     int32_t nGameIndex;
     uint32_t uMsg;
@@ -170,7 +170,7 @@ void __stdcall SaveGameRecordToFile() {
     do {
 #if D2_ARCH_X86
       /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ WriteFile(hFile, (LPCVOID)pBlock, pBlock->nEntrySize << 4, &dwBytesWritten, (LPOVERLAPPED)0x0);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
       RECORD_WriteBlock(hFile, pBlock, &dwBytesWritten);
 #endif
       pBlock = pBlock->pNext;
@@ -214,7 +214,7 @@ void __stdcall LoadGameRecordFromFile() {
 
 #if D2_ARCH_X86
         /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(hFile, gpCurrentGameRecord, gsGameRecordContext.nEntrySize << 4, &dwBytesRead, (LPOVERLAPPED)0x0);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
         RECORD_ReadBlock(hFile, gpCurrentGameRecord, gsGameRecordContext.nEntrySize, &dwBytesRead);
 #endif
       }

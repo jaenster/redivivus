@@ -6265,7 +6265,7 @@ int __fastcall MISSILESMODE_SrvDoFn35_RoyalStrikeChaosIce(::SGAMEDATA * pGame, D
       // Never taken (&pUnit->sSeed is not null). 1.14d returns the address in EAX here.
 #if D2_ARCH_X86
       return (int)(uint8_t*)((intptr_t)&pUnit->sSeed.nSeedLow + 2);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
       return 0;
 #endif
     }

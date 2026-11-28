@@ -187,7 +187,7 @@ void __fastcall SendAdjacentRoomUpdates(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
 
 #if D2_ARCH_X86
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, (D2RoomStrc***)&pGameSave, (int*)&nClient);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
     // nClient is pointer-sized but the count is written as an int; the slot holds the room list.
     nClient = 0;
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, (D2RoomStrc***)&pGameSave, (int*)&nClient);
@@ -200,7 +200,7 @@ void __fastcall SendAdjacentRoomUpdates(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
     do {
 #if D2_ARCH_X86
       SendRoomUnitUpdates(pGame, *(D2RoomStrc**)(pGameSave->szGameName + nRoomIdx * 4 - 0x2a), pRoomEnd);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
       SendRoomUnitUpdates(pGame, ((D2RoomStrc**)pGameSave)[nRoomIdx], pRoomEnd);
 #endif
       nRoomIdx++;

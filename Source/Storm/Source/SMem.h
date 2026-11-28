@@ -17,7 +17,7 @@
 #define D2_DEFINED_HSHEAP
 typedef uint32_t HSHEAP; // a Storm heap handle: the heap record's 32-bit hash (Storm.h)
 #endif // D2_DEFINED_HSHEAP
-#if defined(_WIN64) && !defined(D2_DEFINED_D2SMemLink)
+#if (defined(_WIN64) || defined(__LP64__)) && !defined(D2_DEFINED_D2SMemLink)
 #define D2_DEFINED_D2SMemLink
 // A free-list link of the Storm heap: the address of the next free block. The
 // block header holds it in 32 bits, beside the heap's 16-bit address tag. On
@@ -43,7 +43,7 @@ union D2FogHeapBlockLinkUnion {
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
 
     /* 0x00 */ uint32_t dwHeapSignature;
-#ifdef _WIN64
+#if defined(_WIN64) || defined(__LP64__)
     /* 0x00 */ D2SMemLink pNextFree;
 #else
     /* 0x00 */ struct D2FogHeapBlockHdrStrc * pNextFree;
@@ -67,7 +67,7 @@ struct D2FogHeapDescStrc {
     /* 0x2C */ uint32_t nCommitted; // committed bytes (VirtualAlloc MEM_COMMIT)
     /* 0x30 */ uint32_t nReserved; // reserved bytes (VirtualAlloc MEM_RESERVE)
     /* 0x34 */ int nLargeBytes; // total bytes in large (VirtualAlloc) allocations
-#ifdef _WIN64
+#if defined(_WIN64) || defined(__LP64__)
     /* 0x38 */ D2SMemLink aFreeBins[9];
 #else
     /* 0x38 */ void * aFreeBins[9];

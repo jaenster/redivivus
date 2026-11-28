@@ -18,7 +18,7 @@
 // record's 32-bit hash (SMemHeapCreate counts up from 0x80000000), not a pointer.
 typedef uint32_t HSHEAP;
 #endif // D2_DEFINED_HSHEAP
-#if defined(_WIN64) && !defined(D2_DEFINED_D2SMemLink)
+#if (defined(_WIN64) || defined(__LP64__)) && !defined(D2_DEFINED_D2SMemLink)
 #define D2_DEFINED_D2SMemLink
 // A free-list link of the Storm heap: the address of the next free block. The
 // block header holds it in 32 bits, beside the heap's 16-bit address tag. On
@@ -242,7 +242,7 @@ union D2FogHeapBlockLinkUnion {
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
 
     /* 0x00 */ uint32_t dwHeapSignature;
-#ifdef _WIN64
+#if defined(_WIN64) || defined(__LP64__)
     /* 0x00 */ D2SMemLink pNextFree;
 #else
     /* 0x00 */ struct D2FogHeapBlockHdrStrc * pNextFree;

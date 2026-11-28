@@ -123,7 +123,7 @@ BOOL __stdcall SPRITECACHE_AllocEntry(D2TileLibraryEntryStrc * pTile, uint32_t d
     D2GroundSubTileStrc* pCacheData = (D2GroundSubTileStrc*)ppCacheNode->pBuf;
     pTile->pSubTiles = pCacheData;
     memset(pCacheData, 0, pTile->nBlockDataSize);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
     uint32_t nCacheSize = Tilecmp::TILECMP_GetSubTileCacheSize(pTile);
     D2LRUCacheNodeStrc* ppCacheNode = LRUCache::LRUCACHE_GetOrAlloc(&gSpriteCacheLru, nCacheSize, pTile);
     pTile->pLruNode = ppCacheNode;
@@ -139,7 +139,7 @@ BOOL __stdcall SPRITECACHE_AllocEntry(D2TileLibraryEntryStrc * pTile, uint32_t d
     D2Hell::D2FILE_SeekFile(nullptr, (D2MPQFileStrc*)pTileSlot, pTile->dwBlockDataOffset, nullptr, 0);
 #if D2_ARCH_X86
     D2Hell::D2FILE_ReadFile(nullptr, (D2MPQFileStrc*)pTileSlot, pTile->pSubTiles, pTile->nBlockDataSize);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
     D2Hell::D2FILE_ReadFile(nullptr, (D2MPQFileStrc*)pTileSlot, Tilecmp::TILECMP_GetSubTileBlock(pTile), pTile->nBlockDataSize);
 #endif
     D2Hell::D2FILE_CloseFile(nullptr, (D2MPQFileStrc*)pTileSlot);
@@ -827,7 +827,7 @@ static DC6Block * __stdcall SPRITECACHE_FindFrameBlock(D2GfxDataStrc * pGfxData,
 
 #if D2_ARCH_X86
       nFrameOffset = nFrameOffset + 0x23 + pFrameBlock->nLength + pFrameBlock->nAllocSize;
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
       // Decoded frames carry the native block header (pointer-sized nNextBlock), then the RLE data and 3 bytes.
       nFrameOffset = nFrameOffset + (int)sizeof(DC6Block) + 3 + pFrameBlock->nLength + pFrameBlock->nAllocSize;
 #endif
@@ -1415,7 +1415,7 @@ uint32_t __stdcall SPRITECACHE_DecodeFrameByIndex(uint32_t * pReadBuffer, uint32
     return 1;
 }
 
-#if D2_ARCH_X64
+#if D2_ARCH_X64 || D2_ARCH_ARM64
 #define DC6_FILE_BLOCK_HEADER 0x20      // nFlip .. nLength of a frame block as stored in the file
 #define DC6_FILE_BLOCK_NLENGTH 0x1c     // int nLength in the file block header
 #define DC6_FILE_BLOCK_TERMINATOR 3     // bytes after each frame's RLE data
@@ -1586,7 +1586,7 @@ static void __stdcall SPRITECACHE_LoadCelFileAndCache(char * szCelPath, D2CelFil
         } else {
 #if D2_ARCH_X86
           pAsyncData = Fog::Src::AsyncData::STRUCT_AllocAsyncData_Line0x128(D2GfxMemoryStrc_0089db60.pMemory, szCelPath, 0, *pStartOffset, nReadSize, nullptr, nullptr, -2, ".\\SRC\\SpriteCache.cpp", 0x379);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
           D2SpriteDecodeRequestStrc tWidenRequest;
           memset(&tWidenRequest, 0, sizeof(tWidenRequest));
           tWidenRequest.pfnComplete = SPRITECACHE_WidenRawDC6Frames;
@@ -1699,7 +1699,7 @@ static uint32_t __stdcall SPRITECACHE_LoadFromArchive(D2GfxDataStrc * pGfxData, 
         hArchiveHandle = *pOffsetTable;
         nLine = 0x3e6;
         pDecodeRequest = 0;
-#if D2_ARCH_X64
+#if D2_ARCH_X64 || D2_ARCH_ARM64
         D2SpriteDecodeRequestStrc tWidenRequest;
         memset(&tWidenRequest, 0, sizeof(tWidenRequest));
         tWidenRequest.pfnComplete = SPRITECACHE_WidenRawDC6Frames;

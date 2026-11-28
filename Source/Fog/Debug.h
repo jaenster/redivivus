@@ -47,7 +47,7 @@ struct _EXCEPTION_RECORD {
 #endif // _WIN32
 
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
-#if !defined(_WIN64)
+#if !(defined(_WIN64) || defined(__LP64__))
 D2_PACKED_BEGIN struct __attribute__((packed)) ADDRESS {
     /* 0x00 */ DWORD Offset;
     /* 0x04 */ WORD Segment;
@@ -153,7 +153,7 @@ struct D2ImagehlpSymbol64BufStrc {
 
 #endif // D2_MODULE_Fog
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
-#if !defined(_WIN64)
+#if !(defined(_WIN64) || defined(__LP64__))
 struct D2ImagehlpSymbolBufStrc {
     /* 0x00 */ DWORD SizeOfStruct;
     /* 0x04 */ DWORD Address;
@@ -206,7 +206,7 @@ D2_PACKED_BEGIN struct __attribute__((packed)) FPO_DATA_WORD {
 
 #endif // D2_MODULE_Fog
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
-#if !defined(_WIN64)
+#if !(defined(_WIN64) || defined(__LP64__))
 D2_PACKED_BEGIN struct __attribute__((packed)) IMAGEHLP_LINE64 {
     /* 0x00 */ DWORD SizeOfStruct;
     /* 0x04 */ void * Key;
@@ -227,7 +227,7 @@ struct IMAGEHLP_LINE64 {
 
 #endif // D2_MODULE_Fog
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
-#if !defined(_WIN64)
+#if !(defined(_WIN64) || defined(__LP64__))
 struct IMAGEHLP_MODULE {
     /* 0x000 */ DWORD SizeOfStruct;
     /* 0x004 */ DWORD BaseOfImage;
@@ -288,7 +288,7 @@ D2_PACKED_BEGIN struct __attribute__((packed)) IMAGEHLP_MODULE64 {
 
 #endif // D2_MODULE_Fog
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
-#if !defined(_WIN64)
+#if !(defined(_WIN64) || defined(__LP64__))
 struct KDHELP {
     /* 0x00 */ DWORD Thread;
     /* 0x04 */ DWORD ThCallbackStack;
@@ -328,7 +328,7 @@ struct KDHELP {
 
 #endif // D2_MODULE_Fog
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
-#if defined(_WIN64)
+#if (defined(_WIN64) || defined(__LP64__))
 #pragma pack(push, 4) // dbghelp.h packs MINIDUMP_EXCEPTION_INFORMATION to 4 on every target
 #endif
 struct MINIDUMP_EXCEPTION_INFORMATION {
@@ -336,7 +336,7 @@ struct MINIDUMP_EXCEPTION_INFORMATION {
     /* 0x04 */ struct _EXCEPTION_POINTERS * ExceptionPointers;
     /* 0x08 */ BOOL ClientPointers;
 };
-#if defined(_WIN64)
+#if (defined(_WIN64) || defined(__LP64__))
 #pragma pack(pop)
 #endif
 
@@ -395,7 +395,7 @@ D2_PACKED_BEGIN struct __attribute__((packed)) D2FogDebugModuleTableStrc {
 
 #endif // D2_MODULE_Fog
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
-#if !defined(_WIN64)
+#if !(defined(_WIN64) || defined(__LP64__))
 D2_PACKED_BEGIN struct __attribute__((packed)) STACKFRAME {
     /* 0x00 */ ADDRESS AddrPC;
     /* 0x0C */ ADDRESS AddrReturn;

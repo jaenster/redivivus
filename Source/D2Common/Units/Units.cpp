@@ -1981,7 +1981,7 @@ void __stdcall FreePlayerData(D2PoolManagerStrc * pMemory, D2UnitStrc * pUnit) {
 #if D2_ARCH_X86
         QuestRecord::FreeQuestRecordPool(pMemory, *(D2BitBufferStrc**)(pUnit->pUnitData.pUnitDataPlayer->szCharName + iActIdx - 0xc));
         Waypoints::Free(pMemory, *(D2WaypointStrc**)(pUnit->pUnitData.pUnitDataPlayer->szCharName + iActIdx));
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
         QuestRecord::FreeQuestRecordPool(pMemory, pUnit->pUnitData.pUnitDataPlayer->pQuestRecord[(iActIdx - 0x1c) / 4]);
         Waypoints::Free(pMemory, pUnit->pUnitData.pUnitDataPlayer->pWaypoint[(iActIdx - 0x1c) / 4]);
 #endif

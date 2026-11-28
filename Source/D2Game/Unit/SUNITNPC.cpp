@@ -3164,7 +3164,7 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
         D2ClientStrc* pClient;
         uint32_t dwPacketHead;
       };
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
       D2ClientStrc* pClient;
       uint32_t dwPacketHead; // the packet head gets its own slot: pClient no longer fits the 4 bytes before byGuidHigh
 #endif

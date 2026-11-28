@@ -38,7 +38,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2TileLibraryHeaderStrc) == 0x114, 
 #if D2_ARCH_X86
 static_assert(sizeof(::D2TileLibraryEntryStrc) == 0x60, "D2TileLibraryEntryStrc: DT1 tile records are relocated in place, so the record must be the 0x60 bytes on disk");
 static_assert(sizeof(::D2GroundSubTileStrc) == 0x14, "D2GroundSubTileStrc: DT1 subtile records are relocated in place, so the record must be the 0x14 bytes on disk");
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
 #define DT1_HEADER_SIZE 0x114          // file header, up to and including the pTiles file offset
 #define DT1_HEADER_NTILES 0x10c        // int nTiles
 #define DT1_HEADER_TILES_OFFSET 0x110  // int file offset of the first tile record
@@ -800,7 +800,7 @@ void __stdcall TILECMP_FixupPointersInPlace(D2TileLibraryHeaderStrc * pTileCmpHd
         return;
       }
 
-#if D2_ARCH_X64
+#if D2_ARCH_X64 || D2_ARCH_ARM64
       // The whole-image form keeps every subtile block inline behind 32-bit records; only the
       // minimal form (TILECMP_FixupMinimalPointers, used by TileProjects::Alloc) is widened.
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), __LINE__);
@@ -852,7 +852,7 @@ void __stdcall TILECMP_FixupPointersInPlace(D2TileLibraryHeaderStrc * pTileCmpHd
     }
 }
 
-#if D2_ARCH_X64
+#if D2_ARCH_X64 || D2_ARCH_ARM64
 // Copies the 32-bit DT1 header and tile records of the file image pDt1 into one native allocation
 // (header, then the tile array, so TILECMP_FreeTileCache frees it as a single block once flag 4 is
 // set) and frees the image. The tile pointer slots start 0, as they are on disk.
@@ -899,7 +899,7 @@ void __stdcall TILECMP_FixupMinimalPointers(D2TileLibraryHeaderStrc * pTileCmpHd
 #if D2_ARCH_X86
     pTileCmpHdr->pTiles = reinterpret_cast<D2TileLibraryEntryStrc*>(
         reinterpret_cast<uintptr_t>(pTileCmpHdr) + reinterpret_cast<uintptr_t>(pTileCmpHdr->pTiles));
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
     pTileCmpHdr = TILECMP_WidenTileLibrary(pTileCmpHdr);
 #endif
     char *pFilename = pTileCmpHdr->szLibraryName;
@@ -969,7 +969,7 @@ void __stdcall TILECMP_RelocateSubTilePixelData(D2TileLibraryEntryStrc * pTile) 
       D2GroundSubTileStrc* pSubTile = &pTile->pSubTiles[iSubTile];
       pSubTile->pPixelData = (uint8_t*)pSubTileBase + (intptr_t)pSubTile->pPixelData;
     }
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
     // SPRITECACHE_AllocEntry reads the 32-bit block in behind room for the native records.
     const uint8_t* pBlock = (const uint8_t*)TILECMP_GetSubTileBlock(pTile);
     for (int iSubTile = 0; iSubTile < pTile->nSubTiles; iSubTile++) {
@@ -981,7 +981,7 @@ void __stdcall TILECMP_RelocateSubTilePixelData(D2TileLibraryEntryStrc * pTile) 
 #endif
 }
 
-#if D2_ARCH_X64
+#if D2_ARCH_X64 || D2_ARCH_ARM64
 // Bytes the sprite cache holds for a tile: the native subtile records, then the tile's 32-bit block.
 uint32_t __stdcall TILECMP_GetSubTileCacheSize(D2TileLibraryEntryStrc * pTile) {
     return (uint32_t)((size_t)pTile->nSubTiles * sizeof(D2GroundSubTileStrc)) + (uint32_t)pTile->nBlockDataSize;

@@ -83,7 +83,15 @@ void OGL_DrawString(int nX, int nY, char * szFormat, char * va) {
     char local_214[512];
     uint8_t* puVar1 = (uint8_t*)PTR____stack_chk_guard_003961fc;
     int local_14 = *(int*)PTR____stack_chk_guard_003961fc;
+#if !defined(_WIN32) && defined(__x86_64__)
+    // The SysV x86-64 va_list is an array of one record, and the char * the caller passes
+    // (D2gfxRenderer.cpp DrawString) is that record's address: copy the record back.
+    va_list vaArgs;
+    memcpy(vaArgs, va, sizeof(va_list));
+    vsprintf(local_214, szFormat, vaArgs);
+#else
     vsprintf(local_214, szFormat, va);
+#endif
     __bzero(local_614, 0x400);
     D2Lang::UTF8_ConvertToWideChar((uint16_t*)local_614, local_214, 0x200);
     int32_t nFontId = D2Win::Src::D2WinFont::SetAndReturnLastFont(0xd);

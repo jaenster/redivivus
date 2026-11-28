@@ -33,6 +33,9 @@
 // defined in D2GFXMacForward.cpp, in the global namespace
 void FUN_002b6035(void);
 #endif
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
+// The modern Mac renders through D2OpenGL, as the 1.14d Intel Mac does.
+#include "Source/D2OpenGL/Src/D2gfxRenderer.h"
 #else
 #error "D2GFX.cpp: unsupported Mac architecture"
 #endif
@@ -325,6 +328,9 @@ BOOL __stdcall D2GFX_Initialize(HINSTANCE hInstance, WNDPROC pfWndProc, eD2Rende
     static D2RendererFunctionsStrc * RENDERER_RenderedFunctionsSelector[8] = { nullptr, nullptr, &UniFunctionTable, nullptr, nullptr /* PPC Glide renderer */, nullptr /* PPC OpenGL renderer */, nullptr, &D2Rave::Renderer::RaveFunctionTable }; D2_STATIC_GUARD(RENDERER_RenderedFunctionsSelector, "D2gfx::D2GFX::D2GFX_Initialize::RENDERER_RenderedFunctionsSelector");
 #elif D2_ARCH_X86
     // Mac 1.14d (002b4975, selector 003c817c): OpenGL at 5 is the only row.
+    static D2RendererFunctionsStrc * RENDERER_RenderedFunctionsSelector[7] = { nullptr, nullptr, nullptr, nullptr, nullptr, &D2OpenGL::Renderer::OpenGLFunctionTable, nullptr }; D2_STATIC_GUARD(RENDERER_RenderedFunctionsSelector, "D2gfx::D2GFX::D2GFX_Initialize::RENDERER_RenderedFunctionsSelector");
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
+    // The modern Mac: OpenGL at 5 is the only row, as on the 1.14d Intel Mac.
     static D2RendererFunctionsStrc * RENDERER_RenderedFunctionsSelector[7] = { nullptr, nullptr, nullptr, nullptr, nullptr, &D2OpenGL::Renderer::OpenGLFunctionTable, nullptr }; D2_STATIC_GUARD(RENDERER_RenderedFunctionsSelector, "D2gfx::D2GFX::D2GFX_Initialize::RENDERER_RenderedFunctionsSelector");
 #else
 #error "D2GFX.cpp: no video driver rows for this Mac architecture"
@@ -1066,6 +1072,14 @@ void D2GFX_ResetViewport() {
     } while ((intptr_t)pWindowPlacement < (intptr_t)((char*)&gaD2GFXWindowPlacements + sizeof(gaD2GFXWindowPlacements)));
 }
 
+#endif
+#if !defined(_WIN32) && D2_BACKEND_POSIX
+// No taskbar or app bars off Windows: nothing to hide, nothing to restore.
+void __stdcall DRAW_HideTaskbarAppBars() {
+}
+
+void D2GFX_ResetViewport() {
+}
 #endif
 #if !D2_MAC_CARBON
 void __stdcall D2GFX_EndCutScene() {

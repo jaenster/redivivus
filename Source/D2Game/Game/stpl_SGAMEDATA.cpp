@@ -89,7 +89,7 @@ template<> void TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, C
 template<> ::SGAMEDATA * TSExplicitList<SGAMEDATA, -572662307>::DeleteNode(::SGAMEDATA * pNode) {
 #if D2_ARCH_X86
     TSLink<::SGAMEDATA>* pSlotPtr = pNode ? (TSLink<::SGAMEDATA>*)(pNode->szGameName + (this->m_linkoffset - 0x2a)) : &this->m_terminator; // steer-ok: the other store is in the other D2_ARCH arm
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
     TSLink<::SGAMEDATA>* pSlotPtr = pNode ? (TSLink<::SGAMEDATA>*)((char*)pNode + this->m_linkoffset) : &this->m_terminator;
 #endif
     ::SGAMEDATA* pNext = (::SGAMEDATA*)(pSlotPtr->m_next <= 0 ? 0 : pSlotPtr->m_next);
@@ -112,7 +112,7 @@ template<> __attribute__((noinline)) inline ::SGAMEDATA * TSHashTable<SGAMEDATA,
 
 #if D2_ARCH_X86
       pGame = *(::SGAMEDATA**)(pGame->szGameName + this->tSlotListArray.m_data[dwHashVal & this->nSlotMask].m_linkoffset - 0x26);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
       pGame = (::SGAMEDATA*)((TSLink<::SGAMEDATA>*)((char*)pGame + this->tSlotListArray.m_data[dwHashVal & this->nSlotMask].m_linkoffset))->m_next;
 #endif
     }
@@ -335,7 +335,7 @@ template<> __attribute__((noinline)) inline ::SGAMEDATA * TSHashTable<SGAMEDATA,
     if (pGame) {
 #if D2_ARCH_X86
       ppActiveListLink = (TSLink<::SGAMEDATA>*)(pGame->szGameName + (this->tFullList.m_linkoffset - 0x2a)); // steer-ok: the other store is in the other D2_ARCH arm
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
       ppActiveListLink = (TSLink<::SGAMEDATA>*)((char*)pGame + this->tFullList.m_linkoffset);
 #endif
     } else {

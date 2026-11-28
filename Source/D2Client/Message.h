@@ -32,7 +32,7 @@ typedef uint32_t (__stdcall *fpGameLoopFunction)(uint32_t param_1);
 
 typedef struct HACCEL__ * HACCEL;
 
-#if !D2_MAC_CARBON  // d2_platform.h carries the Mac's
+#if !(D2_MAC_CARBON || D2_BACKEND_POSIX)  // the Win32 layer carries it: Win32Mac or Win32Posix
 struct tagMSG {
     /* 0x00 */ HWND hwnd;
     /* 0x04 */ UINT message;

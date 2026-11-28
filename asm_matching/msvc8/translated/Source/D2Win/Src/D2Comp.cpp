@@ -2830,7 +2830,7 @@ void __fastcall D2COMP_UnlinkCompositeUnit(D2CharSelStrc * pCharSel) {
 #if D2_ARCH_X86
     D2CharSelCompStrc* nNext = *(D2CharSelCompStrc**)(pCharSel->szCharname + 200); // steer-ok: the other store is in the other D2_ARCH arm
     D2CharSelCompStrc* nPrev = *(D2CharSelCompStrc**)(pCharSel->szCharname + 0xc4); // steer-ok: the other store is in the other D2_ARCH arm
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
     // pCharSel is the composite unit (D2CharSelCompStrc); the x86 body reads its links at +0xc8/+0xc4.
     D2CharSelCompStrc* nNext = ((D2CharSelCompStrc*)pCharSel)->pPrev;
     D2CharSelCompStrc* nPrev = ((D2CharSelCompStrc*)pCharSel)->pNext;
@@ -3146,7 +3146,7 @@ int32_t __stdcall D2COMP_IsItemTypeDescendant(int32_t nItemType, int32_t nAncest
       }
 
       nQueueCount = nQueueTail - 1;
-#if D2_ARCH_X64
+#if D2_ARCH_X64 || D2_ARCH_ARM64
       // The 1.14d itemtypes/weapons/armor/misc .bin records are 0xec/0x250 bytes, read here with the
       // older 0xe4/0x1a8 strides, so the item types are misread and can index far outside the table.
       // The 32-bit build reads that out-of-range memory unnoticed; on x64 it is unmapped, so such an

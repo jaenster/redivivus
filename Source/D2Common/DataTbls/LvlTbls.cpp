@@ -20,7 +20,7 @@
 // lvlsub.bin records are the 32-bit 0x15c-byte layout; pDrlgFile and the grids are runtime-only.
 #if D2_ARCH_X86
 static_assert(sizeof(D2LvlSubTxt) == 0x15c, "D2LvlSubTxt: lvlsub.bin is loaded in place, so the record must be the 0x15c bytes on disk");
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
 static_assert(offsetof(D2LvlSubTxt, pDrlgFile) == 0x50, "D2LvlSubTxt: the data fields before pDrlgFile keep their on-disk offsets");
 #endif
 
@@ -846,7 +846,7 @@ void __fastcall TXT_AllocTxt_lvlsub(D2PoolManagerStrc * pMemory, int32_t nParam,
     };
     int nMaxTypeId = 0;
     sgpTxtLvlSub = (D2LvlSubTxt*)DataTbls::CompileTxt(pMemory, "lvlsub", lvlsub, &nTxtLvlSubSize, 0x15c);
-#if D2_ARCH_X64
+#if D2_ARCH_X64 || D2_ARCH_ARM64
     {
       static const DataTbls::D2BinRecordSpanStrc aLvlSubSpans[] = {
         {0, 0, 0x50},

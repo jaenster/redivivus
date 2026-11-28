@@ -452,7 +452,7 @@ static void __stdcall GFX_LoadAndHashCofArchive(char * szPath, D2CofCacheStrc * 
       pRecordCursor += *puVar1;
     }
 
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
     // The archive is a run of records with a 0x18-byte header (pNext, dwFlags, nFileSize, szName[8],
     // pFileData) followed by nFileSize bytes of COF data, used in place on x86. The x64 header holds
     // two pointers, so the records are copied into native ones and the file image is freed.

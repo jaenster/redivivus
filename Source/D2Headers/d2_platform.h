@@ -63,13 +63,14 @@ extern "C" void* _AddressOfReturnAddress(void);
 
 #include <cstdint>
 #include <cstddef>
-// The Mac keeps its own C library's FILE (struct __sFILE) and has no errno_t.
-#if !defined(_WIN32) && D2_OS_MAC
+// Off Windows the C library keeps its own FILE (the Mac's struct __sFILE, glibc's _IO_FILE)
+// and has no errno_t.
+#if !defined(_WIN32)
 #  ifndef _FILE_DEFINED
 #    define _FILE_DEFINED 1
 #  endif
 typedef int errno_t;
-typedef long __time32_t;  // the Mac's time_t
+typedef long __time32_t;  // the C library's time_t
 #endif
 // MSVC CRT stream layout (what Ghidra models and what D2 indexes into).
 // Claimed before <cstdio> so a UCRT toolchain cannot substitute its opaque
@@ -320,6 +321,11 @@ static inline int WideCharToMultiByte(UINT cp, DWORD flags, const uint16_t* src,
 #ifndef _countof
 #  define _countof(a) (sizeof(a) / sizeof((a)[0]))
 #endif
+#if D2_BACKEND_POSIX
+// Win32Posix owns the Win32 types and entry points, as windows.h does on Windows; the
+// stand-ins below are for a build with neither layer.
+#  include "Source/StormMac/Win32Posix/Win32Posix.h"
+#else
 
 // Scalar types
 typedef int BOOL;
@@ -536,6 +542,7 @@ HWND CreateWindowExA(DWORD dwExStyle, LPCSTR lpClassName, LPCSTR lpWindowName, D
 BOOL GetClientRect(HWND hWnd, LPRECT lpRect);
 HDC GetDC(HWND hWnd);
 int ReleaseDC(HWND hWnd, HDC hDC);
+#endif  // D2_BACKEND_POSIX
 
 #endif // _WIN32
 #if !defined(_WIN32) && D2_MAC_CARBON
@@ -671,7 +678,7 @@ template <class T, class U> static inline bool D2_AtomicCompareExchange(T* p, T*
 #if defined(_MSC_VER)
 extern "C" unsigned short __cdecl _rotl16(unsigned short value, unsigned char shift);
 #pragma intrinsic(_rotl16)
-#elif !defined(__INTRINSIC_DEFINED__rotl16) && !defined(__x86_64)
+#elif !defined(__INTRINSIC_DEFINED__rotl16) && (!defined(__x86_64) || !defined(_WIN32))
 // On x86-64 mingw's winnt.h declares _rotl16 extern "C"; the definition is
 // Redivivus/x64/d2_crt_x64.cpp.
 static inline unsigned short _rotl16(unsigned short value, unsigned char shift) {
@@ -820,19 +827,21 @@ static inline uint64_t __aullrem(uint32_t lo1, uint32_t hi1, uint32_t lo2, uint3
 static inline uint64_t _aullshr(uint64_t a, unsigned int n) { return a >> n; }
 
 #ifndef _WIN32
-#if !D2_MAC_CARBON
+#if !(D2_MAC_CARBON || D2_BACKEND_POSIX)  // Win32Mac.h or Win32PosixKernel.h on the Mac
 static inline LONG InterlockedIncrement(volatile LONG* p) { return ++(*p); }
 static inline LONG InterlockedDecrement(volatile LONG* p) { return --(*p); }
 static inline LONG InterlockedExchange(volatile LONG* p, LONG v) { LONG old = *p; *p = v; return old; }
 static inline LONG InterlockedCompareExchange(volatile LONG* p, LONG exchange, LONG comparand) { LONG old = *p; if (*p == comparand) *p = exchange; return old; }
 #endif
 // Overloads for int32_t* (Ghidra decompiler uses int32_t instead of LONG; the Mac's LONG is int32_t)
-#if !D2_MAC_CARBON
+#if !(D2_MAC_CARBON || D2_BACKEND_POSIX)  // Win32Posix's LONG is int32_t
 static inline int32_t InterlockedIncrement(volatile int32_t* p) { return ++(*p); }
 static inline int32_t InterlockedDecrement(volatile int32_t* p) { return --(*p); }
 #endif
+#if !D2_BACKEND_POSIX  // Win32PosixKernel.h
 HANDLE CreateEventW(LPSECURITY_ATTRIBUTES lpEventAttributes, BOOL bManualReset, BOOL bInitialState, LPCWSTR lpName);
-#if !D2_MAC_CARBON
+#endif
+#if !(D2_MAC_CARBON || D2_BACKEND_POSIX)  // Win32Mac or Win32Posix
 DWORD WaitForMultipleObjects(DWORD nCount, const HANDLE* lpHandles, BOOL bWaitAll, DWORD dwMilliseconds);
 LRESULT SendMessageA(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 #endif
@@ -1100,9 +1109,6 @@ namespace _Wrappers {
 // The Win32-on-Mac layer's entry points, under the names the shared code calls.
 #  include "Source/StormMac/Win32Mac/Source/Win32/Win32MacKernel.h"
 #  include "Source/StormMac/Win32Mac/Source/Win32/Win32MacDirectSound.h"
-#endif
-#if !defined(_WIN32) && D2_BACKEND_POSIX
-#  include "Source/StormMac/Win32Posix/Win32Posix.h"
 #endif
 
 // Array rows held by pointer (Ghidra `T[N] *` return and global types)

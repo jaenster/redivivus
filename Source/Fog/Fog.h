@@ -93,7 +93,7 @@ typedef int32_t (__fastcall *fpD2QServerSourceLineHook)(struct D2QServerStrc * p
 #define D2_DEFINED_D2AsyncDataCallbackStrc
 D2_PACKED_BEGIN struct __attribute__((packed)) D2AsyncDataCallbackStrc {
     /* 0x00 */ uint32_t (__stdcall *pfnCallback)(void *, uint32_t, struct D2AsyncDataCallbackStrc *); // called with (pReadBuffer, nReadSize, &tCallback) when the read completes
-#if defined(_WIN64)
+#if (defined(_WIN64) || defined(__LP64__))
     /* 0x08 */ uint32_t aUserData[6]; // the D2CMP request keeps two pointers and two ints here (D2SpriteDecodeRequestStrc)
 #else
     /* 0x04 */ uint32_t aUserData[4];

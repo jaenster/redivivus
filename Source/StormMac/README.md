@@ -20,7 +20,7 @@ calls; `asm_matching/mac/coverage/macro-split.tsv` lists each one with its class
 |-|-|-|
 |`D2_OS_MAC`|macOS behaviour any Mac build wants: paths and folders, prefs, the Cmd key, the bundle, Mac defaults|both Mac builds|
 |`D2_MAC_CARBON`|Blizzard's Carbon-era layer: Carbon, QuickDraw, FSSpec/MoreFiles, AGL, the Sound Manager, Gestalt, StormMac, Win32Mac, MacShell. The 1.14d build only|`cmake/mac.cmake` (`D2_MAC_CARBON=1`)|
-|`D2_BACKEND_POSIX`|the Win32Posix layer (a modern Mac build, later Linux)|nothing yet|
+|`D2_BACKEND_POSIX`|the Win32Posix layer (a modern Mac build, later Linux)|`cmake/mac-modern.cmake` (`D2_BACKEND_POSIX=1`)|
 
 Both new macros default to 0 off Windows (`d2_platform.h`). On Windows none of the three is defined.
 
@@ -30,9 +30,16 @@ Both new macros default to 0 off Windows (`d2_platform.h`). On Windows none of t
   MacSpecific, D2Rave/D2Uni (with `D2_ARCH_PPC`), and the 1.14d Mac struct layouts that
   follow Win32Mac's types.
 - The Win32 stand-ins in `d2_platform.h` (the scalar and handle types, the core declarations)
-  are guarded `!D2_MAC_CARBON`: Win32Mac.h replaces them on the 1.14d build, and Win32Posix
-  builds on them. The module headers' own stand-ins (`d2_enums.h`, `Fog/Debug.h`,
-  `Safesock.h` ...) are guarded `!(D2_MAC_CARBON || D2_BACKEND_POSIX)`: a Win32 layer owns those.
+  are guarded `!D2_MAC_CARBON`, and skipped whole under `D2_BACKEND_POSIX`: Win32Mac.h replaces
+  them on the 1.14d build, Win32Posix.h on the modern one. Win32Posix owns every Win32 type
+  there, as windows.h does: fixed-width scalars (DWORD and LONG are 32 bits on LP64) and the
+  SDK's record layouts, each checked against its Windows size at the target's pointer width.
+  The module headers' own stand-ins (`d2_enums.h`, `Fog/Debug.h`, `Safesock.h` ...) are guarded
+  `!(D2_MAC_CARBON || D2_BACKEND_POSIX)`: a Win32 layer owns those. A generated
+  `#ifndef _WIN32` stand-in that Win32Posix also defines sits in `#if !D2_BACKEND_POSIX`.
+- The architectures: `D2_ARCH_ARM64` takes the x86-64 branch wherever that branch is about
+  pointer width, and shared headers, which cannot read `D2Arch.h`, test
+  `defined(_WIN64) || defined(__LP64__)` for the 64-bit layout.
 - Windows-only machinery that no other build has (SEH, crash dumps, ToolHelp and the PE image,
   Warden, the registry, the shell folders, WinMain) is guarded `#if defined(_WIN32)`. Its
   portable replacement is guarded `#if !defined(_WIN32)`. Where that replacement still needs a

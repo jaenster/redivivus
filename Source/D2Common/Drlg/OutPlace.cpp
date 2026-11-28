@@ -1512,7 +1512,7 @@ static void __stdcall DRLGLEVEL_ParseLevelData(D2DrlgLevelDataList * pLevelData,
           nNodeOffset--;
 #if D2_ARCH_X86
           peLevelIdEntry += -4;
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
           // The x86 body steps one 16-byte D2DrlgLevelDataEntry as 4 ints; the entry holds a function pointer on x64.
           peLevelIdEntry = (eD2LevelId*)((char*)peLevelIdEntry - sizeof(D2DrlgLevelDataEntry));
 #endif
@@ -1521,7 +1521,7 @@ static void __stdcall DRLGLEVEL_ParseLevelData(D2DrlgLevelDataList * pLevelData,
           nNodeOffset++;
 #if D2_ARCH_X86
           peLevelIdEntry += 4;
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
           peLevelIdEntry = (eD2LevelId*)((char*)peLevelIdEntry + sizeof(D2DrlgLevelDataEntry));
 #endif
         }

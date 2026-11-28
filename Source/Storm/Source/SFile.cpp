@@ -3724,7 +3724,7 @@ int __stdcall SFILE_EnumFilesInternal(D2ArchiveStrc * pArchive, char * szText, v
         if (*(int*)(pInsertPos + 0x23) <= (intptr_t)pArchiveRecord->pMpqFileRecord) {
           break;
         }
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
         // The x86 body reads the archive priority at +0x118 as 0x23 links; the record's slot is wider on x64.
         if (*(int*)&((D2ArchiveStrc*)pInsertPos)->pMpqFileRecord <= (intptr_t)pArchiveRecord->pMpqFileRecord) {
           break;
@@ -5623,7 +5623,7 @@ int __fastcall SFILE_s_OpenArchive(D2ArchiveStrc * ppArchive, uint32_t nFlags, i
         if (*(int*)(pScanPos + 0x23) <= (intptr_t)pListNode->pMpqFileRecord) {
           break;
         }
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
         // The x86 body reads the archive priority at +0x118 as 0x23 links; the record's slot is wider on x64.
         if (*(int*)&((D2ArchiveStrc*)pScanPos)->pMpqFileRecord <= (intptr_t)pListNode->pMpqFileRecord) {
           break;

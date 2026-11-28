@@ -18,7 +18,7 @@
 // sets.bin records are the 32-bit 0x128-byte layout; pTxtSetItems is filled at load from setitems.
 #if D2_ARCH_X86
 static_assert(sizeof(D2SetsTxt) == 0x128, "D2SetsTxt: sets.bin is loaded in place, so the record must be the 0x128 bytes on disk");
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
 static_assert(offsetof(D2SetsTxt, pTxtSetItems) == 0x110, "D2SetsTxt: the data fields before pTxtSetItems keep their on-disk offsets");
 #endif
 
@@ -844,7 +844,7 @@ void __fastcall TXT_AllocTxt_setitems(D2PoolManagerStrc * pMemory) {
     D2PoolManagerStrc* pPoolManager = pMemory;
     MonsterTbls::sgtDataTable.pTxtSetsLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\ItemTbls.cpp", 0x3f2);
     MonsterTbls::sgtDataTable.pTxtSets = (D2SetsTxt*)DataTbls::CompileTxt(pPoolManager, "sets", sets, &MonsterTbls::sgtDataTable.nTxtSetsSize, 0x128);
-#if D2_ARCH_X64
+#if D2_ARCH_X64 || D2_ARCH_ARM64
     {
       static const DataTbls::D2BinRecordSpanStrc aSetsSpans[] = {
         {0, 0, 0x110}

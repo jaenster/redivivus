@@ -80,8 +80,13 @@ foreach(_arch IN LISTS CMAKE_OSX_ARCHITECTURES)
 endforeach()
 # -g and no -O, as the Windows build (link.sh); -fwrapv for the same reason (CMakeLists.txt).
 # d2_platform.h is forced ahead of every unit, as in every other build.
+# Warnings stay on (no -w): this is the build where 64-bit narrowing shows, so
+# -Wshorten-64-to-32 is added. Off by name, as noise on this target only: the Windows calling
+# conventions the tree spells (no meaning on arm64 or x86-64), string literals held as char *
+# (the decompile's spelling), and the SDK's deprecation notes (sprintf, the GL calls).
 target_compile_options(d2_modern_objs PRIVATE
     ${_d2_arch_flags}
-    -g -w -fwrapv -fpascal-strings
+    -g -fwrapv -fpascal-strings
+    -Wshorten-64-to-32 -Wno-ignored-attributes -Wno-writable-strings -Wno-deprecated-declarations
     "SHELL:-include ${CMAKE_SOURCE_DIR}/Source/D2Headers/d2_platform.h"
     -Werror=implicit-function-declaration -ferror-limit=0)

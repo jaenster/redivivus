@@ -75,7 +75,7 @@ void __thiscall GFXHASH_UnlinkCacheEntry(D2GfxHashTableStrc * pHashTable, D2Pool
             nFrameIdx++;
           } while (nFrameIdx < (uint32_t)pCacheBlock->tDecode.nFramesPerDir * (uint32_t)pCacheBlock->tDecode.nDirCount);
         }
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
         if ((uint32_t)((uint32_t)pCacheBlock->tDecode.nFramesPerDir * (uint32_t)pCacheBlock->tDecode.nDirCount) > 0) {
           // The decoded frames carry the native x64 block header (DC6Block): the renderer record at +0x18
           // is pointer-sized, nLength follows at +0x20 and the RLE data at +0x24.

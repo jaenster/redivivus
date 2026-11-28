@@ -81,10 +81,12 @@ struct D2WinAnimImageNotifyStrc {
 #endif // D2_DEFINED_D2WinAnimImageNotifyStrc
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
 
+#if !D2_BACKEND_POSIX  // Win32Posix.h
 struct tagPOINT {
     /* 0x00 */ LONG x;
     /* 0x04 */ LONG y;
 };
+#endif
 
 #endif // _WIN32
 

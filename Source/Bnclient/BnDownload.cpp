@@ -309,7 +309,7 @@ void __fastcall BNDOWNLOAD_ExtractFileFromArchive(char * szFileName, D2ArchiveSt
     Storm::Source::SFile::SFileCloseFile(pMpqFile);
 }
 
-#if defined(_WIN32)
+#if defined(_WIN32) || !D2_MAC_CARBON
 static BOOL BNDOWNLOAD_LaunchVerifiedExecutables(LPCSTR szText1, LPCSTR szText2) {
     while (*szText2) {
       if (!D2Hell::D2FILE_VerifyFileSignature(szText2)) {

@@ -18,7 +18,9 @@
 struct D2SoundSmpStrc;
 struct IDirectSoundBuffer;
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
+#if !D2_BACKEND_POSIX  // Win32Posix.h
 struct WAVEFORMATEX;
+#endif
 #endif // _WIN32
 #ifndef RECON_FPTD_DS_CreateSoundBuffer
 #define RECON_FPTD_DS_CreateSoundBuffer

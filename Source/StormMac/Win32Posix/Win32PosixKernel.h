@@ -1,29 +1,67 @@
 // Win32Posix: the kernel entry points (files, time, threads, modules, locale, the registry,
 // strings and the CRT's Microsoft extras) the shared game code calls, as the SDK declares them.
-// Read through Win32Posix.h, after d2_platform.h's stand-ins (which declare the few it already
-// has: GetTickCount, Sleep, the critical sections, CreateThread, ReadFile, CreateFileA ...).
+// Read through Win32Posix.h. d2_platform.h still declares the file calls it gives every
+// non-Windows build (ReadFile, CreateFileA, SetFilePointer ...) over these types.
 #pragma once
 
 #if !defined(_WIN32) && D2_BACKEND_POSIX
-
-typedef BOOL* LPBOOL;
-typedef long LSTATUS;
-typedef DWORD LCID;
-typedef DWORD LCTYPE;
 
 #define HKEY_CURRENT_USER ((HKEY)(uintptr_t)0x80000001)
 #define HKEY_LOCAL_MACHINE ((HKEY)(uintptr_t)0x80000002)
 #define ERROR_SUCCESS 0L
 
-union _ULARGE_INTEGER {
-    struct {
-        DWORD LowPart;
-        DWORD HighPart;
-    } u;
-    unsigned long long QuadPart;
-};
-typedef _ULARGE_INTEGER ULARGE_INTEGER;
-typedef ULARGE_INTEGER* PULARGE_INTEGER;
+// ---- the core the stand-ins used to give (time, errors, modules, heap, threads, memory) ----
+extern "C" {
+DWORD GetTickCount();
+void Sleep(DWORD dwMilliseconds);
+BOOL QueryPerformanceCounter(LARGE_INTEGER* lpPerformanceCount);
+BOOL QueryPerformanceFrequency(LARGE_INTEGER* lpFrequency);
+int wsprintfA(LPSTR lpOut, LPCSTR lpFmt, ...);
+int wsprintfW(LPWSTR lpOut, LPCWSTR lpFmt, ...);
+DWORD GetLastError();
+void SetLastError(DWORD dwErrCode);
+DWORD GetCurrentThreadId();
+DWORD GetCurrentProcessId();
+void OutputDebugStringA(LPCSTR lpOutputString);
+HMODULE GetModuleHandleA(LPCSTR lpModuleName);
+FARPROC GetProcAddress(HMODULE hModule, LPCSTR lpProcName);
+HMODULE LoadLibraryA(LPCSTR lpLibFileName);
+BOOL FreeLibrary(HMODULE hLibModule);
+HANDLE GetProcessHeap();
+LPVOID HeapAlloc(HANDLE hHeap, DWORD dwFlags, SIZE_T dwBytes);
+BOOL HeapFree(HANDLE hHeap, DWORD dwFlags, LPVOID lpMem);
+void InitializeCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
+void EnterCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
+void LeaveCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
+void DeleteCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
+HANDLE CreateThread(LPSECURITY_ATTRIBUTES lpThreadAttributes, SIZE_T dwStackSize, LPTHREAD_START_ROUTINE lpStartAddress,
+                    LPVOID lpParameter, DWORD dwCreationFlags, LPDWORD lpThreadId);
+DWORD WaitForSingleObject(HANDLE hHandle, DWORD dwMilliseconds);
+DWORD WaitForMultipleObjects(DWORD nCount, const HANDLE* lpHandles, BOOL bWaitAll, DWORD dwMilliseconds);
+BOOL CloseHandle(HANDLE hObject);
+void ExitProcess(UINT uExitCode);
+LPVOID VirtualAlloc(LPVOID lpAddress, SIZE_T dwSize, DWORD flAllocationType, DWORD flProtect);
+BOOL VirtualFree(LPVOID lpAddress, SIZE_T dwSize, DWORD dwFreeType);
+}
+BOOL IsBadCodePtr(FARPROC lpfn);
+BOOL IsBadReadPtr(const void* lp, UINT_PTR ucb);
+BOOL IsBadWritePtr(LPVOID lp, UINT_PTR ucb);
+HANDLE CreateEventA(LPSECURITY_ATTRIBUTES lpEventAttributes, BOOL bManualReset, BOOL bInitialState, LPCSTR lpName);
+HANDLE CreateEventW(LPSECURITY_ATTRIBUTES lpEventAttributes, BOOL bManualReset, BOOL bInitialState, LPCWSTR lpName);
+BOOL SetEvent(HANDLE hEvent);
+BOOL ResetEvent(HANDLE hEvent);
+
+// The interlocked operations, as the compiler's atomics (full barriers, as on Windows).
+static inline LONG InterlockedIncrement(volatile LONG* p) { return __atomic_add_fetch(p, 1, __ATOMIC_SEQ_CST); }
+static inline LONG InterlockedDecrement(volatile LONG* p) { return __atomic_sub_fetch(p, 1, __ATOMIC_SEQ_CST); }
+static inline LONG InterlockedExchange(volatile LONG* p, LONG v) { return __atomic_exchange_n(p, v, __ATOMIC_SEQ_CST); }
+static inline LONG InterlockedCompareExchange(volatile LONG* p, LONG exchange, LONG comparand) {
+    __atomic_compare_exchange_n(p, &comparand, exchange, false, __ATOMIC_SEQ_CST, __ATOMIC_SEQ_CST);
+    return comparand;
+}
+// The generated code keeps some counters as `long`, which is LONG on Windows and 64 bits here.
+static inline long InterlockedIncrement(volatile long* p) { return __atomic_add_fetch(p, 1, __ATOMIC_SEQ_CST); }
+static inline long InterlockedDecrement(volatile long* p) { return __atomic_sub_fetch(p, 1, __ATOMIC_SEQ_CST); }
 
 // ---- files and directories ----
 BOOL DeleteFileA(LPCSTR lpFileName);
@@ -42,6 +80,7 @@ BOOL GetDiskFreeSpaceA(LPCSTR lpRootPathName, LPDWORD lpSectorsPerCluster, LPDWO
 BOOL GetDiskFreeSpaceExA(LPCSTR lpDirectoryName, PULARGE_INTEGER lpFreeBytesAvailableToCaller,
                          PULARGE_INTEGER lpTotalNumberOfBytes, PULARGE_INTEGER lpTotalNumberOfFreeBytes);
 #define GetDiskFreeSpaceEx GetDiskFreeSpaceExA
+DWORD GetLogicalDriveStringsA(DWORD nBufferLength, LPSTR lpBuffer);
 UINT GetDriveTypeA(LPCSTR lpRootPathName);
 BOOL GetVolumeInformationA(LPCSTR lpRootPathName, LPSTR lpVolumeNameBuffer, DWORD nVolumeNameSize,
                            LPDWORD lpVolumeSerialNumber, LPDWORD lpMaximumComponentLength,
@@ -103,6 +142,32 @@ static inline LONG d2_InterlockedCompareExchange(LONG* pDestination, LONG nExcha
     return InterlockedCompareExchange((volatile LONG*)pDestination, nExchange, nComperand);
 }
 
+// The I/O completion port QServerNT's workers pump: emulated over the BSD sockets' readiness.
+HANDLE CreateIoCompletionPort(HANDLE FileHandle, HANDLE ExistingCompletionPort, ULONG_PTR CompletionKey,
+                              DWORD NumberOfConcurrentThreads);
+BOOL GetQueuedCompletionStatus(HANDLE CompletionPort, LPDWORD lpNumberOfBytesTransferred, ULONG_PTR* lpCompletionKey,
+                               LPOVERLAPPED* lpOverlapped, DWORD dwMilliseconds);
+BOOL PostQueuedCompletionStatus(HANDLE CompletionPort, DWORD dwNumberOfBytesTransferred, ULONG_PTR dwCompletionKey,
+                                LPOVERLAPPED lpOverlapped);
+HANDLE GetCurrentThread(void);
+int GetThreadPriority(HANDLE hThread);
+
+// ---- memory ----
+#define MEM_FREE 0x00010000
+#define GMEM_MOVEABLE 0x0002
+#define GMEM_DDESHARE 0x2000
+SIZE_T VirtualQuery(LPCVOID lpAddress, PMEMORY_BASIC_INFORMATION lpBuffer, SIZE_T dwLength);
+HGLOBAL GlobalAlloc(UINT uFlags, SIZE_T dwBytes);
+LPVOID GlobalLock(HGLOBAL hMem);
+BOOL GlobalUnlock(HGLOBAL hMem);
+HGLOBAL GlobalFree(HGLOBAL hMem);
+
+// ---- the private profile (D2.ini), read the way Windows reads an .ini file ----
+UINT GetPrivateProfileIntA(LPCSTR lpAppName, LPCSTR lpKeyName, INT nDefault, LPCSTR lpFileName);
+DWORD GetPrivateProfileStringA(LPCSTR lpAppName, LPCSTR lpKeyName, LPCSTR lpDefault, LPSTR lpReturnedString, DWORD nSize,
+                               LPCSTR lpFileName);
+BOOL WritePrivateProfileStringA(LPCSTR lpAppName, LPCSTR lpKeyName, LPCSTR lpString, LPCSTR lpFileName);
+
 // ---- the registry ----
 LSTATUS RegOpenKeyExA(HKEY hKey, LPCSTR lpSubKey, DWORD ulOptions, DWORD samDesired, HKEY* phkResult);
 LSTATUS RegCreateKeyExA(HKEY hKey, LPCSTR lpSubKey, DWORD Reserved, LPSTR lpClass, DWORD dwOptions,
@@ -117,6 +182,13 @@ LSTATUS RegDeleteValueA(HKEY hKey, LPCSTR lpValueName);
 LSTATUS RegFlushKey(HKEY hKey);
 
 // ---- strings ----
+#define CP_ACP 0
+#define CP_UTF8 65001
+UINT GetACP(void);
+int MultiByteToWideChar(UINT CodePage, DWORD dwFlags, LPCCH lpMultiByteStr, int cbMultiByte, LPWSTR lpWideCharStr,
+                        int cchWideChar);
+int WideCharToMultiByte(UINT CodePage, DWORD dwFlags, LPCWCH lpWideCharStr, int cchWideChar, LPSTR lpMultiByteStr,
+                        int cbMultiByte, LPCCH lpDefaultChar, LPBOOL lpUsedDefaultChar);
 DWORD CharLowerBuffA(LPSTR lpsz, DWORD cchLength);
 int wvsprintfA(LPSTR lpOutput, LPCSTR lpFmt, va_list arglist);
 

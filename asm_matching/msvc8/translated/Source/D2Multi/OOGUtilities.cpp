@@ -273,7 +273,7 @@ int __stdcall OOG_PollMCPCharLogonPump(int nFrameIndex) {
 }
 
 // Opens a URL in the default system browser by querying registry for .html file association. Reads "SOFTWARE\\Classes\\.html" to get file type, then reads "SOFTWARE\\Classes\\{type}\\shell\\open\\command" to get the command line. Appends the URL to the command string, creates a process via CreateProcessA with NORMAL_PRIORITY_CLASS flag, and closes process handles. Shows error dialog (locale 5340) if registry lookup fails. Uses 1024-byte buffers for registry paths and 1025-byte buffer for final command line construction.
-#if D2_MAC_CARBON
+#if !defined(_WIN32)  // STORM_LaunchURL: Win32MacUser.h or Win32PosixShell.h
 // 1.14d mac: 002cdd63
 int __stdcall OOGUTIL_OpenBrowserWithURL(D2ControlMsg * pControlMsg) {
     char* pszUrl;

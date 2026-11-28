@@ -133,7 +133,7 @@ struct D2TileLibraryHashStrc * __fastcall TILECMP_RegisterTilesForLookup(struct 
 // tile's block data into pSubTiles. Halts on line 0x3c9 if pTile is null.
 // Provenance: 1.14d asm 0060a4e9..0060a50c (ADD [EAX+ESI+0x10],EDI with EDI = [ECX+0x54]).
 void __stdcall TILECMP_RelocateSubTilePixelData(struct D2TileLibraryEntryStrc * pTile);
-#if defined(_WIN64)
+#if (defined(_WIN64) || defined(__LP64__))
 // The 64-bit sprite cache entry of a tile: native subtile records, then the tile's 32-bit DT1 block.
 uint32_t __stdcall TILECMP_GetSubTileCacheSize(struct D2TileLibraryEntryStrc * pTile);
 void * __stdcall TILECMP_GetSubTileBlock(struct D2TileLibraryEntryStrc * pTile);

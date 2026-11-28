@@ -779,7 +779,7 @@ static uint32_t __stdcall INVENTORY_CalcGridPlacementScore(uint8_t byItemHeight,
     int nRowCount;
 #if D2_ARCH_X86
     int* pStartCol;
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
     D2UnitStrc** pStartCol; // the grid cells are pointers; the x86 body scans them as dwords
 #endif
     int32_t nSavedStartCol = nStartCol;
@@ -788,7 +788,7 @@ static uint32_t __stdcall INVENTORY_CalcGridPlacementScore(uint8_t byItemHeight,
       if (nStartRow < (int)((uint32_t)byItemHeight + nStartRow)) {
 #if D2_ARCH_X86
         pScanCell = pGridInfo->pGridCells + ((uint32_t)pGridInfo->bWidth * nStartRow - 1);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
         // 1.14d adds nStartCol here (0063b368..0063b381); the x86 body leaves it out and reads cell -1 of the row.
         // Without it the 32-bit wrap of (row * width - 1) becomes a 4 GB offset on x64.
         pScanCell = pGridInfo->pGridCells + ((uint32_t)pGridInfo->bWidth * nStartRow + (nStartCol - 1));
@@ -831,7 +831,7 @@ static uint32_t __stdcall INVENTORY_CalcGridPlacementScore(uint8_t byItemHeight,
         nRowCount = iVar1 - nStartCol;
 #if D2_ARCH_X86
         pStartCol = (int*)(pGridInfo->pGridCells + (nGridWidth * (nStartRow - 1) + nStartCol));
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
         pStartCol = pGridInfo->pGridCells + (nGridWidth * (nStartRow - 1) + nStartCol);
 #endif
         do {
@@ -916,7 +916,7 @@ static BOOL __stdcall INVENTORY_FindFirstEmptySlot(int * pnOutX, int * pnOutY, u
     int32_t bFits;
 #if D2_ARCH_X86
     int32_t* pGridCell;
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
     D2UnitStrc** pGridCell; // the grid cells are pointers; the x86 body scans them as dwords
 #endif
     uint8_t byGridWidth;
@@ -933,7 +933,7 @@ static BOOL __stdcall INVENTORY_FindFirstEmptySlot(int * pnOutX, int * pnOutY, u
         byGridWidth = pGridInfo->bWidth;
 #if D2_ARCH_X86
         pGridCell = (int32_t*)(pGridInfo->pGridCells + nX); // steer-ok: the other store is in the other D2_ARCH arm
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
         pGridCell = pGridInfo->pGridCells + nX;
 #endif
         do {

@@ -216,7 +216,7 @@ void __stdcall SPELLSEL_Initialize() {
     gSpellSelectionSkillIDs[0xf] = -1;
 #if D2_ARCH_X86
     memset(&gSpellSelGridRegion, 0, 0x3c5);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
     memset(&gSpellSelGridRegion, 0, sizeof(gSpellSelGridRegion));
 #endif
     int* pSlotPtr = gSpellSelGridRegion.aRightHandSlots;
@@ -1253,7 +1253,7 @@ void __stdcall SPELLSEL_RenderAllSkillGrids() {
     BOOL bShowTooltips;
 #if D2_ARCH_X86
     memset(&gSpellSelGridRegion, 0, 0x3c5);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
     memset(&gSpellSelGridRegion, 0, sizeof(gSpellSelGridRegion));
 #endif
     int32_t* pSlotPtr;

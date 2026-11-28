@@ -15,7 +15,7 @@
 #include "Source/D2Headers/D2Arch.h"
 
 // Hex address field of the crash-dump lines: 8 digits on x86, the full pointer on x64.
-#if defined(_WIN64)
+#if (defined(_WIN64) || defined(__LP64__))
 #define FOG_ADDR_FMT "%016I64X"
 #define FOG_ADDR_FMT_L "%016I64X"
 #else
@@ -46,7 +46,7 @@ static_assert(sizeof(void*) != 4 || sizeof(D2ImagehlpSymbol64BufStrc) == 0x420, 
 #define FOG_DBGHELP_FPO 1
 #define FOG_PRINTF_U64(v) v, 0 // a %llu argument as two DWORDs, low then high
 #define FOG_CONTEXT_FULL 0x10007 // CONTEXT_i386 | CONTROL | INTEGER | SEGMENTS
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
 #define FOG_DBGHELP_ADDR64(lo, hi) ((DWORD64)(lo) | ((DWORD64)(hi) << 32))
 #define FOG_DBGHELP_MACHINE IMAGE_FILE_MACHINE_AMD64
 #define FOG_DBGHELP_NAME(name, name64) name64
@@ -87,7 +87,7 @@ typedef BOOL (__stdcall *pfnStackWalk64)(DWORD MachineType, HANDLE hProcess, HAN
 #define RECON_FPTD_pfnSymFunctionTableAccess64
 #if D2_ARCH_X86
 typedef void * (__stdcall *pfnSymFunctionTableAccess64)(HANDLE hProcess, DWORD AddrBaseLow, DWORD AddrBaseHigh);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
 typedef void * (__stdcall *pfnSymFunctionTableAccess64)(HANDLE hProcess, DWORD64 AddrBase);
 #endif
 #endif
@@ -95,7 +95,7 @@ typedef void * (__stdcall *pfnSymFunctionTableAccess64)(HANDLE hProcess, DWORD64
 #define RECON_FPTD_pfnSymGetLineFromAddr64
 #if D2_ARCH_X86
 typedef BOOL (__stdcall *pfnSymGetLineFromAddr64)(HANDLE hProcess, DWORD qwAddrLow, DWORD qwAddrHigh, DWORD * pdwDisplacement, void * pLine64);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
 typedef BOOL (__stdcall *pfnSymGetLineFromAddr64)(HANDLE hProcess, DWORD64 qwAddr, DWORD * pdwDisplacement, void * pLine64);
 #endif
 #endif
@@ -103,7 +103,7 @@ typedef BOOL (__stdcall *pfnSymGetLineFromAddr64)(HANDLE hProcess, DWORD64 qwAdd
 #define RECON_FPTD_pfnSymGetModuleBase64
 #if D2_ARCH_X86
 typedef uint64_t (__stdcall *pfnSymGetModuleBase64)(HANDLE hProcess, DWORD qwAddrLow, DWORD qwAddrHigh);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
 typedef uint64_t (__stdcall *pfnSymGetModuleBase64)(HANDLE hProcess, DWORD64 qwAddr);
 #endif
 #endif
@@ -111,7 +111,7 @@ typedef uint64_t (__stdcall *pfnSymGetModuleBase64)(HANDLE hProcess, DWORD64 qwA
 #define RECON_FPTD_pfnSymGetModuleInfo64
 #if D2_ARCH_X86
 typedef BOOL (__stdcall *pfnSymGetModuleInfo64)(HANDLE hProcess, DWORD qwAddrLow, DWORD qwAddrHigh, void * pModuleInfo);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
 typedef BOOL (__stdcall *pfnSymGetModuleInfo64)(HANDLE hProcess, DWORD64 qwAddr, void * pModuleInfo);
 #endif
 #endif
@@ -123,7 +123,7 @@ typedef DWORD (__stdcall *pfnSymGetOptions)();
 #define RECON_FPTD_pfnSymGetSymFromAddr64
 #if D2_ARCH_X86
 typedef BOOL (__stdcall *pfnSymGetSymFromAddr64)(HANDLE hProcess, DWORD AddressLow, DWORD AddressHigh, void * pDisplacement, void * pSymbol);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
 typedef BOOL (__stdcall *pfnSymGetSymFromAddr64)(HANDLE hProcess, DWORD64 Address, void * pDisplacement, void * pSymbol);
 #endif
 #endif
@@ -155,7 +155,7 @@ typedef BOOL (__stdcall *pfnSymFindFileInPath)(HANDLE hProcess, char * SearchPat
 #define RECON_FPTD_pfnSymLoadModule64
 #if D2_ARCH_X86
 typedef uint64_t (__stdcall *pfnSymLoadModule64)(HANDLE hProcess, HANDLE hFile, char * ImageName, char * ModuleName, DWORD BaseOfDllLow, DWORD BaseOfDllHigh, DWORD SizeOfDll);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
 typedef uint64_t (__stdcall *pfnSymLoadModule64)(HANDLE hProcess, HANDLE hFile, char * ImageName, char * ModuleName, DWORD64 BaseOfDll, DWORD SizeOfDll);
 #endif
 #endif
@@ -163,7 +163,7 @@ typedef uint64_t (__stdcall *pfnSymLoadModule64)(HANDLE hProcess, HANDLE hFile, 
 #define RECON_FPTD_pfnSymUnloadModule64
 #if D2_ARCH_X86
 typedef BOOL (__stdcall *pfnSymUnloadModule64)(HANDLE hProcess, DWORD BaseOfDllLow, DWORD BaseOfDllHigh);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
 typedef BOOL (__stdcall *pfnSymUnloadModule64)(HANDLE hProcess, DWORD64 BaseOfDll);
 #endif
 #endif
@@ -211,7 +211,7 @@ typedef DWORD (__stdcall *pfnGetModuleBaseNameA)(HANDLE hProcess, void * hModule
 #define RECON_FPTD_pfnSymFunctionTableAccess
 #if D2_ARCH_X86
 typedef void * (__stdcall *pfnSymFunctionTableAccess)(HANDLE hProcess, DWORD AddrBase);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
 typedef void * (__stdcall *pfnSymFunctionTableAccess)(HANDLE hProcess, DWORD64 AddrBase);
 #endif
 #endif
@@ -219,7 +219,7 @@ typedef void * (__stdcall *pfnSymFunctionTableAccess)(HANDLE hProcess, DWORD64 A
 #define RECON_FPTD_pfnSymGetLineFromAddr
 #if D2_ARCH_X86
 typedef BOOL (__stdcall *pfnSymGetLineFromAddr)(HANDLE hProcess, DWORD dwAddr, void * pdwDisplacement, void * pLine);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
 typedef BOOL (__stdcall *pfnSymGetLineFromAddr)(HANDLE hProcess, DWORD64 dwAddr, void * pdwDisplacement, void * pLine);
 #endif
 #endif
@@ -227,7 +227,7 @@ typedef BOOL (__stdcall *pfnSymGetLineFromAddr)(HANDLE hProcess, DWORD64 dwAddr,
 #define RECON_FPTD_pfnSymGetModuleBase
 #if D2_ARCH_X86
 typedef DWORD (__stdcall *pfnSymGetModuleBase)(HANDLE hProcess, DWORD dwAddr);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
 typedef DWORD64 (__stdcall *pfnSymGetModuleBase)(HANDLE hProcess, DWORD64 dwAddr);
 #endif
 #endif
@@ -235,7 +235,7 @@ typedef DWORD64 (__stdcall *pfnSymGetModuleBase)(HANDLE hProcess, DWORD64 dwAddr
 #define RECON_FPTD_pfnSymGetModuleInfo
 #if D2_ARCH_X86
 typedef BOOL (__stdcall *pfnSymGetModuleInfo)(HANDLE hProcess, DWORD dwAddr, void * pModuleInfo);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
 typedef BOOL (__stdcall *pfnSymGetModuleInfo)(HANDLE hProcess, DWORD64 dwAddr, void * pModuleInfo);
 #endif
 #endif
@@ -243,7 +243,7 @@ typedef BOOL (__stdcall *pfnSymGetModuleInfo)(HANDLE hProcess, DWORD64 dwAddr, v
 #define RECON_FPTD_pfnSymGetSymFromAddr
 #if D2_ARCH_X86
 typedef BOOL (__stdcall *pfnSymGetSymFromAddr)(HANDLE hProcess, DWORD_PTR dwAddr, void * pDisplacement, void * pSymbol);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
 typedef BOOL (__stdcall *pfnSymGetSymFromAddr)(HANDLE hProcess, DWORD64 dwAddr, void * pDisplacement, void * pSymbol);
 #endif
 #endif
@@ -251,7 +251,7 @@ typedef BOOL (__stdcall *pfnSymGetSymFromAddr)(HANDLE hProcess, DWORD64 dwAddr, 
 #define RECON_FPTD_pfnSymLoadModule
 #if D2_ARCH_X86
 typedef DWORD (__stdcall *pfnSymLoadModule)(HANDLE hProcess, HANDLE hFile, char * ImageName, char * ModuleName, DWORD_PTR BaseOfDll, DWORD SizeOfDll);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
 typedef DWORD64 (__stdcall *pfnSymLoadModule)(HANDLE hProcess, HANDLE hFile, char * ImageName, char * ModuleName, DWORD64 BaseOfDll, DWORD SizeOfDll);
 #endif
 #endif
@@ -259,7 +259,7 @@ typedef DWORD64 (__stdcall *pfnSymLoadModule)(HANDLE hProcess, HANDLE hFile, cha
 #define RECON_FPTD_pfnSymUnloadModule
 #if D2_ARCH_X86
 typedef BOOL (__stdcall *pfnSymUnloadModule)(HANDLE hProcess, DWORD BaseOfDll);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
 typedef BOOL (__stdcall *pfnSymUnloadModule)(HANDLE hProcess, DWORD64 BaseOfDll);
 #endif
 #endif
@@ -793,7 +793,7 @@ int __stdcall LoadModuleSymbols(HANDLE hFile, char * szImageName, char * szModul
       uint64_t uVar2;
 #if D2_ARCH_X86
       *(uint32_t*)(char*)&uVar2 = (*pSymLoadModule64)(ghCurrentProcessHandle, hFile, szImageName, szModuleName, dwBaseOfDll, dwSizeOfDll, dwBaseHigh);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
       uVar2 = (*pSymLoadModule64)(ghCurrentProcessHandle, hFile, szImageName, szModuleName, FOG_DBGHELP_ADDR64(dwBaseOfDll, dwSizeOfDll), dwBaseHigh);
 #endif
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0098a6f0);
@@ -2089,7 +2089,7 @@ BOOL __fastcall QuickStackWalkWithSymbols(char * szSearchPath, HANDLE hProcess, 
       uint8_t __pad48[116];
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 164, "frame group __frame0_t must reproduce the Ghidra frame layout");
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
     // The same frame as STACKFRAME64 (0x108 bytes): AddrPC +0x00, AddrFrame +0x20, AddrStack +0x30.
     struct __frame0_t {
       DWORD64 stackFrame[1];

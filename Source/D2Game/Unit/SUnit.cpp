@@ -255,7 +255,7 @@ static D2UnitStrc * * __stdcall UNITS_GetHashTableSlot(eD2UnitType eUnitType, ::
     if (eUnitType <= UNIT_ITEM) {
 #if D2_ARCH_X86
       return (D2UnitStrc**)(pGame->szGameName + ganUnitHashTableBaseOffsets[eUnitType] + (nUnitGUID & 0x7f) * 4 - 0x2a);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
       // ganUnitHashTableBaseOffsets holds x86 byte offsets of SGAMEDATA.pUnitList rows.
       return &pGame->pUnitList[(ganUnitHashTableBaseOffsets[eUnitType] - 0x1120) / 0x200][nUnitGUID & 0x7f];
 #endif
@@ -277,7 +277,7 @@ D2UnitStrc * __fastcall FindUnitFromTable(::SGAMEDATA * pGame, eD2UnitType eUnit
     } else if (eUnitType <= UNIT_ITEM) {
 #if D2_ARCH_X86
       ppHashSlot = (D2UnitStrc**)(pGame->szGameName + ganUnitHashTableBaseOffsets[eUnitType] + (nUnitGUID & 0x7f) * 4 - 0x2a); // steer-ok: the other store is in the other D2_ARCH arm
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
       // ganUnitHashTableBaseOffsets holds x86 byte offsets of SGAMEDATA.pUnitList rows.
       ppHashSlot = &pGame->pUnitList[(ganUnitHashTableBaseOffsets[eUnitType] - 0x1120) / 0x200][nUnitGUID & 0x7f];
 #endif
@@ -348,7 +348,7 @@ void __fastcall UNITS_InsertUnitIntoHashTable(D2UnitStrc * pUnit, ::SGAMEDATA * 
     } else if (eCachedUnitType <= UNIT_ITEM) {
 #if D2_ARCH_X86
       ppHashSlot = (D2UnitStrc**)(pGame->szGameName + ganUnitHashTableBaseOffsets[eCachedUnitType] + (pUnit->nUnitGUID & 0x7fU) * 4 - 0x2a);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
       // ganUnitHashTableBaseOffsets holds x86 byte offsets of SGAMEDATA.pUnitList rows.
       ppHashSlot = &pGame->pUnitList[(ganUnitHashTableBaseOffsets[eCachedUnitType] - 0x1120) / 0x200][pUnit->nUnitGUID & 0x7fU];
 #endif
@@ -394,7 +394,7 @@ static void UNITS_RemoveUnitFromHashTable(::SGAMEDATA * pGame, D2UnitStrc * pUni
     } else if (eUnitTypeSwitch <= UNIT_ITEM) {
 #if D2_ARCH_X86
       ppHashSlot = (D2UnitStrc**)(pGame->szGameName + ganUnitHashTableBaseOffsets[eUnitTypeSwitch] + (pUnit->nUnitGUID & 0x7fU) * 4 - 0x2a); // steer-ok: the other store is in the other D2_ARCH arm
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
       // ganUnitHashTableBaseOffsets holds x86 byte offsets of SGAMEDATA.pUnitList rows.
       ppHashSlot = &pGame->pUnitList[(ganUnitHashTableBaseOffsets[eUnitTypeSwitch] - 0x1120) / 0x200][pUnit->nUnitGUID & 0x7fU];
 #endif

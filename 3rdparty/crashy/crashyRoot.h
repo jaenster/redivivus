@@ -20,6 +20,7 @@ struct D2BlizzardErrorArgument;
 // Data types
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
 
+#if !D2_BACKEND_POSIX  // Win32Posix.h
 struct _MEMORY_BASIC_INFORMATION {
     /* 0x00 */ PVOID BaseAddress;
     /* 0x04 */ PVOID AllocationBase;
@@ -29,6 +30,7 @@ struct _MEMORY_BASIC_INFORMATION {
     /* 0x14 */ DWORD Protect;
     /* 0x18 */ DWORD Type;
 };
+#endif
 
 #endif // _WIN32
 

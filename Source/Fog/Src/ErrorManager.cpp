@@ -348,7 +348,7 @@ uint8_t Unreferenced_00407dd0() {
 void __stdcall InitializeSystemInfo() {
 #if D2_ARCH_X86
     _MEMORYSTATUS memoryStatus;
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
     MEMORYSTATUSEX memoryStatus;
 #endif
     _OSVERSIONINFOA osVersionInfo;
@@ -379,7 +379,7 @@ void __stdcall InitializeSystemInfo() {
 #if D2_ARCH_X86
     GlobalMemoryStatus(&memoryStatus);
     gSystemInfo.dwTotalPhysicalMemory = memoryStatus.dwTotalPhys;
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
     // dwTotalPhysicalMemory is a DWORD: saturate as the 32-bit GlobalMemoryStatus does above 4 GB.
     memoryStatus.dwLength = sizeof(memoryStatus);
     GlobalMemoryStatusEx(&memoryStatus);
@@ -5390,6 +5390,71 @@ void FOG_InitErrorManager(void* pUnused, char* szText, int bStoreStartupInfo) {
     atexit(EXIT_AtExit);
     ERRORMANAGER_ReturnTrue();
     SERR_SetDisplayErrorCallback((pfnBlizzardError)CRASH_FillupCrashTxt);
+}
+#endif
+
+#if !defined(_WIN32) && D2_BACKEND_POSIX
+// The POSIX crash path: a fatal signal (Win32PosixShell.h) is written to the log, which is
+// flushed, and the process ends, as the Mac's crash callback ends in CRASHY_Exit. The full
+// report (registers, backtraces, modules) is the Windows and Mac crash libraries' and is not
+// here.
+static void ERRORMANAGER_OnPosixCrash(int nSignal, void* pFaultAddress) {
+    LogManager::LOGFILE_WriteStringToFile((char*)"[CRASH] signal %d at %p", nSignal, pFaultAddress);
+    LogManager::ExitOrCrashCleanUpJmp();
+    _Exit(-1);
+}
+
+// The POSIX error manager: the portable half of the Mac's FOG_InitErrorManager (002eed78) and
+// of the Windows one - the report strings, the two locks, the timer, the pool system, the bit
+// mask self-check, the system record, the log writer - with the crash path above in place of
+// the crash reporter.
+void __fastcall ERRORMANAGER_InitErrorManager(char * dwUnused1, char * szText, BOOL bLogGameStrartupInfo) {
+    static char gszFogCrashReportCustomMessage[0x400] = {};
+    static char gszFogVersionString[16] = {};
+    if (gbFogErrorManagerInitialized) {
+      if (bLogGameStrartupInfo) {
+        Source::SFile::LOGFILE_StoreGameStartupInfo();
+      }
+      return;
+    }
+
+    POSIX_SetCrashHandler(ERRORMANAGER_OnPosixCrash);
+    g_nProjectId = 0x108;
+    szProduct = (char*)"Diablo II";
+    g_szApplicationName = (char*)"Diablo II";
+    g_szModuleName = (char*)"Diablo II";
+    snprintf(gszFogVersionString, sizeof(gszFogVersionString), "D2 %i.%i%c", 1, 14, 'd');
+    g_szMilestone = gszFogVersionString;
+    g_szBuildNumber = (char*)"77";
+    g_szPlatform = (char*)"OSX";
+    g_szPrimaryAssignment = (char*)".ClassicErrorReporter";
+    g_szAssignments = (char*)".ClassicErrorReporter";
+    if (szText) {
+      Storm::Source::SSTR::SStrCopy(gszFogCrashReportCustomMessage, szText, sizeof(gszFogCrashReportCustomMessage));
+    }
+
+    InitializeCriticalSection(&lpCriticalSection_0074c830);
+    InitializeCriticalSection(&lpCriticalSection_0074d848);
+    gbFogErrorManagerInitialized = 1;
+    LogManager::InitHighResTimer();
+    Memory::InitializePoolSystem(nullptr, (char*)"Global Pool System", 0x40000, 0x8000);
+    SMem::SMemInitPerfCounters();
+    for (int nBit = 0; nBit < 0x20; nBit++) {
+      uint32_t nMask = 1u << nBit;
+      if (BitBuffer::gadwBitMasks[nBit] != nMask || BitBuffer::gadwInvBitMasks[nBit] != ~nMask) {
+        return;
+      }
+    }
+
+    gSystemInfo.eOSType = 9;
+    GetSystemInfo(&gSystemInfo.sWinSystemInfo);
+    gSystemInfo.bInitialized = 1;
+    LogManager::StartLogWriterThread();
+    if (bLogGameStrartupInfo) {
+      Source::SFile::LOGFILE_StoreGameStartupInfo();
+    }
+
+    atexit(EXIT_AtExit);
 }
 #endif
 

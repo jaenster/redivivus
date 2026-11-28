@@ -1754,7 +1754,7 @@ void __fastcall CLIENT_TeleportUnitToPosition(D2UnitStrc * pUnit, int32_t nX, in
 #if D2_ARCH_X86
             // The compiler kept the current room's level record in ptFreePos.y's slot.
             ptFreePos.y = (LONG)D2Common::DATATBLS::LvlTbls::TXT_Levels_GetLine(eLevelId);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
             // A level record no longer fits a LONG slot: it gets its own local.
             D2LevelsTxt* pCurrentLevelsTxt = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetLine(eLevelId);
 #endif
@@ -1762,7 +1762,7 @@ void __fastcall CLIENT_TeleportUnitToPosition(D2UnitStrc * pUnit, int32_t nX, in
             pLevelsTxt = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetLine(eLevelId);
 #if D2_ARCH_X86
             if (*(char*)(ptFreePos.y + 2) != pLevelsTxt->Pal)
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
             if (pCurrentLevelsTxt->Pal != pLevelsTxt->Pal)
 #endif
             {

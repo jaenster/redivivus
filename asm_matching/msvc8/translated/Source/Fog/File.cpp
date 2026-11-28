@@ -13,7 +13,7 @@
 // A general register is a DWORD on x86 and a DWORD64 on x64.
 #if D2_ARCH_X86
 #define CRASH_REGISTER_FORMAT "%6s:0x%08x"
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
 #define CRASH_REGISTER_FORMAT "%6s:0x%016I64x"
 #else
 #error "File.cpp: no register dump format for this architecture"

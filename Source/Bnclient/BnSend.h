@@ -32,7 +32,9 @@ typedef void (__stdcall *pfnVoidNoArgCallback)();
 // Data types
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
 
+#if !D2_BACKEND_POSIX  // Win32Posix.h
 typedef unsigned long LCID;
+#endif
 
 #endif // _WIN32
 

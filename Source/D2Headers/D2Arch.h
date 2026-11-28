@@ -14,7 +14,9 @@
 // Architecture, exactly one defined, to 1:
 //   D2_ARCH_X86   32-bit x86: the 1.14d Game.exe target (mingw i686, VC8) and the
 //                 1.14d Intel Mac build
-//   D2_ARCH_X64   64-bit x86-64 (mingw x86_64)
+//   D2_ARCH_X64   64-bit x86-64 (mingw x86_64, the modern Intel Mac build)
+//   D2_ARCH_ARM64 64-bit ARM (the modern Apple silicon Mac build); in hand-maintained code
+//                 it takes the x86-64 branch wherever that branch is about pointer width
 //   D2_ARCH_PPC   32-bit PowerPC: the Mac builds before the Intel move
 //
 // Byte order: D2_BIG_ENDIAN is defined, to 1, on PowerPC only. The file, wire and
@@ -42,6 +44,8 @@
 #elif (defined(__ppc__) || defined(__POWERPC__) || defined(_M_PPC)) && !defined(__ppc64__)
 #define D2_ARCH_PPC 1
 #define D2_BIG_ENDIAN 1
+#elif defined(__aarch64__) || defined(__arm64__)
+#define D2_ARCH_ARM64 1
 #else
-#error "D2Arch.h: unsupported target architecture (expected x86, x86-64 or PowerPC)"
+#error "D2Arch.h: unsupported target architecture (expected x86, x86-64, ARM64 or PowerPC)"
 #endif

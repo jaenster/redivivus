@@ -28,7 +28,7 @@ static_assert(sizeof(void*) != 4 || sizeof(D2PoolBlockStrc) == 0x18, "malloc(...
 #define FOG_GLOBALMEMORYSTATUS(s) GlobalMemoryStatus(&(s))
 #define FOG_MEMORYSTATUS_LO(s, f) (s).dw##f
 #define FOG_MEMORYSTATUS_HI(s, f) 0
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
 #define FOG_MEMORYSTATUS MEMORYSTATUSEX
 #define FOG_GLOBALMEMORYSTATUS(s) ((s).dwLength = sizeof(s), GlobalMemoryStatusEx(&(s)))
 #define FOG_MEMORYSTATUS_LO(s, f) (uint32_t)((s).ull##f & 0xFFFFFFFFu)
@@ -48,7 +48,7 @@ typedef void (__fastcall *pfnBlizzardError)(char * szMessage, char * szTitle, ch
 // 32-bit index, so the x64 test compares it at full width.
 #if D2_ARCH_X86
 #define D2_POOL_SLOT_IN_RANGE(nSlot, pAddr, pCommit, pPool) ((int)(nSlot) < (int)(pPool)->nBlocks)
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
 #define D2_POOL_SLOT_IN_RANGE(nSlot, pAddr, pCommit, pPool) (((intptr_t)(pAddr) - (intptr_t)(pCommit)) / (int)(pPool)->nBlockSize < (intptr_t)(int)(pPool)->nBlocks)
 #endif
 
@@ -395,7 +395,7 @@ static int32_t __stdcall FindOrCreateBlockWithFreeSlots(D2PoolBlockStrc * * ppOu
 // x64 pads it to 16 bytes so the user block keeps malloc's 16-byte alignment.
 union D2PoolOverflowHeader {
     uint8_t* pNext;
-#if D2_ARCH_X64
+#if D2_ARCH_X64 || D2_ARCH_ARM64
     alignas(16) uint8_t aAlign[16];
 #endif
 };

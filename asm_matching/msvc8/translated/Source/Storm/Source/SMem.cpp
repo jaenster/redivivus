@@ -155,7 +155,7 @@ static void SMEM_UnlockHeap(int * pnBucketIndex) {
 typedef void * D2SMemLink;
 #endif
 
-#if D2_ARCH_X64
+#if D2_ARCH_X64 || D2_ARCH_ARM64
 // Reserves a heap region below 4 GB. A block header keeps the high 16 bits of its
 // heap's address and a 32-bit free-list link (D2SMemLink), so on x64 the heap and
 // every block in it must have 32-bit addresses. The first free range that fits,
@@ -192,7 +192,7 @@ static LPVOID SMEM_ReserveBelow4G(SIZE_T nReserveSize) {
 // @blizzard AllocateHeap (SMEM.CPP)
 static D2FogHeapDescStrc * __stdcall SMEM_AllocateHeap(int32_t nSourceLine, uint32_t dwHash, int32_t nBucketIndex, uint32_t dwPageAlignMask, uint32_t nCommitSize, uint32_t nReserveSize, uint32_t * pnName) {
     int nNameLenBytes;
-#if D2_ARCH_X64
+#if D2_ARCH_X64 || D2_ARCH_ARM64
     D2FogHeapDescStrc* pHeapBlock = (D2FogHeapDescStrc*)SMEM_ReserveBelow4G(nReserveSize); // steer-ok: the x64 spelling of the one declaration below
 #else
     D2FogHeapDescStrc* pHeapBlock = (D2FogHeapDescStrc*)VirtualAlloc((LPVOID)0x0, nReserveSize, 0x2000, 1);
@@ -348,7 +348,7 @@ static void SMEM_FreeHeapBlock(D2FogHeapBlockHdrStrc * pwBlock, D2FogHeapDescStr
         uBinIndex = 8;
       }
 
-#if D2_ARCH_X64
+#if D2_ARCH_X64 || D2_ARCH_ARM64
       pwBlock->uLink.pNextFree = nHeap->aFreeBins[uBinIndex];
 #else
       pwBlock->uLink.pNextFree = (D2FogHeapBlockHdrStrc*)nHeap->aFreeBins[uBinIndex];
@@ -775,7 +775,7 @@ int32_t __stdcall SMemFindNextBlock(HSHEAP nHeapId, uint8_t * pPrevBlock, uint8_
     }
 
     SMemZero(pnInfo + 1, *pnInfo - offsetof(SMemBlockDetailsStrc, pBlock));
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
     // pnInfo is the caller's SMemBlockDetailsStrc; with a pointer-sized pBlock its fields are not int slots.
     SMemBlockDetailsStrc* pInfo = (SMemBlockDetailsStrc*)pnInfo;
     if (!(nHeapId && ppOutBlock && pInfo && pInfo->dwSize == sizeof(SMemBlockDetailsStrc))) {
@@ -863,7 +863,7 @@ int32_t __stdcall SMemFindNextBlock(HSHEAP nHeapId, uint8_t * pPrevBlock, uint8_
     BOOL nValid = SMEM_CheckValidBlock(pBlockData, 0, nullptr, 0);
     pnInfo[3] = nValid;
     SMemGetBlockDataAndSize(pBlockData, pnInfo + 4, pnInfo + 5, pFoundBlock);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
     pInfo->pBlock = pBlockData;
     pInfo->bAllocated = ~(uint32_t)(pFoundBlock->byFlags >> 1) & 1;
     pInfo->bValid = SMEM_CheckValidBlock(pBlockData, 0, nullptr, 0);

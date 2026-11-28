@@ -21,7 +21,9 @@ typedef uint32_t eD2RendererMode;
 // Data types
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
 
+#if !D2_BACKEND_POSIX  // Win32Posix.h
 typedef long LSTATUS;
+#endif
 
 typedef struct SC_HANDLE__ * SC_HANDLE;
 

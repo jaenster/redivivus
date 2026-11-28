@@ -6,8 +6,9 @@
 // types are; and its calls into those frameworks, the Mac libc and the Mac-only
 // Storm helpers, in namespace D2OpenGL, where an unqualified call from the module
 // finds them before any Win32 function of the same name (ShowWindow, SetRect).
-// On Windows the window is the game's (D2GFX GetHwnd), never one of our own. The Mac
-// build takes the first branch below: the 10.7 SDK itself.
+// On Windows the window is the game's (D2GFX GetHwnd), never one of our own. The 1.14d Mac
+// build takes the first branch below: the 10.7 SDK itself. The modern Mac build
+// (D2_BACKEND_POSIX) takes the second, as Windows does, with these calls on its own layer.
 //
 // A structure the Mac returns in memory keeps the i386 Darwin convention the
 // decompile shows: the result pointer is the first argument, and is returned.
@@ -149,9 +150,25 @@ extern void *PTR_DAT_00397abc __asm__("_g_pDisplayDriver");  // StormMac/MacDisp
 
 #include <cstdint>
 #include <cstddef>
+#if defined(_WIN32)
 #include <windows.h>
 #include <GL/gl.h>
 #include <GL/glu.h>
+#else
+// The POSIX build: the Win32 types are Win32Posix's (d2_platform.h), the GL headers the
+// system's, and these Mac SDK calls its own layer's. Only the 1.14d build has the Mac SDK
+// itself: the modern one has no AGL (gone from the SDK), Carbon windows or QuickDraw.
+#ifndef GL_SILENCE_DEPRECATION
+#define GL_SILENCE_DEPRECATION 1
+#endif
+#if defined(__APPLE__)
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#else
+#include <GL/gl.h>
+#include <GL/glu.h>
+#endif
+#endif
 
 // ---- Mac SDK types (MacTypes, CoreFoundation, CoreGraphics, AGL, HIToolbox, QuickDraw, cxxabi)
 

@@ -1774,7 +1774,7 @@ void __stdcall CELCMP_FixupOffsetsAndSerialize(int * pOldFile, uint32_t * ppSeri
     size_t nFrameTableBytes;
     size_t nSerializedSize;
     char* pFrameEntry2;
-    #if D2_ARCH_X64
+    #if D2_ARCH_X64 || D2_ARCH_ARM64
     // The serialized image is handed back through a uint32_t, and the old cel frames are relocated in 32-bit slots: an x86-only converter.
     Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), __LINE__);
     exit(-1);
@@ -1904,7 +1904,7 @@ BOOL __stdcall CELCMP_SerializeCelFileToMemory(DC6 * pDCCSrc, uint32_t * ppDCCDe
     uint32_t iNextFrame;
     void* pColorShiftDst;
     D2InventoryGridStrc* pFrameStrc;
-    #if D2_ARCH_X64
+    #if D2_ARCH_X64 || D2_ARCH_ARM64
     // The serialized image is handed back through a uint32_t, and its frame table is 32-bit file offsets: an x86-only converter.
     Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), __LINE__);
     exit(-1);
@@ -1974,7 +1974,7 @@ BOOL __stdcall CELCMP_SerializeCelFileToMemory(DC6 * pDCCSrc, uint32_t * ppDCCDe
 #if D2_ARCH_X86
 static_assert(sizeof(DC6Block) == 0x20, "DC6Block: DC6 frame blocks are used in place, so the header must be the 0x20 bytes on disk");
 static_assert(sizeof(DC6) == 0x18, "DC6: the header is used in place, so it must be the 0x18 bytes on disk");
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
 #define DC6_FILE_HEADER_SIZE 0x18      // nVersion .. nFrames
 #define DC6_FILE_NTERM 0x0c            // char nTerm[4]; the native header widens this slot to hold pRawData
 #define DC6_FILE_NDIRECTIONS 0x10      // int nDirections
@@ -2054,7 +2054,7 @@ void __stdcall CELCMP_FixupPointersAndPrepare(DC6 * pDC6, DC6 * * ppDC6Out, char
       return;
     }
 
-#if D2_ARCH_X64
+#if D2_ARCH_X64 || D2_ARCH_ARM64
     pDC6 = CELCMP_WidenDC6(pDC6);
 #endif
     size_t nAllocSize = pDC6->nDirections * pDC6->nFrames * sizeof(D2GfxCellNodeStrc);
@@ -2076,7 +2076,7 @@ void __stdcall CELCMP_FixupPointersAndPrepare(DC6 * pDC6, DC6 * * ppDC6Out, char
         pFrameIter = (DC6*)&pFrameIter->nFlags;
       } while (nFrameIndex < (uint32_t)(pDC6->nDirections * pDC6->nFrames));
     }
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
     for (; nFrameIndex < (uint32_t)(pDC6->nDirections * pDC6->nFrames); nFrameIndex++) {
       pDC6->pBlocks[nFrameIndex]->nNextBlock = (intptr_t)((D2GfxCellNodeStrc*)nErrorAddr + nFrameIndex);
     }

@@ -39,7 +39,7 @@ namespace D2Common { namespace Drlg { namespace DrlgLogic {
 // The coord-index grid's cells hold the D2RoomCoordListStrc* of the region that claimed the
 // subtile (0 = unclaimed). The 32-bit targets keep them in the shared int DrlgGrid cells, as
 // 1.14d does; x64 lays the cells out pointer-sized with the same row offsets.
-#if D2_ARCH_X64
+#if D2_ARCH_X64 || D2_ARCH_ARM64
 static void DRLGLOGIC_InitCoordIndexGrid(D2PoolManagerStrc * pMemory, D2DrlgGridStrc * pGrid, int32_t nWidth, int32_t nHeight) {
     size_t nRowBytes = ((size_t)nHeight * sizeof(int) + sizeof(D2RoomCoordListStrc*) - 1) & ~(sizeof(D2RoomCoordListStrc*) - 1);
     size_t nAllocSize = nRowBytes + (size_t)nWidth * nHeight * sizeof(D2RoomCoordListStrc*);

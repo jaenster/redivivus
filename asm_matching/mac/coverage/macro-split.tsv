@@ -1,14 +1,14 @@
 file	line	class	evidence
-Source/Bnclient/BNGatewayAccess.h	21	CARBON	Win32 SDK stand-ins, off where a Win32 layer owns the types (Win32Mac or Win32Posix): Fallback _TIME_ZONE_INFORMATION for non-Win non-Mac; Mac gets it from Win32Mac.h -> becomes !D2_MAC_CARBON UNSURE: depends on Win32Posix providing the struct
+Source/Bnclient/BNGatewayAccess.h	21	CARBON	Win32 SDK stand-ins, off where a Win32 layer owns the types (Win32Mac or Win32Posix): Fallback _TIME_ZONE_INFORMATION for non-Win non-Mac; Mac gets it from Win32Mac.h, the modern build from Win32Posix.h
 Source/Bnclient/BnDownload.cpp	35	CARBON	Mac: CoreServices, Gestalt, MacShell.h, MACSEC_IsBlizzardSigned, c2pstr, PATH_ToPosixPath, SREG_FlushPrefsFiles, MACCURSOR_CallGuardProc
-Source/Bnclient/BnDownload.cpp	240	CARBON	Mac: BNDOWNLOAD_IsCheckRevisionLibraryTrusted (Gestalt/MACSEC); Win: D2FILE_VerifyFileSignature UNSURE: Win side is WinVerifyTrust, Win32Posix has none
-Source/Bnclient/BnDownload.cpp	312	NOTWIN	Win: ShellExecuteA + D2FILE_VerifyFileSignature (WinVerifyTrust); Mac: none (inlined in Mac ApplyPrepatch) UNSURE: 441 calls it; modern needs stub
-Source/Bnclient/BnDownload.cpp	441	CARBON	Win ProcessPrepatchList: DeleteFileA, GetModuleFileNameA, SReg, SFile; Mac has own version (671) UNSURE: calls NOTWIN 312 (ShellExecute/WinVerifyTrust)
+Source/Bnclient/BnDownload.cpp	240	CARBON	Mac: BNDOWNLOAD_IsCheckRevisionLibraryTrusted (Gestalt/MACSEC); Win: D2FILE_VerifyFileSignature, which Win32Posix takes too (its POSIX body has no WinVerifyTrust, so it trusts no DLL)
+Source/Bnclient/BnDownload.cpp	312	CARBON	Win: ShellExecuteA + D2FILE_VerifyFileSignature (WinVerifyTrust); Mac: none (inlined in Mac ApplyPrepatch). Was NOTWIN, but 441 (CARBON) calls it: ShellExecuteA is Win32PosixShell.h
+Source/Bnclient/BnDownload.cpp	441	CARBON	Win ProcessPrepatchList: DeleteFileA, GetModuleFileNameA, SReg, SFile; Mac has own version (671); calls 312, now CARBON too
 Source/Bnclient/BnDownload.cpp	653	CARBON	Win ApplyPrepatch wraps ProcessPrepatchList; Mac version at 671 is MAC_SpawnProcess/MACSEC
 Source/Bnclient/BnDownload.cpp	671	CARBON	Mac ApplyPrepatch: MAC_SpawnProcess, MACSEC_IsBlizzardSigned, c2pstr, SaveFileFromMemCreateDirs, PATH_ToPosixPath, SREG_FlushPrefsFiles
 Source/Bnclient/BnDownload.cpp	1154	CARBON	Mac: Win32Mac 7-arg _beginthreadex(..., "DownloadThreadProc") (Win32MacKernel.h); Win: standard _beginthreadex
 Source/Bnclient/BnDownload.cpp	1472	CARBON	Mac: Win32Mac 7-arg _beginthreadex with thread name (Win32MacKernel.h); Win: standard _beginthreadex
-Source/Bnclient/BnSend.cpp	701	MAC	Win: Send_0x12_LocaleInfo (GetTimeZoneInformation, GetLocaleInfoA - all in Win32Mac); absent from Mac binary, no caller UNSURE: could equally be CARBON
+Source/Bnclient/BnSend.cpp	701	MAC	Win: Send_0x12_LocaleInfo (GetTimeZoneInformation, GetLocaleInfoA - all in Win32Mac); absent from Mac binary, no caller on any build, so the Mac skip stays macOS behaviour
 Source/Bnclient/BnSend.cpp	946	NOTWIN	Mac: decl of portable ERRORMANAGER_ReturnFalse stub (Fog ErrorManager.cpp); counterpart of Win crash-dump loader
 Source/Bnclient/BnSend.cpp	956	NOTWIN	Mac: ERRORMANAGER_ReturnFalse (portable stub); Win: Fog::Debug::LoadPreviousCrashDump (crash dump)
 Source/Bnclient/BnSend.cpp	1146	CARBON	Mac: Win32Mac 7-arg CreateThread(..., "sGetServersList") (Win32MacKernel.h); Win: standard CreateThread
@@ -36,7 +36,7 @@ Source/D2CMP/Src/SpriteCache.cpp	2173	CARBON	Mac: SPRITECACHE_EvictCelCacheEntry
 Source/D2Client/Core/WINMAIN.cpp	300	CARBON	Win: Unreferenced_0044b780 SendMessageA + D2GFX_ResetViewport; plain Win32 absent from Mac binary
 Source/D2Client/Core/WINMAIN.cpp	399	NOTWIN	Win: CLIENT_LoadLNG = LoadLibraryExA(D2.LNG) PE resource DLL + LoadAcceleratorsA
 Source/D2Client/D2Client.h	3054	CARBON	struct layout: D2SoundSmpStrc pDS3DBuffer/pEaxInterface absent in Win32Mac DirectSound emulation (0x58 bytes)
-Source/D2Client/D2ClientRoot.cpp	896	CARBON	Win: INPUT_HandleIMEComposition ImmGetContext/ImmGetCompositionStringA; Mac uses TSM UNSURE: Imm* may not be emulated by Win32Posix
+Source/D2Client/D2ClientRoot.cpp	896	CARBON	Win: INPUT_HandleIMEComposition ImmGetContext/ImmGetCompositionStringA; Mac uses TSM; Win32PosixUser.h declares IMM32 (no POSIX IME: no context)
 Source/D2Client/D2ClientRoot.cpp	3044	NOTWIN	Win: WARDEN_DecryptModule VirtualAlloc/VirtualProtect/LoadLibraryA/GetProcAddress, SEH (D2_SEH_EXCEPT)
 Source/D2Client/D2Hell/Src/Archive.cpp	289	CARBON	Win: ARCHIVE_WriteMemoryCheckReport CreateFileA + SMemFindNextHeap/SMemFindNextBlock (Windows Storm only, not StormMac)
 Source/D2Client/Engine.cpp	30	CARBON	Mac: #include <Carbon/Carbon.h>, decl STORM_IsCDVolume (StormMac SFILE), ARCHIVE_UnmountCdVolumes (MacShell)
@@ -54,13 +54,13 @@ Source/D2Client/Game/Msg.cpp	179	NOTWIN	Warden checksum packet field: Mac consta
 Source/D2Client/Game/Record.cpp	373	MAC	Mac: RECORD_SetFlagA, RECORD_GetFlagB, plain flags; no Carbon
 Source/D2Client/Game/Rendering.cpp	27	MAC	Mac: CLIENT_SetRendererMode sets globals; caller in MacShell unknown_display.cpp
 Source/D2Client/Game/Rendering.cpp	173	NOTWIN	Win: GlobalMemoryStatus phys/page memory overlay (Windows memory query)
-Source/D2Client/Game/SCmd.cpp	3721	NOTWIN	Win: D2TraceFmt Redivivus dev trace (d2_trace.cpp wsprintfA/OutputDebugStringA) UNSURE: our instrumentation, not original; could be ported
+Source/D2Client/Game/SCmd.cpp	3721	NOTWIN	Win: D2TraceFmt Redivivus dev trace (d2_trace.cpp wsprintfA/OutputDebugStringA): our Windows instrumentation, nothing off Windows needs it
 Source/D2Client/Game/Select.cpp	1094	MAC	Mac: SELECT_IsValueOne, plain C; no Carbon
 Source/D2Client/Game/stpl_SGAMEDATA.cpp	473	MAC	Mac: SGAMEDATA_FreeElementBlock (clang TSGrowableArray dtor), D2_StormNextLink, SMemFree; no Carbon
 Source/D2Client/Message.cpp	14	CARBON	Mac: #include MacShell/MacShell.h
 Source/D2Client/Message.cpp	101	CARBON	Mac: MAC_ProcessEvents (MacShell)
-Source/D2Client/Message.cpp	107	NOTWIN	Win: TranslateAcceleratorA with ghAccelTable, which only LoadAcceleratorsA of the LNG PE DLL fills UNSURE: plain Win32 API, could be CARBON
-Source/D2Client/Message.h	35	CARBON	Win32 SDK stand-ins where Win32Mac.h is not the SDK; Win32Posix builds on them: no-layer fallback tagMSG; Mac gets it from Win32MacUser.h (
+Source/D2Client/Message.cpp	107	NOTWIN	Win: TranslateAcceleratorA with ghAccelTable, which only LoadAcceleratorsA of the LNG PE DLL fills: no PE DLL off Windows
+Source/D2Client/Message.h	35	CARBON	Win32 SDK stand-ins, off where a Win32 layer owns the types (Win32Mac or Win32Posix): no-layer fallback tagMSG; Mac gets it from Win32MacUser.h (
 Source/D2Client/Renderer/Direct3D.cpp	19	NOTWIN	Win: RENDERER_D3D_CloseRegistryKey RegCloseKey (registry)
 Source/D2Client/Sound/Sound.cpp	631	MAC	Mac: SOUND_IsClientSampleActive (shared SOUNDSMP_GetStatus), SOUND_Inc/DecreaseOffsetA/B; no Carbon
 Source/D2Client/Sound/Sound.h	159	CARBON	struct layout: D2SoundSmpStrc pDS3DBuffer/pEaxInterface absent in Win32Mac DirectSound emulation (0x58 bytes)
@@ -69,15 +69,15 @@ Source/D2Client/Source/ClientEngine.cpp	2396	NOTWIN	Win: WARDEN_FreeModuleLibrar
 Source/D2Client/Source/ClientEngine.cpp	2402	NOTWIN	Win: WARDEN_FreeModuleLibraries thunk (Warden)
 Source/D2Client/UI/Button/ButtonWrapper.cpp	267	MAC	Mac: BUTTON_ConstructWrapper out-of-line ctor wrapper; no Carbon
 Source/D2Client/UI/Chat.cpp	27	CARBON	Mac: #include MacShell.h, decl CHAT_OnIMEInputText (TSM callback), MAC_DisposeTSMDocument
-Source/D2Client/UI/Chat.cpp	133	CARBON	Win: CHAT_HandleIMECandidateList ImmGetCandidateListA/CountA UNSURE: Imm* may not be emulated by Win32Posix
-Source/D2Client/UI/Chat.cpp	159	CARBON	Win: INPUT_HandleIMENotify ImmGetContext/ImmGetOpenStatus/ImmIsIME/GetKeyboardLayout UNSURE: Imm* may not be emulated by Win32Posix
-Source/D2Client/UI/Chat.cpp	272	CARBON	Win: CHAT_CheckIMELanguage GetSystemDefaultLangID/ImmIsIME/GetKeyboardLayout UNSURE: Imm* may not be emulated by Win32Posix
+Source/D2Client/UI/Chat.cpp	133	CARBON	Win: CHAT_HandleIMECandidateList ImmGetCandidateListA/CountA; Win32PosixUser.h declares IMM32
+Source/D2Client/UI/Chat.cpp	159	CARBON	Win: INPUT_HandleIMENotify ImmGetContext/ImmGetOpenStatus/ImmIsIME/GetKeyboardLayout; Win32PosixUser.h declares IMM32
+Source/D2Client/UI/Chat.cpp	272	CARBON	Win: CHAT_CheckIMELanguage GetSystemDefaultLangID/ImmIsIME/GetKeyboardLayout; Win32PosixUser.h declares IMM32
 Source/D2Client/UI/Chat.cpp	301	CARBON	Mac: CHAT_InitIME MAC_SetTSMInputCallback, MAC_CreateTSMDocument (MacShell); Win: Imm*
 Source/D2Client/UI/Chat.cpp	401	CARBON	Mac: CHAT_ShutdownIME MAC_DisposeTSMDocument, MAC_SetTSMInputCallback (MacShell); Win: Imm*
-Source/D2Client/UI/Chat.cpp	544	CARBON	Win: CHAT_DrawIMECandidates over LPCANDIDATELIST, MultiByteToWideChar UNSURE: Imm* may not be emulated by Win32Posix
+Source/D2Client/UI/Chat.cpp	544	CARBON	Win: CHAT_DrawIMECandidates over LPCANDIDATELIST, MultiByteToWideChar; Win32Posix declares both
 Source/D2Client/UI/Chat.cpp	1485	CARBON	Mac: MAC_ConvertUnicodeToText (MacShell); Win: WideCharToMultiByte
 Source/D2Client/UI/Chat.cpp	1579	CARBON	Mac: CHAT_OnIMEInputText, the TSM input callback (MacShell callback type), marked-text buffer
-Source/D2Client/UI/CmdTbl.cpp	1073	CARBON	Mac: thunk_CreateFileA hTemplate passed as 0 (Win32Mac HANDLE type) vs nullptr UNSURE: trivial type difference
+Source/D2Client/UI/CmdTbl.cpp	1073	CARBON	Mac: thunk_CreateFileA hTemplate passed as 0 (Win32Mac HANDLE is an int32 index) vs nullptr; Win32Posix HANDLE is a pointer
 Source/D2Client/UI/CmdTbl.cpp	2199	MAC	Mac: CMD_DisableKeyConfigMode -> CMD_ToggleKeyConfigMode; no Carbon
 Source/D2Client/UI/CmdTbl.h	101	MAC	Mac: decl CMD_DisableKeyConfigMode
 Source/D2Client/UI/Draw.cpp	492	MAC	Mac: CMD_DisableKeyConfigMode vs Win CMD_ExitKeyConfigMode; 1.14d Mac behaviour
@@ -103,7 +103,7 @@ Source/D2Common/DataTbls/DataTbls.h	159	MAC	Mac: decl DATATBLS_SwapTableRecords
 Source/D2Common/DataTbls/MonsterTbls.cpp	463	MAC	Mac: monstats DATATBLS_SwapTableRecords fix-up
 Source/D2Common/DataTbls/MonsterTbls.cpp	2422	MAC	Mac: monpreset DATATBLS_SwapTableRecords fix-up
 Source/D2Common/Txt/Cube.cpp	851	MAC	Mac: cubemain DATATBLS_SwapTableRecords fix-up
-Source/D2Game/Game/Server.cpp	2611	CARBON	Win: QSERVER_PlayerMessageThread + CreateThread; plain Win32 absent from Mac binary UNSURE: absent from Mac binary, not obviously a Win32Mac gap
+Source/D2Game/Game/Server.cpp	2611	CARBON	Win: QSERVER_PlayerMessageThread + CreateThread; absent from Mac binary; CreateThread is Win32PosixKernel.h
 Source/D2Game/Game/Task.cpp	590	CARBON	Win: StaticInit_aTaskQueueCriticalSections (_eh_vector_constructor_iterator_ shimmed in d2_platform.h, InitCriticalSection); modern needs CS init
 Source/D2Game/Game/Task.cpp	602	CARBON	Win: StaticFini_aTaskQueueCriticalSections _eh_vector_destructor_iterator_ + DeleteCriticalSection thunk
 Source/D2Game/Game/stpl_SGAMEDATA.cpp	381	MAC	Mac: TSHashTableSGAMEDATA_Initialize out-of-line (SetCount, UnlinkAll); no Carbon
@@ -111,51 +111,51 @@ Source/D2Game/Monster/MonsterMode.cpp	1805	MAC	Mac: MONMODE_EnterSkill1AndThink/
 Source/D2Game/Player/Player.cpp	1221	MAC	Mac: SERVER_GAME_SetMinimumPlayerCount + gnMinimumPlayerCount
 Source/D2Game/Player/PlayerMsg.cpp	5145	MAC	Mac: PLRMSG_ClearStateOnExpire -> ItemStats::SetState
 Source/D2Game/Skills/SkillAss.cpp	3019	MAC	Mac: SKILLASS_OnChargeUpStateExpire -> ItemStats::SetState
-Source/D2Headers/d2_enums.h	2434	CARBON	Win32 SDK stand-ins, off where a Win32 layer owns the types (Win32Mac or Win32Posix): TRUE constant: Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_enums.h	2438	CARBON	Win32 SDK stand-ins, off where a Win32 layer owns the types (Win32Mac or Win32Posix): using TRUE: Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	67	MAC	Mac C library: own FILE (__sFILE, _FILE_DEFINED), errno_t, __time32_t=long; no layer calls UNSURE: may be plain !defined(_WIN32) if Linux also uses libc FILE
-Source/D2Headers/d2_platform.h	310	CARBON	includes StormMac Win32Mac.h + Win32MacSockets.h (Win32-on-Mac layer types/handles)
-Source/D2Headers/d2_platform.h	328	CARBON	DWORD: Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	335	CARBON	LONG: Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	351	CARBON	ATOM: Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	359	CARBON	HANDLE: Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	364	CARBON	HWND/HDC: Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	377	CARBON	HRGN: Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	382	CARBON	LRESULT/WPARAM/LPARAM: Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	388	CARBON	FARPROC: Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	408	CARBON	CRITICAL_SECTION: Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	416	CARBON	FILETIME: Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	424	CARBON	PALETTEENTRY: Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	429	CARBON	_FILETIME: Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	435	CARBON	SYSTEMTIME: Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	445	CARBON	LARGE_INTEGER: Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	456	CARBON	CONTEXT: Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	463	CARBON	GetTickCount decl: Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	467	CARBON	QueryPerformanceCounter/Frequency, wsprintfA decls: Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	473	CARBON	GetLastError decl: Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	476	CARBON	SetLastError decl: Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	479	CARBON	GetCurrentThreadId decl: Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	483	CARBON	OutputDebugStringA/GetModuleHandleA/GetProcAddress/LoadLibraryA/FreeLibrary decls: Win32Mac supplies it
-Source/D2Headers/d2_platform.h	493	CARBON	Win32 SDK stand-ins where Win32Mac.h is not the SDK; Win32Posix builds on them: Initialize/Enter/Leave/DeleteCriticalSection decls: Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	499	CARBON	CreateThread decl: Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	502	CARBON	WaitForSingleObject/CloseHandle decls: Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	507	CARBON	Win32 SDK stand-ins where Win32Mac.h is not the SDK; Win32Posix builds on them: MessageBoxA/VirtualAlloc/VirtualFree decls: Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	515	CARBON	IsBadReadPtr Mac prototype SIZE_T vs UINT: mirrors Win32Mac declaration
-Source/D2Headers/d2_platform.h	527	CARBON	SetWindowPos BYTE uFlags/ShowWindow UINT: Win32MacWindow.h:308 prototype
-Source/D2Headers/d2_platform.h	541	CARBON	includes StormMac Win32MacUser.h
-Source/D2Headers/d2_platform.h	617	CARBON	_strrev decl (Win32MacKernel.h:170 declares it): Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	823	CARBON	Interlocked* inline stand-ins (Win32Mac.h/Win32MacKernel.h): Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	830	CARBON	Interlocked int32_t overloads (Win32MacKernel.h): Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	835	CARBON	WaitForMultipleObjects/SendMessageA decls: Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	891	CARBON	CreateFileA decl: Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	896	CARBON	GetFileAttributesA/GetModuleFileNameA decls: Win32Mac.h supplies it on Mac; modern build takes the stand-in
-Source/D2Headers/d2_platform.h	903	CARBON	Mac: BOOL SetRect (Win32GDI.h:151); Win: void SetRect + WSAGetLastError/WSACleanup stand-ins (Win32MacSockets provides)
-Source/D2Headers/d2_platform.h	910	CARBON	Win32 SDK stand-ins where Win32Mac.h is not the SDK; Win32Posix builds on them: timeGetTime decl (Win32MacKernel.h:136 maps it to TIME_GetMilliseconds): Win32Mac supplies it
-Source/D2Headers/d2_platform.h	1013	MAC	Mac: __cxa_pure_virtual (Itanium C++ ABI, clang); Win: MSVC _purecall. No layer calls UNSURE: any non-MSVC toolchain wants this; could be compiler-keyed
-Source/D2Headers/d2_platform.h	1099	CARBON	includes Win32MacKernel.h + Win32MacDirectSound.h (Win32-on-Mac entry points)
-Source/D2Hell/D2HellRoot.cpp	76	NOTWIN	Win: CreateProcessA for SystemSurvey; Mac twin in Main.cpp is MAC_SpawnProcess (posix_spawn) UNSURE: plain Win32, CARBON if Win32Posix spawns
+Source/D2Headers/d2_enums.h	2434	CARBON	Win32 SDK stand-ins, off where a Win32 layer owns the types (Win32Mac or Win32Posix): TRUE constant: Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_enums.h	2438	CARBON	Win32 SDK stand-ins, off where a Win32 layer owns the types (Win32Mac or Win32Posix): using TRUE: Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	67	NOTWIN	C library: own FILE (__sFILE, _FILE_DEFINED), errno_t, __time32_t=long; no layer calls. Was MAC; any non-Windows libc (Linux too), so !defined(_WIN32)
+Source/D2Headers/d2_platform.h	311	CARBON	includes StormMac Win32Mac.h + Win32MacSockets.h (Win32-on-Mac layer types/handles)
+Source/D2Headers/d2_platform.h	334	CARBON	DWORD: Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	341	CARBON	LONG: Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	357	CARBON	ATOM: Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	365	CARBON	HANDLE: Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	370	CARBON	HWND/HDC: Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	383	CARBON	HRGN: Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	388	CARBON	LRESULT/WPARAM/LPARAM: Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	394	CARBON	FARPROC: Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	414	CARBON	CRITICAL_SECTION: Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	422	CARBON	FILETIME: Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	430	CARBON	PALETTEENTRY: Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	435	CARBON	_FILETIME: Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	441	CARBON	SYSTEMTIME: Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	451	CARBON	LARGE_INTEGER: Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	462	CARBON	CONTEXT: Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	469	CARBON	GetTickCount decl: Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	473	CARBON	QueryPerformanceCounter/Frequency, wsprintfA decls: Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	479	CARBON	GetLastError decl: Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	482	CARBON	SetLastError decl: Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	485	CARBON	GetCurrentThreadId decl: Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	489	CARBON	OutputDebugStringA/GetModuleHandleA/GetProcAddress/LoadLibraryA/FreeLibrary decls: Win32Mac supplies it
+Source/D2Headers/d2_platform.h	499	CARBON	Win32 SDK stand-ins where Win32Mac.h is not the SDK; Win32Posix builds on them: Initialize/Enter/Leave/DeleteCriticalSection decls: Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	505	CARBON	CreateThread decl: Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	508	CARBON	WaitForSingleObject/CloseHandle decls: Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	513	CARBON	Win32 SDK stand-ins where Win32Mac.h is not the SDK; Win32Posix builds on them: MessageBoxA/VirtualAlloc/VirtualFree decls: Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	521	CARBON	IsBadReadPtr Mac prototype SIZE_T vs UINT: mirrors Win32Mac declaration
+Source/D2Headers/d2_platform.h	533	CARBON	SetWindowPos BYTE uFlags/ShowWindow UINT: Win32MacWindow.h:308 prototype
+Source/D2Headers/d2_platform.h	548	CARBON	includes StormMac Win32MacUser.h
+Source/D2Headers/d2_platform.h	624	CARBON	_strrev decl (Win32MacKernel.h:170 declares it): Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	823	CARBON	Interlocked* inline stand-ins (Win32Mac.h/Win32MacKernel.h): Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	830	CARBON	Interlocked int32_t overloads (Win32MacKernel.h): Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	835	CARBON	WaitForMultipleObjects/SendMessageA decls: Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	900	CARBON	CreateFileA decl: Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	905	CARBON	GetFileAttributesA/GetModuleFileNameA decls: Win32Mac.h supplies it on Mac; the modern build takes Win32Posix.h
+Source/D2Headers/d2_platform.h	912	CARBON	Mac: BOOL SetRect (Win32GDI.h:151); Win: void SetRect + WSAGetLastError/WSACleanup stand-ins (Win32MacSockets provides)
+Source/D2Headers/d2_platform.h	919	CARBON	Win32 SDK stand-ins where Win32Mac.h is not the SDK; Win32Posix builds on them: timeGetTime decl (Win32MacKernel.h:136 maps it to TIME_GetMilliseconds): Win32Mac supplies it
+Source/D2Headers/d2_platform.h	1022	MAC	Mac: __cxa_pure_virtual (Itanium C++ ABI, clang); Win: MSVC _purecall. Compiler-keyed in truth, kept on D2_OS_MAC: d2_platform.h is read whole by the VC8 translator, which skips only !defined(_WIN32) blocks
+Source/D2Headers/d2_platform.h	1108	CARBON	includes Win32MacKernel.h + Win32MacDirectSound.h (Win32-on-Mac entry points)
+Source/D2Hell/D2HellRoot.cpp	76	NOTWIN	Win: CreateProcessA for SystemSurvey (a Windows tool); Mac twin in Main.cpp is MAC_SpawnProcess (posix_spawn)
 Source/D2Hell/D2HellRoot.cpp	91	NOTWIN	Win: D2FILE_VerifySignatureWinTrust/D2FILE_GetSignerOrganization (WinTrust/Crypt32); Mac twin MACSEC_IsBlizzardSigned
-Source/D2Hell/D2HellRoot.cpp	246	CARBON	Win: GetLogicalDriveStringsA, GetDriveTypeA, GetVolumeInformationA CD walk; Mac twin PBHGetVInfoSync UNSURE: needs Win32Posix drive stubs else NOTWIN
+Source/D2Hell/D2HellRoot.cpp	246	CARBON	Win: GetLogicalDriveStringsA, GetDriveTypeA, GetVolumeInformationA CD walk; Mac twin PBHGetVInfoSync; Win32PosixKernel.h declares the three
 Source/D2Hell/D2HellRoot.cpp	320	CARBON	Win: GetModuleFileNameA + SFileOpenArchive path search; Mac inlines it into its Carbon ARCHIVE_LoadMPQ (3477)
 Source/D2Hell/D2HellRoot.cpp	357	CARBON	Win: ARCHIVE_LoadMPQ, Sleep, FindMpqFromDiskOrCd; Mac twin at 3477 is Carbon (PBHGetVInfoSync)
 Source/D2Hell/D2HellRoot.cpp	410	CARBON	Win: TerminateProcess(GetCurrentProcess()); absent from Win32Mac/1.14d Mac
@@ -172,7 +172,7 @@ Source/D2Hell/D2HellRoot.h	38	CARBON	Win32 SDK stand-ins, off where a Win32 laye
 Source/D2Hell/D2HellRoot.h	117	CARBON	Win32 SDK stand-ins, off where a Win32 layer owns the types (Win32Mac or Win32Posix): declares _CERT_INFO (Crypt32) for the WinTrust code only Windows keeps
 Source/D2Hell/Mac/MACSEC.cpp	12	MIXED	split: Carbon.h include, StormMac TSList fault-list init, Gestalt OS check CARBON; Security.framework signature check stays MAC. Mac: SecStaticCode*/CF (MAC) + Gestalt, Carbon.h, StormMac TSLink fault-list static init (CARBON)
 Source/D2Lang/StrTable/strtable.cpp	853	NOTWIN	Win: STRTABLE_GetRegistryLanguage RegOpenKeyExA/RegQueryValueExA "Control Panel\\International"; Mac: return 0
-Source/D2Lang/StrTable/strtable.cpp	969	CARBON	Win: STRTABLE_FormatInt64 _i64toa (Win32Mac.h: no body in 1.14d), unreferenced UNSURE: excluded because Mac binary lacks it
+Source/D2Lang/StrTable/strtable.cpp	969	CARBON	Win: STRTABLE_FormatInt64 _i64toa (Win32Mac.h: no body in 1.14d), unreferenced; Win32PosixKernel.h declares _i64toa
 Source/D2Launch/D2Launch.h	167	MAC	Mac: extern uint8_t fpInsertPlayCd vs uint32_t (1.14d Mac data size)
 Source/D2Launch/Launcher.cpp	17	MAC	Mac: #include D2gfx/Src/D2GFX.h for GetHwnd in the Mac quit path (Launcher.cpp:609)
 Source/D2Launch/Launcher.cpp	609	MAC	Mac: PostMessage(GetHwnd(), WM_CLOSE) instead of Win TerminateProcess(GetCurrentProcess()); 1.14d Mac quit behaviour
@@ -189,7 +189,7 @@ Source/D2Launch/Src/MainMenus.cpp	6099	CARBON	Mac: MAC_ProcessEvents (MacShell)
 Source/D2Launch/Src/MainMenus.cpp	6188	MAC	Mac: fpLoadVideoMpqCallback file-scope global (1.14d Mac linkage)
 Source/D2Launch/Src/MainMenus.cpp	6195	MAC	Win: static local fpLoadVideoMpqCallback; complement of MainMenus.cpp:6188
 Source/D2Launch/Src/MainMenus.cpp	6233	CARBON	Mac: GetCursorPos((POINT*)) - Win32MacUser.h POINT type differs from tagPOINT
-Source/D2Launch/Src/MainMenus.cpp	8121	CARBON	Mac: GetDiskFreeSpaceEx uint64 variant (Win32MacKernel.h), no wait screen; Win: GetDiskFreeSpaceA + FORMS wait screen UNSURE: Mac also drops the wait screen
+Source/D2Launch/Src/MainMenus.cpp	8121	CARBON	Mac: GetDiskFreeSpaceEx uint64 variant (Win32MacKernel.h), no wait screen; Win: GetDiskFreeSpaceA + FORMS wait screen, which Win32Posix takes
 Source/D2Launch/Src/MainMenus.cpp	8647	CARBON	Win: D2GFX_UpdateWindowSize (D2GFX.cpp: not on Mac, window moved by the Win32Mac window layer)
 Source/D2Launch/Src/MainMenus.cpp	8656	CARBON	Win: D2GFX_UpdateWindowSize (D2GFX.cpp: not on Mac, window moved by the Win32Mac window layer)
 Source/D2Launch/Src/MainMenus.cpp	9141	CARBON	Mac: GetDiskFreeSpaceEx uint64 variant (Win32MacKernel.h); Win: GetDiskFreeSpaceA
@@ -199,7 +199,7 @@ Source/D2Launch/Src/MainMenus.data.h	114	MAC	Mac: extern uint8_t gbCinematicsMen
 Source/D2MCPClient/Src/McpConnect.cpp	492	CARBON	Mac: CreateThread 7-arg Win32MacKernel.h signature (thread name); Win: standard CreateThread
 Source/D2Multi/OOGUtilities.cpp	207	NOTWIN	Win: LAUNCHER_ReadRegistryValue RegOpenKeyExA/RegQueryValueExA/RegCloseKey
 Source/D2Multi/OOGUtilities.cpp	255	MAC	Mac: tests only bit 0 of gnMCPConnectionRestoreResult; HasPeerName both sides; no Carbon
-Source/D2Multi/OOGUtilities.cpp	276	NOTWIN	Mac: STORM_LaunchURL (StormMac/Win32MacUser.h; LAYER); Win: registry .html lookup + CreateProcessA UNSURE: Win32Posix must provide STORM_LaunchURL
+Source/D2Multi/OOGUtilities.cpp	276	NOTWIN	Mac: STORM_LaunchURL (Win32MacUser.h, Win32PosixShell.h); Win: registry .html lookup + CreateProcessA. Guard now !defined(_WIN32) (was D2_MAC_CARBON in the code)
 Source/D2Multi/OOGUtilities.cpp	3378	MAC	Mac: EDITBOX_Cb_OOGUTIL_FilterGameNameChar, D2WINTEXTBOX_SetSelectedLine
 Source/D2Multi/Src/ChatDlg.cpp	80	CARBON	Mac: decl MAC_ConvertTextToUnicode (MacShell GameSetup.cpp)
 Source/D2Multi/Src/ChatDlg.cpp	2521	CARBON	Mac: GetDateFormat (Win32MacKernel.h) + MAC_ConvertTextToUnicode (MacShell); Win: GetDateFormatA/MultiByteToWideChar(GetACP)
@@ -210,8 +210,8 @@ Source/D2Net/Src/Client.cpp	99	MAC	NET_CLIENT_CreateServerConnectionThread (Crea
 Source/D2Net/Src/Client.cpp	123	CARBON	Mac: Win32Mac 7-arg CreateThread(..., "ConnectThread"); Win: standard CreateThread
 Source/D2Net/Src/Client.cpp	509	MAC	keep_ reference to NET_CLIENT_CreateServerConnectionThread, absent from Mac binary
 Source/D2Net/Src/Server.cpp	224	CARBON	Mac: Win32Mac 7-arg CreateThread(..., "ClientThread"); Win: standard CreateThread
-Source/D2OpenGL/Src/MacSdkOnWin32.h	19	CARBON	Mac side: the 10.7 SDK - Carbon/Carbon.h, AGL/agl.h, QuickDrawMac.h
-Source/D2OpenGL/Src/globals.cpp	52	CARBON	OpenGLFunctionTable for the Carbon Mac D2gfx mode-5 slot (g_apMacRenderers) UNSURE: the modern renderer may want it
+Source/D2OpenGL/Src/MacSdkOnWin32.h	20	CARBON	Mac side: the 10.7 SDK - Carbon/Carbon.h, AGL/agl.h, QuickDrawMac.h. Carbon confirmed: the modern SDK has no AGL; the modern build takes the second branch, as Windows does, with the system GL headers in place of windows.h
+Source/D2OpenGL/Src/globals.cpp	52	CARBON	OpenGLFunctionTable for the Carbon Mac D2gfx mode-5 slot (g_apMacRenderers, Mac slot order); the modern build takes D2gfxRenderer.cpp's table, as Windows does
 Source/D2OpenGL/Src/oglMac.cpp	831	CARBON	MAC_GetBinkSurfaceType: the Mac Bink library hook (CGDisplay pixel encoding)
 Source/D2Rave/D2Rave.h	8	CARBON	Mac PPC: QuickDraw 3D RAVE (QA*), DrawSprocket, D2Rave renderer internals
 Source/D2Rave/Src/CRaveTextures.cpp	10	CARBON	Mac PPC: QuickDraw 3D RAVE (QA*), DrawSprocket, D2Rave renderer internals
@@ -287,27 +287,27 @@ Source/D2gfx/Mac/D2GFXMac.h	7	CARBON	Mac D2gfx renderer table/surface/tile blitt
 Source/D2gfx/Mac/D2GFXMacForward.cpp	11	CARBON	Mac renderer-table forwarders (pfnSlot2C.. take EventRecord/Point, Carbon types), FUN_002b6035
 Source/D2gfx/Mac/D2GFXMacHelper.cpp	12	CARBON	Mac renderer helper-table slots: surface, palette shift tables (Mac D2gfx renderer architecture)
 Source/D2gfx/Mac/D2GFXMacRenderer.cpp	12	CARBON	Mac renderer switch: RENDERER_CurrentRenderedFunctions as MacRendererFunctions, D2GFX_SwitchModule
-Source/D2gfx/Mac/D2GFXMacTiles.cpp	18	CARBON	Mac software-renderer tile blitters for the Mac helper table; modern takes the Windows D2gfx tile path UNSURE: portable C
+Source/D2gfx/Mac/D2GFXMacTiles.cpp	18	CARBON	Mac software-renderer tile blitters for the Mac helper table; modern takes the Windows D2gfx tile path (D2gfx/Mac is not in the modern build)
 Source/D2gfx/Mac/MACDISPLAYGamma.cpp	10	MAC	Mac: CGSetDisplayTransferByTable/CGGetDisplayTransferByTable gamma (CoreGraphics), used by D2OpenGL Mac
-Source/D2gfx/Mac/MACGFX.cpp	11	MAC	Mac: CGDisplayCopyAllDisplayModes etc (CoreGraphics) display-mode table UNSURE: only caller is MacShell startup
+Source/D2gfx/Mac/MACGFX.cpp	11	MAC	Mac: CGDisplayCopyAllDisplayModes etc (CoreGraphics, in the modern SDK) display-mode table; only caller is MacShell startup; D2gfx/Mac is not in the modern build
 Source/D2gfx/Mac/MacSupport.mm	11	MAC	Mac: posix_spawn MAC_SpawnProcess, NSBundle sharedSupportPath (Foundation), no Carbon
 Source/D2gfx/Src/D2GFX.cpp	20	MIXED	split: PPC D2Rave/D2Uni includes and FUN_002b6035 decl D2_MAC_CARBON; x86 D2OpenGL include and the arch #error stay D2_OS_MAC. Mac: PPC D2Rave/D2Uni includes + FUN_002b6035 decl (CARBON), x86 D2OpenGL include (MAC)
-Source/D2gfx/Src/D2GFX.cpp	65	MAC	Mac: IsOSCursorHidden inverted cursor flag; pairs with ShowCursor-based Hide/ShowOSCursor, nothing Carbon
-Source/D2gfx/Src/D2GFX.cpp	82	CARBON	Mac: extern RENDERER_CurrentRenderedFunctions defined in D2GFXMacRenderer.cpp (Mac renderer unit)
-Source/D2gfx/Src/D2GFX.cpp	139	CARBON	Mac: thunk_D2GFX_ResetViewport -> FUN_002b6035 (Mac renderer forwarder); Win: D2GFX_ResetViewport
-Source/D2gfx/Src/D2GFX.cpp	154	CARBON	Mac: Win32Mac 1-arg UnregisterClass("Diablo II"); Win: UnregisterClassA, MessageBoxA error
-Source/D2gfx/Src/D2GFX.cpp	313	MAC	Mac: renderer selector rows; x86 OpenGL-only row (MAC), PPC Uni/RAVE rows already arch-gated
-Source/D2gfx/Src/D2GFX.cpp	350	CARBON	Mac: Win32Mac WNDCLASS/RegisterClass, int hInstance, GetSystemMetrics as brush; Win: RegisterClassA, LoadImageA icon
-Source/D2gfx/Src/D2GFX.cpp	412	MAC	Mac: first nfpInitialize failure returns 0 silently; Win: FOG_ErrorHandler; nothing Carbon
-Source/D2gfx/Src/D2GFX.cpp	453	MAC	Mac: Hide/ShowOSCursor with IsOSCursorHidden flag via ShowCursor; same calls both sides
-Source/D2gfx/Src/D2GFX.cpp	528	CARBON	Mac: Win32Mac CreateWindowEx (int hInstance cast), SetWindowPos; Win: CreateWindowExA, ChangeDisplaySettingsA, FindWindowA
-Source/D2gfx/Src/D2GFX.cpp	735	MAC	Mac: ShowOSCursor (IsOSCursorHidden flag); Win: inline ShowCursor loop on IsOSCursorVisible
-Source/D2gfx/Src/D2GFX.cpp	756	CARBON	Win: ChangeDisplaySettingsA(nullptr,0); plain Win32 display API Win32Mac lacks
-Source/D2gfx/Src/D2GFX.cpp	780	MAC	Mac: UpdateOSCursorVisibilty always toggles via Show/HideOSCursor; Win gates on windowed/renderer; nothing Carbon
-Source/D2gfx/Src/D2GFX.cpp	825	MAC	Mac: D2GFX_ResizeWindow 1<->2 skip, no GetClientRect; AdjustWindowRectEx/SetWindowPos both sides UNSURE: may be layer-driven
-Source/D2gfx/Src/D2GFX.cpp	893	CARBON	Win: D2GFX_UpdateWindowSize SystemParametersInfoA work area, GetWindowRect, GetClientRect, SetWindowPos
-Source/D2gfx/Src/D2GFX.cpp	1032	MIXED	split: taskbar DRAW_HideTaskbarAppBars/D2GFX_ResetViewport NOTWIN (defined(_WIN32)); D2GFX_EndCutScene !D2_MAC_CARBON. Win: SHAppBarMessage taskbar hide/restore (NOTWIN) + D2GFX_EndCutScene IsIconic/ShowWindow/ShowCursor (CARBON)
-Source/D2gfx/Src/D2GFX.cpp	1109	CARBON	Mac: Wnd_ReturnZero (Win32Mac IsIconic stub) in EndCutScene state; Win: D2GFX_EndCutScene
+Source/D2gfx/Src/D2GFX.cpp	68	MAC	Mac: IsOSCursorHidden inverted cursor flag; pairs with ShowCursor-based Hide/ShowOSCursor, nothing Carbon
+Source/D2gfx/Src/D2GFX.cpp	85	CARBON	Mac: extern RENDERER_CurrentRenderedFunctions defined in D2GFXMacRenderer.cpp (Mac renderer unit)
+Source/D2gfx/Src/D2GFX.cpp	142	CARBON	Mac: thunk_D2GFX_ResetViewport -> FUN_002b6035 (Mac renderer forwarder); Win: D2GFX_ResetViewport
+Source/D2gfx/Src/D2GFX.cpp	157	CARBON	Mac: Win32Mac 1-arg UnregisterClass("Diablo II"); Win: UnregisterClassA, MessageBoxA error
+Source/D2gfx/Src/D2GFX.cpp	316	MAC	Mac: renderer selector rows; x86 OpenGL-only row (MAC), PPC Uni/RAVE rows already arch-gated
+Source/D2gfx/Src/D2GFX.cpp	356	CARBON	Mac: Win32Mac WNDCLASS/RegisterClass, int hInstance, GetSystemMetrics as brush; Win: RegisterClassA, LoadImageA icon
+Source/D2gfx/Src/D2GFX.cpp	418	MAC	Mac: first nfpInitialize failure returns 0 silently; Win: FOG_ErrorHandler; nothing Carbon
+Source/D2gfx/Src/D2GFX.cpp	459	MAC	Mac: Hide/ShowOSCursor with IsOSCursorHidden flag via ShowCursor; same calls both sides
+Source/D2gfx/Src/D2GFX.cpp	534	CARBON	Mac: Win32Mac CreateWindowEx (int hInstance cast), SetWindowPos; Win: CreateWindowExA, ChangeDisplaySettingsA, FindWindowA
+Source/D2gfx/Src/D2GFX.cpp	741	MAC	Mac: ShowOSCursor (IsOSCursorHidden flag); Win: inline ShowCursor loop on IsOSCursorVisible
+Source/D2gfx/Src/D2GFX.cpp	762	CARBON	Win: ChangeDisplaySettingsA(nullptr,0); plain Win32 display API Win32Mac lacks
+Source/D2gfx/Src/D2GFX.cpp	786	MAC	Mac: UpdateOSCursorVisibilty always toggles via Show/HideOSCursor; Win gates on windowed/renderer; nothing Carbon
+Source/D2gfx/Src/D2GFX.cpp	831	MAC	Mac: D2GFX_ResizeWindow 1<->2 skip, no GetClientRect; AdjustWindowRectEx/SetWindowPos both sides, which Win32PosixUser.h declares
+Source/D2gfx/Src/D2GFX.cpp	899	CARBON	Win: D2GFX_UpdateWindowSize SystemParametersInfoA work area, GetWindowRect, GetClientRect, SetWindowPos
+Source/D2gfx/Src/D2GFX.cpp	1038	MIXED	split: taskbar DRAW_HideTaskbarAppBars/D2GFX_ResetViewport NOTWIN (defined(_WIN32)); D2GFX_EndCutScene !D2_MAC_CARBON. Win: SHAppBarMessage taskbar hide/restore (NOTWIN) + D2GFX_EndCutScene IsIconic/ShowWindow/ShowCursor (CARBON)
+Source/D2gfx/Src/D2GFX.cpp	1123	CARBON	Mac: Wnd_ReturnZero (Win32Mac IsIconic stub) in EndCutScene state; Win: D2GFX_EndCutScene
 Source/Fog/Debug.cpp	276	NOTWIN	Win: dbghelp process HANDLE global (SymInitialize/SymCleanup); Mac: nothing (Mach exception server)
 Source/Fog/Debug.cpp	326	NOTWIN	Win: DebugThread - IsDebuggerPresent, RaiseException thread-name SEH __except; Mac: nothing
 Source/Fog/Debug.cpp	345	NOTWIN	Win: dbghelp/crash: CloseHandle, DEBUG_LoadDbgHelp64Apis, GetProcAddress, LoadLibraryW; Mac: nothing
@@ -345,8 +345,8 @@ Source/Fog/Debug.cpp	2479	NOTWIN	Win: LoadPreviousCrashDump (GetFileAttributesA/
 Source/Fog/Debug.cpp	2570	NOTWIN	Win: dbghelp/crash: CloseHandle, DuplicateHandle, FullStackWalkWithAnnotations, GetCurrentProcess, GetCurrentThread; Mac: nothing
 Source/Fog/Debug.cpp	2588	NOTWIN	Win: dbghelp/crash: DEBUG_LoadStackCrawlDbgHelp, FOG_DBGHELP_NAME, GetProcAddress, InitializeCriticalSection, LoadLibraryA; Mac: nothing
 Source/Fog/Debug.cpp	2638	NOTWIN	Win: dbghelp/crash: GetCurrentThread, QuickStackWalkWithSymbols, TriggerManualStackDump; Mac: nothing
-Source/Fog/Debug.h	30	CARBON	Win32 SDK stand-ins, off where a Win32 layer owns the types (Win32Mac or Win32Posix): Neither-Win-nor-Mac fallback typedefs EXCEPTION_RECORD/CONTEXT/FLOATING_SAVE_AREA; Mac gets them from Win32Mac.h -> becomes !D2_MAC_CARBON UNSURE: depends on whether Win32Posix declares SEH types
-Source/Fog/Debug.h	353	CARBON	Win32 SDK stand-ins, off where a Win32 layer owns the types (Win32Mac or Win32Posix): Neither-Win-nor-Mac fallback struct _CONTEXT/_EXCEPTION_POINTERS; Mac gets them from Win32Mac.h -> becomes !D2_MAC_CARBON UNSURE: depends on whether Win32Posix declares SEH types
+Source/Fog/Debug.h	30	CARBON	Win32 SDK stand-ins, off where a Win32 layer owns the types (Win32Mac or Win32Posix): EXCEPTION_RECORD/CONTEXT/FLOATING_SAVE_AREA; Win32Posix.h declares the SEH types
+Source/Fog/Debug.h	353	CARBON	Win32 SDK stand-ins, off where a Win32 layer owns the types (Win32Mac or Win32Posix): struct _CONTEXT/_EXCEPTION_POINTERS; Win32Posix.h declares them (_CONTEXT opaque)
 Source/Fog/Engine/Application.cpp	49	NOTWIN	Win: NtCurrentTeb (TEB/PEB access); Mac: nothing
 Source/Fog/Engine/Application.cpp	63	NOTWIN	Win: DEBUG_ParsePEDebugDirectory (PE image debug directory); Mac: nothing
 Source/Fog/Engine/Application.cpp	164	NOTWIN	Win: DEBUG_ParseModuleHeaders/DEBUG_GetPEImageType (PE headers, IsBadReadPtr); Mac: nothing
@@ -391,7 +391,7 @@ Source/Fog/File.data.h	18	CARBON	typedef void filter: shape of Mac DumpLog (CRAS
 Source/Fog/File.h	33	CARBON	typedef void filter: shape of Mac DumpLog (CRASHY_* Mac crash lib); Win int = SEH disposition
 Source/Fog/Fog.h	759	NOTWIN	Win: GetAndCreateSavePath (registry+SHGetFolderPath); Mac: FOG_GetSavePath exe dir+"Save\" LAYER (GetModuleFileNameA)
 Source/Fog/Memory.cpp	12	CARBON	Mac: sizeof(D2MemoryManagerStrc)==0xd858 because Win32Mac CRITICAL_SECTION is a 0x2c pthread mutex (Win32Mac layout)
-Source/Fog/Memory.cpp	16	CARBON	Win: sizeof(D2MemoryManagerStrc)==0xbea4 with 0x18 CRITICAL_SECTION; excluded on Mac only for Win32Mac layout UNSURE: Win32Posix CRITICAL_SECTION size decides; 32-bit-only assert
+Source/Fog/Memory.cpp	16	CARBON	Win: sizeof(D2MemoryManagerStrc)==0xbea4 with 0x18 CRITICAL_SECTION, 32-bit only; Win32Posix keeps the SDK CRITICAL_SECTION (0x18/0x28), so the Windows assert holds there
 Source/Fog/Memory.cpp	63	NOTWIN	Win: OutOfMemoryHandler - GlobalMemoryStatus(Ex) (not in Win32Mac); Mac: nothing (Gestalt status elsewhere)
 Source/Fog/Memory.cpp	239	NOTWIN	Win: call to OutOfMemoryHandler (GlobalMemoryStatus report, NOTWIN def); Mac: nothing
 Source/Fog/Memory.cpp	301	NOTWIN	Win: call to OutOfMemoryHandler (GlobalMemoryStatus report, NOTWIN def); Mac: nothing
@@ -422,7 +422,7 @@ Source/Fog/Src/D2QSSocket.cpp	15	CARBON	Win: sizeof(D2QSSocketStrc)==0x194 (Win 
 Source/Fog/Src/D2QSSocket.cpp	29	CARBON	Mac: D2_NEW_AT size 0x1a8, Win32Mac pthread-mutex CRITICAL_SECTION layout
 Source/Fog/Src/D2QSSocket.cpp	33	CARBON	Win: D2_NEW_AT size 0x194, other half of Win32Mac layout split
 Source/Fog/Src/D2QSSocket.cpp	300	CARBON	Mac: CreateThread with extra thread-name arg (Win32MacKernel.h signature); Win: plain CreateThread
-Source/Fog/Src/D2QSSocket.cpp	313	CARBON	Win: QSSOCKET_Initialize (CreateEventA, CreateThread, normal Win32); absent from Mac binary UNSURE: absent fn, not missing API
+Source/Fog/Src/D2QSSocket.cpp	313	CARBON	Win: QSSOCKET_Initialize (CreateEventA, CreateThread, normal Win32); absent from Mac binary; Win32PosixKernel.h declares both
 Source/Fog/Src/ErrorManager.cpp	21	CARBON	Mac: #include CoreServices.h + MacShell.h
 Source/Fog/Src/ErrorManager.cpp	49	CARBON	Mac: zero-init _RTL_CRITICAL_SECTION = Win32Mac pthread_mutex_t typedef
 Source/Fog/Src/ErrorManager.cpp	53	CARBON	Win: _RTL_CRITICAL_SECTION field initializer (DebugInfo/LockCount), Win layout vs Win32Mac pthread mutex
@@ -431,16 +431,16 @@ Source/Fog/Src/ErrorManager.cpp	156	NOTWIN	Win: OpenProcess, GetModuleFileNameEx
 Source/Fog/Src/ErrorManager.cpp	171	NOTWIN	Win: WriteCrashReportProcessInfo: AllocateAndInitializeSid, CheckTokenMembership, parent process (crash report)
 Source/Fog/Src/ErrorManager.cpp	277	MIXED	split: CRASHY_* prototypes CARBON; gaMacLanguageNames + portable WriteCrashReportProcessInfo NOTWIN (!defined(_WIN32)). Mac: CRASHY_* decls (Mac crash lib) + portable WriteCrashReportProcessInfo via _3rdparty::crashy::Printf
 Source/Fog/Src/ErrorManager.cpp	347	NOTWIN	Win: InitializeSystemInfo: GetVersionExA, GlobalMemoryStatus(Ex), GetSystemInfo (OS/version queries)
-Source/Fog/Src/ErrorManager.cpp	540	CARBON	Win: OutputDebugStringIfCapsLock: GetAsyncKeyState, OutputDebugStringA (in Win32Mac); absent from Mac bin UNSURE: absent fn
+Source/Fog/Src/ErrorManager.cpp	540	CARBON	Win: OutputDebugStringIfCapsLock: GetAsyncKeyState, OutputDebugStringA (in Win32Mac and Win32Posix); absent from Mac bin
 Source/Fog/Src/ErrorManager.cpp	569	NOTWIN	Win: Fog exception filter DumpLog: CRASH_DumpRegisters, CRASH_EnumerateThreads, CRASH_FormatStackTrace, CrashDumpWriterThread
 Source/Fog/Src/ErrorManager.cpp	680	CARBON	Mac: DumpLog via CRASHY_Exit/CRASHY_WriteThreadBacktrace/CRASHY_WriteModules (Mac crash library entry points)
 Source/Fog/Src/ErrorManager.cpp	764	NOTWIN	Win: CRASH_FillupCrashTxt: CRASH_DumpThreadContext, CRASH_DumpRegisters, CRASH_EnumerateThreads (crash dump)
 Source/Fog/Src/ErrorManager.cpp	873	CARBON	Mac: CRASH_FillupCrashTxt via CRASHY_WriteThreadBacktrace/Registers/OtherThreadBacktraces (Mac crash lib)
-Source/Fog/Src/ErrorManager.cpp	1075	NOTWIN	Win: InitErrorManager: DEBUG_LoadStackCrawlDbgHelp, CRASH_SetExceptionHandler, SRegLoadValue UNSURE: pool/log init needed too
+Source/Fog/Src/ErrorManager.cpp	1075	NOTWIN	Win: InitErrorManager: DEBUG_LoadStackCrawlDbgHelp, CRASH_SetExceptionHandler, SRegLoadValue; the POSIX one is its own block after FOG_InitErrorManager (D2_BACKEND_POSIX)
 Source/Fog/Src/ErrorManager.cpp	5272	CARBON	Mac: FSFindFolder, FSGetCatalogInfo, PATH_MakeMacPathToken (Win32Mac), "\p" string
-Source/Fog/Src/ErrorManager.cpp	5295	NOTWIN	Mac: ERRORMANAGER_ReturnTrue/ReturnFalse stubs (no crash dump; Bnclient Mac caller) UNSURE: ReturnTrue only used by CARBON init
-Source/Fog/Src/ErrorManager.cpp	5308	CARBON	Mac: FOG_InitErrorManager: Gestalt, MAC_GetSharedSupportPath, CRASHY_SetCrashCallback, SERR_SetDisplayErrorCallback UNSURE: generic init
-Source/Fog/Src/ErrorManager.cpp	5398	CARBON	Mac: FOG_GetFramePointer, only used by D2gfx/Mac renderer (fp_fatal / FRAMEPOINTER_FATAL)
+Source/Fog/Src/ErrorManager.cpp	5295	NOTWIN	Mac: ERRORMANAGER_ReturnTrue/ReturnFalse stubs (no crash dump; Bnclient Mac caller); portable, any non-Windows build may call them
+Source/Fog/Src/ErrorManager.cpp	5308	CARBON	Mac: FOG_InitErrorManager: Gestalt, MAC_GetSharedSupportPath, CRASHY_SetCrashCallback, SERR_SetDisplayErrorCallback; its portable half is the POSIX ERRORMANAGER_InitErrorManager
+Source/Fog/Src/ErrorManager.cpp	5463	CARBON	Mac: FOG_GetFramePointer, only used by D2gfx/Mac renderer (fp_fatal / FRAMEPOINTER_FATAL)
 Source/Fog/Src/ErrorManager.h	105	NOTWIN	Mac: void WriteCrashReportProcessInfo (portable crashy::Printf body); Win: bool (SID/process info)
 Source/Fog/Src/ErrorManager.h	140	CARBON	Mac: void DumpLog prototype = CRASHY_Exit-ending Mac filter; Win: int SEH disposition
 Source/Fog/Src/Excel/Excel.cpp	1344	MAC	Mac: EXCEL_WalkTable20, TXT_SwapTableRecords, FOG_GetStringFromLinkIndex, plain C 1.14d Mac-only functions
@@ -475,11 +475,11 @@ Source/Fog/Src/QServer/QServer.cpp	46	CARBON	Win: D2_NEW_AT D2QServerStrc 0xc4c,
 Source/Fog/Src/QServer/QServer.cpp	50	CARBON	Mac: D2_NEW_AT D2QServerClientContainerStrc 0x678, Win32Mac layout
 Source/Fog/Src/QServer/QServer.cpp	53	CARBON	Win: D2_NEW_AT D2QServerClientContainerStrc 0x664, other half of Win32Mac layout split
 Source/Fog/Src/QServer/QServer98.cpp	383	CARBON	Mac: CreateThread with extra name arg (Win32MacKernel.h signature)
-Source/Fog/Src/QServer/QServerNT.cpp	232	CARBON	Win: CreateIoCompletionPort (normal Win32, not in Win32Mac) UNSURE: Win32Posix must emulate IOCP
+Source/Fog/Src/QServer/QServerNT.cpp	232	CARBON	Win: CreateIoCompletionPort (normal Win32, not in Win32Mac); Win32PosixKernel.h declares the completion port
 Source/Fog/Src/QServer/QServerNT.cpp	353	CARBON	Win: GetThreadPriority/SetThreadPriority (Win32Mac lacks GetThreadPriority)
-Source/Fog/Src/QServer/QServerNT.cpp	464	CARBON	Mac: no-IOCP PumpIoCompletionQueueForWorker stub (GetTickCount/GetLastError) UNSURE: only right if Win32Posix has IOCP
-Source/Fog/Src/QServer/QServerNT.cpp	476	CARBON	Win: GetQueuedCompletionStatus IOCP pump (Win32Mac has no IOCP) UNSURE: Win32Posix must emulate IOCP
-Source/Fog/Src/QServer/QServerNT.cpp	665	CARBON	Win: CreateIoCompletionPort (not in Win32Mac) UNSURE: Win32Posix must emulate IOCP
+Source/Fog/Src/QServer/QServerNT.cpp	464	CARBON	Mac: no-IOCP PumpIoCompletionQueueForWorker stub (GetTickCount/GetLastError): the Carbon layer has no completion port; Win32Posix has one
+Source/Fog/Src/QServer/QServerNT.cpp	476	CARBON	Win: GetQueuedCompletionStatus IOCP pump (Win32Mac has no IOCP); Win32PosixKernel.h declares it
+Source/Fog/Src/QServer/QServerNT.cpp	665	CARBON	Win: CreateIoCompletionPort (not in Win32Mac); Win32PosixKernel.h declares it
 Source/Fog/Src/QServer/QServerNT.cpp	706	CARBON	Win: stores IOCP handle in aIoCompletionPorts (Win32Mac has no IOCP)
 Source/Fog/Src/QServer/QServerNT.cpp	715	CARBON	Mac: CreateThread with extra name arg (Win32MacKernel.h signature)
 Source/Fog/Src/QServer/QServerNT.cpp	727	CARBON	Mac: CreateThread with extra "sReadThread" name arg (Win32MacKernel.h signature)
@@ -495,8 +495,8 @@ Source/Game/Main.cpp	47	NOTWIN	advapi security typedefs: AllocateAndInitializeSi
 Source/Game/Main.cpp	649	NOTWIN	_SERVICE_STATUS global (Windows service)
 Source/Game/Main.cpp	661	NOTWIN	_SERVICE_STATUS static (Windows service)
 Source/Game/Main.cpp	667	NOTWIN	SERVICE_STATUS_HANDLE ghServiceCtrlHandler (Windows service)
-Source/Game/Main.cpp	681	CARBON	MISC_GetValueFromD2Ini: GetPrivateProfileIntA/StringA (D2.ini); absent from Win32Mac UNSURE: Mac 1.14d never reads D2.ini; MAC if modern Mac should skip it
-Source/Game/Main.cpp	934	CARBON	call MISC_GetValueFromD2Ini (GetPrivateProfile*, not in Win32Mac) UNSURE: same as 681
+Source/Game/Main.cpp	681	CARBON	MISC_GetValueFromD2Ini: GetPrivateProfileIntA/StringA (D2.ini); absent from Win32Mac; Win32PosixKernel.h declares them, so the modern build reads D2.ini as Windows does
+Source/Game/Main.cpp	934	CARBON	call MISC_GetValueFromD2Ini (GetPrivateProfile*, not in Win32Mac; Win32PosixKernel.h)
 Source/Game/Main.cpp	1037	CARBON	Mac: FOG_MacGetBlizzardSupportPath (MacShell.h); Win: SFILE_GetBlizzardAppDataPath
 Source/Game/Main.cpp	1048	CARBON	Mac: FOpenResolveMacPath (Win32Mac Win32_Paths.cpp); Win: fopen
 Source/Game/Main.cpp	1065	CARBON	Mac: FOpenResolveMacPath (Win32Mac Win32_Paths.cpp); Win: fopen

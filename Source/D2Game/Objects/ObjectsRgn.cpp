@@ -115,7 +115,7 @@ int32_t __fastcall AllocObjectControl(::SGAMEDATA * pGame) {
       uSlot8.pShrinesRngIter->nShrinesCount[0] = 0;
       uSlot8.pShrinesRngIter = (D2ObjectRngShrines*)(uSlot8.pShrinesRngIter->nShrinesCount + 1);
     } while (uSlotC.nShrineClassIdxLoop < 8);
-#elif D2_ARCH_X64
+#elif D2_ARCH_X64 || D2_ARCH_ARM64
     uSlotC.nShrineClassIdxLoop = 0;
     // The x86 body walks a D2ObjectRngShrines* one dword per class, so ->aShrinesRng[0] and
     // ->nShrinesCount[0] land on the class's entries; the pointer array is wider on x64.
