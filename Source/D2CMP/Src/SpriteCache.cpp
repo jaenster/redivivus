@@ -1834,7 +1834,7 @@ void __stdcall GFX_InitCelDataCache(D2PoolManagerStrc * nFlags, uint32_t dwCache
     }
 
     GFX_AllocSpriteCache(&D2GfxMemoryStrc_0089db60, nFlags, dwCacheBytes, (fnSpriteCacheEntryRelease)SPRITECACHE_ReleaseHashEntry);
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
     // The Mac build hands Storm the eviction callback for the cel cache.
     extern uint32_t SPRITECACHE_EvictCelCacheEntry();
     ::STORM_StoreValue((uint32_t)(uintptr_t)SPRITECACHE_EvictCelCacheEntry);
@@ -2170,7 +2170,7 @@ BOOL __stdcall SPRITECACHE_PrecacheSpriteSync(D2GfxDataStrc * pGfxData) {
 }
 
 } // namespace D2CMP::SRC::SpriteCache
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 namespace D2CMP::SRC::SpriteCache {
 

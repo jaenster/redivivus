@@ -2,7 +2,7 @@
 
 #include "Source/Fog/Src/LogManager.h"
 #include "Source/Fog/Memory.h"
-#if D2_OS_MAC
+#if (D2_MAC_CARBON || D2_BACKEND_POSIX)  // the non-Windows side runs on a Win32 layer: Win32Mac or Win32Posix
 #include "Source/Fog/Debug.h"
 #endif
 #include "Source/Fog/Source/SFile.h"
@@ -541,15 +541,15 @@ static void __stdcall DecodeCpuModelName(uint32_t nModel, int32_t nBrandId, char
     }
 }
 
-// The CPU benchmark, special-folder, disk-space and OS-version queries are Windows-only (win32-on-mac.tsv). They are under `#if !D2_OS_MAC`.
-#if !D2_OS_MAC
+// The CPU benchmark, special-folder, disk-space and OS-version queries are Windows-only (win32-on-mac.tsv). They are under `#if defined(_WIN32)`.
+#if defined(_WIN32)
 int64_t __stdcall GetTimestamp() {
     int64_t nTsc = __rdtsc();
     return nTsc;
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 uint32_t __stdcall BenchmarkCpuSpeed() {
     LARGE_INTEGER qpcStart;
     LARGE_INTEGER qpcEnd;
@@ -615,7 +615,7 @@ uint32_t __fastcall DispatchCpuidCall(int32_t nLeaf) {
     return pCpuidResult[2];
 }
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 void __stdcall LogCpuInfo() {
     // Static local variables (originally global data)
     static char * gaCpuVendorNames[5] = { (char*)"Unknown", (char*)"Intel", (char*)"AMD", (char*)"Cyrix", nullptr }; D2_STATIC_GUARD(gaCpuVendorNames, "Fog::Src::LogManager::LogCpuInfo::gaCpuVendorNames");
@@ -890,7 +890,7 @@ FILE * __fastcall FindOrOpenLogFileSlot(uint8_t * szFileName, uint32_t * pnSlotI
     return pOpenedFile;
 }
 
-#if !D2_OS_MAC
+#if !(D2_MAC_CARBON || D2_BACKEND_POSIX)  // the non-Windows side runs on a Win32 layer: Win32Mac or Win32Posix
 void __fastcall FILETOOLS_GetUserMyDocumentsDiabloIIGameLogsFolder(char * szGameLogsPath, int32_t nGameLogsPathLength) {
     char szMyDocuments[260];
     *szGameLogsPath = '\0';
@@ -1719,27 +1719,27 @@ void __fastcall EnqueueFormattedLogMessage(char * szText, int32_t nPriority, int
     int** pPrevLink;
     char szFormatted[4096];
     void* pSavedEsp;
-#if !D2_OS_MAC
+#if defined(_WIN32)
     EH4_EXCEPTION_REGISTRATION tSehFrame;
 #endif
     int* pNext;
-#if !D2_OS_MAC
+#if defined(_WIN32)
     tSehFrame.TryLevel = -2;
     tSehFrame.ExceptionHandler = _except_handler4;
     tSehFrame.Next = (EH4_EXCEPTION_REGISTRATION*)ExceptionList;
     tSehFrame.EncodedScopeTable = DEFAULT_SECURITY_COOKIE ^ 0x700c98;
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
     ExceptionList = &tSehFrame;
 #endif
     if (!gLogWriterThreadStopFlag && gLogManagerInitialized) {
       int nPayloadSize;
-#if !D2_OS_MAC
+#if defined(_WIN32)
       tSehFrame.TryLevel = 0;
 #endif
       vsnprintf(szFormatted, 0x1000, szFormat, vaArgs);
       szFormatted[0xfff] = '\0';
-#if !D2_OS_MAC
+#if defined(_WIN32)
       tSehFrame.TryLevel = -2;
 #endif
       if (bAppendNewline == 1) {
@@ -1778,7 +1778,7 @@ void __fastcall EnqueueFormattedLogMessage(char * szText, int32_t nPriority, int
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gLogMessageQueueCS);
     }
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
     ExceptionList = tSehFrame.Next;
 #endif
 }
@@ -1786,7 +1786,7 @@ void __fastcall EnqueueFormattedLogMessage(char * szText, int32_t nPriority, int
 // 1.14d mac: 002efad4
 void __stdcall StartLogWriterThread() {
     /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ gLogWriterThreadStopFlag = 0;
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
     gLogWriterThreadHandle = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)LOGMANAGER_LogWriterThreadProc, (LPVOID)0x0, 0, &gLogWriterThreadId, "LogThread");
 #else
     gLogWriterThreadHandle = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)LOGMANAGER_LogWriterThreadProc, (LPVOID)0x0, 0, &gLogWriterThreadId);
@@ -1924,7 +1924,7 @@ void __fastcall Atomic64Load(int64_t * pllResult, int64_t * pllSource) {
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 ULONGLONG __stdcall GetFreeDiskSpaceForSavePath() {
     char szSavePath[1024];
     Source::SFile::GetAndCreateSavePath(szSavePath, 0x400);
@@ -1957,7 +1957,7 @@ ULONGLONG __stdcall GetFreeDiskSpaceForSavePath() {
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 void GetGlobalMemoryStatus(LPMEMORYSTATUS pMemoryStatus) {
     memset(pMemoryStatus, 0, sizeof(*pMemoryStatus));
     /* LPMEMORYSTATUS lpBuffer for GlobalMemoryStatus */ pMemoryStatus->dwLength = 0x20;
@@ -1965,7 +1965,7 @@ void GetGlobalMemoryStatus(LPMEMORYSTATUS pMemoryStatus) {
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 int __stdcall IsWindowsNT() {
     _OSVERSIONINFOA sVersionInfo;
     memset(&sVersionInfo, 0, sizeof(sVersionInfo));
@@ -2012,7 +2012,7 @@ void InitHighResTimer() {
 // Returns the current wall-clock second count in EAX (base seconds + elapsed ticks/1000). Takes no arguments: the former EBX parameter was a phantom propagated from AtomicExchange64's don't-care comparand.
 // 1.14d mac: 002f72b8
 uint32_t LOGMGR_GetHighResolutionTime() {
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
     int nPriority;
 #endif
     D2HighResTimestampStrc tRefresh;
@@ -2024,7 +2024,7 @@ uint32_t LOGMGR_GetHighResolutionTime() {
     Atomic64Load((int64_t*)&tBase, (int64_t*)&gHighResTimerInitTimestamp);
 #endif
     if (dwNowTick - tBase.dwTick > 30000) {
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
       HANDLE hThread;
       hThread = GetCurrentThread();
       /* HANDLE hThread for GetThreadPriority */ nPriority = GetThreadPriority(hThread);
@@ -2046,7 +2046,7 @@ uint32_t LOGMGR_GetHighResolutionTime() {
     return (dwNowTick - tBase.dwTick) / 1000 + tBase.nSeconds;
 }
 
-#if D2_OS_MAC
+#if !defined(_WIN32)
 // 1.14d mac: 002f731d
 // The Mac build has no Windows NT: the check the init code makes (the error manager, the QServer's
 // local mode) is this stub, always zero.

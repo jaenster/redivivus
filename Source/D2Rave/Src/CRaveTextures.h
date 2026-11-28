@@ -10,7 +10,7 @@
 // Mac target yet; the member and method names below are that header's, so the two can merge.
 #pragma once
 
-#if !defined(_WIN32) && D2_OS_MAC && D2_ARCH_PPC
+#if !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC
 
 #include <stdint.h>
 #include "Redivivus/Platform/MacClassic/MacClassicRave.h"
@@ -75,4 +75,4 @@ public:
     void ConvertPixels(int nTexWidth, int nTexHeight, int nSrcWidth, int nSrcHeight, uint8_t * pSrc) override;
 };
 
-#endif // !defined(_WIN32) && D2_OS_MAC && D2_ARCH_PPC
+#endif // !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC

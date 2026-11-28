@@ -3,7 +3,7 @@
 // Win32_Process.cpp (ends with WSOCK_CloseSocket, 0002b1f5) and the resource code.
 #include "Win32Text.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 // 1.14d mac: 0002b1fe
 // Clamps the point into the rectangle, right and bottom inclusive; true when it moved.

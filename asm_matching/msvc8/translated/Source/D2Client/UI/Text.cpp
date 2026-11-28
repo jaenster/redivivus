@@ -41,7 +41,7 @@
 #include "Source/D2Client/UI/Help.data.h"
 #include "Source/D2Client/UI/Party.data.h"
 #include "Source/D2Client/UI/Text.data.h"
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 #include "Source/MacSpecific/Source/MacShell/MacShell.h"
 #endif
 
@@ -3070,7 +3070,7 @@ static uint8_t TEXT_ConvertCharToWideWithLanguage(uint32_t dwUnused, char * szTe
     if (nLanguage == 7 || nLanguage == 0xc || nLanguage == 6 || nLanguage == 9) {
       uint16_t uVar1;
       /* int cchWideChar for MultiByteToWideChar */ /* LPWSTR lpWideCharStr for MultiByteToWideChar */ /* int cbMultiByte for MultiByteToWideChar */ /* LPCSTR lpMultiByteStr for MultiByteToWideChar */ /* DWORD dwFlags for MultiByteToWideChar */ /* UINT CodePage for MultiByteToWideChar */ 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
       MAC_ConvertTextToUnicode(szText, (char*)pwszDest, strlen(szText), 0x200, -0x80);
 #else
       MultiByteToWideChar(0, 1, szText, 0x100, (LPWSTR)pwszDest, 0x100);
@@ -3924,7 +3924,7 @@ void __fastcall TEXT_ProcessChatMessage(MessageStrc * pMessage) {
           {
             Fog::File::CONTAINER_InitializeBuffer(wcWideStart, 2, 0x100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
             /* int cchWideChar for MultiByteToWideChar */ /* LPWSTR lpWideCharStr for MultiByteToWideChar */ /* int cbMultiByte for MultiByteToWideChar */ /* LPCSTR lpMultiByteStr for MultiByteToWideChar */ /* DWORD dwFlags for MultiByteToWideChar */ /* UINT CodePage for MultiByteToWideChar */ 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
             MAC_ConvertTextToUnicode(pszName, (char*)wcWideStart, strlen(pszName), 0x200, -0x80);
 #else
             MultiByteToWideChar(0, 1, pszName, 0x100, (LPWSTR)wcWideStart, 0x100);

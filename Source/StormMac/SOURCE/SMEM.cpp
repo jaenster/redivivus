@@ -3,7 +3,7 @@
 // Source/Storm/Source/SMem.cpp; this one has no heap manager of its own.
 #include "Source/StormMac/Win32Mac/Source/Win32/Win32Mac.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include <stdint.h>
 

@@ -7,7 +7,7 @@
 // the window drops its handlers of all five types.
 #include "Source/StormMac/H/stpl.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include "Source/StormMac/H/StormApi.h"
 

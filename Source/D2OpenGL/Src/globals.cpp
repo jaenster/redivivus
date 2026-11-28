@@ -49,7 +49,7 @@ int INT_ARRAY_00334c70[6] = { 0x200, 0x800, 0x800, 0x100, 0x100, 0x40 }; D2_GLOB
 
 uint64_t DAT_00335278 = 0x4330000000000000; D2_GLOBAL_GUARD(DAT_00335278, "DAT_00335278");
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 #include "Source/D2OpenGL/Src/oglMac.h"
 #include "Source/D2OpenGL/Src/oglSmack.h"
 #include "Source/D2OpenGL/Src/oglPerspective.h"

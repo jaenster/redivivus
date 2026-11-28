@@ -32,7 +32,7 @@ static unsigned int gbBnetDownloadCancelFlag = {}; D2_STATIC_GUARD(gbBnetDownloa
 static char lpFileName_00881c58[260] = {}; D2_STATIC_GUARD(lpFileName_00881c58, "lpFileName_00881c58");
 static LONG lpAddend_00881d5c = 0; D2_STATIC_GUARD(lpAddend_00881d5c, "lpAddend_00881d5c");
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 #include <CoreServices/CoreServices.h>
 #include <sys/stat.h>
 #include <string.h>
@@ -237,7 +237,7 @@ int32_t __fastcall BNDOWNLOAD_PerformCheckRevision(uint32_t * pdwVersionOut, uin
         if (!__frame0.dwAuthResult || __frame0.dwAuthResult >= 5) {
           BVar1 = NET_CopyDllFromArchive(__frame0.pArchive, __frame0.szDllPath, lpFileName_00881c58);
           if (BVar1) {
-#if D2_OS_MAC
+#if D2_MAC_CARBON
             bSigValid = BNDOWNLOAD_IsCheckRevisionLibraryTrusted(__frame0.szDllPath);
 #else
             bSigValid = D2Hell::D2FILE_VerifyFileSignature(__frame0.szDllPath);
@@ -309,7 +309,7 @@ void __fastcall BNDOWNLOAD_ExtractFileFromArchive(char * szFileName, D2ArchiveSt
     Storm::Source::SFile::SFileCloseFile(pMpqFile);
 }
 
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32)
 static BOOL BNDOWNLOAD_LaunchVerifiedExecutables(LPCSTR szText1, LPCSTR szText2) {
     while (*szText2) {
       if (!D2Hell::D2FILE_VerifyFileSignature(szText2)) {
@@ -438,7 +438,7 @@ static int32_t __stdcall BNDOWNLOAD_RecvFileFromSocket(LPCSTR pThis, SOCKET hSoc
 }
 
 // Processes BNet prepatch.lst from downloaded MPQ archive - executes patches, extracts files, launches updates
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 int __fastcall BNDOWNLOAD_ProcessPrepatchList(int * pResultOut) {
     // Frame slots -4020..-3996 are ONE object: &dwAuthResult is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -650,7 +650,7 @@ int __fastcall BNDOWNLOAD_ProcessPrepatchList(int * pResultOut) {
 }
 #endif
 
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 int __fastcall BNDOWNLOAD_ApplyPrepatch(BOOL * pbPatcherLaunched) {
     int nResult;
     BNDOWNLOAD_ProcessPrepatchList(&nResult);
@@ -668,7 +668,7 @@ int __fastcall BNDOWNLOAD_ApplyPrepatch(BOOL * pbPatcherLaunched) {
 }
 #endif
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // The Mac has no separate list processor: one function reads Prepatch.lst out of each downloaded
 // archive, applies delete/extract/execute lines, registers the patch sources and launches the
 // signed updater programs.
@@ -1151,7 +1151,7 @@ void __fastcall BNDOWNLOAD_InitiateFileDownload(int32_t pDownloadCtx, uint32_t d
     Storm::Source::SSTR::SStrCopy(pThreadCtx->szFileName, szBufferInput, 0x104);
     Storm::Source::SSTR::SStrCopy(pThreadCtx->szOutputPath, szText2, 0x104);
     /* LONG * lpAddend for InterlockedIncrement */ InterlockedIncrement(&lpAddend_00881d5c);
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
     HANDLE hObject = (HANDLE)_beginthreadex(nullptr, 0, BnetDownloadFile_II, pThreadCtx, 0, &nThreadId, "DownloadThreadProc");
 #else
     HANDLE hObject = (HANDLE)_beginthreadex(nullptr, 0, BnetDownloadFile_II, pThreadCtx, 0, &nThreadId);
@@ -1469,7 +1469,7 @@ uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pPatchList, uint32_
     Storm::Source::SSTR::SStrCopy(pThreadCtx->szFileName, (char*)pPatchList, 0x104);
     Storm::Source::SSTR::SStrCopy(pThreadCtx->szOutputPath, "", 0x104);
     /* LONG * lpAddend for InterlockedIncrement */ InterlockedIncrement(&lpAddend_00881d5c);
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
     uintptr_t nThreadHandle = _beginthreadex(nullptr, 0, BnetDownloadFile_II, pThreadCtx, 0, &nThreadId, "DownloadThreadProc");
 #else
     uintptr_t nThreadHandle = _beginthreadex(nullptr, 0, BnetDownloadFile_II, pThreadCtx, 0, &nThreadId);

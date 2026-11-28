@@ -5,7 +5,7 @@
 #
 #   cmake/check-macppc.sh [file.cpp ...]     default: every .cpp in both modules
 #
-# Every file is guarded by `!defined(_WIN32) && D2_OS_MAC && D2_ARCH_PPC`, so both axes are
+# Every file is guarded by `!defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC`, so the axes are
 # forced on. Current clang has no Apple PowerPC triple: a unit that needs only the stub
 # headers is checked as 32-bit big-endian PowerPC, freestanding; a unit that includes the
 # shared tree headers (d2_platform.h needs a hosted C++ library) falls back to i386 Mac with
@@ -14,7 +14,7 @@ set -u
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
 CXX=${CXX_MACPPC:-clang++}
 SDK=${SDK_MACPPC:-$(xcrun --show-sdk-path 2>/dev/null || true)}
-AXES=(-std=gnu++17 -fsyntax-only -DD2_OS_MAC=1 -DD2_ARCH_PPC=1 -I"$ROOT")
+AXES=(-std=gnu++17 -fsyntax-only -DD2_OS_MAC=1 -DD2_MAC_CARBON=1 -DD2_ARCH_PPC=1 -I"$ROOT")
 PPC=(-target powerpc-unknown-none -ffreestanding)
 HOSTED=(-target i386-apple-macos10.13 -Wno-#warnings -I"$ROOT/Source/D2Headers")
 [ -n "$SDK" ] && HOSTED+=(-isysroot "$SDK")

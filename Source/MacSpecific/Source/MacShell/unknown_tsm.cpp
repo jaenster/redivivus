@@ -7,11 +7,11 @@
 // calls its 35-byte activate/deactivate functions out of line; Game/Main.cpp
 // (MISC_InitD2IniAndIgnorelist, 0019e8a1) follows. See Source/MacSpecific/README.md.
 //
-// Mac-only: the guard is spelled `#if !defined(_WIN32) && D2_OS_MAC` (see
+// Mac-only: the guard is spelled `#if !defined(_WIN32) && D2_MAC_CARBON` (see
 // Source/MacSpecific/README.md).
 #include "D2Arch.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include <Carbon/Carbon.h>
 #include <pthread.h>

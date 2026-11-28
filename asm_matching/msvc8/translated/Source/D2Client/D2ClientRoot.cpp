@@ -893,7 +893,7 @@ int __fastcall Unreferenced_0047aa40(uint16_t * pChar) {
     return 0;
 }
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // Windows-only: the Mac build has no Imm* input method manager (its IME is Text Services Manager, MAC_SetTSMInputCallback).
 #else
 void __stdcall INPUT_HandleIMEComposition(D2UIMouseMsgStrc * pMsg) {
@@ -3041,7 +3041,7 @@ pfnWardenCreateInterface __fastcall WARDEN_DecryptBuffer(D2WardenModuleStrc * pp
     return (pfnWardenCreateInterface)(pContext + pExportTable[nOrdinal - pImage->nOrdinalBase]);
 }
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32)
 // Windows-only: the Mac build loads no Warden module (no VirtualProtect, no x86 module image).
 #else
 // Decrypt Warden anti-cheat module data using RSA/crypto operations

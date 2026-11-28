@@ -27,7 +27,7 @@
 #define D2_NEW_AT(T, szFile, nLine) ((T*)D2_ALLOC_AT(sizeof(T), (szFile), (nLine)))
 #endif
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // The 1.14d Mac allocates and zeroes 0x58 bytes in CallSounds (002e8c21) and SOUNDSMP_ReleaseInterfaces (002e8e43).
 static_assert(sizeof(void*) != 4 || sizeof(::D2SoundSmpStrc) == 0x58, "D2_NEW_AT(D2SoundSmpStrc): the 32-bit Mac layout must be the 0x58 bytes 1.14d Mac allocates");
 #else
@@ -192,7 +192,7 @@ BOOL __fastcall SOUNDSMP_ClearBuffer(IDirectSoundBuffer * pSoundSmp, DWORD dwWri
     return 1;
 }
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // 1.14d mac: 002e8cf1
 // The Mac sample has no 3D buffer and no EAX set: one CreateSoundBuffer, never the 3D caps
 // (0x14), and the sample-param case keeps only the pan control the |= adds. The Mac passes
@@ -456,7 +456,7 @@ void __fastcall SOUNDSMP_SetPan(D2SoundSmpStrc * ppSoundSmp, int32_t nPan) {
 // The Mac has no 3D buffer: only the checks remain.
 void __thiscall SOUNDSMP_Set3DPosition(D2SoundSmpStrc * pThis, float nSoundHandle, float fY, float pD2SoundsTxt) {
     if (pThis && pThis->pDSBuffer) {
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
       return;
 #else
       if (!(pThis->dwFlags & 2)) {
@@ -527,7 +527,7 @@ void __fastcall SOUNDSMP_SetEaxObstruction(D2SoundSmpStrc * pSoundSmp, float fOb
     }
 
     pSoundSmp->fEaxObstruction = fObstruction;
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32) && D2_MAC_CARBON)
     if (!pSoundSmp->pEaxInterface) {
       return;
     }
@@ -552,7 +552,7 @@ void __fastcall SOUNDSMP_SetEaxRoomLevel(D2SoundSmpStrc * pSoundSmp, float fPara
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x359);
       exit(-1);
     }
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32) && D2_MAC_CARBON)
 
     DWORD DVar1 = SOUND_GetEAXEnabledFlag();
     if (DVar1) {
@@ -780,7 +780,7 @@ BOOL __fastcall SOUNDSMP_CheckBufferLost(D2SoundSmpStrc * ppnParam) {
 // The Mac sample holds only the sound buffer.
 static void SOUNDSMP_ReleaseInterfaces(D2SoundSmpStrc * ppnParam) {
     SOUNDSMP_Stop(ppnParam);
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32) && D2_MAC_CARBON)
     IKsPropertySet* pInterface = ppnParam->pEaxInterface;
     if (pInterface) {
       pInterface->lpVtbl->Release(pInterface);
@@ -822,7 +822,7 @@ void __fastcall SOUNDSMP_Destroy(D2SoundSmpStrc * pSoundSmp) {
 // The Mac has no 3D buffer: no distances, no 3D position; the pan is centred through
 // SOUNDSMP_SetPan(0x80) for every sample.
 void __fastcall SOUNDSMP_Reset(D2SoundSmpStrc * pSoundSmp) {
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32) && D2_MAC_CARBON)
     IDirectSound3DBuffer* This;
 #endif
     DWORD DVar1;
@@ -853,7 +853,7 @@ void __fastcall SOUNDSMP_Reset(D2SoundSmpStrc * pSoundSmp) {
       }
 
       pSoundSmp->pDSBuffer->lpVtbl->SetCurrentPosition(pSoundSmp->pDSBuffer, 0);
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
       SOUNDSMP_SetPan(pSoundSmp, 0x80);
 #else
       This = pSoundSmp->pDS3DBuffer;
@@ -912,7 +912,7 @@ DWORD __stdcall D2SOUNDSMP_SoundUpdateThreadProc(void * lpThreadParam) {
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gSoundSmpCs);
       __frame0.nPrevMinimized = gbWindowIsMinimized;
       hWnd = D2gfx::D2GFX::GetHwnd();
-      #if D2_OS_MAC
+      #if D2_MAC_CARBON
       // 1.14d mac: 00031564, the layer's IsIconic stub
       gbWindowIsMinimized = Wnd_ReturnZero();
 #else
@@ -1035,7 +1035,7 @@ void __stdcall SOUNDSMP_CreateSoundThread() {
     }
 
     /* LPCSTR lpName for CreateEventA */ /* BOOL bInitialState for CreateEventA */ /* BOOL bManualReset for CreateEventA */ /* LPSECURITY_ATTRIBUTES lpEventAttributes for CreateEventA */ ghSoundThreadStopEvent = CreateEventA((LPSECURITY_ATTRIBUTES)0x0, 1, 0, (LPCSTR)0x0);
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
     ghSoundThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)D2SOUNDSMP_SoundUpdateThreadProc, (LPVOID)0x0, 0, &dwThreadId, "sSampleThreadProc");
 #else
     /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ ghSoundThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)D2SOUNDSMP_SoundUpdateThreadProc, (LPVOID)0x0, 0, &dwThreadId);

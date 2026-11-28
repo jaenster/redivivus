@@ -3718,7 +3718,7 @@ void __fastcall NET_D2GS_CLIENT_PacketHandle_to0xAF(char * pBytes, uint32_t nSiz
       while (true) {
         byPacketId = *pBytes;
         byPacketIdSaved = byPacketId;
-#if !D2_OS_MAC
+#if defined(_WIN32)
         {
           if (++g_anClientPktCount[byPacketId] <= 2)
             D2TraceFmt("SPKT %02X", (unsigned)byPacketId); }

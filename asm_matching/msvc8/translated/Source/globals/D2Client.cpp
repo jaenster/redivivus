@@ -137,7 +137,7 @@ uint32_t nScreenMode = 0; D2_GLOBAL_GUARD(nScreenMode, "D2Client::UI::Inv::nScre
 
 }}} // namespace D2Client::UI::Inv
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 namespace D2Client { namespace Warden { namespace NWardenClient {
 
 // =============================================================================

@@ -278,7 +278,7 @@ uint32_t __fastcall ASYNCDATA_IsComplete(D2AsyncData_Line0x128 * pAsyncData) {
     return pAsyncData->nFlags & 1;
 }
 
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 // Sets pAsyncData->nPriority (+0x44). Halts (AsyncData.cpp lines 0x1da/0x1db/0x1dc) on NULL, a bad 0x41737960 tag in nFlags, or nPriority > 0.
 // While gnAsyncDataPriorityDeferDepth > 0 the change is queued: the first time it saves the old value in nPriorityBeforeDefer, sets nFlags |= 8 and pushes the entry on
 // gpAsyncDataDeferredList (later calls only raise nPriority). Otherwise, if the value changes, it calls SFILE_SetRequestPriorityByBuffer(pReadBuffer, nPriority).
@@ -319,7 +319,7 @@ void __fastcall ASYNCDATA_SetPriority(D2AsyncData_Line0x128 * pAsyncData, int nP
 }
 #endif
 
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 // Shared halt tail of ASYNCDATA_SetPriority: ERROR_UnrecoverableInternalError_Halt("", GetInstructionPointer(), nLine) then exit(-1). nLine is the word the caller pushed last (AsyncData.cpp line 0x1da/0x1db/0x1dc).
 // Split out because the NULL path reaches it at ESP-4 but the other two after PUSH ESI at ESP-8; the two JMPs carry CALL_RETURN and nLine sits at Stack[0x0] (no return address). 1.14d: 0040a859
 void ASYNCDATA_HaltSetPriorityAtLine(int nLine) {
@@ -328,7 +328,7 @@ void ASYNCDATA_HaltSetPriorityAtLine(int nLine) {
 }
 #endif
 
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 // bDefer != 0: increments gnAsyncDataPriorityDeferDepth. bDefer == 0: halts if the depth is not > 0 (AsyncData.cpp line 0x211), decrements it, and at 0 walks
 // gpAsyncDataDeferredList: re-applies nPriority through SFILE_SetRequestPriorityByBuffer when it differs from nPriorityBeforeDefer, clears nFlags bit 8,
 // nPriorityBeforeDefer and pNextDeferred, then empties the list.
@@ -371,7 +371,7 @@ void __fastcall ASYNCDATA_DeferPriorityUpdates(BOOL bDefer) {
 }
 #endif
 
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 // StormMac/SOURCE/SFILE.CPP, global namespace (00014e4e): the Mac Storm's request re-prioritiser.
 void SFilePrioritizeRequest(void * pReadBuffer, int nPriority) __asm__("__Z22SFilePrioritizeRequestPvi");
 #endif
@@ -392,7 +392,7 @@ void __fastcall ASYNCDATA_WaitForCompletion(D2AsyncData_Line0x128 * pAsyncData) 
         return;
       }
 
-#if D2_OS_MAC
+#if D2_MAC_CARBON
       SFilePrioritizeRequest(pAsyncData->pReadBuffer, 1);
 #else
       Storm::Source::SFile::SFILE_SetRequestPriorityByBuffer(pAsyncData->pReadBuffer, 1);

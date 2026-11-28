@@ -102,7 +102,7 @@ void __fastcall FILETOOLS_WriteOneStringToFile(::Report * pReport, char * szStri
 DWORD __fastcall GetParentProcessId(int32_t nProcessId);
 uint8_t __fastcall GetModuleFileNameForProcess(DWORD nProcessId, LPSTR szText, DWORD nBufferSize);
 // Writes process metadata to crash report: application name, inspector tags, admin status via AllocateAndInitializeSid (SECURITY_BUILTIN_DOMAIN_RID + DOMAIN_ALIAS_RID_ADMINS), process/parent/grandparent paths, game/system locale from gaLocaleCodeStrings, and attaches log files (21 slots from InitLogFilePathPointers). Locale lookup uses MISC_GetLanguageCode and STRTABLE_GetRegistryLanguage.
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32)
 // The Mac body returns nothing (1.14d mac).
 void __fastcall WriteCrashReportProcessInfo(::Report * pReport);
 #else
@@ -137,7 +137,7 @@ void FormatDebugOutputLogOnly(char * szText, ...);
 // the pfnFogExceptionFilter slot's 2.
 // Returns int 2 ('mov eax,2' at 00408637, before the only RET at 00408657); the dispatcher
 // compares that EAX at 00403f28 and 00403f2f, matching the pfnFogExceptionFilter slot.
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // The Mac body returns nothing (1.14d mac).
 void __fastcall DumpLog(struct D2CrashReportStrc * pCrashInfo, void * pUserContext);
 #else

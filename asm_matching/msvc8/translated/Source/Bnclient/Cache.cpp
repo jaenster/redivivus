@@ -485,7 +485,7 @@ static void CACHE_RemoveEntry(char * szText) {
     gpCacheBlockTable = pCacheBlockTable;
 }
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && (D2_MAC_CARBON || D2_BACKEND_POSIX)  // the non-Windows side runs on a Win32 layer: Win32Mac or Win32Posix
 static void CACHE_BuildFilePath(LPSTR szText) {
     HANDLE hModule = GetModuleHandle(nullptr);
     GetModuleFileName(hModule, szText, 0x104);

@@ -14,7 +14,7 @@
 
 #include "Win32Mac.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include <stdio.h>
 

@@ -10,7 +10,7 @@
 // WM_QUIT, the pending mouse move, WM_PAINT for a window that needs it, and WM_TIMER.
 #include "Win32MacWindow.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include <Carbon/Carbon.h>
 #include <string.h>

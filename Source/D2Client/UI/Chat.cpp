@@ -24,7 +24,7 @@
 #include "Source/D2Client/D2ClientRoot.h"
 #include "Source/D2Client/UI/Chat.data.h"
 #include "Source/D2Client/UI/Help.data.h"
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 #include "Source/MacSpecific/Source/MacShell/MacShell.h"
 // The text the Text Services Manager delivers for the chat line (Mac only, no Windows twin).
 void CHAT_OnIMEInputText(const char* szText, bool bFixed, int* pnRange);
@@ -130,7 +130,7 @@ void __stdcall CHAT_InitEmpty_Unref_00477970() {
 
 }
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // Windows-only: the Mac build has no Imm* input method manager (its IME is Text Services Manager, MAC_SetTSMInputCallback).
 #else
 // @sourcefile .\UI\chat.cpp
@@ -156,7 +156,7 @@ static void CHAT_HandleIMECandidateList(HIMC hImc) {
 }
 #endif
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // Windows-only: the Mac build has no Imm* input method manager (its IME is Text Services Manager, MAC_SetTSMInputCallback).
 #else
 // @sourcefile .\UI\chat.cpp
@@ -269,7 +269,7 @@ void __stdcall INPUT_HandleIMENotify(D2UIMouseMsgStrc * pMsg) {
 }
 #endif
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // Windows-only: the Mac build has no Imm* input method manager (its IME is Text Services Manager, MAC_SetTSMInputCallback).
 #else
 uint8_t __stdcall CHAT_CheckIMELanguage() {
@@ -298,7 +298,7 @@ void __stdcall CHAT_ResetIMEState(D2UIMouseMsgStrc * pMsg) {
     pMsg->dwResult = 0;
 }
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // The Mac builds a TSM document for the Asian languages instead of querying the Win32 IME.
 // 1.14d mac: 0009e9bd
 void __stdcall CHAT_InitIME() {
@@ -398,7 +398,7 @@ void __stdcall CHAT_InitIME() {
 }
 #endif
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // The Mac has no Imm* input method manager: it drops the chat handlers and, for the Asian
 // languages, the Text Services Manager document and its input hook.
 // 1.14d mac: 0009ebad (CHAT_ShutdownInput in the Mac database)
@@ -541,7 +541,7 @@ void __stdcall CHAT_DrawIMEComposition(int32_t nPosX, int32_t nPosY) {
     CHAT_DrawCursor(nY, nLen + nX - 0x83 + nWidthComposition, 4);
 }
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // Windows-only: the Mac build has no Imm* input method manager (its IME is Text Services Manager, MAC_SetTSMInputCallback).
 #else
 void __stdcall CHAT_DrawIMECandidates() {
@@ -1482,7 +1482,7 @@ void __stdcall INPUT_HandleChatCharInput(D2UIMouseMsgStrc * pMsg) {
             if (nTrimmedLen) {
               CHAT_AddToHistory(gwszChatInputText + nScanIdx);
               /* LPBOOL lpUsedDefaultChar for WideCharToMultiByte */ /* LPCSTR lpDefaultChar for WideCharToMultiByte */ /* int cbMultiByte for WideCharToMultiByte */ /* LPSTR lpMultiByteStr for WideCharToMultiByte */ /* int cchWideChar for WideCharToMultiByte */ /* LPCWSTR lpWideCharStr for WideCharToMultiByte */ /* DWORD dwFlags for WideCharToMultiByte */ /* UINT CodePage for WideCharToMultiByte */ 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 #define CHAT_INPUT_TO_MULTIBYTE() MAC_ConvertUnicodeToText((const char*)gwszChatInputText, szMultiByteText, D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(gwszChatInputText), 0x101, -0x80)
 #else
 #define CHAT_INPUT_TO_MULTIBYTE() WideCharToMultiByte(0, 0x250, (LPCWSTR)gwszChatInputText, -1, szMultiByteText, 0x100, (LPCSTR)0x0, (LPBOOL)0x0)
@@ -1576,7 +1576,7 @@ void StaticInit_gwcImeCompositionBuffer() {
 }
 
 } // namespace D2Client::UI::Chat
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // The marked text of an unfinished TSM composition: before, converted range, after.
 static uint16_t gwszMacIMEMarkedText[261] = {}; D2_STATIC_GUARD(gwszMacIMEMarkedText, "gwszMacIMEMarkedText");
 

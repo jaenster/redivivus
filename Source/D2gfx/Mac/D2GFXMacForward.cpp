@@ -5,10 +5,10 @@
 // reached through its PIC pointer cell, so these sit in a unit other than the one that
 // defines it (D2GFXMacRenderer.cpp). See Source/D2gfx/Mac/README.md.
 //
-// Mac-only: the guard is spelled `#if !defined(_WIN32) && D2_OS_MAC`.
+// Mac-only: the guard is spelled `#if !defined(_WIN32) && D2_MAC_CARBON`.
 #include "D2GFXMac.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 struct EventRecord;
 struct Point;

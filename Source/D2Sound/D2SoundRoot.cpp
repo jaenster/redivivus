@@ -10,7 +10,7 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // The 1.14d Mac keeps the inverse as a byte nothing writes: SOUND_GetHardwareAccelerationFlag (002e76e9)
 // returns it XOR 1, and the Mac has no driver scan to clear it.
 static bool gbSoundHardwareAccelerationOff = false; D2_STATIC_GUARD(gbSoundHardwareAccelerationOff, "gbSoundHardwareAccelerationOff");
@@ -21,7 +21,7 @@ static uint32_t gnSoundHardwareAcceleration = 0x1; D2_STATIC_GUARD(gnSoundHardwa
 namespace D2Sound {
 
 // Not in the 1.14d Mac binary: the DirectSoundEnumerate callback of the Windows driver scan.
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if defined(_WIN32)
 BOOL __stdcall SOUND_DetectLegacySoundDrivers(int nUnused, char * szDeviceName, char * szDriverVxd, DWORD dwUnused) {
     if (!nUnused || g_bSoundDriverScanComplete) {
       return 1;
@@ -69,7 +69,7 @@ IDirectSound * __stdcall SOUND_GetDirectSoundDevice() {
 // 1.14d mac: 002e76bc
 // The Mac has no primary-buffer 3D mode.
 DWORD __stdcall SOUND_GetPrimaryBufferModeFlag() {
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
     return 0;
 #else
     return gbDSoundPrimaryBufferMode;
@@ -84,7 +84,7 @@ DWORD __stdcall SOUND_GetSound3DFlag() {
 // 1.14d mac: 002e76d5
 // On the Mac the quality is a byte that is set only for EAX 2; the getter doubles it.
 DWORD __stdcall SOUND_GetSoundQualityFlag() {
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
     return gnSoundQualityMode * 2;
 #else
     return gnSoundQualityMode;
@@ -92,7 +92,7 @@ DWORD __stdcall SOUND_GetSoundQualityFlag() {
 }
 
 // Not in the 1.14d Mac binary: its only reader, SOUNDSMP_SetEaxRoomLevel, does not read it there.
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32) && D2_MAC_CARBON)
 DWORD __stdcall SOUND_GetEAXEnabledFlag() {
     return g_bEAXEnabled;
 }
@@ -100,7 +100,7 @@ DWORD __stdcall SOUND_GetEAXEnabledFlag() {
 
 // 1.14d mac: 002e76e9
 DWORD __stdcall SOUND_GetHardwareAccelerationFlag() {
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
     return gbSoundHardwareAccelerationOff ^ 1;
 #else
     return gnSoundHardwareAcceleration;

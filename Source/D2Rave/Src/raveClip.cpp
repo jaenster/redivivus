@@ -13,7 +13,7 @@
 
 #include "Source/D2Rave/Src/raveInternal.h"
 
-#if !defined(_WIN32) && D2_OS_MAC && D2_ARCH_PPC
+#if !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC
 
 namespace D2Rave {
 
@@ -193,4 +193,4 @@ int sQAClipHelper(const TQAVTexture * pVertices, int nVertices) {
 
 } // namespace D2Rave
 
-#endif // !defined(_WIN32) && D2_OS_MAC && D2_ARCH_PPC
+#endif // !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC

@@ -5,7 +5,7 @@
 // The original file name is not recorded: no 1.14d string or static initialiser names it.
 #include "Source/StormMac/Win32Mac/Source/Win32/Win32Mac.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include <Carbon/Carbon.h>
 

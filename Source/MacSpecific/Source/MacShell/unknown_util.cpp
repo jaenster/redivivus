@@ -6,11 +6,11 @@
 // nothing in the binary decides whether these two close Game/Main.cpp, open D2FlamingLogo.cpp
 // or are a unit of their own; they are kept apart from both. See Source/MacSpecific/README.md.
 //
-// Mac-only: the guard is spelled `#if !defined(_WIN32) && D2_OS_MAC` (see
+// Mac-only: the guard is spelled `#if !defined(_WIN32) && D2_MAC_CARBON` (see
 // Source/MacSpecific/README.md).
 #include "D2Arch.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include <Carbon/Carbon.h>
 #include <pthread.h>

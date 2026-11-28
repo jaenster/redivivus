@@ -11,7 +11,7 @@
 #include "Source/D2Win/D2Win.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/Game/Game.data.h"
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 #include "Source/MacSpecific/Source/MacShell/MacShell.h"
 #endif
 
@@ -98,13 +98,13 @@ int32_t __fastcall MessageGameLoop(::fpGameLoopFunction nfpGameLoopFunction) {
       // reached town was indistinguishable from one that had died.
       D2CONTROL_Pump(); D2LOUD_GuardPump();   // loud build: also walks the guard zones between globals
       BOOL bHasMessage;
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
       MAC_ProcessEvents();
 #endif
       /* UINT wRemoveMsg for PeekMessageA */ /* UINT wMsgFilterMax for PeekMessageA */ /* UINT wMsgFilterMin for PeekMessageA */ /* HWND hWnd for PeekMessageA */ /* LPMSG lpMsg for PeekMessageA */ bHasMessage = PeekMessageA(&msg, (HWND)0x0, 0, 0, 0);
       if (bHasMessage) {
         /* UINT wMsgFilterMax for GetMessageA */ /* UINT wMsgFilterMin for GetMessageA */ /* HWND hWnd for GetMessageA */ /* LPMSG lpMsg for GetMessageA */ getMessageResult = GetMessageA(&msg, (HWND)0x0, 0, 0);
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32)
         // The Mac pump has no accelerator tables (0005e2ee).
 #else
         if (getMessageResult && GAME::Game::ghAccelTable) {

@@ -4,7 +4,7 @@
 // lookup and precedes the thread functions (Win32_Threads.cpp).
 #include "Win32Text.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include <Carbon/Carbon.h>
 

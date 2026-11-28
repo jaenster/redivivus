@@ -6,11 +6,11 @@
 #include "Source/Fog/Src/ErrorManager.h"
 #include "Source/Fog/Src/LogManager.h"
 #include "Source/D2Headers/d2_platform.h"
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // The Mac layer's critical section is a pthread mutex (0x2c bytes, not 0x18).
 static_assert(sizeof(void*) != 4 || sizeof(D2NetDataStrc) == 0x8c, "D2NetDataStrc is 0x8c bytes on 32-bit");
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 static_assert(sizeof(void*) != 4 || sizeof(D2NetDataStrc) == 0x78, "D2NetDataStrc is 0x78 bytes on 32-bit");
 #endif
 
@@ -28,11 +28,11 @@ static_assert(sizeof(void*) != 4 || sizeof(D2NetDataStrc) == 0x78, "D2NetDataStr
 #define D2_NEW_AT(T, szFile, nLine) ((T*)D2_ALLOC_AT(sizeof(T), (szFile), (nLine)))
 #endif
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // The Mac layer's critical section is a pthread mutex (0x2c bytes, not 0x18).
 static_assert(sizeof(void*) != 4 || sizeof(::D2NetDataStrc) == 0x8c, "D2_NEW_AT(D2NetDataStrc): the 32-bit layout must be the 0x8c bytes 1.14d allocates");
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 static_assert(sizeof(void*) != 4 || sizeof(::D2NetDataStrc) == 0x78, "D2_NEW_AT(D2NetDataStrc): the 32-bit layout must be the 0x78 bytes 1.14d allocates");
 #endif
 
@@ -163,7 +163,7 @@ D2NetDataStrc * __fastcall Create(char * szHostName, u_short nPort, LPTHREAD_STA
       }
     }
     if (pThreadProcLocal) {
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
       hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, pThreadProcLocal, pThreadParamLocal, 0, (LPDWORD)&pSafesockStrc->lpThreadId, "lpClientThread");
 #else
       /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, pThreadProcLocal, pThreadParamLocal, 0, (LPDWORD)&pSafesockStrc->lpThreadId);

@@ -29,7 +29,7 @@ int __stdcall SSYSTEM_Shutdown(uint32_t nShutdownCode) {
     return 0;
 }
 
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 void __stdcall SSYSTEM_Initialize() {
     SMem::SMemInitialize();
     SLog::SLogInitialize();
@@ -139,7 +139,7 @@ void __stdcall SSYSTEM_SetSystemOption(uint32_t nOptionId, uint32_t * pValue, in
     }
 }
 
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 uint32_t __fastcall SSYSTEM_InitializeAndReturn(uint32_t nFlags) {
     SSYSTEM_Initialize();
     return nFlags;
@@ -174,7 +174,7 @@ void * __fastcall TSFixedArray_Ui_Constructor(void * pNode) {
     return pNode;
 }
 
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 // JMP thunk
 void __stdcall StaticInit_6ca890() {
     ::Storm::Source::SSystem::SSYSTEM_Initialize();

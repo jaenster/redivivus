@@ -41,7 +41,7 @@ target_include_directories(d2_mac_objs PRIVATE
     "${CMAKE_SOURCE_DIR}"
     "${CMAKE_SOURCE_DIR}/Source/D2Headers")
 # The target axes (Source/D2Headers/D2Arch.h): Mac OS X, i386, the client.
-target_compile_definitions(d2_mac_objs PRIVATE D2_OS_MAC=1 D2_ARCH_X86=1 D2_TARGET_CLIENT=1)
+target_compile_definitions(d2_mac_objs PRIVATE D2_OS_MAC=1 D2_MAC_CARBON=1 D2_ARCH_X86=1 D2_TARGET_CLIENT=1)
 target_compile_options(d2_mac_objs PRIVATE
     -Os -fstack-protector -fpascal-strings
     $<$<COMPILE_LANGUAGE:CXX>:-std=gnu++11 -stdlib=libc++>
@@ -118,7 +118,7 @@ add_library(d2_mac_shared_objs OBJECT EXCLUDE_FROM_ALL ${D2_MAC_SHARED_SOURCES})
 set_target_properties(d2_mac_shared_objs PROPERTIES
     CXX_COMPILER_LAUNCHER "${D2_NODE};${CMAKE_SOURCE_DIR}/cmake/mac-cxx.ts")
 target_include_directories(d2_mac_shared_objs PRIVATE ${D2_MAC_SHARED_INCLUDE_DIRS})
-target_compile_definitions(d2_mac_shared_objs PRIVATE D2_OS_MAC=1 D2_ARCH_X86=1 D2_TARGET_CLIENT=1)
+target_compile_definitions(d2_mac_shared_objs PRIVATE D2_OS_MAC=1 D2_MAC_CARBON=1 D2_ARCH_X86=1 D2_TARGET_CLIENT=1)
 # d2_platform.h is forced ahead of every shared unit, as in the Windows build.
 target_compile_options(d2_mac_shared_objs PRIVATE
     -Os -fstack-protector -fpascal-strings

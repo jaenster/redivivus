@@ -8,7 +8,7 @@
 // d2_platform.h after them (and after Win32Mac.h) and not by the layer's units.
 #pragma once
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #ifndef LOWORD
 #define LOWORD(l) ((WORD)(((DWORD_PTR)(l)) & 0xffff))

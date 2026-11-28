@@ -58627,7 +58627,7 @@ void __fastcall UI_SLIDER_ApplyNpcSpeech(D2EscMenuItemStrc * pItem, D2UIMouseMsg
         }
       case 0:
         {
-#if !D2_OS_MAC
+#if defined(_WIN32)
           Warden::WARDEN_SetGlobalFlag(1);
 #endif
           Text::TEXT_SetTextDisplayMode(0);
@@ -58635,7 +58635,7 @@ void __fastcall UI_SLIDER_ApplyNpcSpeech(D2EscMenuItemStrc * pItem, D2UIMouseMsg
         }
       case 1:
         {
-#if !D2_OS_MAC
+#if defined(_WIN32)
           Warden::WARDEN_SetGlobalFlag(0);
 #endif
           Text::TEXT_SetTextDisplayMode(1);
@@ -58643,7 +58643,7 @@ void __fastcall UI_SLIDER_ApplyNpcSpeech(D2EscMenuItemStrc * pItem, D2UIMouseMsg
         }
       case 2:
         {
-#if !D2_OS_MAC
+#if defined(_WIN32)
           Warden::WARDEN_SetGlobalFlag(1);
 #endif
           Text::TEXT_SetTextDisplayMode(1);
@@ -59801,8 +59801,10 @@ static void * keep_0047d5b0 = (0 ? (Unreferenced_0047d5b0(*(int32_t *)0), (void 
 // 00450410: set by the quit-to-desktop item, cleared by its cancel item, read by SendExitGameRequest.
 static uint8_t gbEscMenuQuitRequested = 0;
 
+#if !defined(_WIN32) && D2_MAC_CARBON
 // 1.14d mac: 0019b2d1 (MacShell/unknown_input.cpp, global namespace: applies the mouse sensitivity, empty on this build)
 void MouseSensitivityApply(int32_t nSensitivity) __asm__("__Z25MAC_ApplyMouseSensitivityi");
+#endif
 
 // 1.14d mac: 000d9060
 void __stdcall ESCMENU_ShowConfirmMenuSave() {
@@ -59830,7 +59832,9 @@ void __stdcall ESCMENU_ShowConfirmMenuQuit() {
 // 1.14d mac: 000dbce7
 void __fastcall ESCMENU_SaveMouseSensitivity(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     Storm::Source::SReg::SRegSaveValue("Diablo II Mac", "Mouse Sensitivity", 0, pItem->nImageIndex);
+#if !defined(_WIN32) && D2_MAC_CARBON
     MouseSensitivityApply(pItem->nImageIndex);
+#endif
 }
 
 // 1.14d mac: 000dbd35

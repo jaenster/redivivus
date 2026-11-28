@@ -6,7 +6,7 @@
 
 #include "D2Arch.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include <stddef.h>
 #include <stdint.h>

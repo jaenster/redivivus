@@ -850,7 +850,7 @@ uint32_t __stdcall MISC_GetLanguageCode() {
 
 // 1.14d mac: 002b9950
 uint32_t __stdcall STRTABLE_GetRegistryLanguage() {
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32)
     // The Mac reads no Control Panel language: the game's own language file decides.
     return 0;
 #else
@@ -966,7 +966,7 @@ void __stdcall STRTABLE_FormatNumber(uint16_t * wszText, uint32_t nValue, int32_
     Unicode::UNISYS::STRING_CopyWideString(wszText, wszFallback);
 }
 
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 void __stdcall STRTABLE_FormatInt64(uint16_t * wszText, int32_t nValueLo, int32_t nValueHi, int32_t nMaxLen) {
     int nOutPos2;
     bool bNeedNeg;

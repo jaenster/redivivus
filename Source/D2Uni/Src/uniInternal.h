@@ -5,11 +5,11 @@
 // Not an original header name (no PPC string names one); see Source/D2Uni/README.md. Globals are
 // listed with their LoD 1.10b classic address. Names are inferred unless a comment says otherwise.
 //
-// Classic Mac PowerPC only: the guard is `#if !defined(_WIN32) && D2_OS_MAC && D2_ARCH_PPC`, from
+// Classic Mac PowerPC only: the guard is `#if !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC`, from
 // the compiler flags of the Mac PowerPC target (never from D2Arch.h).
 #pragma once
 
-#if !defined(_WIN32) && D2_OS_MAC && D2_ARCH_PPC
+#if !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC
 
 // The Mac C library owns FILE; d2_platform.h's MSVC _iobuf stand-in is for the Windows CRT layout.
 #ifndef _FILE_DEFINED
@@ -266,4 +266,4 @@ void YieldToThinThread(int nFlags);
 }
 int16_t FilepathToFSSpec(FSSpec * pSpec, const char * szPath, int hBase);
 
-#endif // !defined(_WIN32) && D2_OS_MAC && D2_ARCH_PPC
+#endif // !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC

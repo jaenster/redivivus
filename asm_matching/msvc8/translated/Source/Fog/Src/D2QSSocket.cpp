@@ -8,11 +8,11 @@
 #include "Source/Fog/Src/Safesock.h"
 #include "Source/Storm/Storm.h"
 #include "Source/D2Headers/d2_platform.h"
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // The Mac layer's critical section is a pthread mutex (0x2c bytes, not 0x18).
 static_assert(sizeof(void*) != 4 || sizeof(D2QSSocketStrc) == 0x1a8, "D2QSSocketStrc is 0x1a8 bytes on 32-bit");
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 static_assert(sizeof(void*) != 4 || sizeof(D2QSSocketStrc) == 0x194, "D2QSSocketStrc is 0x194 bytes on 32-bit");
 #endif
 
@@ -26,11 +26,11 @@ static_assert(sizeof(void*) != 4 || sizeof(D2QSSocketStrc) == 0x194, "D2QSSocket
 #define D2_NEW_AT(T, szFile, nLine) ((T*)D2_ALLOC_AT(sizeof(T), (szFile), (nLine)))
 #endif
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // The Mac layer's critical section is a pthread mutex (0x2c bytes, not 0x18).
 static_assert(sizeof(void*) != 4 || sizeof(::D2QSSocketStrc) == 0x1a8, "D2_NEW_AT(D2QSSocketStrc): the 32-bit layout must be the 0x1a8 bytes 1.14d allocates");
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 static_assert(sizeof(void*) != 4 || sizeof(::D2QSSocketStrc) == 0x194, "D2_NEW_AT(D2QSSocketStrc): the 32-bit layout must be the 0x194 bytes 1.14d allocates");
 #endif
 
@@ -297,7 +297,7 @@ void __stdcall NET_MCP_CLIENT_CreateConnectionThread(D2QSSocketStrc * NET_MCP_CL
     /* LPCSTR lpName for CreateEventA */ /* BOOL bInitialState for CreateEventA */ /* BOOL bManualReset for CreateEventA */ /* LPSECURITY_ATTRIBUTES lpEventAttributes for CreateEventA */ NET_MCP_CLIENT_D2QSSocket->bStopRequested = 0;
     HANDLE pvVar1 = CreateEventA((LPSECURITY_ATTRIBUTES)0x0, 0, 0, (LPCSTR)0x0);
     NET_MCP_CLIENT_D2QSSocket->pEvent = pvVar1;
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
     pvVar1 = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)QSSOCKET_ThreadEntryPoint, NET_MCP_CLIENT_D2QSSocket, 0, &NET_MCP_CLIENT_D2QSSocket->dwThreadId, "(LPTHREAD_START_ROUTINE)sConnect");
 #else
     /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ pvVar1 = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)QSSOCKET_ThreadEntryPoint, NET_MCP_CLIENT_D2QSSocket, 0, &NET_MCP_CLIENT_D2QSSocket->dwThreadId);
@@ -310,7 +310,7 @@ void __stdcall NET_MCP_CLIENT_CreateConnectionThread(D2QSSocketStrc * NET_MCP_CL
     }
 }
 
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 // The Mac binary has one thread-starting function, QSSOCKET_StartConnectThread (002ed57c).
 HANDLE __stdcall QSSOCKET_Initialize(D2QSSocketStrc * pQSSocket) {
     if (!pQSSocket) {

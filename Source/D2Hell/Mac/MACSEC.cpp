@@ -11,7 +11,9 @@
 
 #if !defined(_WIN32) && D2_OS_MAC
 
+#if !defined(_WIN32) && D2_MAC_CARBON
 #include <Carbon/Carbon.h>
+#endif
 #include <Security/Security.h>
 #include <dlfcn.h>
 #include <stdint.h>
@@ -21,6 +23,7 @@
 // The 10.7 SDK headers do not declare it; flag 2 asks for the signing information.
 extern "C" OSStatus SecCodeCopySigningInformation(SecStaticCodeRef pCode, uint32_t nFlags, CFDictionaryRef* ppInformation);
 
+#if !defined(_WIN32) && D2_MAC_CARBON
 extern "C" int __cxa_atexit(void (*pfnDestructor)(void*), void* pObject, void* pDso);
 extern "C" void* __dso_handle;
 
@@ -93,6 +96,7 @@ void TSLIST_InitFaultHandlerList(void) {
     gFaultHandlerList.pNext = (int)&gFaultHandlerList.pPrevLink | 1;
     __cxa_atexit((void (*)(void*))TSLIST_Destructor, &gFaultHandlerList, &__dso_handle);
 }
+#endif
 
 // 1.14d mac: 00549431
 static bool s_bModernTrust;
@@ -109,6 +113,7 @@ static SecCertificateRef MACSEC_CopySigningCertificate(CFAllocatorRef pAllocator
     if (pUrl == 0) {
         return 0;
     }
+#if !defined(_WIN32) && D2_MAC_CARBON
     if (!s_bOSChecked) {
         s_bOSChecked = true;
         SInt32 nOSMajor = 0;
@@ -123,6 +128,7 @@ static SecCertificateRef MACSEC_CopySigningCertificate(CFAllocatorRef pAllocator
             }
         }
     }
+#endif
     SecStaticCodeRef pStaticCode = 0;
     CFDictionaryRef pSigningInfo = 0;
     pCertificate = 0;

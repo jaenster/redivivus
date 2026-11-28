@@ -8,7 +8,7 @@ every Windows and Intel Mac build have no RAVE. Reconstructed by hand from
 `classic/1.00` as the earliest form.
 
 Classic Mac PowerPC only. Every file compiles to nothing unless the target is classic Mac
-PowerPC (`#if !defined(_WIN32) && D2_OS_MAC && D2_ARCH_PPC`, the axes from compiler flags), and
+PowerPC (`#if !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC`, the axes from compiler flags), and
 the folder is left out of every build here: CMakeLists.txt filters it out of the game sources and
 include path, and the VC8 oracle lists it in `NOT_GAME`. It is checked against the stub headers
 in `Redivivus/Platform/MacClassic/` (see the README there for the command).

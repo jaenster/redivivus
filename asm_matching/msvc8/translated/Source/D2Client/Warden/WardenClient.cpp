@@ -790,7 +790,7 @@ static BOOL __stdcall WARDEN_ResolveAndLoadModule(void * pRc4Key, uint8_t * pMod
     return bCacheReadSuccess;
 }
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32)
 // Windows-only: the Mac build loads no Warden module.
 #else
 BOOL __stdcall WARDEN_DownloadModule(char * szKey, void * pData, uint32_t nSize) {
@@ -814,7 +814,7 @@ bool __fastcall CheckModule(::WardenClient * pThis, int, uint8_t * pModuleHash, 
     return bResult;
 }
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32)
 // Windows-only: the Mac build loads no Warden module.
 #else
 void __fastcall LoadModule(::WardenClient * pThis, int, uint8_t * pModuleHash, void * pData, uint32_t nSize) {

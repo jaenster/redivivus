@@ -9,7 +9,7 @@
 // 64 KiB buffer and written when it passes 0xC000 bytes.
 #include "Source/StormMac/Win32Mac/Source/Win32/Win32Mac.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include "Source/StormMac/H/StormApi.h"
 

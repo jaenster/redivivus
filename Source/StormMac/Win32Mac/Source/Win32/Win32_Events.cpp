@@ -13,7 +13,7 @@
 // signals its own when it ends) goes through the same pair.
 #include "Win32Mac.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include <string.h>
 #include <time.h>

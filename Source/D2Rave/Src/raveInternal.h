@@ -15,7 +15,7 @@
 // Classic Mac PowerPC only (non-Carbon builds 1.00-1.13d; Carbon builds have no RAVE).
 #pragma once
 
-#if !defined(_WIN32) && D2_OS_MAC && D2_ARCH_PPC
+#if !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC
 
 #include <stdint.h>
 #include <stdarg.h>
@@ -433,4 +433,4 @@ int sQAClipHelper(const TQAVTexture * pVertices, int nVertices);
 
 } // namespace D2Rave
 
-#endif // !defined(_WIN32) && D2_OS_MAC && D2_ARCH_PPC
+#endif // !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC

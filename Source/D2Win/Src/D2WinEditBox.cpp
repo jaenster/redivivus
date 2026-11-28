@@ -13,7 +13,7 @@
 #include "Source/D2Win/D2Win.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Win/D2WinEditBox.h"
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 #include <Carbon/Carbon.h>
 #endif
 
@@ -113,7 +113,7 @@ void __fastcall D2WINEDITBOX_SetChangeCallback(::D2WinEditBox * pEditBox, fpD2Wi
     }
 }
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // 1.14d mac: 00044f0d
 char * __stdcall D2WINEDITBOX_GetClipboardText() {
     static char gszClipboardTextBuffer[512] = {};
@@ -131,9 +131,13 @@ char * __stdcall D2WINEDITBOX_GetClipboardText() {
     return szResult;
 }
 
+#endif
+#if !defined(_WIN32) && D2_OS_MAC
 // 00431854: set by the cut menu path while it puts its own text on the scrap.
 static char gbSuppressClipboardSet = 0;
 
+#endif
+#if !defined(_WIN32) && D2_MAC_CARBON
 // 1.14d mac: 00044f92
 BOOL __fastcall D2WINEDITBOX_SetClipboardText(char * szText) {
     BOOL bResult = 0;
@@ -147,6 +151,8 @@ BOOL __fastcall D2WINEDITBOX_SetClipboardText(char * szText) {
     return bResult;
 }
 
+#endif
+#if !defined(_WIN32) && D2_OS_MAC
 // 1.14d mac: 00045e02
 BOOL __fastcall D2WINEDITBOX_HandleMenuCommand(::D2WinEditBox * pEditBox, uint32_t nCommand) {
     uint8_t byKeyChar;
@@ -180,8 +186,9 @@ BOOL __fastcall D2WINEDITBOX_HandleMenuCommand(::D2WinEditBox * pEditBox, uint32
 
     return D2WINEDITBOX_HandleKeyPress(pEditBox, byKeyChar);
 }
-#else
-#if !D2_OS_MAC
+#endif
+#if !(!defined(_WIN32) && D2_MAC_CARBON)
+#if !D2_MAC_CARBON
 char * __stdcall D2WINEDITBOX_GetClipboardText() {
     // Static local variables (originally global data)
     static char gszClipboardTextBuffer[512] = {}; D2_STATIC_GUARD(gszClipboardTextBuffer, "D2Win::Src::D2WinEditBox::D2WINEDITBOX_GetClipboardText::gszClipboardTextBuffer");

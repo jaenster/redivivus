@@ -8,7 +8,7 @@
 // Win32Mac.h is not included: it defines BOOL as a 32-bit integer, which Objective-C refuses.
 #include "D2Arch.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #import <Foundation/Foundation.h>
 #include <string.h>

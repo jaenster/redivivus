@@ -19,7 +19,7 @@
 #include "Source/D2gfx/D2gfx.public.h"
 #include "Source/D2Rave/D2Rave.h"
 
-#if !defined(_WIN32) && D2_OS_MAC && D2_ARCH_PPC
+#if !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC
 
 namespace D2Rave::Renderer {
 
@@ -369,4 +369,4 @@ D2RendererFunctionsStrc RaveFunctionTable = {
 
 } // namespace D2Rave::Renderer
 
-#endif // !defined(_WIN32) && D2_OS_MAC && D2_ARCH_PPC
+#endif // !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC

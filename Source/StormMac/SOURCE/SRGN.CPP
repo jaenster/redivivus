@@ -10,7 +10,7 @@
 // address, and the original did not inline them.
 #include "D2Arch.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include "Source/StormMac/H/StormApi.h"
 

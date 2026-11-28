@@ -7,7 +7,7 @@
 // called from nothing else.
 #include "../Win32Mac/Source/Win32/Win32Mac.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include "Source/StormMac/H/StormApi.h"
 

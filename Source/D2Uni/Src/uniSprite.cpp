@@ -12,7 +12,7 @@
 // cel at +0x3C.
 //
 // Classic Mac PowerPC only.
-#if !defined(_WIN32) && D2_OS_MAC && D2_ARCH_PPC
+#if !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC
 
 #include "Source/D2Uni/Src/uniInternal.h"
 
@@ -385,4 +385,4 @@ void __fastcall UniDebugFillBackBuffer(int nPosX, int nPosY) {
     MacFatal("UniLens");
 }
 
-#endif // !defined(_WIN32) && D2_OS_MAC && D2_ARCH_PPC
+#endif // !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC

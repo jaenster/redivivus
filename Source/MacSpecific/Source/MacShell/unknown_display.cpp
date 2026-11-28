@@ -8,11 +8,11 @@
 // and display callbacks with direct references, while it reaches 005c8a38 (unknown_app.cpp's)
 // and the configuration 005c8660 through non-lazy pointers. See Source/MacSpecific/README.md.
 //
-// Mac-only: the guard is spelled `#if !defined(_WIN32) && D2_OS_MAC` (see
+// Mac-only: the guard is spelled `#if !defined(_WIN32) && D2_MAC_CARBON` (see
 // Source/MacSpecific/README.md).
 #include "D2Arch.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include <Carbon/Carbon.h>
 #include <pthread.h>

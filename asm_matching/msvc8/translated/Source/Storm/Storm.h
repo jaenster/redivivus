@@ -853,7 +853,7 @@ void __stdcall SBigAdd(struct BigData * pResult, struct BigData * pBigA, struct 
 // @renamed-from SBIG_ImportBytesWrapper (2026-08-28, Storm PowerPC oracle pass 4)
 // @oracle Mac PPC 1.10b Storm -- PPC SBigFromBinary -> 10099cd0, single bl .FromBinary__FR9BigBufferPCvUi. 1.14d: 3-arg forwarder onto BigBuffer_FromBinary 00423380.
 // @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 void __stdcall SBigFromBinary(struct BigData * pDstBignum, const void * pSrcBytes, uint32_t nByteCount);
 #else
 void __stdcall SBigFromBinary(struct BigData * pDstBignum, void * pSrcBytes, uint32_t nByteCount);
@@ -910,7 +910,7 @@ namespace Storm { namespace Source { namespace SBMP {
 // @oracle-source Storm export vector SBmpDecodeImage @100cbc64 -> code 10004d00 = the traceback-named function .SBmpDecodeImage, in Mac PPC 1.10b Storm
 // @rename-basis Behaviour. The only SBmp entry point that touches no file at all: it takes a source pointer and a byte count instead of a path, and it is the only one with an explicit format-selector argument. SBmpAllocLoadImage 006c6e70 calls it twice - once with a NULL destination to probe the dimensions, once to decode - which is what a decode-from-memory primitive is for.
 // @former-name SBMP_LoadImageFromMemory
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 int __stdcall SBmpDecodeImage(int nFormat, const void * pData, uint32_t nDataSize, void * pPalette, uint8_t * pbPixels, int nPixelBufSize, uint32_t * pnWidth, uint32_t * pnHeight, uint32_t * pnBpp);
 #else
 int __stdcall SBmpDecodeImage(int nFormat, void * pData, uint32_t nDataSize, void * pPalette, uint8_t * pbPixels, int nPixelBufSize, uint32_t * pnWidth, uint32_t * pnHeight, uint32_t * pnBpp);
@@ -1015,7 +1015,7 @@ void __stdcall SFileSetAsyncBudget(uint32_t nBudgetBytesPerSec);
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SFileSetBasePath"
 // @wasnamed SFILE_SetMaxFileHandles
 // @basis behaviour-confirmed, and a hard contradiction of the old name. The single parameter is a PATH STRING, not a handle count: it is length-checked against MAX_PATH (0x104, SetLastError(0xa1) = ERROR_BAD_PATHNAME on overflow), copied into the global base-path buffer lpFilename_00778f28, and a trailing backslash is appended if absent. An empty string clears the base path. Nothing in the body touches a handle table. Counterpart of SFileGetBasePath (004160a0).
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 int32_t __stdcall SFileSetBasePath(const char * szText);
 #else
 int32_t __stdcall SFileSetBasePath(char * szText);
@@ -1038,7 +1038,7 @@ int __stdcall SFileAuthenticateArchive(struct D2ArchiveStrc * pArchive, uint32_t
 BOOL __stdcall SFileDdaGetPos(struct D2MPQFileStrc * pFile, uint32_t * pdwCurrentPos, uint32_t * pdwEndPos);
 // @sourcefile .\SOURCE\SFILE.CPP
 // @blizzard SFileOpenFileEx (SFILE.CPP)
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 int __stdcall SFileOpenFileEx(struct D2ArchiveStrc * pArchive, const char * szFileName, uint32_t dwFlags, void * * phFile);
 #else
 int __stdcall SFileOpenFileEx(struct D2ArchiveStrc * pArchive, char * szFileName, uint32_t dwFlags, void * * phFile);
@@ -1046,7 +1046,7 @@ int __stdcall SFileOpenFileEx(struct D2ArchiveStrc * pArchive, char * szFileName
 // @blizzard SFileCloseFile (SFILE.CPP)
 int __stdcall SFileCloseFile(struct D2MPQFileStrc * pMPQFile);
 // @blizzard SFileOpenFile (SFILE.CPP)
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 int32_t __stdcall SFileOpenFile(const char * szFilename, struct D2MPQFileStrc * * ppFile);
 #else
 int32_t __stdcall SFileOpenFile(char * szFilename, struct D2MPQFileStrc * * ppFile);
@@ -1073,7 +1073,7 @@ BOOL __stdcall SFileDdaBeginEx(struct D2MPQFileStrc * hFile, uint32_t dwBufferBy
 // @wasnamed SFILE_LoadFileToMemory
 // @basis behaviour-confirmed as part of a three-way arity lock. The real API has exactly one 5/7/8-parameter family: SFileLoadFile(filename, buffer, bytes, extrabytes, callback) = 5, SFileLoadFileEx(archive, filename, buffer, bytes, extrabytes, flags, callback) = 7, SFileLoadFileEx2(... , readflags) = 8. This is the 5-parameter member; it forwards to the 8-parameter worker with archive = NULL, flags = SFILE_GetOpenFlags() and readflags = 0, which is exactly the set of defaults the 5-parameter signature implies. Note its first parameter is the FILENAME - it is currently mistyped D2ArchiveStrc *, and lands in the worker's filename slot.
 // @seealso SFileLoadFileEx 0041b680, SFileLoadFileEx2 0041af60
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 uint32_t __stdcall SFileLoadFile(const char * pArchive, void * * ppOutBuffer, DWORD * pdwOutSize, uint32_t nSize, LPOVERLAPPED nReadCtx);
 #else
 uint32_t __stdcall SFileLoadFile(char * pArchive, void * * ppOutBuffer, DWORD * pdwOutSize, uint32_t nSize, LPOVERLAPPED nReadCtx);
@@ -1082,14 +1082,14 @@ uint32_t __stdcall SFileLoadFile(char * pArchive, void * * ppOutBuffer, DWORD * 
 // @wasnamed SFILE_LoadFileToMemory2
 // @basis behaviour-confirmed as part of a three-way arity lock. 7 parameters, positionally identical to SFileLoadFileEx(archive, filename, buffer, bytes, extrabytes, flags, callback); the body forwards them unchanged to the 8-parameter worker with readflags = 0, which is exactly what distinguishes Ex from Ex2.
 // @seealso SFileLoadFile 0041b650, SFileLoadFileEx2 0041af60
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 uint32_t __stdcall SFileLoadFileEx(struct D2ArchiveStrc * pArchive, const char * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, uint32_t nExtraPadBytes, uint32_t nSearchScope, LPOVERLAPPED nReadCtx);
 #else
 uint32_t __stdcall SFileLoadFileEx(struct D2ArchiveStrc * pArchive, char * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, uint32_t nExtraPadBytes, uint32_t nSearchScope, LPOVERLAPPED nReadCtx);
 #endif
 // @sourcefile .\SOURCE\SFILE.CPP
 // @blizzard SFileOpenArchive (SFILE.CPP)
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 int __stdcall SFileOpenArchive(const char * szArchiveName, int * pUserData, uint32_t nFlags, struct D2ArchiveStrc * * ppArchive);
 #else
 int __stdcall SFileOpenArchive(char * szArchiveName, int * pUserData, uint32_t nFlags, struct D2ArchiveStrc * * ppArchive);
@@ -1104,7 +1104,7 @@ void __stdcall SLogCreate(LPCSTR szFileName, uint32_t dwUnused, int * pnHandleOu
 // Provenance: 1.14d asm 00420120 (SLOG_LockLog, [ctx+0x14] += delta); caller BNET_LogIndent.
 int32_t __stdcall SLogSetIndent(uint32_t nHandle, int32_t nDelta);
 // @blizzard SLogWrite (SLOG.CPP)
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 void SLogWrite(uint32_t nHandle, const char * szFormat, ...);
 #else
 void SLogWrite(uint32_t nHandle, char * szFormat, ...);
@@ -1116,19 +1116,19 @@ namespace Storm { namespace Source { namespace SMem {
 __declspec(noinline) inline void MISC_OperatorDeleteShim(void * p);
 int32_t __stdcall SMemFindNextBlock(HSHEAP nHeapId, uint8_t * pPrevBlock, uint8_t * * ppOutBlock, int * pnInfo);
 int32_t __stdcall SMemFindNextHeap(HSHEAP nCurHeapId, HSHEAP * pnNextHeapId, struct SMemHeapDetailsStrc * pHeapDetails);
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 BOOL __stdcall SMemFree(void * pObject, const char * szFile, int32_t nLine, DWORD dwFlags);
 #else
 BOOL __stdcall SMemFree(void * pObject, char * szFile, int32_t nLine, DWORD dwFlags);
 #endif
 HSHEAP __stdcall SMemGetHeapByCaller(char * pszName, uint32_t dwHashSeed);
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 void * __stdcall SMemAlloc(uint32_t nSize, const char * szFile, uint32_t nLine, uint32_t nFlags);
 #else
 void * __stdcall SMemAlloc(uint32_t nSize, char * szFile, uint32_t nLine, uint32_t nFlags);
 #endif
 // @blizzard SMemReAlloc (Storm assert string)
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 void * __stdcall SMemReAlloc(void * pBlock, uint32_t nSize, const char * szSourceFile, int32_t nSourceLine, uint32_t dwFlags);
 #else
 void * __stdcall SMemReAlloc(void * pBlock, uint32_t nSize, char * szSourceFile, int32_t nSourceLine, uint32_t dwFlags);
@@ -1150,7 +1150,7 @@ namespace Storm { namespace Source { namespace SReg {
 // @namespace-fix moved from Storm::Source::SSTR to Storm::Source::SReg. SReg is a separate
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 BOOL __stdcall SRegDeleteValue(const char * pszSubKey, LPCSTR szValueName, DWORD byFlags);
 #else
 BOOL __stdcall SRegDeleteValue(char * pszSubKey, LPCSTR szValueName, DWORD byFlags);
@@ -1168,7 +1168,7 @@ int32_t __stdcall SRegLoadData(char * pszSubKey, char * szValueName, int32_t nFl
 // @namespace-fix moved from Storm::Source::SSTR to Storm::Source::SReg. SReg is a separate
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 BOOL __stdcall SRegLoadString(const char * szSubKey, const char * szValueName, int32_t nFlags, LPSTR szOutBuf, DWORD dwOutBufSize);
 #else
 BOOL __stdcall SRegLoadString(char * szSubKey, char * szValueName, int32_t nFlags, LPSTR szOutBuf, DWORD dwOutBufSize);
@@ -1179,7 +1179,7 @@ BOOL __stdcall SRegLoadString(char * szSubKey, char * szValueName, int32_t nFlag
 // @namespace-fix moved from Storm::Source::SSTR to Storm::Source::SReg. SReg is a separate
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 BOOL __stdcall SRegLoadValue(const char * pTree, const char * pKey, int32_t byFlags, int32_t * pnOut);
 #else
 BOOL __stdcall SRegLoadValue(char * pTree, char * pKey, uint8_t byFlags, int32_t * pnOut);
@@ -1230,7 +1230,7 @@ namespace Storm { namespace Source { namespace SSTR {
 // SStrTokenize calls it three times to test a character against a delimiter set.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed STRING_CutStringBeginingTillFoundString
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 char * __stdcall SStrChr(const char * szText, char cTarget);
 #else
 char * __stdcall SStrChr(char * szText, char cTarget);
@@ -1242,7 +1242,7 @@ char * __stdcall SStrChr(char * szText, char cTarget);
 // they differ exactly as the two API names do.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed SSTR_FindLastChar
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 char * __stdcall SStrChrR(const char * szText, char cTarget);
 #else
 char * __stdcall SStrChrR(char * szText, char cTarget);
@@ -1253,7 +1253,7 @@ char * __stdcall SStrChrR(char * szText, char cTarget);
 // call to the CRT strncmp. The case-sensitive half of the only Cmp/CmpI pair in the module.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed STRING_CompareTwoStringCaseSensitive
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 int32_t __stdcall SStrCmp(const char * str_1, const char * str_2, uint32_t nMaxCount);
 #else
 int32_t __stdcall SStrCmp(char * str_1, char * str_2, uint32_t nMaxCount);
@@ -1263,7 +1263,7 @@ int32_t __stdcall SStrCmp(char * str_1, char * str_2, uint32_t nMaxCount);
 // @oracle-basis Identical to SStrCmp except it calls _strnicmp. The case-insensitive half of the pair.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed STRING_CompareTwoStringNoCaseSensitive
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 int32_t __stdcall SStrCmpI(const char * str_1, const char * str_2, uint32_t nMaxCount);
 #else
 int32_t __stdcall SStrCmpI(char * str_1, char * str_2, uint32_t nMaxCount);
@@ -1275,7 +1275,7 @@ int32_t __stdcall SStrCmpI(char * str_1, char * str_2, uint32_t nMaxCount);
 // the module; the append variant (SStrPack) is distinguished by first walking dst to its terminator.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed STRING_CopyStringWithSetLength
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 uint32_t __stdcall SStrCopy(char * szBufferOutput, const char * szBufferInput, int32_t nBufferOutputLength);
 #else
 uint32_t __stdcall SStrCopy(char * szBufferOutput, char * szBufferInput, int32_t nBufferOutputLength);
@@ -1285,7 +1285,7 @@ uint32_t __stdcall SStrCopy(char * szBufferOutput, char * szBufferInput, int32_t
 // @oracle-basis One parameter. NULL guard then the word-at-a-time strlen. The only length function in the module.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed GetStringLength
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 uint32_t __stdcall SStrLen(const char * szText);
 #else
 uint32_t __stdcall SStrLen(char * szText);
@@ -1297,7 +1297,7 @@ uint32_t __stdcall SStrLen(char * szText);
 // SStrPack is. Distinguished from SStrCopy purely by the leading end-of-destination scan.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed SSTR_AppendStringOptimized
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 uint32_t __stdcall SStrPack(LPSTR szText, const char * szSource, uint32_t nBufferLength);
 #else
 uint32_t __stdcall SStrPack(LPSTR szText, char * szSource, uint32_t nBufferLength);
@@ -1309,7 +1309,7 @@ uint32_t __stdcall SStrPack(LPSTR szText, char * szSource, uint32_t nBufferLengt
 // va_list and is SStrVPrintf.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed STRING_printfToPointer
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 uint32_t SStrPrintf(char * szOutput, uint32_t nSize, const char * Format, ...);
 #else
 uint32_t SStrPrintf(char * szOutput, uint32_t nSize, char * Format, ...);
@@ -1320,7 +1320,7 @@ uint32_t SStrPrintf(char * szOutput, uint32_t nSize, char * Format, ...);
 // SStrPrintf. The va_list/varargs split is exactly what separates the two API names.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed SSTR_Vsnprintf
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 uint32_t SStrVPrintf(char * szOutput, uint32_t nSize, const char * szFormatString, va_list vaArgs);
 #else
 uint32_t SStrVPrintf(char * szOutput, uint32_t nSize, char * szFormatString, va_list vaArgs);
@@ -1333,7 +1333,7 @@ uint32_t SStrVPrintf(char * szOutput, uint32_t nSize, char * szFormatString, va_
 // the token was quoted. Five parameters and there is no other tokenizer in the module.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed SSTR_ExtractQuotedToken
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 void __stdcall SStrTokenize(char * * ppszCursor, char * szTokenOut, uint32_t nMaxLen, const char * szDelimiters, uint32_t * pbWasQuoted);
 #else
 void __stdcall SStrTokenize(char * * ppszCursor, char * szTokenOut, uint32_t nMaxLen, char * szDelimiters, uint32_t * pbWasQuoted);
@@ -1363,7 +1363,7 @@ void __stdcall SStrLower(char * szText);
 // the new buffer. The allocation site's own __FILE__ literal is what proves this module is SSTR.CPP.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed SSTR_Strdup
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 char * __stdcall SStrDup(const char * szText);
 #else
 char * __stdcall SStrDup(char * szText);

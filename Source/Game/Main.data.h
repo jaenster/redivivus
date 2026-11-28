@@ -21,12 +21,12 @@ typedef int32_t (__fastcall *fnAppModeRun)(D2IniConfigStrc * pD2IniConfig);
 namespace Game::Main {
 extern D2IniConfigValuesStrc D2IniConfigValues[58];
 // lpServiceStatus parameter of SetServiceStatus
-#if !D2_OS_MAC
+#if defined(_WIN32)
 extern _SERVICE_STATUS lpServiceStatus_007065fc;
 #endif
 extern fnAppModeRun * CurrentApplication;
 extern eD2ApplicationMode geModState;
-#if !D2_OS_MAC
+#if defined(_WIN32)
 extern SERVICE_STATUS_HANDLE ghServiceCtrlHandler;
 #endif
 extern HINSTANCE WinMain_hInstance;

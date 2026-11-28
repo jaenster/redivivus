@@ -943,7 +943,7 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x5B_ChangeEmail(char * szText1, char * szTe
     return (uint32_t)(nSendResult >= 0);
 }
 
-#if D2_OS_MAC
+#if !defined(_WIN32)
 // The Mac error manager keeps no crash dump file: its loader answers zero (ErrorManager.cpp, global
 // namespace; named by its symbol because this unit's namespace would hide it).
 int ERRORMANAGER_ReturnFalse(void* pOutBuffer, uint32_t* pnBufferSize) __asm__("__ZN3Fog3Src12ErrorManager24ERRORMANAGER_ReturnFalseEPvPj");
@@ -953,7 +953,7 @@ int ERRORMANAGER_ReturnFalse(void* pOutBuffer, uint32_t* pnBufferSize) __asm__("
 BOOL __stdcall NET_SID_CLIENT_Send_0x5D_ReportCrash() {
     char szCrashDumpBuf[1500];
     uint32_t nCrashDumpSize = 0x5dc;
-#if D2_OS_MAC
+#if !defined(_WIN32)
     BOOL bHasCrashDump = ERRORMANAGER_ReturnFalse(szCrashDumpBuf, &nCrashDumpSize);
 #else
     BOOL bHasCrashDump = Fog::Debug::LoadPreviousCrashDump((uint8_t*)szCrashDumpBuf, (int*)&nCrashDumpSize);
@@ -1143,7 +1143,7 @@ void __fastcall GetDnsRecordSync(char * * ppszDnsOutput, char * nDnsThreadParam2
     DWORD dwThreadId = 0;
     lpParameter_00881be8.pszOut = (char*)ppszDnsOutput;
     lpParameter_00881be8.pszHost = nDnsThreadParam2;
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
     // The Mac layer's CreateThread names the thread (1.14d mac 00050973).
     HANDLE hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)GetDnsResults, &lpParameter_00881be8, 0, &dwThreadId, "sGetServersList");
 #else
@@ -2020,7 +2020,7 @@ HANDLE __fastcall ConnectingToBattleNet() {
         _net_sid::SID_InitializeProtocolState();
         _net_sid::NET_SID_CLIENT_InitializeSRP();
         /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ g_nBNetThreadInitFlag = 0;
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
         // The Mac layer's CreateThread names the thread (1.14d mac 00050cde).
         hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)BattleConnectFastest, (LPVOID)0x0, 0, &dwThreadId, "(LPTHREAD_START_ROUTINE)BattleConnectFastest");
 #else

@@ -14,7 +14,7 @@
 // This file is the classic LoD 1.10b object; the Carbon dispatch is not reconstructed here.
 //
 // Classic Mac PowerPC only.
-#if !defined(_WIN32) && D2_OS_MAC && D2_ARCH_PPC
+#if !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC
 
 #include "Source/D2Uni/Src/uniInternal.h"
 
@@ -572,4 +572,4 @@ D2MacRendererSlotsStrc UniMacFunctionTable = {
     UniLocalToGlobal,
 };
 
-#endif // !defined(_WIN32) && D2_OS_MAC && D2_ARCH_PPC
+#endif // !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC

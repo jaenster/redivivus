@@ -11,8 +11,8 @@ Windows picks a DLL: D2DDraw (full screen) and D2Gdi (windowed). The drawing slo
 8-bit back buffer and are shared by both.
 
 **Mac-only, PowerPC-only.** Every file compiles to nothing unless the Mac PowerPC target's flags
-define `D2_OS_MAC` and `D2_ARCH_PPC`; the guard is spelled
-`#if !defined(_WIN32) && D2_OS_MAC && D2_ARCH_PPC` (the VC8 oracle's translator skips
+define `D2_OS_MAC`, `D2_MAC_CARBON` and `D2_ARCH_PPC`; the guard is spelled
+`#if !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC` (the VC8 oracle's translator skips
 `!defined(_WIN32)` blocks), placed before any include. Nothing here includes `D2Arch.h`. No CMake
 target builds it yet: the default build's glob compiles each file to an empty object. The Carbon
 builds' CoreGraphics back end (`cgCore.cpp`) is not reconstructed.
@@ -68,5 +68,5 @@ be folded into one when both land.
 
 Modern clang has no `powerpc-apple` target, so the check is the i386 fallback with the PPC
 macros forced:
-`clang++ -std=gnu++17 -fsyntax-only -target i386-apple-macos10.13 -DD2_OS_MAC=1 -DD2_ARCH_PPC=1 -I<tree> -I<tree>/Source/D2Headers Source/D2Uni/Src/<file>.cpp`
+`clang++ -std=gnu++17 -fsyntax-only -target i386-apple-macos10.13 -DD2_OS_MAC=1 -DD2_MAC_CARBON=1 -DD2_ARCH_PPC=1 -I<tree> -I<tree>/Source/D2Headers Source/D2Uni/Src/<file>.cpp`
 (0 errors on every file). Without `D2_ARCH_PPC`, and under mingw, each file is an empty object.

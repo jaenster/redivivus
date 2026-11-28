@@ -204,7 +204,7 @@ int gnProfileUserExpansionFlag = 0; D2_GLOBAL_GUARD(gnProfileUserExpansionFlag, 
 namespace D2Multi { namespace OOGUtilities {
 
 // Not in the 1.14d Mac binary: it has no registry.
-#if !D2_OS_MAC
+#if defined(_WIN32)
 static uint32_t __stdcall LAUNCHER_ReadRegistryValue(LPCSTR szSubKey, LPCSTR szValueName, LPBYTE pbData, DWORD dwDataSize, LPDWORD pdwDataSize) {
     DWORD dwValueType;
     HKEY hKey;
@@ -273,7 +273,7 @@ int __stdcall OOG_PollMCPCharLogonPump(int nFrameIndex) {
 }
 
 // Opens a URL in the default system browser by querying registry for .html file association. Reads "SOFTWARE\\Classes\\.html" to get file type, then reads "SOFTWARE\\Classes\\{type}\\shell\\open\\command" to get the command line. Appends the URL to the command string, creates a process via CreateProcessA with NORMAL_PRIORITY_CLASS flag, and closes process handles. Shows error dialog (locale 5340) if registry lookup fails. Uses 1024-byte buffers for registry paths and 1025-byte buffer for final command line construction.
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 // 1.14d mac: 002cdd63
 int __stdcall OOGUTIL_OpenBrowserWithURL(D2ControlMsg * pControlMsg) {
     char* pszUrl;

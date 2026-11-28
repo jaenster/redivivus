@@ -54,7 +54,7 @@
 #include "Source/D2Client/Engine.h"
 #include "Source/D2Client/Game/Game.data.h"
 #include "Source/D2Client/Game/Server.h"
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 #include "Source/MacSpecific/Source/MacShell/MacShell.h"
 #endif
 
@@ -2844,7 +2844,7 @@ eD2ClientAppMode __stdcall pfModes_EnterGame() {
         /* .pfHandler = */ &D2Client::GAME::Game::INPUT_HandlePassthrough
     }
 }; D2_STATIC_GUARD(g_UIFlagInitGameDataPanel4, "D2Client::GAME::Game::pfModes_EnterGame::g_UIFlagInitGameDataPanel4");
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32)
     // The Mac build never asks for the OS version (00070e8f).
 #else
     static _OSVERSIONINFOA lpVersionInformation_007a0528 = {}; D2_STATIC_GUARD(lpVersionInformation_007a0528, "D2Client::GAME::Game::pfModes_EnterGame::lpVersionInformation_007a0528");
@@ -2859,7 +2859,7 @@ static uint32_t gdwHostGameThreadId; D2_STATIC_GUARD_BSS(gdwHostGameThreadId, "D
     }
 
     GetTickCount();
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32)
     BOOL bResult;
 #else
     /* LPOSVERSIONINFOA lpVersionInformation for GetVersionExA */ lpVersionInformation_007a0528.dwOSVersionInfoSize = 0x94;
@@ -2888,7 +2888,7 @@ static uint32_t gdwHostGameThreadId; D2_STATIC_GUARD_BSS(gdwHostGameThreadId, "D
         /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ ExitingGame = 0;
         EnteringGame = 0;
         InitializeCriticalSection(&gHostGameStateCs);
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
         HostGameThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0x20000, (LPTHREAD_START_ROUTINE)Server::QSERVER_CooperativeThreadMain, (LPVOID)0x0, 0, (LPDWORD)&gdwHostGameThreadId, "OpenServerThread");
 #else
         /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ HostGameThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)Server::QSERVER_CooperativeThreadMain, (LPVOID)0x0, 0, (LPDWORD)&gdwHostGameThreadId);
@@ -2900,7 +2900,7 @@ static uint32_t gdwHostGameThreadId; D2_STATIC_GUARD_BSS(gdwHostGameThreadId, "D
     GAME_InitClientSide();
     bResult = Record::IsNotRecording();
     if (bResult || (bResult = Record::IsRecording() , bResult != 0)) {
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
       MAC_ProcessEvents();
 #endif
       do {

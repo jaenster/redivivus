@@ -23,12 +23,16 @@
 #endif
 #elif D2_OS_MAC
 #if D2_ARCH_PPC
+#if D2_MAC_CARBON
 #include "Source/D2Rave/D2Rave.h"
 #include "Source/D2Uni/D2Uni.h"
+#endif
 #elif D2_ARCH_X86
 #include "Source/D2OpenGL/Src/D2gfxRenderer.h"
+#if D2_MAC_CARBON
 // defined in D2GFXMacForward.cpp, in the global namespace
 void FUN_002b6035(void);
+#endif
 #else
 #error "D2GFX.cpp: unsupported Mac architecture"
 #endif
@@ -75,7 +79,7 @@ eD2RendererMode eRendererMode = 0; D2_GLOBAL_GUARD(eRendererMode, "D2gfx::D2GFX:
 BOOL bD2GFX_Windowed = 0; D2_GLOBAL_GUARD(bD2GFX_Windowed, "bD2GFX_Windowed");
 uint32_t gnD2GFXResolutionMode = 0; D2_GLOBAL_GUARD(gnD2GFXResolutionMode, "gnD2GFXResolutionMode");
 static HWND hwndD2GFX_Window = 0; D2_STATIC_GUARD(hwndD2GFX_Window, "hwndD2GFX_Window");
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // The Mac build defines the renderer pointer in the Mac unit (D2GFXMacRenderer.cpp), whose renderer switch addresses it directly.
 extern D2RendererFunctionsStrc * RENDERER_CurrentRenderedFunctions;
 #else
@@ -132,7 +136,7 @@ BOOL __stdcall D2GFX_CheckGamma_ForGammaItem() {
 }
 
 // JMP thunk
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 // 1.14d mac: 002b4b33
 void thunk_D2GFX_ResetViewport() {
     ::FUN_002b6035();
@@ -147,7 +151,7 @@ int __stdcall Unreferenced_004f5040(int param_1, int param_2, int param_3) {
     return 0;
 }
 
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 // 1.14d mac: 002b4d0c
 BOOL __stdcall D2GFX_Release() {
     RENDERER_CurrentRenderedFunctions->nfpRelease();
@@ -343,7 +347,7 @@ BOOL __stdcall D2GFX_Initialize(HINSTANCE hInstance, WNDPROC pfWndProc, eD2Rende
 #endif
     static WNDPROC gpfnWndProc; D2_STATIC_GUARD_BSS(gpfnWndProc, "D2gfx::D2GFX::D2GFX_Initialize::gpfnWndProc");
 
-#if D2_OS_MAC
+#if D2_MAC_CARBON
     // 1.14d mac: 002b4975
     WNDCLASS wndClass;
     ghD2GFXInstance = hInstance;
@@ -521,7 +525,7 @@ void __stdcall D2GFX_GetWindowSizeByResolutionMode(int32_t nResolutionMode, int 
     }
 }
 
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 // 1.14d mac: 002b576b
 BOOL __stdcall D2GFX_CreateWindow(BOOL bWindowed, int32_t nResolution) {
     tagRECT WindowRectangle;
@@ -749,7 +753,7 @@ BOOL __stdcall D2GFX_DestroyWindow() {
       hwndD2GFX_Window = nullptr;
     }
 
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
     ChangeDisplaySettingsA(nullptr, 0);
 #endif
     return bSuccess;
@@ -886,7 +890,7 @@ BOOL __stdcall D2GFX_ResizeWindow(int32_t nResolution, BOOL bForceResize) {
 #endif
 
 // Not in the 1.14d Mac binary: its window is moved by the window layer.
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 BOOL __stdcall D2GFX_UpdateWindowSize(int32_t nResolutionMode) {
     // Frame slots -40..-8 are ONE object: &nWorkAreaLeft is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -1025,7 +1029,7 @@ void __stdcall D2GFX_CloseSmacker(D2SmackerContextStrc * pContext) {
 }
 
 // Not in the 1.14d Mac binary: the taskbar, the display-mode switch and the iconic state are Windows shell concepts.
-#if !D2_OS_MAC
+#if defined(_WIN32)
 void __stdcall DRAW_HideTaskbarAppBars() {
     if (bD2GFX_Windowed == 1) {
       return;
@@ -1062,6 +1066,8 @@ void D2GFX_ResetViewport() {
     } while ((intptr_t)pWindowPlacement < (intptr_t)((char*)&gaD2GFXWindowPlacements + sizeof(gaD2GFXWindowPlacements)));
 }
 
+#endif
+#if !D2_MAC_CARBON
 void __stdcall D2GFX_EndCutScene() {
     BOOL bIsIconic;
     int nCursorDisplayCount;
@@ -1100,7 +1106,7 @@ void __stdcall D2GFX_EndCutScene() {
 }
 #endif
 
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 // 1.14d mac: 002b5aab
 int32_t __stdcall D2GFX_EndCutSceneReturnSceneState() {
     if (::D2GFX_EndCutScene != D2GFX_EndCutSceneCurrentState && hwndD2GFX_Window) {

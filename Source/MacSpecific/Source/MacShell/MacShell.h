@@ -1,9 +1,9 @@
-// MacShell.h - the Mac shell entry points the shared game code calls from its D2_OS_MAC blocks.
+// MacShell.h - the Mac shell entry points the shared game code calls from its D2_MAC_CARBON blocks.
 //
-// Mac-only: the guard is spelled `#if !defined(_WIN32) && D2_OS_MAC`.
+// Mac-only: the guard is spelled `#if !defined(_WIN32) && D2_MAC_CARBON`.
 #pragma once
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include <stdio.h>
 

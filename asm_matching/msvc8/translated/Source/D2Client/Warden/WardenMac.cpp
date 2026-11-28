@@ -9,7 +9,7 @@
 // Mac-only: compiles to nothing elsewhere.
 #include "Source/D2Client/Warden/WardenClient.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32)
 
 namespace D2Client { namespace Warden {
 

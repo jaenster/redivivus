@@ -756,7 +756,7 @@ int __fastcall SFILE_GetExecutableDirectory(char * szText, DWORD nSize);
 int __fastcall SFILE_GetInstallPath(LPSTR lpFilename, DWORD nSize);
 int __fastcall SFILE_GetBlizzardAppDataPath(char * szOutPath, uint32_t nMaxLen);
 BOOL __stdcall GetUseDirectCommand();
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32) && (D2_MAC_CARBON || D2_BACKEND_POSIX))  // the non-Windows side runs on a Win32 layer: Win32Mac or Win32Posix
 void __fastcall GetAndCreateSavePath(char * pBuffer, uint32_t nSize);
 #else
 // The Mac binary has no GetAndCreateSavePath (it reads the Windows registry and shell folders): its

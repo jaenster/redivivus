@@ -27,7 +27,7 @@ struct _EXCEPTION_POINTERS;
 #endif // _WIN32
 
 // Data types
-#if !defined(_WIN32) && !D2_OS_MAC  // the Win32 SDK / CRT on Windows, Win32Mac.h on the Mac
+#if !defined(_WIN32) && !(D2_MAC_CARBON || D2_BACKEND_POSIX)  // the Win32 SDK / CRT on Windows, Win32Mac.h on the Mac
 
 typedef _FLOATING_SAVE_AREA FLOATING_SAVE_AREA;
 
@@ -350,7 +350,7 @@ struct THREADNAME_INFO {
 };
 
 #endif // D2_MODULE_Fog
-#if !defined(_WIN32) && !D2_OS_MAC  // the Win32 SDK / CRT on Windows, Win32Mac.h on the Mac
+#if !defined(_WIN32) && !(D2_MAC_CARBON || D2_BACKEND_POSIX)  // the Win32 SDK / CRT on Windows, Win32Mac.h on the Mac
 
 struct _CONTEXT {
     /* 0x00 */ DWORD ContextFlags;

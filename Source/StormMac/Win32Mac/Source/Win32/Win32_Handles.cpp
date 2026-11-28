@@ -15,7 +15,7 @@
 // 0x40 slots when the list is empty.
 #include "Win32Mac.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include <deque>
 

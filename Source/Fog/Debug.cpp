@@ -272,8 +272,8 @@ typedef BOOL (__stdcall *pfnStackWalk)(DWORD MachineType, HANDLE hProcess, HANDL
 typedef DWORD (__stdcall *pfnUnDecorateSymbolName)(char * DecoratedName, char * UnDecoratedName, DWORD UndecoratedLength, DWORD Flags);
 #endif
 
-// The crash handler, stack walker and dump writer are Windows machinery (SEH, dbghelp, ToolHelp, the PE image): the 1.14d Mac binary has none of it, its crash handler is a Mach exception server. That code is under `#if !D2_OS_MAC`.
-#if !D2_OS_MAC
+// The crash handler, stack walker and dump writer are Windows machinery (SEH, dbghelp, ToolHelp, the PE image): the 1.14d Mac binary has none of it, its crash handler is a Mach exception server. That code is under `#if defined(_WIN32)`.
+#if defined(_WIN32)
 static HANDLE ghCurrentProcessHandle = INVALID_HANDLE_VALUE; D2_STATIC_GUARD(ghCurrentProcessHandle, "ghCurrentProcessHandle");
 #endif
 static _RTL_CRITICAL_SECTION lpCriticalSection_0075cfbc = {}; D2_STATIC_GUARD(lpCriticalSection_0075cfbc, "lpCriticalSection_0075cfbc");
@@ -323,7 +323,7 @@ namespace Fog::Debug {
 
 static void InitializeDebugInfoTable(D2FogDebugModuleTableStrc * pTable);
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 void __stdcall DebugThread() {
     void* pSavedEsp;
     BOOL bDebuggerPresent = IsDebuggerPresent();
@@ -342,7 +342,7 @@ void __stdcall DebugThread() {
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 // Loads dbghelp.dll once and resolves its 64-bit symbol APIs into globals. Returns true when the library is (already) loaded and every API resolved, in AL.
 bool __stdcall DEBUG_LoadDbgHelp64Apis() {
     // Static local variables (originally global data)
@@ -423,7 +423,7 @@ void __stdcall Unreferenced_00401c80() {
     hDbgHelpDll = (HMODULE)0x0;
 }
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 bool __stdcall InitializeDebugSymbols() {
     DWORD dwOptions;
     char szSymbolPath[32768];
@@ -465,7 +465,7 @@ bool __stdcall InitializeDebugSymbols() {
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 void __stdcall Unreferenced_00401dd0() {
     if (bDebugSymbolsInitialized == '\0') {
       return;
@@ -476,7 +476,7 @@ void __stdcall Unreferenced_00401dd0() {
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 // NOTE: Return type changed void→char (1 callers, MEDIUM confidence)
 bool __stdcall GetModuleInfoForAddress(uintptr_t dwQueryAddr, uintptr_t * pdwModuleBase, char * szModuleName) {
     bool bVar1;
@@ -531,7 +531,7 @@ bool __stdcall GetModuleInfoForAddress(uintptr_t dwQueryAddr, uintptr_t * pdwMod
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 bool __stdcall GetSymbolNameForAddress(DWORD_PTR dwQueryAddr, char * szSymbolName, uint32_t * pdwSymDisplacement) {
     bool bVar1;
     uint32_t adwDisplacement[2];
@@ -588,7 +588,7 @@ bool __stdcall GetSymbolNameForAddress(DWORD_PTR dwQueryAddr, char * szSymbolNam
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 bool __stdcall GetSourceLineForAddress(uintptr_t dwQueryAddr, char * szFileName, uint32_t * pdwLineNumber) {
     // Frame slots -24..-12 are ONE object: &dwDisplacement is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -648,7 +648,7 @@ bool __stdcall GetSourceLineForAddress(uintptr_t dwQueryAddr, char * szFileName,
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 bool __stdcall EnumerateLoadedModules(void * pfnModuleCallback, void * pUserContext) {
     BOOL bEnumOk;
     uint32_t nSehState = -1;
@@ -679,7 +679,7 @@ bool __stdcall EnumerateLoadedModules(void * pfnModuleCallback, void * pUserCont
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 void __fastcall SetSymbolSearchPath(char * szSearchPath) {
     bool bVar1;
     uint32_t nSehState;
@@ -722,7 +722,7 @@ void __fastcall SetSymbolSearchPath(char * szSearchPath) {
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 int __thiscall FindSymbolFile(void * pfnFindCallback, char * szSearchPath, char * szFileName, void * nId, uint32_t dwTimestamp, uint32_t nThree, uint32_t dwFlags, char * szFoundFile, void * pUserContext) {
     bool bVar1;
     uint32_t nSehState;
@@ -765,7 +765,7 @@ int __thiscall FindSymbolFile(void * pfnFindCallback, char * szSearchPath, char 
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 int __stdcall LoadModuleSymbols(HANDLE hFile, char * szImageName, char * szModuleName, uint32_t dwBaseOfDll, uint32_t dwSizeOfDll, uint32_t dwBaseHigh) {
     bool bVar1;
     uint32_t nSehState;
@@ -808,7 +808,7 @@ int __stdcall LoadModuleSymbols(HANDLE hFile, char * szImageName, char * szModul
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 uint32_t __stdcall UnloadModuleSymbols(uint32_t dwBaseOfDll, uint32_t dwBaseHigh) {
     bool bVar1;
     uint32_t nSehState;
@@ -847,7 +847,7 @@ uint32_t __stdcall UnloadModuleSymbols(uint32_t dwBaseOfDll, uint32_t dwBaseHigh
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 bool __stdcall WalkStackFrame(HANDLE hThread, void * pStackFrame, void * pContextRecord) {
     bool bVar1;
     uint32_t nSehState;
@@ -886,7 +886,7 @@ bool __stdcall WalkStackFrame(HANDLE hThread, void * pStackFrame, void * pContex
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 // Write crash dump via background thread - wrapper for MiniDumpWriteDump on Windows
 void __stdcall WriteCrashDumpViaThread() {
     // Frame slots -36..-12 are ONE object: &nBufferSize is passed out and the callee reaches the rest by byte offset.
@@ -953,7 +953,7 @@ void __stdcall WriteCrashDumpViaThread() {
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 // lpStartAddress parameter of CreateThread
 DWORD __stdcall DEBUG_CrashDumpRequestThreadProc(void * lpThreadParam) {
     DebugThread();
@@ -968,7 +968,7 @@ DWORD __stdcall DEBUG_CrashDumpRequestThreadProc(void * lpThreadParam) {
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 bool __fastcall CrashDumpWriterThread(LPCSTR szDumpPath, char * szComment, _EXCEPTION_POINTERS * pExceptionPointers, DWORD dwThreadId) {
     uint32_t bLoadOk;
     HANDLE hResult;
@@ -1018,7 +1018,7 @@ bool __fastcall CrashDumpWriterThread(LPCSTR szDumpPath, char * szComment, _EXCE
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 void __stdcall InitializeDebugSubsystem() {
     // Static local variables (originally global data)
     static HANDLE hDebugThread; D2_STATIC_GUARD_BSS(hDebugThread, "Fog::Debug::InitializeDebugSubsystem::hDebugThread");
@@ -1034,7 +1034,7 @@ void __stdcall InitializeDebugSubsystem() {
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 bool __stdcall DEBUG_GetDbgHelpModuleRange(LPVOID * ppBaseOfDll, DWORD * pdwSizeOfImage) {
     _MODULEINFO moduleInfo;
     if (!hDbgHelpDll) {
@@ -1056,7 +1056,7 @@ bool __stdcall DEBUG_GetDbgHelpModuleRange(LPVOID * ppBaseOfDll, DWORD * pdwSize
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 void __stdcall CleanupDebugSymbols() {
     int nSehState = -1;
     pfnEHHandlerRoutine puStack12 = __GSHandlerCheck_EH_6ca575;
@@ -1179,7 +1179,7 @@ void __fastcall FormatAddressDebugString(D2CrashFrameStrc * pAddrInfo, D2FogAddr
     }
 }
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 void __fastcall EnumerateAndDumpAllFunctions(fnCrashOutputLine pOutputCallback, ::Report * pReport) {
     char* pszLine;
     uint32_t nLineLen;
@@ -1223,7 +1223,7 @@ static void InitializeDebugInfoTable(D2FogDebugModuleTableStrc * pTable) {
     } while (nRemaining >= 0);
 }
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 void __fastcall CRASH_DumpThreadContext(DWORD dwThreadId, void * pContext, fnCrashOutputLine pOutputCallback, ::Report * pReport, char bIncludeThreadName, char bIncludeStackInfo, uint32_t nMaxFrames) {
     D2CrashFrameStrc aFrames[128];
     int nFrameCountClamped = 0x7f;
@@ -1251,7 +1251,7 @@ void __fastcall CRASH_DumpThreadContext(DWORD dwThreadId, void * pContext, fnCra
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 // Format stack trace for crash dump. Captures thread context if bIncludeThreadName set, iterates frames and calls callback for each formatted address line. If bIncludeStackInfo set, includes stack space usage info.
 void __fastcall CRASH_FormatStackTrace(DWORD dwThreadId, D2CrashFrameStrc * aFrameAddrs, int32_t nNumFrames, fnCrashOutputLine pOutputCallback, ::Report * pReport, char bIncludeThreadName, char bIncludeStackInfo) {
     // Frame slots -2012..-16 are ONE object: &dwStackBytesUsed is passed out and the callee reaches the rest by byte offset.
@@ -1326,7 +1326,7 @@ int __stdcall DEBUG_UnloadStackCrawlDbgHelp() {
     return 1;
 }
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 void __fastcall DumpThreadContext(HANDLE hHandle) {
     CONTEXT sContext;
     memset(&sContext, 0, sizeof(sContext));
@@ -1377,7 +1377,7 @@ void __fastcall FOG_FreeModuleList(D2FogModuleNodeStrc * pModuleList) {
     }
 }
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 // @sourcefile .\Src\Exceptions.cpp
 D2FogModuleNodeStrc * __stdcall EnumerateModulesToolhelp32(uint32_t dwProcessId) {
     D2FogModuleNodeStrc* pDVar1;
@@ -1465,7 +1465,7 @@ D2FogModuleNodeStrc * __stdcall EnumerateModulesToolhelp32(uint32_t dwProcessId)
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 // Enumerates process modules using PSAPI library. Loads PSAPI.DLL, queries module list, retrieves module paths and base names, constructs sorted list of module information for debugging.
 // @sourcefile .\Src\Exceptions.cpp
 D2FogModuleNodeStrc * __stdcall EnumerateModulesPsapi(HANDLE hProcess) {
@@ -1615,7 +1615,7 @@ D2FogModuleNodeStrc * __fastcall FindModuleContainingAddress(uintptr_t nAddress,
     return pModuleList;
 }
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 // Dumps stack memory with symbol annotations. Formats raw stack bytes as hex, identifies pointer values, and looks up module/symbol information for each dword.
 void __fastcall DumpAnnotatedStackMemory(HANDLE hSymHandle, CONTEXT * pContext, D2FogModuleNodeStrc * pModuleListHead) {
     // Frame slots -656..-648 are ONE object: &nSymDisplacement is passed out and the callee reaches the rest by byte offset.
@@ -1863,7 +1863,7 @@ BOOL __fastcall FILETOOLS_GetExecutableFolderPath(LPSTR lpFilename, DWORD nSize)
     return 1;
 }
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 static char * BuildSymbolSearchPath(char * szSearchPath) {
     int nResult;
     char szCurrentDir[512];
@@ -1924,7 +1924,7 @@ static char * BuildSymbolSearchPath(char * szSearchPath) {
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 // Maps a code address to its module path, 1-based PE section index and offset within that section;
 // "unknown" and 0/0 when the address is not in a mapped image.
 static void __stdcall GetLogicalAddress(void * pAddress, char * szModulePath, int * pnSectionIndex, uint32_t * ppSectionOffset, int nBufferSize) {
@@ -1970,7 +1970,7 @@ static void __stdcall GetLogicalAddress(void * pAddress, char * szModulePath, in
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 // @sourcefile .\Src\Exceptions.cpp
 int __stdcall InitializeSymbolsWithRefcount() {
     // Static local variables (originally global data)
@@ -2051,7 +2051,7 @@ int __fastcall CleanupSymbolsWithRefcount(int32_t bForceCleanup) {
     return bResult;
 }
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 BOOL __fastcall QuickStackWalkWithSymbols(char * szSearchPath, HANDLE hProcess, CONTEXT * pContext) {
     // Static local variables (originally global data)
     static uint32_t gnStackWalkInProgress; D2_STATIC_GUARD_BSS(gnStackWalkInProgress, "Fog::Debug::QuickStackWalkWithSymbols::gnStackWalkInProgress");
@@ -2253,7 +2253,7 @@ BOOL __fastcall QuickStackWalkWithSymbols(char * szSearchPath, HANDLE hProcess, 
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 void __fastcall FullStackWalkWithAnnotations(HANDLE hThread, CONTEXT * pContext) {
     // Frame slots -5268..-5220 are ONE object: &dwLineStructSize is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -2457,7 +2457,7 @@ void __fastcall FullStackWalkWithAnnotations(HANDLE hThread, CONTEXT * pContext)
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 void __fastcall WriteCrashDump(uint32_t dwHeader0, uint32_t dwHeader1, uint32_t dwRecordType, int32_t nDwordCount, void * pData) {
     D2CrashDumpRecordStrc sRecord;
     char szDumpPath[260];
@@ -2476,7 +2476,7 @@ void __fastcall WriteCrashDump(uint32_t dwHeader0, uint32_t dwHeader1, uint32_t 
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 // @sourcefile .\Src\Exceptions.cpp
 BOOL __fastcall LoadPreviousCrashDump(uint8_t * pOutBuffer, int * pnBufferSize) {
     int nResult;
@@ -2567,7 +2567,7 @@ BOOL __fastcall LoadPreviousCrashDump(uint8_t * pOutBuffer, int * pnBufferSize) 
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 void HandleExceptionWithStackDump(uint32_t dwUnused, _EXCEPTION_POINTERS * pExceptionPointers) {
     HANDLE hDupThread;
     if (!bBetterStackCrawls) {
@@ -2585,7 +2585,7 @@ void HandleExceptionWithStackDump(uint32_t dwUnused, _EXCEPTION_POINTERS * pExce
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 BOOL __stdcall DEBUG_LoadStackCrawlDbgHelp() {
     // Static local variables (originally global data)
     static pfnSymUnloadModule pSymUnloadModule; D2_STATIC_GUARD_BSS(pSymUnloadModule, "Fog::Debug::DEBUG_LoadStackCrawlDbgHelp::pSymUnloadModule");
@@ -2635,7 +2635,7 @@ BOOL __stdcall DEBUG_LoadStackCrawlDbgHelp() {
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 void __fastcall TriggerManualStackDump(char * szCategory) {
     // Frame slots -748..-16 are ONE object: &szCategorySpill is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.

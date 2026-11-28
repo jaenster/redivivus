@@ -828,7 +828,7 @@ OSStatus OGL_MacWindowEventHandler(EventHandlerCallRef hCallRef, EventRef hEvent
 } // namespace D2OpenGL::oglMac
 
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // 1.14d mac: 002ffe21
 // The Bink code to hand a movie surface for the display's current pixel encoding: 0 for 8-bit
 // indexed, 9 for 16-bit RGB555, 3 for 32-bit RGB, -1 otherwise. Global namespace: the binary

@@ -16,7 +16,7 @@ void __fastcall RENDERER_D3D_CopyPixelsWithStride(uint8_t * pSrc, uint8_t * pDes
     }
 }
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32)
 // Windows-only: the Mac build has no Direct3D renderer and no registry.
 #else
 void __fastcall RENDERER_D3D_CloseRegistryKey(HKEY * phKey) {

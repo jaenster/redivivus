@@ -2608,7 +2608,7 @@ void __stdcall QSERVER_BroadcastChatByServerId(uint16_t nServerId, char * pMessa
     return gpQServerLockedGame;
 }
 
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 // Not in the 1.14d Mac binary (no PlayerMessageThread, no caller of CreateThread for it).
 // lpStartAddress parameter of CreateThread
 DWORD __stdcall QSERVER_PlayerMessageThread(D2PlayerMessageThreadArgsStrc * lpThreadParam) {

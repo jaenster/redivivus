@@ -24,7 +24,7 @@
 // has more free space. Win32 critical sections are re-entrant: recursive mutexes.
 #include "Win32Mac.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include <Carbon/Carbon.h>
 #include <dlfcn.h>

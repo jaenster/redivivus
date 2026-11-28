@@ -35,7 +35,7 @@ static char g_szStoredUsername[256] = {}; D2_STATIC_GUARD(g_szStoredUsername, "g
 static D2SrpSaltVerifierStrc g_srpSaltVerifier = {}; D2_STATIC_GUARD(g_srpSaltVerifier, "g_srpSaltVerifier");
 static D2SrpCredentialsStrc g_srpCredentials = {}; D2_STATIC_GUARD(g_srpCredentials, "g_srpCredentials");
 D2Srp * g_pSrpContext = 0; D2_GLOBAL_GUARD(g_pSrpContext, "g_pSrpContext");
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32)
 // kernel32!GetSystemDefaultUILanguage, looked up at run time (absent before Windows 2000).
 typedef LANGID (WINAPI *pfnGetSystemDefaultUILanguage)(void);
 #endif
@@ -1337,7 +1337,7 @@ void __stdcall NET_SID_CLIENT_FreeSRP() {
     SRP::SRP_FreeParameters(&g_pSrpContext);
 }
 
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32)
 int Unreferenced_00521ba0() {
     uint16_t uVar3;
     HMODULE hModule = LoadLibraryA("kernel32.dll");
@@ -1407,7 +1407,7 @@ int __stdcall NET_SID_CLIENT_Send_0x50_AuthInfo() {
     llTimeDiff = _alldiv(ftUtc.dwLowDateTime - ftLocal.dwLowDateTime, ftUtc.dwHighDateTime - ftLocal.dwHighDateTime - (uint32_t)(ftUtc.dwLowDateTime < ftLocal.dwLowDateTime), 600000000, 0);
     sAuthInfoPacket.nTzBias = (int)llTimeDiff;
     sAuthInfoPacket.dwLocaleId = GetUserDefaultLCID();
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32)
     HMODULE hKernel32;
     hKernel32 = LoadLibraryA("kernel32.dll");
     if (hKernel32) {

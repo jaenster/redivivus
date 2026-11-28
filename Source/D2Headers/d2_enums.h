@@ -2431,11 +2431,11 @@ using define__USE_DECLSPECS_FOR_SAL_ns::_USE_DECLSPECS_FOR_SAL;
 
 typedef uint64_t define_TRUE;
 namespace define_TRUE_ns {
-#if !defined(_WIN32) && !D2_OS_MAC  // <windows.h>/<winnt.h> on Windows, Win32Mac.h on the Mac
+#if !defined(_WIN32) && !(D2_MAC_CARBON || D2_BACKEND_POSIX)  // <windows.h>/<winnt.h> on Windows, Win32Mac.h on the Mac
 constexpr define_TRUE TRUE = 1;
 #endif
 }
-#if !defined(_WIN32) && !D2_OS_MAC  // <windows.h>/<winnt.h> on Windows, Win32Mac.h on the Mac
+#if !defined(_WIN32) && !(D2_MAC_CARBON || D2_BACKEND_POSIX)  // <windows.h>/<winnt.h> on Windows, Win32Mac.h on the Mac
 using define_TRUE_ns::TRUE;
 #endif
 

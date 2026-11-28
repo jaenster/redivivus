@@ -120,7 +120,7 @@ void __stdcall NET_D2GS_ConnectToServer(eD2GSConnectionType neD2GSConnectionType
       return;
     }
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
     SERVER_THREAD = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)CLIENT_ServerConnectionThread_lpStartAddress, szIpAddress, 0, (LPDWORD)&::D2Net::SRC::Client::lpThreadId_00882b30, "ConnectThread");
 #else
     /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ SERVER_THREAD = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)CLIENT_ServerConnectionThread_lpStartAddress, szIpAddress, 0, (LPDWORD)&::D2Net::SRC::Client::lpThreadId_00882b30);

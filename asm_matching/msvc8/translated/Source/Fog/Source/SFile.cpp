@@ -215,8 +215,8 @@ int __fastcall SFILE_GetInstallPath(LPSTR lpFilename, DWORD nSize) {
     return 1;
 }
 
-// The Blizzard application-data path, save-game path and directory move use Windows shell and file calls the Win32 layer does not implement. They are under `#if !D2_OS_MAC`.
-#if !D2_OS_MAC
+// The Blizzard application-data path, save-game path and directory move use Windows shell and file calls the Win32 layer does not implement. They are under `#if defined(_WIN32)`.
+#if defined(_WIN32)
 int __fastcall SFILE_GetBlizzardAppDataPath(char * szOutPath, uint32_t nMaxLen) {
     uint32_t nDstPathLen;
     char cAppDataPath[260];
@@ -258,7 +258,7 @@ BOOL __stdcall GetUseDirectCommand() {
     return D2Ini_bUseDirect;
 }
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 static bool SFILE_GetSaveGamePath(LPSTR szOutPath, uint32_t nMaxLen) {
     int nResult;
     char szAppDataPath[260];
@@ -288,7 +288,7 @@ static bool SFILE_GetSaveGamePath(LPSTR szOutPath, uint32_t nMaxLen) {
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 int __fastcall SFILE_MoveDirectoryRecursive(LPCSTR szSrcRoot, LPCSTR szDstRoot) {
     size_t nSrcGlobLen;
     size_t nDstDirLen;
@@ -366,7 +366,7 @@ int __fastcall SFILE_MoveDirectoryRecursive(LPCSTR szSrcRoot, LPCSTR szDstRoot) 
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 void __fastcall GetAndCreateSavePath(char * pBuffer, uint32_t nSize) {
     DWORD dwAttributes;
     char* pcLen;
@@ -449,7 +449,7 @@ void __fastcall GetAndCreateSavePath(char * pBuffer, uint32_t nSize) {
 }
 #endif
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && (D2_MAC_CARBON || D2_BACKEND_POSIX)  // the non-Windows side runs on a Win32 layer: Win32Mac or Win32Posix
 // 1.14d mac: 002ef69a
 BOOL FOG_AppendBackslash(char * szPath, size_t nSize) {
     if (!szPath || !nSize) {
@@ -661,7 +661,7 @@ void __stdcall LOGFILE_StoreGameStartupInfo() {
     }
 
     Src::LogManager::LOGFILE_WriteStringToFile("%s running under %s (Version %.3f)", "Diablo II", szOsName, (double)gSystemInfo.fOSVersion);
-#if !D2_OS_MAC
+#if defined(_WIN32)
     Src::LogManager::LogCpuInfo();
 #endif
     Src::LogManager::LOGFILE_WriteStringToFile("Total Physical Memory: %.2fMB", (float)gSystemInfo.dwTotalPhysicalMemory * 9.5367431640625e-7);

@@ -286,7 +286,7 @@ uintptr_t __thiscall ARCHIVE_RemoveNode(StormLinkedListStrc * pThis, StormLinkSt
     return nValue;
 }
 
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 // NOTE: Callee-saved register params inferred (medium confidence): param_esi (ESI): LPOVERLAPPED, param_edi (EDI): LPOVERLAPPED, param_ebx (EBX): LPOVERLAPPED
 // @sourcefile SOURCE\D2HELL\Src\Archive.cpp
 void ARCHIVE_WriteMemoryCheckReport() {

@@ -8,7 +8,7 @@
 // A thread is a kernel object (WIN32MAC_HANDLE_THREAD) that is signaled when it ends.
 #include "Win32Mac.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include <string.h>
 #include <unistd.h>

@@ -170,7 +170,7 @@ void __stdcall DRAW_UI_FPSStats() {
     D2gfx::D2GFX::D2GFX_DrawString(10, 2, "%d FPS  %d Skip", fps, nStat);
     nStatValue = Game::GetPing();
     D2gfx::D2GFX::D2GFX_DrawString(0xa0, 2, "Ping: %d", nStatValue);
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32)
     // The Mac overlay shows no physical or page memory (0005e76a).
 #else
     /* LPMEMORYSTATUS lpBuffer for GlobalMemoryStatus */ memStatus.dwLength = sizeof(memStatus);

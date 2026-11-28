@@ -4,12 +4,12 @@
 // terminator's address | 1 (StormMac/H/stpl.h).
 //
 // Mac-only: see Win32Mac/Source/Win32/Win32Mac.h for why the guard is spelled
-// `#if !defined(_WIN32) && D2_OS_MAC`.
+// `#if !defined(_WIN32) && D2_MAC_CARBON`.
 #pragma once
 
 #include "D2Arch.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #pragma GCC visibility push(hidden)
 #include "Source/StormMac/H/stpl.h"

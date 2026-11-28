@@ -26,7 +26,7 @@ __declspec(noinline) inline void MISC_OperatorDeleteShim(void * p) {
       return;
     }
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
     SMemFree(p, "delete", -1, 0);
 #else
     SMemFree(p, "delete", -1, 0);

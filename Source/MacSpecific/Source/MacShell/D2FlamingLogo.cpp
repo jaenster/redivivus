@@ -8,11 +8,11 @@
 // The Baal AI follows at 0019f900, so the file ends there; where it starts is not proven
 // (0019f18a and 0019f1c4 before it use no file name; they are kept in unknown_util.cpp).
 //
-// Mac-only: the guard is spelled `#if !defined(_WIN32) && D2_OS_MAC` (see
+// Mac-only: the guard is spelled `#if !defined(_WIN32) && D2_MAC_CARBON` (see
 // Source/MacSpecific/README.md).
 #include "D2Arch.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include <Carbon/Carbon.h>
 #include <QuickTime/QuickTime.h>

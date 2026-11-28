@@ -21,7 +21,7 @@ struct sockaddr;
 #endif // _WIN32
 
 // Data types
-#if !defined(_WIN32) && !D2_OS_MAC  // the Win32 SDK / CRT on Windows, Win32Mac.h on the Mac
+#if !defined(_WIN32) && !(D2_MAC_CARBON || D2_BACKEND_POSIX)  // the Win32 SDK / CRT on Windows, Win32Mac.h on the Mac
 
 typedef uint32_t u_int;
 

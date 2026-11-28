@@ -18,7 +18,7 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/Src/ErrorManager.data.h"
 #include "Source/D2Headers/D2Arch.h"
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 #include <CoreServices/CoreServices.h>
 #include "Source/MacSpecific/Source/MacShell/MacShell.h"
 #endif
@@ -46,11 +46,11 @@ static char * gaErrorTypeNames[12] = {
     (char*)"Deadlock",
     (char*)"\?\?\?"
 }; D2_STATIC_GUARD(gaErrorTypeNames, "gaErrorTypeNames");
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // The Mac's critical section is a pthread mutex, set up by InitializeCriticalSection.
 static _RTL_CRITICAL_SECTION lpCriticalSection_0074c830 = {}; D2_STATIC_GUARD(lpCriticalSection_0074c830, "lpCriticalSection_0074c830");
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 static _RTL_CRITICAL_SECTION lpCriticalSection_0074c830 = {
     /* .DebugInfo = */ nullptr,
     /* .LockCount = */ 0x0,
@@ -128,8 +128,8 @@ void __fastcall FILETOOLS_WriteOneStringToFile(::Report * pReport, char * szStri
     _3rdparty::crashy::Printf(pReport, "%s", szString);
 }
 
-// Process, token, system-info and exception-pointer queries are Windows-only (the Mac bodies differ: WriteCrashReportProcessInfo, DumpLog and CRASH_FillupCrashTxt have their own Mac versions). They are under `#if !D2_OS_MAC`.
-#if !D2_OS_MAC
+// Process, token, system-info and exception-pointer queries are Windows-only (the Mac bodies differ: WriteCrashReportProcessInfo, DumpLog and CRASH_FillupCrashTxt have their own Mac versions). They are under `#if defined(_WIN32)`.
+#if defined(_WIN32)
 DWORD __fastcall GetParentProcessId(int32_t nProcessId) {
     DWORD dwParentProcessId = 0;
     PROCESSENTRY32 procEntry;
@@ -153,7 +153,7 @@ DWORD __fastcall GetParentProcessId(int32_t nProcessId) {
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 uint8_t __fastcall GetModuleFileNameForProcess(DWORD nProcessId, LPSTR szText, DWORD nBufferSize) {
     uint8_t bResult;
     HANDLE hProcess = OpenProcess(0x410, 0, nProcessId);
@@ -168,7 +168,7 @@ uint8_t __fastcall GetModuleFileNameForProcess(DWORD nProcessId, LPSTR szText, D
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 // Writes process metadata to crash report: application name, inspector tags, admin status via AllocateAndInitializeSid (SECURITY_BUILTIN_DOMAIN_RID + DOMAIN_ALIAS_RID_ADMINS), process/parent/grandparent paths, game/system locale from gaLocaleCodeStrings, and attaches log files (21 slots from InitLogFilePathPointers). Locale lookup uses MISC_GetLanguageCode and STRTABLE_GetRegistryLanguage.
 bool __fastcall WriteCrashReportProcessInfo(::Report * pReport) {
     // Static local variables (originally global data)
@@ -274,7 +274,7 @@ bool __fastcall WriteCrashReportProcessInfo(::Report * pReport) {
 }
 #endif
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // crashy's Mac reporting entry points, called by the crash writers below (third-party code).
 // 1.14d mac: 000035c0
 void CRASHY_Exit(int nExitCode);
@@ -292,7 +292,8 @@ void CRASHY_WriteFrameBacktrace(uint32_t hThread, void** apFrameAddrs, uint32_t 
 void CRASHY_WriteThreadRegisters(uint32_t hThread, fnCrashOutputLine pfnOutput, ::Report* pReport);
 // 1.14d mac: 00007df4
 void CRASHY_WriteOtherThreadBacktraces(fnCrashOutputLine pfnOutput, ::Report* pReport, uint32_t hExcludeThread);
-
+#endif
+#if !defined(_WIN32)
 static char* gaMacLanguageNames[15] = {
     (char*)"English", (char*)"Spanish", (char*)"German", (char*)"French", (char*)"Portuguese",
     (char*)"Italian", (char*)"Japanese", (char*)"Korean", (char*)"Simplified Chinese",
@@ -343,7 +344,7 @@ uint8_t Unreferenced_00407dd0() {
     return '\0';
 }
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 void __stdcall InitializeSystemInfo() {
 #if D2_ARCH_X86
     _MEMORYSTATUS memoryStatus;
@@ -536,7 +537,7 @@ void OutputDebugStringSimple(char * szText, ...) {
     va_end(__va);
 }
 
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 void OutputDebugStringIfCapsLock(char * szText, ...) {
     va_list __va;
     va_start(__va, szText);
@@ -565,7 +566,7 @@ void FormatDebugOutputLogOnly(char * szText, ...) {
     FormatDebugOutput(1, szText, __va);
 }
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 // The registered Fog exception filter. Its ABI is measured at the only dispatch,
 // 00403f21 'call dword ptr [gpCurrentExceptionFilter]' with NO pushes: ECX = &crashInfo
 // (00403efd 'lea ecx,[ebp-0x320]') and EDX = the stored context (00403ef5
@@ -676,7 +677,7 @@ int __fastcall DumpLog(D2CrashReportStrc * pCrashInfo, void * pUserContext) {
 }
 #endif
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // 1.14d mac: 002ee625
 // Unlike the Windows filter the Mac one ends the process itself (CRASHY_Exit); it never sets a return value.
 void __fastcall DumpLog(D2CrashReportStrc * pCrashInfo, void * pUserContext) {
@@ -760,7 +761,7 @@ void __fastcall DumpLog(D2CrashReportStrc * pCrashInfo, void * pUserContext) {
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 // Fog's implementation of Storm's Blizzard-error callback: writes Crash.txt (summary, line number,
 // thread context, registers, thread list, attachments) and hands it to ErrorReportingLaunch.
 // @abi __fastcall(char *szSummary @ECX, char *szReason @EDX, char **ppszAttachPaths @Stack[0x4],
@@ -869,7 +870,7 @@ void __fastcall CRASH_FillupCrashTxt(char * szSummary, char * szReason, char * *
 }
 #endif
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // 1.14d mac: 002eea97
 // Same job as the Windows body; the crash writers are crashy's CRASHY_* entry points and there is no exception frame.
 void __fastcall CRASH_FillupCrashTxt(char * szSummary, char * szReason, char * * ppszAttachPaths, uint32_t nAttachPathCount, uint32_t nLineNumber, bool bSilentFlag) {
@@ -1071,7 +1072,7 @@ void __fastcall ShowUnrecoverableErrorDialog(int32_t eErrorType, char * szText, 
     /* UINT uType for MessageBoxA */ /* LPCSTR lpCaption for MessageBoxA */ /* LPCSTR lpText for MessageBoxA */ /* HWND hWnd for MessageBoxA */ MessageBoxA((HWND)0x0, szMessageBoxBuffer, szTitleBuffer, 0x30);
 }
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 // Initializes Fog error manager and debugging subsystems on first call. Sets up project metadata (ID 0x108, "Diablo II", version "D2 1.14d"), retrieves executable directory via SFILE_GetExecutableDirectory into a 4096-byte buffer, initializes two critical sections for thread safety, starts the log writer thread, validates gadwBitMasks/gadwInvBitMasks lookup tables, and registers the exit handler. On subsequent calls with bLogGameStrartupInfo=TRUE, only logs startup info via LOGFILE_StoreGameStartupInfo.
 void __fastcall ERRORMANAGER_InitErrorManager(char * dwUnused1, char * szText, BOOL bLogGameStrartupInfo) {
     // Static local variables (originally global data)
@@ -5268,7 +5269,7 @@ _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9bfb(EHExceptionRecord * pException
     return ExceptionContinueSearch;
 }
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // The Mac build keeps its error and log files in a "Blizzard" folder of the user's Application
 // Support folder, as a Mac path token ("\\{MacPathNN}\\Blizzard\\").
 
@@ -5291,7 +5292,7 @@ bool FOG_MacGetBlizzardSupportPath(char* szPath, size_t nSize) {
 }
 #endif
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32)
 // 1.14d mac: 002ef34b
 int ERRORMANAGER_ReturnTrue() {
     return 1;
@@ -5304,7 +5305,7 @@ int ERRORMANAGER_ReturnFalse(void* pOutBuffer, uint32_t* pnBufferSize) {
 }
 #endif
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // The Mac binary's crash and error-report entry points live in its own unit and in the crash library.
 // 1.14d mac: 00002e4d
 void CRASH_InitCrashReporter();
@@ -5394,7 +5395,7 @@ void FOG_InitErrorManager(void* pUnused, char* szText, int bStoreStartupInfo) {
 
 } // namespace Fog::Src::ErrorManager
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // 1.14d mac: 002ef085
 // The frame pointer of its own frame: the %08x of the "Unrecoverable internal error" text the
 // Mac renderer units format (Windows inlines GetInstructionPointer at each site instead).

@@ -17,7 +17,7 @@
 // Forward declarations
 struct D2SoundEaxEnvironStrc;
 
-#if !defined(_WIN32) && !D2_OS_MAC  // the Win32 SDK / CRT on Windows, Win32Mac.h on the Mac
+#if !defined(_WIN32) && !(D2_MAC_CARBON || D2_BACKEND_POSIX)  // the Win32 SDK / CRT on Windows, Win32Mac.h on the Mac
 struct WAVEFORMATEX;
 #endif // _WIN32
 
@@ -42,7 +42,7 @@ struct DSBUFFERDESC {
 };
 
 #endif // D2_MODULE_D2Sound
-#if !defined(_WIN32) && !D2_OS_MAC  // the Win32 SDK / CRT on Windows, Win32Mac.h on the Mac
+#if !defined(_WIN32) && !(D2_MAC_CARBON || D2_BACKEND_POSIX)  // the Win32 SDK / CRT on Windows, Win32Mac.h on the Mac
 
 D2_PACKED_BEGIN struct __attribute__((packed)) WAVEFORMATEX {
     /* 0x00 */ WORD wFormatTag;

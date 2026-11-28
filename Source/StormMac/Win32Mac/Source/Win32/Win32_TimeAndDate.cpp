@@ -15,7 +15,7 @@
 // The two epochs are 0x0153B281E0FB4000 FILETIME units apart.
 #include "Win32Mac.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include <CoreServices/CoreServices.h>
 #include <string.h>

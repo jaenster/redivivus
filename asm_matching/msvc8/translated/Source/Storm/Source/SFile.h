@@ -357,7 +357,7 @@ void __stdcall SFileSetAsyncBudget(uint32_t nBudgetBytesPerSec);
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SFileSetBasePath"
 // @wasnamed SFILE_SetMaxFileHandles
 // @basis behaviour-confirmed, and a hard contradiction of the old name. The single parameter is a PATH STRING, not a handle count: it is length-checked against MAX_PATH (0x104, SetLastError(0xa1) = ERROR_BAD_PATHNAME on overflow), copied into the global base-path buffer lpFilename_00778f28, and a trailing backslash is appended if absent. An empty string clears the base path. Nothing in the body touches a handle table. Counterpart of SFileGetBasePath (004160a0).
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 int32_t __stdcall SFileSetBasePath(const char * szText);
 #else
 int32_t __stdcall SFileSetBasePath(char * szText);
@@ -380,7 +380,7 @@ int __stdcall SFileAuthenticateArchive(struct D2ArchiveStrc * pArchive, uint32_t
 BOOL __stdcall SFileDdaGetPos(struct D2MPQFileStrc * pFile, uint32_t * pdwCurrentPos, uint32_t * pdwEndPos);
 // @sourcefile .\SOURCE\SFILE.CPP
 // @blizzard SFileOpenFileEx (SFILE.CPP)
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 int __stdcall SFileOpenFileEx(struct D2ArchiveStrc * pArchive, const char * szFileName, uint32_t dwFlags, void * * phFile);
 #else
 int __stdcall SFileOpenFileEx(struct D2ArchiveStrc * pArchive, char * szFileName, uint32_t dwFlags, void * * phFile);
@@ -388,7 +388,7 @@ int __stdcall SFileOpenFileEx(struct D2ArchiveStrc * pArchive, char * szFileName
 // @blizzard SFileCloseFile (SFILE.CPP)
 int __stdcall SFileCloseFile(struct D2MPQFileStrc * pMPQFile);
 // @blizzard SFileOpenFile (SFILE.CPP)
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 int32_t __stdcall SFileOpenFile(const char * szFilename, struct D2MPQFileStrc * * ppFile);
 #else
 int32_t __stdcall SFileOpenFile(char * szFilename, struct D2MPQFileStrc * * ppFile);
@@ -415,7 +415,7 @@ BOOL __stdcall SFileDdaBeginEx(struct D2MPQFileStrc * hFile, uint32_t dwBufferBy
 // @wasnamed SFILE_LoadFileToMemory
 // @basis behaviour-confirmed as part of a three-way arity lock. The real API has exactly one 5/7/8-parameter family: SFileLoadFile(filename, buffer, bytes, extrabytes, callback) = 5, SFileLoadFileEx(archive, filename, buffer, bytes, extrabytes, flags, callback) = 7, SFileLoadFileEx2(... , readflags) = 8. This is the 5-parameter member; it forwards to the 8-parameter worker with archive = NULL, flags = SFILE_GetOpenFlags() and readflags = 0, which is exactly the set of defaults the 5-parameter signature implies. Note its first parameter is the FILENAME - it is currently mistyped D2ArchiveStrc *, and lands in the worker's filename slot.
 // @seealso SFileLoadFileEx 0041b680, SFileLoadFileEx2 0041af60
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 uint32_t __stdcall SFileLoadFile(const char * pArchive, void * * ppOutBuffer, DWORD * pdwOutSize, uint32_t nSize, LPOVERLAPPED nReadCtx);
 #else
 uint32_t __stdcall SFileLoadFile(char * pArchive, void * * ppOutBuffer, DWORD * pdwOutSize, uint32_t nSize, LPOVERLAPPED nReadCtx);
@@ -424,14 +424,14 @@ uint32_t __stdcall SFileLoadFile(char * pArchive, void * * ppOutBuffer, DWORD * 
 // @wasnamed SFILE_LoadFileToMemory2
 // @basis behaviour-confirmed as part of a three-way arity lock. 7 parameters, positionally identical to SFileLoadFileEx(archive, filename, buffer, bytes, extrabytes, flags, callback); the body forwards them unchanged to the 8-parameter worker with readflags = 0, which is exactly what distinguishes Ex from Ex2.
 // @seealso SFileLoadFile 0041b650, SFileLoadFileEx2 0041af60
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 uint32_t __stdcall SFileLoadFileEx(struct D2ArchiveStrc * pArchive, const char * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, uint32_t nExtraPadBytes, uint32_t nSearchScope, LPOVERLAPPED nReadCtx);
 #else
 uint32_t __stdcall SFileLoadFileEx(struct D2ArchiveStrc * pArchive, char * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, uint32_t nExtraPadBytes, uint32_t nSearchScope, LPOVERLAPPED nReadCtx);
 #endif
 // @sourcefile .\SOURCE\SFILE.CPP
 // @blizzard SFileOpenArchive (SFILE.CPP)
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 int __stdcall SFileOpenArchive(const char * szArchiveName, int * pUserData, uint32_t nFlags, struct D2ArchiveStrc * * ppArchive);
 #else
 int __stdcall SFileOpenArchive(char * szArchiveName, int * pUserData, uint32_t nFlags, struct D2ArchiveStrc * * ppArchive);

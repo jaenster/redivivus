@@ -12,12 +12,12 @@
 // address with bit 0 set, where Windows stores its complement.
 //
 // Mac-only, like the rest of StormMac: see Win32Mac/Source/Win32/Win32Mac.h for why
-// the guard is spelled `!defined(_WIN32) && D2_OS_MAC`.
+// the guard is spelled `!defined(_WIN32) && D2_MAC_CARBON`.
 #pragma once
 
 #include "D2Arch.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include <new>
 #include <stddef.h>

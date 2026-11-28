@@ -37,7 +37,7 @@
 #include "Source/D2Win/D2WinScrollbar.h"
 #include "Source/D2Win/D2WinTimer.h"
 #include "Source/D2Win/Src/D2WinMain.data.h"
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 #include "Source/MacSpecific/Source/MacShell/MacShell.h"
 #endif
 
@@ -842,7 +842,7 @@ void __stdcall INPUT_CtrlKeyUp(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 // 1.14d mac: 0004ba8d
 void __stdcall D2WIN_HandleSystemCommand(D2UIMouseMsgStrc * pMsg) {
 }
@@ -1337,7 +1337,7 @@ BOOL __stdcall MessagePump(pfnFramePump pfnFrameCallback)
     uint32_t nBudgetAccum = 0;
     while (gbMessageLoopActive) {
       BOOL hasMessage;
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
       MAC_ProcessEvents();
 #endif
       /* UINT wRemoveMsg for PeekMessageA */ /* UINT wMsgFilterMax for PeekMessageA */ /* UINT wMsgFilterMin for PeekMessageA */ /* HWND hWnd for PeekMessageA */ /* LPMSG lpMsg for PeekMessageA */ hasMessage = PeekMessageA(&windowMsg, (HWND)0x0, 0, 0, 0);
@@ -1396,12 +1396,12 @@ BOOL __stdcall MessagePump(pfnFramePump pfnFrameCallback)
 void __stdcall MOUSE_CaptureMousePosition(D2UIMouseMsgStrc * phWnd) {
     uint32_t Y;
     bool bXOutOfRange;
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
     tagTRACKMOUSEEVENT sTrackMouseEvent;
 #endif
     int nScreenHeight;
     D2UIMouseMsgStrc* pDVar1 = phWnd;
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
     if (!gbMouseInWindow) {
       /* LPTRACKMOUSEEVENT lpEventTrack for TrackMouseEvent */ sTrackMouseEvent.cbSize = sizeof(sTrackMouseEvent);
       sTrackMouseEvent.dwFlags = 2;

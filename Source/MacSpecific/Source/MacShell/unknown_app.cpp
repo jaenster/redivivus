@@ -9,11 +9,11 @@
 // MAC_GetDefaultDisplayMode; FUN_0019be53/be79 call the input unit's FUN_0019b290/b2a2/b2b4
 // out of line and reach 005c865c through a non-lazy pointer. See Source/MacSpecific/README.md.
 //
-// Mac-only: the guard is spelled `#if !defined(_WIN32) && D2_OS_MAC` (see
+// Mac-only: the guard is spelled `#if !defined(_WIN32) && D2_MAC_CARBON` (see
 // Source/MacSpecific/README.md).
 #include "D2Arch.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include <Carbon/Carbon.h>
 #include <pthread.h>

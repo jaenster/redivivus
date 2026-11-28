@@ -7,7 +7,7 @@
 // (or, for an owner-drawn list without strings, just the 32-bit item data).
 #include "Win32ListBox.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include <string.h>
 

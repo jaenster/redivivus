@@ -587,7 +587,7 @@ void StaticInit_CriticalSection_0088caa8() {
     atexit(StaticFini_CriticalSection_0088caa8);
 }
 
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 // Constructs the 32 task-queue critical sections in aTaskQueueCriticalSections through the compiler's array iterator, InitCriticalSection per element; THREADING_DeleteCriticalSection_Thunk is the matching destructor.
 void StaticInit_aTaskQueueCriticalSections() {
     _eh_vector_constructor_iterator_(aTaskQueueCriticalSections, sizeof(CRITICAL_SECTION), 0x20, (void (__fastcall *)(void*))Fog::Src::LogManager::InitCriticalSection, Fog::THREADING_DeleteCriticalSection_Thunk);
@@ -599,7 +599,7 @@ void StaticFini_CriticalSection_0088caa8() {
     DeleteCriticalSection(&lpCriticalSection_0088caa8);
 }
 
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 void StaticFini_aTaskQueueCriticalSections() {
     _eh_vector_destructor_iterator_(aTaskQueueCriticalSections, sizeof(CRITICAL_SECTION), 0x20, Fog::THREADING_DeleteCriticalSection_Thunk);
 }

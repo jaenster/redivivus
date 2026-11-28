@@ -13,7 +13,7 @@
 // distance is refused.
 #include "Win32GDI.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include <CoreServices/CoreServices.h>
 #include <string.h>

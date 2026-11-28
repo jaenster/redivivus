@@ -67,7 +67,7 @@ void __stdcall SBigAdd(struct BigData * pResult, struct BigData * pBigA, struct 
 // @renamed-from SBIG_ImportBytesWrapper (2026-08-28, Storm PowerPC oracle pass 4)
 // @oracle Mac PPC 1.10b Storm -- PPC SBigFromBinary -> 10099cd0, single bl .FromBinary__FR9BigBufferPCvUi. 1.14d: 3-arg forwarder onto BigBuffer_FromBinary 00423380.
 // @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 void __stdcall SBigFromBinary(struct BigData * pDstBignum, const void * pSrcBytes, uint32_t nByteCount);
 #else
 void __stdcall SBigFromBinary(struct BigData * pDstBignum, void * pSrcBytes, uint32_t nByteCount);

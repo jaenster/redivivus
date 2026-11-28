@@ -10,8 +10,8 @@
 // (Win32_Events.cpp, Win32_Memory.cpp, Win32_Rect.cpp ...) hold units whose original
 // file name no binary records.
 //
-// Mac-only: every file here compiles to nothing unless D2_OS_MAC. Each guard is spelled
-// `#if !defined(_WIN32) && D2_OS_MAC`: the VC8 oracle's translator reads every source in
+// Mac-only: every file here compiles to nothing unless D2_MAC_CARBON (the original 1.14d
+// build). Each guard is spelled `#if !defined(_WIN32) && D2_MAC_CARBON`: the VC8 oracle's translator reads every source in
 // the tree for its cross-file facts and skips only `!defined(_WIN32)` blocks, and this
 // layer redeclares Win32 entry points (GetDesktopWindow ...) that would otherwise change
 // how Windows TUs are translated.
@@ -19,7 +19,7 @@
 
 #include "D2Arch.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include <pthread.h>
 #include <stddef.h>

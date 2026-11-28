@@ -5,7 +5,7 @@
 // unknown: no 1.14d string names it (see Source/StormMac/README.md).
 #include "Win32Mac.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include <Carbon/Carbon.h>
 #include <string.h>

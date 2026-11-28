@@ -6,7 +6,7 @@ original put it: the binary's source paths read
 `Diablo2/Source/DiabloAll/../MacSpecific/Source/...`.
 
 The Mac shell (`Source/MacShell/`) is Mac-only and not part of the Windows game: every file
-compiles to nothing unless `D2_OS_MAC`, with the guard spelled `#if !defined(_WIN32) && D2_OS_MAC`
+compiles to nothing unless `D2_MAC_CARBON`, with the guard spelled `#if !defined(_WIN32) && D2_MAC_CARBON`
 (the VC8 oracle's translator reads every source in the checkout and skips only `!defined(_WIN32)`
 blocks). `Source/CD2Textures/` is the D2OpenGL texture base with the Mac system calls restored on
 Win32/WGL, compiled with D2OpenGL by the CMake target `d2opengl_objs` and never linked into the

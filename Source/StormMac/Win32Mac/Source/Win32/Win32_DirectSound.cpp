@@ -9,7 +9,7 @@
 #include "Win32Mac.h"
 #include "Win32MacDirectSound.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include <Carbon/Carbon.h>
 #include <math.h>

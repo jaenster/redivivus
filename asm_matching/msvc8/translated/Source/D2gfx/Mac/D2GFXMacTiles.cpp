@@ -10,12 +10,12 @@
 // 0,0 pair; the blitters unroll the copy as a fall-through switch on the count, as the
 // original does.
 //
-// Mac-only: the guard is spelled `#if !defined(_WIN32) && D2_OS_MAC`.
+// Mac-only: the guard is spelled `#if !defined(_WIN32) && D2_MAC_CARBON`.
 #include "D2GFXMac.h"
 
 #include <stdlib.h>
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 void fp_fatal(const char* szFormat, ...);
 // 1.14d mac: 002ef085

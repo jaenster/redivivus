@@ -11,7 +11,7 @@
 // Bodies from the LoD 1.10b classic PEF; differences in other builds are noted where seen.
 //
 // Classic Mac PowerPC only.
-#if !defined(_WIN32) && D2_OS_MAC && D2_ARCH_PPC
+#if !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC
 
 #include "Source/D2Uni/Src/uniInternal.h"
 
@@ -485,4 +485,4 @@ void UniPlayBinkFile(char * szFile, int nResolution, BYTE * pDest, int nDestPitc
     }
 }
 
-#endif // !defined(_WIN32) && D2_OS_MAC && D2_ARCH_PPC
+#endif // !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC

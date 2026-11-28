@@ -10,7 +10,7 @@
 // added to one global dirty region.
 #include "Win32GDI.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include <string.h>
 

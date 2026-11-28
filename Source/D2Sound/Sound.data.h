@@ -22,7 +22,7 @@ struct IDirectSound;
 // lpCriticalSection parameter of EnterCriticalSection
 extern _RTL_CRITICAL_SECTION gSoundSmpCs;
 extern IDirectSound * gpDirectSound;
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // The 1.14d Mac keeps these flags as bytes (SOUND_GetSound3DFlag 002e76c3 and
 // SOUND_GetSoundQualityFlag 002e76d5 read them with MOVZX) and has no primary-buffer mode
 // or driver scan.

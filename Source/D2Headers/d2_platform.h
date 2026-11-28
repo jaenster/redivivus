@@ -6,6 +6,20 @@
 
 #pragma once
 
+// The Mac axes beside D2_OS_MAC (macOS behaviour, both Mac builds): D2_MAC_CARBON is the
+// original 1.14d build's Carbon, Win32Mac and StormMac layer (cmake/mac.cmake defines it),
+// D2_BACKEND_POSIX the Win32Posix layer. Both are 0 unless the toolchain sets them; see
+// Source/StormMac/README.md. Not on Windows: a new macro VC8 sees shifts its symbol numbering
+// (D2Arch.h), and an undefined name is 0 in #if there anyway.
+#if !defined(_WIN32)
+#  ifndef D2_MAC_CARBON
+#    define D2_MAC_CARBON 0
+#  endif
+#  ifndef D2_BACKEND_POSIX
+#    define D2_BACKEND_POSIX 0
+#  endif
+#endif
+
 // Visual C++ 2015 and later as cl.exe (clang-cl takes the GCC spellings as they are):
 // the two GCC spellings the generator emits that cl has no syntax for.
 //   __attribute__((x))  each attribute as its __declspec, `packed` as nothing: cl packs
@@ -293,7 +307,7 @@ static inline int WideCharToMultiByte(UINT cp, DWORD flags, const uint16_t* src,
 }
 #else
 
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 // The shared code's Win32 on the Mac is Storm's Win32-on-Mac layer, as in the original
 // build: Win32Mac.h gives the calling conventions (spelled away), the scalar types (DWORD
 // is 32 bits), HANDLE (an index into the layer's handle table), the critical section (a
@@ -311,14 +325,14 @@ static inline int WideCharToMultiByte(UINT cp, DWORD flags, const uint16_t* src,
 typedef int BOOL;
 typedef unsigned char BYTE;
 typedef unsigned short WORD;
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 typedef unsigned long DWORD;
 #endif
 typedef unsigned long long QWORD;
 typedef char CHAR;
 typedef uint16_t WCHAR;
 typedef char TCHAR;
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 typedef long LONG;
 #endif
 typedef unsigned long ULONG;
@@ -334,7 +348,7 @@ typedef uintptr_t DWORD_PTR;
 typedef uintptr_t ULONG_PTR;
 typedef WORD LANGID;
 typedef long HRESULT;
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 typedef unsigned short ATOM;
 #endif
 
@@ -342,12 +356,12 @@ typedef unsigned short ATOM;
 typedef void* LPVOID;
 typedef const void* LPCVOID;
 typedef void* PVOID;
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 typedef void* HANDLE;
 #endif
 typedef void* HMODULE;
 typedef void* HINSTANCE;
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 typedef void* HWND;
 typedef void* HDC;
 #endif
@@ -360,18 +374,18 @@ typedef void* HCURSOR;
 typedef void* HICON;
 typedef void* HMENU;
 typedef void* HPALETTE;
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 typedef void* HRGN;
 #endif
 typedef void* HRSRC;
 typedef void* HGLOBAL;
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 typedef intptr_t LRESULT;
 typedef uintptr_t WPARAM;
 typedef intptr_t LPARAM;
 #endif
 typedef uint16_t LANGID;
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 typedef intptr_t (__stdcall *FARPROC)();
 #endif
 
@@ -391,7 +405,7 @@ typedef PTHREAD_START_ROUTINE LPTHREAD_START_ROUTINE;
 typedef void* LPSERVICE_STATUS;
 
 // Minimal struct definitions
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 struct CRITICAL_SECTION { void* DebugInfo; long LockCount; long RecursionCount; void* OwningThread; void* LockSemaphore; unsigned long SpinCount; };
 typedef CRITICAL_SECTION* LPCRITICAL_SECTION;
 #endif
@@ -399,7 +413,7 @@ struct POINT { LONG x; LONG y; };
 typedef POINT* LPPOINT;
 struct RECT { LONG left; LONG top; LONG right; LONG bottom; };
 typedef RECT* LPRECT;
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 struct FILETIME { DWORD dwLowDateTime; DWORD dwHighDateTime; };
 #endif
 typedef FILETIME* LPFILETIME;
@@ -407,18 +421,18 @@ struct GUID { DWORD Data1; WORD Data2; WORD Data3; BYTE Data4[8]; };
 struct OVERLAPPED { DWORD Internal; DWORD InternalHigh; DWORD Offset; DWORD OffsetHigh; HANDLE hEvent; };
 typedef OVERLAPPED* LPOVERLAPPED;
 
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 struct PALETTEENTRY { BYTE peRed; BYTE peGreen; BYTE peBlue; BYTE peFlags; };
 typedef PALETTEENTRY* LPPALETTEENTRY;
 #endif
 
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 typedef FILETIME _FILETIME;
 #endif
 typedef OVERLAPPED _OVERLAPPED;
 struct MEMORYSTATUS { DWORD dwLength; DWORD dwMemoryLoad; SIZE_T dwTotalPhys; SIZE_T dwAvailPhys; SIZE_T dwTotalPageFile; SIZE_T dwAvailPageFile; SIZE_T dwTotalVirtual; SIZE_T dwAvailVirtual; };
 typedef MEMORYSTATUS _MEMORYSTATUS;
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 struct SYSTEMTIME { WORD wYear; WORD wMonth; WORD wDayOfWeek; WORD wDay; WORD wHour; WORD wMinute; WORD wSecond; WORD wMilliseconds; };
 typedef SYSTEMTIME _SYSTEMTIME;
 #endif
@@ -428,7 +442,7 @@ typedef SECURITY_ATTRIBUTES* LPSECURITY_ATTRIBUTES;
 typedef MEMORYSTATUS* LPMEMORYSTATUS;
 typedef SYSTEMTIME* LPSYSTEMTIME;
 typedef LONG* PLONG;
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 union _LARGE_INTEGER { struct { DWORD LowPart; long HighPart; } s; long long QuadPart; };
 typedef _LARGE_INTEGER LARGE_INTEGER;
 #endif
@@ -439,34 +453,34 @@ typedef int SOCKET;
 typedef unsigned long u_long;
 
 // Thread context (minimal stub)
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 struct CONTEXT { DWORD ContextFlags; };
 #endif
 typedef CONTEXT* LPCONTEXT;
 
 // Common Win32 API function stubs
 extern "C" {
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 DWORD GetTickCount();
 #endif
 void Sleep(DWORD dwMilliseconds);
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 BOOL QueryPerformanceCounter(LARGE_INTEGER* lpPerformanceCount);
 BOOL QueryPerformanceFrequency(LARGE_INTEGER* lpFrequency);
 int wsprintfA(LPSTR lpOut, LPCSTR lpFmt, ...);
 #endif
 int wsprintfW(LPWSTR lpOut, LPCWSTR lpFmt, ...);
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 DWORD GetLastError();
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 void SetLastError(DWORD dwErrCode);
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 DWORD GetCurrentThreadId();
 #endif
 DWORD GetCurrentProcessId();
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 void OutputDebugStringA(LPCSTR lpOutputString);
 HMODULE GetModuleHandleA(LPCSTR lpModuleName);
 FARPROC GetProcAddress(HMODULE hModule, LPCSTR lpProcName);
@@ -476,21 +490,21 @@ BOOL FreeLibrary(HMODULE hLibModule);
 HANDLE GetProcessHeap();
 LPVOID HeapAlloc(HANDLE hHeap, DWORD dwFlags, SIZE_T dwBytes);
 BOOL HeapFree(HANDLE hHeap, DWORD dwFlags, LPVOID lpMem);
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 void InitializeCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
 void EnterCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
 void LeaveCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
 void DeleteCriticalSection(LPCRITICAL_SECTION lpCriticalSection);
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 HANDLE CreateThread(LPSECURITY_ATTRIBUTES lpThreadAttributes, SIZE_T dwStackSize, LPTHREAD_START_ROUTINE lpStartAddress, LPVOID lpParameter, DWORD dwCreationFlags, LPDWORD lpThreadId);
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 DWORD WaitForSingleObject(HANDLE hHandle, DWORD dwMilliseconds);
 BOOL CloseHandle(HANDLE hObject);
 #endif
 void ExitProcess(UINT uExitCode);
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 int MessageBoxA(HWND hWnd, LPCSTR lpText, LPCSTR lpCaption, UINT uType);
 LPVOID VirtualAlloc(LPVOID lpAddress, SIZE_T dwSize, DWORD flAllocationType, DWORD flProtect);
 BOOL VirtualFree(LPVOID lpAddress, SIZE_T dwSize, DWORD dwFreeType);
@@ -498,7 +512,7 @@ BOOL VirtualFree(LPVOID lpAddress, SIZE_T dwSize, DWORD dwFreeType);
 }
 
 BOOL IsBadCodePtr(FARPROC lpfn);
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 BOOL IsBadReadPtr(const void* lp, SIZE_T ucb);
 #else
 BOOL IsBadReadPtr(const void* lp, UINT ucb);
@@ -510,7 +524,7 @@ BOOL ResetEvent(HANDLE hEvent);
 void PostQuitMessage(int nExitCode);
 BOOL PostMessageA(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 int GetSystemMetrics(int nIndex);
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 BOOL SetWindowPos(HWND hWnd, HWND hWndInsertAfter, int X, int Y, int cx, int cy, BYTE uFlags);
 BOOL ShowWindow(HWND hWnd, UINT nCmdShow);
 #else
@@ -524,7 +538,7 @@ HDC GetDC(HWND hWnd);
 int ReleaseDC(HWND hWnd, HDC hDC);
 
 #endif // _WIN32
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 #include "Source/StormMac/Win32Mac/Source/Win32/Win32MacUser.h"
 #endif
 
@@ -600,7 +614,7 @@ typedef void (*GrProc)();
 extern "C" {
 double CRT_Floor(...);
 double CRT_Ceil(...);
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 char* _strrev(char*);
 #endif
 }
@@ -806,19 +820,19 @@ static inline uint64_t __aullrem(uint32_t lo1, uint32_t hi1, uint32_t lo2, uint3
 static inline uint64_t _aullshr(uint64_t a, unsigned int n) { return a >> n; }
 
 #ifndef _WIN32
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 static inline LONG InterlockedIncrement(volatile LONG* p) { return ++(*p); }
 static inline LONG InterlockedDecrement(volatile LONG* p) { return --(*p); }
 static inline LONG InterlockedExchange(volatile LONG* p, LONG v) { LONG old = *p; *p = v; return old; }
 static inline LONG InterlockedCompareExchange(volatile LONG* p, LONG exchange, LONG comparand) { LONG old = *p; if (*p == comparand) *p = exchange; return old; }
 #endif
 // Overloads for int32_t* (Ghidra decompiler uses int32_t instead of LONG; the Mac's LONG is int32_t)
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 static inline int32_t InterlockedIncrement(volatile int32_t* p) { return ++(*p); }
 static inline int32_t InterlockedDecrement(volatile int32_t* p) { return --(*p); }
 #endif
 HANDLE CreateEventW(LPSECURITY_ATTRIBUTES lpEventAttributes, BOOL bManualReset, BOOL bInitialState, LPCWSTR lpName);
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 DWORD WaitForMultipleObjects(DWORD nCount, const HANDLE* lpHandles, BOOL bWaitAll, DWORD dwMilliseconds);
 LRESULT SendMessageA(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 #endif
@@ -874,26 +888,26 @@ static inline errno_t _strncpy_s(char* dst, size_t dsz, const char* src, size_t 
 #ifndef _WIN32
 BOOL WriteFile(HANDLE hFile, LPCVOID lpBuffer, DWORD nBytes, LPDWORD lpBytesWritten, LPOVERLAPPED lpOverlapped);
 BOOL ReadFile(HANDLE hFile, LPVOID lpBuffer, DWORD nBytes, LPDWORD lpBytesRead, LPOVERLAPPED lpOverlapped);
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 HANDLE CreateFileA(LPCSTR lpFileName, DWORD dwDesiredAccess, DWORD dwShareMode, LPSECURITY_ATTRIBUTES lpSec, DWORD dwCreationDisposition, DWORD dwFlagsAndAttributes, HANDLE hTemplate);
 #endif
 DWORD SetFilePointer(HANDLE hFile, LONG lDistanceToMove, PLONG lpDistanceToMoveHigh, DWORD dwMoveMethod);
 DWORD GetFileSize(HANDLE hFile, LPDWORD lpFileSizeHigh);
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 DWORD GetFileAttributesA(LPCSTR lpFileName);
 DWORD GetModuleFileNameA(HMODULE hModule, LPSTR lpFilename, DWORD nSize);
 #endif
 void GetLocalTime(LPSYSTEMTIME lpSystemTime);
 HANDLE GetCurrentProcess();
 SHORT GetKeyState(int nVirtKey);
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 BOOL SetRect(LPRECT lprc, int left, int top, int right, int bottom);
 #else
 void SetRect(LPRECT lprc, int left, int top, int right, int bottom);
 int WSAGetLastError();
 int WSACleanup();
 #endif
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 DWORD timeGetTime(void);
 #endif
 #endif
@@ -1082,7 +1096,7 @@ namespace _Wrappers {
 }  // namespace _Wrappers
 #endif // _WIN32
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // The Win32-on-Mac layer's entry points, under the names the shared code calls.
 #  include "Source/StormMac/Win32Mac/Source/Win32/Win32MacKernel.h"
 #  include "Source/StormMac/Win32Mac/Source/Win32/Win32MacDirectSound.h"

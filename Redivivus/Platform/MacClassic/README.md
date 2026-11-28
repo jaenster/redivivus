@@ -20,7 +20,7 @@ The two sets were written in parallel and overlap in some type definitions; they
 until they are folded into one.
 
 Every file compiles to nothing unless the target is classic Mac PowerPC: the guard is
-`#if !defined(_WIN32) && D2_OS_MAC && D2_ARCH_PPC`, with the axes from compiler flags. The
+`#if !defined(_WIN32) && D2_MAC_CARBON && D2_ARCH_PPC`, with the axes from compiler flags. The
 folder is left out of every CMake build (CMakeLists.txt) and of the VC8 oracle (`NOT_GAME` in
 `asm_matching/msvc8/zig/src/compile.zig`).
 
@@ -29,7 +29,7 @@ stubs is checked as
 
 ```
 clang++ -target powerpc-unknown-none -ffreestanding -fsyntax-only -std=gnu++17 \
-    -DD2_OS_MAC=1 -DD2_ARCH_PPC=1 -I. Source/D2Rave/Src/<file>.cpp
+    -DD2_OS_MAC=1 -DD2_MAC_CARBON=1 -DD2_ARCH_PPC=1 -I. Source/D2Rave/Src/<file>.cpp
 ```
 
 `powerpc-unknown-none` is a 32-bit big-endian PowerPC target; current clang has no

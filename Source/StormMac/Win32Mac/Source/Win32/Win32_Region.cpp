@@ -8,7 +8,7 @@
 // the window manager and the DirectX shims, see Source/StormMac/README.md.
 #include "Win32Mac.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include <CoreServices/CoreServices.h>
 #include <string.h>

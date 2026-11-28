@@ -4,7 +4,7 @@ The Mac-only functions of D2gfx in the 1.14d Intel Mac build (`DiabloII_macho`):
 and palette slots of the helper table, the software tile blitters, the renderer switch, the
 forwarders only the Mac renderer table has, the display-mode enumeration (MACGFX) and the
 code-signature check (MACSEC). Built by `cmake/mac.cmake` (compile only), measured by
-`asm_matching/mac/cmp.ts`. Every file compiles to nothing unless `D2_OS_MAC`.
+`asm_matching/mac/cmp.ts`. Every file compiles to nothing unless `D2_OS_MAC`; the files that call the Carbon-era layer (Win32Mac, StormMac, the Mac renderer forwarders) only under `D2_MAC_CARBON`.
 
 No `__FILE__` names these units. The binary files them among D2gfx's shared functions
 (`D2GFX.cpp`), so the split here follows how each unit reaches its globals: a global the

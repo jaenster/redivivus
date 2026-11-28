@@ -6,9 +6,41 @@ the binary's source paths read `Diablo2/Source/DiabloAll/../../../StormMac/Storm
 (the 1.14d BNUpdate patcher uses the same tree). It is not part of Storm (`Source/Storm`);
 it sits beside it under `Source/` because both are Blizzard's own code.
 
-Mac-only: every file compiles to nothing unless `D2_OS_MAC`, with the guard spelled
-`#if !defined(_WIN32) && D2_OS_MAC` (see `Win32Mac/Source/Win32/Win32Mac.h`).
+Mac-only: every file compiles to nothing unless `D2_MAC_CARBON`, with the guard spelled
+`#if !defined(_WIN32) && D2_MAC_CARBON` (see `Win32Mac/Source/Win32/Win32Mac.h` and
+[The Mac macros](#the-mac-macros)).
 Built by `cmake/mac.cmake` (compile only), measured by `asm_matching/mac/cmp.ts`.
+
+## The Mac macros
+
+Three macros split what used to be one `D2_OS_MAC`. Every shared block was sorted by what it
+calls; `asm_matching/mac/coverage/macro-split.tsv` lists each one with its class and evidence.
+
+|macro|means|set by|
+|-|-|-|
+|`D2_OS_MAC`|macOS behaviour any Mac build wants: paths and folders, prefs, the Cmd key, the bundle, Mac defaults|both Mac builds|
+|`D2_MAC_CARBON`|Blizzard's Carbon-era layer: Carbon, QuickDraw, FSSpec/MoreFiles, AGL, the Sound Manager, Gestalt, StormMac, Win32Mac, MacShell. The 1.14d build only|`cmake/mac.cmake` (`D2_MAC_CARBON=1`)|
+|`D2_BACKEND_POSIX`|the Win32Posix layer (a modern Mac build, later Linux)|nothing yet|
+
+Both new macros default to 0 off Windows (`d2_platform.h`). On Windows none of the three is defined.
+
+- Code for the Carbon layer is guarded `#if !defined(_WIN32) && D2_MAC_CARBON`. The Windows code
+  it replaces is guarded `!D2_MAC_CARBON` (or `defined(_WIN32) || !D2_MAC_CARBON`), so a build
+  without Carbon takes the Win32 path through its own layer. This includes all of StormMac,
+  MacSpecific, D2Rave/D2Uni (with `D2_ARCH_PPC`), and the 1.14d Mac struct layouts that
+  follow Win32Mac's types.
+- The Win32 stand-ins in `d2_platform.h` (the scalar and handle types, the core declarations)
+  are guarded `!D2_MAC_CARBON`: Win32Mac.h replaces them on the 1.14d build, and Win32Posix
+  builds on them. The module headers' own stand-ins (`d2_enums.h`, `Fog/Debug.h`,
+  `Safesock.h` ...) are guarded `!(D2_MAC_CARBON || D2_BACKEND_POSIX)`: a Win32 layer owns those.
+- Windows-only machinery that no other build has (SEH, crash dumps, ToolHelp and the PE image,
+  Warden, the registry, the shell folders, WinMain) is guarded `#if defined(_WIN32)`. Its
+  portable replacement is guarded `#if !defined(_WIN32)`. Where that replacement still needs a
+  Win32 layer call (`GetModuleFileNameA`), the guard is
+  `(D2_MAC_CARBON || D2_BACKEND_POSIX)`, with a note on the line.
+- Plain macOS behaviour keeps `D2_OS_MAC`.
+- The `#if !defined(_WIN32)` spelling matters: the VC8 translator skips those blocks when it
+  gathers its facts, and a Mac block must not open a brace in both branches (3cf1e44e).
 
 ## Folders
 
@@ -121,7 +153,7 @@ the list-template instantiations before it belong to that file.
 
 ## Boundaries recorded by the last functions of the port
 
-- `Fog/Src/ErrorManager.cpp` (shared, generated): the Mac-only `FOG_MacGetBlizzardSupportPath` (002ef7cd) is a `D2_OS_MAC` block at the end of the file. The Mac build does not compile that file yet (the shared code is not Mac-clean), so the block was checked in isolation with the clang-425 toolchain; it calls `Source::SFile::SafeCreateDirectoryTree`, which the Windows header declares `__fastcall` and the Mac one is not.
+- `Fog/Src/ErrorManager.cpp` (shared, generated): the Mac-only `FOG_MacGetBlizzardSupportPath` (002ef7cd) is a `D2_MAC_CARBON` block at the end of the file. The Mac build does not compile that file yet (the shared code is not Mac-clean), so the block was checked in isolation with the clang-425 toolchain; it calls `Source::SFile::SafeCreateDirectoryTree`, which the Windows header declares `__fastcall` and the Mac one is not.
 - 00002e4d and 00002e52 (`ErrorReportingSetSupportPath`) are not Blizzard code: they belong to crashy's error-reporting API, whose other entry point is `ErrorReportingLaunch` (00002e90; `crashy::ErrorReportingLaunch` on Windows). 2e52 fills the buffer 003e2cf0 that Launch reads, both are reached through the data table at 0061610b..e and called only from FOG_InitErrorManager. `coverage/units.tsv` classes them third-party.
 - `Win32MacWindow.h` holds the message state (`Win32MacMsgState`, the rings, MSG, timers) as well as the window; Win32_Messages.cpp used to keep its own copy of the window struct with the child links at 0x54/0x58, where the window manager has 0x50 first child, 0x54 last child, 0x58 previous sibling, 0x5c next sibling.
-- `H/StormApi.h` declares the Storm entry points the shared code calls, in the namespaces the binary's symbols and `Source/Storm/Storm.h` give them (`Storm::Source::SSTR`, `SFile`, `SMem`, `SReg`, `SLog`, `SBig`, `SBMP`, `Storm::WindowHandle`, ...), and `using`s them for the StormMac units. The definitions in `SOURCE` carry the qualified names and the parameter types of that declaration; the Mac units must not declare these functions again. Where Storm.h's type is wrong for the binary and the shared callers can take the right one (const pointers, the registry's `int` flags), `Storm.h` and `Storm/Source/*.h` have a `D2_OS_MAC` branch with the Mac type; the shared callers' casts decide the rest (`SFileOpenArchive` keeps Windows' `int*` priority, the Mac units reach it through the `int` overload in StormApi.h).
+- `H/StormApi.h` declares the Storm entry points the shared code calls, in the namespaces the binary's symbols and `Source/Storm/Storm.h` give them (`Storm::Source::SSTR`, `SFile`, `SMem`, `SReg`, `SLog`, `SBig`, `SBMP`, `Storm::WindowHandle`, ...), and `using`s them for the StormMac units. The definitions in `SOURCE` carry the qualified names and the parameter types of that declaration; the Mac units must not declare these functions again. Where Storm.h's type is wrong for the binary and the shared callers can take the right one (const pointers, the registry's `int` flags), `Storm.h` and `Storm/Source/*.h` have a `D2_MAC_CARBON` branch with the Mac type; the shared callers' casts decide the rest (`SFileOpenArchive` keeps Windows' `int*` priority, the Mac units reach it through the `int` overload in StormApi.h).

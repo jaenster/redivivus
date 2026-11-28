@@ -27,7 +27,7 @@
 #include "Source/D2Win/D2WinScrollbar.h"
 #include "Source/D2Win/D2WinTimer.h"
 #include "Redivivus/Lua/d2_lua_hooks.h"
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 #include "Source/MacSpecific/Source/MacShell/MacShell.h"
 #endif
 
@@ -4235,13 +4235,13 @@ static D2ControlStrc * gpCtlBnetPasswordOkButton = 0; D2_STATIC_GUARD(gpCtlBnetP
 
 namespace D2Launch { namespace MainMenus {
 
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 void __fastcall FORMS_DestroyEncoderContext_Thunk_Unref_0041f930(uint32_t * pEncoder) {
     Storm::Source::SComp::COMPRESS_DestroyEncoderContext((D2CompressEncoderStrc*)pEncoder);
 }
 #endif
 
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 void __fastcall FORMS_DestroyEncoderContext_Thunk_Unref_0041f940(uint32_t * pEncoder) {
     Storm::Source::SComp::COMPRESS_DestroyEncoderContext((D2CompressEncoderStrc*)pEncoder);
 }
@@ -6096,7 +6096,7 @@ BOOL __stdcall MAINMENU_ShowCinematicsMenu(D2ControlMsg * pControlMsg) {
 // 1.14d mac: 002cb1f2
 void __stdcall GetAndDispatchAllPossible() {
     tagMSG msg;
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
     MAC_ProcessEvents();
 #endif
     while (PeekMessageA(&msg, (HWND)0x0, 0, 0, 1)) {
@@ -6230,7 +6230,7 @@ uint32_t __fastcall MAINMENU_DetectDoubleClick(D2ControlMsg * pMsg) {
       bIsDoubleClick = 0;
     }
 
-    #if D2_OS_MAC
+    #if D2_MAC_CARBON
     GetCursorPos((POINT*)&cursorPos);
 #else
     /* LPPOINT lpPoint for GetCursorPos */ GetCursorPos(&cursorPos);
@@ -8118,7 +8118,7 @@ BOOL __stdcall MAINMENU_OnPressReturnToMainMenu(D2ControlMsg * pControlMsg) {
     return 1;
 }
 
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 // 1.14d mac: 002c1dd4
 // The Mac keeps no wait screen here: a full volume goes straight to the popup, otherwise the
 // terms of service follow. The save path is a Mac path token, so it is not cut at a backslash.
@@ -8644,7 +8644,7 @@ int32_t __fastcall fAPPMODE_launcher_ReturnAppMode_Caller(D2IniConfigStrc * pD2I
         D2IniData_launcher->bSKIPTOBNET = false;
         D2IniData_launcher->padding_0x35F[0] = 1;
         D2Win::D2GFX::D2GFX_SetVideoMode(1);
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
         D2gfx::D2GFX::D2GFX_UpdateWindowSize(1);
 #endif
         OogCurrentCharSelectionMode = nSkipToOpen ? CHAR_SELECTION_BNET_OPEN_Unsure : CHAR_SELECTION_BNET;
@@ -8653,7 +8653,7 @@ int32_t __fastcall fAPPMODE_launcher_ReturnAppMode_Caller(D2IniConfigStrc * pD2I
         if (!D2IniData_launcher->padding_0x35F[0]) {
           OogCurrentCharSelectionMode = CHAR_SELECTION_SP;
           D2Win::D2GFX::D2GFX_SetVideoMode(1);
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
           D2gfx::D2GFX::D2GFX_UpdateWindowSize(1);
 #endif
           /* Show intro and first screen without menus */ PlaysBlizzardNorthCutScene();
@@ -9138,7 +9138,7 @@ BOOL __stdcall MAINMENU_OnPressCreateCharacterOk(D2ControlStrc * pControl) {
     }
 
     Fog::Source::SFile::GetAndCreateSavePath(szSavePath, 0x400);
-#if D2_OS_MAC
+#if D2_MAC_CARBON
     // 1.14d mac: 002c2af6 tests the first (available) figure and does not cut the Mac path token at a backslash
     uint64_t nFreeBytesAvailable = 0;
     uint64_t nTotalBytes = 0;
@@ -9795,7 +9795,7 @@ int MAINMENU_ReturnTrue() {
 }
 #endif
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 }} // namespace D2Launch::MainMenus
 int ARCHIVE_UnmountCdVolumes(void);
 namespace D2Launch { namespace MainMenus {

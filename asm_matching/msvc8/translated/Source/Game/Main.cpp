@@ -16,7 +16,7 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Launch/D2LaunchRoot.h"
 #include "Source/Game/Main.data.h"
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 #include "Source/MacSpecific/Source/MacShell/MacShell.h"
 #include <Carbon/Carbon.h>
 #endif
@@ -44,7 +44,7 @@ static_assert(sizeof(void*) != 4 || sizeof(D2IniConfigStrc) == 0x3cd, "D2IniConf
 #define RECON_FPTD_fpRequiredUserAction
 typedef BOOL (*fpRequiredUserAction)();
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 #ifndef RECON_FPTD_pfnAllocateAndInitializeSid
 #define RECON_FPTD_pfnAllocateAndInitializeSid
 typedef BOOL (__stdcall *pfnAllocateAndInitializeSid)(void * pIdentifierAuthority, uint8_t nSubAuthorityCount, DWORD dwSubAuthority0, DWORD dwSubAuthority1, DWORD dwSubAuthority2, DWORD dwSubAuthority3, DWORD dwSubAuthority4, DWORD dwSubAuthority5, DWORD dwSubAuthority6, DWORD dwSubAuthority7, PSID * pSid);
@@ -646,7 +646,7 @@ D2IniConfigValuesStrc D2IniConfigValues[58] = {
         /* .nDefaultValue = */ 0x0
     }
 }; D2_GLOBAL_GUARD(D2IniConfigValues, "Game::Main::D2IniConfigValues");
-#if !D2_OS_MAC
+#if defined(_WIN32)
 _SERVICE_STATUS lpServiceStatus_007065fc = {
     /* .dwServiceType = */ 0x10,
     /* .dwCurrentState = */ 0x4,
@@ -658,13 +658,13 @@ _SERVICE_STATUS lpServiceStatus_007065fc = {
 }; D2_GLOBAL_GUARD(lpServiceStatus_007065fc, "Game::Main::lpServiceStatus_007065fc");
 #endif
 }} // namespace Game::Main
-#if !D2_OS_MAC
+#if defined(_WIN32)
 static _SERVICE_STATUS gszCommandLineLocaleCode = {0}; D2_STATIC_GUARD(gszCommandLineLocaleCode, "gszCommandLineLocaleCode");
 #endif
 namespace Game { namespace Main {
 fnAppModeRun * CurrentApplication = (fnAppModeRun *)0x00000000; D2_GLOBAL_GUARD(CurrentApplication, "Game::Main::CurrentApplication");
 eD2ApplicationMode geModState = APPMODE_mode0; D2_GLOBAL_GUARD(geModState, "Game::Main::geModState");
-#if !D2_OS_MAC
+#if defined(_WIN32)
 SERVICE_STATUS_HANDLE ghServiceCtrlHandler = nullptr; D2_GLOBAL_GUARD(ghServiceCtrlHandler, "Game::Main::ghServiceCtrlHandler");
 #endif
 HINSTANCE WinMain_hInstance = (HINSTANCE)0x00000000; D2_GLOBAL_GUARD(WinMain_hInstance, "Game::Main::WinMain_hInstance");
@@ -678,7 +678,7 @@ void * MISC_OperatorNewShim(uint32_t nSize) {
     return pMemory;
 }
 
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
 void __stdcall MISC_GetValueFromD2Ini(D2IniConfigStrc * pD2IniData) {
     UINT dwIniValue;
     char* pDestField;
@@ -931,7 +931,7 @@ void __fastcall MISC_ParseCommandLineAndPutIntoD2IniData(char * szText, int, D2I
 
 void __fastcall MISC_InitD2IniAndIgnorelist(D2IniConfigStrc * D2IniData, char * szCommandLine) {
     memset(D2IniData, 0, sizeof(*D2IniData));
-#if !D2_OS_MAC
+#if !D2_MAC_CARBON
     MISC_GetValueFromD2Ini(D2IniData);
 #endif
     D2Common::Chat::Ignorelist::MISC_InitIgnorelist();
@@ -1034,7 +1034,7 @@ void __stdcall SystemSurvey_WriteProductLanugageToLocaleFile() {
     FILE* pLocaleFile;
     BOOL bIsExpansion;
     D2Lang::StrTable::strtable::TABLES_GetLangAbbreviation((char*)&langInfo, 3);
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
     int bAppDataPathOk = FOG_MacGetBlizzardSupportPath(szLocaleFilePath, 0x104);
 #else
     int bAppDataPathOk = Fog::Source::SFile::SFILE_GetBlizzardAppDataPath(szLocaleFilePath, 0x104);
@@ -1045,7 +1045,7 @@ void __stdcall SystemSurvey_WriteProductLanugageToLocaleFile() {
       const int32_t nRemaining = (int32_t)(szLocaleFilePath + sizeof(szLocaleFilePath) - szBufferOutput);
       Storm::Source::SSTR::SStrCopy(szBufferOutput, "D2DV\\locale", nRemaining);
       Fog::Source::SFile::SafeCreateDirectoryTree(szLocaleFilePath);
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
       pLocaleFile = FOpenResolveMacPath(szLocaleFilePath, "w");
 #else
       pLocaleFile = fopen(szLocaleFilePath, "w");
@@ -1062,7 +1062,7 @@ void __stdcall SystemSurvey_WriteProductLanugageToLocaleFile() {
       if (bIsExpansion) {
         Storm::Source::SSTR::SStrCopy(szBufferOutput, "D2XP\\locale", nRemaining);
         Fog::Source::SFile::SafeCreateDirectoryTree(szLocaleFilePath);
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
         pLocaleFile = FOpenResolveMacPath(szLocaleFilePath, "w");
 #else
         pLocaleFile = fopen(szLocaleFilePath, "w");
@@ -1077,7 +1077,7 @@ void __stdcall SystemSurvey_WriteProductLanugageToLocaleFile() {
       }
     }
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
     if (MAC_GetSharedSupportPath(szExePathBuf, 0x400)) {
       Storm::Source::SSTR::SStrPack(szExePathBuf, "/SystemSurvey", 0x400);
       if (MACSEC_IsBlizzardSigned(szExePathBuf) == 1) {
@@ -1126,7 +1126,7 @@ int __fastcall ApplicationMain(HINSTANCE hInstance, D2IniConfigStrc * pD2IniData
     if (geModState != APPMODE_server) {
 #if D2_TARGET_CLIENT
       bMpqLoaded = D2Win::Src::D2WinArchive::MPQ_LoadAllDataMpqFiles();
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
       if (!bMpqLoaded || (bMpqLoaded = D2Win::Src::D2WinArchive::MPQ_LoadAllMediaMpqFiles((::fpRequiredUserAction)0, (::fpRequiredUserAction)0, 0, pD2IniData) , !bMpqLoaded)) {
         Str255 szMpqError;
         GetIndString(szMpqError, 200, 0xd);
@@ -1184,12 +1184,12 @@ int __fastcall ApplicationMain(HINSTANCE hInstance, D2IniConfigStrc * pD2IniData
       HWND hWnd;
       bMpqLoaded = D2Win::Src::D2WinMain::D2GFX_PreSetupBeforeCreatingWindow(hInstance, eD2ApplicationModeAndRenderer, bWindowed, (uint32_t)!pD2IniData->bNOCOMPRESS);
       if (!bMpqLoaded) {
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
         MAC_ResetVideoSettingsAndExit();
 #endif
         return 0;
       }
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
       MAC_ApplyDisplayModuleSettings();
 #endif
       if (pD2IniData->bPERSPECTIVE && (int32_t)RENDERED_DirectDraw < (int32_t)eD2ApplicationModeAndRenderer) {
@@ -1199,12 +1199,12 @@ int __fastcall ApplicationMain(HINSTANCE hInstance, D2IniConfigStrc * pD2IniData
       bMpqLoaded = D2Win::D2GFX::CreateWindowWithChecks(bWindowed, bExpansionMode ? 2 : 0);
       if (!bMpqLoaded) {
         D2gfx::D2GFX::D2GFX_Release();
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
         MAC_ResetVideoSettingsAndExit();
 #endif
         return 0;
       }
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32)
       if (gbEnableKeyhookDll) {
         /* LPCSTR lpLibFileName for LoadLibraryA */ ghKeyhookDll = LoadLibraryA("Keyhook.dll");
       }
@@ -1225,7 +1225,7 @@ int __fastcall ApplicationMain(HINSTANCE hInstance, D2IniConfigStrc * pD2IniData
     } else {
       bWindowCreated = false;
     }
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
     MAC_EnableMenus();
 #endif
 #if D2_TARGET_CLIENT
@@ -1302,7 +1302,7 @@ int __fastcall ApplicationMain(HINSTANCE hInstance, D2IniConfigStrc * pD2IniData
 #else
 #error "Main.cpp: define exactly one of D2_TARGET_CLIENT or D2_TARGET_SERVER"
 #endif
-#if D2_TARGET_CLIENT && (defined(_WIN32) || !D2_OS_MAC)
+#if D2_TARGET_CLIENT && defined(_WIN32)
     if (ghKeyhookDll) {
       /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pfnKeyhook = GetProcAddress(ghKeyhookDll, "UninstallKeyboardHook");
       if (pfnKeyhook) {
@@ -1630,7 +1630,7 @@ void __fastcall D2INIT_CheckCommandLineOrLoadItFromRegistry(char * * ppszText) {
 }
 
 // Windows-only, not in the 1.14d Mac binary (it has no registry, ini file, security descriptor or service control manager).
-#if !D2_OS_MAC
+#if defined(_WIN32)
 void __stdcall CreateRegedit() {
     DWORD dwValueInfo;
     DWORD dwValueNameLen;
@@ -1730,6 +1730,8 @@ BOOL __stdcall LIB_LoadAdvapi32() {
     return bResult;
 }
 
+#endif
+#if !D2_MAC_CARBON
 // @sourcefile .\Main.cpp
 static int __stdcall CLIENT_CheckIfApplicationModeIsInCommandLineAndSetItToArgument(eD2ApplicationMode * eAppMode, char * szText) {
     // Static local variables (originally global data)
@@ -1765,6 +1767,8 @@ static int __stdcall CLIENT_CheckIfApplicationModeIsInCommandLineAndSetItToArgum
     return 1;
 }
 
+#endif
+#if defined(_WIN32)
 // lpHandlerProc parameter of RegisterServiceCtrlHandlerA
 void __stdcall ERRORMANAGER_ServiceControlHandler(int32_t nServiceControl) {
     // Static local variables (originally global data)
@@ -1810,6 +1814,8 @@ static BOOL Unreferenced_00406470(SC_HANDLE * phSCManager, SC_HANDLE * phService
     return 1;
 }
 
+#endif
+#if !D2_MAC_CARBON
 // Early app bootstrap: set log path, parse cmdline/registry for app mode, init INI, then ApplicationMain.
 void __fastcall PreInitApplication(int32_t argc, char * * argv) {
     D2IniConfigStrc pD2IniData;
@@ -1823,14 +1829,18 @@ void __fastcall PreInitApplication(int32_t argc, char * * argv) {
     Fog::Source::SFile::FILETOOLS_SetLogFilePathWithoutDateAndExtension2("D2");
     Fog::Src::ErrorManager::ERRORMANAGER_InitErrorManager("Diablo II", szVersionString, 1);
     D2LUA_Boot();
+#if defined(_WIN32)
     HANDLE hDiabloOkEvent = OpenEventA(2, 1, "DIABLO_II_OK");
     if (hDiabloOkEvent) {
       /* HANDLE hEvent for SetEvent */ SetEvent(hDiabloOkEvent);
       /* HANDLE hObject for CloseHandle */ CloseHandle(hDiabloOkEvent);
     }
+#endif
 
+#if defined(_WIN32)
     D2INIT_CheckCommandLineOrLoadItFromRegistry(&szRawCommandLine);
     CreateRegedit();
+#endif
     char* szCommandLine = szRawCommandLine;
     eD2ApplicationMode eAppMode = APPMODE_launcher;
     CLIENT_CheckIfApplicationModeIsInCommandLineAndSetItToArgument(&eAppMode, szRawCommandLine);
@@ -1849,6 +1859,8 @@ void __fastcall PreInitApplication(int32_t argc, char * * argv) {
     D2LUA_Shutdown();
 }
 
+#endif
+#if defined(_WIN32)
 // ServiceMain for the DIABLO2SRV service. Registers the control handler, reports
 // SERVICE_RUNNING via SetServiceStatus, runs PreInitApplication(argc, argv), then reports stopped.
 // Signature fixed by RET 0x8 and the two [EBP+8]/[EBP+0xc] argument reads; installed as
@@ -1912,7 +1924,7 @@ static void * keep_00406470 = (0 ? (Unreferenced_00406470(*(SC_HANDLE * *)0, *(S
 
 }} // namespace Game::Main
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 // Process entry point — the linker resolves `WinMain` at root scope,
 // not `Game::Main::WinMain`.
 extern "C" int32_t __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int32_t nShowCmd) {

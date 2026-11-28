@@ -132,19 +132,19 @@ namespace Storm { namespace Source { namespace SMem {
 __declspec(noinline) inline void MISC_OperatorDeleteShim(void * p);
 int32_t __stdcall SMemFindNextBlock(HSHEAP nHeapId, uint8_t * pPrevBlock, uint8_t * * ppOutBlock, int * pnInfo);
 int32_t __stdcall SMemFindNextHeap(HSHEAP nCurHeapId, HSHEAP * pnNextHeapId, struct SMemHeapDetailsStrc * pHeapDetails);
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 BOOL __stdcall SMemFree(void * pObject, const char * szFile, int32_t nLine, DWORD dwFlags);
 #else
 BOOL __stdcall SMemFree(void * pObject, char * szFile, int32_t nLine, DWORD dwFlags);
 #endif
 HSHEAP __stdcall SMemGetHeapByCaller(char * pszName, uint32_t dwHashSeed);
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 void * __stdcall SMemAlloc(uint32_t nSize, const char * szFile, uint32_t nLine, uint32_t nFlags);
 #else
 void * __stdcall SMemAlloc(uint32_t nSize, char * szFile, uint32_t nLine, uint32_t nFlags);
 #endif
 // @blizzard SMemReAlloc (Storm assert string)
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 void * __stdcall SMemReAlloc(void * pBlock, uint32_t nSize, const char * szSourceFile, int32_t nSourceLine, uint32_t dwFlags);
 #else
 void * __stdcall SMemReAlloc(void * pBlock, uint32_t nSize, char * szSourceFile, int32_t nSourceLine, uint32_t dwFlags);

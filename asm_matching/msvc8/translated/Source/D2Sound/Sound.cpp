@@ -21,7 +21,7 @@
 
 
 static BOOL gbSoundInBackground = 0; D2_STATIC_GUARD(gbSoundInBackground, "gbSoundInBackground");
-#if !(!defined(_WIN32) && D2_OS_MAC)  // the 1.14d Mac takes the EAX set straight from the buffer, no 3D buffer between
+#if !(!defined(_WIN32) && D2_MAC_CARBON)  // the 1.14d Mac takes the EAX set straight from the buffer, no 3D buffer between
 static IDirectSound3DBuffer * gpEAXInterface1 = 0; D2_STATIC_GUARD(gpEAXInterface1, "gpEAXInterface1");
 #endif
 static IDirectSoundBuffer * gpEAXInterface2 = 0; D2_STATIC_GUARD(gpEAXInterface2, "gpEAXInterface2");
@@ -30,7 +30,7 @@ static IDirectSoundBuffer * gpDSoundPrimaryBuffer = 0; D2_STATIC_GUARD(gpDSoundP
 _RTL_CRITICAL_SECTION gSoundSmpCs = {0}; D2_GLOBAL_GUARD(gSoundSmpCs, "gSoundSmpCs");
 static uint32_t gnDirectSoundInitialized = 0; D2_STATIC_GUARD(gnDirectSoundInitialized, "gnDirectSoundInitialized");
 IDirectSound * gpDirectSound = 0; D2_GLOBAL_GUARD(gpDirectSound, "gpDirectSound");
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // Bytes on the 1.14d Mac (see Sound.data.h); gnSoundQualityMode is set only for EAX 2 there.
 bool gbSound3DEnabled = 0; D2_GLOBAL_GUARD(gbSound3DEnabled, "gbSound3DEnabled");
 bool gnSoundQualityMode = 0; D2_GLOBAL_GUARD(gnSoundQualityMode, "gnSoundQualityMode");
@@ -55,7 +55,7 @@ void __stdcall SOUND_ReleaseEAXInterfaces() {
       gpDirectSoundEAXInterface->lpVtbl->Release(gpDirectSoundEAXInterface);
       gpDirectSoundEAXInterface = 0;
     }
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32) && D2_MAC_CARBON)
     if (gpEAXInterface1) {
       gpEAXInterface1->lpVtbl->Release(gpEAXInterface1);
       gpEAXInterface1 = 0;
@@ -77,7 +77,7 @@ void __fastcall SOUND_ApplyEAXEnvironment(D2SoundEaxEnvironStrc * pEnviron) {
     if (!(gbSound3DEnabled && gpDirectSoundEAXInterface)) {
       return;
     }
-#if !(!defined(_WIN32) && D2_OS_MAC)
+#if !(!defined(_WIN32) && D2_MAC_CARBON)
     if (gnSoundQualityMode == 1) {
       fAttenuation.fValue = Src::D2SoundSmp::SOUNDSMP_ClampAttenuation((float)pEnviron->nRoom);
       gpDirectSoundEAXInterface->lpVtbl->Set(gpDirectSoundEAXInterface, gEAXPropertyGuid_Reserved1, 1, nullptr, 0, pEnviron, 4);
@@ -85,7 +85,7 @@ void __fastcall SOUND_ApplyEAXEnvironment(D2SoundEaxEnvironStrc * pEnviron) {
       gpDirectSoundEAXInterface->lpVtbl->Set(gpDirectSoundEAXInterface, gEAXPropertyGuid_Reserved1, 3, nullptr, 0, &pEnviron->fDecayTime, 4);
     }
 #endif
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 #define SOUND_EAX_SET_IS_EAX2 (gnSoundQualityMode)
 #else
 #define SOUND_EAX_SET_IS_EAX2 (gnSoundQualityMode == 2)
@@ -134,7 +134,7 @@ void __stdcall SOUND_ShutdownDirectSound() {
     gbDirectSoundCritSecInitialized = 0;
 }
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // 1.14d mac: 002e7227
 // The Mac has no primary-buffer 3D mode, no driver-delay workaround and no hardware 3D buffer
 // count check; its EAX set comes straight from the 3D-sound buffer (no IDirectSound3DBuffer
@@ -378,7 +378,7 @@ void __stdcall SOUND_InitDirectSound() {
 }
 #endif
 
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 // 1.14d mac: 002e71c0
 void __fastcall SOUND_Initialize(uint32_t dwLanguageCode, BOOL bSoundInBackground) {
     LanguageCode = dwLanguageCode;
@@ -397,6 +397,7 @@ void __fastcall SOUND_Initialize(uint32_t dwLanguageCode, BOOL bSoundInBackgroun
 }
 #else
 void __fastcall SOUND_Initialize(uint32_t dwLanguageCode, BOOL bSoundInBackground) {
+#if defined(_WIN32)
     // Frame slots -12..-4 are ONE object: &dwVerMinor is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -408,8 +409,10 @@ void __fastcall SOUND_Initialize(uint32_t dwLanguageCode, BOOL bSoundInBackgroun
     BOOL nFileVersionResult;
     char szWindowsDir[260];
     uint32_t dwVerBuild;
+#endif
     LanguageCode = dwLanguageCode;
     gbSoundInBackground = bSoundInBackground;
+#if defined(_WIN32)
     g_bSoundDriverScanComplete = 0;
     DirectSoundEnumerateA(SOUND_DetectLegacySoundDrivers, 0);
     if (gbHasLegacyEMU10K1Driver) {
@@ -437,6 +440,7 @@ void __fastcall SOUND_Initialize(uint32_t dwLanguageCode, BOOL bSoundInBackgroun
         gbDirectSoundDelayWorkaround = 1;
       }
     }
+#endif
     if (gnDirectSoundInitialized) {
       return;
     }

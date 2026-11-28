@@ -7,7 +7,7 @@
 // id, or -1 then a UTF-16 name) and the name the same way, then the language word.
 #include "Win32Text.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include <Carbon/Carbon.h>
 #include <stdlib.h>

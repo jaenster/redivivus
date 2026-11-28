@@ -5,11 +5,11 @@
 // translation unit each belongs to follows from direct versus indirect (PIC pointer cell)
 // access to the globals alone. See Source/D2gfx/Mac/README.md.
 //
-// Mac-only: the guard is spelled `#if !defined(_WIN32) && D2_OS_MAC`; cmake/mac.cmake globs
+// Mac-only: the guard is spelled `#if !defined(_WIN32) && D2_MAC_CARBON`; cmake/mac.cmake globs
 // this folder.
 #include "D2GFXMac.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 
 namespace D2gfx { namespace D2GFX {

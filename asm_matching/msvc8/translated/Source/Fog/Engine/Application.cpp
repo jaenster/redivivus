@@ -45,8 +45,8 @@ namespace Fog { namespace Engine { namespace Application {
 static uint8_t DEBUG_ParseNB01DebugInfo(CV_INFO_PDB20 * pDebugRecord, D2FogDebugModuleEntryStrc * pModuleInfo);
 static uint8_t DEBUG_ParseRSDSDebugInfo(CV_INFO_PDB70 * pDebugRecord, D2FogDebugModuleEntryStrc * pModuleInfo);
 
-// The PE image, PEB loader list and ToolHelp walks are Windows-only: the Mac binary reads its images through dyld. That code is under `#if !D2_OS_MAC`.
-#if !D2_OS_MAC
+// The PE image, PEB loader list and ToolHelp walks are Windows-only: the Mac binary reads its images through dyld. That code is under `#if defined(_WIN32)`.
+#if defined(_WIN32)
 struct _TEB * Unreferenced_004046d0() {
     return NtCurrentTeb();
 }
@@ -60,7 +60,7 @@ static uint32_t DEBUG_GetPEImageType(short * nMagic) {
     return *nMagic == 0x20b ? 0x2 : 0;
 }
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 static bool DEBUG_ParsePEDebugDirectory(uint32_t * pnSize, int * pnRVA, short * pOptHeader) {
     uint32_t nDirSize;
     int nDirRVA;
@@ -161,7 +161,7 @@ static uint8_t __stdcall DEBUG_ParseDebugDataDirectory(uint32_t nCount, uint8_t 
     return 0;
 }
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 static uint8_t __stdcall DEBUG_ParseModuleHeaders(D2FogDebugModuleEntryStrc * ppModuleBase, short * pModuleBase) {
     /* UINT_PTR ucb for IsBadReadPtr */ /* void * lp for IsBadReadPtr */ ppModuleBase->pImageBase = pModuleBase;
     BOOL bIsBadPtr = IsBadReadPtr(pModuleBase, 0x40);
@@ -213,7 +213,7 @@ static uint8_t __stdcall DEBUG_ParseModuleHeaders(D2FogDebugModuleEntryStrc * pp
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 // Adds a loaded module to the crash dump module list by parsing PE headers
 static bool __stdcall DEBUG_AddModuleToList(int * pModuleList, LPCWSTR szModulePath, int32_t nPathLength, short * pModuleBase) {
     int nCopyCount;
@@ -283,7 +283,7 @@ static bool __stdcall DEBUG_AddModuleToList(int * pModuleList, LPCWSTR szModuleP
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 bool __stdcall DEBUG_EnumerateModulesViaPsapi(int * pModuleList) {
     // Frame slots -556..-12 are ONE object: &nBytesNeeded is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -349,7 +349,7 @@ bool __stdcall DEBUG_EnumerateModulesViaPsapi(int * pModuleList) {
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 bool DEBUG_EnumerateModulesViaToolhelp32(int * pModuleList) {
     int bHasModule;
     MODULEENTRY32W moduleEntry;
@@ -388,7 +388,7 @@ struct D2LdrUnicodeStringStrc {
     LPCWSTR wszBuffer;
 };
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 // LDR_DATA_TABLE_ENTRY seen from its InMemoryOrderLinks member, which is what the list links point at.
 struct D2LdrMemOrderEntryStrc {
     LIST_ENTRY tInMemoryOrderLinks;
@@ -400,7 +400,7 @@ struct D2LdrMemOrderEntryStrc {
 };
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 struct D2PebLdrDataStrc {
     uint32_t nLength;
     uint32_t bInitialized;
@@ -410,7 +410,7 @@ struct D2PebLdrDataStrc {
 };
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 struct D2PebStrc {
     uint8_t aReserved1[2];
     uint8_t bBeingDebugged;
@@ -420,29 +420,29 @@ struct D2PebStrc {
 };
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 struct D2TebStrc {
     void* aReserved1[12];
     D2PebStrc* pProcessEnvironmentBlock;
 };
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 static_assert(sizeof(void*) != 4 || offsetof(D2TebStrc, pProcessEnvironmentBlock) == 0x30, "TEB.ProcessEnvironmentBlock");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 static_assert(sizeof(void*) != 4 || offsetof(D2PebStrc, pLdr) == 0x0c, "PEB.Ldr");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 static_assert(sizeof(void*) != 4 || offsetof(D2PebLdrDataStrc, tInMemoryOrderModuleList) == 0x14, "PEB_LDR_DATA.InMemoryOrderModuleList");
 static_assert(sizeof(void*) != 4 || offsetof(D2LdrMemOrderEntryStrc, pDllBase) == 0x10, "LDR_DATA_TABLE_ENTRY.DllBase");
 static_assert(sizeof(void*) != 4 || offsetof(D2LdrMemOrderEntryStrc, tFullDllName) == 0x1c, "LDR_DATA_TABLE_ENTRY.FullDllName");
 #endif
-#if !D2_OS_MAC
+#if defined(_WIN32)
 static_assert(sizeof(void*) != 8 || (offsetof(D2TebStrc, pProcessEnvironmentBlock) == 0x60 && offsetof(D2PebStrc, pLdr) == 0x18 && offsetof(D2PebLdrDataStrc, tInMemoryOrderModuleList) == 0x20 && offsetof(D2LdrMemOrderEntryStrc, pDllBase) == 0x20 && offsetof(D2LdrMemOrderEntryStrc, tFullDllName) == 0x38), "64-bit loader layout");
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 bool __fastcall DEBUG_EnumerateModulesViaPEB(int * pModuleList) {
     void* pSavedEsp;
     EH4_EXCEPTION_REGISTRATION tSehFrame;
@@ -497,7 +497,7 @@ static bool __stdcall DEBUG_EnumerateModules(int * pModuleList) {
     return bVar1;
 }
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 static void __stdcall DEBUG_ExtractDebugDirectory64(uint32_t dwParam, uint32_t * pnRVA, uint32_t * pnSize, uint8_t * pOptHeader) {
     IMAGE_OPTIONAL_HEADER64* pOptHeader64 = (IMAGE_OPTIONAL_HEADER64*)pOptHeader; // steer-ok: winnt.h IMAGE_OPTIONAL_HEADER64
     if (pOptHeader64->NumberOfRvaAndSizes > 6) {
@@ -516,7 +516,7 @@ static void __stdcall DEBUG_ExtractDebugDirectory32(uint32_t dwUnused, uint32_t 
     }
 }
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 static uint8_t DEBUG_ParseNB01DebugInfo(CV_INFO_PDB20 * pDebugRecord, D2FogDebugModuleEntryStrc * pModuleInfo) {
     BOOL bIsBadPtr = IsBadReadPtr(pDebugRecord, 0x14);
     if (bIsBadPtr) {
@@ -536,7 +536,7 @@ static uint8_t DEBUG_ParseNB01DebugInfo(CV_INFO_PDB20 * pDebugRecord, D2FogDebug
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 static uint8_t DEBUG_ParseRSDSDebugInfo(CV_INFO_PDB70 * pDebugRecord, D2FogDebugModuleEntryStrc * pModuleInfo) {
     if (IsBadReadPtr(pDebugRecord, 0x1c)) {
       return 0;
@@ -552,7 +552,7 @@ static uint8_t DEBUG_ParseRSDSDebugInfo(CV_INFO_PDB70 * pDebugRecord, D2FogDebug
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 // Unwinds stack frames for crash dumps. Walks EBP chain up to 128 frames, validates stack pointers, skips first N frames. Captures EIP, ESP, EBP for each frame. Handles current thread or remote thread via OpenThread/SuspendThread.
 int __fastcall DEBUG_UnwindStackFrames(CONTEXT * pContext, int, DWORD dwThreadId, D2CrashFrameStrc * pFrameArray, uint32_t nSkipFrames) {
     // Frame slots -780..-752 are ONE object: &nStackLimit is passed out and the callee reaches the rest by byte offset.
@@ -681,7 +681,7 @@ int __fastcall DEBUG_UnwindStackFrames(CONTEXT * pContext, int, DWORD dwThreadId
 }
 #endif
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 bool __stdcall DEBUG_FormatAddressInfo(uintptr_t nAddress, D2FogAddressInfoStrc * pOutput) {
     char* pSep;
     char* pBasename;
@@ -755,7 +755,7 @@ int Unreferenced_004067c0() {
     return iVar1;
 }
 
-#if !D2_OS_MAC
+#if defined(_WIN32)
 bool __stdcall PATH_GetKnownFolderPath(LPSTR szOutPath, int32_t nBufferSize) {
     // Static local variables (originally global data)
     static GUID GUID_006cca6c = {0x4c5c32ff, 0xbb9d, 0x43b0, {0xb5, 0xb4, 0x2d, 0x72, 0xe5, 0x4e, 0xaa, 0xa4}} /* 4c5c32ff-bb9d-43b0-b5b4-2d72e54eaaa4 */; D2_STATIC_GUARD(GUID_006cca6c, "Fog::Engine::Application::PATH_GetKnownFolderPath::GUID_006cca6c");
@@ -781,7 +781,7 @@ bool __stdcall PATH_GetKnownFolderPath(LPSTR szOutPath, int32_t nBufferSize) {
 
 static void * keep_004048c0 = (0 ? (DEBUG_ParseDebugInfoFromMemory(*(uint32_t *)0, *(uint32_t * *)0, *(D2FogDebugModuleEntryStrc * *)0), (void *)0) : (void *)0);
 static void * keep_00404f20 = (0 ? (DEBUG_EnumerateModules(*(int * *)0), (void *)0) : (void *)0);
-#if !D2_OS_MAC
+#if defined(_WIN32)
 static void * keep_00404f40 = (0 ? (DEBUG_ExtractDebugDirectory64(*(uint32_t *)0, *(uint32_t * *)0, *(uint32_t * *)0, *(uint8_t * *)0), (void *)0) : (void *)0);
 #endif
 static void * keep_00404f60 = (0 ? (DEBUG_ExtractDebugDirectory32(*(uint32_t *)0, *(uint32_t * *)0, *(uint32_t * *)0, *(IMAGE_OPTIONAL_HEADER32 * *)0), (void *)0) : (void *)0);

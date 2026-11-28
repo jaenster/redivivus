@@ -30,7 +30,7 @@ typedef void (__fastcall *fnCrashOutputLine)(::Report * pReport, char * szString
 #endif
 #ifndef RECON_FPTD_pfnFogExceptionFilter
 #define RECON_FPTD_pfnFogExceptionFilter
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // The Mac exception callback returns nothing (1.14d mac 002ee625).
 typedef void (__fastcall *pfnFogExceptionFilter)(struct D2CrashReportStrc * pExceptionReport, void * pUserContext);
 #else

@@ -27,7 +27,7 @@
 #include "Source/D2Client/D2ClientRoot.h"
 #include "Source/D2Client/Engine.data.h"
 #include "Source/D2Common/DataTbls/MonsterTbls.inline.h"
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 #include <Carbon/Carbon.h>
 // 1.14d mac: 00035351
 bool STORM_IsCDVolume(short nVRefNum);
@@ -416,7 +416,7 @@ void __fastcall LOADER_SetConnectionLostFlag(BOOL bConnectionLost) {
     gbConnectionLost = bConnectionLost;
 }
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // True when a mounted volume of that name is a CD volume (the disc check of the insert-disc loop).
 // 1.14d mac: 000ab26f
 BOOL __fastcall LOADER_IsNamedVolumeMounted(char * szVolumeName) {
@@ -449,7 +449,7 @@ BOOL __fastcall LOADER_IsNamedVolumeMounted(char * szVolumeName) {
 }
 #endif
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 // The Mac keeps the insert-disc loop alive only while the game disc is not mounted: each pass
 // draws the screen, then looks for the Play Disc (Lord of Destruction for the expansion); once
 // found it sets the done flag, otherwise it asks the Mac shell to unmount the other volumes.

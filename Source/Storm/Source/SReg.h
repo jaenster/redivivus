@@ -23,7 +23,7 @@ namespace Storm::Source::SReg {
 // @namespace-fix moved from Storm::Source::SSTR to Storm::Source::SReg. SReg is a separate
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 BOOL __stdcall SRegDeleteValue(const char * pszSubKey, LPCSTR szValueName, DWORD byFlags);
 #else
 BOOL __stdcall SRegDeleteValue(char * pszSubKey, LPCSTR szValueName, DWORD byFlags);
@@ -41,7 +41,7 @@ int32_t __stdcall SRegLoadData(char * pszSubKey, char * szValueName, int32_t nFl
 // @namespace-fix moved from Storm::Source::SSTR to Storm::Source::SReg. SReg is a separate
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 BOOL __stdcall SRegLoadString(const char * szSubKey, const char * szValueName, int32_t nFlags, LPSTR szOutBuf, DWORD dwOutBufSize);
 #else
 BOOL __stdcall SRegLoadString(char * szSubKey, char * szValueName, int32_t nFlags, LPSTR szOutBuf, DWORD dwOutBufSize);
@@ -52,7 +52,7 @@ BOOL __stdcall SRegLoadString(char * szSubKey, char * szValueName, int32_t nFlag
 // @namespace-fix moved from Storm::Source::SSTR to Storm::Source::SReg. SReg is a separate
 // Storm module with its own nine exported symbols; nothing in this family belongs to the string module.
 // The SReg block occupies 00414930-0041513f, contiguous, between SStr and SFile.
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 BOOL __stdcall SRegLoadValue(const char * pTree, const char * pKey, int32_t byFlags, int32_t * pnOut);
 #else
 BOOL __stdcall SRegLoadValue(char * pTree, char * pKey, uint8_t byFlags, int32_t * pnOut);

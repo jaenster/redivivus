@@ -7,6 +7,10 @@
 //   D2_OS_WIN     Windows (mingw, VC8)
 //   D2_OS_MAC     Mac OS X (Apple clang; 1.14d Mac shipped i386 built with clang-425)
 //
+// The Mac's layer, beside D2_OS_MAC (Source/StormMac/README.md), from the toolchain:
+//   D2_MAC_CARBON     the 1.14d build's Carbon, Win32Mac and StormMac layer (cmake/mac.cmake)
+//   D2_BACKEND_POSIX  the Win32Posix layer
+//
 // Architecture, exactly one defined, to 1:
 //   D2_ARCH_X86   32-bit x86: the 1.14d Game.exe target (mingw i686, VC8) and the
 //                 1.14d Intel Mac build

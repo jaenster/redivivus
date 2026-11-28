@@ -73,7 +73,7 @@ static pfnFaultError g_pfnFaultErrorCallback = (pfnFaultError)0; D2_STATIC_GUARD
 
 namespace D2Hell {
 
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32)
 bool __fastcall D2FILE_CreateProcess(LPCSTR szText) {
     _STARTUPINFOA processInfo = { sizeof(processInfo) };
     _PROCESS_INFORMATION startupInfo;
@@ -88,7 +88,7 @@ bool __fastcall D2FILE_CreateProcess(LPCSTR szText) {
 }
 #endif
 
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32)
 // NOTE: Return type changed void→char (1 callers, MEDIUM confidence)
 char __fastcall D2FILE_VerifyFileSignature(LPCSTR szText) {
     // Static local variables (originally global data)
@@ -243,7 +243,7 @@ void * __fastcall D2FILE_AllocAndLoadD2File(D2PoolManagerStrc * pMemory, char * 
     return pBuffer;
 }
 
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 static int __stdcall FindMPQOnCd(char * pszMpqName, int * pnPriority, D2ArchiveStrc * * ppArchive, LPSTR szText) {
     char* pcNextBackslash;
     DWORD dwDriveStringsLen;
@@ -317,7 +317,7 @@ static int __stdcall FindMPQOnCd(char * pszMpqName, int * pnPriority, D2ArchiveS
 }
 #endif
 
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 static D2ArchiveStrc * __stdcall FindMpqFromDiskOrCd(char * pszMpqName, int * pnPriority, D2ArchiveStrc * pArchive, LPSTR szText) {
     uint32_t nFlags = 2;
     if (pArchive) { // on entry the slot is the "also search the CD" flag
@@ -354,7 +354,7 @@ static D2ArchiveStrc * __stdcall FindMpqFromDiskOrCd(char * pszMpqName, int * pn
 }
 #endif
 
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 // @sourcefile .\SRC\Archive.cpp
 D2FogArchiveStrc * __fastcall ARCHIVE_LoadMPQ(char * szMpqFileName, int32_t nZero, ::fpRequiredUserAction nfpRequiredUserAction, int32_t nTimeTBC) {
     BOOL BVar1;
@@ -407,7 +407,7 @@ pfnFaultError __fastcall RegisterExitFunction(pfnFaultError pfnNewCallback) {
     return pfnPrevCallback;
 }
 
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 void __stdcall FAULT_TerminateCurrentProcess() {
     UINT uExitCode = -1;
     HANDLE hProcess = GetCurrentProcess();
@@ -415,21 +415,21 @@ void __stdcall FAULT_TerminateCurrentProcess() {
 }
 #endif
 
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 void __fastcall FAULT_ShowErrorAndTerminate(LPCSTR szText) {
     /* UINT uType for MessageBoxA */ /* LPCSTR lpCaption for MessageBoxA */ /* LPCSTR lpText for MessageBoxA */ /* HWND hWnd for MessageBoxA */ MessageBoxA((HWND)0x0, szText, "Diablo 2.EXE", 0x2010);
     FAULT_TerminateCurrentProcess();
 }
 #endif
 
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 int __fastcall FAULT_ShowErrorMessageBox(LPCSTR szText) {
     MessageBoxA((HWND)0x0, szText, lpCaption_006cc848, 0x2010);
     return 1;
 }
 #endif
 
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 void __fastcall FAULT_FormatAndShowError(LPCSTR szFile, int nLine, LPCSTR szExpression) {
     char szBuffer[512];
     if (g_pfnFaultErrorCallback) {
@@ -672,7 +672,7 @@ void __fastcall FAULT_LookupErrorString(uint32_t nErrorCode, char * szText, int3
     Storm::Source::SSTR::SStrCopy(szText, "D2Hell Fault.cpp error.", nMaxLen);
 }
 
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 void FAULT_ShowFormattedError(uint32_t nErrorCode, ...) {
     va_list __va;
     va_start(__va, nErrorCode);
@@ -687,7 +687,7 @@ void FAULT_ShowFormattedError(uint32_t nErrorCode, ...) {
 }
 #endif
 
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32) || !D2_MAC_CARBON
 void FAULT_ShowFormattedErrorAndTerminate(uint32_t nErrorCode, ...) {
     va_list __va;
     va_start(__va, nErrorCode);
@@ -706,7 +706,7 @@ void FAULT_ShowFormattedErrorWithArgs(uint32_t nErrorCode, ...) {
     char szFormattedMsg[512];
     char szErrorMsg[512];
     FAULT_LookupErrorString(nErrorCode, szErrorMsg, 0x200);
-    #if !defined(_WIN32) && D2_OS_MAC
+    #if !defined(_WIN32) && D2_MAC_CARBON
     vsprintf(szFormattedMsg, szErrorMsg, __va);
     // FAULT_ShowErrorMessageBox, which the Mac build has inlined
     MessageBoxA((HWND)0x0, szFormattedMsg, lpCaption_006cc848, 0x2010);
@@ -848,7 +848,7 @@ int32_t D2MEM_FindLowestSetBit(uint32_t dwMask) {
     return nBitPos + 1;
 }
 
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32)
 int32_t __fastcall D2FILE_VerifySignatureWinTrust(LPCSTR szText) {
     uint32_t nVerifyResult;
     LPWSTR pWideStr;
@@ -914,7 +914,7 @@ int32_t __fastcall D2FILE_VerifySignatureWinTrust(LPCSTR szText) {
 }
 #endif
 
-#if defined(_WIN32) || !D2_OS_MAC
+#if defined(_WIN32)
 // Extracts signer organization from signed file's certificate. Converts file path to wide char, queries certificate store, retrieves X.509 certificate, extracts organization field (OID 2.5.4.10), converts back to ANSI.
 bool __fastcall D2FILE_GetSignerOrganization(LPCSTR szFilePath, LPSTR szOrgOut, int32_t nOrgMaxLen) {
     // Static local variables (originally global data)
@@ -3474,7 +3474,7 @@ void StaticFini_gFaultHandlerList() {
 // The Mac-only walk over the mounted volumes that the archive code runs before it opens the game
 // archives. The binary's file-map puts it in Bnclient/D2Hell/SRC/Archive.cpp, between
 // D2FILE_AllocAndLoadD2File and ARCHIVE_LoadMPQ.
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 #include <Carbon/Carbon.h>
 

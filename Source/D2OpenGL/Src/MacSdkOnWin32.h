@@ -16,7 +16,7 @@
 
 #include "Source/D2Headers/D2Arch.h"
 
-#if !defined(_WIN32) && D2_OS_MAC
+#if !defined(_WIN32) && D2_MAC_CARBON
 
 // On the Mac the renderer calls the real frameworks. What stays here: the calls whose
 // shape in the decompile differs from the 10.7 SDK's (a structure returned through a
@@ -356,4 +356,4 @@ extern void *PTR_DAT_00397abc;
 
 }  // namespace D2OpenGL
 
-#endif  // !defined(_WIN32) && D2_OS_MAC
+#endif  // !defined(_WIN32) && D2_MAC_CARBON

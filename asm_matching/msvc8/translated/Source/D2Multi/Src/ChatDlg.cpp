@@ -77,7 +77,7 @@ static uint32_t gbLadderExpansionEnabled = 0x1; D2_STATIC_GUARD(gbLadderExpansio
 int gnChatTabCompletionIndex = -0x1; D2_GLOBAL_GUARD(gnChatTabCompletionIndex, "gnChatTabCompletionIndex");
 static int gnLadderBoardSelectedRank = -0x1; D2_STATIC_GUARD(gnLadderBoardSelectedRank, "gnLadderBoardSelectedRank");
 static uint32_t gnLadderRequestedCharIndex = -0x1; D2_STATIC_GUARD(gnLadderRequestedCharIndex, "gnLadderRequestedCharIndex");
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 // MacShell/GameSetup.cpp: text in a Mac script to UTF-16.
 void MAC_ConvertTextToUnicode(const char* pSrc, char* wszDest, int nSrcLength, int nDestSize, int nScript);
 #endif
@@ -2518,7 +2518,7 @@ void __stdcall CHATDLG_ProcessPendingMessages() {
     }
 }
 
-#if D2_OS_MAC
+#if D2_MAC_CARBON
 // 1.14d mac: 002d1dc6 (inline in CHATDLG_DisplayTimestampedMessage; no standalone function)
 static void __stdcall CHATDLG_FormatFileTimeToDate(FILETIME * pFileTime, int32_t nBufSize, char * szText) {
     uint16_t wszWideBuf[256];
@@ -2561,7 +2561,7 @@ int __fastcall CHATDLG_DisplayTimestampedMessage(uint32_t nUnixTime, char * pszM
       exit(-1);
     }
     if (nUnixTime) {
-#if D2_OS_MAC
+#if !defined(_WIN32)
       // 1.14d mac: 002d1dc6 builds the 64-bit FILETIME directly
       utcFileTime = d2_bits_as<FILETIME>((uint64_t)nUnixTime * 10000000 + 0x19db1ded53e8000ULL);
 #else

@@ -35,7 +35,7 @@ typedef BOOL (__stdcall *pfnStormErrorHandler)(DWORD dwErrorCode, char * szBuffe
 #endif
 
 // Data types
-#if !defined(_WIN32) && !D2_OS_MAC  // the Win32 SDK on Windows; the Mac checks signatures with Security.framework (MACSEC.cpp)
+#if !defined(_WIN32) && !(D2_MAC_CARBON || D2_BACKEND_POSIX)  // the Win32 SDK on Windows; the Mac checks signatures with Security.framework (MACSEC.cpp)
 
 typedef _CRYPTOAPI_BLOB CERT_NAME_BLOB;
 
@@ -114,7 +114,7 @@ D2_PACKED_BEGIN __pragma(pack(push, 1)) struct StormFaultHandlerNodeStrc {
 }; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Hell
-#if !defined(_WIN32) && !D2_OS_MAC  // the Win32 SDK on Windows; the Mac checks signatures with Security.framework (MACSEC.cpp)
+#if !defined(_WIN32) && !(D2_MAC_CARBON || D2_BACKEND_POSIX)  // the Win32 SDK on Windows; the Mac checks signatures with Security.framework (MACSEC.cpp)
 
 struct _CERT_INFO {
     /* 0x00 */ DWORD dwVersion;
