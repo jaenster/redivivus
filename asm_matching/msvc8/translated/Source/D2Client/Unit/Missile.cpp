@@ -1614,36 +1614,23 @@ D2UnitStrc * __fastcall MISSILE_CreatePeriodicTrail(D2UnitStrc * pUnit, int32_t 
     return pOwner;
 }
 
+static inline int GetClassIdInline(D2UnitStrc * pUnit);
 // 1.14d mac: 001090ac
 void __fastcall MISSILE_SetupFallingZPos(D2UnitStrc * pUnit) {
-    int nStartZ;
-    int nClassId;
-    D2MissilesTxt* pMissileTxt;
-    pMissileTxt = 0;
-    if (pUnit) {
-      nClassId = pUnit->nClassId;
-      pMissileTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
-    }
+    int nMissileId = GetClassIdInline(pUnit);
+    D2MissilesTxt* pMissileTxt = nMissileId >= 0 && nMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileId : nullptr;
     if (!pMissileTxt) {
       MISSILE_RemoveClientSide(pUnit);
       return;
     }
 
-    nClassId = pMissileTxt->CltParam2;
-    if (nClassId < 1) {
-      nClassId = 1;
-    }
-
-    nStartZ = nClassId;
-    if (nClassId <= pMissileTxt->CltParam1) {
-      nStartZ = pMissileTxt->CltParam1;
-    }
+    int nSpeed = pMissileTxt->CltParam2 < 1 ? 1 : pMissileTxt->CltParam2;
+    int nStartZ = nSpeed > pMissileTxt->CltParam1 ? nSpeed : pMissileTxt->CltParam1;
 
     Engine::Particle::SetPosVectorShifted(pUnit, 0, 0, nStartZ);
-    Engine::Particle::SetOffsetVector(pUnit, 0, 0, -nClassId, 1);
-    D2Common::Units::Missile::SetTotalFrames(pUnit, nStartZ / nClassId);
-    D2Common::Units::Missile::SetCurrentFrame(pUnit, nStartZ / nClassId);
-    return;
+    Engine::Particle::SetOffsetVector(pUnit, 0, 0, -nSpeed, 1);
+    D2Common::Units::Missile::SetTotalFrames(pUnit, nStartZ / nSpeed);
+    D2Common::Units::Missile::SetCurrentFrame(pUnit, nStartZ / nSpeed);
 }
 
 // 1.14d mac: 0010ab73

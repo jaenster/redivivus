@@ -3406,58 +3406,50 @@ void __stdcall INV_HandleMouseMove(D2UIMouseMsgStrc * pMsg) {
     CurrentInventoryPage = bySavedPage;
 }
 
+// GetClassId as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
+
 // 1.14d mac: 000b5ded
 static int32_t __stdcall ClickItemRight(int32_t nMouseX, int32_t nMouseY, uint8_t nPage, D2UnitStrc * pPlayer, D2InventoryStrc * pInventory) {
     uint32_t nCol;
-    uint32_t nRowOffset;
-    int32_t nPosX;
-    int nItemCode;
-    uint32_t nSendResult;
-    D2ItemsTxt* pItemsTxt;
-    uint8_t* pTmp;
+    uint32_t nRow;
     int nCellX;
     int nCellY;
-    eD2UnitType eUnitType;
-    BOOL bExpansion = GAME::Game::CLIENT_CheckExpansion();
-    int32_t nInvPageFull = D2Common::Units::UNITS_GetInventoryRecordId(pPlayer, nPage, bExpansion);
+    int32_t nInventoryRecordId = D2Common::Units::UNITS_GetInventoryRecordId(pPlayer, nPage, GAME::Game::CLIENT_CheckExpansion());
     if (nPage == '\0') {
       nCol = (uint32_t)(nMouseX - pInventoryGridScreenCoordinated.nPixelLeft) / (uint32_t)pInventoryGridScreenCoordinated.nCellWidth;
-      nRowOffset = (uint32_t)(nMouseY - pInventoryGridScreenCoordinated.nTop) / (uint32_t)pInventoryGridScreenCoordinated.nCellHeight;
+      nRow = (uint32_t)(nMouseY - pInventoryGridScreenCoordinated.nTop) / (uint32_t)pInventoryGridScreenCoordinated.nCellHeight;
+    } else if (GAME::Game::CLIENT_CheckExpansion()) {
+      nCol = (uint32_t)(nMouseX - pBigBankPageGridScreenCoordinates.nPixelLeft) / (uint32_t)pBigBankPageGridScreenCoordinates.nCellWidth;
+      nRow = (uint32_t)(nMouseY - pBigBankPageGridScreenCoordinates.nTop) / (uint32_t)pBigBankPageGridScreenCoordinates.nCellHeight;
     } else {
-      bExpansion = GAME::Game::CLIENT_CheckExpansion();
-      if (bExpansion) {
-        nCol = (uint32_t)(nMouseX - pBigBankPageGridScreenCoordinates.nPixelLeft) / (uint32_t)pBigBankPageGridScreenCoordinates.nCellWidth;
-        nRowOffset = (uint32_t)(nMouseY - pBigBankPageGridScreenCoordinates.nTop) / (uint32_t)pBigBankPageGridScreenCoordinates.nCellHeight;
-      } else {
-        nCol = (uint32_t)(nMouseX - pBankPageGridScreenCoordinates.nPixelLeft) / (uint32_t)pBankPageGridScreenCoordinates.nCellWidth;
-        nRowOffset = (uint32_t)(nMouseY - pBankPageGridScreenCoordinates.nTop) / (uint32_t)pBankPageGridScreenCoordinates.nCellHeight;
-      }
+      nCol = (uint32_t)(nMouseX - pBankPageGridScreenCoordinates.nPixelLeft) / (uint32_t)pBankPageGridScreenCoordinates.nCellWidth;
+      nRow = (uint32_t)(nMouseY - pBankPageGridScreenCoordinates.nTop) / (uint32_t)pBankPageGridScreenCoordinates.nCellHeight;
     }
 
-    D2UnitStrc* pItemAtCell = D2Common::INVENTORY::Inventory::GetUnitAndXAndY(pInventory, nCol, nRowOffset, &nCellX, &nCellY, nInvPageFull, nPage);
-    if (!pItemAtCell) {
+    D2UnitStrc* pItem = D2Common::INVENTORY::Inventory::GetUnitAndXAndY(pInventory, nCol, nRow, &nCellX, &nCellY, nInventoryRecordId, nPage);
+    if (!pItem) {
       return 0;
     }
 
-    D2UnitStrc* pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
-    if (!pCursorItem_lcl) {
-      nPosX = D2Common::ITEMS::Items::ITEM_CheckItemsTxt_bTransmogrify(pItemAtCell);
-      if (nPosX) {
-        bExpansion = UNIT::PlayerIsUnInterruptable(pItemAtCell);
-        if (!bExpansion) {
-          GAME::Msg::NET_D2GS_CLIENT_Send_INT(0x4c, pItemAtCell->nUnitGUID);
-          UNIT::ITEM_RemoveClientSide(pItemAtCell);
-          return 1;
-        }
-
-        return 0;
+    if (!D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory) && D2Common::ITEMS::Items::ITEM_CheckItemsTxt_bTransmogrify(pItem)) {
+      if (!UNIT::PlayerIsUnInterruptable(pItem)) {
+        GAME::Msg::NET_D2GS_CLIENT_Send_INT(0x4c, pItem->nUnitGUID);
+        UNIT::ITEM_RemoveClientSide(pItem);
+        return 1;
       }
+
+      return 0;
     }
 
-    nPosX = D2Common::ITEMS::Items::IsUseable(pItemAtCell);
-    if (nPosX) {
-      int32_t nPosY;
-      eUnitType = pPlayer->eUnitType;
+    if (D2Common::ITEMS::Items::IsUseable(pItem)) {
+      int32_t nPosX;
+      eD2UnitType eUnitType = pPlayer->eUnitType;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
         nPosX = pPlayer->pPath.pStaticPath->nPosX;
       } else if (pPlayer->pPath.pDynamicPath) {
@@ -3466,6 +3458,7 @@ static int32_t __stdcall ClickItemRight(int32_t nMouseX, int32_t nMouseY, uint8_
         nPosX = 0;
       }
 
+      int32_t nPosY;
       eUnitType = pPlayer->eUnitType;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
         nPosY = pPlayer->pPath.pStaticPath->nPosY;
@@ -3475,36 +3468,25 @@ static int32_t __stdcall ClickItemRight(int32_t nMouseX, int32_t nMouseY, uint8_
         nPosY = 0;
       }
 
-      bExpansion = UNIT::PlayerIsUnInterruptable(pItemAtCell);
-      if (!bExpansion) {
-        nItemCode = INV_CheckActionThrottle();
-        if (nItemCode) {
-          bExpansion = ui::GetUIFlag(UI_STASH);
-          if (bExpansion) {
-            nSendResult = D2Common::ITEMS::Items::ITEM_GetItemsTxt_szCode(pItemAtCell);
-            if (nSendResult == 0x20786f62) {
-              gnInvCubeCloseClickState = 1;
-            }
-          }
-
-          GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT(0x20, pItemAtCell->nUnitGUID, nPosX, nPosY);
-          UNIT::ITEM_RemoveClientSide(pItemAtCell);
-          Sound::SOUND_PlaySound(UNIT::ITEM_PlayItemUseSound(pItemAtCell), nullptr, 0, 0, 0);
-          gbInvItemUnderCursorExists = 0;
-          return 1;
-        }
-      }
-    } else {
-      nPosX = D2Common::ITEMS::Items::IsUnique(pItemAtCell);
-      if (nPosX) {
-        pItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(pItemAtCell->nClassId);
-        nItemCode = pItemsTxt->dwCode;
-        if (nItemCode == 0x20737274 || nItemCode == 0x20736b62 || nItemCode == 0x20646b62) {
-          Text::TEXT_OpenQuestScroll(pItemAtCell, pItemsTxt);
+      if (!UNIT::PlayerIsUnInterruptable(pItem) && INV_CheckActionThrottle()) {
+        if (ui::GetUIFlag(UI_STASH) && D2Common::ITEMS::Items::ITEM_GetItemsTxt_szCode(pItem) == 0x20786f62) {
+          gnInvCubeCloseClickState = 1;
         }
 
+        GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT(0x20, pItem->nUnitGUID, nPosX, nPosY);
+        UNIT::ITEM_RemoveClientSide(pItem);
+        Sound::SOUND_PlaySound(UNIT::ITEM_PlayItemUseSound(pItem), nullptr, 0, 0, 0);
+        gbInvItemUnderCursorExists = 0;
         return 1;
       }
+    } else if (D2Common::ITEMS::Items::IsUnique(pItem)) {
+      D2ItemsTxt* pItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(GetClassIdInline(pItem));
+      int nItemCode = pItemsTxt->dwCode;
+      if (nItemCode == 0x20737274 || nItemCode == 0x20736b62 || nItemCode == 0x20646b62) {
+        Text::TEXT_OpenQuestScroll(pItem, pItemsTxt);
+      }
+
+      return 1;
     }
 
     return 0;
