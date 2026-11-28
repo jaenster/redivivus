@@ -7554,7 +7554,6 @@ int32_t __fastcall AI_Pet_ExecuteMovementBehavior(::SGAMEDATA * pGame, D2UnitStr
 
 // Pet/minion follow-AI helper: decides which movement behavior a pet should execute relative to its owner this tick, then dispatches it via AI_Pet_ExecuteMovementBehavior. Computes owner distance, owner anim mode, and a follow-distance cap scaled by total pet count (capped at 0x24). If close, owner idle, and not flagged -> behavior 5 (settle). On owner teleport, if pet is far and out of town -> behavior 3 (teleport-to-owner). Otherwise compares owner vs pet grid cells and owner path segments to pick behavior 0 (move, owner walking/running or path turned), 1 (reposition, different cell or beyond cap), or 3 (far). Near a revealed-map target may upgrade to behavior 4. Returns the executed behavior code (0 if it declines to move).
 int __fastcall AI_Pet_EvaluateMovementPriority(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * bHasTeleported, D2UnitStrc * pOwner, int32_t nParam1, D2AiParamStrc * pAiParam, int32_t nParam2, int32_t pUnitDataPlayerInteractedNPC) {
-    BOOL bIsInTown;
     int32_t nOwnerGridCell;
     int32_t nPetGridCell;
     uint32_t nOwnerPathX1;
@@ -7578,102 +7577,84 @@ int __fastcall AI_Pet_EvaluateMovementPriority(::SGAMEDATA * pGame, D2UnitStrc *
     if (pUnitDataPlayerInteractedNPC > 0x24) {
       pUnitDataPlayerInteractedNPC = 0x24;
     }
-    if (nBehaviorMode < 2 && eOwnerAnimMode == eD2PlayerAnimMode_ns::Neutral && !nParam1) {
+    if (nBehaviorMode <= 1 && eOwnerAnimMode == eD2PlayerAnimMode_ns::Neutral && !nParam1) {
       nBehaviorMode = AI_Pet_ExecuteMovementBehavior(pGame, pOwner, pUnit, 5, 0, 0, pUnitDataPlayerInteractedNPC);
       return nBehaviorMode;
     }
-    if (bHasTeleported) {
-      D2RoomStrc* pRoom;
-      pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-      bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
-      if (!bIsInTown) {
-        if (nBehaviorMode <= 0x50) {
-          return 0;
-        }
+    if (bHasTeleported && !D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(D2Common::Units::UNITS_GetRoom(pUnit))) {
+      if (nBehaviorMode > 0x50) {
+        return AI_Pet_ExecuteMovementBehavior(pGame, pOwner, pUnit, 3, 0, 0, pUnitDataPlayerInteractedNPC);
+      }
+    } else {
+      eUnitType = pOwner->eUnitType;
+      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+        nPetCount = pOwner->pPath.pStaticPath->nPosY;
+      } else if (pOwner->pPath.pDynamicPath) {
+        nPetCount = D2Common::PATH::DynamicPath::GetYPos(pOwner->pPath.pDynamicPath);
+      } else {
+        nPetCount = 0;
+      }
 
-        nBehaviorMode = AI_Pet_ExecuteMovementBehavior(pGame, pOwner, pUnit, 3, 0, 0, pUnitDataPlayerInteractedNPC);
-        return nBehaviorMode;
+      eUnitType = pOwner->eUnitType;
+      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+        nOwnerGridCell = pOwner->pPath.pStaticPath->nPosX;
+      } else if (pOwner->pPath.pDynamicPath) {
+        nOwnerGridCell = D2Common::PATH::DynamicPath::GetXPos(pOwner->pPath.pDynamicPath);
+      } else {
+        nOwnerGridCell = 0;
+      }
+
+      nPetCount = D2Common::DUNGEON::Dungeon::GetGridIndex(D2Common::Units::UNITS_GetRoom(pOwner), nOwnerGridCell, nPetCount);
+      eUnitType = pUnit->eUnitType;
+      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+        nOwnerGridCell = pUnit->pPath.pStaticPath->nPosY;
+      } else if (pUnit->pPath.pDynamicPath) {
+        nOwnerGridCell = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
+      } else {
+        nOwnerGridCell = 0;
+      }
+
+      eUnitType = pUnit->eUnitType;
+      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+        nPetGridCell = pUnit->pPath.pStaticPath->nPosX;
+      } else if (pUnit->pPath.pDynamicPath) {
+        nPetGridCell = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
+      } else {
+        nPetGridCell = 0;
+      }
+
+      nOwnerGridCell = D2Common::DUNGEON::Dungeon::GetGridIndex(D2Common::Units::UNITS_GetRoom(pUnit), nPetGridCell, nOwnerGridCell);
+      nOwnerPathX1 = D2Common::PATH::DynamicPath::GetXSP1(pDynamicPath);
+      nOwnerPathY1 = D2Common::PATH::DynamicPath::GetYSP1(pDynamicPath);
+      nOwnerPathX3 = D2Common::PATH::DynamicPath::GetXSP3(pDynamicPath);
+      nOwnerPathY3 = D2Common::PATH::DynamicPath::GetYSP3(pDynamicPath);
+      nBehaviorMode_00 = 2;
+      if (eOwnerAnimMode == Walk || eOwnerAnimMode == TownWalk || eOwnerAnimMode == eD2PlayerAnimMode_ns::Run) {
+        nBehaviorMode_00 = 0;
+      }
+      if (nOwnerPathX1 != nOwnerPathX3 && nOwnerPathY1 != nOwnerPathY3) {
+        nBehaviorMode_00 = 0;
+      }
+      if (nPetCount != nOwnerGridCell) {
+        nBehaviorMode_00 = 1;
+      }
+      if (nBehaviorMode > pUnitDataPlayerInteractedNPC) {
+        nBehaviorMode_00 = 1;
+      }
+      if (nBehaviorMode > 0x32) {
+        nBehaviorMode_00 = 3;
+      }
+
+      nDistToOwnerCoords = MONSTERAI_GetDistanceToCoords(pUnit, pOwnerData->nRevealingMapRelated, pOwnerData->nRevealingMapRelated2);
+      if (nDistToOwnerCoords < 0x1c && (nBehaviorMode_00 == 1 && nBehaviorMode < 0x1e || nBehaviorMode_00 == 2)) {
+        nBehaviorMode_00 = 4;
+      }
+      if (!nParam2 || nBehaviorMode_00 != 2) {
+        return AI_Pet_ExecuteMovementBehavior(pGame, pOwner, pUnit, nBehaviorMode_00, 0, 0, pUnitDataPlayerInteractedNPC);
       }
     }
 
-    eUnitType = pOwner->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nPetCount = pOwner->pPath.pStaticPath->nPosY;
-    } else if (pOwner->pPath.pDynamicPath) {
-      nPetCount = D2Common::PATH::DynamicPath::GetYPos(pOwner->pPath.pDynamicPath);
-    } else {
-      nPetCount = 0;
-    }
-
-    eUnitType = pOwner->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nOwnerGridCell = pOwner->pPath.pStaticPath->nPosX;
-    } else if (pOwner->pPath.pDynamicPath) {
-      nOwnerGridCell = D2Common::PATH::DynamicPath::GetXPos(pOwner->pPath.pDynamicPath);
-    } else {
-      nOwnerGridCell = 0;
-    }
-
-    nPetCount = D2Common::DUNGEON::Dungeon::GetGridIndex(D2Common::Units::UNITS_GetRoom(pOwner), nOwnerGridCell, nPetCount);
-    eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nOwnerGridCell = pUnit->pPath.pStaticPath->nPosY;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nOwnerGridCell = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nOwnerGridCell = 0;
-    }
-
-    eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nPetGridCell = pUnit->pPath.pStaticPath->nPosX;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nPetGridCell = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nPetGridCell = 0;
-    }
-
-    nOwnerGridCell = D2Common::DUNGEON::Dungeon::GetGridIndex(D2Common::Units::UNITS_GetRoom(pUnit), nPetGridCell, nOwnerGridCell);
-    nOwnerPathX1 = D2Common::PATH::DynamicPath::GetXSP1(pDynamicPath);
-    nOwnerPathY1 = D2Common::PATH::DynamicPath::GetYSP1(pDynamicPath);
-    nOwnerPathX3 = D2Common::PATH::DynamicPath::GetXSP3(pDynamicPath);
-    nOwnerPathY3 = D2Common::PATH::DynamicPath::GetYSP3(pDynamicPath);
-    nBehaviorMode_00 = 2;
-    if (eOwnerAnimMode == Walk || eOwnerAnimMode == TownWalk || eOwnerAnimMode == eD2PlayerAnimMode_ns::Run) {
-      nBehaviorMode_00 = 0;
-    }
-    if (nOwnerPathX1 != nOwnerPathX3 && nOwnerPathY1 != nOwnerPathY3) {
-      nBehaviorMode_00 = 0;
-    }
-    if (nPetCount != nOwnerGridCell) {
-      nBehaviorMode_00 = 1;
-    }
-    if (nBehaviorMode > pUnitDataPlayerInteractedNPC) {
-      nBehaviorMode_00 = 1;
-    }
-    if (nBehaviorMode > 0x32) {
-      nBehaviorMode_00 = 3;
-    }
-
-    nDistToOwnerCoords = MONSTERAI_GetDistanceToCoords(pUnit, pOwnerData->nRevealingMapRelated, pOwnerData->nRevealingMapRelated2);
-    if (nDistToOwnerCoords < 0x1c) {
-      if (nBehaviorMode_00 == 1) {
-        if (nBehaviorMode >= 0x1e) {
-          goto run_behavior;
-        }
-      } else if (nBehaviorMode_00 != 2) {
-        goto run_behavior;
-      }
-
-      nBehaviorMode_00 = 4;
-    }
-
-    run_behavior:
-    if (nParam2 && nBehaviorMode_00 == 2) {
-      return 0;
-    }
-    nBehaviorMode = AI_Pet_ExecuteMovementBehavior(pGame, pOwner, pUnit, nBehaviorMode_00, 0, 0, pUnitDataPlayerInteractedNPC);
-    return nBehaviorMode;
+    return 0;
 }
 
 // Per-tick combat+follow AI for a summoned pet/minion (server-side; returns BOOL from the chosen movement helper). Resolves the owning player via GetOwnerUnit (caching its GUID in pMonsterAiGeneral->dwArg2); if the owner is gone it tries to re-find the player by GUID and trails it, else replans. If owner distance >0x32 it just follows; within 0x1D it actively fights: picks the best target (MONSTERAI_FindBestTarget, skipping units flagged uninteractable) and a nearby melee target (MONSTERAI_FindTargetInRange dist<=6/0x24), confirms line of sight via TestIfMonsterCanHitTarget, rolls the seed to pick a near/far follow radius, then delegates to AI_Pet_EvaluateMovementPriority. In-town vs. dungeon checks (DRLGROOM_IsRoomInTown) decide whether to flee, end-attack, or replan. Otherwise it follows the owner with a random offset. Side effects: issues movement/combat commands, schedules next think.
@@ -13492,130 +13473,81 @@ void __fastcall AITHINK_Fn1_Vines(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
 // Per-frame server AI tick for a Necromancer-summon-style pet (classId 0x1aa/0x1ab = life/mana golem). Reads pMonStats/AiGeneral from pAiParam, follows its owner (returns if no owner), and if it strays too far hands off to AI_Pet_ExecuteMovementBehavior. Scans for a nearby corpse (SKILLEMONST_FindNearbyCorpse) within an aurarangecalc-derived radius; if the owner is below max HP/mana (the heal trigger) and a corpse is in melee range and the per-difficulty cooldown (AiGeneral->dwArg1) has elapsed, casts the monster's Skill1 (CycleOfLife heal) on the corpse and resets the cooldown. Otherwise re-engages the prior target, walks to the corpse, or plans a default move. Side effects: casts skill, issues walk commands, mutates AiGeneral cooldown.
 // 1.14d mac: 002ac431
 void __fastcall AITHINK_Fn1_CycleOfLife(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
-    D2SkillStrc* pSkill;
-    int nSkillLevel;
-    uint32_t nRandRoll;
-    eD2Skills eSkill;
-    D2SkillsTxt* pSkillTxt;
-    int nAiParam;
-    D2MonStatsTxt* pMonStats;
-    pMonStats = pAiParam->pMonStats;
-    D2AiGeneralStrc* pAiGeneral;
-    pAiGeneral = pAiParam->pMonsterAiGeneral;
-    D2UnitStrc* pTarget;
-    pTarget = Ai::AiGeneral::GetOwnerUnit(pUnit);
-    if (!pTarget) {
+    D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
+    D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
+    D2UnitStrc* pOwner = Ai::AiGeneral::GetOwnerUnit(pUnit);
+    if (!pOwner) {
       return;
     }
 
-    D2UnitStrc* pCorpse;
-    pCorpse = 0;
-    int bCorpseInMeleeRange;
-    bCorpseInMeleeRange = 0;
-    int nDistToCorpse;
-    nDistToCorpse = 0;
-    D2UnitStrc* pOrigTarget;
-    pOrigTarget = pAiParam->pTarget;
-    int bEngaged;
-    bEngaged = pAiParam->bEngagedInCombat;
-    BOOL bOwnerNeedsHeal;
-    bOwnerNeedsHeal = TRUE;
-    int32_t nDistOrResult;
-    nDistOrResult = D2Common::Collision::GetCollisionDistance(pUnit, pTarget);
-    if (nDistOrResult >= pMonStats->aip[4][pGame->nDifficulty]) {
-      nDistOrResult = AI_Pet_ExecuteMovementBehavior(pGame, pTarget, pUnit, 3, 0, 0, 6);
-      if (nDistOrResult) {
-        return;
-      }
+    D2UnitStrc* pCorpse = nullptr;
+    int bCorpseInMeleeRange = 0;
+    int nDistToCorpse = 0;
+    D2UnitStrc* pTarget = pAiParam->pTarget;
+    int bEngaged = pAiParam->bEngagedInCombat;
+    BOOL bOwnerNeedsHeal = TRUE;
+    if (D2Common::Collision::GetCollisionDistance(pUnit, pOwner) >= pMonStats->aip[4][pGame->nDifficulty] && AI_Pet_ExecuteMovementBehavior(pGame, pOwner, pUnit, 3, 0, 0, 6)) {
+      return;
     }
-    if (pOrigTarget) {
-      BOOL bOrigTargetDead;
-      bOrigTargetDead = UNIT::SUnit::CheckForModeZeroDeath(pOrigTarget);
-      if (bOrigTargetDead) {
-        pOrigTarget = 0;
-        bEngaged = 0;
-      }
+    if (pTarget && UNIT::SUnit::CheckForModeZeroDeath(pTarget)) {
+      pTarget = nullptr;
+      bEngaged = 0;
     }
     if (pMonStats->aSkill[0] > 0) {
-      eSkill = (eD2Skills)pMonStats->aSkill[0];
-      if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
-        pSkillTxt = 0;
-      } else {
-        pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
-      }
-
-      pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, eSkill);
+      eD2Skills eSkill = (eD2Skills)pMonStats->aSkill[0];
+      D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+      D2SkillStrc* pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, eSkill);
       if (pSkillTxt && pSkill) {
-        nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
-        nDistOrResult = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->aurarangecalc, (int)pMonStats->aSkill[0], nSkillLevel);
-        if (nDistOrResult > 5) {
-          if (nDistOrResult >= 0x32) {
-            nDistOrResult = 0x32;
-          }
-        } else {
-          nDistOrResult = 5;
-        }
-
-        pCorpse = SKILLS::SkillEMonst::SKILLEMONST_FindNearbyCorpse(pGame, pUnit, pTarget, nDistOrResult);
+        int nRange = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->aurarangecalc, pMonStats->aSkill[0], D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1));
+        nRange = min(max(nRange, 5), 0x32);
+        pCorpse = SKILLS::SkillEMonst::SKILLEMONST_FindNearbyCorpse(pGame, pUnit, pOwner, nRange);
         if (pCorpse) {
           nDistToCorpse = D2Common::Collision::GetCollisionDistance(pUnit, pCorpse);
         }
       }
     }
-    if (!(nDistToCorpse < pMonStats->aip[1][pGame->nDifficulty])) {
-      pCorpse = 0;
-    } else {
-      if (pCorpse) {
-        bCorpseInMeleeRange = D2Common::Units::IsInMeleeRange(pUnit, pCorpse, 0);
+    if (nDistToCorpse >= pMonStats->aip[1][pGame->nDifficulty]) {
+      pCorpse = nullptr;
+    } else if (pCorpse) {
+      bCorpseInMeleeRange = D2Common::Units::IsInMeleeRange(pUnit, pCorpse, 0);
+    }
+
+    if (AI_Pet_EvaluateMovementPriority(pGame, pUnit, pCorpse, pOwner, bCorpseInMeleeRange, pAiParam, 0, 6)) {
+      return;
+    }
+
+    switch (!pUnit ? -1 : pUnit->nClassId) {
+      case 0x1aa: {
+        int nLife = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, UNITSTAT_hitpoints, 0); // steer-ok: the original reads the owner's life before its maximum
+        if (nLife >= D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pOwner)) {
+          bOwnerNeedsHeal = FALSE;
+        }
+        break;
+      }
+      case 0x1ab: {
+        int nMana = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, UNITSTAT_mana, 0); // steer-ok: the original reads the owner's mana before its maximum
+        if (nMana >= D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pOwner)) {
+          bOwnerNeedsHeal = FALSE;
+        }
+        break;
       }
     }
 
-    nSkillLevel = AI_Pet_EvaluateMovementPriority(pGame, pUnit, pCorpse, pTarget, bCorpseInMeleeRange, pAiParam, 0, 6);
-    if (nSkillLevel) {
-      return;
-    }
-    if (!pUnit) {
-      nSkillLevel = -1;
-    } else {
-      nSkillLevel = pUnit->nClassId;
-    }
-
-    switch (nSkillLevel) {
-      case 0x1aa:
-        nAiParam = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_hitpoints, 0);
-        nSkillLevel = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pTarget);
-        if (nAiParam >= nSkillLevel) {
-          bOwnerNeedsHeal = FALSE;
-        }
-        break;
-      case 0x1ab:
-        nAiParam = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_mana, 0);
-        nSkillLevel = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pTarget);
-        if (nAiParam >= nSkillLevel) {
-          bOwnerNeedsHeal = FALSE;
-        }
-        break;
-    }
-
-    if (pCorpse && bCorpseInMeleeRange && bOwnerNeedsHeal && (int)pMonStats->aip[0][pGame->nDifficulty] + pAiGeneral->dwArg1 < pGame->dwGameFrame) {
-      SERVER_UNIT_CastSkill(pGame, pUnit, 8, (int)pMonStats->aSkill[0], pCorpse, 0, 0);
+    if (pCorpse && bCorpseInMeleeRange && bOwnerNeedsHeal && pMonStats->aip[0][pGame->nDifficulty] + pAiGeneral->dwArg1 < pGame->dwGameFrame) {
+      SERVER_UNIT_CastSkill(pGame, pUnit, 8, pMonStats->aSkill[0], pCorpse, 0, 0);
       pAiGeneral->dwArg1 = pGame->dwGameFrame;
       return;
     }
-    if (bEngaged && pOrigTarget) {
-      nRandRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
-      if ((int)nRandRoll < 0x19) {
-        WalkTowardsUnitOffset(pGame, pUnit, pOrigTarget, (uint8_t)pMonStats->aip[3][pGame->nDifficulty], 0);
-        return;
-      }
+    if (bEngaged && pTarget && (int)D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100) < 0x19) {
+      WalkTowardsUnitOffset(pGame, pUnit, pTarget, (uint8_t)pMonStats->aip[3][pGame->nDifficulty], 0);
+      return;
     }
     if (pCorpse) {
       MONSTERAI_CommandWalkToUnit(pGame, pUnit, pCorpse, 7);
       return;
     }
 
-    PlanNextAiMove(pGame, pUnit, (int)pMonStats->aip[2][pGame->nDifficulty]);
-    return;
+    PlanNextAiMove(pGame, pUnit, pMonStats->aip[2][pGame->nDifficulty]);
 }
 
 // 1.14d mac: 002ac7ff

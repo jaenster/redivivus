@@ -813,73 +813,46 @@ void __fastcall Objects_InitFn28_GoldPlaceholder(D2ObjectInitFnArg * pInitArg) {
 // Shrine object initialization function (object init table entry 1). Reads the shrine-type param from ObjectsTxt; if 0, randomly rolls a shrine type from the Shrines table (up to 8 tries, filtered by dwLevelMin vs current level); if 1/2 rolls fixed shrine category 2/3; otherwise calls OBJECT_SelectRandomShrineType. Remaps certain shrine IDs (4→2, 5→3, 0x10→0x12), stores the result in the object's szCharName[4], and sets the ShrineTxt record pointer.
 // 1.14d mac: 001ed065
 void __fastcall Objects_InitFn01_Shrine(D2ObjectInitFnArg * pInitArg) {
-    D2ShrinesTxt* pShrineLine;
-    uint32_t nRandIdx;
-    int nShrineTypeArg;
-    D2SeedStrc* pRandSeed;
-    uint32_t seedRolled;
     int nShrineId = pInitArg->pObjectTxt->Parm[0];
     eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pInitArg->pRoom);
     if (nShrineId) {
+      int nShrineType;
       switch (nShrineId) {
         case 1:
-          {
-            *(uint8_t*)(char*)&nShrineTypeArg = 2;
-            break;
-          }
+          nShrineType = 2;
+          break;
         case 2:
-          {
-            *(uint8_t*)(char*)&nShrineTypeArg = 3;
-            break;
-          }
+          nShrineType = 3;
+          break;
         default:
-          {
-            pRandSeed = pInitArg->pSeed;
-            seedRolled = D2_SeedRoll(pRandSeed);
-            if (seedRolled % 10 == 0) {
-              *(uint8_t*)(char*)&nShrineTypeArg = 1;
-            } else {
-              *(uint8_t*)(char*)&nShrineTypeArg = 4;
-            }
+          nShrineType = 4;
+          if (D2_SeedRoll(pInitArg->pSeed) % 10 == 0) {
+            nShrineType = 1;
           }
+          break;
       }
 
-      nShrineId = OBJECT_SelectRandomShrineType(pInitArg->pGame, eLevelId, (uint8_t)nShrineTypeArg, pInitArg->pRoom);
+      nShrineId = OBJECT_SelectRandomShrineType(pInitArg->pGame, eLevelId, (uint8_t)nShrineType, pInitArg->pRoom);
     } else {
-      int32_t nShrinesCount;
-      nShrineTypeArg = 8;
-      eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pInitArg->pRoom);
+      int nTries = 8;
+      eD2LevelId eRoomLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pInitArg->pRoom);
+      D2ShrinesTxt* pShrineTxt;
       do {
-        nShrinesCount = D2Common::DATATBLS::ObjectTbls::GetShrinesSize();
-        pRandSeed = pInitArg->pSeed;
-        nRandIdx = nShrinesCount - 1;
-        nRandIdx = D2_SeedRollLimited(pRandSeed, nRandIdx);
-        nShrineId = nRandIdx + 1;
-        pShrineLine = D2Common::DATATBLS::ObjectTbls::TXT_Shrines_GetLine(nShrineId);
-      } while (eLevelId < pShrineLine->dwLevelMin && (nShrineTypeArg-- , nShrineTypeArg > 0));
+        nShrineId = D2_SeedRollLimited(pInitArg->pSeed, D2Common::DATATBLS::ObjectTbls::GetShrinesSize() - 1) + 1;
+        pShrineTxt = D2Common::DATATBLS::ObjectTbls::TXT_Shrines_GetLine(nShrineId);
+      } while (eRoomLevelId < pShrineTxt->dwLevelMin && --nTries > 0);
     }
 
-    switch (nShrineId) {
-      case 5:
-        {
-          nShrineId = 3;
-          break;
-        }
-      case 4:
-        {
-          nShrineId = 2;
-          break;
-        }
-      case 0x10:
-        {
-          nShrineId = 0x12;
-          break;
-        }
+    if (nShrineId == 5) {
+      nShrineId = 3;
+    } else if (nShrineId == 4) {
+      nShrineId = 2;
+    } else if (nShrineId == 0x10) {
+      nShrineId = 0x12;
     }
 
     pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = (uint8_t)nShrineId;
-    pShrineLine = D2Common::DATATBLS::ObjectTbls::TXT_Shrines_GetLine(nShrineId);
-    D2Common::Units::SetShrineTxtRecordInObjectData(pInitArg->pObject, pShrineLine);
+    D2Common::Units::SetShrineTxtRecordInObjectData(pInitArg->pObject, D2Common::DATATBLS::ObjectTbls::TXT_Shrines_GetLine(nShrineId));
 }
 
 void __fastcall Objects_InitFn05_Door_Unref_0054fb30(D2ObjectInitFnArg * pInitArg) {
