@@ -2324,7 +2324,8 @@ void __fastcall SKILLDESC_FormatMagicSuffixDesc(D2UnitStrc * pUnit, D2GemsTxt * 
       D2Common::Stats::StatsEx::FreeStatList(&pStatList->sStatList);
     }
 
-    if (wszText1[D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText1) - 1] == L'\n') {
+    uint16_t* pLastChar = &wszText1[D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText1) - 1];
+    if (*pLastChar == L'\n') {
       wszText1[D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText1) - 1] = L'\0';
     }
 }
