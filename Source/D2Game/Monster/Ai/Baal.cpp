@@ -373,32 +373,18 @@ static int32_t __stdcall AI_BAAL_SelectWeightedAction(int * pnWeights, int32_t n
 
 // Already-documented — existing description accurately covers Baal Clone's weighted-random action selection. Builds a 16-entry weight table biased by difficulty, Baal Clone's current life percentage, cold state, and whether a sub-unit (pUnit2) is present; rolls against the total weight using pUnit2's seed; returns the chosen action index 0-15.
 static int32_t __stdcall AI_BAAL_CloneChooseAction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t bCollisionWithWall, D2UnitStrc * pUnit2) {
-    int anWeights[16];
-    anWeights[0xb] = 10;
-    anWeights[0xc] = 10;
-    anWeights[0] = 0;
-    int nBaseWeight = 0x32;
-    memset(anWeights + 2, 0, 6 * sizeof(anWeights[0]));
-    anWeights[8] = 0x14;
-    anWeights[9] = 0x1e;
-    anWeights[10] = 0x96;
-    anWeights[0xd] = 0x46;
-    anWeights[0xe] = 0x28;
-    anWeights[0xf] = 0;
+    int anWeights[16] = { 0, 0x32, 0, 0, 0, 0, 0, 0, 0x14, 0x1e, 0x96, 10, 10, 0x46, 0x28, 0 };
     if (!pGame->nDifficulty) {
-      nBaseWeight = 0x4b;
+      anWeights[1] = 0x4b;
       anWeights[0xd] = 0x2d;
     }
 
-    int32_t nLifePercent = D2Common::Units::GetCurrentLifePercentage(pUnit);
-    if (nLifePercent < 0x21) {
+    if (D2Common::Units::GetCurrentLifePercentage(pUnit) < 0x21) {
       anWeights[10] = 200;
     }
 
-    nLifePercent = D2Common::Units::GetCurrentLifePercentage(pUnit2);
-    anWeights[1] = nBaseWeight + (100 - nLifePercent);
-    BOOL eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_cold);
-    if (eUnitState) {
+    anWeights[1] += 100 - D2Common::Units::GetCurrentLifePercentage(pUnit2);
+    if (D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_cold)) {
       anWeights[8] = 0;
       anWeights[0xd] = 0;
       anWeights[0xb] = 0;
@@ -409,32 +395,25 @@ static int32_t __stdcall AI_BAAL_CloneChooseAction(::SGAMEDATA * pGame, D2UnitSt
       anWeights[0xc] = 0;
     }
 
-    nBaseWeight = 4;
-    uint32_t nTotalWeight = 0;
-    int* pWeightEntry = anWeights + 2;
-    do {
-      nTotalWeight = nTotalWeight + pWeightEntry[-2] + pWeightEntry[-1] + pWeightEntry[1] + *pWeightEntry;
-      nBaseWeight--;
-      pWeightEntry += 4;
-    } while (nBaseWeight);
-
-    uint32_t nRandRoll = 0;
-    if ((int)nTotalWeight > 0) {
-      nRandRoll = D2_SeedRollLimited(&pUnit2->sSeed, nTotalWeight);
+    int nTotalWeight = 0;
+    int* pWeight = anWeights;
+    for (int i = 0; i < 16; i++) {
+      nTotalWeight += *pWeight;
+      pWeight++;
     }
 
+    int nRandRoll = D2_SeedRollLimited(&pUnit2->sSeed, nTotalWeight);
+
     int nWeightAccum = 0;
-    pWeightEntry = anWeights;
-    nBaseWeight = 0;
-    do {
-      nWeightAccum += *pWeightEntry;
-      if ((int)nRandRoll < nWeightAccum) {
-        return nBaseWeight;
+    pWeight = anWeights;
+    for (int i = 0; i < 16; i++) {
+      nWeightAccum += *pWeight;
+      if (nRandRoll < nWeightAccum) {
+        return i;
       }
 
-      nBaseWeight++;
-      pWeightEntry++;
-    } while (nBaseWeight < 0x10);
+      pWeight++;
+    }
 
     return 1;
 }
