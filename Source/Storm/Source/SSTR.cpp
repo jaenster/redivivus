@@ -1276,20 +1276,20 @@ uint32_t __stdcall SStrLen(char * szText) {
       uint32_t dwWord = *(uint32_t*)pScan;
       dwCarry -= dwWord;
       uint32_t dwZeroMask = dwWord + 0x7efefeff ^ dwCarry;
-      pScan += 4;
+      pScan += sizeof(dwWord);
       dwCarry |= dwWord;
       dwZeroMask &= 0x81010101;
       if (dwZeroMask) {
         if ((char)dwWord == '\0') {
-          pScan -= 4;
+          pScan -= sizeof(dwWord);
           break;
         }
         if ((char)(dwWord >> 8) == '\0') {
-          pScan -= 3;
+          pScan -= sizeof(dwWord) - 1;
           break;
         }
         if (!(dwWord & 0xff0000)) {
-          pScan -= 2;
+          pScan -= sizeof(dwWord) - 2;
           break;
         }
         if (!(dwWord & 0xff000000)) {
