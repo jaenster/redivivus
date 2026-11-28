@@ -21130,94 +21130,83 @@ void __fastcall AI_Fn1_VileDog(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiPara
 // Server-side per-tick AI mode-1 routine for the Finger Mage / undead-mage monster. Computes a run-speed bonus from MonStats Run/Velocity. Tracks a hit-and-run state in pMonsterAiGeneral->dwArg0/dwArg1: when attacking it may retreat, when in retreat state it walks away from the target (with the run-speed bonus applied via ApplyCombatAndMonStats) for a limited number of ticks. Otherwise advances the RNG seed and uses per-difficulty MonStats AI % columns to decide between fleeing (CalledOnEndAiFunction1), approaching, planning a move, or casting Skill1 (e.g. fingermagecurse, gated by UNIT_GetUnitState) via SERVER_UNIT_CastSkill. No return; movement/skill side effects.
 // 1.14d mac: 0029a25a
 void __fastcall AI_Fn1_FingerMage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
-    uint32_t uRandResult2;
-    short int nSkill1Id;
-    D2SeedStrc sSeedNext;
-    int nRangeCheck = pAiParam->nDistanceToTarget;
+    D2SeedStrc* pSeed = &pUnit->sSeed;
+    int nDistance = pAiParam->nDistanceToTarget;
     int bEngagedInCombat = pAiParam->bEngagedInCombat;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
-    D2UnitStrc* pUnit_00 = pAiParam->pTarget;
+    D2UnitStrc* pTarget = pAiParam->pTarget;
     D2AiGeneralStrc* pAiGeneral = pAiParam->pMonsterAiGeneral;
     int32_t nHpPct = D2Common::Units::GetCurrentLifePercentage(pUnit);
-    uint32_t pRunSpeedBonus = 0;
+    int nRunSpeedBonus = 0;
     if (pMonStats->Velocity > 0) {
-      pRunSpeedBonus = pMonStats->Run * 100 / (int)pMonStats->Velocity - 100;
-      pRunSpeedBonus = (int)pRunSpeedBonus <= 0 ? 0 : pRunSpeedBonus;
-      if ((int)pRunSpeedBonus >= 0x78) {
-        pRunSpeedBonus = 0x78;
+      nRunSpeedBonus = pMonStats->Run * 100 / (int)pMonStats->Velocity - 100;
+      nRunSpeedBonus = nRunSpeedBonus <= 0 ? 0 : nRunSpeedBonus;
+      if (nRunSpeedBonus >= 0x78) {
+        nRunSpeedBonus = 0x78;
       }
     }
-
-    BOOL bIsAttacking = MONSTERAI_IsMonsterAttacking(pUnit);
-    if (bIsAttacking) {
+    if (MONSTERAI_IsMonsterAttacking(pUnit)) {
       pAiGeneral->dwArg0 = 0;
       if (bEngagedInCombat) {
-        AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pUnit_00);
+        AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pTarget);
         return;
       }
-
-      nSkill1Id = pMonStats->aSkill[0];
-      if (nSkill1Id >= 0 && nRangeCheck < pMonStats->aip[4][pGame->nDifficulty]) {
-        SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[0], (int)nSkill1Id, pUnit_00, 0, 0);
+      if (pMonStats->aSkill[0] >= 0 && nDistance < pMonStats->aip[4][pGame->nDifficulty]) {
+        SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[0], (int)pMonStats->aSkill[0], pTarget, 0, 0);
         return;
       }
     }
     if (pAiGeneral->dwArg0 == 1) {
       pAiGeneral->dwArg1++;
-      if (nHpPct > pMonStats->aip[2][pGame->nDifficulty] || (sSeedNext = D2_SEED_NEXT(pUnit->sSeed) , pUnit->sSeed = sSeedNext , (int32_t)(sSeedNext.nSeedLow % 100) < 0x19) || pAiGeneral->dwArg1 > (int)pMonStats->aip[5][pGame->nDifficulty]) {
+      if (nHpPct > pMonStats->aip[2][pGame->nDifficulty] || (int32_t)(D2_SeedRoll(pSeed) % 100) < 0x19 || pAiGeneral->dwArg1 > (int)pMonStats->aip[5][pGame->nDifficulty]) {
         pAiGeneral->dwArg0 = 0;
-      } else if (nRangeCheck < 0xe) {
-        AITACTICS_SetPathOverrides(pUnit, 0, pRunSpeedBonus, '\0');
-        WalkTowardsUnitOffset(pGame, pUnit, pUnit_00, '\x0e', 0);
+      } else if (nDistance < 0xe) {
+        AITACTICS_SetPathOverrides(pUnit, 0, nRunSpeedBonus, '\0');
+        WalkTowardsUnitOffset(pGame, pUnit, pTarget, '\x0e', 0);
         return;
       }
 
       PlanNextAiMove(pGame, pUnit, 0xf);
       return;
     }
-
-    D2UnitStrc* pOwner = Ai::AiGeneral::GetOwnerUnit(pUnit);
-    if (!pOwner && nHpPct < pMonStats->aip[3][pGame->nDifficulty]) {
+    if (!Ai::AiGeneral::GetOwnerUnit(pUnit) && nHpPct < pMonStats->aip[3][pGame->nDifficulty]) {
       pAiGeneral->dwArg0 = 1;
       pAiGeneral->dwArg1 = 0;
-      WalkTowardsUnitOffset(pGame, pUnit, pUnit_00, '\t', 0);
+      WalkTowardsUnitOffset(pGame, pUnit, pTarget, '\t', 0);
       return;
     }
     if (bEngagedInCombat) {
-      sSeedNext = D2_SEED_NEXT(pUnit->sSeed);
-      pUnit->sSeed = sSeedNext;
-      if ((int)(sSeedNext.nSeedLow % 100) < (int)pMonStats->aip[0][pGame->nDifficulty]) {
-        AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pUnit_00);
+      if ((int)(D2_SeedRoll(pSeed) % 100) < (int)pMonStats->aip[0][pGame->nDifficulty]) {
+        AI_ChangeModeAndTargetUnit(pGame, pUnit, 4, pTarget);
         return;
       }
-      if (pMonStats->aSkill[0] < 0 || (uRandResult2 = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100) , (int)uRandResult2 >= (int)pMonStats->aip[1][pGame->nDifficulty])) {
-        SetCombatStateAndApproachTarget(pGame, pUnit, pUnit_00, 5, 0);
+      if (pMonStats->aSkill[0] >= 0 && (int)D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100) < (int)pMonStats->aip[1][pGame->nDifficulty]) {
+        SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[0], (int)pMonStats->aSkill[0], pTarget, 0, 0);
         return;
       }
-    } else {
-      if (nRangeCheck >= pMonStats->aip[4][pGame->nDifficulty]) {
-        if (nRangeCheck < pMonStats->aip[6][pGame->nDifficulty]) {
-          MONSTERAI_CommandWalkToUnit(pGame, pUnit, pUnit_00, 7);
-          return;
-        }
 
-        PlanNextAiMove(pGame, pUnit, 0xf);
+      SetCombatStateAndApproachTarget(pGame, pUnit, pTarget, 5, 0);
+      return;
+    }
+    if (nDistance < pMonStats->aip[4][pGame->nDifficulty]) {
+      if (pMonStats->aSkill[0] >= 0 && (int)D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, 100) < (int)pMonStats->aip[1][pGame->nDifficulty]) {
+        SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[0], (int)pMonStats->aSkill[0], pTarget, 0, 0);
         return;
       }
-      if (pMonStats->aSkill[0] < 0 || (uRandResult2 = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100) , (int)uRandResult2 >= (int)pMonStats->aip[1][pGame->nDifficulty])) {
-        bIsAttacking = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit_00, STATE_fingermagecurse);
-        if (bIsAttacking) {
-          MONSTERAI_CommandWalkToUnit(pGame, pUnit, pUnit_00, 0);
-          return;
-        }
+      if (D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pTarget, STATE_fingermagecurse)) {
+        MONSTERAI_CommandWalkToUnit(pGame, pUnit, pTarget, 0);
+        return;
+      }
 
-        PlanNextAiMove(pGame, pUnit, (int)pMonStats->aip[7][pGame->nDifficulty]);
-        return;
-      }
+      PlanNextAiMove(pGame, pUnit, (int)pMonStats->aip[7][pGame->nDifficulty]);
+      return;
+    }
+    if (nDistance < pMonStats->aip[6][pGame->nDifficulty]) {
+      MONSTERAI_CommandWalkToUnit(pGame, pUnit, pTarget, 7);
+      return;
     }
 
-    nSkill1Id = pMonStats->aSkill[0];
-    SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[0], (int)nSkill1Id, pUnit_00, 0, 0);
+    PlanNextAiMove(pGame, pUnit, 0xf);
 }
 
 // The flag bit as the original's header getter returns it: a value of its own, tested in a register.
