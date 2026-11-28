@@ -4,8 +4,8 @@
 # d2_mac_objs  StormMac, the Mac Storm project (Source/StormMac/), the game's Mac-only
 #              module (Source/MacSpecific/Source/: the Mac shell and CD2Textures) and the
 #              OpenGL renderer (Source/D2OpenGL/Src) on the 10.7 SDK. The renderer's Win32/WGL
-#              and Win32Posix restorations (MacSdkOnWin32.cpp, MacSdkOnPosix.cpp) and its D2gfx
-#              adapter (D2gfxRenderer.cpp) are the other builds' alone. The 1.14d Mac flags:
+#              and Win32Posix restorations (MacSdkOnWin32.cpp, MacSdkOnPosix.cpp, oglSdl.cpp) and
+#              its D2gfx adapter (D2gfxRenderer.cpp) are the other builds' alone. The 1.14d Mac flags:
 #              -Os -fstack-protector, libc++, Pascal string literals (Xcode's
 #              default; "\p" literals sit in __TEXT,__const).
 #
@@ -22,7 +22,7 @@ file(GLOB_RECURSE D2_MAC_SOURCES CONFIGURE_DEPENDS LIST_DIRECTORIES false
     "${CMAKE_SOURCE_DIR}/Source/MacSpecific/Source/MacShell/*.cpp"
     "${CMAKE_SOURCE_DIR}/Source/MacSpecific/Source/CD2Textures/*.cpp"
     "${CMAKE_SOURCE_DIR}/Source/D2OpenGL/Src/*.cpp")
-list(FILTER D2_MAC_SOURCES EXCLUDE REGEX "/Source/D2OpenGL/Src/(MacSdkOnWin32|MacSdkOnPosix|D2gfxRenderer)\\.cpp$")
+list(FILTER D2_MAC_SOURCES EXCLUDE REGEX "/Source/D2OpenGL/Src/(MacSdkOnWin32|MacSdkOnPosix|oglSdl|D2gfxRenderer)\\.cpp$")
 # Win32Posix is the modern build's layer (cmake/mac-modern.cmake), not Storm's Mac one.
 list(FILTER D2_MAC_SOURCES EXCLUDE REGEX "/Source/StormMac/Win32Posix/")
 list(REMOVE_DUPLICATES D2_MAC_SOURCES)

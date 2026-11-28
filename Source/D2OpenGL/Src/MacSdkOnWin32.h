@@ -328,9 +328,6 @@ void glFinishObjectAPPLE(GLenum eObject, GLint nName);
 void glActiveTexture(GLenum eTexture);
 GLubyte *glGetString(GLenum eName);
 #if !defined(_WIN32) && D2_BACKEND_POSIX
-// The renderer's viewport is in the game window's client pixels; the POSIX layer scales the
-// client into the window's drawable (Win32Posix_GetViewport), so the viewport follows it.
-void glViewport(GLint nX, GLint nY, GLsizei nWidth, GLsizei nHeight);
 // Before D2gfx makes the game window: the window is made for an OpenGL context.
 void POSIX_PrepareGameWindowForGL(void);
 #endif

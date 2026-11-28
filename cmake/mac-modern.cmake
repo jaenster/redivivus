@@ -5,10 +5,12 @@
 #
 # d2_modern_objs         compile only, outside `all`: `ninja -k 0 d2_modern_objs` measures it
 #                        (and builds d2_modern_opengl_objs with it).
-# d2_modern_opengl_objs  the D2OpenGL renderer, compiled with the same flags. Its Mac SDK calls
-#                        (AGL, Core Graphics, Carbon) are MacSdkOnPosix.cpp's, on Win32Posix and
-#                        SDL3: an OpenGL 2.1 compatibility context on the game window, through the
-#                        system OpenGL.framework. Linked into d2_modern with REDIVIVUS_OPENGL.
+# d2_modern_opengl_objs  the D2OpenGL renderer, compiled with the same flags. Its window, context
+#                        and swap are oglSdl.cpp's: an OpenGL 2.1 compatibility context on the
+#                        game window through SDL3 and the system OpenGL.framework, no display mode
+#                        switching. Its other Mac SDK calls (Core Graphics, Carbon) are
+#                        MacSdkOnPosix.cpp's, on Win32Posix. Linked into d2_modern with
+#                        REDIVIVUS_OPENGL.
 # d2_uni_objs            the D2Uni renderer's shared slots and its SDL3 back end (sdlCore.cpp),
 #                        D2gfx's video mode 2.
 #

@@ -145,6 +145,10 @@ BOOL OGL_InstallCursorCallbacks() {
     return 1;
 }
 
+#if defined(_WIN32) || !D2_BACKEND_POSIX
+// The display mode, the window, the AGL context and the swap: the Carbon build's, and the Win32/WGL
+// restoration's through MacSdkOnWin32.cpp. The Win32Posix build has its own on SDL3 (oglSdl.cpp).
+
 // In fullscreen, restores the saved CG display mode, releases the displays and shows the menu bar.
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
 // 1.14d mac: 002e0cc8
@@ -543,6 +547,7 @@ void OGL_MacCloseWindow() {
 void OGL_MacSwapBuffers() {
     aglSwapBuffers(AGLContext_00552b34);
 }
+#endif  // defined(_WIN32) || !D2_BACKEND_POSIX
 
 // 1.14d mac: 002e175d
 int OGL_MacClampMouseEvent(void * pEvent) {
@@ -789,6 +794,7 @@ BOOL OGL_SetOption(int nOption, intptr_t nValue) {
     return 1;
 }
 
+#if defined(_WIN32) || !D2_BACKEND_POSIX
 // Carbon window event handler installed in MacOpenWindow. Handles moved, activate and close (sends WM_CLOSE).
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
 // 1.14d mac: 002e1d14
@@ -824,6 +830,7 @@ OSStatus OGL_MacWindowEventHandler(EventHandlerCallRef hCallRef, EventRef hEvent
 
     return nStatus;
 }
+#endif  // defined(_WIN32) || !D2_BACKEND_POSIX
 
 } // namespace D2OpenGL::oglMac
 

@@ -38,6 +38,10 @@ bool EnsureSdl() {
     }
     SDL_SetHint(SDL_HINT_QUIT_ON_LAST_WINDOW_CLOSE, "0");
     SDL_SetHint(SDL_HINT_MOUSE_FOCUS_CLICKTHROUGH, "1");
+    // Full screen is a borderless window over the desktop in place, not a macOS fullscreen Space:
+    // moving to a Space takes the window's focus away, which a full-screen game reads as being
+    // switched away from (WM_ACTIVATEAPP) and answers by minimising.
+    SDL_SetHint(SDL_HINT_VIDEO_MAC_FULLSCREEN_SPACES, "0");
     if (!SDL_InitSubSystem(SDL_INIT_VIDEO | SDL_INIT_EVENTS)) {
         LogSdlError("SDL_InitSubSystem");
         return false;
