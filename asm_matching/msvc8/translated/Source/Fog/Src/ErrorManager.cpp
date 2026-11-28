@@ -195,7 +195,7 @@ bool __fastcall WriteCrashReportProcessInfo(::Report * pReport) {
     uint8_t* aLogFilePaths[21];
     PSID pAdminSid;
     _SID_IDENTIFIER_AUTHORITY sNtAuthority;
-    bool bVar1 = _3rdparty::crashy::IsOpen(pReport);
+    bool bVar1 = vc8_thiscall(_3rdparty::crashy::IsOpen)(pReport);
     if (!bVar1) {
       return false;
     }
@@ -264,7 +264,7 @@ bool __fastcall WriteCrashReportProcessInfo(::Report * pReport) {
     do {
       szPath = aLogFilePaths[nLogIdx];
       if (szPath && *szPath) {
-        _3rdparty::crashy::AddAttachment(pReport, (char*)szPath, '\x01');
+        vc8_thiscall(_3rdparty::crashy::AddAttachment)(pReport, (char*)szPath, '\x01');
       }
 
       nLogIdx++;
@@ -306,7 +306,7 @@ static char* gaMacLanguageNames[15] = {
 // The inspector project id is only written once FOG_InitErrorManager has run (g_nProjectId is set there).
 void __fastcall WriteCrashReportProcessInfo(::Report * pReport) {
     uint8_t* aLogFilePaths[21];
-    if (!_3rdparty::crashy::IsOpen(pReport)) {
+    if (!vc8_thiscall(_3rdparty::crashy::IsOpen)(pReport)) {
       return;
     }
 
@@ -332,7 +332,7 @@ void __fastcall WriteCrashReportProcessInfo(::Report * pReport) {
     do {
       uint8_t* szPath = aLogFilePaths[nLogIdx];
       if (szPath && *szPath) {
-        _3rdparty::crashy::AddAttachment(pReport, (char*)szPath, '\x01');
+        vc8_thiscall(_3rdparty::crashy::AddAttachment)(pReport, (char*)szPath, '\x01');
       }
 
       nLogIdx++;
@@ -597,7 +597,7 @@ int __fastcall DumpLog(D2CrashReportStrc * pCrashInfo, void * pUserContext) {
       g_dwErrorState = 1;
       vc8_thiscall(_3rdparty::crashy::Constructor)(&crashFile);
       nSehState = 0;
-      iVar1 = _3rdparty::crashy::Open(&crashFile, "Crash.txt");
+      iVar1 = vc8_thiscall(_3rdparty::crashy::Open)(&crashFile, "Crash.txt");
       if (iVar1 != '\0') {
         WriteCrashReportProcessInfo(&crashFile);
         _3rdparty::crashy::Printf(&crashFile, "<Inspector.Summary:>\n%s", pCrashInfo->pszExceptionName, nAttachIndex);
@@ -641,11 +641,11 @@ int __fastcall DumpLog(D2CrashReportStrc * pCrashInfo, void * pUserContext) {
         Storm::Source::SSTR::SStrPack(gszCrashReportProcessPath, "/Minidump.dmp", 0x800);
         bMinidumpCreated = Debug::CrashDumpWriterThread(gszCrashReportProcessPath, "", pCrashInfo->pExceptionPointers, 0);
         if (bMinidumpCreated) {
-          _3rdparty::crashy::AddAttachment(&crashFile, gszCrashReportProcessPath, '\0');
+          vc8_thiscall(_3rdparty::crashy::AddAttachment)(&crashFile, gszCrashReportProcessPath, '\0');
         }
 
         _3rdparty::crashy::Printf(&crashFile, "<:Inspector.HashBlock>\n");
-        _3rdparty::crashy::Close(&crashFile);
+        vc8_thiscall(_3rdparty::crashy::Close)(&crashFile);
         memset(&errorArg, 0, sizeof(errorArg));
         errorArg.szProduct = szProduct;
         nAttachIndex = 0;
@@ -692,7 +692,7 @@ void __fastcall DumpLog(D2CrashReportStrc * pCrashInfo, void * pUserContext) {
 
     g_dwErrorState = 1;
     vc8_thiscall(_3rdparty::crashy::Constructor)(&crashFile);
-    if (!_3rdparty::crashy::Open(&crashFile, "Crash.txt")) {
+    if (!vc8_thiscall(_3rdparty::crashy::Open)(&crashFile, "Crash.txt")) {
       g_dwErrorState = 0;
       InterlockedDecrement((LONG*)&lpAddend_003cec90);
       CRASHY_Exit(-1);
@@ -733,7 +733,7 @@ void __fastcall DumpLog(D2CrashReportStrc * pCrashInfo, void * pUserContext) {
       }
 
       _3rdparty::crashy::Printf(&crashFile, "<:Inspector.HashBlock>\n");
-      _3rdparty::crashy::Close(&crashFile);
+      vc8_thiscall(_3rdparty::crashy::Close)(&crashFile);
       memset(&errorArg, 0, sizeof(errorArg));
       errorArg.szProduct = szProduct;
       uint32_t nAttachIndex = 0;
@@ -810,7 +810,7 @@ void __fastcall CRASH_FillupCrashTxt(char * szSummary, char * szReason, char * *
     LONG nRecursionGuard = InterlockedIncrement((LONG*)&lpAddend_007076bc);
     if (!nRecursionGuard) {
       g_dwErrorState = 1;
-      iVar1 = _3rdparty::crashy::Open(&crashFile, "Crash.txt");
+      iVar1 = vc8_thiscall(_3rdparty::crashy::Open)(&crashFile, "Crash.txt");
       if (iVar1 != '\0') {
         WriteCrashReportProcessInfo(&crashFile);
         _3rdparty::crashy::Printf(&crashFile, "<Inspector.Summary:>\n%s\n<:Inspector.Summary>\n", szSummary, nAttachIndex);
@@ -828,10 +828,10 @@ void __fastcall CRASH_FillupCrashTxt(char * szSummary, char * szReason, char * *
         File::CRASH_EnumerateThreads(FILETOOLS_WriteOneStringToFile, &crashFile, dwThreadId);
         ppszAttachEnd = ppszAttachPaths + nAttachPathCount;
         for (; ppszAttachPaths != ppszAttachEnd; ppszAttachPaths++) {
-          _3rdparty::crashy::AddAttachment(&crashFile, *ppszAttachPaths, '\x01');
+          vc8_thiscall(_3rdparty::crashy::AddAttachment)(&crashFile, *ppszAttachPaths, '\x01');
         }
 
-        _3rdparty::crashy::Close(&crashFile);
+        vc8_thiscall(_3rdparty::crashy::Close)(&crashFile);
         memset(&errorArg, 0, sizeof(errorArg));
         errorArg.szProduct = szProduct;
         if (bSilentFlag) {
@@ -881,7 +881,7 @@ void __fastcall CRASH_FillupCrashTxt(char * szSummary, char * szReason, char * *
     vc8_thiscall(_3rdparty::crashy::Constructor)(&crashFile);
     if (InterlockedIncrement((LONG*)&lpAddend_003cec94) == 0) {
       g_dwErrorState = 1;
-      if (_3rdparty::crashy::Open(&crashFile, "Crash.txt")) {
+      if (vc8_thiscall(_3rdparty::crashy::Open)(&crashFile, "Crash.txt")) {
         WriteCrashReportProcessInfo(&crashFile);
         _3rdparty::crashy::Printf(&crashFile, "<Inspector.Summary:>\n%s\n<:Inspector.Summary>\n", szSummary);
         if (nLineNumber != 0) {
@@ -897,10 +897,10 @@ void __fastcall CRASH_FillupCrashTxt(char * szSummary, char * szReason, char * *
         _3rdparty::crashy::Printf(&crashFile, "Threads:\n");
         CRASHY_WriteOtherThreadBacktraces(FILETOOLS_WriteOneStringToFile, &crashFile, dwThreadId);
         for (uint32_t nAttach = 0; nAttach != nAttachPathCount; nAttach++) {
-          _3rdparty::crashy::AddAttachment(&crashFile, ppszAttachPaths[nAttach], '\x01');
+          vc8_thiscall(_3rdparty::crashy::AddAttachment)(&crashFile, ppszAttachPaths[nAttach], '\x01');
         }
 
-        _3rdparty::crashy::Close(&crashFile);
+        vc8_thiscall(_3rdparty::crashy::Close)(&crashFile);
         memset(&errorArg, 0, sizeof(errorArg));
         errorArg.szProduct = szProduct;
         errorArg.nFlags = bSilentFlag;
@@ -953,7 +953,7 @@ void __fastcall CRASH_FillupCrashTxt(char * szSummary, char * szReason, char * *
     vc8_thiscall(_3rdparty::crashy::Constructor)(&crashFile);
     if (InterlockedIncrement((LONG*)&nReportsInProgress) == 0) {
       g_dwErrorState = 1;
-      if (_3rdparty::crashy::Open(&crashFile, (char*)"Crash.txt")) {
+      if (vc8_thiscall(_3rdparty::crashy::Open)(&crashFile, (char*)"Crash.txt")) {
         WriteCrashReportProcessInfo(&crashFile);
         _3rdparty::crashy::Printf(&crashFile, "<Inspector.Summary:>\n%s\n<:Inspector.Summary>\n", szSummary);
         if (nLineNumber != 0) {
@@ -964,10 +964,10 @@ void __fastcall CRASH_FillupCrashTxt(char * szSummary, char * szReason, char * *
         POSIX_WriteBacktrace(CRASH_WriteBacktraceLine, &crashFile, 1);
         _3rdparty::crashy::Printf(&crashFile, "<:Inspector.Assertion>\n");
         for (uint32_t nAttach = 0; nAttach != nAttachPathCount; nAttach++) {
-          _3rdparty::crashy::AddAttachment(&crashFile, ppszAttachPaths[nAttach], '\x01');
+          vc8_thiscall(_3rdparty::crashy::AddAttachment)(&crashFile, ppszAttachPaths[nAttach], '\x01');
         }
 
-        _3rdparty::crashy::Close(&crashFile);
+        vc8_thiscall(_3rdparty::crashy::Close)(&crashFile);
         LogManager::LOGFILE_WriteStringToFile((char*)"[CRASH] report written to %s", crashFile.szFilePath);
         fprintf(stderr, "Diablo II: crash report written to %s\n", crashFile.szFilePath);
       }

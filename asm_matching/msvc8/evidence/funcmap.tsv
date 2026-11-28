@@ -4,10 +4,10 @@ start	end	name	tu	symbol	method	detail
 00401070	0040108d	Fog::_3rdparty::crashy::Constructor	3rdparty/crashy/Report	?Constructor@crashy@_3rdparty@Fog@@YIPAUReport@@PAU4@H@Z	sourcemap	sourcemap Report.cpp.map (bare name)
 00401090	004010c9	Fog::_3rdparty::crashy::ScalarDeletingDestructor	3rdparty/crashy/Report	?ScalarDeletingDestructor@crashy@_3rdparty@Fog@@YIPAUReport@@PAU4@HI@Z	sourcemap	sourcemap Report.cpp.map (bare name)
 004010d0	004010f2	Fog::_3rdparty::crashy::Destructor	3rdparty/crashy/Report	?Destructor@crashy@_3rdparty@Fog@@YIXPAUReport@@H@Z	sourcemap	sourcemap Report.cpp.map (bare name)
-00401100	004011ed	Fog::_3rdparty::crashy::Open	3rdparty/crashy/Report	?Open@crashy@_3rdparty@Fog@@YACPAUReport@@PAD@Z	sourcemap	sourcemap Report.cpp.map (bare name)
-004011f0	0040120e	Fog::_3rdparty::crashy::Close	3rdparty/crashy/Report	?Close@crashy@_3rdparty@Fog@@YACPAUReport@@@Z	sourcemap	sourcemap Report.cpp.map (bare name)
-00401210	00401219	Fog::_3rdparty::crashy::IsOpen	3rdparty/crashy/Report	?IsOpen@crashy@_3rdparty@Fog@@YA_NPAUReport@@@Z	sourcemap	sourcemap Report.cpp.map (bare name)
-00401220	00401375	Fog::_3rdparty::crashy::AddAttachment	3rdparty/crashy/Report	?AddAttachment@crashy@_3rdparty@Fog@@YACPAUReport@@PADC@Z	sourcemap	sourcemap Report.cpp.map (bare name)
+00401100	004011ed	Fog::_3rdparty::crashy::Open	3rdparty/crashy/Report	?Open@crashy@_3rdparty@Fog@@YICPAUReport@@HPAD@Z	sourcemap	sourcemap Report.cpp.map (bare name)
+004011f0	0040120e	Fog::_3rdparty::crashy::Close	3rdparty/crashy/Report	?Close@crashy@_3rdparty@Fog@@YICPAUReport@@H@Z	sourcemap	sourcemap Report.cpp.map (bare name)
+00401210	00401219	Fog::_3rdparty::crashy::IsOpen	3rdparty/crashy/Report	?IsOpen@crashy@_3rdparty@Fog@@YI_NPAUReport@@H@Z	sourcemap	sourcemap Report.cpp.map (bare name)
+00401220	00401375	Fog::_3rdparty::crashy::AddAttachment	3rdparty/crashy/Report	?AddAttachment@crashy@_3rdparty@Fog@@YICPAUReport@@HPADC@Z	sourcemap	sourcemap Report.cpp.map (bare name)
 00401380	0040139c	Fog::_3rdparty::crashy::Printf	3rdparty/crashy/Report	?Printf@crashy@_3rdparty@Fog@@YAHPAUReport@@PADZZ	sourcemap	sourcemap Report.cpp.map (bare name)
 004013a0	004013b1	Fog::_3rdparty::crashy::isDebuggerPresent	3rdparty/crashy/crashyRoot	?isDebuggerPresent@crashy@_3rdparty@Fog@@YGIXZ	sourcemap	sourcemap crashyRoot.cpp.map
 004013c0	004013cf	Fog::_3rdparty::crashy::SYSTEM_Win32TerminateProcess	3rdparty/crashy/crashyRoot	?SYSTEM_Win32TerminateProcess@crashy@_3rdparty@Fog@@YIXI@Z	sourcemap	sourcemap crashyRoot.cpp.map

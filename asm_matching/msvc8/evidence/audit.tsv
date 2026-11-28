@@ -4,10 +4,10 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00401070	0040108d	Fog::_3rdparty::crashy::Constructor	3rdparty/crashy/Report	sourcemap	8	8	0	1.000	MATCH	1 refs unverified	29	0
 00401090	004010c9	Fog::_3rdparty::crashy::ScalarDeletingDestructor	3rdparty/crashy/Report	sourcemap	21	21	0	1.000	MATCH	1 refs unverified	57	0
 004010d0	004010f2	Fog::_3rdparty::crashy::Destructor	3rdparty/crashy/Report	sourcemap	12	12	0	1.000	MATCH	1 refs unverified	34	0
-00401100	004011ed	Fog::_3rdparty::crashy::Open	3rdparty/crashy/Report	sourcemap	92	97	0	0.508	OUR+5		118	39
-004011f0	0040120e	Fog::_3rdparty::crashy::Close	3rdparty/crashy/Report	sourcemap	12	15	0	0.741	OUR+3		28	2
-00401210	00401219	Fog::_3rdparty::crashy::IsOpen	3rdparty/crashy/Report	sourcemap	4	8	0	0.667	OUR+4		9	0
-00401220	00401375	Fog::_3rdparty::crashy::AddAttachment	3rdparty/crashy/Report	sourcemap	117	119	0	0.280	OUR+2		97	22
+00401100	004011ed	Fog::_3rdparty::crashy::Open	3rdparty/crashy/Report	sourcemap	92	98	0	0.526	OUR+6		126	35
+004011f0	0040120e	Fog::_3rdparty::crashy::Close	3rdparty/crashy/Report	sourcemap	12	12	0	1.000	MATCH		30	0
+00401210	00401219	Fog::_3rdparty::crashy::IsOpen	3rdparty/crashy/Report	sourcemap	4	4	0	1.000	MATCH		9	0
+00401220	00401375	Fog::_3rdparty::crashy::AddAttachment	3rdparty/crashy/Report	sourcemap	117	119	0	0.314	OUR+2		110	23
 00401380	0040139c	Fog::_3rdparty::crashy::Printf	3rdparty/crashy/Report	sourcemap	13	13	0	1.000	MATCH	1 refs unverified	28	0
 004013a0	004013b1	Fog::_3rdparty::crashy::isDebuggerPresent	3rdparty/crashy/crashyRoot	sourcemap	6	6	0	1.000	MATCH		17	0
 004013c0	004013cf	Fog::_3rdparty::crashy::SYSTEM_Win32TerminateProcess	3rdparty/crashy/crashyRoot	sourcemap	5	5	0	1.000	MATCH		15	0
@@ -169,7 +169,7 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00407980	00407990	Fog::Src::ErrorManager::FILETOOLS_WriteOneStringToFile	Source/Fog/Src/ErrorManager	sourcemap	6	6	0	1.000	MATCH		16	0
 00407990	00407a11	Fog::Src::ErrorManager::GetParentProcessId	Source/Fog/Src/ErrorManager	sourcemap	46	46	0	1.000	MATCH	4 refs unverified	129	0
 00407a20	00407a71	Fog::Src::ErrorManager::GetModuleFileNameForProcess	Source/Fog/Src/ErrorManager	sourcemap	39	39	0	1.000	MATCH	1 refs unverified	81	0
-00407a80	00407dc6	Fog::Src::ErrorManager::WriteCrashReportProcessInfo	Source/Fog/Src/ErrorManager	sourcemap	264	267	0	0.923	OUR+3		830	6
+00407a80	00407dc6	Fog::Src::ErrorManager::WriteCrashReportProcessInfo	Source/Fog/Src/ErrorManager	sourcemap	264	264	0	1.000	MATCH	20 refs unverified	838	0
 00407dd0	00407dd3	Fog::Src::ErrorManager::Unreferenced_00407dd0	Source/Fog/Src/ErrorManager	sourcemap	2	2	0	1.000	MATCH		3	0
 00407de0	00407f1e	Fog::Src::ErrorManager::InitializeSystemInfo	Source/Fog/Src/ErrorManager	sourcemap	81	81	0	1.000	MATCH	13 refs unverified	318	0
 00407f20	00407f6d	Fog::Src::ErrorManager::EXIT_AtExit	Source/Fog/Src/ErrorManager	sourcemap	19	19	0	1.000	MATCH	4 refs unverified	77	0
@@ -191,8 +191,8 @@ start	end	name	tu	method	ref_insns	our_insns	byte_diffs	similarity	status	notes	
 00408220	0040829d	Fog::Src::ErrorManager::OutputDebugStringIfCapsLock	Source/Fog/Src/ErrorManager	sourcemap	40	40	0	1.000	MATCH	1 refs unverified	125	0
 004082a0	004082b8	Fog::Src::ErrorManager::FormatDebugOutputVariadic	Source/Fog/Src/ErrorManager	sourcemap	13	13	0	1.000	MATCH		24	0
 004082c0	004082d6	Fog::Src::ErrorManager::FormatDebugOutputLogOnly	Source/Fog/Src/ErrorManager	sourcemap	12	12	0	1.000	MATCH		22	0
-004082e0	00408658	Fog::Src::ErrorManager::DumpLog	Source/Fog/Src/ErrorManager	sourcemap	239	239	1010	0.657	INSN_COUNT_MATCH	116 refs differ; 10 refs unverified	521	250
-00408660	004088bc	Fog::Src::ErrorManager::CRASH_FillupCrashTxt	Source/Fog/Src/ErrorManager	sourcemap	161	167	0	0.506	OUR+6		309	150
+004082e0	00408658	Fog::Src::ErrorManager::DumpLog	Source/Fog/Src/ErrorManager	sourcemap	239	235	0	0.633	OUR-4		518	252
+00408660	004088bc	Fog::Src::ErrorManager::CRASH_FillupCrashTxt	Source/Fog/Src/ErrorManager	sourcemap	161	161	734	0.466	INSN_COUNT_MATCH	68 refs differ; 4 refs unverified	311	168
 004088c0	004088f8	Fog::Src::ErrorManager::CheckErrorDuringError	Source/Fog/Src/ErrorManager	sourcemap	19	19	0	0.947	MATCH	2 refs unverified	56	0
 00408900	00408a29	Fog::Src::ErrorManager::FOG_ErrorHandler	Source/Fog/Src/ErrorManager	sourcemap	86	86	0	0.988	MATCH	5 refs unverified	297	0
 00408a30	00408a5a	Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_AssertionFailure	Source/Fog/Src/ErrorManager	sourcemap	14	14	0	0.929	MATCH	1 refs unverified	42	0

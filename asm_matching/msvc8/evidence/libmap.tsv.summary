@@ -1,4 +1,4 @@
-libcmt.lib + libcpmt.lib functions (sp1): 8595, of which our image links 0 (no linker map: /Users/jaenster/code/re/diablo2/d2-surveys/layout/step4/pub-prs/asm_matching/msvc8/build-exe/d2recon-vc8.map)
+libcmt.lib + libcpmt.lib functions (sp1): 8595, of which our image links 0 (no linker map: /Users/jaenster/code/re/diablo2/d2-surveys/layout/step4/pub-vc8-V1/asm_matching/msvc8/build-exe/d2recon-vc8.map)
 original functions the funcmap leaves unpaired: 1457 (160688 bytes)
 paired with a library function: 629 (126047 bytes), of which our image links 0
   lib-exact     498

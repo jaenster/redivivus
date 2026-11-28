@@ -8,6 +8,9 @@
 // a debugger is never detected.
 //
 // Mac-only: compiled by cmake/mac.cmake (d2_mac_link_deps), never by the Windows build.
+// The guard keeps these plain-call declarations out of the VC8 translation, which would
+// otherwise read Report.cpp's __thiscall Open, Close, IsOpen and AddAttachment as __cdecl.
+#if !defined(_WIN32)
 
 struct Report;
 struct D2BlizzardErrorArgument;
@@ -52,3 +55,5 @@ void Close(Report* pReport) { (void)pReport; }
 bool IsOpen(Report* pReport) { (void)pReport; return false; }
 void Printf(Report* pReport, char* szFormat, ...) { (void)pReport; (void)szFormat; }
 } } } // namespace Fog::_3rdparty::crashy
+
+#endif  // !defined(_WIN32)

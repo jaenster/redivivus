@@ -682,6 +682,7 @@ symbol	address	uses	other_addresses
 ?gaItemClearCommandTable@?1??ITEM_ClearFlagsAndCommands@UNIT@D2Game@@YIXPAUSGAMEDATA@@PAUD2UnitStrc@@@Z@4PAIA	00738c70	1	
 ?gaItemPaletteTransformData@@3PAEA	00842710	3	
 ?gaItemWeaponClassCodes@?1??ITEM_GetWeaponAnimClass@Items@ITEMS@D2Common@@YGFPAUD2UnitStrc@@@Z@4PAUD2ItemWeaponClassCodeStrc@@A	007446a0	2	
+?gaLanguageNames@?1??WriteCrashReportProcessInfo@ErrorManager@Src@Fog@@YI_NPAUReport@@@Z@4PAPADA	00706618	2	
 ?gaLanguageNames_0072a300@UnitSnd@UNIT@D2Client@@3PAPADA	0072a300	1	
 ?gaLastSentPacketBuffer@?1??NET_D2GS_CLIENT_Send@Msg@GAME@D2Client@@YGXPAEH@Z@4PADA	007bb3b8	3	
 ?gaLeapArcParticleOffsetZ@?1??SKILL_CreateLeapArcParticle@SkillsBar@SKILLS@D2Client@@YIXPAUD2UnitStrc@@PAUD2SkillStrc@@@Z@4PAUD2LeapArcSegmentStrc@@A	006dae70	3	
@@ -1924,7 +1925,7 @@ ___sbh_pHeaderList	00993b34	10
 ___sbh_pHeaderScan	00993b3c	4	
 ___sbh_sizeHeaderList	00993b40	3	
 ___sbh_threshold	00993b38	2	
-___security_cookie	00749de0	296	
+___security_cookie	00749de0	297	
 ___security_cookie_complement	00749de4	3	
 ___sse2_available	00994c88	4	
 ___type_info_root_node	0096e010	4	
@@ -2223,7 +2224,7 @@ _g_bSIDFlag2	00882538	5
 _g_bSIDProtocolReady	00882528	4	
 _g_bWhisperDelivered	008846e4	1	
 _g_bWhisperSquelched	008846e0	1	
-_g_dwErrorState	0074f0c8	5	
+_g_dwErrorState	0074f0c8	4	
 _g_dwProductId	00730190	2	
 _g_nBNetClientToken	008818c0	2	
 _g_nBNetConnectionState	008818e0	4	
@@ -2234,6 +2235,7 @@ _g_nLadderFilterMode	0070cd62	34
 _g_nMCPGameDifficulty	00798f58	2	
 _g_nMCPJoinTimestamp	00799104	2	
 _g_nMemoryCounter	00883d3c	1	
+_g_nProjectId	0074d868	1	
 _g_nRealmLogonResult	0072ffa8	8	
 _g_nSIDResponseCount1	008822a0	4	
 _g_nSIDResponseCount2	008822a4	10	
@@ -2261,9 +2263,16 @@ _g_pfnMCPGameListCompleteCallback	00799304	1
 _g_pfnMCPMessageCallback	00799308	2	
 _g_srpCredentials	00882680	18	
 _g_srpSaltVerifier	00882640	8	
+_g_szApplicationName	0074d870	1	
+_g_szAssignments	0074d888	1	
+_g_szBuildNumber	0074d87c	1	
 _g_szCurrentChannelName	00882028	2	
 _g_szMCPGameName	00799294	2	
 _g_szMCPGamePassword	00798f60	2	
+_g_szMilestone	0074d878	1	
+_g_szModuleName	0074d874	1	
+_g_szPlatform	0074d880	1	
+_g_szPrimaryAssignment	0074d884	1	
 _g_szStoredUsername	00882540	2	
 _gaActiveUnitSlots	007a7470	11	
 _gaAnimImgCharCreateByClass	0077956c	21	
@@ -3082,6 +3091,7 @@ _gsUIFlagInit2	00724780	5
 _gsUIFlagInit3	0072478c	5	
 _gsUITextFlagInit	00722600	6	
 _gszCDKeyInUseByUsername	00882428	4	
+_gszCrashReportProcessPath	0074e8c8	9	
 _gszLadderCharNameFilter	0077b040	3	
 _gszLastTcpIpAddress	007795f8	6	
 _gszLocalSaveFilenameBuffer	00779b68	7	
@@ -3216,7 +3226,6 @@ _sgpTxtArena	0096d608	4
 _sgpTxtCharTemplate	0096d600	5	
 _sgpUnknownSequence	007bc998	8	
 _szBnNewsChannelName	0072ff80	2	
-_szProduct	0074d86c	1	
 _szSFileBasePath	00778f28	10	
 _szWindowClassName	007c9344	1	
 _term_action	0096de84	1	

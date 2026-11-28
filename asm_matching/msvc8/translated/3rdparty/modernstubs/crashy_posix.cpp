@@ -127,7 +127,7 @@ void __fastcall Destructor(::Report* pThis, int) {
     }
 }
 
-int8_t Open(::Report* pThis, char* szFileName) {
+int8_t __fastcall Open(::Report* pThis, int, char* szFileName) {
     time_t tNow = time(nullptr);
     struct tm tLocal;
     localtime_r(&tNow, &tLocal);
@@ -142,7 +142,7 @@ int8_t Open(::Report* pThis, char* szFileName) {
     return pThis->pFile != nullptr;
 }
 
-int8_t Close(::Report* pThis) {
+int8_t __fastcall Close(::Report* pThis, int) {
     if (pThis->pFile) {
         fclose(pThis->pFile);
         pThis->pFile = nullptr;
@@ -150,11 +150,11 @@ int8_t Close(::Report* pThis) {
     return 1;
 }
 
-bool IsOpen(::Report* pThis) {
+bool __fastcall IsOpen(::Report* pThis, int) {
     return pThis->pFile != nullptr;
 }
 
-int8_t AddAttachment(::Report* pThis, char* szPath, int8_t bCopyToReportDir) {
+int8_t __fastcall AddAttachment(::Report* pThis, int, char* szPath, int8_t bCopyToReportDir) {
     const int nSlots = (int)(sizeof(pThis->aszAttachmentPaths) / sizeof(pThis->aszAttachmentPaths[0]));
     if (pThis->nAttachmentCount >= nSlots || !szPath) {
         return 0;
