@@ -8,7 +8,8 @@
 // finds them before any Win32 function of the same name (ShowWindow, SetRect).
 // On Windows the window is the game's (D2GFX GetHwnd), never one of our own. The 1.14d Mac
 // build takes the first branch below: the 10.7 SDK itself. The modern Mac build
-// (D2_BACKEND_POSIX) takes the second, as Windows does, with these calls on its own layer.
+// (D2_BACKEND_POSIX) takes the second, as Windows does, with these calls on its own layer:
+// MacSdkOnWin32.cpp on Windows, MacSdkOnPosix.cpp (Win32Posix and SDL3) on POSIX.
 //
 // A structure the Mac returns in memory keeps the i386 Darwin convention the
 // decompile shows: the result pointer is the first argument, and is returned.
@@ -326,6 +327,13 @@ void glTextureRangeAPPLE(GLenum eTarget, GLsizei nLength, void *pPointer);
 void glFinishObjectAPPLE(GLenum eObject, GLint nName);
 void glActiveTexture(GLenum eTexture);
 GLubyte *glGetString(GLenum eName);
+#if !defined(_WIN32) && D2_BACKEND_POSIX
+// The renderer's viewport is in the game window's client pixels; the POSIX layer scales the
+// client into the window's drawable (Win32Posix_GetViewport), so the viewport follows it.
+void glViewport(GLint nX, GLint nY, GLsizei nWidth, GLsizei nHeight);
+// Before D2gfx makes the game window: the window is made for an OpenGL context.
+void POSIX_PrepareGameWindowForGL(void);
+#endif
 
 // ---- the Mac libc and C++ runtime
 

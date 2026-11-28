@@ -5,8 +5,10 @@
 #
 # d2_modern_objs         compile only, outside `all`: `ninja -k 0 d2_modern_objs` measures it
 #                        (and builds d2_modern_opengl_objs with it).
-# d2_modern_opengl_objs  the D2OpenGL renderer, compiled with the same flags but not linked:
-#                        its Carbon, AGL and Core Graphics calls have no Win32Posix side yet.
+# d2_modern_opengl_objs  the D2OpenGL renderer, compiled with the same flags. Its Mac SDK calls
+#                        (AGL, Core Graphics, Carbon) are MacSdkOnPosix.cpp's, on Win32Posix and
+#                        SDL3: an OpenGL 2.1 compatibility context on the game window, through the
+#                        system OpenGL.framework. Linked into d2_modern with REDIVIVUS_OPENGL.
 # d2_uni_objs            the D2Uni renderer's shared slots and its SDL3 back end (sdlCore.cpp),
 #                        D2gfx's video mode 2.
 #
@@ -23,11 +25,19 @@
 #   3rdparty/macstubs and the other Mac link dependencies (cmake/mac.cmake).
 # What it keeps beside the shared modules: D2OpenGL, and the texture manager it builds on
 # (Source/MacSpecific/Source/CD2Textures, no Carbon), as the Windows d2opengl_objs does - compiled
-# in d2_modern_opengl_objs, out of the link.
+# in d2_modern_opengl_objs.
+#
+# REDIVIVUS_OPENGL (on by default here; off on Windows) links D2OpenGL into d2_modern and defines
+# D2_RENDERER_OPENGL=1: D2GFX_Initialize gets the mode-5 row, and -opengl on the command line
+# selects it (ApplicationMain), as in the Windows build with the same option. Without -opengl
+# the game renders through D2Uni (mode 2).
 #
 # The target axes: D2_OS_MAC (macOS behaviour, shared with the 1.14d Mac build),
 # D2_BACKEND_POSIX (the Win32Posix layer), D2_MAC_CARBON=0 (no Carbon layer), and one
 # architecture macro per slice: -Xarch_ keeps a universal build to one compile per unit.
+
+option(REDIVIVUS_OPENGL
+    "Link the D2OpenGL renderer into d2_modern as video mode 5 (-opengl), defining D2_RENDERER_OPENGL=1." ON)
 
 set(D2_MODERN_MODULES
     D2Common D2CMP D2Lang D2Game D2Client Fog Storm D2Win D2gfx D2Sound D2Net D2Launch D2Hell
@@ -93,6 +103,9 @@ function(d2_modern_game_setup _target)
     target_include_directories(${_target} PRIVATE ${D2_MODERN_INCLUDE_DIRS})
     target_compile_definitions(${_target} PRIVATE
         D2_OS_MAC=1 D2_BACKEND_POSIX=1 D2_MAC_CARBON=0 D2_TARGET_CLIENT=1)
+    if(REDIVIVUS_OPENGL)
+        target_compile_definitions(${_target} PRIVATE D2_RENDERER_OPENGL=1)
+    endif()
     target_compile_options(${_target} PRIVATE
         ${_d2_arch_flags}
         -g -fwrapv -fpascal-strings
@@ -105,6 +118,8 @@ add_library(d2_modern_objs OBJECT EXCLUDE_FROM_ALL ${D2_MODERN_SOURCES})
 d2_modern_game_setup(d2_modern_objs)
 add_library(d2_modern_opengl_objs OBJECT EXCLUDE_FROM_ALL ${_ogl_sources})
 d2_modern_game_setup(d2_modern_opengl_objs)
+# OpenGL.framework is deprecated on macOS but present; its headers' notes are silenced here only.
+target_compile_definitions(d2_modern_opengl_objs PRIVATE GL_SILENCE_DEPRECATION=1)
 # Built with d2_modern_objs, so `ninja d2_modern_objs` still compiles the renderer.
 add_custom_target(d2_modern_opengl_built DEPENDS $<TARGET_OBJECTS:d2_modern_opengl_objs>)
 add_dependencies(d2_modern_objs d2_modern_opengl_built)
@@ -183,6 +198,10 @@ if(SDL3_FOUND)
     add_library(d2_uni_objs OBJECT EXCLUDE_FROM_ALL ${_uni_sources})
     d2_modern_game_setup(d2_uni_objs)
     target_link_libraries(d2_uni_objs PRIVATE SDL3::SDL3)
+    target_link_libraries(d2_modern_opengl_objs PRIVATE SDL3::SDL3)
+    if(REDIVIVUS_OPENGL)
+        set(_ogl_objs $<TARGET_OBJECTS:d2_modern_opengl_objs>)
+    endif()
     if(_posix_rest)
         add_library(d2_win32posix OBJECT EXCLUDE_FROM_ALL ${_posix_rest})
         d2_win32posix_setup(d2_win32posix)
@@ -191,7 +210,7 @@ if(SDL3_FOUND)
     endif()
     add_executable(d2_modern EXCLUDE_FROM_ALL
         $<TARGET_OBJECTS:d2_modern_objs> $<TARGET_OBJECTS:d2_uni_objs> $<TARGET_OBJECTS:d2_win32posix_kernel>
-        ${_posix_rest_objs} $<TARGET_OBJECTS:d2_modern_link_deps>)
+        ${_posix_rest_objs} $<TARGET_OBJECTS:d2_modern_link_deps> ${_ogl_objs})
     set_target_properties(d2_modern PROPERTIES OUTPUT_NAME "Diablo II")
     target_link_libraries(d2_modern PRIVATE SDL3::SDL3 "-framework OpenGL")
     # The tree's packed records keep 1.14d's offsets, and on a 64-bit target the pointers in

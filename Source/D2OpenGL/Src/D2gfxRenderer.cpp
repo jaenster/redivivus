@@ -27,6 +27,7 @@
 #include "Source/D2OpenGL/Src/MacDisplayDevice.h"
 #include "Source/D2gfx/Src/D2GFX.h"
 #include "Source/D2OpenGL/Src/oglSmack.h"
+#include "Source/D2OpenGL/Src/MacSdkOnWin32.h"
 
 namespace D2OpenGL::Renderer {
 
@@ -47,6 +48,10 @@ using namespace D2OpenGL::MacDisplayDevice;
 
 // Win 0 / Mac 0
 BOOL __fastcall Initialize(HINSTANCE hInstance) {
+#if !defined(_WIN32) && D2_BACKEND_POSIX
+    // D2gfx makes the game window after this: on POSIX it must be made for a GL context.
+    D2OpenGL::POSIX_PrepareGameWindowForGL();
+#endif
     return OGL_Initialize(hInstance);
 }
 
