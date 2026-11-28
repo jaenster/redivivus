@@ -5622,6 +5622,9 @@ static void __stdcall SKILLDESC_DescLine1A_SkillDamage(uint16_t * wszText, D2Ski
     nMinDmgRaw = nMinDmgRaw * 0x19 >> 8;
     nMaxDmgRaw = nMaxDmgRaw * 0x19 >> 8;
     switch (pSkillsTxt->EType) {
+      case ELEMENTAL_FIRE:
+        wDmgTypeStringId = 0x10a1;
+      break;
       case ELEMENTAL_LIGHTNING:
         wDmgTypeStringId = 0x10a3;
       break;
