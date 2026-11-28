@@ -340,9 +340,7 @@ void __fastcall SOUND_CycleSoundMixerMode(D2EscMenuItemStrc * pItem, D2UIMouseMs
 
 // 1.14d mac: 00097898
 int32_t __fastcall SOUND_PlayFootstepSound(uint32_t nFrame, uint32_t nFootstepFrame, int nModulus) {
-    int nMinDist;
     uint32_t nMod1;
-    int nWrapDist;
     uint32_t nMod2 = nModulus - 1;
     if (!(nModulus & nMod2)) {
       nMod1 = nMod2 & nFrame;
@@ -352,34 +350,13 @@ int32_t __fastcall SOUND_PlayFootstepSound(uint32_t nFrame, uint32_t nFootstepFr
       nMod2 = (int)nFootstepFrame % nModulus;
     }
 
-    int nDiff = nMod2 - nMod1;
-    int nAbsDiff = nDiff;
-    if (nDiff < 0) {
-      nAbsDiff = -nDiff;
-    }
-
-    nDiff -= nModulus;
-    if (nDiff < 0) {
-      nDiff = -nDiff;
-    }
-
-    nWrapDist = nMod1 - nMod2 - nModulus;
-    if (nWrapDist < 0) {
-      nWrapDist = -nWrapDist;
-    }
-
-    nMinDist = nAbsDiff;
-    if (nAbsDiff >= nDiff) {
-      nMinDist = nDiff;
-    }
-    if (nMinDist < nWrapDist) {
-      nWrapDist = nAbsDiff;
-      if (nAbsDiff >= nDiff) {
-        nWrapDist = nDiff;
-      }
-    }
-
-    return nWrapDist;
+    int nDist = nMod2 - nMod1;
+    int nForwardDist = nDist < 0 ? -nDist : nDist;
+    nDist -= nModulus;
+    int nBackDist = nDist < 0 ? -nDist : nDist;
+    nDist = nMod1 - nMod2 - nModulus;
+    int nWrapDist = nDist < 0 ? -nDist : nDist;
+    return min(min(nForwardDist, nBackDist), nWrapDist);
 }
 
 int Unreferenced_004e41e0() {
@@ -629,7 +606,7 @@ void __fastcall SOUND_UpdateEnvironmentAmbience(int32_t nTick) {
 }} // namespace D2Client::Sound
 
 #if !defined(_WIN32) && D2_OS_MAC
-namespace D2Sound { namespace Src { namespace D2SoundSmp { BOOL __stdcall FUN_002e93bd(void * pSoundSmp); }}}
+namespace D2Sound { namespace Src { namespace D2SoundSmp { uint32_t __fastcall SOUNDSMP_GetStatus(struct D2SoundSmpStrc * ppSoundSmp); }}}
 
 namespace D2Client { namespace Sound {
 
@@ -643,7 +620,7 @@ BOOL __stdcall SOUND_IsClientSampleActive(D2ClientSoundChannelStrc * pSound) {
     if (!pSound || !pSound->pSoundSmp) {
       return 0;
     }
-    return D2Sound::Src::D2SoundSmp::FUN_002e93bd(pSound->pSoundSmp);
+    return D2Sound::Src::D2SoundSmp::SOUNDSMP_GetStatus((D2SoundSmpStrc*)pSound->pSoundSmp);
 }
 
 // 1.14d mac: 000978f8

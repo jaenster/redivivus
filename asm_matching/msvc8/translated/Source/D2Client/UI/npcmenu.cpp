@@ -3777,38 +3777,32 @@ uint16_t __fastcall NPCMENU_FindNextUnhandledMessage(int16_t nMsgTypeToFind) {
     static int32_t gnNpcDialogOptionData_725c04 = 0x2; D2_STATIC_GUARD(gnNpcDialogOptionData_725c04, "D2Client::UI::npcmenu::NPCMENU_FindNextUnhandledMessage::gnNpcDialogOptionData_725c04");
     static uint16_t gNPCMenuMouseWheelOffsetY[6] = { 0x7b, 0x7e, 0x109, 0x0, 0x7d, 0x7e }; D2_STATIC_GUARD(gNPCMenuMouseWheelOffsetY, "D2Client::UI::npcmenu::NPCMENU_FindNextUnhandledMessage::gNPCMenuMouseWheelOffsetY");
 
-    int nScrollQueueIdx;
-    int nIndex;
-    for (nIndex = 0; nIndex < gnNpcDialogOptionData_725c04; nIndex++) {
-      if (gNPCMenuMouseWheelOffsetY[nIndex * 4] == (uint16_t)nMsgTypeToFind) {
-        return gNPCMenuMouseWheelOffsetY[nIndex * 4 + 1];
+    for (int i = 0; i < gnNpcDialogOptionData_725c04; i++) {
+      if (gNPCMenuMouseWheelOffsetY[i * 4] == (uint16_t)nMsgTypeToFind) {
+        return gNPCMenuMouseWheelOffsetY[i * 4 + 1];
       }
     }
 
     D2GSPacketSrv0x27_TextStrc* pOverheadText = Text::TEXT_GetOverheadGlobalPointer();
-    nIndex = 0;
-    uint16_t uVar1 = D2Common::Text::OVERHEAD_GetMessageType0(pOverheadText, 0);
-    do {
-      if (uVar1 == 0xffff) {
+    for (int nIndex = 0; ; nIndex++) {
+      uint16_t nMsgType = D2Common::Text::OVERHEAD_GetMessageType0(pOverheadText, nIndex);
+      if (nMsgType == 0xffff) {
         return 0xffff;
       }
-      if (uVar1 != (uint16_t)nMsgTypeToFind) {
-        nScrollQueueIdx = 0;
-        if (!gnNpcMenuScrollMessageHead) {
-          return uVar1;
-        }
-
-        while ((uint16_t)gaNpcMenuHandledMessageIds[nScrollQueueIdx] != uVar1) {
-          nScrollQueueIdx++;
-          if (nScrollQueueIdx >= (int)(uint32_t)gnNpcMenuScrollMessageHead) {
-            return uVar1;
+      if (nMsgType != (uint16_t)nMsgTypeToFind) {
+        BOOL bHandled = FALSE;
+        for (int i = 0; i < gnNpcMenuScrollMessageHead; i++) {
+          if ((uint16_t)gaNpcMenuHandledMessageIds[i] == nMsgType) {
+            bHandled = TRUE;
+            break;
           }
         }
-      }
 
-      nIndex++;
-      uVar1 = D2Common::Text::OVERHEAD_GetMessageType0(pOverheadText, nIndex);
-    } while (true);
+        if (!bHandled) {
+          return nMsgType;
+        }
+      }
+    }
 }
 
 // 1.14d mac: 000cb42d

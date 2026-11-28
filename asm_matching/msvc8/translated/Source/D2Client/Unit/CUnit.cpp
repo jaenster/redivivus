@@ -1317,41 +1317,42 @@ void __fastcall UnitDoOverlay(D2UnitStrc * pUnit, eOverlayId eOverlay, uint32_t 
     }
 }
 
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
+
 // @sourcefile .\UNIT\CUnit.cpp
 // 1.14d mac: 000ff2f2
 uint32_t __fastcall SKILL_IsTargetOwnedPet(D2UnitStrc * pUnit, int * pnSkillParams) {
-    eD2Skills eSkillId;
-    D2SkillsTxt* pSkillsTxt;
-    DWORD nOwnerGUID;
-    bool bHasPetSkill = false;
-    if (!(pUnit && pnSkillParams && (pUnit->eUnitType == UNIT_PLAYER || *pnSkillParams == 1))) {
+    BOOL bHasPetSkill = FALSE;
+    if (!pUnit || !pnSkillParams || GetTypeInline(pUnit) != UNIT_PLAYER && *pnSkillParams != 1) {
       return 0;
     }
 
     D2SkillStrc* pSkill = D2Common::Units::GetLeftSkill(pUnit);
     if (pSkill) {
-      eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UNIT\\CUnit.cpp", 0xb4a);
-      pSkillsTxt = D2Common::Skills::TXT_Skills_GetLine(eSkillId);
+      D2SkillsTxt* pSkillsTxt = D2Common::Skills::TXT_Skills_GetLine(D2Common::Skills::GetSkillId(pSkill, ".\\UNIT\\CUnit.cpp", 0xb4a));
       if (pSkillsTxt && pSkillsTxt->aFlagBytes[3] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
-        bHasPetSkill = true;
+        bHasPetSkill = TRUE;
       }
     }
 
     pSkill = D2Common::Units::GetRightSkill(pUnit);
     if (pSkill) {
-      eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UNIT\\CUnit.cpp", 0xb55);
-      pSkillsTxt = D2Common::Skills::TXT_Skills_GetLine(eSkillId);
+      D2SkillsTxt* pSkillsTxt = D2Common::Skills::TXT_Skills_GetLine(D2Common::Skills::GetSkillId(pSkill, ".\\UNIT\\CUnit.cpp", 0xb55));
       if (pSkillsTxt && pSkillsTxt->aFlagBytes[3] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
-        nOwnerGUID = GAME::RosterPets::GetRosterOwnerGUID(pnSkillParams[3]);
-        return (uint32_t)(nOwnerGUID == pUnit->nUnitGUID);
+        bHasPetSkill = TRUE;
       }
     }
     if (!bHasPetSkill) {
       return 0;
     }
 
-    nOwnerGUID = GAME::RosterPets::GetRosterOwnerGUID(pnSkillParams[3]);
-    return (uint32_t)(nOwnerGUID == pUnit->nUnitGUID);
+    DWORD nOwnerGUID = GAME::RosterPets::GetRosterOwnerGUID(pnSkillParams[3]); // steer-ok: the original calls GetRosterOwnerGUID before it reads the unit GUID
+    return nOwnerGUID == GetGUIDInline(pUnit);
 }
 // Returns 1 if pUnit has an allied-targeting skill (flags4 bit 2 set in skills.txt) equipped in either hand AND the skill target (pnSkillParams[3]) is in the same party/owned-by the caster. Returns 0 for non-player units unless pnSkillParams[1] matches. Used by skill targeting logic to allow friendly-fire bypass.
 // @sourcefile .\UNIT\CUnit.cpp
