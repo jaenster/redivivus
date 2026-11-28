@@ -412,14 +412,16 @@ void __stdcall SEED_RollChampionPack(D2SeedStrc * pSeed, D2MonsterRegionFieldStr
               // minus a record pointer, which a 64-bit int cannot hold.
 #if D2_ARCH_X86
               nFreeSlots = (int)((intptr_t)pComponents - (intptr_t)pSlot);
-              for (nMaxRetries = 0; nMaxRetries < 0x10; nMaxRetries++) {
-                byCompCount = *(uint8_t*)(nFreeSlots + (char*)pSlot);
 #elif D2_ARCH_X64 || D2_ARCH_ARM64
               intptr_t nComponentDelta = (intptr_t)pComponents - (intptr_t)pSlot;
-              for (nMaxRetries = 0; nMaxRetries < 0x10; nMaxRetries++) {
-                byCompCount = *(uint8_t*)(nComponentDelta + (char*)pSlot);
 #else
 #error "SkillItem.cpp: no pointer width for this architecture"
+#endif
+              for (nMaxRetries = 0; nMaxRetries < 0x10; nMaxRetries++) {
+#if D2_ARCH_X86
+                byCompCount = *(uint8_t*)(nFreeSlots + (char*)pSlot);
+#else
+                byCompCount = *(uint8_t*)(nComponentDelta + (char*)pSlot);
 #endif
                 if (byCompCount <= 1) {
                   pSlot->aComponentVariants[0] = 0;
