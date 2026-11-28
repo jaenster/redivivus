@@ -2182,24 +2182,18 @@ void __stdcall CELCMP_DrawCelFrame(D2GfxDataStrc * pGfxData, int32_t nDrawX, int
 }
 
 BOOL __stdcall CELCMP_CopyCelDataToBuffer(DC6 * pDC6, int32_t nDirection, int32_t nFrame, void * pDstBuffer) {
-    DC6Block* pFrameBlock;
     if (pDC6->nVersion != 6) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4a0);
       exit(-1);
     }
-
-    {
-      uint32_t nDirFrameIndex;
-      if (!(pDC6->nFlags & 4)) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4a1);
-        exit(-1);
-      }
-
-      nDirFrameIndex = CELCMP_GetDirectionFrameTableIndex(nDirection, pDC6->nDirections);
-      pFrameBlock = pDC6->pBlocks[nDirFrameIndex * pDC6->nFrames + nFrame];
-      memcpy(pDstBuffer, pFrameBlock + 1, pFrameBlock->nHeight * pFrameBlock->nWidth * 3);
-      return 1;
+    if (!(pDC6->nFlags & 4)) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4a1);
+      exit(-1);
     }
+
+    int nBlockIndex = CELCMP_GetDirectionFrameTableIndex(nDirection, pDC6->nDirections) * pDC6->nFrames + nFrame;
+    memcpy(pDstBuffer, &pDC6->pBlocks[nBlockIndex][1], pDC6->pBlocks[nBlockIndex]->nHeight * pDC6->pBlocks[nBlockIndex]->nWidth * 3);
+    return 1;
 }
 
 void __stdcall CELCMP_DrawCelFrameFromGfxData(D2GfxDataStrc * pGfxData, int32_t nDrawX, int32_t nDrawY, int32_t nClipLeft, int32_t nClipRight, BYTE * pDstBits, int32_t nViewportHeight, uint32_t nDstPitch, uint8_t * pLookupTable1, uint8_t * pBlendTable, int32_t nClipTop, int32_t nClipBottom, uint8_t * pLookupTable2) {
