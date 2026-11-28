@@ -41,6 +41,13 @@ void POSIX_SetCrashHandler(POSIX_CRASHPROC pfnCrash);
 typedef void (*POSIX_LINEPROC)(void* pContext, const char* szLine);
 void POSIX_WriteBacktrace(POSIX_LINEPROC pfnLine, void* pContext, int nSkipFrames);
 
+// ---- the game data ----
+// Finds the player's game data before the game starts (GameData.cpp): nonzero when the MPQ
+// directory holds d2data.mpq, if need be after asking for the folder with the native folder
+// picker (the choice is kept for the next launch); 0 when the player cancelled, after a message
+// box saying the files of their own Diablo II install are needed.
+int POSIX_LocateGameData(void);
+
 // The process entry is Game/Main.cpp's main(), which hands the command line to
 // PreInitApplication as WinMain does. The taskbar has no POSIX counterpart: D2gfx keeps
 // empty bodies for it (D2GFX.cpp).

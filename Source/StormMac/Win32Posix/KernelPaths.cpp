@@ -19,6 +19,9 @@
 #include <strings.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#if defined(__APPLE__)
+#include <mach-o/dyld.h>
+#endif
 
 #include "Source/StormMac/Win32Posix/Win32PosixKernelPriv.h"
 
@@ -181,27 +184,81 @@ const std::string& InstallDir() {
     return sDir;
 }
 
-const std::string& MpqDir() {
-    static const std::string sDir = [] {
-        const char* szEnv = getenv("D2_MPQ_DIR");
-        std::string s;
-        if (szEnv && *szEnv) {
-            s = szEnv;
-        } else {
-            char szValue[MAX_PATH];
-            std::string sIni = Path_ToWindows(InstallDir() + "/Win32Posix.ini");
-            if (GetPrivateProfileStringA("Paths", "MpqDir", "", szValue, sizeof(szValue), sIni.c_str()) && *szValue) {
-                s = szValue[0] == '/' ? std::string(szValue) : Path_ToPosix(szValue);
-            }
+namespace {
+
+// The directory the game data is looked for in beside the program: the one holding the .app
+// when the executable runs from a bundle (X.app/Contents/MacOS/X), else the executable's own.
+// Empty when the executable's path is not known.
+std::string ExecutableNeighbourDir() {
+    char szPath[PATH_MAX];
+#if defined(__APPLE__)
+    uint32_t nSize = sizeof(szPath);
+    if (_NSGetExecutablePath(szPath, &nSize) != 0) {
+        return std::string();
+    }
+#else
+    ssize_t nLen = readlink("/proc/self/exe", szPath, sizeof(szPath) - 1);
+    if (nLen <= 0) {
+        return std::string();
+    }
+    szPath[nLen] = '\0';
+#endif
+    char szReal[PATH_MAX];
+    std::string s = realpath(szPath, szReal) ? szReal : szPath;
+    s = s.substr(0, s.rfind('/'));
+    const std::string sBundleTail = "/Contents/MacOS";
+    if (s.size() > sBundleTail.size() && s.compare(s.size() - sBundleTail.size(), sBundleTail.size(), sBundleTail) == 0) {
+        std::string sBundle = s.substr(0, s.size() - sBundleTail.size());
+        if (sBundle.size() > 4 && strcasecmp(sBundle.c_str() + sBundle.size() - 4, ".app") == 0) {
+            return sBundle.substr(0, sBundle.rfind('/'));
         }
-        if (s.empty()) {
+    }
+    return s;
+}
+
+std::string RealDir(const std::string& sDir) {
+    std::string s = StripTrailingSlash(sDir);
+    char szReal[PATH_MAX];
+    return std::string(realpath(s.c_str(), szReal) ? szReal : s.c_str());
+}
+
+std::string& MpqDirSlot() {
+    static std::string sDir = [] {
+        const char* szEnv = getenv("D2_MPQ_DIR");
+        if (szEnv && *szEnv) {
+            return RealDir(szEnv);
+        }
+        std::string sBeside = ExecutableNeighbourDir();
+        if (!sBeside.empty() && HasGameData(sBeside)) {
+            return RealDir(sBeside);
+        }
+        if (HasGameData(InstallDir())) {
             return InstallDir();
         }
-        s = StripTrailingSlash(s);
-        char szReal[PATH_MAX];
-        return std::string(realpath(s.c_str(), szReal) ? szReal : s.c_str());
+        char szValue[MAX_PATH];
+        std::string sIni = Path_ToWindows(InstallDir() + "/Win32Posix.ini");
+        if (GetPrivateProfileStringA("Paths", "MpqDir", "", szValue, sizeof(szValue), sIni.c_str()) && *szValue) {
+            return RealDir(szValue[0] == '/' ? std::string(szValue) : Path_ToPosix(szValue));
+        }
+        return InstallDir();
     }();
     return sDir;
+}
+
+}  // namespace
+
+bool HasGameData(const std::string& sDir) {
+    return !FindNoCase(StripTrailingSlash(sDir), "d2data.mpq").empty();
+}
+
+const std::string& MpqDir() {
+    return MpqDirSlot();
+}
+
+bool MpqDir_Store(const std::string& sDir) {
+    std::string sIni = Path_ToWindows(InstallDir() + "/Win32Posix.ini");
+    MpqDirSlot() = RealDir(sDir);
+    return WritePrivateProfileStringA("Paths", "MpqDir", MpqDirSlot().c_str(), sIni.c_str()) != 0;
 }
 
 }  // namespace Win32Posix

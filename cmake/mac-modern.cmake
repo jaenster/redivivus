@@ -201,6 +201,28 @@ if(SDL3_FOUND)
     # for the same records in the 64-bit Windows build. ld still warns at each such pointer.
     target_link_options(d2_modern PRIVATE "LINKER:-no_fixup_chains")
 
+    # d2_modern_app  "Diablo II.app" in the build directory (cmake/mac-modern-bundle.cmake): the
+    #                executable, an Info.plist (macOS 12, high-DPI, the game category), SDL3 in
+    #                Contents/Frameworks reached through @executable_path/../Frameworks, and an
+    #                ad-hoc signature, verified. The bundle has the architectures of the SDL3 it
+    #                copies: Homebrew's is arm64 only, so a universal bundle needs SDL3 built
+    #                universal. No icon (the game's art is in the player's MPQs, not the tree),
+    #                and no MPQs: the game finds the player's own at run time (GameData.cpp).
+    set(D2_BUNDLE_ID "app.redivivus.diablo2" CACHE STRING "CFBundleIdentifier of Diablo II.app")
+    add_custom_target(d2_modern_app
+        COMMAND "${CMAKE_COMMAND}"
+            "-DD2_EXE=$<TARGET_FILE:d2_modern>"
+            "-DD2_BUNDLE=${CMAKE_BINARY_DIR}/Diablo II.app"
+            "-DD2_SDL3=$<TARGET_FILE:SDL3::SDL3-shared>"
+            "-DD2_PLIST_IN=${CMAKE_SOURCE_DIR}/cmake/mac-modern-Info.plist.in"
+            "-DD2_BUNDLE_ID=${D2_BUNDLE_ID}"
+            # Game.exe 1.14d's file version.
+            "-DD2_BUNDLE_VERSION=1.14.3" "-DD2_BUNDLE_BUILD=1.14.3.71"
+            -P "${CMAKE_SOURCE_DIR}/cmake/mac-modern-bundle.cmake"
+        DEPENDS d2_modern "${CMAKE_SOURCE_DIR}/cmake/mac-modern-bundle.cmake"
+            "${CMAKE_SOURCE_DIR}/cmake/mac-modern-Info.plist.in"
+        VERBATIM)
+
     add_executable(d2_directsound_test EXCLUDE_FROM_ALL
         "${CMAKE_SOURCE_DIR}/Source/StormMac/Win32Posix/Tests/DirectSoundTest.cpp"
         "${CMAKE_SOURCE_DIR}/Source/StormMac/Win32Posix/DirectSound.cpp"
@@ -237,6 +259,13 @@ add_executable(d2_win32posix_test EXCLUDE_FROM_ALL
     "${CMAKE_SOURCE_DIR}/Source/StormMac/Win32Posix/Tests/KernelTest.cpp"
     $<TARGET_OBJECTS:d2_win32posix_kernel>)
 d2_win32posix_setup(d2_win32posix_test)
+
+# d2_mpqdir_test  where the MPQs are looked for (MpqDir) and the kept folder choice
+#                 (MpqDir_Store), one child process per case, headless.
+add_executable(d2_mpqdir_test EXCLUDE_FROM_ALL
+    "${CMAKE_SOURCE_DIR}/Source/StormMac/Win32Posix/Tests/MpqDirTest.cpp"
+    $<TARGET_OBJECTS:d2_win32posix_kernel>)
+d2_win32posix_setup(d2_mpqdir_test)
 
 # d2_smem_test  Storm's heap (Source/Storm/Source/SMem.cpp) on the kernel: many heaps, the
 #               free lists, large blocks and reallocation, at addresses above 4 GB on arm64.

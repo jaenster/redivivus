@@ -1961,6 +1961,9 @@ int main(int argc, char** argv) {
       nUsed += nLen;
     }
     szCommandLine[nUsed] = '\0';
+    if (!POSIX_LocateGameData()) {
+      return 0;
+    }
     char* aszArgv[2] = {argv[0], szCommandLine};
     Game::Main::PreInitApplication(2, aszArgv);
     return 0;

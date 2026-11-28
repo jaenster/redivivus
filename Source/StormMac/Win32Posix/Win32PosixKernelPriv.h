@@ -73,11 +73,19 @@ DWORD ErrorFromErrno(int nErrno);
 std::string HomeDir();
 std::string AppSupportDir();
 // The directories: the install directory (D2_INSTALL_DIR, default
-// AppSupportDir()/Diablo II), and the one the MPQs are read from (D2_MPQ_DIR,
-// else MpqDir in [Paths] of Win32Posix.ini in the install directory, else the install
-// directory). Both are POSIX paths without the trailing slash, created on first use.
+// AppSupportDir()/Diablo II), and the one the MPQs are read from: D2_MPQ_DIR; else the
+// directory holding the .app (the executable's own outside a bundle) when it has d2data.mpq;
+// else the install directory when it has it; else MpqDir in [Paths] of Win32Posix.ini in the
+// install directory (the folder the player picked, MpqDir_Store); else the install directory.
+// Both are POSIX paths without the trailing slash; the install directory is created on first
+// use.
 const std::string& InstallDir();
 const std::string& MpqDir();
+// Whether a directory holds the game data (d2data.mpq, matched without case).
+bool HasGameData(const std::string& sDir);
+// Makes sDir the MPQ directory, now and on the next launch (MpqDir in Win32Posix.ini); false
+// when the .ini could not be written (the directory is used for this run all the same).
+bool MpqDir_Store(const std::string& sDir);
 // The POSIX path of a Windows one, matched without case where its own spelling is missing; a
 // component nothing matches (a file about to be created) keeps the spelling given.
 std::string Path_ToPosix(const char* szWinPath);
