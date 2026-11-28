@@ -1687,16 +1687,15 @@ void __fastcall NET_SID_CLIENT_SetCDKeyBit(uint32_t * pCdKeyData, uint32_t nBitI
 
 uint32_t __fastcall NET_SID_CLIENT_BigNumMultiplyAccumulate(int32_t nWords, uint32_t multiplier, uint32_t * pSrc, uint32_t * pDst, uint32_t carryIn)
 {
-    uint32_t* pSrcWord = pSrc + nWords;
-    uint32_t* pOutWord = pDst + nWords;
-    if (nWords == 0) {
-      return carryIn;
-    }
-    do {
-      uint64_t product = (uint64_t)*--pSrcWord * multiplier + carryIn;
-      *--pOutWord = (uint32_t)product;
+    uint32_t nRemaining = nWords;
+    pSrc += nRemaining;
+    pDst += nRemaining;
+    while (nRemaining-- > 0) {
+      uint64_t product = (uint64_t)*--pSrc * multiplier + carryIn;
+      *--pDst = (uint32_t)product;
       carryIn = (uint32_t)(product >> 32);
-    } while (--nWords != 0);
+    }
+
     return carryIn;
 }
 
