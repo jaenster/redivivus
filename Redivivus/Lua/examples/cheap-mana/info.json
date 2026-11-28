@@ -1,0 +1,7 @@
+{
+  "name": "cheap-mana",
+  "version": "0.1.0",
+  "title": "Cheap mana (function override example)",
+  "author": "Redivivus",
+  "dependencies": ["redivivus >= 0.1"]
+}

@@ -14,24 +14,36 @@ Three layers:
 ## A mod
 
 One program in its namespace `mods/<name>/`: `info.json`, the data stage entries (`settings`,
-`data`, `data-updates`, `data-final-fixes`), and the control entry `main`, which exports the
-functions the engine calls:
+`data`, `data-updates`, `data-final-fixes`), and the control entry `main`, whose default export is
+the mod:
 
 ```ts
-import { Event, type Game } from "redivivus:server";
-import type { Client } from "redivivus:client";
+import { defineMod } from "redivivus:mod";
+import { Event, Side, StatId } from "redivivus:enums";
 
-export function server(game: Game) { game.on(Event.Tick, () => {}); }   // once for every game this process hosts
-export function client(client: Client) { client.on(Event.Draw, () => {}); } // once for every game this client is in
-export function menu(menu: Menu) {                                        // once, when the main menu first comes up
-    const screen = menu.addScreen((s) => <MyScreen close={() => s.close()} />);
-    menu.addButton("MY MOD", () => screen.open());
-}
+export default defineMod({
+    patch(engine) {                                     // once per Lua state, first, with no game
+        if (engine.side !== Side.Server) return;
+        engine.D2Game.SKILLS.SkillsServer.CalculateManaUse.override((next, game, unit, skill, level) => {
+            next(game, unit, skill, level);             // the stock deduction (or the next mod's override)
+        });
+    },
+    server(game) { game.on(Event.Tick, () => {}); },   // once for every game this process hosts
+    client(client) { client.on(Event.Draw, () => {}); }, // once for every game this client is in
+    menu(menu) {                                        // once, when the main menu first comes up
+        const screen = menu.addScreen((s) => <MyScreen close={() => s.close()} />);
+        menu.addButton("MY MOD", () => screen.open());
+    },
+});
 ```
 
-The same `main` is loaded in the server state and in the client state; each calls only its own
-export (`menu` is the client's too). Everything registered through `game` or `client` lasts as long as that game. Plain Lua:
-`main.lua` returns `{ server = function(game) ... end, client = function(client) ... end }`.
+`defineMod` returns its argument; it is there for the types: every entry point is optional, each
+parameter is typed from it, and a key that is no entry point is a compile error (and, from Lua, the
+mod fails to load). The same `main` is loaded in the server state and in the client state; each
+runs `patch` first, then calls only its own entries (`menu` is the client's too). Everything
+registered through `game` or `client` lasts as long as that game. Plain Lua: `main.lua` returns
+`{ default = require("redivivus:mod").defineMod({ ... }) }`, or as before a bare table of the entry
+functions (named exports in TypeScript keep working the same way).
 
 Modules are `<mod>:<path>`: `redivivus:<entry>` for the API, `other-mod:ids` for a dependency;
 relative imports reach the mod's own files. `redivivus` is built into the game (version
@@ -48,6 +60,7 @@ disk may be named after it.
 |`redivivus:data`|every state|`data` (`raw`, `extend`; extend only in the data stage)|
 |`redivivus:enums`|every state|every enum, canonical: the engine's (from `Source/D2Headers/d2_enums.h`) and the API's|
 |`redivivus:lualib`|every state|TypeScriptToLua's runtime, which compiled TypeScript requires|
+|`redivivus:mod`|every state|`defineMod` and the mod's types: `ModDefinition`, `Engine` (`ServerEngine`, `ClientEngine`), `EngineFunction`, `Opaque`, `Pointer`|
 |`redivivus:mods`|every state|the installed mods as the boot found them: `installedMods()` (state, error, dependencies as met), `readme`, `changelog`, `installedSettings()`; read-only|
 |`redivivus:manager`|every state, the built-in mod only|`setEnabled(changes)` (writes `mods/mod-list.json`), `restart()`; no mod can import it|
 |`redivivus:test`|server, with the test runner's grant|`world` (the runner's stand-in world), `probe`|
@@ -83,6 +96,82 @@ backend draws through D2gfx with its own scissor stack (see that file for the dr
 buttons are the stock short button art appended to the menu's form list, and a screen is one
 full-screen control as Credits is.
 
+## Overriding engine functions: `patch(engine)`
+
+Every named function of the compiled game can be overridden, by the names of the source:
+`engine.<module>.<namespace>.<function>`, e.g. `engine.D2Common.Skills.GetSkillLevel` or
+`engine.D2Game.SKILLS.SkillsServer.CalculateManaUse` (the module is the Source directory, the rest
+the C++ namespace; a name two functions share in one namespace gets the address appended,
+`Ptr_0060f360`). The registry is generated from the tree's own definitions (`tools/src/overrides.ts`
+into `generated/override/`): 14542 functions, 14211 of them overridable. Refused, and listed with the
+reason (`engine.X.Y.refused`, and `override` raises it): 280 member functions, 34 that take `...`,
+17 that take or return a record by value. An override that the build cannot honour (an entry
+without its patch area) is refused at run time the same way.
+
+```ts
+engine.D2Common.Skills.SKILLS_GetManaCostMultiplier.override((next, skill) => next(skill) / 2);
+```
+
+- `override(fn)` works only inside `patch`, which runs once per Lua state (the client's, and each
+  game's server state, made at its first frame) before `menu`, `server` and `client`.
+- `fn(next, ...args)` returns the result; `next(...args)` runs what is below. Several mods on one
+  function chain in load order: a mod's override wraps those of the mods it depends on, the
+  original at the bottom. An override may call `next` with other arguments, twice, or not at all.
+- The engine of a state holds that side's functions only: a server state the server's (`D2Game`)
+  and the shared ones (`D2Common`, `Fog`, `Storm`, `D2Lang`, `D2Net`, `D2CMP`, `D2Hell`), the
+  client state the client's and the shared ones. Narrow it on `engine.side`.
+- Which state runs an override: the thread's. A thread processing a game (`ServerGameLoop`'s frame
+  and a client's in-game command) uses that game's server state; the client's thread uses the
+  client state; any other thread, or a state without an override of the function, runs the
+  original. In single player the server runs on the client's thread: there a shared function uses
+  the server state inside the game's frame and the client state outside it.
+- An override that raises, returns something of the wrong type, yields, or runs out of time or
+  memory faults its mod (logged): all of the mod's overrides are removed and the call goes on with
+  what is below it. The time budget and the memory cap of every entry apply.
+- Overrides run compiled: LuaJIT records the override's body as traces (the host test checks it);
+  `next` is a C function the trace stitches around.
+
+### The two tiers
+
+The typed tier, every mod's: numbers are numbers (an integer argument or result is checked against
+its C type's range; -1 for an unsigned one wraps as in C), `bool` is a boolean, a unit is a checked
+handle of `redivivus:server` in a server state (opaque in the client's), and every other pointer
+is an opaque value a mod can only hand on. A pointer handed to `next` or returned must be one the
+call was given or one `next` returned, of the same C type; `nil` only where the call was given a
+null one. So a typed mod never reads, writes or makes a pointer. Numbers it changes are the
+engine's to check, as a data mod's are.
+
+The raw tier, `engine.unsafe`: the same functions, but pointers arrive as LuaJIT FFI cdata of their
+C type and `engine.unsafe.ffi` is LuaJIT's ffi (declare a record with `ffi.cdef` to read its
+fields; an undeclared one is an incomplete type). `next` takes cdata back, unchecked. It exists only
+for mods the player listed in `mods/unsafe-mods.json` (`{ "mods": ["name"] }`, a file nothing but
+the player writes); for every other mod `engine.unsafe` is nil.
+
+### How it works, and its limits
+
+A mods build compiles every unit with `-fpatchable-function-entry=5,0` and functions on 16 bytes:
+five nops at each entry. Overriding a function replaces them with a jump to its generated thunk
+(the function's own calling convention: `__fastcall`, `__stdcall`, `__thiscall`, `__cdecl`), in one
+locked 8-byte store while every other thread is suspended and none stands inside the five bytes;
+removing the last override stores the nops back. The thunk calls the original five bytes in, so
+nothing is relocated, and a function nobody overrides only runs its nops. Every patch is journaled
+and put back when its state goes (a game ends, a reload) and, for whatever is left, before the
+Mods screen restarts the game and at exit.
+
+- Inlining: the build is unoptimised, and no function of the registry has an inlined copy in it
+  (the DWARF of the mods build: 87414 inlined copies, all of 2177 library and platform helpers such
+  as `std::forward` and `D2_SeedRoll`). A function marked always_inline would be refused. What the
+  original compiler inlined into the decompiled bodies (a helper whose body the source repeats at
+  its call sites) is not a call in the tree either: overriding the helper does not reach those
+  copies; override the caller.
+- Static functions are reachable: each table is compiled into its own Source unit (the
+  `.ov.cpp` `#include`s the unit), which takes the unit's place in a mods build.
+- Cost: a function nobody overrides runs five nops; a patched one called on a thread whose state
+  does not override it costs the thunk's check; an overridden call one entry into Lua (see the
+  host test's `--bench-override`).
+- The registry is generated and committed; after a regen of `Source/` run `node tools/src/gen.ts`
+  (the mods build fails at compile time when a signature changed).
+
 ## The world and monster AI (server)
 
 In a game, the `Game` a mod's `server` export gets also reaches the world: `game.players()`,
@@ -115,7 +204,9 @@ script's, so its waits and actions are the script's.
 |`d2_lua_natives.cpp`|What generated glue builds on: argument checks, the tables the declarations fill|
 |`d2_lua_handle.cpp`|Handle classes: engine objects named by (class, id), resolved on every access; the core can fill a class's member tables|
 |`d2_lua_world.*`|The game world for a server state: the `D2LuaWorld` interface, the natives the world classes are built on (handle classes Player, Monster, Unit, Room, Level; scoped unit queries), a think's bookkeeping|
-|`d2_lua_hooks.h`|The macros Source/ calls (AI lookup, tick, game end, unit freed, monster died, the main menu, palette loads, the font accessors); nothing with the option off|
+|`d2_lua_hooks.h`|The macros Source/ calls (AI lookup, tick, game end, unit freed, monster died, the game scope of a server frame and command, the main menu, palette loads, the font accessors); nothing with the option off|
+|`d2_lua_override.*`, `d2_lua_override_gen.h`|Function overrides: the registry, the patcher, the dispatch a thunk runs, the templates the generated tables are built from|
+|`generated/override/`|The override tables, one per Source unit (`<unit>.ov.cpp`, which `#include`s the unit), and their index|
 |`d2_lua_ui.*`|The drawing backend interface (`D2LuaUi`) and its natives, the catalogue of installed mods, the mod list file|
 |`builtin/`|The built-in redivivus mod's program: its `menu` export, the Mods screen (`builtin/mods`) and its game data|
 |`engine/`|The game's build only: the world over a real `SGAMEDATA`, a server state per game, the AI overlay and the hooks' bodies (`d2_lua_engine.cpp`); the client state, the D2gfx backend, the main menu buttons and screens (`d2_lua_menu.cpp`)|
@@ -130,7 +221,7 @@ script's, so its waits and actions are the script's.
 |`generated/`|Generated and committed: the glue, the embedded core (`d2_lua_core.gen.cpp`) and its runtime library's licence|
 |`api/`|The `@redivivus/api` package: emitted declarations, the sandbox's Lua library as TypeScript, LuaLS files, the reference, the editor plugin|
 |`tools/`|The generator (`src/gen.ts`), `rdvmod` (`src/cli.ts`), the TypeScriptToLua plugin, the MPQ library (`src/mpq`, copied from the mod portal; see its PROVENANCE), the selftest|
-|`examples/`|`first-mod` and `second-mod` (TypeScript), `lua-mod` (plain Lua), `ui-mod` (a TSX panel), `charger` (a monster AI), `fallen-shaman` and `mephisto` (stock AIs ported; mephisto twice, with step-level tests), `type-tests`|
+|`examples/`|`cheap-mana` (a function override), `first-mod` and `second-mod` (TypeScript), `lua-mod` (plain Lua), `ui-mod` (a TSX panel), `charger` (a monster AI), `fallen-shaman` and `mephisto` (stock AIs ported; mephisto twice, with step-level tests), `type-tests`|
 |`test/`|The host test, its fixture mods, the adversarial escape suite, a stand-in engine for the world classes and the AI hook (`d2_lua_test_engine.cpp`)|
 
 ## Commands
@@ -144,6 +235,7 @@ node Redivivus/Lua/tools/src/cli.ts create DIR --name NAME [--ui]       # --ui: 
 node Redivivus/Lua/tools/src/cli.ts pack [--out DIR] BUILT_MOD_DIR     # -> <name>_<version>.mpq
 node Redivivus/Lua/tools/src/cli.ts pack --check FILE.mpq
 node Redivivus/Lua/tools/src/selftest.ts --host-test BUILD/d2_lua_host_test[.exe]
+BUILD/d2_lua_host_test[.exe] --bench-override .         # the cost of an overridden call
 cmake -S Redivivus/Lua/test -B build-luatest [-DCMAKE_TOOLCHAIN_FILE=cmake/mingw-i686.cmake]
 ```
 
