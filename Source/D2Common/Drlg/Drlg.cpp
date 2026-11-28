@@ -1219,91 +1219,63 @@ void __fastcall ChangeActiveRoomBetweenLevels(D2RoomExStrc * pRoomEx, D2RoomExSt
 
 // Frees room tile data and near-room arrays for neighboring level rooms.
 BOOL __stdcall DRLG_FreeAdjacentLevelRoomData(D2DrlgLevelStrc * pLevel) {
-    D2DrlgLevelStrc* pVisLevel;
-    eD2LevelId* pVisLevelIds2;
-    uint32_t dwNeighborFlags;
-    eD2LevelId nCurLevelId;
-    eD2LevelId eVisLevelId;
-    D2RoomExStrc* pRoomEx;
-    D2PoolManagerStrc* pMemory;
-    pMemory = pLevel->pDrlg->pMemoryPool;
-    for (pRoomEx = pLevel->pRoomExFirst; pRoomEx; pRoomEx = pRoomEx->pRoomExNext) {
+    D2PoolManagerStrc* pMemory = pLevel->pDrlg->pMemoryPool;
+    for (D2RoomExStrc* pRoomEx = pLevel->pRoomExFirst; pRoomEx; pRoomEx = pRoomEx->pRoomExNext) {
       if (pRoomEx->fRoomStatus <= 3 || pRoomEx->eRoomExFlags & 0x100000U) {
         return 0;
       }
     }
 
-    int* pVisLevelIds;
-    pVisLevelIds = DrlgRoom::DRLGWARP_GetVisArrayFromLevelId(pLevel->pDrlg, pLevel->eD2LevelId);
-    int32_t i;
-    i = 0;
-    do {
-      eVisLevelId = pVisLevelIds[i];
-      if (eVisLevelId != LEVEL_None) {
-        for (pVisLevel = pLevel->pDrlg->pLevel; pVisLevel; pVisLevel = pVisLevel->pLevelNext) {
-          if (pVisLevel->eD2LevelId == eVisLevelId) {
-            goto free_linked_vis_rooms;
-          }
-        }
+    int* pVisLevelIds = DrlgRoom::DRLGWARP_GetVisArrayFromLevelId(pLevel->pDrlg, pLevel->eD2LevelId);
+    for (int i = 0; i < 8; i++) {
+      eD2LevelId eVisLevelId = pVisLevelIds[i];
+      if (eVisLevelId == LEVEL_None) {
+        continue;
+      }
 
+      D2DrlgLevelStrc* pVisLevel = nullptr;
+      for (D2DrlgLevelStrc* pCandidate = pLevel->pDrlg->pLevel; pCandidate; pCandidate = pCandidate->pLevelNext) {
+        if (pCandidate->eD2LevelId == eVisLevelId) {
+          pVisLevel = pCandidate;
+          break;
+        }
+      }
+      if (!pVisLevel) {
         pVisLevel = DRLGACTMISC_AllocDrlgLevel(pLevel->pDrlg, eVisLevelId);
-        free_linked_vis_rooms:
-        pRoomEx = pVisLevel->pRoomExFirst;
-        if (pRoomEx) {
-          pVisLevelIds2 = (eD2LevelId*)DrlgRoom::DRLGWARP_GetVisArrayFromLevelId(pVisLevel->pDrlg, pVisLevel->eD2LevelId);
-          nCurLevelId = pLevel->eD2LevelId;
-          dwNeighborFlags = 0;
-          if (*pVisLevelIds2 == nCurLevelId) {
-            dwNeighborFlags = 0x10;
-          }
-          if (pVisLevelIds2[1] == nCurLevelId) {
-            dwNeighborFlags |= 0x20;
-          }
-          if (pVisLevelIds2[2] == nCurLevelId) {
-            dwNeighborFlags |= 0x40;
-          }
-          if (pVisLevelIds2[3] == nCurLevelId) {
-            dwNeighborFlags |= 0x80;
-          }
-          if (pVisLevelIds2[4] == nCurLevelId) {
-            dwNeighborFlags |= 0x100;
-          }
-          if (pVisLevelIds2[5] == nCurLevelId) {
-            dwNeighborFlags |= 0x200;
-          }
-          if (pVisLevelIds2[6] == nCurLevelId) {
-            dwNeighborFlags |= 0x400;
-          }
-          if (pVisLevelIds2[7] == nCurLevelId) {
-            dwNeighborFlags |= 0x800;
-          }
+      }
 
-          do {
-            if (dwNeighborFlags & pRoomEx->eRoomExFlags && (pRoomEx->fRoomStatus <= 3 || pRoomEx->eRoomExFlags & 0x100000U)) {
-              return 0;
-            }
+      D2RoomExStrc* pRoomEx = pVisLevel->pRoomExFirst;
+      if (!pRoomEx) {
+        continue;
+      }
 
-            pRoomEx = pRoomEx->pRoomExNext;
-          } while (pRoomEx);
-
-          for (pRoomEx = pVisLevel->pRoomExFirst; pRoomEx; pRoomEx = pRoomEx->pRoomExNext) {
-            if (pRoomEx->eRoomExFlags & dwNeighborFlags) {
-              DrlgRoom::DRLGROOMEX_FreeDrlgRoomTile(pMemory, pRoomEx);
-              if (pRoomEx->ppDrlgRoomsExNear) {
-                D2_FREE_POOL_AT(pMemory, pRoomEx->ppDrlgRoomsExNear, ".\\DRLG\\Drlg.cpp", 0x16f);
-                pRoomEx->ppDrlgRoomsExNear = 0;
-                pRoomEx->nDrlgRoomsExNearCount = 0;
-              }
-            }
-          }
+      eD2LevelId* pVisLevelIds2 = (eD2LevelId*)DrlgRoom::DRLGWARP_GetVisArrayFromLevelId(pVisLevel->pDrlg, pVisLevel->eD2LevelId);
+      uint32_t dwNeighborFlags = 0;
+      for (int j = 0; j < 8; j++) {
+        if (pVisLevelIds2[j] == pLevel->eD2LevelId) {
+          dwNeighborFlags |= 0x10 << j;
         }
       }
 
-      i++;
-      if (i >= 8) {
-        return 1;
+      for (; pRoomEx; pRoomEx = pRoomEx->pRoomExNext) {
+        if (dwNeighborFlags & pRoomEx->eRoomExFlags && (pRoomEx->fRoomStatus <= 3 || pRoomEx->eRoomExFlags & 0x100000U)) {
+          return 0;
+        }
       }
-    } while (true);
+
+      for (pRoomEx = pVisLevel->pRoomExFirst; pRoomEx; pRoomEx = pRoomEx->pRoomExNext) {
+        if (pRoomEx->eRoomExFlags & dwNeighborFlags) {
+          DrlgRoom::DRLGROOMEX_FreeDrlgRoomTile(pMemory, pRoomEx);
+          if (pRoomEx->ppDrlgRoomsExNear) {
+            D2_FREE_POOL_AT(pMemory, pRoomEx->ppDrlgRoomsExNear, ".\\DRLG\\Drlg.cpp", 0x16f);
+            pRoomEx->ppDrlgRoomsExNear = 0;
+            pRoomEx->nDrlgRoomsExNearCount = 0;
+          }
+        }
+      }
+    }
+
+    return 1;
 }
 
 // 1.14d mac: 0014cbc6
@@ -2396,42 +2368,16 @@ int __fastcall DRLGPLACE_ACT4_ValidatePlacementList2(D2DrlgLevelPlacementStrc * 
 // For outdoor (eDrlgType==3) Act 1 wilderness levels, walks the gaWildernessLevelSeedOffsets table and OR-writes orientation/connectivity flags into the level's pDrlgLevelData. Each 30-entry table record encodes five conditional rules matching level ID, excluded IDs, and two direction-table values; matching rules contribute a flag bit to the level data.
 // 1.14d mac: 0015b8f1
 void __fastcall ACT1_fpLevelDataFn2_A(D2DrlgLevelStrc * pLevel, int nNodeOffset, int * nDirTableBase) {
-    eD2LevelId eLevelId;
     if (pLevel->eDrlgType != 3) {
       return;
     }
 
-    D2DrlgLevelDataWildernessLevel* pDVar1 = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
-    int* pWildernessEntry = gaWildernessLevelSeedOffsets;
-    do {
-      eD2LevelId eCurLevelId;
-      eCurLevelId = pLevel->eD2LevelId;
-      if ((eCurLevelId == *pWildernessEntry || *pWildernessEntry == LEVEL_None) && eCurLevelId != pWildernessEntry[1] && eCurLevelId != pWildernessEntry[2] && nDirTableBase[nNodeOffset] == pWildernessEntry[3] && nDirTableBase[nNodeOffset + 1] == pWildernessEntry[4]) {
-        pDVar1->dwFlags |= pWildernessEntry[5];
+    D2DrlgLevelDataWildernessLevel* pOutdoorsData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
+    for (int i = 0; i < 15; i++) {
+      if ((pLevel->eD2LevelId == gaWildernessLevelSeedOffsets[i * 6] || gaWildernessLevelSeedOffsets[i * 6] == LEVEL_None) && pLevel->eD2LevelId != gaWildernessLevelSeedOffsets[i * 6 + 1] && pLevel->eD2LevelId != gaWildernessLevelSeedOffsets[i * 6 + 2] && nDirTableBase[nNodeOffset] == gaWildernessLevelSeedOffsets[i * 6 + 3] && nDirTableBase[nNodeOffset + 1] == gaWildernessLevelSeedOffsets[i * 6 + 4]) {
+        pOutdoorsData->dwFlags |= gaWildernessLevelSeedOffsets[i * 6 + 5];
       }
-
-      eLevelId = pLevel->eD2LevelId;
-      if ((eLevelId == pWildernessEntry[6] || pWildernessEntry[6] == LEVEL_None) && eLevelId != pWildernessEntry[7] && eLevelId != pWildernessEntry[8] && nDirTableBase[nNodeOffset] == pWildernessEntry[9] && nDirTableBase[nNodeOffset + 1] == pWildernessEntry[10]) {
-        pDVar1->dwFlags |= pWildernessEntry[0xb];
-      }
-
-      eLevelId = pLevel->eD2LevelId;
-      if ((eLevelId == pWildernessEntry[0xc] || pWildernessEntry[0xc] == LEVEL_None) && eLevelId != pWildernessEntry[0xd] && eLevelId != pWildernessEntry[0xe] && nDirTableBase[nNodeOffset] == pWildernessEntry[0xf] && nDirTableBase[nNodeOffset + 1] == pWildernessEntry[0x10]) {
-        pDVar1->dwFlags |= pWildernessEntry[0x11];
-      }
-
-      eLevelId = pLevel->eD2LevelId;
-      if ((eLevelId == pWildernessEntry[0x12] || pWildernessEntry[0x12] == LEVEL_None) && eLevelId != pWildernessEntry[0x13] && eLevelId != pWildernessEntry[0x14] && nDirTableBase[nNodeOffset] == pWildernessEntry[0x15] && nDirTableBase[nNodeOffset + 1] == pWildernessEntry[0x16]) {
-        pDVar1->dwFlags |= pWildernessEntry[0x17];
-      }
-
-      eLevelId = pLevel->eD2LevelId;
-      if ((eLevelId == pWildernessEntry[0x18] || pWildernessEntry[0x18] == LEVEL_None) && eLevelId != pWildernessEntry[0x19] && eLevelId != pWildernessEntry[0x1a] && nDirTableBase[nNodeOffset] == pWildernessEntry[0x1b] && nDirTableBase[nNodeOffset + 1] == pWildernessEntry[0x1c]) {
-        pDVar1->dwFlags |= pWildernessEntry[0x1d];
-      }
-
-      pWildernessEntry += 0x1e;
-    } while ((intptr_t)pWildernessEntry < (intptr_t)((char*)&gaWildernessLevelSeedOffsets + 360));
+    }
 }
 
 void __fastcall DRLGGRID_OrFlagOnCellList(D2DrlgGridStrc * nGridPtr, D2DrlgVertexStrc * pnCellNode, int32_t nFlag) {

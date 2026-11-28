@@ -1736,48 +1736,7 @@ void * __stdcall SMemReAlloc(void * pBlock, uint32_t nSize, char * szSourceFile,
 // Compares two memory blocks (Storm's memcmp).
 // Name from the PowerPC 1.13c Storm traceback table (exported SMemCmp @10025840, one run with SMemZero/Move/Fill/Copy).
 int __stdcall SMemCmp(uint8_t * pLeft, uint8_t * pRight, uint32_t nLength) {
-    int nResult;
-    for (; nLength >= 4; nLength -= 4) {
-      if (*(int*)pLeft != *(int*)pRight) {
-        goto compare_bytes;
-      }
-
-      pRight += sizeof(int);
-      pLeft += sizeof(int);
-    }
-
-    if (!nLength) {
-      equal:
-      nResult = 0;
-    } else {
-      int nDiff;
-      compare_bytes:
-      nDiff = (uint32_t)*pLeft - (uint32_t)*pRight;
-      if (!nDiff) {
-        if (nLength == 1) {
-          goto equal;
-        }
-
-        nDiff = (uint32_t)pLeft[1] - (uint32_t)pRight[1];
-        if (!nDiff) {
-          if (nLength == 2) {
-            goto equal;
-          }
-
-          nDiff = (uint32_t)pLeft[2] - (uint32_t)pRight[2];
-          if (!nDiff && (nLength == 3 || (nDiff = (uint32_t)pLeft[3] - (uint32_t)pRight[3] , !nDiff))) {
-            goto equal;
-          }
-        }
-      }
-
-      nResult = 1;
-      if (nDiff <= 0) {
-        return -1;
-      }
-    }
-
-    return nResult;
+    return memcmp(pLeft, pRight, nLength);
 }
 
 // @blizzard SMemCopy (Storm ordinal 491)
