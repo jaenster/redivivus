@@ -1088,6 +1088,9 @@ namespace _Wrappers {
 #  include "Source/StormMac/Win32Mac/Source/Win32/Win32MacKernel.h"
 #  include "Source/StormMac/Win32Mac/Source/Win32/Win32MacDirectSound.h"
 #endif
+#if !defined(_WIN32) && D2_BACKEND_POSIX
+#  include "Source/StormMac/Win32Posix/Win32Posix.h"
+#endif
 
 // Array rows held by pointer (Ghidra `T[N] *` return and global types)
 typedef char D2Row_char_32[32];

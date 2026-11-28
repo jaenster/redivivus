@@ -28,8 +28,13 @@ if(NOT MSVC)
 endif()
 
 # Mac OS X: the Mac-only code (Storm's Mac layer), compile only. See cmake/mac.cmake.
+# The modern macOS build (toolchain cmake/mac-appleclang.cmake) is cmake/mac-modern.cmake.
 if(APPLE)
-    include("${CMAKE_SOURCE_DIR}/cmake/mac.cmake")
+    if(D2_MAC_MODERN)
+        include("${CMAKE_SOURCE_DIR}/cmake/mac-modern.cmake")
+    else()
+        include("${CMAKE_SOURCE_DIR}/cmake/mac.cmake")
+    endif()
     return()
 endif()
 
