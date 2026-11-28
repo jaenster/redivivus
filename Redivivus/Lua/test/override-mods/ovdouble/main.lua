@@ -1,0 +1,30 @@
+local shared = require("redivivus:shared")
+local mod = require("redivivus:mod")
+return { default = mod.defineMod({
+    patch = function(engine)
+        shared.log("patch side", engine.side, engine.TestShared.Add.path, engine.unsafe)
+        engine.TestShared.Add.override(function(next, a, b) return next(a, b) * 2 end)
+        engine.TestShared.Half.override(function(next, v) return next(v) + 0.25 end)
+        engine.TestShared.IsEven.override(function(next, a) return not next(a) end)
+        engine.TestShared.Wrap.override(function(next, a) if a == 7 then return -1 end return next(a) end)
+        engine.TestShared.Count.override(function(next, n) next(n) next(n) end)
+        engine.TestShared.Recurse.override(function(next, n) return next(n) + 1000 end)
+        engine.TestShared.Echo.override(function(next, p) return next(p) end)
+        engine.TestShared.Other.override(function(next, p, q) return next(q, p) end)
+        engine.TestShared.Read.override(function(next, p, k) return next(p, k + 1) end)
+        engine.TestShared.CallsInlined.override(function(next, a) return next(a) + 100 end)
+        local ok, err = pcall(function() engine.TestShared.Sum.override(function(next, n) return 0 end) end)
+        shared.log("variadic", ok, err)
+        ok, err = pcall(function() engine.TestShared.Inlined.override(function(next, a) return 0 end) end)
+        shared.log("inlined", ok, err)
+        ok, err = pcall(function() engine.TestShared.Area.override(function(next, p) return 0 end) end)
+        shared.log("byvalue", ok, err)
+        shared.log("server only", engine.TestServer ~= nil, "client only", engine.TestClient ~= nil)
+        shared.log("unknown", engine.TestShared.NoSuch, engine.NoModule)
+        later = engine
+    end,
+    server = function(game)
+        local ok, err = pcall(function() later.TestShared.Plain.override(function(next, a) return 0 end) end)
+        shared.log("late", ok, err)
+    end,
+}) }

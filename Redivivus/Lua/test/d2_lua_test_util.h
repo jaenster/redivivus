@@ -26,7 +26,7 @@ const unsigned kTestBudgetMs = 250;
 // with the test's APIs. aTestGrant: mods that may import redivivus:test.
 D2LuaRuntime* TestMakeRuntime(int nSide, const std::vector<std::string>& aRoots, const std::vector<std::string>& aOnly,
                               const std::string& sSettingsFile, const std::vector<std::string>& aTestGrant = {},
-                              const std::vector<std::string>& aDriverGrant = {});
+                              const std::vector<std::string>& aDriverGrant = {}, const std::vector<std::string>& aRawGrant = {});
 // Run a chunk as mod pszMod with game nGame current; true when it ran without an error.
 bool TestRun(D2LuaRuntime* pRt, uint32_t nGame, const char* pszMod, const char* pszSource);
 // Run it with an empty log, then check it ran and logged pszLogged.
@@ -45,4 +45,9 @@ void RunEscapeTests(const char* pszRoot);
 void RunWorldTests(const char* pszTsMods);
 void RunMenuTests(const char* pszRoot);
 int RunDispatchBench(const char* pszRoot, const char* pszTmp);
+// Function overrides on the fixture (d2_lua_override_test.cpp); bBench adds the per-call timings.
+void RunOverrideTests(const char* pszRoot, bool bBench);
+struct D2UnitStrc;
+// Units through an override, in a server state with a world running mod ovunit (the stand-in engine).
+void RunOverrideUnitTests(D2LuaRuntime* pRt, D2UnitStrc* pA, D2UnitStrc* pB);
 #endif

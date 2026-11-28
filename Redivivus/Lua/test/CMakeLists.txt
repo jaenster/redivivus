@@ -25,6 +25,16 @@ list(REMOVE_ITEM _lua_host_test_sources "${D2_ROOT}/Redivivus/Lua/d2_lua.cpp")
 # The engine enum value checks include the engine's headers, which do not build beside this one's.
 list(FILTER _lua_host_test_sources EXCLUDE REGEX "_asserts\\.gen\\.cpp$")
 add_executable(d2_lua_host_test EXCLUDE_FROM_ALL ${_lua_host_test_sources})
+# The dispatch of an overridden call and the guarded entries it goes through run on every call of
+# an overridden function: optimised, as in the game's build (the root CMakeLists.txt).
+set_source_files_properties("${D2_ROOT}/Redivivus/Lua/d2_lua_override.cpp" "${D2_ROOT}/Redivivus/Lua/d2_lua_host.cpp"
+    PROPERTIES COMPILE_OPTIONS "-O2")
+# The override fixture's table (#includes test/override/d2_lua_override_fixture.cpp) gets the game's
+# patchable entries on an x86 target, so the host test patches and restores real entries there.
+if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86|i[3-6]86|AMD64|x86_64|amd64)$")
+    set_source_files_properties("${D2_ROOT}/Redivivus/Lua/test/generated/d2_lua_override_fixture.ov.cpp" PROPERTIES
+        COMPILE_OPTIONS "-fpatchable-function-entry=5,0;-falign-functions=16")
+endif()
 if(PROJECT_NAME STREQUAL d2_lua_host_test)
     set_target_properties(d2_lua_host_test PROPERTIES EXCLUDE_FROM_ALL OFF)
 endif()

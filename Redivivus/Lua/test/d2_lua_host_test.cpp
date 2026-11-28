@@ -156,6 +156,9 @@ int main(int argc, char** argv) {
             pszTsMods = argv[++i];
         } else if (strcmp(argv[i], "--bench-dispatch") == 0 && i + 2 < argc) {
             return RunDispatchBench(argv[i + 1], argv[i + 2]);
+        } else if (strcmp(argv[i], "--bench-override") == 0 && i + 1 < argc) {
+            RunOverrideTests(argv[i + 1], true);
+            return 0;
         } else if (strcmp(argv[i], "--bench") == 0) {
             return Bench();
         } else if (strcmp(argv[i], "--runaway") == 0) {

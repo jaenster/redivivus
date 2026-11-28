@@ -44,7 +44,7 @@ std::vector<std::string> TestRoots() {
 
 D2LuaRuntime* TestMakeRuntime(int nSide, const std::vector<std::string>& aRoots, const std::vector<std::string>& aOnly,
                               const std::string& sSettingsFile, const std::vector<std::string>& aTestGrant,
-                              const std::vector<std::string>& aDriverGrant) {
+                              const std::vector<std::string>& aDriverGrant, const std::vector<std::string>& aRawGrant) {
     std::vector<D2LuaModInfo> aFound;
     std::vector<std::string> aErrors;
     D2LuaMods_Discover(aRoots, aFound, aErrors);
@@ -65,6 +65,7 @@ D2LuaRuntime* TestMakeRuntime(int nSide, const std::vector<std::string>& aRoots,
     tDesc.sSettingsFile = sSettingsFile;
     tDesc.aTestGrant = aTestGrant;
     tDesc.aDriverGrant = aDriverGrant;
+    tDesc.aRawGrant = aRawGrant;
     if (!D2LuaMods_Resolve(aPicked, tDesc.aMods, aErrors)) {
         for (const auto& e : aErrors) {
             printf("  resolve: %s\n", e.c_str());
@@ -858,6 +859,7 @@ void RunModTests(const char* pszRoot, const char* pszTsMods) {
     RunBootTests(pszRoot);
     RunMenuTests(pszRoot);
     RunEscapeTests(pszRoot);
+    RunOverrideTests(pszRoot, false);
     if (pszTsMods) {
         TypeScriptTests(pszTsMods);
     } else {

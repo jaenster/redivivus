@@ -1,0 +1,1 @@
+{ "name": "ovunit", "version": "1.0.0", "dependencies": ["redivivus >= 0.1"] }

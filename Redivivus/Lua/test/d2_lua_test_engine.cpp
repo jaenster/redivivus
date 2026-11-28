@@ -1330,8 +1330,28 @@ static void MephistoTests(const char* pszTsMods) {
     Check(!tKinds.count("idle 5"), "  and never the C++ case 0 (idle 5), which nothing reaches");
 }
 
+static void OverrideUnitTests() {
+    printf("--- overrides: units through the world's handles\n");
+    TestEngineWorld tWorld;
+    TestEngineWorld* w = &tWorld;
+    s_pWorld = w;
+    D2UnitStrc* pA = w->Add(D2LUA_UNIT_MONSTER, 5, 110, 100);
+    D2UnitStrc* pB = w->Add(D2LUA_UNIT_PLAYER, 1, 100, 100, "Barbara");
+    ClearLog();
+    D2LuaRuntime* pRt = MakeWorldRuntime(w, { g_sTestRoot + "/Redivivus/Lua/test/override-mods" }, { "ovunit" });
+    Check(pRt != nullptr, "a server state with a world and an override of TestServer.Pick");
+    if (pRt) {
+        TestStart(pRt, 1);
+        RunOverrideUnitTests(pRt, pA, pB);
+        D2LuaRt_EndGame(pRt, 1);
+        D2LuaRt_Destroy(pRt);
+    }
+    s_pWorld = nullptr;
+}
+
 void RunWorldTests(const char* pszTsMods) {
     WorldApiTests();
+    OverrideUnitTests();
     GuardAiTests();
     if (pszTsMods) {
         ChargerTests(pszTsMods);

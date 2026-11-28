@@ -12,6 +12,9 @@
 //     acted on once control is back in mod code, and the section is never cut.
 //   - resolution: every declared redivivus:* module resolves where it is declared and nothing
 //     else does; redivivus:test and redivivus:automation only with their grants.
+//   - overrides: what a typed-tier override is handed (the engine object, its functions, next,
+//     the opaque pointers) reaches no native, no ffi and no raw memory, with ffi loaded in the
+//     state for another mod's raw tier.
 #if D2_FEATURE_MODS && D2_LUA_HOST_TEST
 #include <stdio.h>
 #include <string.h>
@@ -22,9 +25,11 @@
 
 #include "Redivivus/Lua/d2_lua_core.h"
 #include "Redivivus/Lua/d2_lua_internal.h"
+#include "Redivivus/Lua/d2_lua_override.h"
 #include "Redivivus/Lua/d2_lua_runtime.h"
 #include "Redivivus/Lua/test/d2_lua_test_util.h"
 #include "Redivivus/Lua/test/d2_lua_test_world.h"
+#include "Redivivus/Lua/test/override/d2_lua_override_fixture.h"
 #include "lua.hpp"
 
 typedef std::chrono::steady_clock Clock;
@@ -121,6 +126,21 @@ static void CollectForbidden(D2LuaRuntime* pRt, const char* pszSelf) {
     lua_pushvalue(L, LUA_REGISTRYINDEX);
     AddForbidden(L, nSet, -1);
     lua_pop(L, 1);
+    // ffi, when a raw tier loaded it, and everything in it (ffi.C reaches every C function).
+    lua_getfield(L, LUA_REGISTRYINDEX, "_LOADED");
+    lua_getfield(L, -1, "ffi");
+    if (lua_istable(L, -1)) {
+        AddForbidden(L, nSet, -1);
+        int nFfi = lua_gettop(L);
+        lua_pushnil(L);
+        while (lua_next(L, nFfi)) {
+            AddForbidden(L, nSet, -1);
+            lua_pop(L, 1);
+        }
+    }
+    lua_getfield(L, -2, "jit");
+    AddForbidden(L, nSet, -1);
+    lua_pop(L, 3);
     lua_pushvalue(L, LUA_GLOBALSINDEX);
     AddForbidden(L, nSet, -1);
     lua_pop(L, 1);
@@ -192,13 +212,13 @@ static int Walk(lua_State* L, int nIndex, int nSet, int nSeen, int nDepth, std::
 
 // Run an attempt as the evil mod; it leaves what it got hold of in the global `got` and may set
 // `ok_flags`. Then walk `got`. True when it ran and nothing forbidden was reached.
-static bool Attempt(D2LuaRuntime* pRt, const char* pszWhat, const char* pszSource, bool bExpectRun = true) {
+static bool Attempt(D2LuaRuntime* pRt, const char* pszWhat, const char* pszSource, bool bExpectRun = true, const char* pszMod = "evil") {
     lua_State* L = D2LuaRt_State(pRt);
     std::string sSource = std::string("got = {} local got = got ") + pszSource;
     ClearLog();
-    bool bRan = TestRun(pRt, 1, "evil", sSource.c_str());
-    CollectForbidden(pRt, "evil");
-    D2LuaHost_NewModEnv(L, "evil");
+    bool bRan = TestRun(pRt, 1, pszMod, sSource.c_str());
+    CollectForbidden(pRt, pszMod);
+    D2LuaHost_NewModEnv(L, pszMod);
     int nEnv = lua_gettop(L);
     lua_pushlightuserdata(L, &s_ForbiddenKey);
     lua_rawget(L, LUA_REGISTRYINDEX);
@@ -469,9 +489,50 @@ static void ResolutionTests() {
     D2LuaRt_Destroy(pRt);
 }
 
+// The typed tier of the overrides: everything an override mod holds, after its patch and its
+// overrides ran, with ffi loaded for another mod's raw tier.
+static void OverrideEscapeTests() {
+    printf("--- escapes: what an override is handed leads nowhere\n");
+    D2LuaRuntime* pRt = TestMakeRuntime(D2LUA_SIDE_SERVER, { g_sTestRoot + "/Redivivus/Lua/test/override-mods" }, { "evilov", "ovraw" },
+                                        "", {}, {}, { "ovraw" });
+    if (!pRt) {
+        Check(0, "override escapes: runtime");
+        return;
+    }
+    TestStart(pRt, 1);
+    FixtureThing a = { 3, { 1, 2, 3, 4 } }, c = { 4, { 5, 6, 7, 8 } };
+    {
+        D2LuaRuntime* pWas = D2LuaOv_BindThread(D2LUA_SIDE_SERVER, pRt);
+        const D2LuaOvEntry* pEcho = D2LuaOv_Find("TestShared.Echo");
+        const D2LuaOvEntry* pOther = D2LuaOv_Find("TestShared.Other");
+        if (D2LuaOv_CanPatch()) {
+            TestShared::Echo(&a);
+            TestShared::Other(&c, &c);
+        } else {
+            ((FixtureThing * (__stdcall*)(FixtureThing*)) pEcho->pThunk)(&a);
+            ((FixtureThing * (__fastcall*)(FixtureThing*, FixtureThing*)) pOther->pThunk)(&c, &c);
+        }
+        D2LuaOv_BindThread(D2LUA_SIDE_SERVER, pWas);
+    }
+    Attempt(pRt, "the engine, its functions, next and the pointers an override was handed",
+            "got.held = held "
+            "local ok, e = pcall(held.next, held.p) got.outside = { ok, e } assert(not ok, 'next ran outside its call') "
+            "for i, r in ipairs({ held.r1, held.r2, held.r3, held.r4 }) do assert(r[1] == false, 'next took a pointer it was not given (' .. i .. ')') end "
+            "assert(type(held.p) == 'userdata' and not pcall(function() return held.p.nValue end), 'a typed pointer can be read') "
+            "assert(held.engine.unsafe == nil, 'a typed mod has the raw tier') "
+            "local function walk(v, seen) if type(v) == 'table' and not seen[v] then seen[v] = true for k, x in next, v do walk(k, seen) walk(x, seen) end end "
+            "  assert(type(v) ~= 'cdata', 'a cdata reached the mod') end walk(held, {}) "
+            "got.fn = held.fn.override got.ns = held.ns.Add",
+            true, "evilov");
+    Check(!D2LuaRt_IsFaulted(pRt, "evilov"), "  the probing mod was never faulted (every refusal was an error it caught)");
+    D2LuaRt_EndGame(pRt, 1);
+    D2LuaRt_Destroy(pRt);
+}
+
 void RunEscapeTests(const char* pszRoot) {
     (void)pszRoot;
     EscapeTests();
+    OverrideEscapeTests();
     BillingTests();
     InterruptionTests();
     ResolutionTests();
