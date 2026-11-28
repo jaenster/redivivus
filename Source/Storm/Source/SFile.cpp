@@ -4095,32 +4095,23 @@ D2StormAudioStreamRec * __thiscall SFILE_DeleteAudioStream(D2StormAudioStreamRec
 
 // @blizzard SFileCloseArchive (SFILE.CPP)
 int __stdcall SFileCloseArchive(D2ArchiveStrc * pArchive) {
-    int* piVar1;
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
-    D2ArchiveStrc* pNext = pArchive;
-    int nValid = SFILE_CheckArchiveHandle(pArchive, &pArchive);
-    D2ArchiveStrc* pObject = pArchive;
-    if (!nValid) {
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
+    EnterCriticalSection(&lpCriticalSection_00779068);
+    D2ArchiveStrc* pObject;
+    if (!SFILE_CheckArchiveHandle(pArchive, &pObject)) {
+      LeaveCriticalSection(&lpCriticalSection_00779068);
       return 0;
     }
-    if (pNext) {
-      if (pNext->bDontCloseHandle) {
-        nValid = SFILE_CheckFileHandle(pArchive->bDontCloseHandle, (D2MPQFileStrc**)&pArchive);
-        if (nValid) {
+    if (pArchive) {
+      if (pArchive->bDontCloseHandle) {
+        D2MPQFileStrc* pFile;
+        if (SFILE_CheckFileHandle(pObject->bDontCloseHandle, &pFile)) {
           SFileCloseFile(pObject->bDontCloseHandle);
         }
-      } else {
-        if (pNext->pBaseArchive) {
-          pNext = pArchive->pBaseArchive;
-          if (pNext) {
-            piVar1 = &pNext->nRefCount;
-            (*piVar1)--;
-            if (!*piVar1) {
-              SFILE_FreeArchiveRecord(pNext);
-              SMem::SMemFree(pNext, "delete", -1, 0);
-            }
-          }
+      } else if (pArchive->pBaseArchive) {
+        D2ArchiveStrc* pBaseArchive = pObject->pBaseArchive;
+        if (pBaseArchive && !--pBaseArchive->nRefCount) {
+          SFILE_FreeArchiveRecord(pBaseArchive);
+          SMem::SMemFree(pBaseArchive, "delete", -1, 0);
         }
       }
     }
@@ -4130,25 +4121,21 @@ int __stdcall SFileCloseArchive(D2ArchiveStrc * pArchive) {
       pNode = (D2ArchiveStrc*)&gMpqArchiveList.head;
     }
 
-    pNext = pNode->pPrevLink;
-    if (pNext) {
+    D2ArchiveStrc* pPrevLink = pNode->pPrevLink;
+    if (pPrevLink) {
       D2ArchiveStrc** pRefCount;
       pRefCount = (D2ArchiveStrc**)D2_StormNextLink(pNode, -1);
-      *pRefCount = pNext;
+      *pRefCount = pPrevLink;
       pNode->pPrevLink->pNext = pNode->pNext;
       pNode->pPrevLink = 0;
       pNode->pNext = 0;
     }
-    if (pObject) {
-      piVar1 = &pObject->nRefCount;
-      (*piVar1)--;
-      if (!*piVar1) {
-        SFILE_FreeArchiveRecord(pObject);
-        SMem::SMemFree(pObject, "delete", -1, 0);
-      }
+    if (pObject && !--pObject->nRefCount) {
+      SFILE_FreeArchiveRecord(pObject);
+      SMem::SMemFree(pObject, "delete", -1, 0);
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
+    LeaveCriticalSection(&lpCriticalSection_00779068);
     return 1;
 }
 
